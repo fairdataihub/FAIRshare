@@ -1,0 +1,73 @@
+{
+  "name": "vue-electron",
+  "version": "0.1.1",
+  "description": "Simple template for combining Electron with Vue3 and Flask",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build-preclean": "node ./scripts/prebuild.js",
+    "python:build": "python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:build-release": "vue-cli-service electron:build -p always",
+    "electron:serve-precopy": "copyfiles -u 1 ./src/pyflask/** ./dist_electron",
+    "electron:serve": "yarn electron:serve-precopy && vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "@electron/remote": "^1.2.1",
+    "axios": "^0.21.2",
+    "core-js": "^3.6.5",
+    "electron-log": "^4.4.1",
+    "electron-updater": "^4.3.9",
+    "ps-tree": "^1.2.0",
+    "semver": "^7.3.5",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "autoprefixer": "^9",
+    "babel-eslint": "^10.1.0",
+    "copyfiles": "^2.4.1",
+    "electron": "^13.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0",
+    "postcss": "^7",
+    "prettier": "^2.3.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "vue-cli-plugin-electron-builder": "~2.1.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/megasanjay/electron-vue-flask-template.git"
+  },
+  "keywords": [],
+  "author": "Sanjay Soundarajan",
+  "license": "MIT"
+}
