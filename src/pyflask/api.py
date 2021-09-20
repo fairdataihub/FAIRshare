@@ -4,7 +4,7 @@ from calc import calc
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
 
-API_VERSION = "1.0.0"
+API_VERSION = "1.0.1"
 
 app = Flask(__name__)
 CORS(app)
@@ -28,7 +28,7 @@ class HelloWorld(Resource):
     @api.response(200, "Success")
     @api.response(400, "Validation Error")
     def get(self):
-        response = "Server active!"
+        response = "Server active!!"
         return response
 
 

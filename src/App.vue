@@ -10,7 +10,7 @@ import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
 
-const MIN_API_VERSION = "1.0.0";
+const MIN_API_VERSION = "1.0.1";
 
 import TheCalculator from "./components/TheCalculator.vue";
 

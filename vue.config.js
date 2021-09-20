@@ -36,8 +36,7 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repository:
-            "https://github.com/megasanjay/electron-vue-flask-template.git",
+          repository: "https://github.com/megasanjay/electron-vue3-flask.git",
         },
       },
     },
