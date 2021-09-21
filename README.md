@@ -48,7 +48,9 @@ python pyflask/api.py
 
 ## Building the application
 
-To build the complete application, you will need to build the python executable and the Electron portion seperately.
+To build the complete application, you will need to build the python executable and the Electron portion seperately. 
+
+`Note:` You will not be able to do cross compatible builds for MacOS, Linux and Windows. The Python executable will be OS specific so you will need to build on each target OS seperately. For macOS you will need an Apple Developer Certificate. You can get one of these [here](https://developer.apple.com/support/certificates/).
 
 ### Create Python executable
 
