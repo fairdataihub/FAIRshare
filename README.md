@@ -1,6 +1,6 @@
 # electron-vue3-flask Template
 
-This is a template that creates an Electron application with a Flask backend and uses Vue3 and TailwindCSS ([optional](#removing-tailwindcss)) for the frontend. At the current time, this application template uses Electron.js version 13.0+ as it is the most recent version of electron that I was able to use with Vue. I will update this template with later versions when supported.
+This is a template that creates an Electron application with a Flask backend and uses Vue3 and TailwindCSS ([optional](#removing-tailwindcss)) for the frontend. Your backend api will be using Flask-RESTX for easier API development and automatic Swagger documentation. At the current time, this application template uses Electron.js version 13.0+ as it is the most recent version of electron that I was able to use with Vue. I will update this template with later versions when supported.
 
 ### Project Use Cases
 
@@ -107,6 +107,12 @@ In your `src/index.css` file remove the following lines:
 @tailwind components;
 @tailwind utilities;
 ```
+
+### Flask application and Swagger documentaion
+
+For the python portion of this application, Flask-RESTX is used to generate the API specific portion. In this example template, I have used a very small subsection of all the features it provides but you are welcome to read more about all the provided options in their documentation. To learn more about Flask-RESTX, click [here](https://flask-restx.readthedocs.io/en/latest/). 
+
+One of the biggest reasons for using this library was the automatic generation of API documentation. If you are working in a team and have different front-end and back-end developers, this should allow you to document your application as you go through your development cycle. To view the documentation, I have set it up under the `/docs` endpoint. This can be accessed by either running `yarn electron:serve` (for the full application) or just running `python pyflask/api.py`. You can then visit the url at [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs) and explore the Swagger documentation.
 
 ### Made with Electron, Vue and Flask
 
