@@ -27,6 +27,6 @@ jobs:
       - uses: sobolevn/misspell-fixer-action@master
       - uses: peter-evans/create-pull-request@v2.4.4
         with:
-          token: ${{ secrets.SANJAY_SPELLING_TOKEN }}
+          token: ${{ secrets.BOT_ACTIONS }}
           commit-message: 'Fixes by misspell-fixer'
           title: 'Typos fix by misspell-fixer'
