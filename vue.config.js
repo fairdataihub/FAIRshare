@@ -5,7 +5,7 @@ module.exports = {
       nodeIntegration: true,
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
-        appId: "com.megasanjay.electronvueflask",
+        appId: "com.fairdataihub.sodacovid19",
         asar: true,
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec"],
@@ -36,7 +36,7 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repository: "https://github.com/megasanjay/electron-vue3-flask.git",
+          repository: "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
         },
       },
     },

@@ -1,14 +1,4 @@
-# electron-vue3-flask Template
-
-This is a template that creates an Electron application with a Flask backend and uses Vue3 and TailwindCSS ([optional](#removing-tailwindcss)) for the frontend. Your backend api will be using Flask-RESTX for easier API development and automatic Swagger documentation. At the current time, this application template uses Electron.js version 13.0+ as it is the most recent version of electron that I was able to use with Vue. I will update this template with later versions when supported.
-
-### Project Use Cases
-
-In the current world of serverless functions and cloud hosted servers, it is nice to have an always accessible backend server but if you want to run some code that uses quite a lot of processing power, this can be a challenge. If your application can have some processing handled by Python on the user's computer, this is a good alternative to have. Some potential use cases are listed below:
-
-- If your application uses ML/AI or something within that area of research, having your backend run Python locally is a great option.
-- If your application concept uses Pandas or some other data processing python package that you do not want to host, using Python locally as a backend is possible.
-- If you have sensitive data that you would like to process on a user's computer and not have to deal with transferring files to a server.
+# SODA for COVID-19 Research
 
 ## Project setup
 
@@ -82,50 +72,9 @@ You can also push your build to a draft release on GitHub. You will need to have
 yarn electron:build-release
 ```
 
-### Project Inspiration
-
-This template starts as a Vue application that Electron was added into using this amazing plugin created by [@nklayman](https://nklayman.github.io/vue-cli-plugin-electron-builder/). I created this template to allow users who would like to use Vue as their frontend for an Electron application while using Flask for a backend. If you wanted to let a user of your application use their own computer to provide some processing power, this repo should hopefully work for you.
-
-The original repository for Vue-Electron can be found here: [@codingwithjustin/vue3-electron](https://github.com/codingwithjustin/vue3-electron)
-
-The original repository for using Electron with a Python backend can be found here: [@fyears/electron-python-example](https://github.com/fyears/electron-python-example). This repo uses zerorpc and zeromq to pass messaged between the backend and the Electron application but the original [zerorpc-node](https://github.com/0rpc/zerorpc-node) library hasn't been updated in over 3 years so using Flask and regular http calls is much more simpler and robust. Further more, using Flask as the backend allows you to use newer versions of Electron and Vue to create your application.
-
-### Removing TailwindCSS
-
-If you would like to use a different CSS framwork or use a library like bootstrap, you can remove the tailwind library from this project.
-
-```shell
-yarn remove tailwindcss postcss
-rm tailwind.config.js
-rm postcss.config.js
-```
-
-In your `src/index.css` file remove the following lines:
-
-```postcss
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
 ### Flask application and Swagger documentaion
 
 For the python portion of this application, Flask-RESTX is used to generate the API specific portion. In this example template, I have used a very small subsection of all the features it provides but you are welcome to read more about all the provided options in their documentation. To learn more about Flask-RESTX, click [here](https://flask-restx.readthedocs.io/en/latest/). 
 
 One of the biggest reasons for using this library was the automatic generation of API documentation. If you are working in a team and have different front-end and back-end developers, this should allow you to document your application as you go through your development cycle. To view the documentation, I have set it up under the `/docs` endpoint. This can be accessed by either running `yarn electron:serve` (for the full application) or just running `python pyflask/api.py`. You can then visit the url at [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs) and explore the Swagger documentation.
 
-### Made with Electron, Vue and Flask
-
-Take a look at some of the amazing projects built with this template. Want to have your own project listed? Feel free to add your project at the bottom of the list below then submit a pull request.
-
-- Your project here
-
-### Still To-Do
-
-- [ ] Add tests (Spectron)
-
-<br/>
-
-<p align="center">
- Made with ❤️ by <a href="https://sanjaysoundarajan.dev">@megasanjay</a>
-</p>

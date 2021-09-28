@@ -1,7 +1,7 @@
 {
-  "name": "vue-electron-flask",
-  "version": "1.0.1",
-  "description": "Simple template for combining Electron with Vue3 and Flask",
+  "name": "soda-for-covid-19-research",
+  "version": "0.0.1",
+  "description": "Simplifying data curation for researchers working on COVID-19 research",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -65,7 +65,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/megasanjay/electron-vue3-flask.git"
+    "url": "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git"
   },
   "keywords": [],
   "author": "Sanjay Soundarajan",
