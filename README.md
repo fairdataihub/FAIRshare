@@ -1,7 +1,7 @@
 # SODA for COVID-19 Research
 
 ## Project setup
-
+Use a python environment (virtulenv or Anaconda) to seperate your dev instance.
 ```shell
 yarn install
 cd src/pyflask
