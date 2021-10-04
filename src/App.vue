@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-2">Current App Path: {{ appPath }}</div>
+  <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div>
     <TheCalculator></TheCalculator>
   </div>
@@ -29,14 +29,15 @@ export default {
         if (
           semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))
         ) {
-          console.log("Api Version satisfied");
+          console.log("API version satisfied");
         } else {
-          alert("Invalid API Version");
+          alert("Invalid API version");
         }
       })
       .catch((error) => {
         console.error(error);
       });
+      console.log(this.appPath)
   },
 };
 </script>

@@ -7,26 +7,9 @@
     </p>
 
     <div class="m-2">
-      <input
-        class="rounded-lg p-2"
-        type="text"
-        v-model="inputExpression"
-        placeholder="1 + 2"
-      />
+      <el-input v-model="inputExpression" placeholder="1 + 2" />
     </div>
-    <button
-      @click="calcSum"
-      class="
-        my-2
-        p-2
-        border-2 border-black
-        rounded-lg
-        hover:bg-gray-300
-        transition-all
-      "
-    >
-      Calculate
-    </button>
+    <el-button type="primary" plain @click="calcSum">Calculate</el-button>
     <br />
     <span class="label"> {{ result }}</span>
   </div>
