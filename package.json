@@ -26,7 +26,8 @@
     "element-plus": "^1.1.0-beta.18",
     "ps-tree": "^1.2.0",
     "semver": "^7.3.5",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div>
-    <TheCalculator></TheCalculator>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -12,11 +12,8 @@ import axios from "axios";
 
 const MIN_API_VERSION = "1.0.1";
 
-import TheCalculator from "./components/TheCalculator.vue";
-
 export default {
   name: "App",
-  components: { TheCalculator },
   data() {
     return {
       appPath: app.getAppPath(),
@@ -37,7 +34,7 @@ export default {
       .catch((error) => {
         console.error(error);
       });
-      console.log(this.appPath)
+    console.log(this.appPath);
   },
 };
 </script>
