@@ -1,23 +1,19 @@
 <template>
   <div>
-    <TheCalculator> </TheCalculator>
     <ul>
       <li v-for="post in posts.posts" :key="post">{{ post }}</li>
     </ul>
     <el-button @click="addPost">Add Post</el-button>
     <!-- <p>{{user.name}}</p> -->
-    <router-link to="/about">About</router-link>
-
+    <router-link to="/home">Home</router-link>
   </div>
 </template>
 
 <script>
-import TheCalculator from "../components/TheCalculator.vue";
 import { usePostsStore } from "../store/posts";
 
 export default {
-  name: "HomePage",
-  components: { TheCalculator },
+  name: "About",
   data() {
     return {
       posts: usePostsStore(),
