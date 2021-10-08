@@ -29,6 +29,7 @@
     "semver": "^7.3.5",
     "vue": "^3.0.0",
     "vue-router": "4",
+    "vue-sidebar-menu": "^5.1.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

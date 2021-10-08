@@ -5,7 +5,8 @@ module.exports = {
       nodeIntegration: true,
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
-        appId: "com.fairdataihub.sodacovid19",
+        appId: "com.fairdataihub.sodaforcovid19research",
+        afterSign: "./scripts/notarize.js",
         asar: true,
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec"],

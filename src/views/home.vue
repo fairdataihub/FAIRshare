@@ -1,35 +1,18 @@
 <template>
-  <div>
-    <TheCalculator> </TheCalculator>
-    <ul>
-      <li v-for="post in posts.posts" :key="post">{{ post }}</li>
-    </ul>
-    <el-button @click="addPost">Add Post</el-button>
-    <!-- <p>{{user.name}}</p> -->
-    <router-link to="/about">About</router-link>
-
-  </div>
+    <el-container>
+      <el-aside width="200px">sid2</el-aside>
+      <el-main>Main</el-main>
+    </el-container>
 </template>
 
 <script>
-import TheCalculator from "../components/TheCalculator.vue";
-import { usePostsStore } from "../store/posts";
-
 export default {
   name: "HomePage",
-  components: { TheCalculator },
+  components: {},
   data() {
-    return {
-      posts: usePostsStore(),
-    };
+    return {};
   },
-  methods: {
-    addPost() {
-      // this.$store.dispatch("insertPost", "post5");
-
-      this.posts.insertPost("post5")
-    },
-  },
+  methods: {},
   mounted() {
     console.log(this.$route);
     // console.log(this.$store.state.user.name);
