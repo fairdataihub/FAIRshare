@@ -1,8 +1,5 @@
 <template>
-    <el-container>
-      <el-aside width="200px">sid2</el-aside>
-      <el-main>Main</el-main>
-    </el-container>
+    <div>home</div>
 </template>
 
 <script>

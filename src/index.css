@@ -16,3 +16,11 @@ html {
 #app {
   @apply h-screen w-screen;
 }
+
+.sideBarMenuItem {
+  @apply block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none;
+}
+
+.sideBarMenuItem.router-link-active {
+  @apply block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg  bg-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none;
+}
