@@ -1,8 +1,9 @@
 <template>
   <!-- component -->
   <div
-    class="md:flex flex-col md:flex-row md:min-h-screen mr-3 "
-    :class="{ 'w-40': sideBarOpen, 'w-10': !sideBarOpen }" style="transition: width 0.3s" 
+    class="md:flex flex-col md:flex-row md:min-h-screen mr-3"
+    :class="{ 'w-40': sideBarOpen, 'w-10': !sideBarOpen }"
+    style="transition: width 0.3s"
   >
     <div class="flex flex-col w-full text-gray-700 bg-white flex-shrink-0">
       <div class="p-2 flex flex-row justify-center relative">
@@ -27,10 +28,10 @@
         </div>
       </div>
       <nav
-        class="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto"
+        class="flex-grow px-4 md:pb-0 md:overflow-y-auto"
         v-show="sideBarOpen"
       >
-        <router-link to="/home" class="sideBarMenuItem"> Home </router-link>
+        <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
         <router-link to="/about" class="sideBarMenuItem"> About </router-link>
 
         <div class="relative">
@@ -38,19 +39,14 @@
             @click="dropdownOpen = !dropdownOpen"
             class="
               flex flex-row
-              items-center
+              items-end
               w-full
               px-4
               py-2
               mt-2
               text-sm
               font-semibold
-              text-left
-              bg-transparent
               rounded-lg
-              md:block
-              hover:text-gray-900
-              focus:text-gray-900
               hover:bg-gray-200
               focus:bg-gray-200 focus:outline-none focus:shadow-outline
             "
@@ -208,7 +204,7 @@ export default {
   position: absolute;
   height: 4px;
   width: 100%;
-  background: #d3531a;
+  background: #5f5d5b;
   border-radius: 9px;
   opacity: 1;
   left: 0;
