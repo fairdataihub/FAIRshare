@@ -1,11 +1,11 @@
 <template>
   <!-- component -->
   <div
-    class="md:flex flex-col md:flex-row md:min-h-screen mr-3"
+    class="md:flex flex-col md:flex-row md:min-h-screen mr-3 "
     :class="{ 'w-40': sideBarOpen, 'w-10': !sideBarOpen }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full text-gray-700 bg-white flex-shrink-0">
+    <div class="flex flex-col w-full text-gray-700 bg-gray-50 flex-shrink-0">
       <div class="p-2 flex flex-row justify-center relative">
         <img
           v-if="sideBarOpen"

@@ -19,6 +19,7 @@
   "main": "background.js",
   "dependencies": {
     "@electron/remote": "^1.2.1",
+    "@tailwindcss/line-clamp": "^0.2.2",
     "axios": "^0.21.2",
     "core-js": "^3.6.5",
     "electron-log": "^4.4.1",
@@ -27,12 +28,12 @@
     "pinia": "^2.0.0-rc.10",
     "ps-tree": "^1.2.0",
     "semver": "^7.3.5",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
-    "vue-router": "4",
-    "vue-sidebar-menu": "^5.1.2",
-    "vuex": "^4.0.2"
+    "vue-router": "4"
   },
   "devDependencies": {
+    "@iconify/vue": "^3.0.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
