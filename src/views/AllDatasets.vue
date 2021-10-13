@@ -55,9 +55,7 @@
                   <span class="font-inter text-sm font-medium">
                     {{ dataset.datasetName }}
                   </span>
-                  <p
-                    class="font-inter text-sm line-clamp-3"
-                  >
+                  <p class="font-inter text-sm line-clamp-3">
                     {{ dataset.datasetDescription }}
                   </p>
                 </div>
@@ -68,24 +66,26 @@
             </div>
           </div>
           <el-divider> </el-divider>
-          <div
-            ref="startFromEmpty"
-            class="
-              flex flex-row
-              items-center
-              w-max
-              text-purple-800
-              cursor-pointer
-              mb-5
-              pb-1
-              hover-underline-animation
-            "
-          >
-            <span class="font-inter text-base font-medium">
-              Or start from an empty project
-            </span>
-            <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-          </div>
+          <router-link to="/datasets/new">
+            <div
+              ref="startFromEmpty"
+              class="
+                flex flex-row
+                items-center
+                w-max
+                text-purple-800
+                cursor-pointer
+                mb-5
+                pb-1
+                hover-underline-animation
+              "
+            >
+              <span class="font-inter text-base font-medium">
+                Or start from an empty project
+              </span>
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+            </div>
+          </router-link>
         </div>
       </div>
       <div
@@ -126,7 +126,7 @@ import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
-  name: "HomePage",
+  name: "AllDatasets",
   components: { Icon },
 
   data() {

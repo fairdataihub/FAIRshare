@@ -1,8 +1,8 @@
 <template>
   <!-- component -->
   <div
-    class="md:flex flex-col md:flex-row md:min-h-screen mr-3 "
-    :class="{ 'w-40': sideBarOpen, 'w-10': !sideBarOpen }"
+    class="md:flex flex-col md:flex-row md:min-h-screen mr-3"
+    :class="{ 'w-64': sideBarOpen, 'w-12': !sideBarOpen }"
     style="transition: width 0.3s"
   >
     <div class="flex flex-col w-full text-gray-700 bg-gray-50 flex-shrink-0">
@@ -32,130 +32,10 @@
         v-show="sideBarOpen"
       >
         <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
+        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
+          Continue curation
+        </router-link>
         <router-link to="/about" class="sideBarMenuItem"> About </router-link>
-
-        <div class="relative">
-          <button
-            @click="dropdownOpen = !dropdownOpen"
-            class="
-              flex flex-row
-              items-end
-              w-full
-              px-4
-              py-2
-              mt-2
-              text-sm
-              font-semibold
-              rounded-lg
-              hover:bg-gray-200
-              focus:bg-gray-200 focus:outline-none focus:shadow-outline
-            "
-          >
-            <span>Dropdown</span>
-            <svg
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              :class="{ 'rotate-180': dropdownOpen, 'rotate-0': !dropdownOpen }"
-              class="
-                inline
-                w-4
-                h-4
-                mt-1
-                ml-1
-                transition-transform
-                duration-200
-                transform
-                md:-mt-1
-              "
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </button>
-          <transition name="sideBarFade">
-            <div
-              v-if="dropdownOpen"
-              class="
-                absolute
-                right-0
-                w-full
-                mt-2
-                origin-top-right
-                rounded-md
-                shadow-lg
-              "
-            >
-              <div
-                class="
-                  px-2
-                  py-2
-                  bg-white
-                  rounded-md
-                  shadow
-                  dark-mode:bg-gray-800
-                "
-              >
-                <a
-                  class="
-                    block
-                    px-4
-                    py-2
-                    mt-2
-                    text-sm
-                    font-semibold
-                    bg-transparent
-                    rounded-lg
-                    md:mt-0
-                    hover:text-gray-900 hover:bg-gray-200
-                  "
-                  href="#"
-                  >Link #1</a
-                >
-                <a
-                  class="
-                    block
-                    px-4
-                    py-2
-                    mt-2
-                    text-sm
-                    font-semibold
-                    bg-transparent
-                    rounded-lg
-                    md:mt-0
-                    hover:text-gray-900
-                    focus:text-gray-900
-                    hover:bg-gray-200
-                    focus:bg-gray-200
-                  "
-                  href="#"
-                  >Link #2</a
-                >
-                <a
-                  class="
-                    block
-                    px-4
-                    py-2
-                    mt-2
-                    text-sm
-                    font-semibold
-                    bg-transparent
-                    rounded-lg
-                    md:mt-0
-                    hover:text-gray-900
-                    focus:text-gray-900
-                    hover:bg-gray-200
-                    focus:bg-gray-200
-                  "
-                  href="#"
-                  >Link #3</a
-                >
-              </div>
-            </div>
-          </transition>
-        </div>
       </nav>
     </div>
   </div>
@@ -167,6 +47,14 @@ export default {
   components: {},
   data() {
     return { dropdownOpen: false, sideBarOpen: true };
+  },
+  methods: {
+    isDataset: function () {
+      if (this.$route.path.search("datasets") != -1) {
+        return "router-link-active";
+      }
+      return "";
+    },
   },
 };
 </script>
