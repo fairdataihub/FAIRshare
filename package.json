@@ -25,6 +25,7 @@
     "electron-log": "^4.4.1",
     "electron-updater": "^4.3.9",
     "element-plus": "^1.1.0-beta.18",
+    "fs-extra": "^10.0.0",
     "pinia": "^2.0.0-rc.10",
     "ps-tree": "^1.2.0",
     "semver": "^7.3.5",

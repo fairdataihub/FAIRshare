@@ -4,6 +4,7 @@
       <li v-for="post in posts.posts" :key="post">{{ post }}</li>
     </ul>
     <el-button @click="addPost">Add Post</el-button>
+    <span>{{posts.datasets}}</span>
     <!-- <p>{{user.name}}</p> -->
     <router-link to="/home">Home</router-link>
   </div>
@@ -28,6 +29,7 @@ export default {
   },
   mounted() {
     console.log(this.$route);
+    console.log(this.posts.datasets)
     // console.log(this.$store.state.user.name);
     // console.log(this.$store.getters.postsCount);
   },

@@ -18,10 +18,10 @@ const loadFile = async () => {
 
   if (!exists) {
     createFile(datasetsFilePath);
-    return "test";
+    return [];
   } else {
-    // let unpublishedDatasets = fs.readJsonSync(datasetsFilePath);
-    return "unpublishedDatasets";
+    let unpublishedDatasets = fs.readJsonSync(datasetsFilePath);
+    return unpublishedDatasets;
   }
 };
 
@@ -29,7 +29,7 @@ export const usePostsStore = defineStore({
   id: "PostsStore",
   state: () => ({
     posts: ["post 1", "post 2", "post 3", "post 4"],
-    datasets: loadFile,
+    datasets: loadFile(),
   }),
   getters: {
     // traditional function

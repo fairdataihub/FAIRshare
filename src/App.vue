@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { app } from "@electron/remote";
+// import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
 import AppSidebar from "./components/ui/AppSidebar.vue";
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      appPath: app.getAppPath(),
+      // appPath: app.getAppPath(),
     };
   },
   mounted() {

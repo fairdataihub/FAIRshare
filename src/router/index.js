@@ -10,6 +10,7 @@ const routes = [
   { path: "/home", component: HomePage },
   { path: "/datasets", component: AllDatasets },
   { path: "/datasets/new", component: NewDataset },
+  { path: "/datasets/new/:datasetID/confirm", component: HomePage },
   { path: "/datasets/:datasetID", component: HomePage },
   { path: "/about", component: About },
 ];

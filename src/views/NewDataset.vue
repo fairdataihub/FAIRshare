@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen w-full flex flex-row items-center overflow-y-auto">
-    <div class="p-3 h-full flex flex-row items-center">
+    <div class="p-3 h-full flex flex-row">
       <div class="flex flex-col h-full">
         <span class="font-inter text-base font-medium">
           Create a new dataset
@@ -8,70 +8,90 @@
         <span class="font-inter text-base">
           Fill out some general details about your dataset here.
         </span>
-        <el-divider content-position="left" class="font-inter">
-          Click on one of the datasets below</el-divider
-        >
 
-        <el-form ref="form" :model="form" label-width="120px" @submit.prevent>
-          <el-form-item label="Activity name">
-            <el-input v-model="form.name"></el-input>
+        <el-divider> </el-divider>
+
+        <el-form
+          ref="datasetForm"
+          :model="datasetForm"
+          label-width="150px"
+          @submit.prevent
+          :rules="rules"
+        >
+          <el-form-item label="Dataset name" prop="datasetName">
+            <el-input v-model="datasetForm.datasetName"></el-input>
           </el-form-item>
-          <el-form-item label="Activity zone">
-            <el-select
-              v-model="form.region"
-              placeholder="please select your zone"
+
+          <el-form-item label="Dataset description">
+            <el-popover
+              ref="popover"
+              placement="bottom"
+              :width="300"
+              trigger="focus"
             >
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
+              <template #reference>
+                <el-input
+                  v-model="datasetForm.datasetDescription"
+                  type="textarea"
+                ></el-input>
+              </template>
+
+              <span class="break-normal">
+                Use a description that is easily identifiable. This will be
+                shown in the dataset selection screen and is not part of your
+                submitted metadata.
+              </span>
+            </el-popover>
           </el-form-item>
-          <el-form-item label="Activity time">
-            <el-col :span="11">
-              <el-date-picker
-                v-model="form.date1"
-                type="date"
-                placeholder="Pick a date"
-                style="width: 100%"
-              ></el-date-picker>
-            </el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-time-picker
-                v-model="form.date2"
-                placeholder="Pick a time"
-                style="width: 100%"
-              ></el-time-picker>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="Instant delivery">
-            <el-switch v-model="form.delivery"></el-switch>
-          </el-form-item>
-          <el-form-item label="Activity type">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="Online activities" name="type"></el-checkbox>
-              <el-checkbox
-                label="Promotion activities"
-                name="type"
-              ></el-checkbox>
-              <el-checkbox label="Offline activities" name="type"></el-checkbox>
-              <el-checkbox
-                label="Simple brand exposure"
-                name="type"
-              ></el-checkbox>
+
+          <el-form-item label="Data type" prop="dataType">
+            <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
+              <el-checkbox label="Code" name="type"></el-checkbox>
+
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Coming soon..."
+                placement="top-end"
+              >
+                <el-checkbox
+                  label="Publications"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+              </el-tooltip>
+
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Coming soon..."
+                placement="top-end"
+              >
+                <el-checkbox label="Images" name="type" disabled></el-checkbox>
+              </el-tooltip>
+
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Coming soon..."
+                placement="top-end"
+              >
+                <el-checkbox
+                  label="Genomic Data"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+              </el-tooltip>
             </el-checkbox-group>
           </el-form-item>
-          <el-form-item label="Resources">
-            <el-radio-group v-model="form.resource">
-              <el-radio label="Sponsor"></el-radio>
-              <el-radio label="Venue"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="Activity form">
-            <el-input v-model="form.desc" type="textarea"></el-input>
-          </el-form-item>
+
           <el-form-item>
-            <el-button type="primary">Create</el-button>
-            <el-button>Cancel</el-button>
+            <div class="py-2">
+              <el-button type="primary" @click="submitForm('datasetForm')">
+                Create
+              </el-button>
+              <el-button> Cancel </el-button>
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -86,22 +106,44 @@
 export default {
   name: "NewDataset",
   // components: { Icon },
-
   data() {
     return {
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+      datasetForm: {
+        datasetName: "",
+        datasetDescription: "",
+        dataType: [],
+      },
+      rules: {
+        datasetName: [
+          {
+            required: true,
+            message: "Please type a dataset name",
+            trigger: "blur",
+          },
+        ],
+        dataType: [
+          {
+            type: "array",
+            required: true,
+            message: "Please select at least one data type",
+            trigger: "change",
+          },
+        ],
       },
     };
   },
-  methods: {},
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+  },
   mounted() {},
 };
 </script>
