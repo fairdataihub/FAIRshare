@@ -1,9 +1,9 @@
 <template>
-  <div class="h-screen w-full flex flex-row items-center">
+  <div class="h-screen w-full flex flex-row justify-center items-center">
     <div ref="" class="p-3 h-full flex flex-row items-center">
       <div ref="" class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto">
-          <span class="font-inter text-base font-medium">
+          <span class="font-inter text-base font-medium text-left">
             SODA suggestions
           </span>
 
