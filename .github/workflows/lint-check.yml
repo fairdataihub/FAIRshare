@@ -55,5 +55,3 @@ jobs:
           flake8_dir: "./src/pyflask"
           auto_fix: true
           github_token: ${{ secrets.BOT_ACTIONS }}
-          git_email: "fairdataihub@gmail.com"
-          git_name: "fairdataihub-bot"
