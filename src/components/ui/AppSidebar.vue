@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="md:flex flex-col md:flex-row md:min-h-screen mr-3 debug-screens"
+    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50"
     :class="{
       'w-64': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -9,7 +9,7 @@
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full text-gray-700 bg-gray-50 flex-shrink-0">
+    <div class="flex flex-col w-full text-gray-700 ">
       <div class="p-2 flex flex-row justify-center relative">
         <img
           v-if="sideBarOpen"
@@ -31,10 +31,7 @@
           </div>
         </div>
       </div>
-      <nav
-        class="flex-grow px-4 md:pb-0 md:overflow-y-auto"
-        v-show="sideBarOpen"
-      >
+      <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
         <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
         <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
           Continue curation

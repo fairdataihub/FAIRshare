@@ -1,11 +1,11 @@
 # SODA for COVID-19 Research
 
 ## Project setup
-Use a python environment (virtulenv or Anaconda) to separate your dev instance.
+Use a python environment (Anaconda) to separate your dev instance.
 ```shell
+conda env create -f .\dev\sodacovid-dev-env.yml
+conda activate sodacovid-dev
 yarn install
-cd src/pyflask
-pip install -r requirements.txt
 ```
 
 ## Running the application
@@ -31,7 +31,7 @@ yarn serve
 This will compile your application and also allow hot-reloads for development. If you want to test any components that don't use OS native calls this is a good alternative to have. In my opinion I would recommend using the [electron compilation command](#vue-frontend-running-in-electron) because this should you the most up to date state of your application. If you want the backend to also run alongside the browser instance, just open a new terminal instance and run the following command:
 
 ```shell
-python pyflask/api.py
+yarn python:dev
 ```
 
 `Note:` This instance will still not have access to the native node libraries since these are provided through the remote Electron mopdule.

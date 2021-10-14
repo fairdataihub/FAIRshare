@@ -6,7 +6,6 @@ module.exports = {
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
         appId: "com.fairdataihub.sodaforcovid19research",
-        afterSign: "./scripts/notarize.js",
         asar: true,
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec"],
@@ -18,6 +17,7 @@ module.exports = {
         mac: {
           target: ["dmg", "zip"],
           icon: "./src/assets/app-icons/macAppIcon.png",
+          afterSign: "./scripts/notarize.js",
           extraResources: [{ from: "./src/pyflaskdist/api" }],
           darkModeSupport: false,
           hardenedRuntime: true,
@@ -37,7 +37,8 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repository: "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
+          repository:
+            "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
         },
       },
     },

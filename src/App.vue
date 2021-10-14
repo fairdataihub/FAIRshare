@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
-  <div class="flex flex-row">
+  <div class="flex flex-row bg-white">
     <AppSidebar></AppSidebar>
     <router-view v-slot="{ Component }">
       <transition name="fade" appear mode="out-in">
