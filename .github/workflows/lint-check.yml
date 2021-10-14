@@ -28,10 +28,14 @@ jobs:
       - name: Install Node.js dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run linters
+      - name: Run ESLint
         uses: wearerequired/lint-action@v1
         with:
           eslint: true
+
+      - name: Run Prettier
+        uses: wearerequired/lint-action@v1
+        with:
           prettier: true
           prettier_extensions: "css,html,js,json,jsx,md,sass,scss,ts,tsx,vue"
           auto_fix: true
@@ -45,9 +49,15 @@ jobs:
       - name: Install Python dependencies
         run: pip install black flake8
 
-      - name: Run linters
+      - name: Run Black
         uses: wearerequired/lint-action@v1
         with:
           black: true
+          auto_fix: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Flake8
+        uses: wearerequired/lint-action@v1
+        with:
           flake8: true
           flake8_dir: "./src/pyflask"
