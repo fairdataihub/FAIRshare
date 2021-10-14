@@ -15,7 +15,10 @@ const routes = [
     component: DatasetsCreateNew,
     name: "DatasetsCreateNew",
   },
-  { path: "/datasets/new/:datasetID/confirm", component: DatasetsCreateNewConfirm },
+  {
+    path: "/datasets/new/:datasetID/confirm",
+    component: DatasetsCreateNewConfirm,
+  },
   { path: "/datasets/:datasetID", component: HomePage },
   { path: "/about", component: About },
 ];
