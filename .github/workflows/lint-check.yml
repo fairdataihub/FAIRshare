@@ -35,7 +35,7 @@ jobs:
           prettier: true
           prettier_extensions: "css,html,js,json,jsx,md,sass,scss,ts,tsx,vue"
           auto_fix: true
-          github_token: ${{ secrets.BOT_ACTIONS }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v1
