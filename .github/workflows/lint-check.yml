@@ -50,8 +50,6 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           black: true
-          black_dir: "./src/pyflask"
           flake8: true
-          flake8_dir: "./src/pyflask"
           auto_fix: true
           github_token: ${{ secrets.BOT_ACTIONS }}
