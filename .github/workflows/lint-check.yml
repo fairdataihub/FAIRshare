@@ -52,4 +52,3 @@ jobs:
           black: true
           flake8: true
           auto_fix: true
-          github_token: ${{ secrets.BOT_ACTIONS }}
