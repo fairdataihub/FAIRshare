@@ -14,6 +14,7 @@ def getPrec(c):
         return 3
     return 0
 
+
 def getAssoc(c):
     if c in "+-*/":
         return "LEFT"
@@ -21,47 +22,52 @@ def getAssoc(c):
         return "RIGHT"
     return "LEFT"
 
+
 def getBin(op, a, b):
-    if op == '+':
+    if op == "+":
         return a + b
-    if op == '-':
+    if op == "-":
         return a - b
-    if op == '*':
+    if op == "*":
         return a * b
-    if op == '/':
+    if op == "/":
         return a / b
-    if op == '^':
+    if op == "^":
         return a ** b
     return 0
+
 
 def calc(s):
     numStk = []
     opStk = []
     i = 0
     isUnary = True
-    while (i < len(s)):
-        while (i < len(s) and s[i] == ' '):
+    while i < len(s):
+        while i < len(s) and s[i] == " ":
             i += 1
-        if (i >= len(s)):
+        if i >= len(s):
             break
-        if (s[i].isdigit()):
-            num = ''
-            while (i < len(s) and (s[i].isdigit() or s[i] == '.')):
+        if s[i].isdigit():
+            num = ""
+            while i < len(s) and (s[i].isdigit() or s[i] == "."):
                 num += s[i]
                 i += 1
             numStk.append(float(num))
             isUnary = False
             continue
 
-        if (s[i] in "+-*/^"):
+        if s[i] in "+-*/^":
             if isUnary:
-                opStk.append('#')
+                opStk.append("#")
             else:
-                while (len(opStk) > 0):
-                    if ((getAssoc(s[i]) == "LEFT" and getPrec(s[i]) <= getPrec(opStk[-1])) or 
-                        (getAssoc(s[i]) == "RIGHT" and getPrec(s[i]) < getPrec(opStk[-1]))):
+                while len(opStk) > 0:
+                    if (
+                        getAssoc(s[i]) == "LEFT" and getPrec(s[i]) <= getPrec(opStk[-1])
+                    ) or (
+                        getAssoc(s[i]) == "RIGHT" and getPrec(s[i]) < getPrec(opStk[-1])
+                    ):
                         op = opStk.pop()
-                        if op == '#':
+                        if op == "#":
                             numStk.append(-numStk.pop())
                         else:
                             b = numStk.pop()
@@ -71,15 +77,15 @@ def calc(s):
                     break
                 opStk.append(s[i])
             isUnary = True
-        elif (s[i] == '('):
+        elif s[i] == "(":
             opStk.append(s[i])
             isUnary = True
         else:
-            while (len(opStk) > 0):
+            while len(opStk) > 0:
                 op = opStk.pop()
-                if (op == '('):
+                if op == "(":
                     break
-                if op == '#':
+                if op == "#":
                     numStk.append(-numStk.pop())
                 else:
                     b = numStk.pop()
@@ -87,9 +93,9 @@ def calc(s):
                     numStk.append(getBin(op, a, b))
         i += 1
 
-    while (len(opStk) > 0):
+    while len(opStk) > 0:
         op = opStk.pop()
-        if op == '#':
+        if op == "#":
             numStk.append(-numStk.pop())
         else:
             b = numStk.pop()
@@ -97,22 +103,21 @@ def calc(s):
             numStk.append(getBin(op, a, b))
 
     return numStk.pop()
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     ss = [
-        "1 + 2 * 3 / 4 - 5 + - 6", # -8.5
-        "10 + ( - 1 ) ^ 4", # 11
-        "10 + - 1 ^ 4", # 9
-        "10 + - - 1 ^ 4", # 11
-        "10 + - ( - 1 ^ 4 )", # 11
-        "5 * ( 10 - 9 )", # 5
-        "1 + 2 * 3", # 7
-        "4 ^ 3 ^ 2", # 262144
-        "4 ^ - 3", # 0.015625
-        "4 ^ ( - 3 )", # 0.015625
+        "1 + 2 * 3 / 4 - 5 + - 6",  # -8.5
+        "10 + ( - 1 ) ^ 4",  # 11
+        "10 + - 1 ^ 4",  # 9
+        "10 + - - 1 ^ 4",  # 11
+        "10 + - ( - 1 ^ 4 )",  # 11
+        "5 * ( 10 - 9 )",  # 5
+        "1 + 2 * 3",  # 7
+        "4 ^ 3 ^ 2",  # 262144
+        "4 ^ - 3",  # 0.015625
+        "4 ^ ( - 3 )",  # 0.015625
     ]
     for s in ss:
         res = calc(s)
-        print('{} = {}'.format(res, s))
-    
+        print("{} = {}".format(res, s))

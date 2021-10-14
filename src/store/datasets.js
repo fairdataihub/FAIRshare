@@ -79,7 +79,7 @@ export const useDatasetsStore = defineStore({
     },
     getDataset(datasetID) {
       for (let dataset of this.datasets) {
-        console.log(dataset.id, datasetID)
+        console.log(dataset.id, datasetID);
         if (dataset.id === datasetID) {
           return dataset;
         }

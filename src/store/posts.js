@@ -68,7 +68,7 @@ export const usePostsStore = defineStore({
     async loadposts() {
       try {
         const datasets = await loadFile();
-        console.log(datasets)
+        console.log(datasets);
         this.datasets = datasets;
       } catch (error) {
         console.log(error);

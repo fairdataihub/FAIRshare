@@ -18,7 +18,11 @@
           @submit.prevent
           :rules="rules"
         >
-          <el-form-item label="Dataset name" prop="datasetName" class="font-inter">
+          <el-form-item
+            label="Dataset name"
+            prop="datasetName"
+            class="font-inter"
+          >
             <el-input v-model="datasetForm.datasetName"></el-input>
           </el-form-item>
 

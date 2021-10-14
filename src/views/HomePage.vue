@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="h-screen w-full flex flex-row "
-  >
-    Home
-  </div>
+  <div class="h-screen w-full flex flex-row">Home</div>
 </template>
 
 <script>

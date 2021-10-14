@@ -1,7 +1,9 @@
 # SODA for COVID-19 Research
 
 ## Project setup
+
 Use a python environment (Anaconda) to separate your dev instance.
+
 ```shell
 conda env create -f .\dev\sodacovid-dev-env.yml
 conda activate sodacovid-dev
@@ -38,7 +40,7 @@ yarn python:dev
 
 ## Building the application
 
-To build the complete application, you will need to build the python executable and the Electron portion separately. 
+To build the complete application, you will need to build the python executable and the Electron portion separately.
 
 `Note:` You will not be able to do cross compatible builds for MacOS, Linux and Windows. The Python executable will be OS specific so you will need to build on each target OS separately. For macOS you will need an Apple Developer Certificate. You can get one of these [here](https://developer.apple.com/support/certificates/).
 
@@ -74,7 +76,6 @@ yarn electron:build-release
 
 ### Flask application and Swagger documentaion
 
-For the python portion of this application, Flask-RESTX is used to generate the API specific portion. In this example template, I have used a very small subsection of all the features it provides but you are welcome to read more about all the provided options in their documentation. To learn more about Flask-RESTX, click [here](https://flask-restx.readthedocs.io/en/latest/). 
+For the python portion of this application, Flask-RESTX is used to generate the API specific portion. In this example template, I have used a very small subsection of all the features it provides but you are welcome to read more about all the provided options in their documentation. To learn more about Flask-RESTX, click [here](https://flask-restx.readthedocs.io/en/latest/).
 
 One of the biggest reasons for using this library was the automatic generation of API documentation. If you are working in a team and have different front-end and back-end developers, this should allow you to document your application as you go through your development cycle. To view the documentation, I have set it up under the `/docs` endpoint. This can be accessed by either running `yarn electron:serve` (for the full application) or just running `python pyflask/api.py`. You can then visit the url at [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs) and explore the Swagger documentation.
-

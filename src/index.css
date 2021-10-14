@@ -16,7 +16,7 @@ html {
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  @apply font-inter
+  @apply font-inter;
 }
 
 #app {
@@ -31,13 +31,12 @@ html {
   @apply block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg  bg-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none;
 }
 
-
 .hover-underline-animation {
   position: relative;
 }
 
 .hover-underline-animation:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   transform: scaleX(0);

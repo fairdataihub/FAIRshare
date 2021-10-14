@@ -106,7 +106,7 @@ export default {
 
 .fade-enter-from,
 .fade-leave-to {
-   opacity: 0;
+  opacity: 0;
   /* transform: translateY(-20px); */
 }
 </style>

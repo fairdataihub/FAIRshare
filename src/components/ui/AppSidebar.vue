@@ -9,7 +9,7 @@
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full text-gray-700 ">
+    <div class="flex flex-col w-full text-gray-700">
       <div class="p-2 flex flex-row justify-center relative">
         <img
           v-if="sideBarOpen"

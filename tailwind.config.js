@@ -11,7 +11,7 @@ module.exports = {
       },
     },
     debugScreens: {
-      position: ['bottom', 'left'],
+      position: ["bottom", "left"],
     },
   },
   variants: {
