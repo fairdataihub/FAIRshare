@@ -33,7 +33,10 @@ jobs:
         with:
           eslint: true
           prettier: true
-          autofix: true
+          auto_fix: true
+          github_token: ${{ secrets.BOT_ACTIONS }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -47,5 +50,10 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           black: true
+          black_dir: src/pyflask
           flake8: true
-          autofix: true
+          flake8_dir: src/pyflask
+          auto_fix: true
+          github_token: ${{ secrets.BOT_ACTIONS }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
