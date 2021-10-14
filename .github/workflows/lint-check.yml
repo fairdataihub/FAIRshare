@@ -33,6 +33,7 @@ jobs:
         with:
           eslint: true
           prettier: true
+          autofix: true
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -47,3 +48,4 @@ jobs:
         with:
           black: true
           flake8: true
+          autofix: true
