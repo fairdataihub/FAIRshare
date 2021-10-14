@@ -1,8 +1,12 @@
 <template>
   <!-- component -->
   <div
-    class="md:flex flex-col md:flex-row md:min-h-screen mr-3"
-    :class="{ 'w-64': sideBarOpen, 'w-12': !sideBarOpen }"
+    class="md:flex flex-col md:flex-row md:min-h-screen mr-3 debug-screens"
+    :class="{
+      'w-64': sideBarOpen,
+      'w-12': !sideBarOpen,
+      'debug-screens': process.env.NODE_ENV === 'production',
+    }"
     style="transition: width 0.3s"
   >
     <div class="flex flex-col w-full text-gray-700 bg-gray-50 flex-shrink-0">
@@ -36,6 +40,12 @@
           Continue curation
         </router-link>
         <router-link to="/about" class="sideBarMenuItem"> About </router-link>
+        <router-link
+          to="/datasets/new/f1f6c588-d79c-4235-b9ef-7cb7bfb95b8e/confirm"
+          class="sideBarMenuItem"
+        >
+          Confirm
+        </router-link>
       </nav>
     </div>
   </div>
@@ -46,7 +56,7 @@ export default {
   name: "AppSidebar",
   components: {},
   data() {
-    return { dropdownOpen: false, sideBarOpen: true };
+    return { dropdownOpen: false, sideBarOpen: true, process: process };
   },
   methods: {
     isDataset: function () {

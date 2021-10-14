@@ -11,7 +11,7 @@ CORS(app)
 api = Api(
     app,
     version=API_VERSION,
-    title="Flask backend api",
+    title="SODA for COVID-19 Research backend api",
     description="The backend api system for the Electron Vue app",
     doc="/docs",
 )
@@ -28,7 +28,7 @@ class HelloWorld(Resource):
     @api.response(200, "Success")
     @api.response(400, "Validation Error")
     def get(self):
-        response = "Server active!!"
+        response = "Server active!"
         return response
 
 

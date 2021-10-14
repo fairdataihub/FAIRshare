@@ -10,11 +10,17 @@ module.exports = {
         asap: ["Asap"],
       },
     },
+    debugScreens: {
+      position: ['bottom', 'left'],
+    },
   },
   variants: {
     extend: {
       transitionProperty: ["responsive", "motion-safe", "motion-reduce"],
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("tailwindcss-debug-screens"),
+  ],
 };

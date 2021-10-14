@@ -31,3 +31,4 @@ build
 src/pyflaskdist
 api.spec
 *.ipynb
+.env

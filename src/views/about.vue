@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-for="post in posts.posts" :key="post">{{ post }}</li>
+      <li v-for="post in posts.datasets" :key="post">{{ post }}</li>
     </ul>
     <el-button @click="addPost">Add Post</el-button>
     <span>{{posts.datasets}}</span>
@@ -28,6 +28,7 @@ export default {
     },
   },
   mounted() {
+    this.posts.loadposts();
     console.log(this.$route);
     console.log(this.posts.datasets)
     // console.log(this.$store.state.user.name);

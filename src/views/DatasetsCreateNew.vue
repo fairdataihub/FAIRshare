@@ -18,7 +18,7 @@
           @submit.prevent
           :rules="rules"
         >
-          <el-form-item label="Dataset name" prop="datasetName">
+          <el-form-item label="Dataset name" prop="datasetName" class="font-inter">
             <el-input v-model="datasetForm.datasetName"></el-input>
           </el-form-item>
 
@@ -27,7 +27,7 @@
               ref="popover"
               placement="bottom"
               :width="300"
-              trigger="focus"
+              trigger="manual"
             >
               <template #reference>
                 <el-input
@@ -36,7 +36,7 @@
                 ></el-input>
               </template>
 
-              <span class="break-normal">
+              <span class="break-normal text-left text-sm">
                 Use a description that is easily identifiable. This will be
                 shown in the dataset selection screen and is not part of your
                 submitted metadata.
@@ -90,7 +90,7 @@
               <el-button type="primary" @click="submitForm('datasetForm')">
                 Create
               </el-button>
-              <el-button> Cancel </el-button>
+              <el-button @click="cancelNewDataset"> Cancel </el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -101,13 +101,16 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
-// import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
+
+import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "NewDataset",
+  name: "DatasetsCreateNew",
   // components: { Icon },
   data() {
     return {
+      datasetStore: useDatasetsStore(),
       datasetForm: {
         datasetName: "",
         datasetDescription: "",
@@ -136,12 +139,27 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          const datasetID = uuidv4();
+          const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
+
+          let dataset = {
+            id: datasetID,
+            image: datasetImage,
+            name: this.datasetForm.datasetName,
+            description: this.datasetForm.datasetDescription,
+          };
+
+          this.datasetStore.addDataset(dataset);
+          this.datasetStore.writeDatasetsToFile();
+          this.$router.push({ name: "DatasetsShowAll" }); //subject to change
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    cancelNewDataset() {
+      this.$router.push({ name: "DatasetsShowAll" });
     },
   },
   mounted() {},

@@ -2247,6 +2247,13 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios-retry@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.2.0.tgz#eb48e72f90b177fde62329b2896aa8476cfb90ba"
+  integrity sha512-RK2cLMgIsAQBDhlIsJR5dOhODPigvel18XUv1dDXW+4k1FzebyfRk+C+orot6WPZOYFKSfhLwHPwVmTVOODQ5w==
+  dependencies:
+    is-retry-allowed "^1.1.0"
+
 axios@^0.21.2:
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.2.tgz#21297d5084b2aeeb422f5d38e7be4fbb82239017"
@@ -6131,6 +6138,11 @@ is-resolvable@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.1.0.tgz#fb18f87ce1feb925169c9a407c19318a3206ed88"
   integrity sha512-qgDYXFSR5WvEfuS5dMj6oTMEbrrSaM0CrFk2Yiq/gXnBvD9pMa2jGXxyhGLfvhZpuMZe18CJpFxAt3CRs42NMg==
 
+is-retry-allowed@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.2.0.tgz#d778488bd0a4666a3be8a1482b9f2baafedea8b4"
+  integrity sha512-RUbUeKwvm3XG2VYamhJL1xFktgjvPzL0Hq8C+6yrWIswDy3BIXGqCxhxkc30N9jqK311gVU137K8Ei55/zVJRg==
+
 is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
@@ -9601,6 +9613,11 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
+tailwindcss-debug-screens@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-debug-screens/-/tailwindcss-debug-screens-2.1.0.tgz#fff6b6d84029a8dc7b507fb02f4264582c1123b2"
+  integrity sha512-58mnybJxnGQG8DyLnbovjNL9dpHpffrHSPm6PsELOX3KSvsZF3xwZO3GYtQhLvSryFGLjS7Ntfdjw34Efck/MQ==
+
 "tailwindcss@npm:@tailwindcss/postcss7-compat":
   version "2.2.10"
   resolved "https://registry.yarnpkg.com/@tailwindcss/postcss7-compat/-/postcss7-compat-2.2.10.tgz#a84da77fb45e80b638419d25963814724129880d"
@@ -10586,6 +10603,11 @@ widest-line@^3.1.0:
   integrity sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==
   dependencies:
     string-width "^4.0.0"
+
+win-node-env@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/win-node-env/-/win-node-env-0.4.0.tgz#2d9dc991702920c73eaa1d644655b773886da5cb"
+  integrity sha512-bf4TV/NOBEazlHJW/bOns7u2JaHe3f5bz8BYanm/xuqJ405NG9OK3VAI1Y2WvHJsAo4GMU8EYTHSh59Q3UfHvA==
 
 word-wrap@~1.2.3:
   version "1.2.3"

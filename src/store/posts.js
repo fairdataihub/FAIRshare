@@ -6,22 +6,26 @@ import { app } from "@electron/remote";
 import { defineStore } from "pinia";
 
 const createFile = async (datasetsFilePath) => {
-  fs.ensureFileSync(datasetsFilePath)
+  fs.ensureFileSync(datasetsFilePath);
   fs.writeJsonSync(datasetsFilePath, []);
 };
 
 const loadFile = async () => {
   const userPath = app.getPath("userData");
-  const datasetsFilePath = path.join(userPath, "Store", "unpublishedDatasets.soda");
-  console.log(datasetsFilePath)
+  const datasetsFilePath = path.join(
+    userPath,
+    "Store",
+    "unpublishedDatasets.soda"
+  );
+  console.log(datasetsFilePath);
   const exists = await fs.pathExists(datasetsFilePath);
 
   if (!exists) {
     createFile(datasetsFilePath);
-    return "test";
+    return [];
   } else {
-    // let unpublishedDatasets = fs.readJsonSync(datasetsFilePath);
-    return "unpublishedDatasets";
+    let unpublishedDatasets = fs.readJsonSync(datasetsFilePath);
+    return unpublishedDatasets;
   }
 };
 
@@ -29,7 +33,7 @@ export const usePostsStore = defineStore({
   id: "PostsStore",
   state: () => ({
     posts: ["post 1", "post 2", "post 3", "post 4"],
-    datasets: loadFile,
+    datasets: [],
   }),
   getters: {
     // traditional function
@@ -59,6 +63,15 @@ export const usePostsStore = defineStore({
         // });
       } catch (error) {
         this.errors.push(error);
+      }
+    },
+    async loadposts() {
+      try {
+        const datasets = await loadFile();
+        console.log(datasets)
+        this.datasets = datasets;
+      } catch (error) {
+        console.log(error);
       }
     },
   },

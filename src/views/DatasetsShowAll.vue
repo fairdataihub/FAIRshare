@@ -1,17 +1,17 @@
 <template>
   <div
     class="h-screen w-full flex flex-row items-center"
-    :class="{ 'justify-center': unpublishedDatasets.length === 0 }"
+    :class="{ 'justify-center': datasetStore.datasets.length === 0 }"
   >
     <div
       ref="startCuration"
       class="p-3 h-full flex flex-row items-center"
-      :class="{ 'w-full': unpublishedDatasets.length > 0 }"
+      :class="{ 'w-full': datasetStore.datasets.length > 0 }"
     >
       <div
         ref="continueCurating"
         class="h-full w-full"
-        v-if="unpublishedDatasets.length > 0"
+        v-if="datasetStore.datasets.length > 0"
       >
         <div class="flex flex-col h-full">
           <span class="font-inter text-base font-medium">
@@ -36,7 +36,7 @@
             "
           >
             <div
-              v-for="dataset in unpublishedDatasets"
+              v-for="dataset in datasetStore.datasets"
               :key="dataset"
               class="
                 flex flex-row
@@ -50,13 +50,13 @@
               "
             >
               <div class="flex flex-row items-center">
-                <img :src="dataset.datasetImage" alt="" class="w-14" />
+                <img :src="dataset.image" alt="" class="w-14" />
                 <div class="flex flex-col px-4">
                   <span class="font-inter text-sm font-medium">
-                    {{ dataset.datasetName }}
+                    {{ dataset.name }}
                   </span>
                   <p class="font-inter text-sm line-clamp-3">
-                    {{ dataset.datasetDescription }}
+                    {{ dataset.description }}
                   </p>
                 </div>
               </div>
@@ -93,29 +93,31 @@
         class="flex flex-row justify-center items-center p-10"
         v-else
       >
-        <div
-          class="
-            flex flex-col
-            justify-center
-            items-center
-            border-2 border-dashed
-            hover:border-solid
-            w-max
-            p-10
-            rounded-lg
-            hover:bg-gray-100
-            transition-all
-            cursor-pointer
-          "
-        >
-          <Icon
-            icon="fluent:quiz-new-24-regular"
-            class="h-20 w-10/12 text-gray-700"
-          />
-          <span class="font-inter font-medium text-large">
-            Create a new dataset
-          </span>
-        </div>
+        <router-link to="/datasets/new">
+          <div
+            class="
+              flex flex-col
+              justify-center
+              items-center
+              border-2 border-dashed
+              hover:border-solid
+              w-max
+              p-10
+              rounded-lg
+              hover:bg-gray-100
+              transition-all
+              cursor-pointer
+            "
+          >
+            <Icon
+              icon="fluent:quiz-new-24-regular"
+              class="h-20 w-10/12 text-gray-700"
+            />
+            <span class="font-inter font-medium text-large">
+              Create a new dataset
+            </span>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -123,49 +125,22 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import { v4 as uuidv4 } from "uuid";
+
+import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "AllDatasets",
+  name: "DatasetsShowAll",
   components: { Icon },
 
   data() {
     return {
-      unpublishedDatasets: [
-        {
-          datasetID: uuidv4(),
-          datasetImage: `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`,
-          datasetName:
-            "Structure Assisted Compressed Sensing Reconstruction of Undersampled AFM Images Dataset",
-          datasetDescription:
-            "This deposition contains the results from a simulation of reconstructions of undersampled atomic force microscopy (AFM) images.",
-        },
-        {
-          datasetID: uuidv4(),
-          datasetImage: `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`,
-          datasetName: "Atomic Force Microscopy Images of Cell Specimens",
-          datasetDescription:
-            "This data set consists of seven atomic force microscopy images in MI format as well as corresponding previews in PNG format. The microscopy images are of cell material and have been scanned with AFM equipment from Keysight Technologies. This data set consists of seven atomic force microscopy images in MI format as well as corresponding previews in PNG format. The microscopy images are of cell material and have been scanned with AFM equipment from Keysight Technologies. This data set consists of seven atomic force microscopy images in MI format as well as corresponding previews in PNG format. The microscopy images are of cell material and have been scanned with AFM equipment from Keysight Technologies.",
-        },
-        {
-          datasetID: uuidv4(),
-          datasetImage: `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`,
-          datasetName:
-            "BIP4COVID19: Impact metrics and indicators for coronavirus related publications",
-          datasetDescription:
-            "This dataset contains impact metrics and indicators for a set of publications that are related to the COVID-19 infectious disease and the coronavirus that causes it.",
-        },
-        {
-          datasetID: uuidv4(),
-          datasetImage: `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`,
-          datasetName: "Gene Ontology Data Archive",
-          datasetDescription: "Archival bundle of GO data release.",
-        },
-      ],
+      datasetStore: useDatasetsStore(),
     };
   },
   methods: {},
-  mounted() {},
+  mounted() {
+    
+  },
 };
 </script>
 
