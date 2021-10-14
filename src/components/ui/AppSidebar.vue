@@ -1,231 +1,48 @@
 <template>
   <!-- component -->
-  <div class="md:flex flex-col md:flex-row md:min-h-screen w-full">
-    <div
-      class="
-        flex flex-col
-        w-full
-        md:w-64
-        text-gray-700
-        bg-white
-        flex-shrink-0
-      "
-    >
-      <div
-        class="
-          flex-shrink-0
-          px-8
-          py-4
-          flex flex-row
-          items-center
-          justify-between
-        "
-      >
-        <p
-          href="#"
-          class="
-            text-lg
-            font-semibold
-            tracking-widest
-            text-gray-900
-            uppercase
-            rounded-lg
-            dark-mode:text-white
-            focus:outline-none focus:shadow-outline
-          "
-        >
-          SODA for COVID-19 Research
-        </p>
-        <button
-          class="rounded-lg md:hidden focus:outline-none focus:shadow-outline"
-          @click="open = !open"
-        >
-          <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
-            <path
-              x-show="!open"
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
-              clip-rule="evenodd"
-            ></path>
-            <path
-              x-show="open"
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-      </div>
-      <nav
-        :class="{ block: open, hidden: !open }"
-        class="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto"
-      >
-        <router-link
-          to="/home"
-          class="
-            block
-            px-4
-            py-2
-            mt-2
-            text-sm
-            font-semibold
-            text-gray-900
-            rounded-lg
-            hover:text-gray-900
-            focus:text-gray-900
-            hover:bg-gray-200
-            focus:bg-gray-200 focus:outline-none focus:shadow-outline
-          "
-        >
-          Blog
-        </router-link>
-        <router-link
-          to="/portfolio"
-          class="
-            block
-            px-4
-            py-2
-            mt-2
-            text-sm
-            font-semibold
-            text-gray-900
-            rounded-lg
-            hover:text-gray-900
-            focus:text-gray-900
-            hover:bg-gray-200
-            focus:bg-gray-200 focus:outline-none focus:shadow-outline
-          "
-        >
-          Portfolio
-        </router-link>
-
-        <div class="relative" x-data="{ open: false }">
-          <button
-            @click="dropdownOpen = !dropdownOpen"
-            class="
-              flex flex-row
-              items-center
-              w-full
-              px-4
-              py-2
-              mt-2
-              text-sm
-              font-semibold
-              text-left
-              bg-transparent
-              rounded-lg
-              md:block
-              hover:text-gray-900
-              focus:text-gray-900
-              hover:bg-gray-200
-              focus:bg-gray-200 focus:outline-none focus:shadow-outline
-            "
-          >
-            <span>Dropdown</span>
-            <svg
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              :class="{ 'rotate-180': open, 'rotate-0': !open }"
-              class="
-                inline
-                w-4
-                h-4
-                mt-1
-                ml-1
-                transition-transform
-                duration-200
-                transform
-                md:-mt-1
-              "
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </button>
-          <div
-            v-show="dropdownOpen"
-            x-transition:enter="transition ease-out duration-100"
-            x-transition:enter-start="transform opacity-0 scale-95"
-            x-transition:enter-end="transform opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-75"
-            x-transition:leave-start="transform opacity-100 scale-100"
-            x-transition:leave-end="transform opacity-0 scale-95"
-            class="
-              absolute
-              right-0
-              w-full
-              mt-2
-              origin-top-right
-              rounded-md
-              shadow-lg
-            "
-          >
-            <div
-              class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800"
-            >
-              <a
-                class="
-                  block
-                  px-4
-                  py-2
-                  mt-2
-                  text-sm
-                  font-semibold
-                  bg-transparent
-                  rounded-lg
-                  md:mt-0
-                  hover:text-gray-900
-                  focus:text-gray-900
-                  hover:bg-gray-200
-                  focus:bg-gray-200 focus:outline-none focus:shadow-outline
-                "
-                href="#"
-                >Link #1</a
-              >
-              <a
-                class="
-                  block
-                  px-4
-                  py-2
-                  mt-2
-                  text-sm
-                  font-semibold
-                  bg-transparent
-                  rounded-lg
-                  md:mt-0
-                  hover:text-gray-900
-                  focus:text-gray-900
-                  hover:bg-gray-200
-                  focus:bg-gray-200 focus:outline-none focus:shadow-outline
-                "
-                href="#"
-                >Link #2</a
-              >
-              <a
-                class="
-                  block
-                  px-4
-                  py-2
-                  mt-2
-                  text-sm
-                  font-semibold
-                  bg-transparent
-                  rounded-lg
-                  md:mt-0
-                  hover:text-gray-900
-                  focus:text-gray-900
-                  hover:bg-gray-200
-                  focus:bg-gray-200 focus:outline-none focus:shadow-outline
-                "
-                href="#"
-                >Link #3</a
-              >
-            </div>
+  <div
+    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50"
+    :class="{
+      'w-64': sideBarOpen,
+      'w-12': !sideBarOpen,
+      'debug-screens': process.env.NODE_ENV === 'production',
+    }"
+    style="transition: width 0.3s"
+  >
+    <div class="flex flex-col w-full text-gray-700">
+      <div class="p-2 flex flex-row justify-center relative">
+        <img
+          v-if="sideBarOpen"
+          class="w-28"
+          src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
+        />
+        <div class="absolute top-0 right-2" @click="sideBarOpen = !sideBarOpen">
+          <div id="menu-hamburger" :class="{ open: sideBarOpen }">
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
+        <div class="invisible">
+          <div id="menu-hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
+        <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
+        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
+          Continue curation
+        </router-link>
+        <router-link to="/about" class="sideBarMenuItem"> About </router-link>
+        <router-link
+          to="/datasets/new/f1f6c588-d79c-4235-b9ef-7cb7bfb95b8e/confirm"
+          class="sideBarMenuItem"
+        >
+          Confirm
+        </router-link>
       </nav>
     </div>
   </div>
@@ -236,9 +53,91 @@ export default {
   name: "AppSidebar",
   components: {},
   data() {
-    return { dropdownOpen: false };
+    return { dropdownOpen: false, sideBarOpen: true, process: process };
+  },
+  methods: {
+    isDataset: function () {
+      if (this.$route.path.search("datasets") != -1) {
+        return "router-link-active";
+      }
+      return "";
+    },
   },
 };
 </script>
 
-<style></style>
+<style lang="postcss">
+.sideBarFade-enter-active,
+.sideBarFade-leave-active {
+  @apply transition-all;
+}
+
+.sideBarFade-enter-to,
+.sideBarFade-leave {
+  @apply opacity-100 scale-100;
+}
+
+.sideBarFade-enter,
+.sideBarFade-leave-to {
+  @apply opacity-0 scale-95;
+}
+</style>
+
+<style lang="postcss">
+#menu-hamburger {
+  width: 23px;
+  height: 10px;
+  position: relative;
+  margin: 10px 0;
+  transform: rotate(0deg);
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+#menu-hamburger span {
+  display: block;
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  background: #5f5d5b;
+  border-radius: 9px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.25s ease-in-out;
+}
+
+#menu-hamburger span:nth-child(1) {
+  top: 0px;
+  transform-origin: left center;
+}
+
+#menu-hamburger span:nth-child(2) {
+  top: 8px;
+  transform-origin: left center;
+}
+
+#menu-hamburger span:nth-child(3) {
+  top: 16px;
+  transform-origin: left center;
+}
+
+#menu-hamburger.open span:nth-child(1) {
+  width: 23px;
+  transform: rotate(45deg);
+  top: 0px;
+  left: 6px;
+}
+
+#menu-hamburger.open span:nth-child(2) {
+  width: 0%;
+  opacity: 0;
+}
+
+#menu-hamburger.open span:nth-child(3) {
+  width: 23px;
+  transform: rotate(-45deg);
+  top: 16px;
+  left: 6px;
+}
+</style>

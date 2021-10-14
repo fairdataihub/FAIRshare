@@ -1,16 +1,26 @@
 <template>
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
-  <div class="flex flex-row">
+  <div class="flex flex-row bg-white">
     <AppSidebar></AppSidebar>
-    <router-view> </router-view>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" appear mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+    <span></span>
   </div>
 </template>
 
 <script>
+import AppSidebar from "./components/ui/AppSidebar.vue";
+
 import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
-import AppSidebar from "./components/ui/AppSidebar.vue";
+import axiosRetry from "axios-retry";
+import { ElLoading } from "element-plus";
+
+import { useDatasetsStore } from "./store/datasets";
 
 const MIN_API_VERSION = "0.0.1";
 
@@ -22,11 +32,40 @@ export default {
   data() {
     return {
       appPath: app.getAppPath(),
+      unpublishedDatasets: useDatasetsStore(),
+      loading: "",
     };
   },
+  methods: {
+    loadStores() {
+      try {
+        this.unpublishedDatasets.loadDatasets();
+
+        this.loading.close();
+      } catch (error) {
+        console.error("Error with loading stores...");
+        console.error(error);
+        this.loading.close();
+      }
+    },
+  },
   mounted() {
-    axios
-      .get(`${this.SERVERURL}/echo`)
+    const client = axios.create({ baseURL: `${this.SERVERURL}` });
+    axiosRetry(client, { retries: 3 });
+
+    this.loading = ElLoading.service({
+      lock: true,
+      text: "Connecting to backend systems and loading data...",
+      background: "rgba(255, 255, 255, 0.95)",
+    });
+
+    client
+      .get("/echo", {
+        "axios-retry": {
+          retries: 5,
+          retryDelay: axiosRetry.exponentialDelay,
+        },
+      })
       .then((response) => {
         console.log(response.data);
         axios
@@ -39,8 +78,11 @@ export default {
               )
             ) {
               console.log("API version satisfied");
+
+              this.loadStores();
             } else {
               alert("Invalid API version");
+              this.loading.close();
             }
           })
           .catch((error) => {
@@ -55,3 +97,16 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  /* transform: translateY(-20px); */
+}
+</style>

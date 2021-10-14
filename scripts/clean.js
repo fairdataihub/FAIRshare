@@ -7,7 +7,7 @@ const deleteitemsRecursive = (path) => {
   if (!fs.existsSync(path)) return console.log(`${path} does not exist!`);
   if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    fs.readdirSync(path).forEach(function(file, _index) {
+    fs.readdirSync(path).forEach(function (file, _index_) {
       const curPath = pathlib.join(path, file);
 
       if (fs.lstatSync(curPath).isDirectory()) {

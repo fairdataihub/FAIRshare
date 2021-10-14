@@ -30,3 +30,5 @@ src/pyflask/__pycache__
 build
 src/pyflaskdist
 api.spec
+*.ipynb
+.env
