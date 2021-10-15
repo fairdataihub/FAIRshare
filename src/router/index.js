@@ -4,6 +4,7 @@ import HomePage from "../views/HomePage.vue";
 import DatasetsShowAll from "../views/DatasetsShowAll.vue";
 import DatasetsCreateNew from "../views/DatasetsCreateNew.vue";
 import DatasetsCreateNewConfirm from "../views/DatasetsCreateNewConfirm.vue";
+import DatasetsCurate from "../views/DatasetsCurate.vue";
 import About from "../views/about.vue";
 
 const routes = [
@@ -19,7 +20,7 @@ const routes = [
     path: "/datasets/new/:datasetID/confirm",
     component: DatasetsCreateNewConfirm,
   },
-  { path: "/datasets/:datasetID", component: HomePage },
+  { path: "/datasets/:datasetID", component: DatasetsCurate },
   { path: "/about", component: About },
 ];
 

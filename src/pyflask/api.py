@@ -32,7 +32,8 @@ class HelloWorld(Resource):
         return response
 
 
-# Request parser documentation can be found here: https://flask-restx.readthedocs.io/en/latest/parsing.html
+# Request parser documentation can be found here:
+# https://flask-restx.readthedocs.io/en/latest/parsing.html
 
 
 @api.route("/add", endpoint="addition")
@@ -50,18 +51,21 @@ class Add(Resource):
             help="Expression is required. Expression needs to be of type str",
         )
 
-        # Use this to add parameters to extract from the request object. Any fields not explicitly stated in the parser will be ignored
+        # Use this to add parameters to extract from the request object.
+        # Any fields not explicitly stated in the parser will be ignored
         # parser.add_argument('name')
 
         args = parser.parse_args()
         formula = args["expression"]
         response = str(calc(formula))
 
-        # restx will automatically jsonify dictionaries. You don't need to import the jsonify method from flask
+        # restx will automatically jsonify dictionaries.
+        # You don't need to import the jsonify method from flask
         return response
 
 
-# 5000 is the flask default port. You can change it to something else if you want.
+# 5000 is the flask default port.
+# You can change it to something else if you want.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000)
