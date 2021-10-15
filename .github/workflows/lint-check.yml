@@ -39,7 +39,9 @@ jobs:
           prettier: true
           prettier_extensions: "css,html,js,json,jsx,md,sass,scss,ts,tsx,vue"
           auto_fix: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.BOT_ACTIONS }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -54,7 +56,9 @@ jobs:
         with:
           black: true
           auto_fix: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.BOT_ACTIONS }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
 
       - name: Run Flake8
         uses: wearerequired/lint-action@v1
