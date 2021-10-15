@@ -40,6 +40,8 @@ jobs:
           prettier_extensions: "css,html,js,json,jsx,md,sass,scss,ts,tsx,vue"
           auto_fix: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -55,9 +57,12 @@ jobs:
           black: true
           auto_fix: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_email: "fairdataihub@gmail.com"
+          git_name: "fairdataihub-bot"
 
       - name: Run Flake8
         uses: wearerequired/lint-action@v1
         with:
           flake8: true
           flake8_dir: "./src/pyflask"
+          flake8_args: "--max-line-length=88"
