@@ -61,3 +61,4 @@ jobs:
         with:
           flake8: true
           flake8_dir: "./src/pyflask"
+          flake8_args: "--max-line-length=88"
