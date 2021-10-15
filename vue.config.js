@@ -7,6 +7,7 @@ module.exports = {
         // afterPack: "./scripts/postbuild.js",
         appId: "com.fairdataihub.sodaforcovid19research",
         asar: true,
+        afterSign: "./scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec"],
         win: {
@@ -17,7 +18,7 @@ module.exports = {
         mac: {
           target: ["dmg", "zip"],
           icon: "./src/assets/app-icons/macAppIcon.png",
-          afterSign: "./scripts/notarize.js",
+
           extraResources: [{ from: "./src/pyflaskdist/api" }],
           darkModeSupport: false,
           hardenedRuntime: true,

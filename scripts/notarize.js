@@ -6,13 +6,13 @@ var electron_notarize = require("electron-notarize");
 module.exports = async function (params) {
   // Only notarize the app on Mac OS only.
   if (process.platform !== "darwin") {
-    console.log("Not building on macOS. Cancelling notarize...");
+    console.log("No notarization needed for current platform. This process is only intended for macOS.");
     return;
   }
   console.log("afterSign hook triggered", params);
 
   // Same appId in electron-builder.
-  let appId = "com.megasanjay.electronvueflask";
+  let appId = "com.fairdataihub.sodaforcovid19research";
 
   let appPath = path.join(
     params.appOutDir,
