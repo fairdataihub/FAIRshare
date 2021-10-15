@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen w-full flex flex-row justify-center items-center">
-    <div ref="" class="p-3 h-full flex flex-row items-center">
-      <div ref="" class="h-full w-full">
+  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
+    <div class="p-3 h-full flex flex-row items-center">
+      <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto">
           <span class="font-inter text-base font-medium text-left">
             SODA suggestions
@@ -42,8 +42,17 @@
           </span>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <el-button type="danger" plain> Cancel </el-button>
-            <el-button type="primary"> Continue </el-button>
+            <router-link to="/datasets" class="mx-6">
+              <el-button type="danger" plain> Cancel </el-button>
+            </router-link>
+            <router-link :to="`/datasets/${datasetID}`" class="mx-6">
+              <el-button type="primary" class="flex flex-row items-center">
+                Continue
+                <el-icon>
+                  <ArrowRightBold />
+                </el-icon>
+              </el-button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -53,12 +62,13 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
+import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
   name: "DatasetsCreateNewConfirm",
-  // components: { Icon },
+  components: { ArrowRightBold },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -73,33 +83,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#unpublishedDatasets::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
-}
-
-#unpublishedDatasets::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
-}
-
-#unpublishedDatasets::-webkit-scrollbar-thumb {
-  background-color: #424242;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #424242;
-}
-</style>

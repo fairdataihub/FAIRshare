@@ -1,6 +1,15 @@
 <template>
-  <div class="h-screen w-full flex flex-row items-center overflow-y-auto">
-    <div class="p-3 h-full flex flex-row">
+  <div
+    class="
+      h-screen
+      w-full
+      flex flex-row
+      items-center
+      overflow-y-auto
+      lg:justify-center
+    "
+  >
+    <div class="p-3 h-full flex flex-row items-center">
       <div class="flex flex-col h-full">
         <span class="font-inter text-base font-medium">
           Create a new dataset
@@ -151,6 +160,7 @@ export default {
             image: datasetImage,
             name: this.datasetForm.datasetName,
             description: this.datasetForm.datasetDescription,
+            dataType: this.datasetForm.dataType,
           };
 
           this.datasetStore.addDataset(dataset);
@@ -169,33 +179,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style>
-#unpublishedDatasets::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
-}
-
-#unpublishedDatasets::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
-}
-
-#unpublishedDatasets::-webkit-scrollbar-thumb {
-  background-color: #424242;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #424242;
-}
-</style>
