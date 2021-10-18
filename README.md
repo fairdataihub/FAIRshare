@@ -36,7 +36,7 @@ This will compile your application and also allow hot-reloads for development. I
 yarn python:dev
 ```
 
-`Note:` This instance will still not have access to the native node libraries since these are provided through the remote Electron mopdule.
+`Note:` This instance will still not have access to the native node libraries since these are provided through the remote Electron module.
 
 ## Building the application
 
