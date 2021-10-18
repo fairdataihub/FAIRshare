@@ -117,7 +117,7 @@ const exitPyProc = (main_pid) => {
     const python_script_name = path.basename(getScriptPath());
     let cleanup_completed = false;
     const psTree = require("ps-tree");
-    psTree(main_pid, function (err, children) {
+    psTree(main_pid, function (_err, children) {
       let python_pids = children
         .filter(function (el) {
           return el.COMMAND == python_script_name;
