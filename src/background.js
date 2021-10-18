@@ -23,6 +23,7 @@ protocol.registerSchemesAsPrivileged([
 // const PY_DIST_FOLDER = "pyflaskdist";
 const PY_FOLDER = "pyflask";
 const PY_MODULE = "api";
+let mainWindow;
 
 let pyProc = null;
 const pyPort = "5000"; // Flask default port
@@ -76,7 +77,7 @@ const createPyProc = () => {
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 600,
     minWidth: 900,
@@ -87,17 +88,18 @@ async function createWindow() {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    mainWindow.loadURL("app://./index.html");
 
     // exitPyProc();
     // Check for updates
@@ -182,11 +184,13 @@ app.on("ready", async () => {
 });
 
 autoUpdater.on("update-available", () => {
+  mainWindow.webContents.send("update-available", true);
   log.info("update_available");
 });
 
 autoUpdater.on("update-downloaded", () => {
   log.info("update_downloaded");
+  mainWindow.webContents.send("update-downloaded", true);
   // exitPyProc(process.pid).then(() => {
   // autoUpdater.quitAndInstall();
   // });

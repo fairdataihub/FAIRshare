@@ -93,6 +93,14 @@ export default {
         console.error(error);
       });
 
+    window.ipcRenderer.on("update-available", (_e, _arg) => {
+      console.log("New update available");
+    });
+
+    window.ipcRenderer.on("update-downloaded", (_e, _arg) => {
+      console.log("Update downloaded");
+    });
+
     console.log(this.appPath);
   },
 };

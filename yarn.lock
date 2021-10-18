@@ -4204,12 +4204,11 @@ electron@^13.0.0:
     "@types/node" "^14.6.2"
     extract-zip "^1.0.3"
 
-element-plus@^1.1.0-beta.18:
-  version "1.1.0-beta.21"
-  resolved "https://registry.yarnpkg.com/element-plus/-/element-plus-1.1.0-beta.21.tgz#4b0232b908d1defee81ef94913c9479342d9d7e6"
-  integrity sha512-QaAX909KgFufXkIKAwXrdHRmv1e+jIyc1SlN90mg9HBE09MnInGUXy0qdYZhVoMgBFyStMkiSIz7XLG8m0ac8A==
+element-plus@1.1.0-beta.20:
+  version "1.1.0-beta.20"
+  resolved "https://registry.yarnpkg.com/element-plus/-/element-plus-1.1.0-beta.20.tgz#59523c99a88ca4881d899ba8bb81c4a9273ed822"
+  integrity sha512-5rBrLzfKGz4urSxqKi1tihylyotSswMCKdXpCAJAfRggMjtS1NfqVtrCYEPdjphmP2JHsj8TisDvbRTScRKF0Q==
   dependencies:
-    "@element-plus/icons" "^0.0.11"
     "@popperjs/core" "^2.10.1"
     "@vueuse/core" "~6.1.0"
     async-validator "^4.0.3"
