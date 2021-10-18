@@ -1,13 +1,13 @@
-name: Lint
+name: Build for linux
 
 on:
   # Trigger the workflow
   push:
     branches:
-      - ["production"]
+      - "production"
   pull_request:
     branches:
-      - ["production"]
+      - "production"
   workflow_dispatch:
 
 jobs:
