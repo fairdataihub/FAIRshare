@@ -64,7 +64,6 @@
     "tailwindcss-debug-screens": "^2.1.0",
     "vue-cli-plugin-electron-builder": "~2.1.1"
   },
-  
   "optionalDependencies": {
     "win-node-env": "^0.4.0"
   },
@@ -73,5 +72,4 @@
     "last 2 versions",
     "not dead"
   ]
-  
 }
