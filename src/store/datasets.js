@@ -26,8 +26,13 @@ const loadFile = async () => {
     createFile();
     return [];
   } else {
-    let unpublishedDatasets = fs.readJsonSync(DATASETS_STORE_PATH);
-    return unpublishedDatasets;
+    try {
+      let unpublishedDatasets = fs.readJsonSync(DATASETS_STORE_PATH);
+      return unpublishedDatasets;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
   }
 };
 
@@ -70,7 +75,7 @@ export const useDatasetsStore = defineStore({
         const datasets = await loadFile();
         this.datasets = datasets;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async writeDatasetsToFile() {

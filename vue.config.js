@@ -3,6 +3,7 @@ module.exports = {
     electronBuilder: {
       externals: ["electron-log"],
       nodeIntegration: true,
+      preload: { preload: "src/preload.js" },
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
         appId: "com.fairdataihub.sodaforcovid19research",
