@@ -39,7 +39,8 @@ jobs:
         run: yarn python:build
         
       - name: Set release token
-        run: set GH_TOKEN=${{secrets.BOT_ACTIONS}}
+        run: set GH_TOKEN=${{secrets.TEST_SECRET}}
+      - run: echo GH_TOKEN
 
       - name: Build App
         run: yarn electron:build-release
