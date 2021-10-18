@@ -2,10 +2,10 @@
 
 ## Project setup
 
-Use a python environment (Anaconda) to separate your dev instance.
+Use a python environment (Anaconda) to separate your dev and release instance.
 
 ```shell
-conda env create -f .\dev\sodacovid-dev-env.yml
+conda env create -f .\dev\sodacovid-dev.yml
 conda activate sodacovid-dev
 yarn install
 ```
