@@ -25,7 +25,7 @@ jobs:
           node-version: 16
 
       - name: Install Node.js dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install 
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -37,6 +37,9 @@ jobs:
 
       - name: Build python executable
         run: yarn python:build
+        
+      - name: Set release token
+        run: set GH_TOKEN=${{secrets.BOT_ACTIONS}}
 
       - name: Build App
         run: yarn electron:build-release
