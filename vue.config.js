@@ -39,8 +39,11 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repository:
+          repo:
             "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
+          publishAutoUpdate: true,
+          host: "github.com",
+          protocol: "https"
         },
       },
     },
