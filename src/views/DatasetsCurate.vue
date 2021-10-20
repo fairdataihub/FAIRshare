@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     navigateToCurate(dataType) {
-      this.datasetStore.currentOptions.dataType = "single" // or 'multi' for multiple
+      this.datasetStore.currentOptions.dataType = "single"; // or 'multi' for multiple
       const routerPath = `/datasets/${this.datasetID}/selectFolder/${dataType}`;
       this.$router.push({ path: routerPath });
     },

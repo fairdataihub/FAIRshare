@@ -51,7 +51,7 @@ export const useDatasetsStore = defineStore({
   state: () => ({
     datasets: {},
     currentDataset: {},
-    currentOptions: {}
+    currentOptions: {},
   }),
   getters: {
     datasetCount: function () {

@@ -78,7 +78,7 @@ export default {
   },
   methods: {},
   mounted() {
-    this.datasetStore.getDataset(this.datasetID)
+    this.datasetStore.getDataset(this.datasetID);
     this.dataset = this.currentDataset;
   },
 };

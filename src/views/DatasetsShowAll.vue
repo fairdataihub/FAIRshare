@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     navigateToDataset(datasetID) {
-      this.datasetStore.getDataset(datasetID)
+      this.datasetStore.getDataset(datasetID);
       const routerPath = `/datasets/${datasetID}`;
       this.$router.push({ path: routerPath });
     },
