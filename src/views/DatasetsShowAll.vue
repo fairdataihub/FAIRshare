@@ -1,17 +1,17 @@
 <template>
   <div
     class="h-screen w-full flex flex-row items-center"
-    :class="{ 'justify-center': datasetStore.datasets.length === 0 }"
+    :class="{ 'justify-center': datasetStore.datasetCount === 0 }"
   >
     <div
       ref="startCuration"
       class="p-3 h-full flex flex-row items-center"
-      :class="{ 'w-full': datasetStore.datasets.length > 0 }"
+      :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
       <div
         ref="continueCurating"
         class="h-full w-full"
-        v-if="datasetStore.datasets.length > 0"
+        v-if="datasetStore.datasetCount > 0"
       >
         <div class="flex flex-col h-full">
           <span class="font-inter text-base font-medium">
@@ -140,6 +140,7 @@ export default {
   },
   methods: {
     navigateToDataset(datasetID) {
+      this.datasetStore.getDataset(datasetID)
       const routerPath = `/datasets/${datasetID}`;
       this.$router.push({ path: routerPath });
     },

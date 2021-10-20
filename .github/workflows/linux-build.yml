@@ -1,13 +1,13 @@
-name: Lint
+name: Build release for linux
 
 on:
   # Trigger the workflow
   push:
     branches:
-      - ["production"]
+      - "production"
   pull_request:
     branches:
-      - ["production"]
+      - "production"
   workflow_dispatch:
 
 jobs:
@@ -19,19 +19,21 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Setup Anaconda environment
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
-          activate-environment: sodacovid-release
-          python-version: 3.9
-          environment-file: dev/sodacovid-release.yml
-          auto-activate-base: true
-      - run: |
-          conda info
-          conda list
+          node-version: 16
 
       - name: Install Node.js dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9.7
+
+      - name: Install Python dependencies
+        run: pip install -r dev/requirements.txt
 
       - name: Build python executable
         run: yarn python:build

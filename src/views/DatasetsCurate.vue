@@ -23,14 +23,12 @@
               <span class="text-lg"> {{ type }} </span>
             </div>
             <div class="bg-gray-200 px-4 py-2">
-              <router-link to="/" class="">
-                <el-button type="primary">
-                  Curate {{ type }}
-                  <el-icon>
-                    <ArrowRightBold />
-                  </el-icon>
-                </el-button>
-              </router-link>
+              <el-button type="primary" @click="navigateToCurate(`${type}`)">
+                Curate {{ type }}
+                <el-icon>
+                  <ArrowRightBold />
+                </el-icon>
+              </el-button>
             </div>
           </div>
         </div>
@@ -44,6 +42,7 @@
 import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../store/datasets";
+// import { useCurrentDatasetStore } from "../store/currentDataset";
 
 export default {
   name: "DatasetsCurate",
@@ -55,10 +54,15 @@ export default {
       datasetID: this.$route.params.datasetID,
     };
   },
-  methods: {},
+  methods: {
+    navigateToCurate(dataType) {
+      this.datasetStore.currentOptions.dataType = "single" // or 'multi' for multiple
+      const routerPath = `/datasets/${this.datasetID}/selectFolder/${dataType}`;
+      this.$router.push({ path: routerPath });
+    },
+  },
   mounted() {
-    this.dataset = this.datasetStore.getDataset(this.datasetID);
-    console.log(this.dataset);
+    this.dataset = this.datasetStore.currentDataset;
   },
 };
 </script>

@@ -163,9 +163,9 @@ export default {
             dataType: this.datasetForm.dataType,
           };
 
-          this.datasetStore.addDataset(dataset);
-          this.datasetStore.writeDatasetsToFile();
-          this.$router.push({ name: "DatasetsShowAll" }); //subject to change
+          this.datasetStore.updateCurrentDataset(dataset);
+          this.datasetStore.syncDatasets();
+          this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
           console.log("error submit!!");
           return false;

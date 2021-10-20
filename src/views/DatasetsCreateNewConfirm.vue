@@ -78,8 +78,8 @@ export default {
   },
   methods: {},
   mounted() {
-    this.dataset = this.datasetStore.getDataset(this.datasetID);
-    console.log(this.dataset);
+    this.datasetStore.getDataset(this.datasetID)
+    this.dataset = this.currentDataset;
   },
 };
 </script>
