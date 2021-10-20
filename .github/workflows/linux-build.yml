@@ -1,13 +1,6 @@
 name: Build release for linux
 
 on:
-  # Trigger the workflow
-  push:
-    branches:
-      - "production"
-  pull_request:
-    branches:
-      - "production"
   workflow_dispatch:
 
 jobs:
