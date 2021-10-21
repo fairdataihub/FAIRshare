@@ -51,7 +51,6 @@ export const useDatasetsStore = defineStore({
   state: () => ({
     datasets: {},
     currentDataset: {},
-    currentOptions: {},
   }),
   getters: {
     datasetCount: function () {
@@ -78,6 +77,7 @@ export const useDatasetsStore = defineStore({
     async addDataset(dataset, datasetID) {
       try {
         this.datasets[datasetID] = dataset;
+        this.currentDataset = dataset;
         this.writeDatasetsToFile();
       } catch (error) {
         console.log(error);

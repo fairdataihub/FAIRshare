@@ -5,6 +5,7 @@ import DatasetsShowAll from "../views/DatasetsShowAll.vue";
 import DatasetsCreateNew from "../views/DatasetsCreateNew.vue";
 import DatasetsCreateNewConfirm from "../views/DatasetsCreateNewConfirm.vue";
 import DatasetsCurateSelectFolder from "../views/DatasetsCurateSelectFolder.vue";
+import DatasetsCurateCreateMetadata from "../views/DatasetsCurateCreateMetadata.vue";
 import DatasetsCurate from "../views/DatasetsCurate.vue";
 import About from "../views/about.vue";
 
@@ -22,9 +23,12 @@ const routes = [
     component: DatasetsCreateNewConfirm,
   },
   {
-    path: "/datasets/:datasetID/selectFolder/:dataType",
+    path: "/datasets/:datasetID/selectFolder/:workflowID",
     component: DatasetsCurateSelectFolder,
-    props: true,
+  },
+  {
+    path: "/datasets/:datasetID/createMetadata/:workflowID",
+    component: DatasetsCurateCreateMetadata,
   },
   { path: "/datasets/:datasetID", component: DatasetsCurate },
   { path: "/about", component: About },

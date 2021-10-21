@@ -16,19 +16,24 @@
 
           <div
             class="flex flex-col p-2"
-            v-for="type in dataset.dataType"
-            :key="type"
+            v-for="(workflow, key) in dataset.workflows"
+            :key="key"
           >
             <div class="bg-gray-300 px-4 py-2">
-              <span class="text-lg"> {{ type }} </span>
+              <span class="text-lg"> {{ workflow.type }} </span>
             </div>
             <div class="bg-gray-200 px-4 py-2">
-              <el-button type="primary" @click="navigateToCurate(`${type}`)">
-                Curate {{ type }}
+              <el-button
+                type="primary"
+                @click="navigateToCurate(`${key}`)"
+                :disabled="workflow.completed"
+              >
+                Curate {{ workflow.type }}
                 <el-icon>
                   <ArrowRightBold />
                 </el-icon>
               </el-button>
+              <span>{{ workflow }}</span>
             </div>
           </div>
         </div>
@@ -42,7 +47,6 @@
 import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../store/datasets";
-// import { useCurrentDatasetStore } from "../store/currentDataset";
 
 export default {
   name: "DatasetsCurate",
@@ -51,18 +55,24 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       dataset: {},
+      currentOptions: {},
       datasetID: this.$route.params.datasetID,
     };
   },
   methods: {
-    navigateToCurate(dataType) {
-      this.datasetStore.currentOptions.dataType = "single"; // or 'multi' for multiple
-      const routerPath = `/datasets/${this.datasetID}/selectFolder/${dataType}`;
+    navigateToCurate(workflowID) {
+      this.datasetStore.updateCurrentDataset(this.dataset);
+
+      const routerPath = `/datasets/${this.datasetID}/selectFolder/${workflowID}`;
       this.$router.push({ path: routerPath });
     },
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;
+
+    if (!this.dataset.workflowConfirmed) {
+      this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
+    }
   },
 };
 </script>

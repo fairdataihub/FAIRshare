@@ -4,19 +4,23 @@
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto">
           <span class="font-inter text-lg font-medium text-left">
+            General information regarding your data
+          </span>
+          <span class="font-inter text-base text-left">
             Where is your data located?
           </span>
 
-          <el-divider> </el-divider>
+          <el-divider class="my-4"> </el-divider>
 
-          <span class="font-inter text-base mb-4">
-            Please select the folder where your {{ dataType }} files are stored.
+          <span class="font-inter text-base mb-2">
+            Please select the folder where your
+            {{ workflow.type }} files are stored.
           </span>
 
           <el-input
             v-model="folderPath"
-            :placeholder="folderPathPlaceholder"
-            class="my-4"
+            placeholder="Click here to select a folder"
+            class="my-3"
             @click="selectFolderPath"
           />
 
@@ -53,13 +57,13 @@ import { useDatasetsStore } from "../store/datasets";
 export default {
   name: "DatasetsCurateSelectFolder",
   components: { ArrowRightBold },
-  props: ["datasetID", "dataType"],
   data() {
     return {
       datasetStore: useDatasetsStore(),
       dataset: {},
-      folderPathPlaceholder: "Click here to select a folder",
       folderPath: "",
+      workflowID: this.$route.params.workflowID,
+      workflow: {},
     };
   },
   computed: {
@@ -80,13 +84,23 @@ export default {
       });
     },
     startCuration() {
-      if (this.datasetStore.currentOptions.dataType === "single") {
-        return;
-      }
+      this.workflow.folderPath = this.folderPath;
+      this.datasetStore.updateCurrentDataset(this.dataset);
+
+      this.datasetStore.syncDatasets();
+
+      this.$router.push({
+        path: `/datasets/${this.dataset.id}/createMetadata/${this.workflowID}`,
+      });
     },
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    if (this.workflow.folderPath) {
+      this.folderPath = this.workflow.folderPath;
+    }
   },
 };
 </script>

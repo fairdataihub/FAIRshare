@@ -99,7 +99,7 @@
           </el-form-item>
 
           <el-form-item>
-            <div class="py-2">
+            <div class="py-2 w-full flex flex-row lg:justify-center">
               <el-button type="primary" @click="submitForm('datasetForm')">
                 Create
               </el-button>
@@ -161,10 +161,18 @@ export default {
             name: this.datasetForm.datasetName,
             description: this.datasetForm.datasetDescription,
             dataType: this.datasetForm.dataType,
+            data: {},
+            worflowConfirmed: false
           };
 
-          this.datasetStore.updateCurrentDataset(dataset);
-          this.datasetStore.syncDatasets();
+          for (const type of dataset.dataType) {
+            dataset.data[type] = {
+              uploaded: false,
+            };
+          }
+
+          this.datasetStore.addDataset(dataset, datasetID);
+
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
           console.log("error submit!!");

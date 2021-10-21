@@ -42,17 +42,20 @@
           </span>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <router-link to="/datasets" class="mx-6">
+            <router-link to="/datasets" class="mx-6 hidden">
               <el-button type="danger" plain> Cancel </el-button>
             </router-link>
-            <router-link :to="`/datasets/${datasetID}`" class="mx-6">
-              <el-button type="primary" class="flex flex-row items-center">
-                Continue
-                <el-icon>
-                  <ArrowRightBold />
-                </el-icon>
-              </el-button>
-            </router-link>
+
+            <el-button
+              type="primary"
+              class="flex flex-row items-center"
+              @click="createWorkflows"
+            >
+              Continue
+              <el-icon>
+                <ArrowRightBold />
+              </el-icon>
+            </el-button>
           </div>
         </div>
       </div>
@@ -76,10 +79,34 @@ export default {
       datasetID: this.$route.params.datasetID,
     };
   },
-  methods: {},
+  methods: {
+    createWorkflows() {
+      const dataTypes = this.dataset.dataType;
+
+      // do some logic here to split up by workflow.
+
+      // right now its all unique workflows.
+      this.dataset.workflows = {};
+
+      let that = this;
+      dataTypes.forEach((type, index) => {
+        const key = `workflow${index + 1}`;
+        that.dataset.workflows[key] = {};
+        that.dataset.workflows[key].type = type;
+        that.dataset.workflows[key].completed = false;
+      });
+
+      this.dataset.workflowConfirmed = true;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      this.$router.push({ path: `/datasets/${this.datasetID}` });
+    },
+  },
   mounted() {
     this.datasetStore.getDataset(this.datasetID);
-    this.dataset = this.currentDataset;
+    this.dataset = this.datasetStore.currentDataset;
   },
 };
 </script>
