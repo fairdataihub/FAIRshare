@@ -11,10 +11,8 @@
   >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="flex flex-col h-full">
-        <span class=" font-medium"> Create a new dataset </span>
-        <span >
-          Fill out some general details about your dataset here.
-        </span>
+        <span class="font-medium"> Create a new dataset </span>
+        <span> Fill out some general details about your dataset here. </span>
 
         <el-divider> </el-divider>
 
