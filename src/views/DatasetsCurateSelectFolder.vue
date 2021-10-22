@@ -2,7 +2,7 @@
   <div class="h-screen w-full flex flex-row lg:justify-center items-center">
     <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
       <div class="h-full w-full">
-        <div class="flex flex-col h-full  overflow-y-auto">
+        <div class="flex flex-col h-full overflow-y-auto">
           <span class="font-inter text-lg font-medium text-left">
             General information regarding your data
           </span>
