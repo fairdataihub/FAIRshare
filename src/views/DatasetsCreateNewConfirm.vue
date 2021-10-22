@@ -3,18 +3,16 @@
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto">
-          <span class="font-inter text-base font-medium text-left">
-            SODA suggestions
-          </span>
+          <span class="font-medium text-left"> SODA suggestions </span>
 
-          <span class="font-inter text-base">
+          <span>
             Based on your selected data types, this is what we suggest you
             should use for FAIR sharing of your data.
           </span>
 
           <el-divider> </el-divider>
 
-          <span class="font-inter text-base">
+          <span>
             We recommend the following repositories for your selected data
             types.
           </span>
@@ -36,7 +34,7 @@
             </div>
           </div>
 
-          <span class="font-inter text-base">
+          <span>
             SODA will automatically split up your data and upload it to the
             relevant repository. Do you want to continue?
           </span>

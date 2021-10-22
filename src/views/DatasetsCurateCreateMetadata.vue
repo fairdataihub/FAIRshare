@@ -3,16 +3,16 @@
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="font-inter text-lg font-medium text-left">
+          <span class="text-lg font-medium text-left">
             General information regarding your data
           </span>
-          <span class="font-inter text-base text-left">
+          <span class="text-left">
             Questions required for creating metadata.json file?
           </span>
 
           <line-divider></line-divider>
 
-          <span class="font-inter text-base mb-2">
+          <span class="mb-2">
             We need to know some general details about you and your dataset.
             Please fill this out to the best of your ability.
           </span>
@@ -24,7 +24,7 @@
             size="medium"
             @submit.prevent
           >
-            <el-form-item label="Dataset name" class="font-inter">
+            <el-form-item label="Dataset name">
               <el-input v-model="generalQuestionsForm.datasetName"></el-input>
             </el-form-item>
 
@@ -53,7 +53,7 @@
 
           <line-divider></line-divider>
           <div ref="codeQuestions" v-if="codePresent">
-            <span class="font-inter text-base mb-2">
+            <span class="mb-2">
               Lets make your Code fair. Please fill the following fields.
             </span>
 
@@ -64,10 +64,7 @@
               size="medium"
               @submit.prevent
             >
-              <el-form-item
-                label="Does your code have a license file already?"
-                class="font-inter"
-              >
+              <el-form-item label="Does your code have a license file already?">
                 <el-input v-model="codeQuestionsForm.datasetName"></el-input>
               </el-form-item>
             </el-form>

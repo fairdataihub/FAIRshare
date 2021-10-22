@@ -11,10 +11,8 @@
   >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="flex flex-col h-full">
-        <span class="font-inter text-base font-medium">
-          Create a new dataset
-        </span>
-        <span class="font-inter text-base">
+        <span class=" font-medium"> Create a new dataset </span>
+        <span >
           Fill out some general details about your dataset here.
         </span>
 
@@ -27,11 +25,7 @@
           @submit.prevent
           :rules="rules"
         >
-          <el-form-item
-            label="Dataset name"
-            prop="datasetName"
-            class="font-inter"
-          >
+          <el-form-item label="Dataset name" prop="datasetName">
             <el-input v-model="datasetForm.datasetName"></el-input>
           </el-form-item>
 

@@ -41,7 +41,7 @@
                 h-30
                 w-30
               "
-              @click="selectRepo(repo.id)"
+              @click="selectRepo(repo.redirectURL)"
             >
               <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
               <span class="text-lg mx-5"> {{ repo.name }} </span>
@@ -80,29 +80,28 @@ export default {
       datasetStore: useDatasetsStore(),
       dataset: {},
       workflowID: this.$route.params.workflowID,
+      datasetID: this.$route.params.datasetID,
       workflow: {},
       repositories: [
         {
           id: "zenodo",
           name: "Zenodo",
           imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
+          redirectURL: `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`,
         },
         {
           id: "figshare",
           name: "Figshare",
           imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
+          redirectURL: `/datasets/${this.datasetID}/${this.workflowID}/figshare/metadata`,
         },
       ],
     };
   },
   computed: {},
   methods: {
-    selectRepo(repoID) {
-      if (repoID === "zenodo") {
-        return;
-      } else if (repoID === "figshare") {
-        return;
-      }
+    selectRepo(redirectURL) {
+      this.$router.push(redirectURL);
     },
   },
   mounted() {

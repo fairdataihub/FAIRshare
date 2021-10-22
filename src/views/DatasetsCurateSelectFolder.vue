@@ -2,17 +2,15 @@
   <div class="h-screen w-full flex flex-row lg:justify-center items-center">
     <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
       <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto">
-          <span class="font-inter text-lg font-medium text-left">
+        <div class="flex flex-col h-full overflow-y-auto pr-5">
+          <span class="text-lg font-medium text-left">
             General information regarding your data
           </span>
-          <span class="font-inter text-base text-left">
-            Where is your data located?
-          </span>
+          <span class="text-left"> Where is your data located? </span>
 
           <el-divider class="my-4"> </el-divider>
 
-          <span class="font-inter text-base mb-2">
+          <span class="mb-2">
             Please select the folder where your
             {{ combineDataTypes }} files are stored.
           </span>

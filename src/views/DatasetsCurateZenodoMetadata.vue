@@ -3,16 +3,16 @@
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="font-inter text-lg font-medium text-left">
-            General information regarding your data
+          <span class="text-lg font-medium text-left">
+            Zenodo Metadata
           </span>
-          <span class="font-inter text-base text-left">
+          <span class="text-left">
             Questions required for creating metadata.json file?
           </span>
 
           <line-divider></line-divider>
 
-          <span class="font-inter text-base mb-2">
+          <span class="mb-2">
             We need to know some general details about you and your dataset.
             Please fill this out to the best of your ability.
           </span>
@@ -24,7 +24,7 @@
             size="medium"
             @submit.prevent
           >
-            <el-form-item label="Dataset name" class="font-inter">
+            <el-form-item label="Dataset name">
               <el-input v-model="generalQuestionsForm.datasetName"></el-input>
             </el-form-item>
 
@@ -50,28 +50,6 @@
               </el-popover>
             </el-form-item>
           </el-form>
-
-          <line-divider></line-divider>
-          <div ref="codeQuestions" v-if="codePresent">
-            <span class="font-inter text-base mb-2">
-              Lets make your Code fair. Please fill the following fields.
-            </span>
-
-            <el-form
-              :model="codeQuestionsForm"
-              label-width="auto"
-              label-position="top"
-              size="medium"
-              @submit.prevent
-            >
-              <el-form-item
-                label="Does your code have a license file already?"
-                class="font-inter"
-              >
-                <el-input v-model="codeQuestionsForm.datasetName"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
 
           <div class="w-full flex flex-row justify-center py-2">
             <router-link to="/datasets" class="mx-6">
@@ -112,22 +90,92 @@ export default {
         datasetName: "",
         datasetDescription: "",
       },
-      codeQuestionsForm: {
-        datasetName: "",
+
+      basicInformationForm: {
+        publicationDate: "",
+        title: "",
+        authors: [],
+        description: "",
+        version: "",
+        language: "",
+        keywords: [],
+        additionalNotes: "",
+      },
+      basicInformationRules: {
+        publicationDate: [
+          {
+            required: true,
+            message: "Please provide a date for your publication.",
+            trigger: "blur",
+          },
+        ],
+        title: [
+          {
+            required: true,
+            message: "Please provide a date for your publication.",
+            trigger: "blur",
+          },
+        ],
+      },
+      licenseForm: {
+        accessRights: "",
+        license: "",
+      },
+      licenseRules: {
+        license: [
+          {
+            required: true,
+            message: "Please select a license.",
+            trigger: "change",
+          },
+        ],
+      },
+      fundingQuestionsForm: {
+        grants: [],
+      },
+      relatedIdentifiersForm: {
+        relatedIdentifiers: [],
+      },
+      contributorsForm: {
+        contributors: [],
+      },
+      referencesForm: {
+        references: [],
+      },
+      journalForm: {
+        title: "",
+        volume: "",
+        issue: "",
+        pages: "",
+      },
+      conferenceForm: {
+        title: "",
+        acronym: "",
+        dates: "",
+        place: "",
+        website: "",
+        session: "",
+        part: "",
+      },
+      bookReportForm: {
+        title: "",
+        publisher: "",
+        place: "",
+        isbn: "",
+        pages: "",
+      },
+      thesisForm: {
+        awardingUniversity: "",
+        supervisors: [],
+      },
+      subjectsForm: {
+        subjects: [],
       },
       workflowID: this.$route.params.workflowID,
       workflow: {},
     };
   },
-  computed: {
-    //check if code workflow is present
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
-      }
-      return false;
-    },
-  },
+  computed: {},
   methods: {
     navigateToSelectDestination() {
       this.datasetStore.updateCurrentDataset(this.dataset);

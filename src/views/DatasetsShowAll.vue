@@ -14,16 +14,17 @@
         v-if="datasetStore.datasetCount > 0"
       >
         <div class="flex flex-col h-full">
-          <span class="font-inter text-base font-medium">
-            Continue curating your datasets
-          </span>
-          <span class="font-inter text-base">
+          <span class="font-medium"> Continue curating your datasets </span>
+
+          <span>
             You have some unpublished datasets. Do you want to continue working
             on these items?
           </span>
-          <el-divider content-position="left" class="font-inter">
+
+          <el-divider content-position="left">
             Click on one of the datasets below</el-divider
           >
+
           <div
             ref="unpublishedDatasets"
             id="unpublishedDatasets"
@@ -53,10 +54,10 @@
               <div class="flex flex-row items-center">
                 <img :src="dataset.image" alt="" class="w-14" />
                 <div class="flex flex-col px-4">
-                  <span class="font-inter text-sm font-medium">
+                  <span class="text-sm font-medium">
                     {{ dataset.name }}
                   </span>
-                  <p class="font-inter text-sm line-clamp-3">
+                  <p class="text-sm line-clamp-3">
                     {{ dataset.description }}
                   </p>
                 </div>
@@ -81,9 +82,7 @@
                 hover-underline-animation
               "
             >
-              <span class="font-inter text-base font-medium">
-                Or start from an empty project
-              </span>
+              <span class="font-medium"> Or start from an empty project </span>
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
@@ -114,9 +113,7 @@
               icon="fluent:quiz-new-24-regular"
               class="h-20 w-10/12 text-gray-700"
             />
-            <span class="font-inter font-medium text-large">
-              Create a new dataset
-            </span>
+            <span class="font-medium text-large"> Create a new dataset </span>
           </div>
         </router-link>
       </div>
