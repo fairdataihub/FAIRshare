@@ -92,7 +92,7 @@ export default {
       dataTypes.forEach((type, index) => {
         const key = `workflow${index + 1}`;
         that.dataset.workflows[key] = {};
-        that.dataset.workflows[key].type = type;
+        that.dataset.workflows[key].type = [type];
         that.dataset.workflows[key].completed = false;
       });
 

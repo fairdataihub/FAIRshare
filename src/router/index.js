@@ -6,7 +6,9 @@ import DatasetsCreateNew from "../views/DatasetsCreateNew.vue";
 import DatasetsCreateNewConfirm from "../views/DatasetsCreateNewConfirm.vue";
 import DatasetsCurateSelectFolder from "../views/DatasetsCurateSelectFolder.vue";
 import DatasetsCurateCreateMetadata from "../views/DatasetsCurateCreateMetadata.vue";
-import DatasetsCurate from "../views/DatasetsCurate.vue";
+import DatasetsCurateSelectDestination from "../views/DatasetsCurateSelectDestination.vue";
+import DatasetsCurateZenodoMetadata from "../views/DatasetsCurateZenodoMetadata.vue";
+import DatasetsCurateHome from "../views/DatasetsCurateHome.vue";
 import About from "../views/about.vue";
 
 const routes = [
@@ -23,14 +25,26 @@ const routes = [
     component: DatasetsCreateNewConfirm,
   },
   {
-    path: "/datasets/:datasetID/selectFolder/:workflowID",
+    path: "/datasets/:datasetID/:workflowID/selectFolder",
     component: DatasetsCurateSelectFolder,
   },
   {
-    path: "/datasets/:datasetID/createMetadata/:workflowID",
+    path: "/datasets/:datasetID/:workflowID/createMetadata",
     component: DatasetsCurateCreateMetadata,
   },
-  { path: "/datasets/:datasetID", component: DatasetsCurate },
+  {
+    path: "/datasets/:datasetID/:workflowID/selectDestination",
+    component: DatasetsCurateSelectDestination,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/zenodo/metadata",
+    component: DatasetsCurateZenodoMetadata,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/metadata",
+    component: DatasetsCurateSelectDestination,
+  },
+  { path: "/datasets/:datasetID", component: DatasetsCurateHome },
   { path: "/about", component: About },
 ];
 

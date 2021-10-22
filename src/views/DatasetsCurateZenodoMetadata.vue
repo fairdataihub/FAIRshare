@@ -102,7 +102,7 @@ import { ArrowRightBold } from "@element-plus/icons";
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "DatasetsCurateCreateMetadata",
+  name: "DatasetsCurateZenodoMetadata",
   components: { ArrowRightBold },
   data() {
     return {

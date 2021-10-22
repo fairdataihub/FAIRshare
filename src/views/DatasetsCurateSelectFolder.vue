@@ -1,8 +1,8 @@
 <template>
   <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="p-3 h-full flex flex-row items-center">
+    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
       <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto">
+        <div class="flex flex-col h-full  overflow-y-auto">
           <span class="font-inter text-lg font-medium text-left">
             General information regarding your data
           </span>
@@ -14,7 +14,7 @@
 
           <span class="font-inter text-base mb-2">
             Please select the folder where your
-            {{ workflow.type }} files are stored.
+            {{ combineDataTypes }} files are stored.
           </span>
 
           <el-input
@@ -74,6 +74,29 @@ export default {
         return false;
       }
     },
+    combineDataTypes() {
+      if ("type" in this.workflow) {
+        const dataTypes = this.workflow.type;
+
+        if (dataTypes.length === 1) {
+          return dataTypes[0];
+        } else if (dataTypes.length === 2) {
+          return `${dataTypes[0]} and ${dataTypes[1]}`;
+        } else if (dataTypes.length > 2) {
+          let returnString = "";
+          dataTypes.forEach((type, index) => {
+            if (index === dataTypes.length - 1) {
+              returnString += `and ${type}`;
+            } else {
+              returnString += `${type}, `;
+            }
+          });
+          return returnString;
+        }
+      }
+
+      return "";
+    },
   },
   methods: {
     selectFolderPath() {
@@ -90,7 +113,7 @@ export default {
       this.datasetStore.syncDatasets();
 
       this.$router.push({
-        path: `/datasets/${this.dataset.id}/createMetadata/${this.workflowID}`,
+        path: `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`,
       });
     },
   },

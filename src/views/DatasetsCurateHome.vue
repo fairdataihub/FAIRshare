@@ -20,7 +20,9 @@
             :key="key"
           >
             <div class="bg-gray-300 px-4 py-2">
-              <span class="text-lg"> {{ workflow.type }} </span>
+              <span class="text-lg">
+                {{ combineDataTypes(workflow.type) }}
+              </span>
             </div>
             <div class="bg-gray-200 px-4 py-2">
               <el-button
@@ -28,11 +30,12 @@
                 @click="navigateToCurate(`${key}`)"
                 :disabled="workflow.completed"
               >
-                Curate {{ workflow.type }}
+                Curate {{ combineDataTypes(workflow.type) }}
                 <el-icon>
                   <ArrowRightBold />
                 </el-icon>
               </el-button>
+              <br />
               <span>{{ workflow }}</span>
             </div>
           </div>
@@ -49,7 +52,7 @@ import { ArrowRightBold } from "@element-plus/icons";
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "DatasetsCurate",
+  name: "DatasetsCurateHome",
   components: { ArrowRightBold },
   data() {
     return {
@@ -60,10 +63,27 @@ export default {
     };
   },
   methods: {
+    combineDataTypes(dataTypes) {
+      if (dataTypes.length === 1) {
+        return dataTypes[0];
+      } else if (dataTypes.length === 2) {
+        return `${dataTypes[0]} and ${dataTypes[1]}`;
+      } else if (dataTypes.length > 2) {
+        let returnString = "";
+        dataTypes.forEach((type, index) => {
+          if (index === dataTypes.length - 1) {
+            returnString += `and ${type}`;
+          } else {
+            returnString += `${type}, `;
+          }
+        });
+        return returnString;
+      }
+    },
     navigateToCurate(workflowID) {
       this.datasetStore.updateCurrentDataset(this.dataset);
 
-      const routerPath = `/datasets/${this.datasetID}/selectFolder/${workflowID}`;
+      const routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
       this.$router.push({ path: routerPath });
     },
   },
