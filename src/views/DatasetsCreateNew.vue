@@ -162,7 +162,7 @@ export default {
             description: this.datasetForm.datasetDescription,
             dataType: this.datasetForm.dataType,
             data: {},
-            worflowConfirmed: false
+            worflowConfirmed: false,
           };
 
           for (const type of dataset.dataType) {
