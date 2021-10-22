@@ -39,10 +39,12 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/metadata",
     component: DatasetsCurateZenodoMetadata,
+    name: "ZenodoMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",
     component: DatasetsCurateSelectDestination,
+    name: "FigshareMetadata",
   },
   { path: "/datasets/:datasetID", component: DatasetsCurateHome },
   { path: "/about", component: About },
