@@ -3,9 +3,7 @@
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="text-lg font-medium text-left">
-            Zenodo Metadata
-          </span>
+          <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
           <span class="text-left">
             Questions required for creating metadata.json file?
           </span>
