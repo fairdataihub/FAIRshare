@@ -105,9 +105,19 @@ export default {
       });
     },
     startCuration() {
-      this.workflow.folderPath = this.folderPath;
-      this.datasetStore.updateCurrentDataset(this.dataset);
+      const dataTypes = this.workflow.type;
 
+      let that = this;
+      // At this moment, add the same folder path to all the data types provided
+      // subject to change when we seperate the data types folder locations.
+      console.log(dataTypes);
+      dataTypes.forEach((type, _index) => {
+        that.dataset.data[type].folderPath = that.folderPath;
+      });
+
+      this.workflow.folderSelected = true;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
       this.$router.push({

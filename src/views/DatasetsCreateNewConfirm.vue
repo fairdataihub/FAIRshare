@@ -92,6 +92,8 @@ export default {
         that.dataset.workflows[key] = {};
         that.dataset.workflows[key].type = [type];
         that.dataset.workflows[key].completed = false;
+        that.dataset.workflows[key].folderSelected = false;
+        that.dataset.workflows[key].destinationSelected = false;
       });
 
       this.dataset.workflowConfirmed = true;

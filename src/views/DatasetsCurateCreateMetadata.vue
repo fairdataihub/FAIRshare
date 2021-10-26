@@ -93,7 +93,6 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../store/datasets";
@@ -138,7 +137,11 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     // Add the functions here to check the pre saved values for on mounted.
-    // decide if the intermdiate data is saved in workflow or data.
+    // decide if the intermediate data is saved in workflow or data.
   },
 };
+
+// Right now, going to put all the general questions in the dataset object under a metadata.general key.
+// questions regarding the detination will be put under worflow[workflowID].destination.name/questions key. 
+// might be slightly confusing but it will be easier to manage.
 </script>
