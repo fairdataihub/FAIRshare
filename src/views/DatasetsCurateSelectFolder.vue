@@ -109,7 +109,7 @@ export default {
 
       let that = this;
       // At this moment, add the same folder path to all the data types provided
-      // subject to change when we seperate the data types folder locations.
+      // subject to change when we separate the data types folder locations.
       console.log(dataTypes);
       dataTypes.forEach((type, _index) => {
         that.dataset.data[type].folderPath = that.folderPath;
