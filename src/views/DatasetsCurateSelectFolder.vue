@@ -110,7 +110,6 @@ export default {
       let that = this;
       // At this moment, add the same folder path to all the data types provided
       // subject to change when we separate the data types folder locations.
-      console.log(dataTypes);
       dataTypes.forEach((type, _index) => {
         that.dataset.data[type].folderPath = that.folderPath;
       });
@@ -129,9 +128,14 @@ export default {
     this.dataset = this.datasetStore.currentDataset;
     this.workflow = this.dataset.workflows[this.workflowID];
 
-    if (this.workflow.folderPath) {
-      this.folderPath = this.workflow.folderPath;
+    // split this up when seperate
+    if (this.workflow.folderSelected) {
+      this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
+
+    // if (this.workflow.folderPath) {
+    //   this.folderPath = this.workflow.folderPath;
+    // }
   },
 };
 </script>

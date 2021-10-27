@@ -41,7 +41,7 @@
                 h-30
                 w-30
               "
-              @click="selectRepo(repo.redirectURL)"
+              @click="selectRepo(repo.id, repo.redirectURL)"
             >
               <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
               <span class="text-lg mx-5"> {{ repo.name }} </span>
@@ -100,7 +100,20 @@ export default {
   },
   computed: {},
   methods: {
-    selectRepo(redirectURL) {
+    selectRepo(repoID, redirectURL) {
+      this.dataset.destinationSelected = true;
+
+      if (this.workflow.destination.name === repoID) {
+        //do nothing
+      } else {
+        // warn the user (add a sweetalert or something)
+        this.workflow.destination.name = repoID;
+        this.workflow.destination.questions = [];
+      }
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
       this.$router.push(redirectURL);
     },
   },
