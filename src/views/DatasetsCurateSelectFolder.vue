@@ -128,7 +128,7 @@ export default {
     this.dataset = this.datasetStore.currentDataset;
     this.workflow = this.dataset.workflows[this.workflowID];
 
-    // split this up when seperate
+    // split this up when separate
     if (this.workflow.folderSelected) {
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
