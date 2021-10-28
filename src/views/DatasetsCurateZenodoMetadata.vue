@@ -4,29 +4,33 @@
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
           <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-          <span class="text-left">
-            Questions required for creating metadata.json file?
-          </span>
+          <span class="text-left"> Lets upload your data to Zenodo. </span>
 
           <line-divider></line-divider>
 
           <span class="mb-2">
-            We need to know some general details about you and your dataset.
-            Please fill this out to the best of your ability.
+            Before we send this data over, Zenodo requires some metadata from
+            you. We have filled any information we have learned from the data as
+            well as your previous metadata.
           </span>
 
           <el-form
-            :model="generalQuestionsForm"
-            label-width="auto"
-            label-position="top"
-            size="medium"
+            :model="basicInformationForm"
+            label-width="150px"
+            label-position="right"
+            size="mini"
             @submit.prevent
           >
-            <el-form-item label="Dataset name">
-              <el-input v-model="generalQuestionsForm.datasetName"></el-input>
+            <el-form-item label="Publication Date">
+              <el-date-picker
+                v-model="basicInformationForm.publicationDate"
+                type="date"
+                placeholder="Pick a day"
+              >
+              </el-date-picker>
             </el-form-item>
 
-            <el-form-item label="Dataset description">
+            <el-form-item label="Title">
               <el-popover
                 ref="popover"
                 placement="bottom"
@@ -35,7 +39,7 @@
               >
                 <template #reference>
                   <el-input
-                    v-model="generalQuestionsForm.datasetDescription"
+                    v-model="basicInformationForm.title"
                     type="textarea"
                   ></el-input>
                 </template>
@@ -46,6 +50,92 @@
                   submitted metadata.
                 </span>
               </el-popover>
+            </el-form-item>
+
+            <!-- Add authors table thing -->
+
+            <el-form-item label="Description">
+              <el-popover
+                ref="popover"
+                placement="bottom"
+                :width="300"
+                trigger="hover"
+                content=""
+              >
+                <template #reference>
+                  <el-input
+                    v-model="basicInformationForm.description"
+                    type="textarea"
+                  ></el-input>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  Use a description that is easily identifiable. This will be
+                  shown in the dataset selection screen and is not part of your
+                  submitted metadata.
+                </span>
+              </el-popover>
+            </el-form-item>
+
+            <el-form-item label="Version">
+              <el-popover
+                ref="popover"
+                placement="bottom"
+                :width="300"
+                trigger="hover"
+                content=""
+              >
+                <template #reference>
+                  <el-input
+                    v-model="basicInformationForm.version"
+                    type="textarea"
+                  ></el-input>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  Optional. Mostly relevant for software and dataset uploads.
+                  Any string will be accepted, but semantically-versioned tag is
+                  recommended. <br />
+                  See
+                  <a href="https://semver.org/" target="_blank"> semver.org </a>
+                  for more information on semantic versioning.
+                </span>
+              </el-popover>
+            </el-form-item>
+
+            <el-form-item label="Language">
+              <el-popover
+                ref="popover"
+                placement="bottom"
+                :width="300"
+                trigger="manual"
+              >
+                <template #reference>
+                  <el-input
+                    v-model="basicInformationForm.language"
+                    type="textarea"
+                  ></el-input>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  Optional. Primary language of the record. Start by typing the
+                  language's common name in English, or its ISO 639 code (two or
+                  three-letter code).
+                  <br />
+                  See
+                  <a href="https://semver.org/" target="_blank">
+                    ISO 639 language codes list
+                  </a>
+                  for more information.
+                </span>
+              </el-popover>
+            </el-form-item>
+
+            <el-form-item label="Additional Notes">
+              <el-input
+                v-model="basicInformationForm.additionalNotes"
+                type="textarea"
+              ></el-input>
             </el-form-item>
           </el-form>
 
@@ -84,10 +174,6 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       dataset: {},
-      generalQuestionsForm: {
-        datasetName: "",
-        datasetDescription: "",
-      },
 
       basicInformationForm: {
         publicationDate: "",
@@ -191,3 +277,6 @@ export default {
   },
 };
 </script>
+
+
+// CHANGE TO ONE FORM SINCE THAT iS BETTER
