@@ -38,7 +38,7 @@
         </router-link>
         <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link
-          to="/datasets/new/f1f6c588-d79c-4235-b9ef-7cb7bfb95b8e/confirm"
+          to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
           class="sideBarMenuItem"
         >
           Confirm
