@@ -431,12 +431,13 @@
                 </div>
               </el-collapse-item>
               <el-collapse-item title="Subjects" name="subjects">
-                <span class="text-xs pb-2">
+                <p class="text-xs mb-4">
                   Specify subjects from a taxonomy or controlled vocabulary.
                   Each term must be uniquely identified (e.g. a URL). For free
                   form text, use the keywords field in basic information
                   section.
-                </span>
+                  <br />
+                </p>
                 <div>
                   <el-form-item label="Awarding university">
                     <draggable
@@ -448,15 +449,19 @@
                       item-key="term"
                     >
                       <template #item="{ element }">
-                        <div>
-                          <el-input
-                            v-model="element.term"
-                            type="text"
-                          ></el-input>
-                          <el-input
-                            v-model="element.identifier"
-                            type="text"
-                          ></el-input>
+                        <div class="flex flex-row">
+                          <div class="pr-5">
+                            <el-input
+                              v-model="element.term"
+                              type="text"
+                            ></el-input>
+                          </div>
+                          <div class="pl-5">
+                            <el-input
+                              v-model="element.identifier"
+                              type="text"
+                            ></el-input>
+                          </div>
                         </div>
                       </template>
                     </draggable>
@@ -599,8 +604,16 @@ export default {
         },
         subjects: [
           {
-            term: "test",
-            identifier: "test",
+            term: "term1",
+            identifier: "identifier2",
+          },
+          {
+            term: "term2",
+            identifier: "identifier2",
+          },
+          {
+            term: "term3",
+            identifier: "identifier3",
           },
         ],
       },
