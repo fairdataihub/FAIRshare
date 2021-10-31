@@ -449,7 +449,7 @@
                       item-key="term"
                     >
                       <template #item="{ element }">
-                        <div class="flex flex-row">
+                        <div class="flex flex-row mb-2 justify-evenly">
                           <div class="pr-5">
                             <el-input
                               v-model="element.term"
