@@ -27,7 +27,7 @@
             :model="zenodoMetadataForm"
             label-width="150px"
             label-position="right"
-            size="mini"
+            size="small"
             @submit.prevent
           >
             <el-collapse v-model="activeNames">
@@ -46,7 +46,18 @@
                     </el-date-picker>
                   </el-form-item>
 
-                  <el-form-item label="Title">
+                  <el-form-item label="Title" >
+                    <Popper :hover="true"
+                      content="Use a description that is easily identifiable. This will
+                        be shown in the dataset selection screen and is not part
+                        of your submitted metadata."
+                    >
+                      <el-input
+                        v-model="zenodoMetadataForm.title"
+                        type="text"
+                      > text </el-input>
+                    </Popper>
+
                     <el-popover
                       ref="popover"
                       placement="bottom"
@@ -68,7 +79,103 @@
                     </el-popover>
                   </el-form-item>
 
-                  <!-- Add authors table thing -->
+                  <el-form-item label="Authors">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.authors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.name"
+                              type="text"
+                              placeholder="Family name, given names"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.affiliation"
+                              type="text"
+                              placeholder="Affiliation"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.orcid"
+                              type="text"
+                              placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteAuthor(
+                                    element.name,
+                                    element.affiliation,
+                                    element.orcid
+                                  )
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addAuthor()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add an author </span>
+                    </div>
+                  </el-form-item>
 
                   <el-form-item label="Description">
                     <el-popover
@@ -150,10 +257,90 @@
                     </el-popover>
                   </el-form-item>
 
+                  <el-form-item label="Keywords">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.keywords"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.keyword"
+                              type="text"
+                              placeholder=""
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteKeyword(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addKeyword()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add a keyword </span>
+                    </div>
+                  </el-form-item>
+
                   <el-form-item label="Additional Notes">
                     <el-input
                       v-model="zenodoMetadataForm.additionalNotes"
-                      type="text"
+                      type="textarea"
                     ></el-input>
                   </el-form-item>
                 </div>
@@ -245,7 +432,7 @@
                   <el-form-item label=""> </el-form-item>
                 </div>
               </el-collapse-item>
-              <el-collapse-item title="Funding" name="funding">
+              <!-- <el-collapse-item title="Funding" name="funding">
                 <span class="text-xs">
                   Zenodo is integrated into reporting lines for research funded
                   by the European Commission via OpenAIRE. Specify grants which
@@ -261,7 +448,7 @@
                     available in OpenAIRE.
                   </p>
                 </div>
-              </el-collapse-item>
+              </el-collapse-item> -->
               <el-collapse-item
                 title="Related/alternate identifiers"
                 name="relatedIdentifiers"
@@ -273,13 +460,293 @@
                   arXiv, Life Science Identifiers (LSID), EAN-13, ISTC, URNs and
                   URLs.
                 </span>
-                <div></div>
+                <div>
+                  <el-form-item label="Related identifiers">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.relatedIdentifiers"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.identifier"
+                              type="text"
+                              placeholder="e.g. 10.1234/foobar.56789"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.relationship"
+                              type="text"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.resourceType"
+                              type="text"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteRelatedIdentifier(
+                                    element.identifier,
+                                    element.relationship,
+                                    element.resourceType
+                                  )
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addRelatedIdentifier()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add an author </span>
+                    </div>
+                  </el-form-item>
+                </div>
               </el-collapse-item>
               <el-collapse-item title="Contributors" name="contributors">
-                <div></div>
+                <div>
+                  <el-form-item label="Contributors">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.contributors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.name"
+                              type="text"
+                              placeholder="Family Name, Given Name"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.affiliation"
+                              type="text"
+                              placeholder="Affiliation"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.orcid"
+                              type="text"
+                              placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.contributorType"
+                              type="text"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteContributor(
+                                    element.name,
+                                    element.affiliation,
+                                    element.orcid,
+                                    element.contributorType
+                                  )
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addContributor()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add an author </span>
+                    </div>
+                  </el-form-item>
+                </div>
               </el-collapse-item>
               <el-collapse-item title="References" name="references">
-                <div></div>
+                <div>
+                  <el-form-item label="References">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.references"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.reference"
+                              type="text"
+                              placeholder="e.g.: Cranmer, Kyle et al. (2014). Decouple software associated to arXiv:1401.0080."
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteReference(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addReference()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add a keyword </span>
+                    </div>
+                  </el-form-item>
+                </div>
               </el-collapse-item>
               <el-collapse-item title="Journal" name="journal">
                 <div>
@@ -428,6 +895,104 @@
                       type="text"
                     ></el-input>
                   </el-form-item>
+
+                  <el-form-item label="Supervisors">
+                    <draggable
+                      tag="div"
+                      :list="zenodoMetadataForm.thesis.supervisors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.name"
+                              type="text"
+                              placeholder="Family name, given names"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.affiliation"
+                              type="text"
+                              placeholder="Affiliation"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                            <el-input
+                              v-model="element.orcid"
+                              type="text"
+                              placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteSupervisor(
+                                    element.name,
+                                    element.affiliation,
+                                    element.orcid
+                                  )
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addSupervisor()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add a supervisor </span>
+                    </div>
+                  </el-form-item>
                 </div>
               </el-collapse-item>
               <el-collapse-item title="Subjects" name="subjects">
@@ -439,32 +1004,95 @@
                   <br />
                 </p>
                 <div>
-                  <el-form-item label="Awarding university">
+                  <el-form-item label="Subjects">
                     <draggable
-                      v-model="zenodoMetadataForm.subjects"
-                      v-bind="dragOptions"
-                      tag="transition-group"
-                      @start="drag = true"
-                      @end="drag = false"
-                      item-key="term"
+                      tag="div"
+                      :list="zenodoMetadataForm.subjects"
+                      item-key="id"
+                      handle=".handle"
                     >
                       <template #item="{ element }">
-                        <div class="flex flex-row mb-2 justify-evenly">
-                          <div class="pr-5">
+                        <div
+                          class="
+                            flex flex-row
+                            mb-2
+                            justify-between
+                            transition-all
+                          "
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
                             <el-input
                               v-model="element.term"
                               type="text"
+                              placeholder="Term"
                             ></el-input>
-                          </div>
-                          <div class="pl-5">
+                            <div class="mx-2"></div>
                             <el-input
                               v-model="element.identifier"
                               type="text"
+                              placeholder="Identifier"
                             ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row justify-evenly w-1/12">
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                handle
+                                text-gray-400
+                                hover:text-gray-700
+                              "
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="
+                                flex
+                                justify-center
+                                items-center
+                                text-gray-600
+                                hover:text-gray-800
+                                cursor-pointer
+                              "
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteSubject(
+                                    element.term,
+                                    element.identifier
+                                  )
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
                           </div>
                         </div>
                       </template>
                     </draggable>
+
+                    <div
+                      class="
+                        flex
+                        items-center
+                        cursor-pointer
+                        text-gray-500
+                        hover:text-black
+                        w-max
+                      "
+                      @click="addSubject()"
+                    >
+                      <Icon icon="carbon:add" />
+                      <span> Add a subject </span>
+                    </div>
                   </el-form-item>
                 </div>
               </el-collapse-item>
@@ -494,7 +1122,7 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue";
 import {
   ArrowRightBold,
   Lock,
@@ -506,20 +1134,17 @@ import draggable from "vuedraggable";
 
 import { useDatasetsStore } from "../store/datasets";
 
-// const message = [
-//   "vue.draggable",
-//   "draggable",
-//   "component",
-//   "for",
-//   "vue.js 2.0",
-//   "based",
-//   "on",
-//   "Sortablejs",
-// ];
-
 export default {
   name: "DatasetsCurateZenodoMetadata",
-  components: { ArrowRightBold, Lock, Unlock, RemoveFilled, Key, draggable },
+  components: {
+    ArrowRightBold,
+    Lock,
+    Unlock,
+    RemoveFilled,
+    Key,
+    draggable,
+    Icon,
+  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -527,7 +1152,7 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       activeNames: ["basicInformation", "license", "subjects"],
-      drag: false,
+      drag: true,
       licenseOptions: [
         {
           value: "CC0-1.0",
@@ -559,21 +1184,8 @@ export default {
             grantName: "",
           },
         ],
-        relatedIdentifier: [
-          {
-            identifier: "",
-            relatedIdentifierType: "",
-            resourceType: "",
-          },
-        ],
-        contributors: [
-          {
-            contributorType: "",
-            name: "",
-            affiliation: "",
-            orcid: "",
-          },
-        ],
+        relatedIdentifiers: [],
+        contributors: [],
         references: [],
         journal: {
           title: "",
@@ -600,22 +1212,9 @@ export default {
         },
         thesis: {
           awardingUniversity: "",
-          supervisors: [{ name: "", affiliation: "", orcid: "" }],
+          supervisors: [],
         },
-        subjects: [
-          {
-            term: "term1",
-            identifier: "identifier2",
-          },
-          {
-            term: "term2",
-            identifier: "identifier2",
-          },
-          {
-            term: "term3",
-            identifier: "identifier3",
-          },
-        ],
+        subjects: [],
       },
     };
   },
@@ -623,7 +1222,6 @@ export default {
     dragOptions() {
       return {
         animation: 200,
-        group: "description",
         disabled: false,
       };
     },
@@ -635,10 +1233,213 @@ export default {
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`;
       this.$router.push({ path: routerPath });
     },
+    addIds(array) {
+      array.forEach((element, index) => {
+        element.id = index;
+      });
+    },
+    addSubject() {
+      if (this.zenodoMetadataForm.subjects.length === 0) {
+        this.zenodoMetadataForm.subjects.push({
+          term: "",
+          identifier: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.subjects.push({
+          term: "",
+          identifier: "",
+          id:
+            this.zenodoMetadataForm.subjects[
+              this.zenodoMetadataForm.subjects.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteSubject(term, identifier) {
+      this.zenodoMetadataForm.subjects =
+        this.zenodoMetadataForm.subjects.filter((subject) => {
+          return subject.term !== term && subject.identifier !== identifier;
+        });
+    },
+    addAuthor() {
+      if (this.zenodoMetadataForm.authors.length === 0) {
+        this.zenodoMetadataForm.authors.push({
+          contributorType: "",
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.authors.push({
+          contributorType: "",
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id:
+            this.zenodoMetadataForm.authors[
+              this.zenodoMetadataForm.authors.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteAuthor(name, affiliation, orcid) {
+      this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter(
+        (author) => {
+          return (
+            author.name !== name &&
+            author.affiliation !== affiliation &&
+            author.orcid !== orcid
+          );
+        }
+      );
+    },
+    addKeyword() {
+      if (this.zenodoMetadataForm.keywords.length === 0) {
+        this.zenodoMetadataForm.keywords.push({
+          keyword: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.keywords.push({
+          keyword: "",
+          id:
+            this.zenodoMetadataForm.keywords[
+              this.zenodoMetadataForm.keywords.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteKeyword(id) {
+      this.zenodoMetadataForm.keywords =
+        this.zenodoMetadataForm.keywords.filter((keyword) => {
+          return keyword.id !== id;
+        });
+    },
+    addRelatedIdentifier() {
+      if (this.zenodoMetadataForm.relatedIdentifiers.length === 0) {
+        this.zenodoMetadataForm.relatedIdentifiers.push({
+          identifier: "",
+          relationship: "",
+          resourceType: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.relatedIdentifiers.push({
+          identifier: "",
+          relationship: "",
+          resourceType: "",
+          id:
+            this.zenodoMetadataForm.relatedIdentifiers[
+              this.zenodoMetadataForm.relatedIdentifiers.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteRelatedIdentifier(identifier, relationship, resourceType) {
+      this.zenodoMetadataForm.relatedIdentifiers =
+        this.zenodoMetadataForm.relatedIdentifiers.filter(
+          (relatedIdentifier) => {
+            return (
+              relatedIdentifier.identifier !== identifier &&
+              relatedIdentifier.relationship !== relationship &&
+              relatedIdentifier.resourceType !== resourceType
+            );
+          }
+        );
+    },
+    addContributor() {
+      if (this.zenodoMetadataForm.contributors.length === 0) {
+        this.zenodoMetadataForm.contributors.push({
+          contributorType: "",
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.contributors.push({
+          contributorType: "",
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id:
+            this.zenodoMetadataForm.contributors[
+              this.zenodoMetadataForm.contributors.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteContributor(name, affiliation, orcid, contributorType) {
+      this.zenodoMetadataForm.contributors =
+        this.zenodoMetadataForm.contributors.filter((contributor) => {
+          return (
+            contributor.name !== name &&
+            contributor.affiliation !== affiliation &&
+            contributor.orcid !== orcid &&
+            contributor.contributorType !== contributorType
+          );
+        });
+    },
+    addReference() {
+      if (this.zenodoMetadataForm.references.length === 0) {
+        this.zenodoMetadataForm.references.push({
+          reference: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.references.push({
+          reference: "",
+          id:
+            this.zenodoMetadataForm.references[
+              this.zenodoMetadataForm.references.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteReference(id) {
+      this.zenodoMetadataForm.references =
+        this.zenodoMetadataForm.references.filter((reference) => {
+          return reference.id !== id;
+        });
+    },
+    addSupervisor() {
+      if (this.zenodoMetadataForm.thesis.supervisors.length === 0) {
+        this.zenodoMetadataForm.thesis.supervisors.push({
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id: 0,
+        });
+      } else {
+        this.zenodoMetadataForm.thesis.supervisors.push({
+          name: "",
+          affiliation: "",
+          orcid: "",
+          id:
+            this.zenodoMetadataForm.thesis.supervisors[
+              this.zenodoMetadataForm.thesis.supervisors.length - 1
+            ].id + 1,
+        });
+      }
+    },
+    deleteSupervisor(name, affiliation, orcid) {
+      this.zenodoMetadataForm.thesis.supervisors =
+        this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
+          return (
+            supervisor.name !== name &&
+            supervisor.affiliation !== affiliation &&
+            supervisor.orcid !== orcid
+          );
+        });
+    },
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.addIds(this.zenodoMetadataForm.subjects);
 
     // Add the functions here to check the pre saved values for on mounted.
     // decide if the intermdiate data is saved in workflow or data.
@@ -647,4 +1448,8 @@ export default {
 // CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
-<style lang="postcss"></style>
+<style lang="postcss" scoped>
+.handle {
+  cursor: move;
+}
+</style>

@@ -43,6 +43,7 @@
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-router": "4",
+    "vue3-popper": "^1.4.0",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
