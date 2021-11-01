@@ -46,16 +46,16 @@
                     </el-date-picker>
                   </el-form-item>
 
-                  <el-form-item label="Title" >
-                    <Popper :hover="true"
+                  <el-form-item label="Title">
+                    <Popper
+                      :hover="true"
                       content="Use a description that is easily identifiable. This will
                         be shown in the dataset selection screen and is not part
                         of your submitted metadata."
                     >
-                      <el-input
-                        v-model="zenodoMetadataForm.title"
-                        type="text"
-                      > text </el-input>
+                      <el-input v-model="zenodoMetadataForm.title" type="text">
+                        text
+                      </el-input>
                     </Popper>
 
                     <el-popover
