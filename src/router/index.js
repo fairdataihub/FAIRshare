@@ -8,6 +8,7 @@ import DatasetsCurateSelectFolder from "../views/DatasetsCurateSelectFolder.vue"
 import DatasetsCurateCreateMetadata from "../views/DatasetsCurateCreateMetadata.vue";
 import DatasetsCurateSelectDestination from "../views/DatasetsCurateSelectDestination.vue";
 import DatasetsCurateZenodoMetadata from "../views/DatasetsCurateZenodoMetadata.vue";
+import DatasetsCurateZenodoReview from "../views/DatasetsCurateZenodoReview.vue";
 import DatasetsCurateHome from "../views/DatasetsCurateHome.vue";
 import About from "../views/about.vue";
 
@@ -40,6 +41,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/metadata",
     component: DatasetsCurateZenodoMetadata,
     name: "ZenodoMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/zenodo/review",
+    component: DatasetsCurateZenodoReview,
+    name: "ZenodoReview",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",

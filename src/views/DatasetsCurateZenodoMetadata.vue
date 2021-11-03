@@ -25,6 +25,7 @@
 
           <el-form
             :model="zenodoMetadataForm"
+            :rules="rulesForZenodoMetadataForm"
             label-width="150px"
             label-position="right"
             size="small"
@@ -37,46 +38,28 @@
                 name="basicInformation"
               >
                 <div>
-                  <el-form-item label="Publication Date">
+                  <el-form-item label="Publication Date" prop="publicationDate">
                     <el-date-picker
                       v-model="zenodoMetadataForm.publicationDate"
                       type="date"
-                      placeholder="Pick a day"
+                      placeholder="Pick a day" value-format="YYYY-MM-DD"
                     >
                     </el-date-picker>
                   </el-form-item>
 
-                  <el-form-item label="Title" >
-                    <Popper :hover="true"
+                  <el-form-item label="Title" prop="title">
+                    <Popper
+                      :hover="true"
+                      offsetDistance="0"
                       content="Use a description that is easily identifiable. This will
                         be shown in the dataset selection screen and is not part
                         of your submitted metadata."
+                      class="w-full"
                     >
-                      <el-input
-                        v-model="zenodoMetadataForm.title"
-                        type="text"
-                      > text </el-input>
+                      <el-input v-model="zenodoMetadataForm.title" type="text">
+                        text
+                      </el-input>
                     </Popper>
-
-                    <el-popover
-                      ref="popover"
-                      placement="bottom"
-                      :width="300"
-                      trigger="manual"
-                    >
-                      <template #reference>
-                        <el-input
-                          v-model="zenodoMetadataForm.title"
-                          type="text"
-                        ></el-input>
-                      </template>
-
-                      <span class="break-normal text-left text-sm">
-                        Use a description that is easily identifiable. This will
-                        be shown in the dataset selection screen and is not part
-                        of your submitted metadata.
-                      </span>
-                    </el-popover>
                   </el-form-item>
 
                   <el-form-item label="Authors">
@@ -177,27 +160,20 @@
                     </div>
                   </el-form-item>
 
-                  <el-form-item label="Description">
-                    <el-popover
-                      ref="popover"
-                      placement="bottom"
-                      :width="300"
-                      trigger="hover"
-                      content=""
-                    >
-                      <template #reference>
-                        <el-input
-                          v-model="zenodoMetadataForm.description"
-                          type="textarea"
-                        ></el-input>
-                      </template>
-
-                      <span class="break-normal text-left text-sm">
-                        Use a description that is easily identifiable. This will
+                  <el-form-item label="Description" prop="description">
+                    <Popper
+                      :hover="true"
+                      offsetDistance="0"
+                      content="Use a description that is easily identifiable. This will
                         be shown in the dataset selection screen and is not part
-                        of your submitted metadata.
-                      </span>
-                    </el-popover>
+                        of your submitted metadata."
+                      class="w-full mx-0"
+                    >
+                      <el-input
+                        v-model="zenodoMetadataForm.description"
+                        type="textarea"
+                      ></el-input>
+                    </Popper>
                   </el-form-item>
 
                   <el-form-item label="Version">
@@ -345,9 +321,10 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="License" name="license">
                 <div>
-                  <el-form-item label="Access right">
+                  <el-form-item label="Access right" prop="accessRight">
                     <div class="flex flex-col">
                       <el-radio-group
                         v-model="zenodoMetadataForm.license.accessRight"
@@ -383,7 +360,7 @@
                     </div>
                   </el-form-item>
 
-                  <el-form-item label="Access right">
+                  <el-form-item label="License" prop="license">
                     <div class="flex flex-col">
                       <el-select
                         v-model="zenodoMetadataForm.license.licenseName"
@@ -392,9 +369,9 @@
                       >
                         <el-option
                           v-for="item in licenseOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
+                          :key="item.licenseId"
+                          :label="item.name"
+                          :value="item.licenseId"
                         >
                         </el-option>
                       </el-select>
@@ -432,6 +409,7 @@
                   <el-form-item label=""> </el-form-item>
                 </div>
               </el-collapse-item>
+
               <!-- <el-collapse-item title="Funding" name="funding">
                 <span class="text-xs">
                   Zenodo is integrated into reporting lines for research funded
@@ -449,17 +427,19 @@
                   </p>
                 </div>
               </el-collapse-item> -->
+
               <el-collapse-item
                 title="Related/alternate identifiers"
                 name="relatedIdentifiers"
               >
-                <span class="text-xs">
+                <p class="text-xs mb-4">
                   Specify identifiers of related publications and datasets.
                   Supported identifiers include: DOI, Handle, ARK, PURL, ISSN,
                   ISBN, PubMed ID, PubMed Central ID, ADS Bibliographic Code,
                   arXiv, Life Science Identifiers (LSID), EAN-13, ISTC, URNs and
                   URLs.
-                </span>
+                  <br />
+                </p>
                 <div>
                   <el-form-item label="Related identifiers">
                     <draggable
@@ -478,22 +458,49 @@
                           "
                         >
                           <div class="flex flex-row justify-between w-11/12">
-                            <el-input
-                              v-model="element.identifier"
-                              type="text"
-                              placeholder="e.g. 10.1234/foobar.56789"
-                            ></el-input>
-                            <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.relationship"
-                              type="text"
-                            ></el-input>
-                            <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.resourceType"
-                              type="text"
-                            ></el-input>
-                            <div class="mx-2"></div>
+                            <div class="mx-2 w-6/12">
+                              <el-input
+                                v-model="element.identifier"
+                                type="text"
+                                placeholder="e.g. 10.1234/foobar.56789"
+                              ></el-input>
+                            </div>
+                            <div
+                              class="mx-2 w-6/12 flex flex-row justify-evenly"
+                            >
+                              <el-select
+                                v-model="element.relationship"
+                                filterable
+                                placeholder="Select a relationship"
+                              >
+                                <el-option
+                                  v-for="item in relatedIdentifierRelationships"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value"
+                                >
+                                </el-option>
+                              </el-select>
+                              <el-select
+                                v-model="element.resourceType"
+                                placeholder="Select a resource type"
+                              >
+                                <el-option-group
+                                  v-for="group in relatedIdentifierTypes"
+                                  :key="group.label"
+                                  :label="group.label"
+                                  v-show="group.options"
+                                >
+                                  <el-option
+                                    v-for="item in group.options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                  >
+                                  </el-option>
+                                </el-option-group>
+                              </el-select>
+                            </div>
                           </div>
                           <div class="flex flex-row justify-evenly w-1/12">
                             <div
@@ -558,6 +565,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="Contributors" name="contributors">
                 <div>
                   <el-form-item label="Contributors">
@@ -577,29 +585,42 @@
                           "
                         >
                           <div class="flex flex-row justify-between w-11/12">
-                            <el-input
-                              v-model="element.name"
-                              type="text"
-                              placeholder="Family Name, Given Name"
-                            ></el-input>
-                            <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.affiliation"
-                              type="text"
-                              placeholder="Affiliation"
-                            ></el-input>
-                            <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.orcid"
-                              type="text"
-                              placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                            ></el-input>
-                            <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.contributorType"
-                              type="text"
-                            ></el-input>
-                            <div class="mx-2"></div>
+                            <div class="w-3/12">
+                              <el-input
+                                v-model="element.name"
+                                type="text"
+                                placeholder="Family Name, Given Name"
+                              ></el-input>
+                            </div>
+                            <div class="mx-2 w-3/12">
+                              <el-input
+                                v-model="element.affiliation"
+                                type="text"
+                                placeholder="Affiliation"
+                              ></el-input>
+                            </div>
+                            <div class="mx-2 w-3/12">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                              ></el-input>
+                            </div>
+                            <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
+                              <el-select
+                                v-model="element.contributorType"
+                                filterable
+                                placeholder="Select a contributor type"
+                              >
+                                <el-option
+                                  v-for="item in contributorTypes"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value"
+                                >
+                                </el-option>
+                              </el-select>
+                            </div>
                           </div>
                           <div class="flex flex-row justify-evenly w-1/12">
                             <div
@@ -665,6 +686,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="References" name="references">
                 <div>
                   <el-form-item label="References">
@@ -748,6 +770,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="Journal" name="journal">
                 <div>
                   <el-form-item label="Journal title">
@@ -776,6 +799,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="Conference" name="conference">
                 <div>
                   <el-form-item label="Conference title">
@@ -841,11 +865,14 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item
                 title="Book/Report/Chapter"
                 name="bookReportChapter"
               >
-                <span class="text-xs"> For parts of books and reports. </span>
+                <p class="text-xs mb-4">
+                  For parts of books and reports. <br />
+                </p>
                 <div>
                   <el-form-item label="Publisher">
                     <el-input
@@ -887,6 +914,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="Thesis" name="thesis">
                 <div>
                   <el-form-item label="Awarding university">
@@ -995,6 +1023,7 @@
                   </el-form-item>
                 </div>
               </el-collapse-item>
+
               <el-collapse-item title="Subjects" name="subjects">
                 <p class="text-xs mb-4">
                   Specify subjects from a taxonomy or controlled vocabulary.
@@ -1107,7 +1136,7 @@
             <el-button
               type="primary"
               class="flex flex-row items-center"
-              @click="navigateToSelectDestination"
+              @click="addZenodoMetadata"
             >
               Continue
               <el-icon>
@@ -1131,8 +1160,10 @@ import {
   Key,
 } from "@element-plus/icons";
 import draggable from "vuedraggable";
+import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "../store/datasets";
+import licensesJson from "../assets/supplementalFiles/licenses.json";
 
 export default {
   name: "DatasetsCurateZenodoMetadata",
@@ -1151,16 +1182,357 @@ export default {
       dataset: {},
       workflowID: this.$route.params.workflowID,
       workflow: {},
+      loading: "",
       activeNames: ["basicInformation", "license", "subjects"],
       drag: true,
-      licenseOptions: [
+      licenseOptions: licensesJson.licenses,
+      relatedIdentifierRelationships: [
         {
-          value: "CC0-1.0",
-          label: "CC0 1.0 Universal (CC0 1.0) - Attribution",
+          value: "string:isCitedBy",
+          label: "cites this upload",
         },
         {
-          value: "CC-BY-4.0",
-          label: "CC BY 4.0 Attribution (CC BY 4.0)",
+          value: "string:cites",
+          label: "is cited by this upload",
+        },
+        {
+          value: "string:isSupplementTo",
+          label: "is supplemented by this upload",
+        },
+        {
+          value: "string:isSupplementedBy",
+          label: "is a supplement to this upload",
+        },
+        {
+          value: "string:references",
+          label: "is referenced by this upload",
+        },
+        {
+          value: "string:isReferencedBy",
+          label: "references this upload",
+        },
+        {
+          value: "string:isPublishedIn",
+          label: "published this upload",
+        },
+        {
+          value: "string:isNewVersionOf",
+          label: "is previous version of this upload",
+        },
+        {
+          value: "string:isPreviousVersionOf",
+          label: "is new version of this upload",
+        },
+        {
+          value: "string:isContinuedBy",
+          label: "continues this upload",
+        },
+        {
+          value: "string:continues",
+          label: "is continued by this upload",
+        },
+        {
+          value: "string:isDescribedBy",
+          label: "describes this upload",
+        },
+        {
+          value: "string:describes",
+          label: "is described by this upload",
+        },
+        {
+          value: "string:isPartOf",
+          label: "has this upload as part",
+        },
+        {
+          value: "string:hasPart",
+          label: "is part of this upload",
+        },
+        {
+          value: "string:isReviewedBy",
+          label: "reviews this upload",
+        },
+        {
+          value: "string:reviews",
+          label: "is reviewed by this upload",
+        },
+        {
+          value: "string:isDocumentedBy",
+          label: "documents this upload",
+        },
+        {
+          value: "string:documents",
+          label: "is documented by this upload",
+        },
+        {
+          value: "string:compiles",
+          label: "is compiled/created by this upload",
+        },
+        {
+          value: "string:isCompiledBy",
+          label: "compiled/created this upload",
+        },
+        {
+          value: "string:isDerivedFrom",
+          label: "is the source this upload is derived from",
+        },
+        {
+          value: "string:isSourceOf",
+          label: "has this upload as its source",
+        },
+        {
+          value: "string:requires",
+          label: "is required by this upload",
+        },
+        {
+          value: "string:isRequiredBy",
+          label: "requires this upload",
+        },
+        {
+          value: "string:isObsoletedBy",
+          label: "replaces this upload",
+        },
+        {
+          value: "string:obsoletes",
+          label: "is replaced by this upload",
+        },
+        {
+          value: "string:isIdenticalTo",
+          label: "is identical to this upload",
+        },
+        {
+          value: "string:isAlternateIdentifier",
+          label: "is an alternate identifier of this upload",
+        },
+      ],
+      relatedIdentifierTypes: [
+        {
+          label: "Publication",
+          options: [
+            {
+              value: "string:publication-annotationcollection",
+              label: "Annotation collection",
+            },
+            {
+              value: "string:publication-book",
+              label: "Book",
+            },
+            {
+              value: "string:publication-section",
+              label: "Book section",
+            },
+            {
+              value: "string:publication-conferencepaper",
+              label: "Conference paper",
+            },
+            {
+              value: "string:publication-datamanagementplan",
+              label: "Data management plan",
+            },
+            {
+              value: "string:publication-article",
+              label: "Journal article",
+            },
+            {
+              value: "string:publication-other",
+              label: "Other",
+            },
+            {
+              value: "string:publication-patent",
+              label: "Patent",
+            },
+            {
+              value: "string:publication-preprint",
+              label: "Preprint",
+            },
+            {
+              value: "string:publication-deliverable",
+              label: "Project deliverable",
+            },
+            {
+              value: "string:publication-milestone",
+              label: "Project milestone",
+            },
+            {
+              value: "string:publication-proposal",
+              label: "Proposal",
+            },
+            {
+              value: "string:publication-report",
+              label: "Report",
+            },
+            {
+              value: "string:publication-softwaredocumentation",
+              label: "Software documentation",
+            },
+            {
+              value: "string:publication-taxonomictreatment",
+              label: "Taxonomic treatment",
+            },
+            {
+              value: "string:publication-technicalnote",
+              label: "Technical note",
+            },
+            {
+              value: "string:publication-thesis",
+              label: "Thesis",
+            },
+            {
+              value: "string:publication-workingpaper",
+              label: "Working paper",
+            },
+          ],
+        },
+        {
+          label: "Image",
+          options: [
+            {
+              value: "string:image-diagram",
+              label: "Diagram",
+            },
+            {
+              value: "string:image-drawing",
+              label: "Drawing",
+            },
+            {
+              value: "string:image-figure",
+              label: "Figure",
+            },
+            {
+              value: "string:image-other",
+              label: "Other",
+            },
+            {
+              value: "string:image-photo",
+              label: "Photo",
+            },
+            {
+              value: "string:image-plot",
+              label: "Plot",
+            },
+          ],
+        },
+        {
+          label: "",
+          options: [
+            {
+              value: "string:dataset",
+              label: "Dataset",
+            },
+            {
+              value: "string:lesson",
+              label: "Lesson",
+            },
+            {
+              value: "string:other",
+              label: "Other",
+            },
+            {
+              value: "string:physicalobject",
+              label: "Physical object",
+            },
+            {
+              value: "string:poster",
+              label: "Poster",
+            },
+            {
+              value: "string:presentation",
+              label: "Presentation",
+            },
+            {
+              value: "string:software",
+              label: "Software",
+            },
+            {
+              value: "string:video",
+              label: "Video/Audio",
+            },
+          ],
+        },
+      ],
+      contributorTypes: [
+        {
+          value: "string:ContactPerson",
+          label: "Contact person",
+        },
+        {
+          value: "string:DataCollector",
+          label: "Data collector",
+        },
+        {
+          value: "string:DataCurator",
+          label: "Data curator",
+        },
+        {
+          value: "string:DataManager",
+          label: "Data manager",
+        },
+        {
+          value: "string:Distributor",
+          label: "Distributor",
+        },
+        {
+          value: "string:Editor",
+          label: "Editor",
+        },
+        {
+          value: "string:HostingInstitution",
+          label: "Hosting institution",
+        },
+        {
+          value: "string:Other",
+          label: "Other",
+        },
+        {
+          value: "string:Producer",
+          label: "Producer",
+        },
+        {
+          value: "string:ProjectLeader",
+          label: "Project leader",
+        },
+        {
+          value: "string:ProjectManager",
+          label: "Project manager",
+        },
+        {
+          value: "string:ProjectMember",
+          label: "Project member",
+        },
+        {
+          value: "string:RegistrationAgency",
+          label: "Registration agency",
+        },
+        {
+          value: "string:RegistrationAuthority",
+          label: "Registration authority",
+        },
+        {
+          value: "string:RelatedPerson",
+          label: "Related person",
+        },
+        {
+          value: "string:ResearchGroup",
+          label: "Research group",
+        },
+        {
+          value: "string:Researcher",
+          label: "Researcher",
+        },
+        {
+          value: "string:RightsHolder",
+          label: "Rights holder",
+        },
+        {
+          value: "string:Sponsor",
+          label: "Sponsor",
+        },
+        {
+          value: "string:Supervisor",
+          label: "Supervisor",
+        },
+        {
+          value: "string:WorkPackageLeader",
+          label: "Work package leader",
         },
       ],
       zenodoMetadataForm: {
@@ -1216,6 +1588,46 @@ export default {
         },
         subjects: [],
       },
+      rulesForZenodoMetadataForm: {
+        publicationDate: [
+          {
+            required: true,
+            message:
+              "Required. In case your upload was already published elsewhere, please use the date of first publication.",
+            trigger: "blur",
+          },
+        ],
+        title: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "change",
+          },
+        ],
+
+        description: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "change",
+          },
+        ],
+        accessRight: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "change",
+          },
+        ],
+        license: [
+          {
+            required: true,
+            message:
+              "Required. Selected license applies to all of your files displayed on the top of the form.",
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -1227,12 +1639,6 @@ export default {
     },
   },
   methods: {
-    navigateToSelectDestination() {
-      this.datasetStore.updateCurrentDataset(this.dataset);
-
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`;
-      this.$router.push({ path: routerPath });
-    },
     addIds(array) {
       array.forEach((element, index) => {
         element.id = index;
@@ -1259,13 +1665,12 @@ export default {
     deleteSubject(term, identifier) {
       this.zenodoMetadataForm.subjects =
         this.zenodoMetadataForm.subjects.filter((subject) => {
-          return subject.term !== term && subject.identifier !== identifier;
+          return subject.term !== term || subject.identifier !== identifier;
         });
     },
     addAuthor() {
       if (this.zenodoMetadataForm.authors.length === 0) {
         this.zenodoMetadataForm.authors.push({
-          contributorType: "",
           name: "",
           affiliation: "",
           orcid: "",
@@ -1273,7 +1678,6 @@ export default {
         });
       } else {
         this.zenodoMetadataForm.authors.push({
-          contributorType: "",
           name: "",
           affiliation: "",
           orcid: "",
@@ -1285,15 +1689,18 @@ export default {
       }
     },
     deleteAuthor(name, affiliation, orcid) {
+      console.log(name, affiliation, orcid);
+      console.log(this.zenodoMetadataForm.authors);
       this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter(
         (author) => {
           return (
-            author.name !== name &&
-            author.affiliation !== affiliation &&
+            author.name !== name ||
+            author.affiliation !== affiliation ||
             author.orcid !== orcid
           );
         }
       );
+      console.log(this.zenodoMetadataForm.authors);
     },
     addKeyword() {
       if (this.zenodoMetadataForm.keywords.length === 0) {
@@ -1342,8 +1749,8 @@ export default {
         this.zenodoMetadataForm.relatedIdentifiers.filter(
           (relatedIdentifier) => {
             return (
-              relatedIdentifier.identifier !== identifier &&
-              relatedIdentifier.relationship !== relationship &&
+              relatedIdentifier.identifier !== identifier ||
+              relatedIdentifier.relationship !== relationship ||
               relatedIdentifier.resourceType !== resourceType
             );
           }
@@ -1375,9 +1782,9 @@ export default {
       this.zenodoMetadataForm.contributors =
         this.zenodoMetadataForm.contributors.filter((contributor) => {
           return (
-            contributor.name !== name &&
-            contributor.affiliation !== affiliation &&
-            contributor.orcid !== orcid &&
+            contributor.name !== name ||
+            contributor.affiliation !== affiliation ||
+            contributor.orcid !== orcid ||
             contributor.contributorType !== contributorType
           );
         });
@@ -1428,18 +1835,49 @@ export default {
       this.zenodoMetadataForm.thesis.supervisors =
         this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
           return (
-            supervisor.name !== name &&
-            supervisor.affiliation !== affiliation &&
+            supervisor.name !== name ||
+            supervisor.affiliation !== affiliation ||
             supervisor.orcid !== orcid
           );
         });
     },
+    addZenodoMetadata() {
+      //validate first
+      this.workflow = this.dataset.workflows[this.workflowID];
+
+      console.log(this.workflowID);
+      console.log(this.dataset.workflows);
+
+      this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
+      this.$router.push({ path: routerPath });
+    },
   },
-  mounted() {
-    this.dataset = this.datasetStore.currentDataset;
+  async mounted() {
+    this.loading = ElLoading.service({
+      lock: true,
+      text: "Loading data from stores...",
+      background: "rgba(255, 255, 255, 0.95)",
+    });
+
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
     this.workflow = this.dataset.workflows[this.workflowID];
 
+    this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+
+    this.addIds(this.zenodoMetadataForm.authors);
+    this.addIds(this.zenodoMetadataForm.keywords);
+    this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
+    this.addIds(this.zenodoMetadataForm.contributors);
+    this.addIds(this.zenodoMetadataForm.references);
+    this.addIds(this.zenodoMetadataForm.thesis.supervisors);
     this.addIds(this.zenodoMetadataForm.subjects);
+
+    this.loading.close();
 
     // Add the functions here to check the pre saved values for on mounted.
     // decide if the intermdiate data is saved in workflow or data.
@@ -1448,8 +1886,12 @@ export default {
 // CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 .handle {
   cursor: move;
+}
+
+.el-select-group > .el-select-dropdown__item {
+  margin-left: 5px;
 }
 </style>

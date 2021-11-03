@@ -84,6 +84,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
 
       const routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+      console.log(routerPath);
       this.$router.push({ path: routerPath });
     },
   },

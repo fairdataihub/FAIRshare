@@ -95,6 +95,9 @@ export const useDatasetsStore = defineStore({
         console.log(error);
       }
     },
+    async getCurrentDataset() {
+      return this.currentDataset;
+    },
     getDataset(datasetID) {
       if (datasetID in this.datasets) {
         this.currentDataset = this.datasets[datasetID];

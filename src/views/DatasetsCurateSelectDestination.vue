@@ -41,7 +41,7 @@
                 h-30
                 w-30
               "
-              @click="selectRepo(repo.id, repo.redirectURL)"
+              @click="selectRepo(repo.id)"
             >
               <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
               <span class="text-lg mx-5"> {{ repo.name }} </span>
@@ -87,39 +87,46 @@ export default {
           id: "zenodo",
           name: "Zenodo",
           imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
-          redirectURL: `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`,
         },
         {
           id: "figshare",
           name: "Figshare",
           imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
-          redirectURL: `/datasets/${this.datasetID}/${this.workflowID}/figshare/metadata`,
         },
       ],
     };
   },
   computed: {},
   methods: {
-    selectRepo(repoID, redirectURL) {
+    selectRepo(repoID) {
       this.dataset.destinationSelected = true;
+
+      if (!this.workflow.destination[repoID]) {
+        this.workflow.destination[repoID] = {
+          id: repoID,
+          questions: {},
+        };
+      }
 
       if (this.workflow.destination.name === repoID) {
         //do nothing
       } else {
-        // warn the user (add a sweetalert or something)
+        // warn the user that they are changing repos (add a sweetalert or something)
         this.workflow.destination.name = repoID;
-        this.workflow.destination.questions = [];
       }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
+      const redirectURL = `/datasets/${this.datasetID}/${this.workflowID}/${repoID}/metadata`;
       this.$router.push(redirectURL);
     },
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    console.log(this.$route);
 
     // Add the functions here to check the pre saved values for on mounted.
     // decide if the intermdiate data is saved in workflow or data.

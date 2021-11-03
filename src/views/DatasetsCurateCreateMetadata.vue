@@ -128,7 +128,8 @@ export default {
     navigateToSelectDestination() {
       this.datasetStore.updateCurrentDataset(this.dataset);
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`;
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/selectDestination`;
+      console.log(routerPath);
       this.$router.push({ path: routerPath });
     },
   },
