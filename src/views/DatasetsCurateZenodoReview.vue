@@ -26,11 +26,12 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['basicInformation', 'license'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit basic information
+                </el-button>
               </template>
               <el-descriptions-item>
                 <template #label> Publication Date </template>
@@ -71,7 +72,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> License </template>
-                {{ zenodoMetadata.license.licensename }}
+                {{ zenodoMetadata.license.licenseName }}
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -85,11 +86,12 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['relatedIdentifiers'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit related/alternate identifiers
+                </el-button>
               </template>
               <el-descriptions-item>
                 <template #label> Related/alternate identifiers </template>
@@ -107,11 +109,12 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['contributors'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit contributors
+                </el-button>
               </template>
               <el-descriptions-item>
                 <template #label> Contributors </template>
@@ -129,11 +132,12 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['references'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit references
+                </el-button>
               </template>
               <el-descriptions-item>
                 <template #label> References </template>
@@ -145,36 +149,34 @@
           <div class="my-2">
             <el-descriptions
               class="margin-top"
-              title="Basic Information"
-              direction="Journal"
+              title="Journal"
+              direction="vertical"
               size="small"
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
-                >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                <el-button type="primary" @click="editInformation(['journal'])">
+                  Edit journal information
+                </el-button>
               </template>
               <el-descriptions-item>
-                <template #label> Journal title </template>
+                <template #label> Title </template>
                 {{ zenodoMetadata.journal.title }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Journal volume </template>
+                <template #label> Volume </template>
                 {{ zenodoMetadata.journal.volume }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Journal issue </template>
+                <template #label> Issue </template>
                 {{ zenodoMetadata.journal.issue }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Journal pages </template>
+                <template #label> Pages </template>
                 {{ zenodoMetadata.journal.pages }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Journal year </template>
+                <template #label> Year </template>
                 {{ zenodoMetadata.journal.year }}
               </el-descriptions-item>
             </el-descriptions>
@@ -189,38 +191,39 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['conference'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit conference information
+                </el-button>
               </template>
               <el-descriptions-item>
-                <template #label> Conference title </template>
+                <template #label> Title </template>
                 {{ zenodoMetadata.conference.title }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference acronym </template>
+                <template #label> Acronym </template>
                 {{ zenodoMetadata.conference.acronym }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference dates </template>
+                <template #label> Dates </template>
                 {{ zenodoMetadata.conference.dates }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference place </template>
+                <template #label> Place </template>
                 {{ zenodoMetadata.conference.place }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference website </template>
+                <template #label> Website </template>
                 {{ zenodoMetadata.conference.website }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference session </template>
+                <template #label> Session </template>
                 {{ zenodoMetadata.conference.session }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Conference part </template>
+                <template #label> Part </template>
                 {{ zenodoMetadata.conference.part }}
               </el-descriptions-item>
             </el-descriptions>
@@ -235,30 +238,31 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['bookReportChapter'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit book/report/chapter information
+                </el-button>
               </template>
               <el-descriptions-item>
-                <template #label> Book/report/chapter publisher </template>
-                {{ zenodoMetadata.bookReportChapter.title }}
+                <template #label> Publisher </template>
+                {{ zenodoMetadata.bookReportChapter.publisher }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Book/report/chapter place </template>
+                <template #label> Place </template>
                 {{ zenodoMetadata.bookReportChapter.place }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Book/report/chapter isbn </template>
+                <template #label> ISBN </template>
                 {{ zenodoMetadata.bookReportChapter.isbn }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Book/report/chapter title </template>
-                {{ zenodoMetadata.bookReportChapter.bookTitle }}
+                <template #label> Title </template>
+                {{ zenodoMetadata.bookReportChapter.title }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Book/report/chapter pages </template>
+                <template #label> Pages </template>
                 {{ zenodoMetadata.bookReportChapter.pages }}
               </el-descriptions-item>
             </el-descriptions>
@@ -273,24 +277,22 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
-                >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                <el-button type="primary" @click="editInformation(['thesis'])">
+                  Edit thesis information
+                </el-button>
               </template>
               <el-descriptions-item>
-                <template #label> Thesis Awarding University </template>
+                <template #label> Awarding University </template>
                 {{ zenodoMetadata.thesis.awardingUniversity }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Thesis supervisors </template>
+                <template #label> Supervisors </template>
                 {{ zenodoMetadata.thesis.supervisors }}
               </el-descriptions-item>
             </el-descriptions>
           </div>
 
-          <div class="my-2">
+          <div class="my-2 mb-6">
             <el-descriptions
               class="margin-top"
               title="Subjects"
@@ -299,11 +301,12 @@
               border
             >
               <template #extra>
-                <router-link
-                  :to="`/datasets/${datasetID}/${workflowID}/zenodo/metadata`"
+                <el-button
+                  type="primary"
+                  @click="editInformation(['subjects'])"
                 >
-                  <el-button type="primary"> Edit data</el-button>
-                </router-link>
+                  Edit subjects
+                </el-button>
               </template>
               <el-descriptions-item>
                 <template #label> Subjects </template>
@@ -311,12 +314,6 @@
               </el-descriptions-item>
             </el-descriptions>
           </div>
-
-          <span class="mb-2">
-            Before we send this data over, Zenodo requires some metadata from
-            you. We have filled any information we have learned from the data as
-            well as your previous metadata.
-          </span>
 
           <div class="w-full flex flex-row justify-center py-2">
             <router-link to="/datasets" class="mx-6">
@@ -367,14 +364,10 @@ export default {
   },
   computed: {},
   methods: {
-    addZeonodoMetadata() {
-      //validate first
+    editInformation(expandOptions) {
+      this.workflow.expandOptions = [...expandOptions];
 
-      this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
-      this.datasetStore.updateCurrentDataset(this.dataset);
-      this.datasetStore.syncDatasets();
-
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
       this.$router.push({ path: routerPath });
     },
   },
@@ -393,6 +386,7 @@ export default {
     this.loading.close();
   },
 };
+// Add computed to hide properties
 </script>
 
 <style lang="postcss">

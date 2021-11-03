@@ -189,6 +189,7 @@
                         <el-input
                           v-model="zenodoMetadataForm.version"
                           type="text"
+                          placeholder="1.0.4"
                         ></el-input>
                       </template>
 
@@ -326,88 +327,82 @@
               <el-collapse-item title="License" name="license">
                 <div>
                   <el-form-item label="Access right" prop="accessRight">
-                    <div class="flex flex-col">
-                      <el-radio-group
-                        v-model="zenodoMetadataForm.license.accessRight"
-                        class="flex flex-col"
-                      >
-                        <el-radio label="openAccess">
-                          <el-icon>
-                            <unlock />
-                          </el-icon>
-                          Open Access
-                        </el-radio>
-                        <el-radio label="embargoedAccess" disabled>
-                          <el-icon> <remove-filled /> </el-icon> Embargoed
-                          Access
-                        </el-radio>
-                        <el-radio label="restrictedAccess" disabled>
-                          <el-icon>
-                            <key />
-                          </el-icon>
-                          Restricted Access
-                        </el-radio>
-                        <el-radio label="closedAccess" disabled>
-                          <el-icon>
-                            <lock />
-                          </el-icon>
-                          Closed Access
-                        </el-radio>
-                      </el-radio-group>
-                      <p class="text-xs pt-2 text-gray-500">
-                        Required. Open access uploads have considerably higher
-                        visibility on Zenodo.
-                      </p>
-                    </div>
+                    <el-radio-group
+                      v-model="zenodoMetadataForm.license.accessRight"
+                      class="flex flex-col"
+                    >
+                      <el-radio label="openAccess">
+                        <el-icon>
+                          <unlock />
+                        </el-icon>
+                        Open Access
+                      </el-radio>
+                      <el-radio label="embargoedAccess" disabled>
+                        <el-icon> <remove-filled /> </el-icon> Embargoed Access
+                      </el-radio>
+                      <el-radio label="restrictedAccess" disabled>
+                        <el-icon>
+                          <key />
+                        </el-icon>
+                        Restricted Access
+                      </el-radio>
+                      <el-radio label="closedAccess" disabled>
+                        <el-icon>
+                          <lock />
+                        </el-icon>
+                        Closed Access
+                      </el-radio>
+                    </el-radio-group>
+                    <p class="text-xs pt-2 text-gray-500">
+                      Required. Open access uploads have considerably higher
+                      visibility on Zenodo.
+                    </p>
                   </el-form-item>
 
                   <el-form-item label="License" prop="license">
-                    <div class="flex flex-col">
-                      <el-select
-                        v-model="zenodoMetadataForm.license.licenseName"
-                        filterable
-                        placeholder="Select a license"
+                    <el-select
+                      v-model="zenodoMetadataForm.license.licenseName"
+                      filterable
+                      placeholder="Select a license"
+                    >
+                      <el-option
+                        v-for="item in licenseOptions"
+                        :key="item.licenseId"
+                        :label="item.name"
+                        :value="item.licenseId"
                       >
-                        <el-option
-                          v-for="item in licenseOptions"
-                          :key="item.licenseId"
-                          :label="item.name"
-                          :value="item.licenseId"
-                        >
-                        </el-option>
-                      </el-select>
-                      <p class="text-xs pt-2 text-gray-500">
-                        Required. Selected license applies to all of your files
-                        displayed on the top of the form. If you want to upload
-                        some of your files under different licenses, please do
-                        so in separate uploads. If you cannot find the license
-                        you're looking for, include a relevant LICENSE file in
-                        your record and choose one of the
-                        <span class="italic"> Other </span> licenses available
-                        <span class="italic">
-                          (Other (Open), Other (Attribution) </span
-                        >, etc.). The supported licenses in the list are
-                        harvested from
-                        <a
-                          href="https://opendefinition.org/"
-                          target="_blank"
-                          class="text-blue-500 hover:underline"
-                        >
-                          opendefinition.org
-                        </a>
-                        and
-                        <a
-                          href="https://spdx.org/"
-                          target="_blank"
-                          class="text-blue-500 hover:underline"
-                        >
-                          spdx.org
-                        </a>
-                        .
-                      </p>
-                    </div>
+                      </el-option>
+                    </el-select>
+                    <p class="text-xs pt-2 text-gray-500">
+                      Required. Selected license applies to all of your files
+                      displayed on the top of the form. <br />
+                      If you want to upload some of your files under different
+                      licenses, please do so in separate uploads. <br />
+                      If you cannot find the license you're looking for, include
+                      a relevant LICENSE file in your record and choose one of
+                      the <span class="italic"> Other </span> licenses available
+                      <span class="italic">
+                        (Other (Open), Other (Attribution) </span
+                      >, etc.). <br />
+                      The supported licenses in the list are harvested from
+                      <a
+                        href="https://opendefinition.org/"
+                        target="_blank"
+                        class="text-blue-500 hover:underline"
+                      >
+                        opendefinition.org
+                      </a>
+                      and
+                      <a
+                        href="https://spdx.org/"
+                        target="_blank"
+                        class="text-blue-500 hover:underline"
+                      >
+                        spdx.org
+                      </a>
+                      .
+                    </p>
                   </el-form-item>
-                  <el-form-item label=""> </el-form-item>
                 </div>
               </el-collapse-item>
 
@@ -435,6 +430,7 @@
               >
                 <p class="text-xs mb-4">
                   Specify identifiers of related publications and datasets.
+                  <br />
                   Supported identifiers include: DOI, Handle, ARK, PURL, ISSN,
                   ISBN, PubMed ID, PubMed Central ID, ADS Bibliographic Code,
                   arXiv, Life Science Identifiers (LSID), EAN-13, ISTC, URNs and
@@ -823,6 +819,7 @@
                       start-placeholder="Start date"
                       end-placeholder="End date"
                       size="medium"
+                      value-format="YYYY-MM-DD"
                     >
                     </el-date-picker>
                   </el-form-item>
@@ -898,7 +895,7 @@
                   <el-form-item label="Book title">
                     <div class="flex flex-col">
                       <el-input
-                        v-model="zenodoMetadataForm.bookReportChapter.bookTitle"
+                        v-model="zenodoMetadataForm.bookReportChapter.title"
                         type="text"
                       ></el-input>
                       <p class="text-xs pt-2 text-gray-500">
@@ -1165,6 +1162,7 @@ import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "../store/datasets";
 import licensesJson from "../assets/supplementalFiles/licenses.json";
+import zenodoMetadataOptions from "../assets/supplementalFiles/zenodoMetadataOptions.json";
 
 export default {
   name: "DatasetsCurateZenodoMetadata",
@@ -1184,451 +1182,15 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       loading: "",
-      activeNames: ["basicInformation", "license", "subjects"],
+      activeNames: [],
       drag: true,
       licenseOptions: licensesJson.licenses,
-      relatedIdentifierRelationships: [
-        {
-          value: "string:isCitedBy",
-          label: "cites this upload",
-        },
-        {
-          value: "string:cites",
-          label: "is cited by this upload",
-        },
-        {
-          value: "string:isSupplementTo",
-          label: "is supplemented by this upload",
-        },
-        {
-          value: "string:isSupplementedBy",
-          label: "is a supplement to this upload",
-        },
-        {
-          value: "string:references",
-          label: "is referenced by this upload",
-        },
-        {
-          value: "string:isReferencedBy",
-          label: "references this upload",
-        },
-        {
-          value: "string:isPublishedIn",
-          label: "published this upload",
-        },
-        {
-          value: "string:isNewVersionOf",
-          label: "is previous version of this upload",
-        },
-        {
-          value: "string:isPreviousVersionOf",
-          label: "is new version of this upload",
-        },
-        {
-          value: "string:isContinuedBy",
-          label: "continues this upload",
-        },
-        {
-          value: "string:continues",
-          label: "is continued by this upload",
-        },
-        {
-          value: "string:isDescribedBy",
-          label: "describes this upload",
-        },
-        {
-          value: "string:describes",
-          label: "is described by this upload",
-        },
-        {
-          value: "string:isPartOf",
-          label: "has this upload as part",
-        },
-        {
-          value: "string:hasPart",
-          label: "is part of this upload",
-        },
-        {
-          value: "string:isReviewedBy",
-          label: "reviews this upload",
-        },
-        {
-          value: "string:reviews",
-          label: "is reviewed by this upload",
-        },
-        {
-          value: "string:isDocumentedBy",
-          label: "documents this upload",
-        },
-        {
-          value: "string:documents",
-          label: "is documented by this upload",
-        },
-        {
-          value: "string:compiles",
-          label: "is compiled/created by this upload",
-        },
-        {
-          value: "string:isCompiledBy",
-          label: "compiled/created this upload",
-        },
-        {
-          value: "string:isDerivedFrom",
-          label: "is the source this upload is derived from",
-        },
-        {
-          value: "string:isSourceOf",
-          label: "has this upload as its source",
-        },
-        {
-          value: "string:requires",
-          label: "is required by this upload",
-        },
-        {
-          value: "string:isRequiredBy",
-          label: "requires this upload",
-        },
-        {
-          value: "string:isObsoletedBy",
-          label: "replaces this upload",
-        },
-        {
-          value: "string:obsoletes",
-          label: "is replaced by this upload",
-        },
-        {
-          value: "string:isIdenticalTo",
-          label: "is identical to this upload",
-        },
-        {
-          value: "string:isAlternateIdentifier",
-          label: "is an alternate identifier of this upload",
-        },
-      ],
-      relatedIdentifierTypes: [
-        {
-          label: "Publication",
-          options: [
-            {
-              value: "string:publication-annotationcollection",
-              label: "Annotation collection",
-            },
-            {
-              value: "string:publication-book",
-              label: "Book",
-            },
-            {
-              value: "string:publication-section",
-              label: "Book section",
-            },
-            {
-              value: "string:publication-conferencepaper",
-              label: "Conference paper",
-            },
-            {
-              value: "string:publication-datamanagementplan",
-              label: "Data management plan",
-            },
-            {
-              value: "string:publication-article",
-              label: "Journal article",
-            },
-            {
-              value: "string:publication-other",
-              label: "Other",
-            },
-            {
-              value: "string:publication-patent",
-              label: "Patent",
-            },
-            {
-              value: "string:publication-preprint",
-              label: "Preprint",
-            },
-            {
-              value: "string:publication-deliverable",
-              label: "Project deliverable",
-            },
-            {
-              value: "string:publication-milestone",
-              label: "Project milestone",
-            },
-            {
-              value: "string:publication-proposal",
-              label: "Proposal",
-            },
-            {
-              value: "string:publication-report",
-              label: "Report",
-            },
-            {
-              value: "string:publication-softwaredocumentation",
-              label: "Software documentation",
-            },
-            {
-              value: "string:publication-taxonomictreatment",
-              label: "Taxonomic treatment",
-            },
-            {
-              value: "string:publication-technicalnote",
-              label: "Technical note",
-            },
-            {
-              value: "string:publication-thesis",
-              label: "Thesis",
-            },
-            {
-              value: "string:publication-workingpaper",
-              label: "Working paper",
-            },
-          ],
-        },
-        {
-          label: "Image",
-          options: [
-            {
-              value: "string:image-diagram",
-              label: "Diagram",
-            },
-            {
-              value: "string:image-drawing",
-              label: "Drawing",
-            },
-            {
-              value: "string:image-figure",
-              label: "Figure",
-            },
-            {
-              value: "string:image-other",
-              label: "Other",
-            },
-            {
-              value: "string:image-photo",
-              label: "Photo",
-            },
-            {
-              value: "string:image-plot",
-              label: "Plot",
-            },
-          ],
-        },
-        {
-          label: "",
-          options: [
-            {
-              value: "string:dataset",
-              label: "Dataset",
-            },
-            {
-              value: "string:lesson",
-              label: "Lesson",
-            },
-            {
-              value: "string:other",
-              label: "Other",
-            },
-            {
-              value: "string:physicalobject",
-              label: "Physical object",
-            },
-            {
-              value: "string:poster",
-              label: "Poster",
-            },
-            {
-              value: "string:presentation",
-              label: "Presentation",
-            },
-            {
-              value: "string:software",
-              label: "Software",
-            },
-            {
-              value: "string:video",
-              label: "Video/Audio",
-            },
-          ],
-        },
-      ],
-      contributorTypes: [
-        {
-          value: "string:ContactPerson",
-          label: "Contact person",
-        },
-        {
-          value: "string:DataCollector",
-          label: "Data collector",
-        },
-        {
-          value: "string:DataCurator",
-          label: "Data curator",
-        },
-        {
-          value: "string:DataManager",
-          label: "Data manager",
-        },
-        {
-          value: "string:Distributor",
-          label: "Distributor",
-        },
-        {
-          value: "string:Editor",
-          label: "Editor",
-        },
-        {
-          value: "string:HostingInstitution",
-          label: "Hosting institution",
-        },
-        {
-          value: "string:Other",
-          label: "Other",
-        },
-        {
-          value: "string:Producer",
-          label: "Producer",
-        },
-        {
-          value: "string:ProjectLeader",
-          label: "Project leader",
-        },
-        {
-          value: "string:ProjectManager",
-          label: "Project manager",
-        },
-        {
-          value: "string:ProjectMember",
-          label: "Project member",
-        },
-        {
-          value: "string:RegistrationAgency",
-          label: "Registration agency",
-        },
-        {
-          value: "string:RegistrationAuthority",
-          label: "Registration authority",
-        },
-        {
-          value: "string:RelatedPerson",
-          label: "Related person",
-        },
-        {
-          value: "string:ResearchGroup",
-          label: "Research group",
-        },
-        {
-          value: "string:Researcher",
-          label: "Researcher",
-        },
-        {
-          value: "string:RightsHolder",
-          label: "Rights holder",
-        },
-        {
-          value: "string:Sponsor",
-          label: "Sponsor",
-        },
-        {
-          value: "string:Supervisor",
-          label: "Supervisor",
-        },
-        {
-          value: "string:WorkPackageLeader",
-          label: "Work package leader",
-        },
-      ],
-      zenodoMetadataForm: {
-        publicationDate: "",
-        title: "",
-        authors: [],
-        description: "",
-        version: "",
-        language: "",
-        keywords: [],
-        additionalNotes: "",
-        license: {
-          accessRight: "openAccess",
-          licenseName: "",
-          embargoDate: "",
-          conditions: "",
-        },
-        grants: [
-          {
-            grantInstitution: "",
-            grantName: "",
-          },
-        ],
-        relatedIdentifiers: [],
-        contributors: [],
-        references: [],
-        journal: {
-          title: "",
-          volume: "",
-          issue: "",
-          pages: "",
-          year: "",
-        },
-        conference: {
-          title: "",
-          acronym: "",
-          dates: "",
-          place: "",
-          website: "",
-          session: "",
-          part: "",
-        },
-        bookReportChapter: {
-          publisher: "",
-          place: "",
-          isbn: "",
-          bookTitle: "",
-          pages: "",
-        },
-        thesis: {
-          awardingUniversity: "",
-          supervisors: [],
-        },
-        subjects: [],
-      },
-      rulesForZenodoMetadataForm: {
-        publicationDate: [
-          {
-            required: true,
-            message:
-              "Required. In case your upload was already published elsewhere, please use the date of first publication.",
-            trigger: "blur",
-          },
-        ],
-        title: [
-          {
-            required: true,
-            message: "Required.",
-            trigger: "change",
-          },
-        ],
-
-        description: [
-          {
-            required: true,
-            message: "Required.",
-            trigger: "change",
-          },
-        ],
-        accessRight: [
-          {
-            required: true,
-            message: "Required.",
-            trigger: "change",
-          },
-        ],
-        license: [
-          {
-            required: true,
-            message:
-              "Required. Selected license applies to all of your files displayed on the top of the form.",
-            trigger: "change",
-          },
-        ],
-      },
+      relatedIdentifierRelationships:
+        zenodoMetadataOptions.relatedIdentifierRelationships,
+      relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
+      contributorTypes: zenodoMetadataOptions.contributorTypes,
+      zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
+      rulesForZenodoMetadataForm: zenodoMetadataOptions.defaultRules,
     };
   },
   computed: {
@@ -1644,6 +1206,11 @@ export default {
       array.forEach((element, index) => {
         element.id = index;
       });
+    },
+    intializeEmptyObjects(root, obj) {
+      if (typeof obj === "undefined") {
+        root[obj] = {};
+      }
     },
     addSubject() {
       if (this.zenodoMetadataForm.subjects.length === 0) {
@@ -1846,8 +1413,7 @@ export default {
       //validate first
       this.workflow = this.dataset.workflows[this.workflowID];
 
-      console.log(this.workflowID);
-      console.log(this.dataset.workflows);
+      this.workflow.expandOptions = [];
 
       this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
       this.datasetStore.updateCurrentDataset(this.dataset);
@@ -1868,15 +1434,47 @@ export default {
 
     this.workflow = this.dataset.workflows[this.workflowID];
 
-    this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+    if (this.workflow.expandOptions.length === 0) {
+      this.activeNames = ["basicInformation", "license"];
+    } else {
+      this.activeNames = this.workflow.expandOptions;
+    }
 
-    this.addIds(this.zenodoMetadataForm.authors);
-    this.addIds(this.zenodoMetadataForm.keywords);
-    this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
-    this.addIds(this.zenodoMetadataForm.contributors);
-    this.addIds(this.zenodoMetadataForm.references);
-    this.addIds(this.zenodoMetadataForm.thesis.supervisors);
-    this.addIds(this.zenodoMetadataForm.subjects);
+    if (
+      this.workflow.destination.zenodo.questions &&
+      Object.keys(this.workflow.destination.zenodo.questions).length !== 0
+    ) {
+      this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+
+      this.intializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.license
+      );
+      this.intializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.journal
+      );
+      this.intializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.conference
+      );
+      this.intializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.bookReportChapter
+      );
+      this.intializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.thesis
+      );
+
+      this.addIds(this.zenodoMetadataForm.authors);
+      this.addIds(this.zenodoMetadataForm.keywords);
+      this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
+      this.addIds(this.zenodoMetadataForm.contributors);
+      this.addIds(this.zenodoMetadataForm.references);
+      this.addIds(this.zenodoMetadataForm.thesis.supervisors);
+      this.addIds(this.zenodoMetadataForm.subjects);
+    }
 
     this.loading.close();
 

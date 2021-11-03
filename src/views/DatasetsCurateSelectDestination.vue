@@ -101,6 +101,10 @@ export default {
     selectRepo(repoID) {
       this.dataset.destinationSelected = true;
 
+      if (!this.workflow.destination) {
+        this.workflow.destination = {};
+      }
+
       if (!this.workflow.destination[repoID]) {
         this.workflow.destination[repoID] = {
           id: repoID,
