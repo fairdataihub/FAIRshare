@@ -42,7 +42,8 @@
                     <el-date-picker
                       v-model="zenodoMetadataForm.publicationDate"
                       type="date"
-                      placeholder="Pick a day" value-format="YYYY-MM-DD"
+                      placeholder="Pick a day"
+                      value-format="YYYY-MM-DD"
                     >
                     </el-date-picker>
                   </el-form-item>
