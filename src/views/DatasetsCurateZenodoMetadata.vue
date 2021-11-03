@@ -207,32 +207,33 @@
                   </el-form-item>
 
                   <el-form-item label="Language">
-                    <el-popover
-                      ref="popover"
-                      placement="bottom"
-                      :width="300"
-                      trigger="manual"
+                    <el-select
+                      v-model="zenodoMetadataForm.language"
+                      filterable
+                      placeholder="e.g.: 'eng', 'fr' or 'Polish'"
                     >
-                      <template #reference>
-                        <el-input
-                          v-model="zenodoMetadataForm.language"
-                          type="text"
-                          placeholder="e.g.: 'eng', 'fr' or 'Polish'"
-                        ></el-input>
-                      </template>
-
-                      <span class="break-normal text-left text-sm">
-                        Optional. Primary language of the record. Start by
-                        typing the language's common name in English, or its ISO
-                        639 code (two or three-letter code).
-                        <br />
-                        See
-                        <a href="https://semver.org/" target="_blank">
-                          ISO 639 language codes list
-                        </a>
-                        for more information.
-                      </span>
-                    </el-popover>
+                      <el-option
+                        v-for="item in languageOptions"
+                        :key="item.alpha3"
+                        :label="`${item.name} - ${item.alpha3}`"
+                        :value="item.alpha3"
+                      >
+                      </el-option>
+                    </el-select>
+                    <p class="text-xs pt-2 text-gray-500">
+                      Optional. Primary language of the record. Start by typing
+                      the language's common name in English, or its ISO 639 code
+                      (two or three-letter code).
+                      <br />
+                      See
+                      <a
+                        href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
+                        target="_blank"
+                      >
+                        ISO 639 language codes list
+                      </a>
+                      for more information.
+                    </p>
                   </el-form-item>
 
                   <el-form-item label="Keywords">
@@ -1161,8 +1162,9 @@ import draggable from "vuedraggable";
 import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "../store/datasets";
-import licensesJson from "../assets/supplementalFiles/licenses.json";
+import licensesJson from "../assets/supplementalFiles/zenodoLicenses.json";
 import zenodoMetadataOptions from "../assets/supplementalFiles/zenodoMetadataOptions.json";
+import languagesJson from "../assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "DatasetsCurateZenodoMetadata",
@@ -1185,6 +1187,7 @@ export default {
       activeNames: [],
       drag: true,
       licenseOptions: licensesJson.licenses,
+      languageOptions: languagesJson.languages,
       relatedIdentifierRelationships:
         zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
