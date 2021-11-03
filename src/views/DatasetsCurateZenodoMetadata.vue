@@ -1207,7 +1207,7 @@ export default {
         element.id = index;
       });
     },
-    intializeEmptyObjects(root, obj) {
+    initializeEmptyObjects(root, obj) {
       if (typeof obj === "undefined") {
         root[obj] = {};
       }
@@ -1446,23 +1446,23 @@ export default {
     ) {
       this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
 
-      this.intializeEmptyObjects(
+      this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.license
       );
-      this.intializeEmptyObjects(
+      this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.journal
       );
-      this.intializeEmptyObjects(
+      this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.conference
       );
-      this.intializeEmptyObjects(
+      this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.bookReportChapter
       );
-      this.intializeEmptyObjects(
+      this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.thesis
       );
