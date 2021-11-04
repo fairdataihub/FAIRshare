@@ -26,10 +26,7 @@
               border
             >
               <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['general'])"
-                >
+                <el-button type="primary" @click="editInformation(['general'])">
                   Edit basic information
                 </el-button>
               </template>
