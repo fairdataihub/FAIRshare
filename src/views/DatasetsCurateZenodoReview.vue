@@ -21,7 +21,6 @@
             <el-descriptions
               class="margin-top"
               title="Basic Information"
-              direction="vertical"
               size="small"
               border
             >
@@ -43,11 +42,34 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Authors </template>
-                {{ zenodoMetadata.authors }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="author in zenodoMetadata.authors"
+                      :key="author.id"
+                    >
+                      Name: {{ author.name }}
+                      <ul class="ml-6">
+                        <li>Affiliation: {{ author.affiliation }}</li>
+                        <li>ORCID: {{ author.orcid }}</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Keywords </template>
-                <el-tag size="small"> {{ zenodoMetadata.keywords }}</el-tag>
+                <div class="flex justify-between">
+                  <el-tag
+                    size="medium"
+                    v-for="element in zenodoMetadata.keywords"
+                    :key="element.id"
+                    class="mx-1"
+                  >
+                    {{ element.keyword }}</el-tag
+                  >
+                </div>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Description </template>
@@ -59,7 +81,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Language </template>
-                {{ zenodoMetadata.language }}
+                {{ displayLanguage }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Additional notes </template>
@@ -95,7 +117,21 @@
               </template>
               <el-descriptions-item>
                 <template #label> Related/alternate identifiers </template>
-                {{ zenodoMetadata.relatedIdentifiers }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="element in zenodoMetadata.relatedIdentifiers"
+                      :key="element.id"
+                    >
+                      Identifier: {{ element.identifier }}
+                      <ul class="ml-6">
+                        <li>Relationship: {{ element.relationship }}</li>
+                        <li>Type: {{ element.resourceType }}</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -118,7 +154,22 @@
               </template>
               <el-descriptions-item>
                 <template #label> Contributors </template>
-                {{ zenodoMetadata.contributors }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="contributor in zenodoMetadata.contributors"
+                      :key="contributor.id"
+                    >
+                      Name: {{ contributor.name }}
+                      <ul class="ml-6">
+                        <li>Affiliation: {{ contributor.affiliation }}</li>
+                        <li>ORCID: {{ contributor.orcid }}</li>
+                        <li>Type: {{ contributor.contributorType }}</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -141,7 +192,17 @@
               </template>
               <el-descriptions-item>
                 <template #label> References </template>
-                {{ zenodoMetadata.references }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="reference in zenodoMetadata.references"
+                      :key="reference.id"
+                    >
+                      {{ reference.reference }}
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -287,7 +348,21 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Supervisors </template>
-                {{ zenodoMetadata.thesis.supervisors }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="supervisor in zenodoMetadata.thesis.supervisors"
+                      :key="supervisor.id"
+                    >
+                      Name: {{ supervisor.name }}
+                      <ul class="ml-6">
+                        <li>Affiliation: {{ supervisor.affiliation }}</li>
+                        <li>ORCID: {{ supervisor.orcid }}</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -310,7 +385,17 @@
               </template>
               <el-descriptions-item>
                 <template #label> Subjects </template>
-                {{ zenodoMetadata.subjects }}
+
+                <div>
+                  <ul class="list-disc list-inside">
+                    <li
+                      v-for="subject in zenodoMetadata.subjects"
+                      :key="subject.id"
+                    >
+                      {{ subject.term }} - {{ subject.identifier }}
+                    </li>
+                  </ul>
+                </div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -339,6 +424,7 @@ import { ArrowRightBold } from "@element-plus/icons";
 import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "../store/datasets";
+import languagesJson from "../assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "DatasetsCurateZenodoReview",
@@ -360,9 +446,29 @@ export default {
         bookReportChapter: {},
         thesis: {},
       },
+      languageOptions: languagesJson.languages,
     };
   },
-  computed: {},
+  computed: {
+    displayLanguage() {
+      const that = this;
+
+      function getLanguage(language) {
+        return that.languageOptions.find((lang) => lang.alpha3 === language);
+      }
+
+      if (
+        "language" in this.zenodoMetadata &&
+        this.zenodoMetadata.language != ""
+      ) {
+        const lang = this.zenodoMetadata.language;
+        const returnVal = getLanguage(lang);
+        return `${returnVal.name} (${returnVal.alpha3})`;
+      } else {
+        return "";
+      }
+    },
+  },
   methods: {
     editInformation(expandOptions) {
       this.workflow.expandOptions = [...expandOptions];

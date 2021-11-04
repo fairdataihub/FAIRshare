@@ -1,0 +1,88 @@
+{
+  "contributorTypes": [
+    {
+      "value": "ContactPerson",
+      "label": "Contact person"
+    },
+    {
+      "value": "DataCollector",
+      "label": "Data collector"
+    },
+    {
+      "value": "DataCurator",
+      "label": "Data curator"
+    },
+    {
+      "value": "DataManager",
+      "label": "Data manager"
+    },
+    {
+      "value": "Distributor",
+      "label": "Distributor"
+    },
+    {
+      "value": "Editor",
+      "label": "Editor"
+    },
+    {
+      "value": "HostingInstitution",
+      "label": "Hosting institution"
+    },
+    {
+      "value": "Other",
+      "label": "Other"
+    },
+    {
+      "value": "Producer",
+      "label": "Producer"
+    },
+    {
+      "value": "ProjectLeader",
+      "label": "Project leader"
+    },
+    {
+      "value": "ProjectManager",
+      "label": "Project manager"
+    },
+    {
+      "value": "ProjectMember",
+      "label": "Project member"
+    },
+    {
+      "value": "RegistrationAgency",
+      "label": "Registration agency"
+    },
+    {
+      "value": "RegistrationAuthority",
+      "label": "Registration authority"
+    },
+    {
+      "value": "RelatedPerson",
+      "label": "Related person"
+    },
+    {
+      "value": "ResearchGroup",
+      "label": "Research group"
+    },
+    {
+      "value": "Researcher",
+      "label": "Researcher"
+    },
+    {
+      "value": "RightsHolder",
+      "label": "Rights holder"
+    },
+    {
+      "value": "Sponsor",
+      "label": "Sponsor"
+    },
+    {
+      "value": "Supervisor",
+      "label": "Supervisor"
+    },
+    {
+      "value": "WorkPackageLeader",
+      "label": "Work package leader"
+    }
+  ]
+}

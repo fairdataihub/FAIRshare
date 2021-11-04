@@ -5,7 +5,7 @@
   >
     <div
       ref="startCuration"
-      class="p-3 h-full flex flex-row items-center"
+      class="px-3 h-full flex flex-row items-center"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
       <div
@@ -17,12 +17,12 @@
           <span class="font-medium"> Continue curating your datasets </span>
 
           <span>
-            You have some unpublished datasets. Do you want to continue working
+            You have some unpublished projects. Do you want to continue working
             on these items?
           </span>
 
           <el-divider content-position="left">
-            Click on one of the datasets below</el-divider
+            Click on one of the projects below</el-divider
           >
 
           <div
@@ -127,7 +127,7 @@ import { Icon } from "@iconify/vue";
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "DatasetsShowAll",
+  name: "ProjectsShowAll",
   components: { Icon },
 
   data() {
@@ -140,7 +140,8 @@ export default {
       this.datasetStore.getDataset(datasetID);
       // const routerPath = `/datasets/${datasetID}`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata`;
-      const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
+      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
+      const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`
       this.$router.push({ path: routerPath });
     },
   },

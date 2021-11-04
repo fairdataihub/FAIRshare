@@ -68,7 +68,7 @@ import { ArrowRightBold } from "@element-plus/icons";
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "DatasetsCreateNewConfirm",
+  name: "ProjectsCreateNewConfirm",
   components: { ArrowRightBold },
   data() {
     return {

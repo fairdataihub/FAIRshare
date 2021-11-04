@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomePage from "../views/HomePage.vue";
-import DatasetsShowAll from "../views/DatasetsShowAll.vue";
-import DatasetsCreateNew from "../views/DatasetsCreateNew.vue";
-import DatasetsCreateNewConfirm from "../views/DatasetsCreateNewConfirm.vue";
+import ProjectsShowAll from "../views/ProjectsShowAll.vue";
+import ProjectsCreateNew from "../views/ProjectsCreateNew.vue";
+import ProjectsCreateNewConfirm from "../views/ProjectsCreateNewConfirm.vue";
 import DatasetsCurateSelectFolder from "../views/DatasetsCurateSelectFolder.vue";
 import DatasetsCurateCreateMetadata from "../views/DatasetsCurateCreateMetadata.vue";
+import DatasetsCurateMetadataReview from "../views/DatasetsCurateMetadataReview.vue";
 import DatasetsCurateSelectDestination from "../views/DatasetsCurateSelectDestination.vue";
 import DatasetsCurateZenodoMetadata from "../views/DatasetsCurateZenodoMetadata.vue";
 import DatasetsCurateZenodoReview from "../views/DatasetsCurateZenodoReview.vue";
@@ -15,15 +16,15 @@ import About from "../views/about.vue";
 const routes = [
   { path: "/", redirect: "/datasets" },
   { path: "/home", component: HomePage },
-  { path: "/datasets", component: DatasetsShowAll, name: "DatasetsShowAll" },
+  { path: "/datasets", component: ProjectsShowAll, name: "ProjectsShowAll" },
   {
     path: "/datasets/new",
-    component: DatasetsCreateNew,
-    name: "DatasetsCreateNew",
+    component: ProjectsCreateNew,
+    name: "ProjectsCreateNew",
   },
   {
     path: "/datasets/new/:datasetID/confirm",
-    component: DatasetsCreateNewConfirm,
+    component: ProjectsCreateNewConfirm,
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectFolder",
@@ -32,6 +33,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/createMetadata",
     component: DatasetsCurateCreateMetadata,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/createMetadata/review",
+    component: DatasetsCurateMetadataReview,
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectDestination",

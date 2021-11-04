@@ -8,6 +8,7 @@
       items-center
       overflow-y-auto
     "
+    v-loading="loading"
   >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
@@ -127,13 +128,7 @@
                                 icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
-                                @confirm="
-                                  deleteAuthor(
-                                    element.name,
-                                    element.affiliation,
-                                    element.orcid
-                                  )
-                                "
+                                @confirm="deleteAuthor(element.id)"
                               >
                                 <template #reference>
                                   <Icon icon="bx:bx-x" />
@@ -479,6 +474,7 @@
                                 >
                                 </el-option>
                               </el-select>
+                              <div class="mx-2 block 2xl:hidden"></div>
                               <el-select
                                 v-model="element.resourceType"
                                 placeholder="Select a resource type"
@@ -528,13 +524,7 @@
                                 icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
-                                @confirm="
-                                  deleteRelatedIdentifier(
-                                    element.identifier,
-                                    element.relationship,
-                                    element.resourceType
-                                  )
-                                "
+                                @confirm="deleteRelatedIdentifier(element.id)"
                               >
                                 <template #reference>
                                   <Icon icon="bx:bx-x" />
@@ -648,14 +638,7 @@
                                 icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
-                                @confirm="
-                                  deleteContributor(
-                                    element.name,
-                                    element.affiliation,
-                                    element.orcid,
-                                    element.contributorType
-                                  )
-                                "
+                                @confirm="deleteContributor(element.id)"
                               >
                                 <template #reference>
                                   <Icon icon="bx:bx-x" />
@@ -987,13 +970,7 @@
                                 icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
-                                @confirm="
-                                  deleteSupervisor(
-                                    element.name,
-                                    element.affiliation,
-                                    element.orcid
-                                  )
-                                "
+                                @confirm="deleteSupervisor(element.id)"
                               >
                                 <template #reference>
                                   <Icon icon="bx:bx-x" />
@@ -1090,12 +1067,7 @@
                                 icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
-                                @confirm="
-                                  deleteSubject(
-                                    element.term,
-                                    element.identifier
-                                  )
-                                "
+                                @confirm="deleteSubject(element.id)"
                               >
                                 <template #reference>
                                   <Icon icon="bx:bx-x" />
@@ -1159,12 +1131,13 @@ import {
   Key,
 } from "@element-plus/icons";
 import draggable from "vuedraggable";
-import { ElLoading } from "element-plus";
+import { v4 as uuidv4 } from "uuid";
 
 import { useDatasetsStore } from "../store/datasets";
-import licensesJson from "../assets/supplementalFiles/zenodoLicenses.json";
+import licensesJSON from "../assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "../assets/supplementalFiles/contributorTypes.json";
 import zenodoMetadataOptions from "../assets/supplementalFiles/zenodoMetadataOptions.json";
-import languagesJson from "../assets/supplementalFiles/zenodoLanguages.json";
+import languagesJSON from "../assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "DatasetsCurateZenodoMetadata",
@@ -1183,15 +1156,15 @@ export default {
       dataset: {},
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      loading: "",
+      loading: true,
       activeNames: [],
       drag: true,
-      licenseOptions: licensesJson.licenses,
-      languageOptions: languagesJson.languages,
+      licenseOptions: licensesJSON.licenses,
+      languageOptions: languagesJSON.languages,
       relatedIdentifierRelationships:
         zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
-      contributorTypes: zenodoMetadataOptions.contributorTypes,
+      contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
       rulesForZenodoMetadataForm: zenodoMetadataOptions.defaultRules,
     };
@@ -1206,8 +1179,8 @@ export default {
   },
   methods: {
     addIds(array) {
-      array.forEach((element, index) => {
-        element.id = index;
+      array.forEach((element) => {
+        element.id = uuidv4();
       });
     },
     initializeEmptyObjects(root, obj) {
@@ -1216,78 +1189,38 @@ export default {
       }
     },
     addSubject() {
-      if (this.zenodoMetadataForm.subjects.length === 0) {
-        this.zenodoMetadataForm.subjects.push({
-          term: "",
-          identifier: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.subjects.push({
-          term: "",
-          identifier: "",
-          id:
-            this.zenodoMetadataForm.subjects[
-              this.zenodoMetadataForm.subjects.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.subjects.push({
+        term: "",
+        identifier: "",
+        id: uuidv4(),
+      });
     },
-    deleteSubject(term, identifier) {
+    deleteSubject(id) {
       this.zenodoMetadataForm.subjects =
         this.zenodoMetadataForm.subjects.filter((subject) => {
-          return subject.term !== term || subject.identifier !== identifier;
+          return subject.id !== id;
         });
     },
     addAuthor() {
-      if (this.zenodoMetadataForm.authors.length === 0) {
-        this.zenodoMetadataForm.authors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.authors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id:
-            this.zenodoMetadataForm.authors[
-              this.zenodoMetadataForm.authors.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.authors.push({
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
     },
-    deleteAuthor(name, affiliation, orcid) {
-      console.log(name, affiliation, orcid);
-      console.log(this.zenodoMetadataForm.authors);
+    deleteAuthor(id) {
       this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter(
         (author) => {
-          return (
-            author.name !== name ||
-            author.affiliation !== affiliation ||
-            author.orcid !== orcid
-          );
+          return author.id !== id;
         }
       );
-      console.log(this.zenodoMetadataForm.authors);
     },
     addKeyword() {
-      if (this.zenodoMetadataForm.keywords.length === 0) {
-        this.zenodoMetadataForm.keywords.push({
-          keyword: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.keywords.push({
-          keyword: "",
-          id:
-            this.zenodoMetadataForm.keywords[
-              this.zenodoMetadataForm.keywords.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.keywords.push({
+        keyword: "",
+        id: uuidv4(),
+      });
     },
     deleteKeyword(id) {
       this.zenodoMetadataForm.keywords =
@@ -1296,85 +1229,41 @@ export default {
         });
     },
     addRelatedIdentifier() {
-      if (this.zenodoMetadataForm.relatedIdentifiers.length === 0) {
-        this.zenodoMetadataForm.relatedIdentifiers.push({
-          identifier: "",
-          relationship: "",
-          resourceType: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.relatedIdentifiers.push({
-          identifier: "",
-          relationship: "",
-          resourceType: "",
-          id:
-            this.zenodoMetadataForm.relatedIdentifiers[
-              this.zenodoMetadataForm.relatedIdentifiers.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.relatedIdentifiers.push({
+        identifier: "",
+        relationship: "",
+        resourceType: "",
+        id: uuidv4(),
+      });
     },
-    deleteRelatedIdentifier(identifier, relationship, resourceType) {
+    deleteRelatedIdentifier(id) {
       this.zenodoMetadataForm.relatedIdentifiers =
         this.zenodoMetadataForm.relatedIdentifiers.filter(
           (relatedIdentifier) => {
-            return (
-              relatedIdentifier.identifier !== identifier ||
-              relatedIdentifier.relationship !== relationship ||
-              relatedIdentifier.resourceType !== resourceType
-            );
+            return relatedIdentifier.id !== id;
           }
         );
     },
     addContributor() {
-      if (this.zenodoMetadataForm.contributors.length === 0) {
-        this.zenodoMetadataForm.contributors.push({
-          contributorType: "",
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.contributors.push({
-          contributorType: "",
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id:
-            this.zenodoMetadataForm.contributors[
-              this.zenodoMetadataForm.contributors.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.contributors.push({
+        contributorType: "",
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
     },
-    deleteContributor(name, affiliation, orcid, contributorType) {
+    deleteContributor(id) {
       this.zenodoMetadataForm.contributors =
         this.zenodoMetadataForm.contributors.filter((contributor) => {
-          return (
-            contributor.name !== name ||
-            contributor.affiliation !== affiliation ||
-            contributor.orcid !== orcid ||
-            contributor.contributorType !== contributorType
-          );
+          return contributor.id !== id;
         });
     },
     addReference() {
-      if (this.zenodoMetadataForm.references.length === 0) {
-        this.zenodoMetadataForm.references.push({
-          reference: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.references.push({
-          reference: "",
-          id:
-            this.zenodoMetadataForm.references[
-              this.zenodoMetadataForm.references.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.references.push({
+        reference: "",
+        id: uuidv4(),
+      });
     },
     deleteReference(id) {
       this.zenodoMetadataForm.references =
@@ -1383,33 +1272,17 @@ export default {
         });
     },
     addSupervisor() {
-      if (this.zenodoMetadataForm.thesis.supervisors.length === 0) {
-        this.zenodoMetadataForm.thesis.supervisors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: 0,
-        });
-      } else {
-        this.zenodoMetadataForm.thesis.supervisors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id:
-            this.zenodoMetadataForm.thesis.supervisors[
-              this.zenodoMetadataForm.thesis.supervisors.length - 1
-            ].id + 1,
-        });
-      }
+      this.zenodoMetadataForm.thesis.supervisors.push({
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
     },
-    deleteSupervisor(name, affiliation, orcid) {
+    deleteSupervisor(id) {
       this.zenodoMetadataForm.thesis.supervisors =
         this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
-          return (
-            supervisor.name !== name ||
-            supervisor.affiliation !== affiliation ||
-            supervisor.orcid !== orcid
-          );
+          return supervisor.name !== id;
         });
     },
     addZenodoMetadata() {
@@ -1427,11 +1300,7 @@ export default {
     },
   },
   async mounted() {
-    this.loading = ElLoading.service({
-      lock: true,
-      text: "Loading data from stores...",
-      background: "rgba(255, 255, 255, 0.95)",
-    });
+    this.loading = true;
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 
@@ -1479,7 +1348,7 @@ export default {
       this.addIds(this.zenodoMetadataForm.subjects);
     }
 
-    this.loading.close();
+    this.loading = false;
 
     // Add the functions here to check the pre saved values for on mounted.
     // decide if the intermdiate data is saved in workflow or data.

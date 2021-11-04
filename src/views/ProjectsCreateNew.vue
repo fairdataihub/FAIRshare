@@ -111,7 +111,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
-  name: "DatasetsCreateNew",
+  name: "ProjectsCreateNew",
   // components: { Icon },
   data() {
     return {
@@ -157,9 +157,14 @@ export default {
             workflowConfirmed: false,
           };
 
+          dataset.data.general = {
+            questions: {},
+          };
+
           for (const type of dataset.dataType) {
             dataset.data[type] = {
               uploaded: false,
+              questions: {},
             };
           }
 
@@ -173,7 +178,7 @@ export default {
       });
     },
     cancelNewDataset() {
-      this.$router.push({ name: "DatasetsShowAll" });
+      this.$router.push({ name: "ProjectsShowAll" });
     },
   },
   mounted() {},
