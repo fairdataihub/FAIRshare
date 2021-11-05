@@ -31,7 +31,8 @@
               type="primary"
               :disabled="emptyInput"
               class="flex flex-row items-center"
-              @click="startCuration" id="continue"
+              @click="startCuration"
+              id="continue"
             >
               Continue
               <el-icon>
@@ -127,7 +128,6 @@ export default {
         path: `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`,
       });
     },
-    
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;

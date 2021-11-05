@@ -98,7 +98,7 @@ export default {
           name: "",
           questions: [],
         };
-        that.dataset.workflows[key].expandOptions = []
+        that.dataset.workflows[key].expandOptions = [];
       });
 
       this.dataset.workflowConfirmed = true;
