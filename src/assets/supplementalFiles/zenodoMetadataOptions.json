@@ -268,7 +268,7 @@
     "authors": [],
     "description": "",
     "version": "",
-    "language": "en",
+    "language": "",
     "keywords": [],
     "additionalNotes": "",
     "license": {
@@ -320,6 +320,13 @@
       {
         "required": true,
         "message": "Required. In case your upload was already published elsewhere, please use the date of first publication.",
+        "trigger": "blur"
+      }
+    ],
+    "authors": [
+      {
+        "required": true,
+        "message": "Required. Please provide at least one author.",
         "trigger": "blur"
       }
     ],

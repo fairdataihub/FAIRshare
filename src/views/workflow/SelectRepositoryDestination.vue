@@ -1,5 +1,8 @@
 <template>
-  <div class="h-screen w-full flex flex-row justify-center items-center">
+  <div
+    class="h-screen w-full flex flex-row justify-center items-center"
+    v-loading="loading"
+  >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div
@@ -36,11 +39,10 @@
                 hover:bg-gray-300 hover:shadow-lg
                 transition-all
                 cursor-pointer
-                b-2
-                border-black
                 h-30
                 w-30
               "
+              :class="{ selected: repoID === repo.id }"
               @click="selectRepo(repo.id)"
             >
               <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
@@ -48,12 +50,20 @@
             </div>
           </div>
 
-          <div class="w-full hidden flex-row justify-center py-2">
+          <div
+            class="absolute bottom-0 w-full flex flex-row justify-center py-2"
+          >
             <router-link to="/datasets" class="mx-6">
               <el-button type="danger" plain> Cancel </el-button>
             </router-link>
 
-            <el-button type="primary" class="flex flex-row items-center">
+            <el-button
+              type="primary"
+              class="flex flex-row items-center"
+              @click="addMetadata"
+              :disabled="repoID === ''"
+              id="continue"
+            >
               Continue
               <el-icon>
                 <ArrowRightBold />
@@ -70,10 +80,10 @@
 // import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "DatasetsCurateSelectDestination",
+  name: "SelectRepositoryDestination",
   components: { ArrowRightBold },
   data() {
     return {
@@ -82,6 +92,8 @@ export default {
       workflowID: this.$route.params.workflowID,
       datasetID: this.$route.params.datasetID,
       workflow: {},
+      loading: false,
+      repoID: "",
       repositories: [
         {
           id: "zenodo",
@@ -99,41 +111,53 @@ export default {
   computed: {},
   methods: {
     selectRepo(repoID) {
+      this.repoID = repoID;
+    },
+    addMetadata() {
       this.dataset.destinationSelected = true;
 
       if (!this.workflow.destination) {
         this.workflow.destination = {};
       }
 
-      if (!this.workflow.destination[repoID]) {
-        this.workflow.destination[repoID] = {
-          id: repoID,
+      if (!this.workflow.destination[this.repoID]) {
+        this.workflow.destination[this.repoID] = {
+          id: this.repoID,
           questions: {},
         };
       }
 
-      if (this.workflow.destination.name === repoID) {
+      if (this.workflow.destination.name === this.repoID) {
         //do nothing
       } else {
         // warn the user that they are changing repos (add a sweetalert or something)
-        this.workflow.destination.name = repoID;
+        this.workflow.destination.name = this.repoID;
       }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      const redirectURL = `/datasets/${this.datasetID}/${this.workflowID}/${repoID}/metadata`;
+      const redirectURL = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
       this.$router.push(redirectURL);
     },
   },
-  mounted() {
-    this.dataset = this.datasetStore.currentDataset;
+  async mounted() {
+    this.loading = true;
+
+    this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
-    console.log(this.$route);
+    if (this.workflow.destination) {
+      this.repoID = this.workflow.destination.name;
+    }
 
-    // Add the functions here to check the pre saved values for on mounted.
-    // decide if the intermdiate data is saved in workflow or data.
+    this.loading = false;
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+.selected {
+  @apply border-2 border-solid border-green-500 bg-green-100;
+}
+</style>

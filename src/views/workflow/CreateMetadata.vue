@@ -2,7 +2,7 @@
   <div class="h-screen w-full flex flex-row lg:justify-center items-center">
     <div class="w-full h-full flex flex-row items-center">
       <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto px-5">
+        <div class="flex flex-col h-full overflow-y-auto pl-5 pr-8">
           <span class="text-lg font-medium text-left">
             Lets make your data FAIR
           </span>
@@ -725,6 +725,7 @@
               type="primary"
               class="flex flex-row items-center"
               @click="navigateToSelectDestination"
+              id="existElement"
             >
               Continue
               <el-icon>
@@ -743,14 +744,15 @@ import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
+import { ElLoading } from "element-plus";
 
-import { useDatasetsStore } from "../store/datasets";
-import licensesJSON from "../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../assets/supplementalFiles/contributorTypes.json";
-import repoStatusJSON from "../assets/supplementalFiles/repoStatus.json";
+import { useDatasetsStore } from "../../store/datasets";
+import licensesJSON from "../../assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
+import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
 
 export default {
-  name: "DatasetsCurateCreateMetadata",
+  name: "CreateMetadata",
   components: { ArrowRightBold, draggable, Icon },
   data() {
     return {
@@ -759,6 +761,8 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       activeNames: ["general", "code"],
+      loading: false,
+      interval: null,
       licenseOptions: licensesJSON.licenses,
       contributorTypes: contributorTypesJSON.contributorTypes,
       programmingLanguageOptions: [
@@ -961,46 +965,81 @@ export default {
       console.log(routerPath);
       this.$router.push({ path: routerPath });
     },
+    hideLoading() {
+      const that = this;
+
+      this.interval = setInterval(function () {
+        var element = document.getElementById("existElement");
+
+        if (typeof element != "undefined" && element != null) {
+          that.loading.close();
+          clearInterval(that.interval);
+        } else {
+          console.log("waiting for loading");
+        }
+      }, 10);
+    },
   },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
+  created() {
+    console.log("created");
+  },
+  beforeMount() {
+    console.log("before mount");
+    this.hideLoading();
+    this.loading = ElLoading.service({
+      lock: true,
+      text: "Loading",
+      fullscreen: true,
+      background: "rgba(0, 0, 0, 0.7)",
+    });
+  },
+  mounted() {
+    console.log("mounted");
 
-    this.workflow = this.dataset.workflows[this.workflowID];
+    this.$nextTick(async function () {
+      this.dataset = await this.datasetStore.getCurrentDataset();
 
-    if (this.workflow.expandOptions.length === 0) {
-      this.activeNames = ["general"];
-    } else {
-      this.activeNames = this.workflow.expandOptions;
-    }
+      this.workflow = this.dataset.workflows[this.workflowID];
 
-    if (
-      this.dataset.data.general.questions &&
-      Object.keys(this.dataset.data.general.questions).length !== 0
-    ) {
-      this.generalForm = this.dataset.data.general.questions;
-
-      this.initializeEmptyObjects(this.generalForm, this.generalForm.funding);
-
-      this.addIds(this.generalForm.keywords);
-      this.addIds(this.generalForm.authors);
-      this.addIds(this.generalForm.contributors);
-    }
-
-    if (this.codePresent) {
-      if (
-        this.dataset.data.Code.questions &&
-        Object.keys(this.dataset.data.Code.questions).length !== 0
-      ) {
-        this.codeForm = this.dataset.data.Code.questions;
-
-        this.addIds(this.codeForm.relatedLinks);
-        this.addIds(this.codeForm.otherSoftwareRequirements);
+      if (!("expandOptions" in this.workflow)) {
+        this.workflow.expandOptions = ["general"];
       }
-    }
+
+      console.log(this.workflow.expandOptions);
+
+      if (this.workflow.expandOptions.length === 0) {
+        this.activeNames = ["general"];
+      } else {
+        this.activeNames = this.workflow.expandOptions;
+      }
+
+      console.log(this.activeNames);
+
+      if (
+        this.dataset.data.general.questions &&
+        Object.keys(this.dataset.data.general.questions).length !== 0
+      ) {
+        this.generalForm = this.dataset.data.general.questions;
+
+        this.initializeEmptyObjects(this.generalForm, this.generalForm.funding);
+
+        this.addIds(this.generalForm.keywords);
+        this.addIds(this.generalForm.authors);
+        this.addIds(this.generalForm.contributors);
+      }
+
+      if (this.codePresent) {
+        if (
+          this.dataset.data.Code.questions &&
+          Object.keys(this.dataset.data.Code.questions).length !== 0
+        ) {
+          this.codeForm = this.dataset.data.Code.questions;
+
+          this.addIds(this.codeForm.relatedLinks);
+          this.addIds(this.codeForm.otherSoftwareRequirements);
+        }
+      }
+    });
   },
 };
-
-// Right now, going to put all the general questions in the dataset object under a metadata.general key.
-// questions regarding the detination will be put under worflow[workflowID].destination.name/questions key.
-// might be slightly confusing but it will be easier to manage.
 </script>

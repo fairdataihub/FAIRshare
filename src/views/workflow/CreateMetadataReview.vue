@@ -9,7 +9,7 @@
       overflow-y-auto
     "
   >
-    <div class="p-3 h-full flex flex-row items-center">
+    <div class="w-full p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full pr-5">
           <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
@@ -22,14 +22,10 @@
               class="margin-top"
               title="Basic Information"
               size="small"
-              direction="vertical"
               border
             >
               <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['general'])"
-                >
+                <el-button type="primary" @click="editInformation(['general'])">
                   Edit basic information
                 </el-button>
               </template>
@@ -62,7 +58,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Keywords </template>
-                <div class="flex justify-start">
+                <div>
                   <el-tag
                     size="medium"
                     v-for="element in generalMetadata.keywords"
@@ -111,7 +107,6 @@
             <el-descriptions
               class="margin-top"
               title="Code"
-              direction="vertical"
               size="small"
               border
             >
@@ -123,11 +118,11 @@
 
               <el-descriptions-item>
                 <template #label> Creation date </template>
-                {{ codeMetadata.creationDate }}
+                {{ displayCreationDate }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> First release date </template>
-                {{ codeMetadata.firstReleaseDate }}
+                {{ displayFirstReleaseDate }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> License </template>
@@ -139,7 +134,9 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Repository </template>
-                {{ codeMetadata.codeRepository }}
+                <span class="break-all xl:break-normal">
+                  {{ codeMetadata.codeRepository }}
+                </span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Continuous integration </template>
@@ -147,19 +144,25 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Issue tracker </template>
-                {{ codeMetadata.issueTracker }}
+                <span class="break-all xl:break-normal">
+                  {{ codeMetadata.issueTracker }}
+                </span>
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> References </template>
-                <ul class="list-disc list-inside">
-                  <li v-for="link in codeMetadata.relatedLinks" :key="link.id">
+                <template #label> Related links </template>
+                <div class="flex flex-col">
+                  <span
+                    v-for="link in codeMetadata.relatedLinks"
+                    :key="link.id"
+                    class="mb-1 break-all xl:break-normal"
+                  >
                     {{ link.link }}
-                  </li>
-                </ul>
+                  </span>
+                </div>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Programming language </template>
-                <div class="flex justify-start">
+                <div>
                   <el-tag
                     size="medium"
                     v-for="element in codeMetadata.programmingLanguage"
@@ -172,7 +175,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Runtime platform </template>
-                <div class="flex justify-start">
+                <div>
                   <el-tag
                     size="medium"
                     v-for="element in codeMetadata.runtimePlatform"
@@ -185,7 +188,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Operating system </template>
-                <div class="flex justify-start">
+                <div>
                   <el-tag
                     size="medium"
                     v-for="element in codeMetadata.operatingSystem"
@@ -198,14 +201,15 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Other software requirements </template>
-                <ul class="list-disc list-inside">
-                  <li
+                <div class="flex flex-col">
+                  <span
                     v-for="link in codeMetadata.otherSoftwareRequirements"
                     :key="link.id"
+                    class="mb-1 break-all xl:break-normal"
                   >
                     {{ link.link }}
-                  </li>
-                </ul>
+                  </span>
+                </div>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Current version </template>
@@ -213,23 +217,27 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Current version release date </template>
-                {{ codeMetadata.currentVersionReleaseDate }}
+                {{ displayCurrentVersionReleaseDate }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Current version download URL </template>
-                {{ codeMetadata.currentVersionDownloadLink }}
+                <span class="break-all xl:break-normal">
+                  {{ codeMetadata.currentVersionDownloadLink }}
+                </span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Current version release notes </template>
                 {{ codeMetadata.currentVersionReleaseNotes }}
               </el-descriptions-item>
               <el-descriptions-item>
-                <template #label> Development status </template>
-                {{ codeMetadata.issueTracker }}
+                <template #label> Development Status </template>
+                {{ displayDevelopmentStatus }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label> Is part of </template>
-                {{ codeMetadata.isPartOf }}
+                <span class="break-all">
+                  {{ codeMetadata.isPartOf }}
+                </span>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -260,12 +268,13 @@
 // import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 import { ElLoading } from "element-plus";
+import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../store/datasets";
-import repoStatusJSON from "../assets/supplementalFiles/repoStatus.json";
+import { useDatasetsStore } from "../../store/datasets";
+import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
 
 export default {
-  name: "DatasetsCurateMetadataReview",
+  name: "CreateMetadataReview",
   components: {
     ArrowRightBold,
   },
@@ -299,6 +308,39 @@ export default {
         const status = this.codeMetadata.developmentStatus;
         const returnVal = getStatus(status);
         return returnVal.description;
+      } else {
+        return "";
+      }
+    },
+    displayCreationDate() {
+      if (
+        "creationDate" in this.codeMetadata &&
+        this.codeMetadata.creationDate != ""
+      ) {
+        const date = this.codeMetadata.codeMetadata;
+        return dayjs(date).format("MMMM D, YYYY");
+      } else {
+        return "";
+      }
+    },
+    displayFirstReleaseDate() {
+      if (
+        "firstReleaseDate" in this.codeMetadata &&
+        this.codeMetadata.firstReleaseDate != ""
+      ) {
+        const date = this.codeMetadata.firstReleaseDate;
+        return dayjs(date).format("MMMM D, YYYY");
+      } else {
+        return "";
+      }
+    },
+    displayCurrentVersionReleaseDate() {
+      if (
+        "currentVersionReleaseDate" in this.codeMetadata &&
+        this.codeMetadata.currentVersionReleaseDate != ""
+      ) {
+        const date = this.codeMetadata.currentVersionReleaseDate;
+        return dayjs(date).format("MMMM D, YYYY");
       } else {
         return "";
       }

@@ -108,10 +108,10 @@
 // import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "ProjectsCreateNew",
+  name: "CreateNewProject",
   // components: { Icon },
   data() {
     return {
@@ -178,7 +178,7 @@ export default {
       });
     },
     cancelNewDataset() {
-      this.$router.push({ name: "ProjectsShowAll" });
+      this.$router.push({ name: "ShowAllProjects" });
     },
   },
   mounted() {},

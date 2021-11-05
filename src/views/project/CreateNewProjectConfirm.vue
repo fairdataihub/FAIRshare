@@ -65,10 +65,10 @@
 // import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "ProjectsCreateNewConfirm",
+  name: "CreateNewProjectConfirm",
   components: { ArrowRightBold },
   data() {
     return {
@@ -98,6 +98,7 @@ export default {
           name: "",
           questions: [],
         };
+        that.dataset.workflows[key].expandOptions = []
       });
 
       this.dataset.workflowConfirmed = true;

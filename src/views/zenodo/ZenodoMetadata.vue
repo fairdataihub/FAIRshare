@@ -8,7 +8,6 @@
       items-center
       overflow-y-auto
     "
-    v-loading="loading"
   >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
@@ -64,7 +63,7 @@
                     </Popper>
                   </el-form-item>
 
-                  <el-form-item label="Authors">
+                  <el-form-item label="Authors" prop="authors">
                     <draggable
                       tag="div"
                       :list="zenodoMetadataForm.authors"
@@ -548,7 +547,7 @@
                       @click="addRelatedIdentifier()"
                     >
                       <Icon icon="carbon:add" />
-                      <span> Add an author </span>
+                      <span> Add a related or alternate identifier </span>
                     </div>
                   </el-form-item>
                 </div>
@@ -662,7 +661,7 @@
                       @click="addContributor()"
                     >
                       <Icon icon="carbon:add" />
-                      <span> Add an author </span>
+                      <span> Add a contributor </span>
                     </div>
                   </el-form-item>
                 </div>
@@ -746,7 +745,7 @@
                       @click="addReference()"
                     >
                       <Icon icon="carbon:add" />
-                      <span> Add a keyword </span>
+                      <span> Add a reference </span>
                     </div>
                   </el-form-item>
                 </div>
@@ -1133,14 +1132,14 @@ import {
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 
-import { useDatasetsStore } from "../store/datasets";
-import licensesJSON from "../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../assets/supplementalFiles/contributorTypes.json";
-import zenodoMetadataOptions from "../assets/supplementalFiles/zenodoMetadataOptions.json";
-import languagesJSON from "../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "../../store/datasets";
+import licensesJSON from "../../assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
+import zenodoMetadataOptions from "../../assets/supplementalFiles/zenodoMetadataOptions.json";
+import languagesJSON from "../../assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
-  name: "DatasetsCurateZenodoMetadata",
+  name: "ZenodoMetadata",
   components: {
     ArrowRightBold,
     Lock,
@@ -1298,9 +1297,62 @@ export default {
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
       this.$router.push({ path: routerPath });
     },
+    prefillZenodoQuestions() {
+      if (
+        "questions" in this.dataset.data.general &&
+        Object.keys(this.dataset.data.general.questions).length !== 0
+      ) {
+        const generalForm = this.dataset.data.general.questions;
+        console.log(generalForm);
+
+        if ("name" in generalForm) {
+          this.zenodoMetadataForm.title = generalForm.name;
+        }
+        if ("description" in generalForm) {
+          this.zenodoMetadataForm.description = generalForm.description;
+        }
+        if ("keywords" in generalForm) {
+          this.zenodoMetadataForm.keywords = generalForm.keywords;
+        }
+        if ("authors" in generalForm) {
+          let authors = generalForm.authors;
+          let newAuthors = [];
+          authors.forEach((author) => {
+            let newAuthor = {
+              name: author.familyName + ", " + author.givenName,
+              affiliation: author.affiliation,
+              orcid: author.orcid,
+              id: uuidv4(),
+            };
+            newAuthors.push(newAuthor);
+          });
+          this.zenodoMetadataForm.authors = newAuthors;
+        }
+        if ("contributors" in generalForm) {
+          let contributors = generalForm.contributors;
+          let newContributors = [];
+          contributors.forEach((contributor) => {
+            let newContributor = {
+              contributorType: contributor.contributorType,
+              name: contributor.familyName + ", " + contributor.givenName,
+              affiliation: contributor.affiliation,
+              orcid: contributor.orcid,
+              id: uuidv4(),
+            };
+            newContributors.push(newContributor);
+          });
+          this.zenodoMetadataForm.contributors = newContributors;
+        }
+      }
+    },
   },
   async mounted() {
-    this.loading = true;
+    this.loading = this.$loading({
+      lock: true,
+      text: "Loading",
+      fullscreen: true,
+      background: "rgba(0, 0, 0, 0.7)",
+    });
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 
@@ -1310,6 +1362,7 @@ export default {
       this.activeNames = ["basicInformation", "license"];
     } else {
       this.activeNames = this.workflow.expandOptions;
+      this.workflow.expandOptions = [];
     }
 
     if (
@@ -1346,9 +1399,11 @@ export default {
       this.addIds(this.zenodoMetadataForm.references);
       this.addIds(this.zenodoMetadataForm.thesis.supervisors);
       this.addIds(this.zenodoMetadataForm.subjects);
+      this.loading.close();
+    } else {
+      this.prefillZenodoQuestions();
+      this.loading.close();
     }
-
-    this.loading = false;
 
     // Add the functions here to check the pre saved values for on mounted.
     // decide if the intermdiate data is saved in workflow or data.

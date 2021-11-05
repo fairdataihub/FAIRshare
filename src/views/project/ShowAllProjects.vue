@@ -124,10 +124,10 @@
 <script>
 import { Icon } from "@iconify/vue";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "ProjectsShowAll",
+  name: "ShowAllProjects",
   components: { Icon },
 
   data() {

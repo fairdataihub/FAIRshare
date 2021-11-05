@@ -31,7 +31,7 @@
               type="primary"
               :disabled="emptyInput"
               class="flex flex-row items-center"
-              @click="startCuration"
+              @click="startCuration" id="continue"
             >
               Continue
               <el-icon>
@@ -50,10 +50,10 @@
 import { ArrowRightBold } from "@element-plus/icons";
 import { dialog } from "@electron/remote";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "DatasetsCurateSelectFolder",
+  name: "SelectSourceFolder",
   components: { ArrowRightBold },
   data() {
     return {
@@ -127,6 +127,7 @@ export default {
         path: `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`,
       });
     },
+    
   },
   mounted() {
     this.dataset = this.datasetStore.currentDataset;

@@ -49,10 +49,10 @@
 // import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 
-import { useDatasetsStore } from "../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "DatasetsCurateHome",
+  name: "ShowAllWorkflows",
   components: { ArrowRightBold },
   data() {
     return {
