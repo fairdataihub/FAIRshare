@@ -12,11 +12,13 @@ config = dotenv_values(".env")  # take environment variables from .env.
 API_VERSION = "0.0.1"
 SERVER_URL = "https://zenodo.org/api/"
 
+
 def load_env_variables():
     if "SERVER_URL" in config:
         global SERVER_URL
 
         SERVER_URL = config["SERVER_URL"]
+
 
 load_env_variables()
 
