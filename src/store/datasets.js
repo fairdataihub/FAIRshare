@@ -5,10 +5,16 @@ import path from "path";
 import { app } from "@electron/remote";
 import { defineStore } from "pinia";
 
-const USER_PATH = app.getPath("userData");
+// const USER_PATH = app.getPath("userData");
+// const DATASETS_STORE_PATH = path.join(
+//   USER_PATH,
+//   "Store",
+//   "unpublishedDatasets.json"
+// );
+const USER_PATH = app.getPath("home");
 const DATASETS_STORE_PATH = path.join(
   USER_PATH,
-  "Store",
+  ".sodaforcovid19research",
   "unpublishedDatasets.json"
 );
 

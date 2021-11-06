@@ -3,11 +3,26 @@ from flask import Flask
 from calc import calc
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
+from zenodo import *
+
+from dotenv import dotenv_values
+
+config = dotenv_values(".env")  # take environment variables from .env.
 
 API_VERSION = "0.0.1"
+SERVER_URL = "https://zenodo.org/api/"
+
+def load_env_variables():
+    if "SERVER_URL" in config:
+        global SERVER_URL
+
+        SERVER_URL = config["SERVER_URL"]
+
+load_env_variables()
 
 app = Flask(__name__)
 CORS(app)
+
 api = Api(
     app,
     version=API_VERSION,
@@ -15,6 +30,12 @@ api = Api(
     description="The backend api system for the Electron Vue app",
     doc="/docs",
 )
+
+
+@api.route("/env", endpoint="test")
+class env(Resource):
+    def get(self):
+        return SERVER_URL
 
 
 @api.route("/api_version", endpoint="apiVersion")
@@ -68,5 +89,5 @@ class Add(Resource):
 # You can change it to something else if you want.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
-    # app.run(host="127.0.0.1", port=5000, debug=True)
+    # app.run(host="127.0.0.1", port=5000)
+    app.run(host="127.0.0.1", port=5000, debug=True)

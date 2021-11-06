@@ -3496,6 +3496,11 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+
 crypto-random-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-2.0.0.tgz#ef2a7a966ec11083388369baa02ebead229b30d5"
@@ -4132,6 +4137,13 @@ electron-builder@^22.2.0:
     read-config-file "6.2.0"
     update-notifier "^5.1.0"
     yargs "^17.0.1"
+
+electron-data-holder@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/electron-data-holder/-/electron-data-holder-1.0.1.tgz#bedf95f6c24659c49b0f45239675cce761cb1a4d"
+  integrity sha512-bqmBJvWmWfuZXy0tUZyw5lkQnyuWyz+9EBJqLzOP1FzWK2xbyEv+bI07lk9kRiKrKNYbaTRvj/uIrEfwlS4tPA==
+  dependencies:
+    on-change "^3.0.2"
 
 electron-devtools-installer@^3.1.0:
   version "3.2.0"
@@ -7370,6 +7382,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
+
+on-change@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/on-change/-/on-change-3.0.2.tgz#e40eb57b455e71ad3144aab06337d91e91d4a7d6"
+  integrity sha512-rdt5YfIfo86aFNwvQqzzHMpaPPyVQ/XjcGK01d46chZh47G8Xzvoao79SgFb03GZfxRGREzNQVJuo31drqyIlA==
 
 on-finished@~2.3.0:
   version "2.3.0"

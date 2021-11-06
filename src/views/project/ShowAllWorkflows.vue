@@ -36,7 +36,6 @@
                 </el-icon>
               </el-button>
               <br />
-              <span>{{ workflow }}</span>
             </div>
           </div>
         </div>
@@ -88,8 +87,8 @@ export default {
       this.$router.push({ path: routerPath });
     },
   },
-  mounted() {
-    this.dataset = this.datasetStore.currentDataset;
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
 
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });

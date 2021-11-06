@@ -138,10 +138,10 @@ export default {
   methods: {
     navigateToDataset(datasetID) {
       this.datasetStore.getDataset(datasetID);
-      // const routerPath = `/datasets/${datasetID}`;
+      const routerPath = `/datasets/${datasetID}`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
-      const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`;
+      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`;
       this.$router.push({ path: routerPath });
     },
   },

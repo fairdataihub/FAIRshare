@@ -21,6 +21,7 @@ import axiosRetry from "axios-retry";
 import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "./store/datasets";
+import { useTokenStore } from "./store/access.js";
 
 const MIN_API_VERSION = "0.0.1";
 
@@ -33,13 +34,22 @@ export default {
     return {
       appPath: app.getAppPath(),
       unpublishedDatasets: useDatasetsStore(),
+      tokens: useTokenStore(),
       loading: "",
     };
   },
   methods: {
-    loadStores() {
+    async loadStores() {
       try {
-        this.unpublishedDatasets.loadDatasets();
+        await this.unpublishedDatasets.loadDatasets();
+        await this.tokens.loadTokens();
+
+        // sample implementation of access tokens
+        await this.tokens.saveToken(
+          "zenodo",
+          "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+        );
+        console.log(await this.tokens.getToken("zenodo"));
 
         this.loading.close();
       } catch (error) {
