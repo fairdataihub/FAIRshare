@@ -91,5 +91,5 @@ class Add(Resource):
 # You can change it to something else if you want.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
-    # app.run(host="127.0.0.1", port=5000)
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    # app.run(host="127.0.0.1", port=7632)
+    app.run(host="127.0.0.1", port=7632, debug=True)

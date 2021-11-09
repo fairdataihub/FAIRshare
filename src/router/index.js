@@ -12,6 +12,7 @@ import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDesti
 
 import ZenodoMetadata from "../views/zenodo/ZenodoMetadata.vue";
 import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
+import ZenodoAccessTokenVerification from "../views/zenodo/AccessTokenVerification.vue";
 
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
@@ -50,6 +51,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/metadata",
     component: ZenodoMetadata,
     name: "ZenodoMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/zenodo/accessToken",
+    component: ZenodoAccessTokenVerification,
+    name: "ZenodoAccessTokenVerification",
   },
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/review",

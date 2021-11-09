@@ -1,0 +1,125 @@
+<template>
+  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
+    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
+      <div class="h-full w-full">
+        <div class="flex flex-col h-full overflow-y-auto pr-5">
+          <span class="text-lg font-medium text-left">
+            Zenodo Access Token Verification
+          </span>
+          <span class="text-left">
+            Let's see if we already have your Zenodo login details
+          </span>
+
+          <el-divider class="my-4"> </el-divider>
+
+          <span v-if="validTokenAvailable" class="mb-10">
+            Looks like we already have your Zenodo login details. Click on the
+            continue button below.
+          </span>
+          <!-- show error message if token is not valid -->
+          <div v-else>
+            <p class="mb-5">
+              {{ errorMessage }}
+            </p>
+
+            <el-input
+              v-model="zenodoAccessToken"
+              placeholder="Zenodo Access Token"
+              class="mb-10"
+            />
+          </div>
+
+          <div class="w-full flex flex-row justify-center py-2">
+            <router-link to="/datasets" class="mx-6">
+              <el-button type="danger" plain> Cancel </el-button>
+            </router-link>
+
+            <el-button
+              type="primary"
+              class="flex flex-row items-center"
+              :disabled="disableContinue"
+            >
+              Continue
+              <el-icon>
+                <ArrowRightBold />
+              </el-icon>
+            </el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+// import { Icon } from "@iconify/vue";
+import { ArrowRightBold } from "@element-plus/icons";
+import axios from "axios";
+
+import { useDatasetsStore } from "../../store/datasets";
+import { useTokenStore } from "../../store/access.js";
+
+export default {
+  name: "ZenodoAccessTokenVerification",
+  components: { ArrowRightBold },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
+      dataset: {},
+      folderPath: "",
+      workflowID: this.$route.params.workflowID,
+      workflow: {},
+      validTokenAvailable: false,
+      errorMessage: "",
+      zenodoAccessToken: "",
+    };
+  },
+  computed: {
+    disableContinue() {
+      if (this.validTokenAvailable) {
+        return false;
+      }
+      if (!this.validTokenAvailable && this.zenodoAccessToken !== "") {
+        return false;
+      }
+      return true;
+    },
+  },
+  methods: {
+    async getDepositions(token) {
+      console.log(token);
+      return axios
+        .get(`${process.env.VUE_APP_SERVER_URL}deposit/depositions`, {
+          params: {
+            access_token: token,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+    },
+  },
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    const zenodoToken = await this.tokens.getToken("zenodo");
+    console.log(zenodoToken);
+    console.log(process.env.VUE_APP_ZENODO_ACCESS_TOKEN);
+    const response = await this.getDepositions(zenodoToken);
+    if (response.status === 200) {
+      this.validTokenAvailable = true;
+    } else if (response.status === 401) {
+      this.errorMessage =
+        "Invalid Zenodo access token. Please enter a valid Zenodo access token.";
+      this.validTokenAvailable = false;
+    }
+  },
+};
+</script>

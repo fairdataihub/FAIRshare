@@ -32,3 +32,4 @@ src/pyflaskdist
 api.spec
 *.ipynb
 .env
+.env.production

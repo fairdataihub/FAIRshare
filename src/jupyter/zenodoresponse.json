@@ -1,0 +1,69 @@
+[
+  {
+    "conceptrecid": "935415",
+    "created": "2021-10-11T20:05:26.339446",
+    "doi": "",
+    "doi_url": "https://doi.org/",
+    "id": 935416,
+    "links": {
+      "discard": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/discard",
+      "edit": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/edit",
+      "files": "https://sandbox.zenodo.org/api/deposit/depositions/935416/files",
+      "html": "https://sandbox.zenodo.org/deposit/935416",
+      "latest_draft": "https://sandbox.zenodo.org/api/deposit/depositions/935416",
+      "latest_draft_html": "https://sandbox.zenodo.org/deposit/935416",
+      "publish": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/publish",
+      "self": "https://sandbox.zenodo.org/api/deposit/depositions/935416"
+    },
+    "metadata": {
+      "access_right": "open",
+      "creators": [
+        {
+          "affiliation": "Zenodo",
+          "name": "Doe, John"
+        }
+      ],
+      "description": "This is my first upload",
+      "doi": "",
+      "license": "CC-BY-4.0",
+      "prereserve_doi": {
+        "doi": "10.5072/zenodo.935416",
+        "recid": 935416
+      },
+      "publication_date": "2021-10-11",
+      "title": "My first upload",
+      "upload_type": "poster"
+    },
+    "modified": "2021-10-11T20:09:30.523214",
+    "owner": 96093,
+    "record_id": 935416,
+    "state": "unsubmitted",
+    "submitted": false,
+    "title": "My first upload"
+  },
+  {
+    "conceptrecid": "935388",
+    "created": "2021-10-11T19:31:29.384773",
+    "id": 935389,
+    "links": {
+      "discard": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/discard",
+      "edit": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/edit",
+      "files": "https://sandbox.zenodo.org/api/deposit/depositions/935389/files",
+      "html": "https://sandbox.zenodo.org/deposit/935389",
+      "publish": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/publish",
+      "self": "https://sandbox.zenodo.org/api/deposit/depositions/935389"
+    },
+    "metadata": {
+      "prereserve_doi": {
+        "doi": "10.5072/zenodo.935389",
+        "recid": 935389
+      }
+    },
+    "modified": "2021-10-11T19:31:29.384783",
+    "owner": 96093,
+    "record_id": 935389,
+    "state": "unsubmitted",
+    "submitted": false,
+    "title": ""
+  }
+]
