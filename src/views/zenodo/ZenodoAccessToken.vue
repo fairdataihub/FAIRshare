@@ -38,6 +38,7 @@
               type="primary"
               class="flex flex-row items-center"
               :disabled="disableContinue"
+              @click="uploadToZenodo"
             >
               Continue
               <el-icon>
@@ -60,7 +61,7 @@ import { useDatasetsStore } from "../../store/datasets";
 import { useTokenStore } from "../../store/access.js";
 
 export default {
-  name: "ZenodoAccessTokenVerification",
+  name: "ZenodoAccessToken",
   components: { ArrowRightBold },
   data() {
     return {
@@ -88,9 +89,8 @@ export default {
   },
   methods: {
     async getDepositions(token) {
-      console.log(token);
-      return axios
-        .get(`${process.env.VUE_APP_SERVER_URL}deposit/depositions`, {
+      return await axios
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
           params: {
             access_token: token,
           },
@@ -104,21 +104,49 @@ export default {
           return { data: error.response.data, status: error.response.status };
         });
     },
+    async checkToken(token) {
+      const response = await this.getDepositions(token);
+
+      if (response.status === 200) {
+        this.validTokenAvailable = true;
+        this.tokens.saveToken("zenodo", this.zenodoAccessToken);
+        return true;
+      } else if (response.status === 401) {
+        this.errorMessage =
+          "Invalid Zenodo access token. Please enter a valid Zenodo access token.";
+        this.validTokenAvailable = false;
+        return false;
+      } else {
+        this.errorMessage = "Something went wrong. Please try again.";
+        this.validTokenAvailable = false;
+        return false;
+      }
+    },
+    async uploadToZenodo() {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/upload`;
+      if (this.validTokenAvailable) {
+        this.$router.push({ path: routerPath });
+      } else {
+        const zenodoToken = this.zenodoAccessToken
+        const res = await this.checkToken(zenodoToken);
+
+        if (res) {
+          this.$router.push({ path: routerPath });
+        }
+      }
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
     const zenodoToken = await this.tokens.getToken("zenodo");
-    console.log(zenodoToken);
-    console.log(process.env.VUE_APP_ZENODO_ACCESS_TOKEN);
-    const response = await this.getDepositions(zenodoToken);
-    if (response.status === 200) {
-      this.validTokenAvailable = true;
-    } else if (response.status === 401) {
+    if (zenodoToken === "NO_TOKEN_FOUND") {
       this.errorMessage =
-        "Invalid Zenodo access token. Please enter a valid Zenodo access token.";
+        "No Zenodo access token found. Please enter a valid Zenodo access token.";
       this.validTokenAvailable = false;
+    } else {
+      this.checkToken(zenodoToken);
     }
   },
 };
