@@ -127,7 +127,7 @@ export default {
       if (this.validTokenAvailable) {
         this.$router.push({ path: routerPath });
       } else {
-        const zenodoToken = this.zenodoAccessToken
+        const zenodoToken = this.zenodoAccessToken;
         const res = await this.checkToken(zenodoToken);
 
         if (res) {
