@@ -1,6 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow } from "electron";
+import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
@@ -14,6 +15,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const path = require("path");
 
 require("@electron/remote/main").initialize();
+// require("@electron/remote/main").enable(webContents);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -26,7 +28,7 @@ const PY_MODULE = "api";
 let mainWindow;
 
 let pyProc = null;
-const pyPort = "5000"; // Flask default port
+const pyPort = "7632"; 
 
 const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
@@ -91,6 +93,9 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  enableWebContents(mainWindow.webContents);
+
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
