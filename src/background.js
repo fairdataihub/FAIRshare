@@ -28,7 +28,7 @@ const PY_MODULE = "api";
 let mainWindow;
 
 let pyProc = null;
-const pyPort = "7632"; 
+const pyPort = "7632";
 
 const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
@@ -95,7 +95,6 @@ async function createWindow() {
   });
 
   enableWebContents(mainWindow.webContents);
-
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
