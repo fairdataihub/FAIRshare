@@ -17,7 +17,7 @@ API_VERSION = "0.0.1"
 
 
 app = Flask(__name__)
-app.config.SWAGGER_UI_DOC_EXPANSION = 'list' # full if you want to see all the details
+app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # full if you want to see all the details
 CORS(app)
 
 api = Api(
@@ -163,7 +163,7 @@ class zenodoAddMetadata(Resource):
         },
     )
     def post(self):
-        '''Add metadata to a zenodo deposition'''
+        """Add metadata to a zenodo deposition"""
         parser = reqparse.RequestParser()
 
         parser.add_argument(
@@ -203,7 +203,7 @@ class zenodoPublish(Resource):
         },
     )
     def post(self):
-        '''Publish a zenodo deposition'''
+        """Publish a zenodo deposition"""
         parser = reqparse.RequestParser()
 
         parser.add_argument(

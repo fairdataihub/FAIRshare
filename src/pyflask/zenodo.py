@@ -6,10 +6,14 @@ import os
 
 # get a list of all unpublished datasets on Zenodo
 def getAllZenodoDepositions(access_token):
-    print(config.ZENODO_SERVER_URL + "deposit/depositions?access_token=%s" % access_token)
+    print(
+        config.ZENODO_SERVER_URL + "deposit/depositions?access_token=%s" % access_token
+    )
     try:
         parameters = {"access_token": access_token}
-        r = requests.get(config.ZENODO_SERVER_URL + "deposit/depositions", params=parameters)
+        r = requests.get(
+            config.ZENODO_SERVER_URL + "deposit/depositions", params=parameters
+        )
         return r.json()
     except Exception as e:
         raise e
