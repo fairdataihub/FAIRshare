@@ -326,22 +326,22 @@
                       v-model="zenodoMetadataForm.license.accessRight"
                       class="flex flex-col"
                     >
-                      <el-radio label="openAccess">
+                      <el-radio label="open">
                         <el-icon>
                           <unlock />
                         </el-icon>
                         Open Access
                       </el-radio>
-                      <el-radio label="embargoedAccess" disabled>
+                      <el-radio label="embargoed" disabled>
                         <el-icon> <remove-filled /> </el-icon> Embargoed Access
                       </el-radio>
-                      <el-radio label="restrictedAccess" disabled>
+                      <el-radio label="restricted" disabled>
                         <el-icon>
                           <key />
                         </el-icon>
                         Restricted Access
                       </el-radio>
-                      <el-radio label="closedAccess" disabled>
+                      <el-radio label="closed" disabled>
                         <el-icon>
                           <lock />
                         </el-icon>

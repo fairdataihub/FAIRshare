@@ -1,7 +1,7 @@
 from __future__ import print_function
 import config
+import json
 from flask import Flask
-
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
 from zenodo import (
@@ -12,6 +12,7 @@ from zenodo import (
     publishZenodoDeposition,
 )
 
+from metadata import createMetadata
 
 API_VERSION = "0.0.1"
 
@@ -47,7 +48,40 @@ class HelloWorld(Resource):
 
 
 ###############################################################################
-# Zenodo API documentation
+# Metadata operations
+###############################################################################
+
+metadata = api.namespace("metadata", description="Metadata operations")
+
+
+@metadata.route("/create", endpoint="createMetadata")
+class createMetadata(Resource):
+    @metadata.doc(
+        responses={200: "Success"},
+        params={
+            "data_types": "Types of data.",
+            "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",
+            "folder_path": "Folder path to put the generated metadata files in",
+        },
+    )
+    def post(self):
+        parser.add_argument("data_types", type=str, help="Types of data ")
+        parser.add_argument(
+            "data_object", type=str, help="Complete data object to create metadata"
+        )
+        parser.add_argument("folder_path", type=str, help="Title of the deposition")
+
+        args = parser.parse_args()
+
+        data_types = json.loads(args["data_types"])
+        data = json.loads(args["data_object"])
+        folder_path = args["folder_path"]
+
+        return createMetadata(data_types, data, folder_path)
+
+
+###############################################################################
+# Zenodo API operations
 ###############################################################################
 
 zenodo = api.namespace("zenodo", description="Zenodo operations")
@@ -88,7 +122,7 @@ class zenodoGetAll(Resource):
 @zenodo.route("/new", endpoint="zenodoCreateNew")
 class zenodoCreateNew(Resource):
     @zenodo.doc(
-        responses={200: "Success", 401: "Authentication error"},
+        responses={200: "Success", 401: "Authentication error", 400: "Bad request"},
         params={"access_token": "Zenodo access token required with every request."},
     )
     def post(self):
@@ -189,7 +223,7 @@ class zenodoAddMetadata(Resource):
 
         access_token = args["access_token"]
         deposition_id = args["deposition_id"]
-        metadata = json.load(args["metadata"])
+        metadata = json.loads(args["metadata"])
 
         return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
 
@@ -233,5 +267,5 @@ class zenodoPublish(Resource):
 # Using 7632 since it spells SODA lol.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
-    # app.run(host="127.0.0.1", port=7632)
-    app.run(host="127.0.0.1", port=7632, debug=True)
+    app.run(host="127.0.0.1", port=7632)
+    # app.run(host="127.0.0.1", port=7632, debug=True)

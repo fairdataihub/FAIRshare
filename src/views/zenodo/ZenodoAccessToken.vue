@@ -12,22 +12,25 @@
 
           <el-divider class="my-4"> </el-divider>
 
-          <span v-if="validTokenAvailable" class="mb-10">
-            Looks like we already have your Zenodo login details. Click on the
-            continue button below.
-          </span>
-          <!-- show error message if token is not valid -->
-          <div v-else>
-            <p class="mb-5">
-              {{ errorMessage }}
-            </p>
+          <div v-if="ready">
+            <span v-if="validTokenAvailable" class="mb-10">
+              Looks like we already have your Zenodo login details. Click on the
+              continue button below.
+            </span>
+            <!-- show error message if token is not valid -->
+            <div v-if="errorMessage !== ''">
+              <p class="mb-5">
+                {{ errorMessage }}
+              </p>
 
-            <el-input
-              v-model="zenodoAccessToken"
-              placeholder="Zenodo Access Token"
-              class="mb-10"
-            />
+              <el-input
+                v-model="zenodoAccessToken"
+                placeholder="Zenodo Access Token"
+                class="mb-10"
+              />
+            </div>
           </div>
+          <LoadingFoldingCube v-else></LoadingFoldingCube>
 
           <div class="w-full flex flex-row justify-center py-2">
             <router-link to="/datasets" class="mx-6">
@@ -57,12 +60,14 @@
 import { ArrowRightBold } from "@element-plus/icons";
 import axios from "axios";
 
+import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
+
 import { useDatasetsStore } from "../../store/datasets";
 import { useTokenStore } from "../../store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
-  components: { ArrowRightBold },
+  components: { ArrowRightBold, LoadingFoldingCube },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -74,6 +79,7 @@ export default {
       validTokenAvailable: false,
       errorMessage: "",
       zenodoAccessToken: "",
+      ready: false,
     };
   },
   computed: {
@@ -96,8 +102,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
-
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
@@ -109,7 +113,7 @@ export default {
 
       if (response.status === 200) {
         this.validTokenAvailable = true;
-        this.tokens.saveToken("zenodo", this.zenodoAccessToken);
+        this.tokens.saveToken("zenodo", token);
         return true;
       } else if (response.status === 401) {
         this.errorMessage =
@@ -145,9 +149,13 @@ export default {
       this.errorMessage =
         "No Zenodo access token found. Please enter a valid Zenodo access token.";
       this.validTokenAvailable = false;
+      this.ready = true;
     } else {
-      this.checkToken(zenodoToken);
+      await this.checkToken(zenodoToken);
+      this.ready = true;
     }
   },
 };
 </script>
+
+<style lang="postcss" scoped></style>

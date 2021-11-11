@@ -45,10 +45,10 @@ export default {
         await this.tokens.loadTokens();
 
         // sample implementation of access tokens
-        await this.tokens.saveToken(
-          "zenodo",
-          process.env.VUE_APP_ZENODO_ACCESS_TOKEN
-        );
+        // await this.tokens.saveToken(
+        //   "zenodo",
+        //   process.env.VUE_APP_ZENODO_ACCESS_TOKEN
+        // );
         console.log(await this.tokens.getToken("zenodo"));
 
         this.loading.close();
@@ -60,7 +60,7 @@ export default {
     },
   },
   mounted() {
-    const client = axios.create({ baseURL: `${this.SERVERURL}` });
+    const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 3 });
 
     this.loading = ElLoading.service({
@@ -79,7 +79,7 @@ export default {
       .then((response) => {
         console.log(response.data);
         axios
-          .get(`${this.SERVERURL}/api_version`)
+          .get(`${this.$server_url}/api_version`)
           .then((response) => {
             if (
               semver.lte(

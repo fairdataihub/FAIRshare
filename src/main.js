@@ -14,7 +14,7 @@ import LineDivider from "./components/ui/LineDivider.vue";
 let app = createApp(App);
 
 // global variables for use in the app
-app.config.globalProperties.SERVERURL = "http://127.0.0.1:7632";
+app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
 
 // register components globally
 app.component("line-divider", LineDivider);

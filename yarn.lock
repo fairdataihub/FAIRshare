@@ -924,7 +924,7 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@electron/get@^1.0.1":
+"@electron/get@^1.13.0":
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/@electron/get/-/get-1.13.1.tgz#42a0aa62fd1189638bd966e23effaebb16108368"
   integrity sha512-U5vkXDZ9DwXtkPqlB45tfYnnYBN8PePp1z/XDCupnSpdrxT8/ThCv9WCwPLf9oqiSGZTkH6dx2jDUPuoXpjkcA==
@@ -4220,12 +4220,12 @@ electron-updater@^4.3.9:
     lodash.isequal "^4.5.0"
     semver "^7.3.5"
 
-electron@^14.0.0:
-  version "14.2.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-14.2.1.tgz#ee8b9cfa8c04ad4d9456daa5bbac562c2c2517a1"
-  integrity sha512-20cLOVpmjIgYMgsDLpI36VQhv0bIy54sSBAP3rLFtrs/kVVHLu0educMVZkkMm5GJPd2vvU4mcK7f43JgVRcNg==
+electron@^15.0.0:
+  version "15.3.1"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-15.3.1.tgz#38ce9dfcd4ec51a33d62de23de15fb5ceeaea25d"
+  integrity sha512-6/qp3Dor7HSGq28qhJEVD1zBFZoWicmo3/ZLvo7rhXPPZFwEMSJGPMEZM9WYSfWW4t/OozpWNuuDe970cF7g2Q==
   dependencies:
-    "@electron/get" "^1.0.1"
+    "@electron/get" "^1.13.0"
     "@types/node" "^14.6.2"
     extract-zip "^1.0.3"
 
