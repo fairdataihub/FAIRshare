@@ -20,7 +20,7 @@ export default {
 
 <style scoped>
 .sk-cube-grid {
-  display: block
+  display: block;
 }
 
 .sk-cube-grid .sk-cube {
