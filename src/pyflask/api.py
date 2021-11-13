@@ -14,6 +14,8 @@ from zenodo import (
 
 from metadata import createMetadata
 
+from utilities import foldersPresent, zipFolder, deleteFile
+
 API_VERSION = "0.0.1"
 
 
@@ -234,6 +236,7 @@ class zenodoPublish(Resource):
         responses={200: "Success", 401: "Authentication error"},
         params={
             "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "deposition id of the zenodo object"
         },
     )
     def post(self):
@@ -259,6 +262,91 @@ class zenodoPublish(Resource):
         deposition_id = args["deposition_id"]
 
         return publishZenodoDeposition(access_token, deposition_id)
+
+
+###############################################################################
+# Utilities
+###############################################################################
+
+
+utilities = api.namespace("utilities", description="utilities for random tasks")
+
+
+@utilities.route("/checkforfolders", endpoint="checkForFolders")
+class checkForFolders(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "folder path to check if sub folders are present.",
+        },
+    )
+    def post(self):
+        """Checks if folders are present in the currently provided path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to check if sub folders are present.",
+        )
+
+        args = parser.parse_args()
+
+        folder_path = args["folder_path"]
+
+        return foldersPresent(folder_path)
+
+
+@utilities.route("/zipfolder", endpoint="ZipFolder")
+class ZipFolder(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "folder path to zip.",
+        },
+    )
+    def post(self):
+        """Zips a folder"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to zip.",
+        )
+
+        args = parser.parse_args()
+
+        folder_path = args["folder_path"]
+
+        return zipFolder(folder_path)
+
+
+@utilities.route("/deletefile", endpoint="deleteFile")
+class deleteFile(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "file_path": "file path to delete.",
+        },
+    )
+    def post(self):
+        """Deletes a file"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file path to delete.",
+        )
+
+        args = parser.parse_args()
+
+        file_path = args["file_path"]
+        return deleteFile(file_path)
 
 
 # KEY

@@ -3,6 +3,7 @@ import config
 import requests
 import json
 import os
+import time
 
 # get a list of all unpublished datasets on Zenodo
 def getAllZenodoDepositions(access_token):
@@ -50,6 +51,10 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
                 data=fileContent,
                 params=params,
             )
+
+        # Adding a sleep function to avoid hitting the rate limit
+        time.sleep(1.5)
+
         return r.json()
     except Exception as e:
         raise e

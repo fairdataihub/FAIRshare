@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, shell } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
@@ -80,9 +80,9 @@ const createPyProc = () => {
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1022,
     height: 600,
-    minWidth: 900,
+    minWidth: 1022,
     minHeight: 600,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -198,6 +198,13 @@ autoUpdater.on("update-downloaded", () => {
   // exitPyProc(process.pid).then(() => {
   // autoUpdater.quitAndInstall();
   // });
+});
+
+ipcMain.on("open-link-in-browser", async (_event, link) => {
+  console.log("opening link", link);
+  shell.openExternal("https://google.com").then(() => {
+		console.log("hello");
+	});
 });
 
 // Exit cleanly on request from parent process in development mode.

@@ -1,69 +1,222 @@
-[
-  {
-    "conceptrecid": "935415",
-    "created": "2021-10-11T20:05:26.339446",
-    "doi": "",
-    "doi_url": "https://doi.org/",
-    "id": 935416,
-    "links": {
-      "discard": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/discard",
-      "edit": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/edit",
-      "files": "https://sandbox.zenodo.org/api/deposit/depositions/935416/files",
-      "html": "https://sandbox.zenodo.org/deposit/935416",
-      "latest_draft": "https://sandbox.zenodo.org/api/deposit/depositions/935416",
-      "latest_draft_html": "https://sandbox.zenodo.org/deposit/935416",
-      "publish": "https://sandbox.zenodo.org/api/deposit/depositions/935416/actions/publish",
-      "self": "https://sandbox.zenodo.org/api/deposit/depositions/935416"
-    },
-    "metadata": {
-      "access_right": "open",
-      "creators": [
-        {
-          "affiliation": "Zenodo",
-          "name": "Doe, John"
+{
+  "conceptdoi":"10.5072/zenodo.959611",
+  "conceptrecid":"959611",
+  "created":"2021-11-13T00:29:59.668968+00:00",
+  "doi":"10.5072/zenodo.959612",
+  "doi_url":"https://doi.org/10.5072/zenodo.959612",
+  "files":[
+     {
+        "checksum":"398379a98e1386e995086acbb61c9b3c",
+        "filename":"01d3328c-582d-41ff-a8d3-cf563ec2b97a.soda",
+        "filesize":41,
+        "id":"6c85478b-e2e9-4d01-a113-75e71b7471b7",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/01d3328c-582d-41ff-a8d3-cf563ec2b97a.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/6c85478b-e2e9-4d01-a113-75e71b7471b7"
         }
-      ],
-      "description": "This is my first upload",
-      "doi": "",
-      "license": "CC-BY-4.0",
-      "prereserve_doi": {
-        "doi": "10.5072/zenodo.935416",
-        "recid": 935416
-      },
-      "publication_date": "2021-10-11",
-      "title": "My first upload",
-      "upload_type": "poster"
-    },
-    "modified": "2021-10-11T20:09:30.523214",
-    "owner": 96093,
-    "record_id": 935416,
-    "state": "unsubmitted",
-    "submitted": false,
-    "title": "My first upload"
+     },
+     {
+        "checksum":"8cd76b32a95dfa0ebab92241dad32d1e",
+        "filename":"5652ff7f-bee7-488f-a185-437fc76838ca.soda",
+        "filesize":41,
+        "id":"7da25cc6-c19d-4154-9a44-21f57163c2fb",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/5652ff7f-bee7-488f-a185-437fc76838ca.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/7da25cc6-c19d-4154-9a44-21f57163c2fb"
+        }
+     },
+     {
+        "checksum":"e9afdaef0fbf915effdbdb2274400dbb",
+        "filename":"5c872305-1f6e-4f7f-9c65-f6c15a43c735.soda",
+        "filesize":41,
+        "id":"834cbc3d-6dae-4b3b-8cb3-cceff3d5da1d",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/5c872305-1f6e-4f7f-9c65-f6c15a43c735.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/834cbc3d-6dae-4b3b-8cb3-cceff3d5da1d"
+        }
+     },
+     {
+        "checksum":"98cef9d238a499035004207799b788cc",
+        "filename":"6a275056-8716-463d-ba43-ef1ed2106dfc.soda",
+        "filesize":41,
+        "id":"f865f1f6-2a33-4fbf-a210-a47a152c5470",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/6a275056-8716-463d-ba43-ef1ed2106dfc.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/f865f1f6-2a33-4fbf-a210-a47a152c5470"
+        }
+     },
+     {
+        "checksum":"b6adfb4c9fa9e9dff28480a9542ea6a8",
+        "filename":"6a75aeaf-1cd9-4f3b-a96d-d586037208ae.soda",
+        "filesize":41,
+        "id":"050704af-b0b5-4de4-b5d8-6e3d5181e375",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/6a75aeaf-1cd9-4f3b-a96d-d586037208ae.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/050704af-b0b5-4de4-b5d8-6e3d5181e375"
+        }
+     },
+     {
+        "checksum":"6d3f9d9ea8ecda21e45b46ffc121e0eb",
+        "filename":"7dd830af-1373-44c1-b36c-e26fcc35e4bf.soda",
+        "filesize":41,
+        "id":"49081077-02e7-49b9-8bf8-7ea24c21437d",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/7dd830af-1373-44c1-b36c-e26fcc35e4bf.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/49081077-02e7-49b9-8bf8-7ea24c21437d"
+        }
+     },
+     {
+        "checksum":"cf90876f050bfe0cb86cb9f76aa92aef",
+        "filename":"b39cf249-a665-4a40-8e6b-d2e66b061419.soda",
+        "filesize":41,
+        "id":"c40296b9-a67a-496d-abdb-8e749c3eebc9",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/b39cf249-a665-4a40-8e6b-d2e66b061419.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/c40296b9-a67a-496d-abdb-8e749c3eebc9"
+        }
+     },
+     {
+        "checksum":"cb7bd7d30684bb6cd0da22145f2a0731",
+        "filename":"b4014d86-ad08-469b-9e08-899f61ee6cf7.soda",
+        "filesize":41,
+        "id":"bcb2c961-8359-4f17-992a-787c4780169f",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/b4014d86-ad08-469b-9e08-899f61ee6cf7.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/bcb2c961-8359-4f17-992a-787c4780169f"
+        }
+     },
+     {
+        "checksum":"fd70d2b435c825e5af996125eef9906a",
+        "filename":"c06ff928-315b-433d-b2a4-117e203b5c68.soda",
+        "filesize":41,
+        "id":"df035c76-c03a-415c-8ff3-717469eb426c",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/c06ff928-315b-433d-b2a4-117e203b5c68.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/df035c76-c03a-415c-8ff3-717469eb426c"
+        }
+     },
+     {
+        "checksum":"bd78d99332a8d7f6125b0ac3fe5b2e3d",
+        "filename":"cfe64dbb-9621-4009-8176-bd53c8fadd17.soda",
+        "filesize":41,
+        "id":"bc62430e-4edf-4873-ab5a-ee2c18a74b9d",
+        "links":{
+           "download":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f/cfe64dbb-9621-4009-8176-bd53c8fadd17.soda",
+           "self":"https://sandbox.zenodo.org/api/deposit/depositions/959612/files/bc62430e-4edf-4873-ab5a-ee2c18a74b9d"
+        }
+     }
+  ],
+  "id":959612,
+  "links":{
+     "badge":"https://sandbox.zenodo.org/badge/doi/10.5072/zenodo.959612.svg",
+     "bucket":"https://sandbox.zenodo.org/api/files/51ede19f-217c-4b58-a346-be8a96f96c4f",
+     "conceptbadge":"https://sandbox.zenodo.org/badge/doi/10.5072/zenodo.959611.svg",
+     "conceptdoi":"https://doi.org/10.5072/zenodo.959611",
+     "doi":"https://doi.org/10.5072/zenodo.959612",
+     "latest":"https://sandbox.zenodo.org/api/records/959612",
+     "latest_html":"https://sandbox.zenodo.org/record/959612",
+     "record":"https://sandbox.zenodo.org/api/records/959612",
+     "record_html":"https://sandbox.zenodo.org/record/959612"
   },
-  {
-    "conceptrecid": "935388",
-    "created": "2021-10-11T19:31:29.384773",
-    "id": 935389,
-    "links": {
-      "discard": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/discard",
-      "edit": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/edit",
-      "files": "https://sandbox.zenodo.org/api/deposit/depositions/935389/files",
-      "html": "https://sandbox.zenodo.org/deposit/935389",
-      "publish": "https://sandbox.zenodo.org/api/deposit/depositions/935389/actions/publish",
-      "self": "https://sandbox.zenodo.org/api/deposit/depositions/935389"
-    },
-    "metadata": {
-      "prereserve_doi": {
-        "doi": "10.5072/zenodo.935389",
-        "recid": 935389
-      }
-    },
-    "modified": "2021-10-11T19:31:29.384783",
-    "owner": 96093,
-    "record_id": 935389,
-    "state": "unsubmitted",
-    "submitted": false,
-    "title": ""
-  }
-]
+  "metadata":{
+     "access_right":"open",
+     "communities":[
+        {
+           "identifier":"zenodo"
+        }
+     ],
+     "conference_acronym":"GSW",
+     "conference_dates":"November 11, 2021 - November 13, 2021",
+     "conference_place":"Chicago, IL, United States",
+     "conference_session":"VI",
+     "conference_session_part":"1",
+     "conference_title":"Gun violence: An event on the power of community",
+     "contributors":[
+        {
+           "affiliation":"test10a",
+           "name":"test10f, test10g",
+           "orcid":"0000-0003-2524-3853",
+           "type":"Editor"
+        }
+     ],
+     "creators":[
+        {
+           "affiliation":"test8a",
+           "name":"test8f, test8g",
+           "orcid":"0000-0003-2524-3853"
+        },
+        {
+           "affiliation":"test9a",
+           "name":"test9f, test9g",
+           "orcid":"0000-0003-2524-3853"
+        }
+     ],
+     "description":"test2",
+     "doi":"10.5072/zenodo.959612",
+     "imprint_isbn":"978-3-16-148410-0",
+     "imprint_place":"Chicago, IL, United States",
+     "imprint_publisher":"Penguin",
+     "journal_issue":"3",
+     "journal_pages":"44–47",
+     "journal_title":"Journal of College Admission",
+     "journal_volume":"13",
+     "keywords":[
+        "test 3",
+        "test3.5",
+        "test4"
+     ],
+     "language":"eng",
+     "license":"GPL-2.0-with-GCC-exception",
+     "notes":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequo dpraesentium explicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit.",
+     "partof_pages":"224",
+     "partof_title":"Gesammelte Werke 3",
+     "prereserve_doi":{
+        "doi":"10.5072/zenodo.959612",
+        "recid":959612
+     },
+     "publication_date":"2021-11-12",
+     "references":[
+        "Grady, J. S., Her, M., Moreno, G., Perez, C., & Yelinek, J. (2019). Emotions in storybooks: A comparison of storybooks that represent ethnic and racial groups in the United States. Psychology of Popular Media Culture, 8(3), 207–217. https://doi.org/10.1037/ppm0000185",
+        "Jerrentrup, A., Mueller, T., Glowalla, U., Herder, M., Henrichs, N., Neubauer, A., & Schaefer, J. R. (2018). Teaching medicine with the help of \"Dr. House.\" PLoS ONE, 13(3), Article e0193972. https://doi.org/10.1371/journal.pone.0193972",
+        "Stegmeir, M. (2016). Climate change: New discipline practices promote college access. The Journal of College Admission, (231), 44–47. https://www.nxtbook.com/ygsreprints/NACAC/nacac_jca_spring2016/#/46"
+     ],
+     "related_identifiers":[
+        {
+           "identifier":"10.1234/foo",
+           "relation":"isPublishedIn",
+           "resource_type":"publication-article",
+           "scheme":"doi"
+        },
+        {
+           "identifier":"10.1234/bar",
+           "relation":"compiles",
+           "resource_type":"publication-proposal",
+           "scheme":"doi"
+        }
+     ],
+     "subjects":[
+        {
+           "identifier":"http://id.loc.gov/authorities/subjects/sh85009003",
+           "scheme":"url",
+           "term":"sub1"
+        }
+     ],
+     "thesis_supervisors":[
+        {
+           "affiliation":"UCSD",
+           "name":"test, ffet",
+           "orcid":"0000-0003-2524-3853"
+        }
+     ],
+     "thesis_university":"University of California San Diego",
+     "title":"test1",
+     "upload_type":"software",
+     "version":"1.0.4"
+  },
+  "modified":"2021-11-13T01:52:01.781055+00:00",
+  "owner":96093,
+  "record_id":959612,
+  "state":"done",
+  "submitted":true,
+  "title":"test1"
+}

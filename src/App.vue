@@ -1,13 +1,12 @@
 <template>
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div class="flex flex-row bg-white">
-    <AppSidebar></AppSidebar>
+    <AppSidebar :environment="environment"></AppSidebar>
     <router-view v-slot="{ Component }" class="pt-2">
       <transition name="fade" appear mode="out-in">
         <component :is="Component" />
       </transition>
     </router-view>
-    <span></span>
   </div>
 </template>
 
@@ -36,6 +35,7 @@ export default {
       unpublishedDatasets: useDatasetsStore(),
       tokens: useTokenStore(),
       loading: "",
+      environment: "",
     };
   },
   methods: {
@@ -98,6 +98,19 @@ export default {
           .catch((error) => {
             console.error(error);
           });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(`${this.$server_url}/zenodo/env`)
+      .then((response) => {
+        if (response.data.search("sandbox") === -1) {
+          this.environment = "production";
+        } else {
+          this.environment = "sandbox";
+        }
       })
       .catch((error) => {
         console.error(error);

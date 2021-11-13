@@ -124,6 +124,7 @@ export default {
         this.workflow.destination[this.repoID] = {
           id: this.repoID,
           questions: {},
+          status: {},
         };
       }
 

@@ -14,6 +14,7 @@ import ZenodoMetadata from "../views/zenodo/ZenodoMetadata.vue";
 import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
 import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
+import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
@@ -67,6 +68,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/upload",
     component: ZenodoUpload,
     name: "ZenodoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/zenodo/publish",
+    component: ZenodoPublish,
+    name: "ZenodoPublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",

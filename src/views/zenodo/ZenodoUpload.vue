@@ -16,29 +16,19 @@
           <div class="flex flex-col justify-center h-full">
             <el-progress
               :percentage="percentage"
-              :indeterminate="true"
+              :indeterminate="indeterminate"
               :stroke-width="10"
             />
             <div class="flex flex-row justify-start items-center py-3">
-              <LoadingCubeGrid class="w-5 h-5"></LoadingCubeGrid>
-              <p class="pl-4">{{ statusMessage }}</p>
+              <LoadingCubeGrid
+                class="w-5 h-5"
+                v-if="percentage !== 100"
+              ></LoadingCubeGrid>
+              <p class="pl-4">
+                {{ statusMessage }}
+                <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
+              </p>
             </div>
-          </div>
-
-          <div
-            class="w-full flex flex-row justify-center py-2"
-            v-if="uploadComplete"
-          >
-            <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
-            </router-link>
-
-            <el-button type="primary" class="flex flex-row items-center">
-              Continue
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
-            </el-button>
           </div>
         </div>
       </div>
@@ -48,18 +38,20 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 import axios from "axios";
 import dayjs from "dayjs";
+import path from "path";
+import fs from "fs-extra";
 
 import LoadingCubeGrid from "../../components/spinners/LoadingCubeGrid.vue";
+import LoadingEllipsis from "../../components/spinners/LoadingEllipsis.vue";
 
 import { useDatasetsStore } from "../../store/datasets";
 import { useTokenStore } from "../../store/access.js";
 
 export default {
   name: "ZenodoUpload",
-  components: { ArrowRightBold, LoadingCubeGrid },
+  components: { LoadingCubeGrid, LoadingEllipsis },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -69,7 +61,7 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       percentage: 0,
-      uploadComplete: false,
+      indeterminate: true,
       zenodoToken: "",
       statusMessage: "some status message here",
     };
@@ -80,7 +72,7 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async createZenodoDeposition() {
-      this.statusMessage = "Creating an empty dataset on Zenodo...";
+      this.statusMessage = "Creating an empty dataset on Zenodo";
       await this.sleep(300);
 
       return axios
@@ -96,7 +88,7 @@ export default {
         });
     },
     async addMetadaToZenodoDeposition() {
-      this.statusMessage = "Adding metadata to Zenodo...";
+      this.statusMessage = "Adding metadata to Zenodo";
       await this.sleep(300);
 
       const zenodoMetadata = this.workflow.destination.zenodo.questions;
@@ -230,16 +222,114 @@ export default {
           return "ERROR";
         });
     },
+    async uploadToZenodo(bucket_url, file_path) {
+      this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
+      await this.sleep(100);
+
+      await axios
+        .post(`${this.$server_url}/zenodo/upload`, {
+          access_token: this.zenodoToken,
+          bucket_url: bucket_url,
+          file_path: file_path,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      this.statusMessage = `Uploaded ${path.basename(
+        file_path
+      )} to Zenodo successfully`;
+      await this.sleep(300);
+      return;
+    },
+    async checkForFoldersAndUpload() {
+      this.statusMessage = "Checking folder path";
+      await this.sleep(300);
+
+      const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+      console.log(folderPath);
+
+      const response = await axios
+        .post(`${this.$server_url}/utilities/checkforfolders`, {
+          folder_path: folderPath,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response) {
+        this.statusMessage =
+          "Found sub folders. Creating a zip of the requested folder";
+        await this.sleep(300);
+
+        const zippedPath = await axios
+          .post(`${this.$server_url}/utilities/zipfolder`, {
+            folder_path: folderPath,
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        console.log(zippedPath);
+
+        this.statusMessage =
+          "Created a zipped folder succesfully. Getting ready to upload to Zenodo";
+        await this.sleep(300);
+
+        await this.uploadToZenodo(
+          this.workflow.destination.zenodo.bucket,
+          zippedPath
+        );
+      } else {
+        this.statusMessage = "Getting ready to upload to Zenodo";
+        await this.sleep(300);
+
+        const contents = fs.readdirSync(folderPath);
+
+        for (const [index, file] of contents.entries()) {
+          await this.uploadToZenodo(
+            this.workflow.destination.zenodo.bucket,
+            path.join(folderPath, file)
+          );
+          this.percentage = ((index + 1) / contents.length) * 80 + 20;
+        }
+
+        this.statusMessage = "Uploaded all files to Zenodo successfully";
+        await this.sleep(300);
+      }
+
+      this.percentage = 100;
+      this.indeterminate = false;
+
+      return "SUCCESS";
+    },
     async uploadWorkflow() {
       let response = "";
       response = await this.createZenodoDeposition();
 
       if (response === "ERROR") {
-        this.statusMessage = "There was an error creating the deposition.";
+        this.statusMessage = "There was an error creating the deposition";
         return "FAIL";
       } else {
-        this.statusMessage = "Empty deposition created on Zenodo.";
+        this.statusMessage = "Empty deposition created on Zenodo";
       }
+
+      this.percentage = 10;
+      this.indeterminate = false;
+
+      this.workflow.destination.zenodo.status.depositionCreated = true;
 
       this.workflow.destination.zenodo.bucket = response.links.bucket;
       this.workflow.destination.zenodo.deposition_id = response.id;
@@ -255,14 +345,33 @@ export default {
 
       if (response === "ERROR") {
         this.statusMessage =
-          "There was an error when adding metadata to the deposition.";
+          "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
         this.statusMessage =
-          "Metadata successfully added to the Zenodo deposition.";
+          "Metadata successfully added to the Zenodo deposition";
       }
 
-      console.log(response);
+      this.percentage = 20;
+      this.indeterminate = false;
+
+      this.workflow.destination.zenodo.status.metadataAdded = true;
+
+      await this.sleep(300);
+
+      response = await this.checkForFoldersAndUpload();
+
+      if (response === "ERROR") {
+        this.statusMessage =
+          "There was an error with uploading files to the Zenodo deposition";
+        return "FAIL";
+      } else {
+        this.statusMessage = "Uploaded all files to Zenodo successfully.";
+      }
+
+      this.workflow.destination.zenodo.status.filesUploaded = true;
+
+      return "SUCCESS";
     },
   },
   async mounted() {
@@ -280,12 +389,10 @@ export default {
     if (response === "FAIL") {
       alert("Something went wrong. Please try again at a later time.");
       return;
+    } else {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+      this.$router.push({ path: routerPath });
     }
-
-    setInterval(() => {
-      this.percentage = Math.floor(Math.random() * 100);
-      this.percentage = 50;
-    }, 500);
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50"
+    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50 relative"
     :class="{
       'w-64': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -45,6 +45,9 @@
         </router-link>
       </nav>
     </div>
+    <div class="absolute bottom-0 right-3">
+      <span class="text-gray-400 text-xs">{{ environment }}</span>
+    </div>
   </div>
 </template>
 
@@ -52,6 +55,7 @@
 export default {
   name: "AppSidebar",
   components: {},
+  props: ["environment"],
   data() {
     return { dropdownOpen: false, sideBarOpen: true, process: process };
   },
