@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span class="one">.</span> 
+    <span class="one">.</span>
     <span class="two">.</span>
     <span class="three">.</span>
   </span>

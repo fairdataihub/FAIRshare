@@ -203,8 +203,8 @@ autoUpdater.on("update-downloaded", () => {
 ipcMain.on("open-link-in-browser", async (_event, link) => {
   console.log("opening link", link);
   shell.openExternal("https://google.com").then(() => {
-		console.log("hello");
-	});
+    console.log("hello");
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
