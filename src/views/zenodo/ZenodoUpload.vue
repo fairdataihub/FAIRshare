@@ -285,7 +285,7 @@ export default {
         console.log(zippedPath);
 
         this.statusMessage =
-          "Created a zipped folder succesfully. Getting ready to upload to Zenodo";
+          "Created a zipped folder successfully. Getting ready to upload to Zenodo";
         await this.sleep(300);
 
         await this.uploadToZenodo(
