@@ -236,7 +236,7 @@ class zenodoPublish(Resource):
         responses={200: "Success", 401: "Authentication error"},
         params={
             "access_token": "Zenodo access token required with every request.",
-            "deposition_id": "deposition id of the zenodo object"
+            "deposition_id": "deposition id of the zenodo object",
         },
     )
     def post(self):
