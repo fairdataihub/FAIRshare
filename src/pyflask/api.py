@@ -62,7 +62,7 @@ class CreateMetadata(Resource):
         responses={200: "Success"},
         params={
             "data_types": "Types of data.",
-            "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",
+            "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
             "folder_path": "Folder path to put the generated metadata files in",
         },
     )
@@ -95,7 +95,7 @@ zenodo = api.namespace("zenodo", description="Zenodo operations")
 @zenodo.route("/env", endpoint="zenodoURL")
 class zenodoURL(Resource):
     def get(self):
-        """Returns the zenodo endpoint url. If the response is sandbox.zenodo.org, this corresponds to the testing environment. zenodo.org only will correspond to the production environment."""
+        """Returns the zenodo endpoint url. If the response is sandbox.zenodo.org, this corresponds to the testing environment. zenodo.org only will correspond to the production environment."""  # noqa: E501
         return config.ZENODO_SERVER_URL
 
 
