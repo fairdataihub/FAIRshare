@@ -5,8 +5,9 @@ import json
 import os
 import time
 
-# get a list of all unpublished datasets on Zenodo
+
 def getAllZenodoDepositions(access_token):
+    # get a list of all unpublished datasets on Zenodo
     print(
         config.ZENODO_SERVER_URL + "deposit/depositions?access_token=%s" % access_token
     )

@@ -1,8 +1,6 @@
 from __future__ import print_function
-import config
 import os
 import shutil
-import json
 
 
 def foldersPresent(folder_path):

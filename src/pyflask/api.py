@@ -57,7 +57,7 @@ metadata = api.namespace("metadata", description="Metadata operations")
 
 
 @metadata.route("/create", endpoint="createMetadata")
-class createMetadata(Resource):
+class CreateMetadata(Resource):
     @metadata.doc(
         responses={200: "Success"},
         params={
@@ -67,6 +67,9 @@ class createMetadata(Resource):
         },
     )
     def post(self):
+        """Create the codemetadata json file"""
+        parser = reqparse.RequestParser()
+
         parser.add_argument("data_types", type=str, help="Types of data ")
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
@@ -236,7 +239,7 @@ class zenodoPublish(Resource):
         responses={200: "Success", 401: "Authentication error"},
         params={
             "access_token": "Zenodo access token required with every request.",
-            "deposition_id": "deposition id of the zenodo object"
+            "deposition_id": "deposition id of the zenodo object",
         },
     )
     def post(self):
@@ -325,7 +328,7 @@ class ZipFolder(Resource):
 
 
 @utilities.route("/deletefile", endpoint="deleteFile")
-class deleteFile(Resource):
+class DeleteFile(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={

@@ -1,5 +1,4 @@
 from __future__ import print_function
-import config
 
 
 def createCodeMetadata(code_data, general_data, folder_path):
