@@ -63,7 +63,6 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
-            "folder_path": "Folder path to put the generated metadata files in",
         },
     )
     def post(self):
@@ -74,15 +73,13 @@ class CreateMetadata(Resource):
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
         )
-        parser.add_argument("folder_path", type=str, help="Title of the deposition")
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
-        folder_path = args["folder_path"]
 
-        return createMetadata(data_types, data, folder_path)
+        return createMetadata(data_types, data)
 
 
 ###############################################################################

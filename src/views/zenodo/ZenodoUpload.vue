@@ -315,6 +315,20 @@ export default {
 
       return "SUCCESS";
     },
+    async createCodeMetadataFile() {
+      await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data: JSON.stringify(this.dataset.data),
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+    },
     async uploadWorkflow() {
       let response = "";
       response = await this.createZenodoDeposition();
@@ -327,6 +341,22 @@ export default {
       }
 
       this.percentage = 10;
+      this.indeterminate = false;
+
+      if (this.codePresent() && "doi" in response) {
+        this.dataset.data.Code.question.uniqueIdentifier = response.doi;
+        response = await this.createCodeMetadataFile();
+
+        if (response === "ERROR") {
+          this.statusMessage =
+            "There was an error with creating the code metadata file.";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Empty deposition created on Zenodo";
+        }
+      }
+
+      this.percentage = 15;
       this.indeterminate = false;
 
       this.workflow.destination.zenodo.status.depositionCreated = true;
@@ -372,6 +402,12 @@ export default {
       this.workflow.destination.zenodo.status.filesUploaded = true;
 
       return "SUCCESS";
+    },
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
     },
   },
   async mounted() {
