@@ -1,7 +1,8 @@
 from __future__ import print_function
+import json
 
 
-def createCodeMetadata(code_data, general_data):
+def createCodeMetadata(code_data, general_data, folder_path):
     metadata = {
         "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
         "@type": "SoftwareSourceCode",
@@ -131,17 +132,18 @@ def createCodeMetadata(code_data, general_data):
             metadata["contributor"].append(new_contributor)
 
     # Create the metadata file
-    folder_path = code_data["folderPath"]
-
     with open(folder_path + "\\codemetadata.json", "w") as f:
-        f.write(metadata)
+        f.write(json.dumps(metadata))
     return True
 
 
 def createMetadata(data_types, data):
     try:
         if "Code" in data_types:
-            createCodeMetadata(data["Code"], data["general"])
+            code_data = data["Code"]["questions"]
+            general_data = data["general"]["questions"]
+            folder_path = data["Code"]["folderPath"]
+            createCodeMetadata(code_data, general_data, folder_path)
 
         return "SUCCESS"
     except Exception as e:

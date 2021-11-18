@@ -27,7 +27,11 @@
                 size="small"
                 @submit.prevent
               >
-                <el-form-item label="Dataset name">
+                <el-form-item
+                  label="Dataset name"
+                  :required="true"
+                  :error="generalForm.description"
+                >
                   <el-input v-model="generalForm.name"></el-input>
                 </el-form-item>
 

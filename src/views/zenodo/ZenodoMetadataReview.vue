@@ -408,7 +408,11 @@
               <el-button type="danger" plain> Cancel </el-button>
             </router-link>
 
-            <el-button type="primary" class="flex flex-row items-center">
+            <el-button
+              type="primary"
+              class="flex flex-row items-center"
+              @click="checkZenodoAccessToken"
+            >
               Continue
               <el-icon>
                 <ArrowRightBold />
@@ -554,7 +558,6 @@ export default {
           this.zenodoMetadata.conference.website != "" ||
           this.zenodoMetadata.conference.session != "")
       ) {
-        console.log(this.zenodoMetadata.conference.dates.length);
         return true;
       } else {
         console.log(this.zenodoMetadata.conference);
@@ -603,6 +606,10 @@ export default {
       this.workflow.expandOptions = [...expandOptions];
 
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
+      this.$router.push({ path: routerPath });
+    },
+    checkZenodoAccessToken() {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
       this.$router.push({ path: routerPath });
     },
   },

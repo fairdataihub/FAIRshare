@@ -304,6 +304,7 @@ export default {
             path.join(folderPath, file)
           );
           this.percentage = ((index + 1) / contents.length) * 80 + 20;
+          this.percentage = Math.round(this.percentage);
         }
 
         this.statusMessage = "Uploaded all files to Zenodo successfully";
@@ -316,10 +317,10 @@ export default {
       return "SUCCESS";
     },
     async createCodeMetadataFile() {
-      await axios
+      const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
           data_types: JSON.stringify(this.workflow.type),
-          data: JSON.stringify(this.dataset.data),
+          data_object: JSON.stringify(this.dataset.data),
         })
         .then((response) => {
           return response.data;
@@ -328,6 +329,8 @@ export default {
           console.error(error);
           return "ERROR";
         });
+
+      return response;
     },
     async uploadWorkflow() {
       let response = "";
@@ -357,9 +360,12 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent() && "doi" in response) {
-        this.dataset.data.Code.question.uniqueIdentifier = response.doi;
+      if (this.codePresent() && "metadata" in response) {
+        this.dataset.data.Code.questions.uniqueIdentifier =
+          response.metadata.prereserve_doi.doi;
+
         response = await this.createCodeMetadataFile();
+        console.log(response);
 
         if (response === "ERROR") {
           this.statusMessage =
@@ -386,6 +392,7 @@ export default {
           "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
+        console.log(response);
         this.statusMessage =
           "Metadata successfully added to the Zenodo deposition";
       }

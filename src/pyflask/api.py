@@ -1,9 +1,14 @@
 from __future__ import print_function
 import config
 import json
+import logging
+import logging.handlers
+import os
+
 from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
+
 from zenodo import (
     getAllZenodoDepositions,
     createNewZenodoDeposition,
@@ -11,9 +16,7 @@ from zenodo import (
     addMetadataToZenodoDeposition,
     publishZenodoDeposition,
 )
-
 from metadata import createMetadata
-
 from utilities import foldersPresent, zipFolder, deleteFile
 
 API_VERSION = "0.0.1"
@@ -22,6 +25,29 @@ API_VERSION = "0.0.1"
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # full if you want to see all the details
 CORS(app)
+
+# configure root logger
+LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".sodaforcovid19research", "logs")
+LOG_FILENAME = "api.log"
+LOG_PATH = os.path.join(LOG_FOLDER, LOG_FILENAME)
+
+if not os.path.exists(LOG_FOLDER):
+    os.makedirs(LOG_FOLDER)
+
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler(
+    LOG_PATH, maxBytes=5 * 1024 * 1024, backupCount=3
+)
+
+# create logging formatter
+logFormatter = logging.Formatter(
+    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+handler.setFormatter(logFormatter)
+
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.DEBUG)
 
 api = Api(
     app,
@@ -36,6 +62,7 @@ api = Api(
 class ApiVersion(Resource):
     def get(self):
         """Returns the semver version number of the current API"""
+        api.logger.warning("TEST")
         return API_VERSION
 
 
