@@ -343,21 +343,7 @@ export default {
       this.percentage = 10;
       this.indeterminate = false;
 
-      if (this.codePresent() && "doi" in response) {
-        this.dataset.data.Code.question.uniqueIdentifier = response.doi;
-        response = await this.createCodeMetadataFile();
-
-        if (response === "ERROR") {
-          this.statusMessage =
-            "There was an error with creating the code metadata file.";
-          return "FAIL";
-        } else {
-          this.statusMessage = "Empty deposition created on Zenodo";
-        }
-      }
-
-      this.percentage = 15;
-      this.indeterminate = false;
+      await this.sleep(300);
 
       this.workflow.destination.zenodo.status.depositionCreated = true;
 
@@ -368,6 +354,28 @@ export default {
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
+
+      await this.sleep(300);
+
+      if (this.codePresent() && "doi" in response) {
+        this.dataset.data.Code.question.uniqueIdentifier = response.doi;
+        response = await this.createCodeMetadataFile();
+
+        if (response === "ERROR") {
+          this.statusMessage =
+            "There was an error with creating the code metadata file";
+          return "FAIL";
+        } else {
+          this.statusMessage =
+            "Created the codemetadata.json file in the target folder";
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        }
+      }
+
+      this.percentage = 15;
+      this.indeterminate = false;
 
       await this.sleep(300);
 
