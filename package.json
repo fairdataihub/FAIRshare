@@ -34,6 +34,7 @@
     "axios-retry": "^3.2.0",
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
+    "doi-regex": "^0.1.10",
     "electron-data-holder": "^1.0.1",
     "electron-log": "^4.4.1",
     "electron-updater": "^4.3.9",

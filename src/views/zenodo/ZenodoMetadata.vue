@@ -25,7 +25,6 @@
 
           <el-form
             :model="zenodoMetadataForm"
-            :rules="rulesForZenodoMetadataForm"
             label-width="150px"
             label-position="right"
             size="small"
@@ -41,7 +40,6 @@
                 <div>
                   <el-form-item
                     label="Publication Date"
-                    prop="publicationDate"
                     :required="true"
                     :error="publicationDateErrorMessage"
                   >
@@ -54,7 +52,12 @@
                     </el-date-picker>
                   </el-form-item>
 
-                  <el-form-item label="Title" prop="title">
+                  <el-form-item
+                    label="Title"
+                    prop="title"
+                    :error="titleErrorMessage"
+                    :required="true"
+                  >
                     <Popper
                       :hover="true"
                       offsetDistance="0"
@@ -71,7 +74,6 @@
 
                   <el-form-item
                     label="Authors"
-                    prop="authors"
                     :error="authorsErrorMessage"
                     :required="true"
                   >
@@ -103,11 +105,16 @@
                               placeholder="Affiliation"
                             ></el-input>
                             <div class="mx-2"></div>
-                            <el-input
-                              v-model="element.orcid"
-                              type="text"
-                              placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                            ></el-input>
+                            <div class="flex flex-col w-full">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                              ></el-input>
+                              <span class="text-xs text-gray-400 mt-1 ml-2">
+                                Optional
+                              </span>
+                            </div>
                             <div class="mx-2"></div>
                           </div>
                           <div class="flex flex-row justify-evenly w-1/12">
@@ -115,7 +122,8 @@
                               class="
                                 flex
                                 justify-center
-                                items-center
+                                items-start
+                                py-2
                                 handle
                                 text-gray-400
                                 hover:text-gray-700
@@ -127,7 +135,8 @@
                               class="
                                 flex
                                 justify-center
-                                items-center
+                                items-start
+                                py-2
                                 text-gray-600
                                 hover:text-gray-800
                                 cursor-pointer
@@ -166,7 +175,11 @@
                     </div>
                   </el-form-item>
 
-                  <el-form-item label="Description" prop="description">
+                  <el-form-item
+                    label="Description"
+                    :error="descriptionErrorMessage"
+                    :required="true"
+                  >
                     <Popper
                       :hover="true"
                       offsetDistance="0"
@@ -433,18 +446,20 @@
               <el-collapse-item
                 title="Related/alternate identifiers"
                 name="relatedIdentifiers"
+                :required="false"
+                :error="relatedIdentifiersErrorMessage"
               >
                 <p class="text-xs mb-4">
                   Specify identifiers of related publications and datasets.
+                  Supported identifiers include: DOI and URLs.
                   <br />
-                  Supported identifiers include: DOI, Handle, ARK, PURL, ISSN,
-                  ISBN, PubMed ID, PubMed Central ID, ADS Bibliographic Code,
-                  arXiv, Life Science Identifiers (LSID), EAN-13, ISTC, URNs and
-                  URLs.
-                  <br />
+                  {{ relatedIdentifiersErrorMessage }}
                 </p>
                 <div>
-                  <el-form-item label="Related identifiers">
+                  <el-form-item
+                    label="Related identifiers"
+                    :error="relatedIdentifiersErrorMessage"
+                  >
                     <draggable
                       tag="div"
                       :list="zenodoMetadataForm.relatedIdentifiers"
@@ -566,7 +581,11 @@
 
               <el-collapse-item title="Contributors" name="contributors">
                 <div>
-                  <el-form-item label="Contributors">
+                  <el-form-item
+                    label="Contributors"
+                    :required="false"
+                    :error="contributorsErrorMessage"
+                  >
                     <draggable
                       tag="div"
                       :list="zenodoMetadataForm.contributors"
@@ -598,11 +617,16 @@
                               ></el-input>
                             </div>
                             <div class="mx-2 w-3/12">
-                              <el-input
-                                v-model="element.orcid"
-                                type="text"
-                                placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                              ></el-input>
+                              <div class="flex flex-col w-full">
+                                <el-input
+                                  v-model="element.orcid"
+                                  type="text"
+                                  placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                                ></el-input>
+                                <span class="text-xs text-gray-400 mt-1 ml-2">
+                                  Optional
+                                </span>
+                              </div>
                             </div>
                             <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
                               <el-select
@@ -625,7 +649,8 @@
                               class="
                                 flex
                                 justify-center
-                                items-center
+                                items-start
+                                py-2
                                 handle
                                 text-gray-400
                                 hover:text-gray-700
@@ -637,7 +662,8 @@
                               class="
                                 flex
                                 justify-center
-                                items-center
+                                items-start
+                                py-2
                                 text-gray-600
                                 hover:text-gray-800
                                 cursor-pointer
@@ -1019,7 +1045,11 @@
                   <br />
                 </p>
                 <div>
-                  <el-form-item label="Subjects">
+                  <el-form-item
+                    label="Subjects"
+                    :error="subjectsErrorMessage"
+                    :required="false"
+                  >
                     <draggable
                       tag="div"
                       :list="zenodoMetadataForm.subjects"
@@ -1144,6 +1174,7 @@ import {
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
+import doiRegex from "doi-regex";
 
 import { useDatasetsStore } from "../../store/datasets";
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
@@ -1179,45 +1210,28 @@ export default {
       contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
       authorsErrorMessage: "",
+      contributorsErrorMessage: "",
+      subjectsErrorMessage: "",
+      titleErrorMessage: "",
+      descriptionErrorMessage: "",
       publicationDateErrorMessage: "",
       versionErrorMessage: "",
+      relatedIdentifiersErrorMessage: "",
       rulesForZenodoMetadataForm: {
-        // publicationDate: [
-        //   {
-        //     required: true,
-        //     message:
-        //       "Required. In case your upload was already published elsewhere, please use the date of first publication.",
-        //     trigger: "blur",
-        //   },
-        // ],
-        // authors: [
-        //   {
-        //     required: true,
-        //     trigger: "blur",
-        //     // validator: validateAuthors,
-        //   },
-        // ],
         title: [
           {
             required: true,
             message: "Required.",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
         description: [
           {
             required: true,
             message: "Required.",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
-        // accessRight: [
-        //   {
-        //     required: true,
-        //     message: "Required.",
-        //     trigger: "change",
-        //   },
-        // ],
         license: [
           {
             required: true,
@@ -1410,20 +1424,23 @@ export default {
   watch: {
     "zenodoMetadataForm.authors": {
       handler(val) {
+        console.log("authors length", val.length);
         if (val.length === 0) {
           this.authorsErrorMessage = "Please provide at least one author.";
           this.$refs.zmForm.validate();
           return;
         } else {
-          this.authorsErrorMessage = "";
+          this.authorsErrorMessage = ""; //clear error message
         }
+
         if (val.length > 0) {
-          val.forEach((author) => {
+          for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
+              console.log("author error");
               this.authorsErrorMessage =
                 "Name and Affiliation for each author is mandatory";
               this.$refs.zmForm.validate();
-              return;
+              break;
             } else {
               this.authorsErrorMessage = "";
             }
@@ -1451,10 +1468,54 @@ export default {
                 console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
-                return;
+                break;
               }
             }
-          });
+          }
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.contributors": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let contributor of val) {
+            if (contributor.name === "" || contributor.affiliation === "") {
+              console.log("contributor error");
+              this.contributorsErrorMessage =
+                "Name and Affiliation for each contributor is mandatory";
+              this.$refs.zmForm.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+            }
+
+            // validate orcid
+            if (contributor.orcid !== "") {
+              const orcid = contributor.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.contributorsErrorMessage = "";
+              } else {
+                console.log("invalid orcid");
+                this.contributorsErrorMessage = "ORCID is not valid";
+                this.$refs.zmForm.validate();
+                break;
+              }
+            }
+          }
         }
       },
       deep: true,
@@ -1472,6 +1533,32 @@ export default {
       },
       deep: true,
     },
+    "zenodoMetadataForm.title": {
+      handler(val) {
+        if (val === "") {
+          this.titleErrorMessage =
+            "Please provide a valid and descriptive title.";
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.titleErrorMessage = "";
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.description": {
+      handler(val) {
+        if (val === "") {
+          this.descriptionErrorMessage =
+            "Please provide a valid and identifiable description.";
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.descriptionErrorMessage = "";
+        }
+      },
+      deep: true,
+    },
     "zenodoMetadataForm.version": {
       handler(val) {
         if (val != "" && semver.valid(val) === null) {
@@ -1480,6 +1567,85 @@ export default {
           return;
         } else {
           this.versionErrorMessage = "";
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.relatedIdentifiers": {
+      handler(val) {
+        // console.log(val);
+        if (val.length === 0) {
+          this.relatedIdentifiersErrorMessage = "";
+        } else {
+          for (let relatedIdentifier of val) {
+            console.log(relatedIdentifier.identifier);
+            if (relatedIdentifier.identifier === "") {
+              this.relatedIdentifiersErrorMessage =
+                "Please provide a related identifier.";
+              this.$refs.zmForm.validate();
+              break;
+            } else if (relatedIdentifier.identifier != "") {
+              let validIdentifier = false;
+
+              if (doiRegex().test(relatedIdentifier.identifier)) {
+                validIdentifier = true;
+              }
+
+              if (!validIdentifier) {
+                try {
+                  new URL(relatedIdentifier.identifier);
+                  validIdentifier = true;
+                } catch (_) {
+                  validIdentifier = false;
+                }
+              }
+
+              if (!validIdentifier) {
+                this.relatedIdentifiersErrorMessage =
+                  "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
+                this.$refs.zmForm.validate();
+                break;
+              } else {
+                this.relatedIdentifiersErrorMessage = "";
+              }
+            } else {
+              this.relatedIdentifiersErrorMessage = "";
+            }
+          }
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.subjects": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let subject of val) {
+            if (subject.term === "") {
+              console.log("subject error");
+              this.subjectsErrorMessage =
+                "Please provide a valid and identifiable subject.";
+              this.$refs.zmForm.validate();
+              break;
+            } else {
+              let validIdentifier = false;
+
+              try {
+                new URL(subject.identifier);
+                validIdentifier = true;
+              } catch (_) {
+                validIdentifier = false;
+              }
+
+              if (!validIdentifier) {
+                this.subjectsErrorMessage =
+                  "Please provide a valid identifier. Your identifier has to be in the form of a URL";
+                this.$refs.zmForm.validate();
+                break;
+              } else {
+                this.subjectsErrorMessage = "";
+              }
+            }
+          }
         }
       },
       deep: true,
@@ -1498,7 +1664,8 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     if (this.workflow.expandOptions.length === 0) {
-      this.activeNames = ["basicInformation", "license"];
+      // this.activeNames = ["basicInformation", "license"];
+      this.activeNames = ["relatedIdentifiers"];
     } else {
       this.activeNames = this.workflow.expandOptions;
       this.workflow.expandOptions = [];

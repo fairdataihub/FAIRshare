@@ -265,7 +265,7 @@
   "defaultForm": {
     "publicationDate": "",
     "title": "",
-    "authors": [],
+    "authors": [{}],
     "description": "",
     "version": "",
     "language": "",
