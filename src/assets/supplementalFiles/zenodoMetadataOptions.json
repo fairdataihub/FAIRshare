@@ -314,50 +314,5 @@
       "supervisors": []
     },
     "subjects": []
-  },
-  "defaultRules": {
-    "publicationDate": [
-      {
-        "required": true,
-        "message": "Required. In case your upload was already published elsewhere, please use the date of first publication.",
-        "trigger": "blur"
-      }
-    ],
-    "authors": [
-      {
-        "required": true,
-        "message": "Required. Please provide at least one author.",
-        "trigger": "blur"
-      }
-    ],
-    "title": [
-      {
-        "required": true,
-        "message": "Required.",
-        "trigger": "change"
-      }
-    ],
-
-    "description": [
-      {
-        "required": true,
-        "message": "Required.",
-        "trigger": "change"
-      }
-    ],
-    "accessRight": [
-      {
-        "required": true,
-        "message": "Required.",
-        "trigger": "change"
-      }
-    ],
-    "license": [
-      {
-        "required": true,
-        "message": "Required. Selected license applies to all of your files displayed on the top of the form.",
-        "trigger": "change"
-      }
-    ]
   }
 }

@@ -29,6 +29,7 @@
             label-width="150px"
             label-position="right"
             size="small"
+            ref="zmForm"
             @submit.prevent
           >
             <el-collapse v-model="activeNames">
@@ -38,7 +39,12 @@
                 name="basicInformation"
               >
                 <div>
-                  <el-form-item label="Publication Date" prop="publicationDate">
+                  <el-form-item
+                    label="Publication Date"
+                    prop="publicationDate"
+                    :required="true"
+                    :error="publicationDateErrorMessage"
+                  >
                     <el-date-picker
                       v-model="zenodoMetadataForm.publicationDate"
                       type="date"
@@ -63,7 +69,12 @@
                     </Popper>
                   </el-form-item>
 
-                  <el-form-item label="Authors" prop="authors">
+                  <el-form-item
+                    label="Authors"
+                    prop="authors"
+                    :error="authorsErrorMessage"
+                    :required="true"
+                  >
                     <draggable
                       tag="div"
                       :list="zenodoMetadataForm.authors"
@@ -171,7 +182,7 @@
                     </Popper>
                   </el-form-item>
 
-                  <el-form-item label="Version">
+                  <el-form-item label="Version" :error="versionErrorMessage">
                     <el-popover
                       ref="popover"
                       placement="bottom"
@@ -1107,6 +1118,7 @@
               type="primary"
               class="flex flex-row items-center"
               @click="addZenodoMetadata"
+              :disabled="!zenodoMetadataForm.valid"
             >
               Continue
               <el-icon>
@@ -1131,6 +1143,7 @@ import {
 } from "@element-plus/icons";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
+import semver from "semver";
 
 import { useDatasetsStore } from "../../store/datasets";
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
@@ -1165,7 +1178,55 @@ export default {
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
-      rulesForZenodoMetadataForm: zenodoMetadataOptions.defaultRules,
+      authorsErrorMessage: "",
+      publicationDateErrorMessage: "",
+      versionErrorMessage: "",
+      rulesForZenodoMetadataForm: {
+        // publicationDate: [
+        //   {
+        //     required: true,
+        //     message:
+        //       "Required. In case your upload was already published elsewhere, please use the date of first publication.",
+        //     trigger: "blur",
+        //   },
+        // ],
+        // authors: [
+        //   {
+        //     required: true,
+        //     trigger: "blur",
+        //     // validator: validateAuthors,
+        //   },
+        // ],
+        title: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "change",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "change",
+          },
+        ],
+        // accessRight: [
+        //   {
+        //     required: true,
+        //     message: "Required.",
+        //     trigger: "change",
+        //   },
+        // ],
+        license: [
+          {
+            required: true,
+            message:
+              "Required. Selected license applies to all of your files displayed on the top of the form.",
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -1344,6 +1405,84 @@ export default {
           this.zenodoMetadataForm.contributors = newContributors;
         }
       }
+    },
+  },
+  watch: {
+    "zenodoMetadataForm.authors": {
+      handler(val) {
+        if (val.length === 0) {
+          this.authorsErrorMessage = "Please provide at least one author.";
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.authorsErrorMessage = "";
+        }
+        if (val.length > 0) {
+          val.forEach((author) => {
+            if (author.name === "" || author.affiliation === "") {
+              this.authorsErrorMessage =
+                "Name and Affiliation for each author is mandatory";
+              this.$refs.zmForm.validate();
+              return;
+            } else {
+              this.authorsErrorMessage = "";
+            }
+
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                console.log(digit);
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.authorsErrorMessage = "";
+              } else {
+                console.log("invalid orcid");
+                this.authorsErrorMessage = "ORCID is not valid";
+                this.$refs.zmForm.validate();
+                return;
+              }
+            }
+          });
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.publicationDate": {
+      handler(val) {
+        if (val === "") {
+          this.publicationDateErrorMessage =
+            "Please provide the date of publication.";
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.publicationDateErrorMessage = "";
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.version": {
+      handler(val) {
+        if (val != "" && semver.valid(val) === null) {
+          this.versionErrorMessage = "Please provide a valid version number.";
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.versionErrorMessage = "";
+        }
+      },
+      deep: true,
     },
   },
   async mounted() {
