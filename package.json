@@ -38,7 +38,7 @@
     "electron-data-holder": "^1.0.1",
     "electron-log": "^4.4.1",
     "electron-updater": "^4.3.9",
-    "element-plus": "^1.1.0-beta.20",
+    "element-plus": "^1.2.0-beta.3",
     "fs-extra": "^10.0.0",
     "pinia": "^2.0.0-rc.10",
     "ps-tree": "^1.2.0",
