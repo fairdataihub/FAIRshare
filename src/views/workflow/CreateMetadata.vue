@@ -25,6 +25,7 @@
                 label-width="160px"
                 label-position="right"
                 size="small"
+                ref="gmForm"
                 @submit.prevent
               >
                 <el-form-item label="Dataset name">
@@ -139,7 +140,7 @@
                   ></el-input>
                 </el-form-item>
 
-                <el-form-item label="Authors">
+                <el-form-item label="Authors" :error="authorsErrorMessage">
                   <draggable
                     tag="div"
                     :list="generalForm.authors"
@@ -243,7 +244,10 @@
                   </div>
                 </el-form-item>
 
-                <el-form-item label="Contributors">
+                <el-form-item
+                  label="Contributors"
+                  :error="contributorsErrorMessage"
+                >
                   <draggable
                     tag="div"
                     :list="generalForm.contributors"
@@ -380,6 +384,7 @@
                 label-position="right"
                 size="small"
                 @submit.prevent
+                ref="cmForm"
               >
                 <el-form-item label="Creation date">
                   <el-date-picker
@@ -420,21 +425,47 @@
 
                 <el-form-item label="Application category">
                   <el-input v-model="codeForm.applicationCategory"></el-input>
+                  <el-select
+                    v-model="codeForm.applicationCategory"
+                    filterable
+                    allow-create
+                    placeholder="Select an application category"
+                  >
+                    <el-option
+                      v-for="item in applicationCategoryOptions"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    >
+                    </el-option>
+                  </el-select>
                 </el-form-item>
 
-                <el-form-item label="Code repository">
+                <el-form-item
+                  label="Code repository"
+                  :error="codeRepositoryErrorMessage"
+                >
                   <el-input v-model="codeForm.codeRepository"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Continuous integration">
+                <el-form-item
+                  label="Continuous integration"
+                  :error="continuousIntegrationErrorMessage"
+                >
                   <el-input v-model="codeForm.continuousIntegration"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Issue Tracker">
+                <el-form-item
+                  label="Issue Tracker"
+                  :error="issueTrackerErrorMessage"
+                >
                   <el-input v-model="codeForm.issueTracker"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Related links">
+                <el-form-item
+                  label="Related links"
+                  :error="relatedLinksErrorMessage"
+                >
                   <draggable
                     tag="div"
                     :list="codeForm.relatedLinks"
@@ -522,6 +553,7 @@
                     allow-create
                     default-first-option
                     placeholder="C#, Java, Python 3"
+                    class="w-full"
                   >
                     <el-option
                       v-for="item in programmingLanguageOptions"
@@ -541,6 +573,7 @@
                     allow-create
                     default-first-option
                     placeholder=".Net, Java"
+                    class="w-full"
                   >
                     <el-option
                       v-for="item in runtimePlatformOptions"
@@ -560,6 +593,7 @@
                     allow-create
                     default-first-option
                     placeholder="Linux, Windows"
+                    class="w-full"
                   >
                     <el-option
                       v-for="item in operatingSystemOptions"
@@ -653,7 +687,10 @@
                   </div>
                 </el-form-item>
 
-                <el-form-item label="Current version">
+                <el-form-item
+                  label="Current version"
+                  :error="versionErrorMessage"
+                >
                   <el-input
                     v-model="codeForm.currentVersion"
                     placeholder="1.5.6"
@@ -670,7 +707,10 @@
                   </el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="Current version download URL">
+                <el-form-item
+                  label="Current version download URL"
+                  :error="currentVersionDownloadLinkErrorMessage"
+                >
                   <el-input
                     v-model="codeForm.currentVersionDownloadLink"
                     type="url"
@@ -705,7 +745,7 @@
                   </p>
                 </el-form-item>
 
-                <el-form-item label="Is part of">
+                <el-form-item label="Is part of" :error="isPartOfErrorMessage">
                   <el-input
                     v-model="codeForm.isPartOf"
                     type="url"
@@ -726,6 +766,7 @@
               class="flex flex-row items-center"
               @click="navigateToSelectDestination"
               id="existElement"
+              :disabled="checkInvalidStatus"
             >
               Continue
               <el-icon>
@@ -745,11 +786,13 @@ import { ArrowRightBold } from "@element-plus/icons";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElLoading } from "element-plus";
+import semver from "semver";
 
 import { useDatasetsStore } from "../../store/datasets";
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
+import codeMetadataJSON from "../../assets/supplementalFiles/codeMetadata.json";
 
 export default {
   name: "CreateMetadata",
@@ -765,40 +808,10 @@ export default {
       interval: null,
       licenseOptions: licensesJSON.licenses,
       contributorTypes: contributorTypesJSON.contributorTypes,
-      programmingLanguageOptions: [
-        {
-          value: "C#",
-          label: "C#",
-        },
-        {
-          value: "Java",
-          label: "Java",
-        },
-        {
-          value: "Python 3",
-          label: "Python 3",
-        },
-      ],
-      runtimePlatformOptions: [
-        {
-          value: ".Net",
-          label: ".Net",
-        },
-        {
-          value: "Java",
-          label: "Java",
-        },
-      ],
-      operatingSystemOptions: [
-        {
-          value: "Linux",
-          label: "Linux",
-        },
-        {
-          value: "Windows",
-          label: "Windows",
-        },
-      ],
+      programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
+      runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
+      operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
+      applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
       generalForm: {
         name: "",
@@ -833,7 +846,334 @@ export default {
         developmentStatus: "",
         isPartOf: "",
       },
+      authorsErrorMessage: "",
+      contributorsErrorMessage: "",
+      isPartOfErrorMessage: "",
+      versionErrorMessage: "",
+      currentVersionDownloadLinkErrorMessage: "",
+      relatedLinksErrorMessage: "",
+      issueTrackerErrorMessage: "",
+      continuousIntegrationErrorMessage: "",
+      codeRepositoryErrorMessage: "",
+      invalidStatus: {},
     };
+  },
+  watch: {
+    "generalForm.authors": {
+      handler(val) {
+        console.log("authors length", val.length);
+        if (val.length === 0) {
+          this.authorsErrorMessage = "Please provide at least one author.";
+          this.invalidStatus.authors = true;
+          this.$refs.gmForm.validate();
+          return;
+        } else {
+          this.authorsErrorMessage = ""; //clear error message
+          this.invalidStatus.authors = false;
+        }
+
+        if (val.length > 0) {
+          for (let author of val) {
+            if (author.name === "" || author.affiliation === "") {
+              console.log("author error");
+              this.authorsErrorMessage =
+                "Name and Affiliation for each author is mandatory";
+              this.invalidStatus.authors = true;
+              this.$refs.gmForm.validate();
+              break;
+            } else {
+              this.authorsErrorMessage = "";
+              this.invalidStatus.authors = false;
+            }
+
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.authorsErrorMessage = "";
+                this.invalidStatus.authors = false;
+              } else {
+                console.log("invalid orcid");
+                this.authorsErrorMessage = "ORCID is not valid";
+                this.$refs.gmForm.validate();
+                this.invalidStatus.authors = true;
+                break;
+              }
+            }
+          }
+        }
+      },
+      deep: true,
+    },
+    "generalForm.contributors": {
+      handler(val) {
+        if (val.length === 0) {
+          this.contributorsErrorMessage = "Please provide at least one author.";
+          this.invalidStatus.contributors = true;
+          this.$refs.gmForm.validate();
+          return;
+        } else {
+          this.contributorsErrorMessage = ""; //clear error message
+          this.invalidStatus.contributors = false;
+        }
+
+        if (val.length > 0) {
+          for (let author of val) {
+            if (author.name === "" || author.affiliation === "") {
+              console.log("author error");
+              this.contributorsErrorMessage =
+                "Name and Affiliation for each author is mandatory";
+              this.invalidStatus.contributors = true;
+              this.$refs.gmForm.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
+            }
+
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              } else {
+                console.log("invalid orcid");
+                this.contributorsErrorMessage = "ORCID is not valid";
+                this.$refs.gmForm.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              }
+            }
+          }
+        }
+      },
+      deep: true,
+    },
+    "codeForm.currentVersion": {
+      handler(val) {
+        if (val != "" && semver.valid(val) === null) {
+          this.versionErrorMessage = "Please provide a valid version number.";
+          this.$refs.cmForm.validate();
+          this.invalidStatus.version = true;
+          return;
+        } else {
+          this.versionErrorMessage = "";
+          this.invalidStatus.version = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.isPartOf": {
+      handler(val) {
+        if (val != "") {
+          let validIdentifier = false;
+
+          try {
+            new URL(val);
+            validIdentifier = true;
+          } catch (_) {
+            validIdentifier = false;
+          }
+
+          if (!validIdentifier) {
+            console.log(val);
+            this.isPartOfErrorMessage = "Please provide a valid URL";
+            this.$refs.cmForm.validate();
+            this.invalidStatus.isPartOf = true;
+            return;
+          } else {
+            this.isPartOfErrorMessage = "";
+            this.invalidStatus.isPartOf = false;
+          }
+        } else {
+          this.isPartOfErrorMessage = "";
+          this.invalidStatus.isPartOf = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.codeRepository": {
+      handler(val) {
+        if (val != "") {
+          let validIdentifier = false;
+
+          try {
+            new URL(val);
+            validIdentifier = true;
+          } catch (_) {
+            validIdentifier = false;
+          }
+
+          if (!validIdentifier) {
+            console.log(val);
+            this.codeRepositoryErrorMessage = "Please provide a valid URL";
+            this.$refs.cmForm.validate();
+            this.invalidStatus.codeRepository = true;
+            return;
+          } else {
+            this.codeRepositoryErrorMessage = "";
+            this.invalidStatus.codeRepository = false;
+          }
+        } else {
+          this.codeRepositoryErrorMessage = "";
+          this.invalidStatus.codeRepository = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.continuousIntegration": {
+      handler(val) {
+        if (val != "") {
+          let validIdentifier = false;
+
+          try {
+            new URL(val);
+            validIdentifier = true;
+          } catch (_) {
+            validIdentifier = false;
+          }
+
+          if (!validIdentifier) {
+            console.log(val);
+            this.continuousIntegrationErrorMessage =
+              "Please provide a valid URL";
+            this.$refs.cmForm.validate();
+            this.invalidStatus.continuousIntegration = true;
+            return;
+          } else {
+            this.continuousIntegrationErrorMessage = "";
+            this.invalidStatus.continuousIntegration = false;
+          }
+        } else {
+          this.continuousIntegrationErrorMessage = "";
+          this.invalidStatus.continuousIntegration = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.issueTracker": {
+      handler(val) {
+        if (val != "") {
+          let validIdentifier = false;
+
+          try {
+            new URL(val);
+            validIdentifier = true;
+          } catch (_) {
+            validIdentifier = false;
+          }
+
+          if (!validIdentifier) {
+            console.log(val);
+            this.issueTrackerErrorMessage = "Please provide a valid URL";
+            this.$refs.cmForm.validate();
+            this.invalidStatus.issueTracker = true;
+            return;
+          } else {
+            this.issueTrackerErrorMessage = "";
+            this.invalidStatus.issueTracker = false;
+          }
+        } else {
+          this.issueTrackerErrorMessage = "";
+          this.invalidStatus.issueTracker = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.currentVersionDownloadLink": {
+      handler(val) {
+        if (val != "") {
+          let validIdentifier = false;
+
+          try {
+            new URL(val);
+            validIdentifier = true;
+          } catch (_) {
+            validIdentifier = false;
+          }
+
+          if (!validIdentifier) {
+            console.log(val);
+            this.currentVersionDownloadLinkErrorMessage =
+              "Please provide a valid URL";
+            this.$refs.cmForm.validate();
+            this.invalidStatus.currentVersionDownloadLink = true;
+            return;
+          } else {
+            this.currentVersionDownloadLinkErrorMessage = "";
+            this.invalidStatus.currentVersionDownloadLink = false;
+          }
+        } else {
+          this.currentVersionDownloadLinkErrorMessage = "";
+          this.invalidStatus.currentVersionDownloadLink = false;
+        }
+      },
+      deep: true,
+    },
+    "codeForm.relatedLinks": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let relatedLink of val) {
+            if (relatedLink.link === "") {
+              this.relatedLinksErrorMessage = "Please provide a valid URL";
+              this.$refs.cmForm.validate();
+              this.invalidStatus.relatedLinks = true;
+              break;
+            } else {
+              let validIdentifier = false;
+
+              try {
+                new URL(relatedLink.link);
+                validIdentifier = true;
+              } catch (_) {
+                validIdentifier = false;
+              }
+
+              if (!validIdentifier) {
+                this.relatedLinksErrorMessage = "Please provide a valid URL";
+                this.$refs.cmForm.validate();
+                this.invalidStatus.relatedLinks = true;
+                break;
+              } else {
+                this.relatedLinksErrorMessage = "";
+                this.invalidStatus.relatedLinks = false;
+              }
+            }
+          }
+        } else {
+          this.relatedLinksErrorMessage = "";
+          this.invalidStatus.relatedLinks = false;
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
     //check if code workflow is present
@@ -863,6 +1203,14 @@ export default {
       } else {
         return "";
       }
+    },
+    checkInvalidStatus() {
+      for (const key in this.invalidStatus) {
+        if (this.invalidStatus[key]) {
+          return true;
+        }
+      }
+      return false;
     },
   },
   methods: {

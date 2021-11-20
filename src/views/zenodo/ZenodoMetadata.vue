@@ -1148,7 +1148,7 @@
               type="primary"
               class="flex flex-row items-center"
               @click="addZenodoMetadata"
-              :disabled="!zenodoMetadataForm.valid"
+              :disabled="checkInvalidStatus"
             >
               Continue
               <el-icon>
@@ -1217,6 +1217,7 @@ export default {
       publicationDateErrorMessage: "",
       versionErrorMessage: "",
       relatedIdentifiersErrorMessage: "",
+      invalidStatus: {},
       rulesForZenodoMetadataForm: {
         title: [
           {
@@ -1249,6 +1250,14 @@ export default {
         animation: 200,
         disabled: false,
       };
+    },
+    checkInvalidStatus() {
+      for (const key in this.invalidStatus) {
+        if (this.invalidStatus[key]) {
+          return true;
+        }
+      }
+      return false;
     },
   },
   methods: {
@@ -1427,10 +1436,12 @@ export default {
         console.log("authors length", val.length);
         if (val.length === 0) {
           this.authorsErrorMessage = "Please provide at least one author.";
+          this.invalidStatus.authors = true;
           this.$refs.zmForm.validate();
           return;
         } else {
           this.authorsErrorMessage = ""; //clear error message
+          this.invalidStatus.authors = false;
         }
 
         if (val.length > 0) {
@@ -1439,10 +1450,12 @@ export default {
               console.log("author error");
               this.authorsErrorMessage =
                 "Name and Affiliation for each author is mandatory";
+              this.invalidStatus.authors = true;
               this.$refs.zmForm.validate();
               break;
             } else {
               this.authorsErrorMessage = "";
+              this.invalidStatus.authors = false;
             }
 
             // validate orcid
@@ -1464,10 +1477,12 @@ export default {
 
               if (checkDigit === orcid.substr(-1)) {
                 this.authorsErrorMessage = "";
+                this.invalidStatus.authors = false;
               } else {
                 console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
+                this.invalidStatus.authors = true;
                 break;
               }
             }
@@ -1485,9 +1500,11 @@ export default {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.$refs.zmForm.validate();
+              this.invalidStatus.contributors = true;
               break;
             } else {
               this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
             }
 
             // validate orcid
@@ -1508,10 +1525,12 @@ export default {
 
               if (checkDigit === orcid.substr(-1)) {
                 this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
               } else {
                 console.log("invalid orcid");
                 this.contributorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
+                this.invalidStatus.contributors = true;
                 break;
               }
             }
@@ -1526,9 +1545,11 @@ export default {
           this.publicationDateErrorMessage =
             "Please provide the date of publication.";
           this.$refs.zmForm.validate();
+          this.invalidStatus.publicationDate = true;
           return;
         } else {
           this.publicationDateErrorMessage = "";
+          this.invalidStatus.publicationDate = false;
         }
       },
       deep: true,
@@ -1539,9 +1560,11 @@ export default {
           this.titleErrorMessage =
             "Please provide a valid and descriptive title.";
           this.$refs.zmForm.validate();
+          this.invalidStatus.title = true;
           return;
         } else {
           this.titleErrorMessage = "";
+          this.invalidStatus.title = false;
         }
       },
       deep: true,
@@ -1552,9 +1575,11 @@ export default {
           this.descriptionErrorMessage =
             "Please provide a valid and identifiable description.";
           this.$refs.zmForm.validate();
+          this.invalidStatus.description = true;
           return;
         } else {
           this.descriptionErrorMessage = "";
+          this.invalidStatus.description = false;
         }
       },
       deep: true,
@@ -1564,9 +1589,11 @@ export default {
         if (val != "" && semver.valid(val) === null) {
           this.versionErrorMessage = "Please provide a valid version number.";
           this.$refs.zmForm.validate();
+          this.invalidStatus.version = true;
           return;
         } else {
           this.versionErrorMessage = "";
+          this.invalidStatus.version = false;
         }
       },
       deep: true,
@@ -1576,6 +1603,7 @@ export default {
         // console.log(val);
         if (val.length === 0) {
           this.relatedIdentifiersErrorMessage = "";
+          this.invalidStatus.relatedIdentifiers = false;
         } else {
           for (let relatedIdentifier of val) {
             console.log(relatedIdentifier.identifier);
@@ -1583,6 +1611,7 @@ export default {
               this.relatedIdentifiersErrorMessage =
                 "Please provide a related identifier.";
               this.$refs.zmForm.validate();
+              this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
               let validIdentifier = false;
@@ -1604,12 +1633,15 @@ export default {
                 this.relatedIdentifiersErrorMessage =
                   "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
                 this.$refs.zmForm.validate();
+                this.invalidStatus.relatedIdentifiers = true;
                 break;
               } else {
                 this.relatedIdentifiersErrorMessage = "";
+                this.invalidStatus.relatedIdentifiers = false;
               }
             } else {
               this.relatedIdentifiersErrorMessage = "";
+              this.invalidStatus.relatedIdentifiers = false;
             }
           }
         }
@@ -1625,6 +1657,7 @@ export default {
               this.subjectsErrorMessage =
                 "Please provide a valid and identifiable subject.";
               this.$refs.zmForm.validate();
+              this.invalidStatus.subjects = true;
               break;
             } else {
               let validIdentifier = false;
@@ -1640,12 +1673,17 @@ export default {
                 this.subjectsErrorMessage =
                   "Please provide a valid identifier. Your identifier has to be in the form of a URL";
                 this.$refs.zmForm.validate();
+                this.invalidStatus.subjects = true;
                 break;
               } else {
                 this.subjectsErrorMessage = "";
+                this.invalidStatus.subjects = false;
               }
             }
           }
+        } else {
+          this.subjectsErrorMessage = "";
+          this.invalidStatus.subjects = false;
         }
       },
       deep: true,

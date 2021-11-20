@@ -104,13 +104,23 @@ def createCodeMetadata(code_data, general_data, folder_path):
             new_author = {}
 
             new_author["@type"] = "Person"
-            new_author["givenName"] = item["givenName"]
-            new_author["familyName"] = item["familyName"]
-            new_author["email"] = item["email"]
 
-            new_author["affiliation"] = {}
-            new_author["affiliation"]["@type"] = "Organization"
-            new_author["affiliation"]["name"] = item["affiliation"]
+            if "orcid" in item:
+                new_author["@id"] = "https://orcid.org/" + item["orcid"]
+
+            if "givenName" in item:
+                new_author["givenName"] = item["givenName"]
+
+            if "familyName" in item:
+                new_author["familyName"] = item["familyName"]
+
+            if "email" in item:
+                new_author["email"] = item["email"]
+
+            if "affiliation" in item:
+                new_author["affiliation"] = {}
+                new_author["affiliation"]["@type"] = "Organization"
+                new_author["affiliation"]["name"] = item["affiliation"]
 
             metadata["author"].append(new_author)
 
@@ -121,13 +131,23 @@ def createCodeMetadata(code_data, general_data, folder_path):
             new_contributor = {}
 
             new_contributor["@type"] = "Person"
-            new_contributor["givenName"] = item["givenName"]
-            new_contributor["familyName"] = item["familyName"]
-            new_contributor["email"] = item["email"]
 
-            new_contributor["affiliation"] = {}
-            new_contributor["affiliation"]["@type"] = "Organization"
-            new_contributor["affiliation"]["name"] = item["affiliation"]
+            if "orcid" in item:
+                new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+
+            if "givenName" in item:
+                new_contributor["givenName"] = item["givenName"]
+
+            if "familyName" in item:
+                new_contributor["familyName"] = item["familyName"]
+
+            if "email" in item:
+                new_contributor["email"] = item["email"]
+
+            if "affiliation" in item:
+                new_contributor["affiliation"] = {}
+                new_contributor["affiliation"]["@type"] = "Organization"
+                new_contributor["affiliation"]["name"] = item["affiliation"]
 
             metadata["contributor"].append(new_contributor)
 

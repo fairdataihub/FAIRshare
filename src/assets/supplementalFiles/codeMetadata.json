@@ -1,0 +1,440 @@
+{
+  "programmingLanguageOptions": [
+    {
+      "value": "Abap",
+      "label": "Abap"
+    },
+    {
+      "value": "Ada",
+      "label": "Ada"
+    },
+    {
+      "value": "C",
+      "label": "C"
+    },
+    {
+      "value": "C++",
+      "label": "C++"
+    },
+    {
+      "value": "C#",
+      "label": "C#"
+    },
+    {
+      "value": "Clojure",
+      "label": "Clojure"
+    },
+    {
+      "value": "Cobol",
+      "label": "Cobol"
+    },
+    {
+      "value": "Dart",
+      "label": "Dart"
+    },
+    {
+      "value": "Delphi/Pascal",
+      "label": "Delphi/Pascal"
+    },
+    {
+      "value": "Elixir",
+      "label": "Elixir"
+    },
+    {
+      "value": "Elm",
+      "label": "Elm"
+    },
+    {
+      "value": "Erlang",
+      "label": "Erlang"
+    },
+    {
+      "value": "F#",
+      "label": "F#"
+    },
+    {
+      "value": "Go",
+      "label": "Go"
+    },
+    {
+      "value": "Groovy",
+      "label": "Groovy"
+    },
+    {
+      "value": "Haskell",
+      "label": "Haskell"
+    },
+    {
+      "value": "Java",
+      "label": "Java"
+    },
+    {
+      "value": "JavaScript",
+      "label": "JavaScript"
+    },
+    {
+      "value": "Julia",
+      "label": "Julia"
+    },
+    {
+      "value": "Kotlin",
+      "label": "Kotlin"
+    },
+    {
+      "value": "Lua",
+      "label": "Lua"
+    },
+    {
+      "value": "Matlab",
+      "label": "Matlab"
+    },
+    {
+      "value": "Objective-C",
+      "label": "Objective-C"
+    },
+    {
+      "value": "Perl",
+      "label": "Perl"
+    },
+    {
+      "value": "PHP",
+      "label": "PHP"
+    },
+    {
+      "value": "Python",
+      "label": "Python"
+    },
+    {
+      "value": "R",
+      "label": "R"
+    },
+    {
+      "value": "React",
+      "label": "React"
+    },
+    {
+      "value": "Ruby",
+      "label": "Ruby"
+    },
+    {
+      "value": "Rust",
+      "label": "Rust"
+    },
+    {
+      "value": "Scala",
+      "label": "Scala"
+    },
+    {
+      "value": "Swift",
+      "label": "Swift"
+    },
+    {
+      "value": "TypeScript",
+      "label": "TypeScript"
+    },
+    {
+      "value": "VBA",
+      "label": "VBA"
+    },
+    {
+      "value": "Visual Basic",
+      "label": "Visual Basic"
+    },
+    {
+      "value": "Vue",
+      "label": "Vue"
+    }
+  ],
+  "runtimePlatformOptions": [
+    {
+      "value": "CLR",
+      "label": "CLR"
+    },
+    {
+      "value": ".Net",
+      "label": ".Net"
+    },
+    {
+      "value": "JVM",
+      "label": "JVM"
+    }
+  ],
+  "operatingSystemOptions": [
+    {
+      "value": "Windows 11",
+      "label": "Windows 11"
+    },
+    {
+      "value": "Windows 10",
+      "label": "Windows 10"
+    },
+    {
+      "value": "Windows 8.1",
+      "label": "Windows 8.1"
+    },
+    {
+      "value": "Windows 8",
+      "label": "Windows 8"
+    },
+    {
+      "value": "Windows 7",
+      "label": "Windows 7"
+    },
+    {
+      "value": "Big Sur (macOS 11)",
+      "label": "Big Sur (macOS 11)"
+    },
+    {
+      "value": "Catalina (macOS 10.15)",
+      "label": "Catalina (macOS 10.15)"
+    },
+    {
+      "value": "Mojave (macOS 10.14)",
+      "label": "Mojave (macOS 10.14)"
+    },
+    {
+      "value": "High Sierra (macOS 10.13)",
+      "label": "High Sierra (macOS 10.13)"
+    },
+    {
+      "value": "Sierra (macOS 10.12)",
+      "label": "Sierra (macOS 10.12)"
+    },
+    {
+      "value": "El Capitan (OS X 10.11)",
+      "label": "El Capitan (OS X 10.11)"
+    },
+    {
+      "value": "Yosemite (OS X 10.10)",
+      "label": "Yosemite (OS X 10.10)"
+    },
+    {
+      "value": "Arch Linux",
+      "label": "Arch Linux"
+    },
+    {
+      "value": "Ubuntu",
+      "label": "Ubuntu"
+    },
+    {
+      "value": "Debian",
+      "label": "Debian"
+    },
+    {
+      "value": "Linux Mint",
+      "label": "Linux Mint"
+    },
+    {
+      "value": "CentOS Linux",
+      "label": "CentOS Linux"
+    },
+    {
+      "value": "Fedora",
+      "label": "Fedora"
+    },
+    {
+      "value": "Red Hat Linux",
+      "label": "Red Hat Linux"
+    },
+    {
+      "value": "OpenSUSE",
+      "label": "OpenSUSE"
+    },
+    {
+      "value": "Gentoo",
+      "label": "Gentoo"
+    },
+    {
+      "value": "Manjaro",
+      "label": "Manjaro"
+    },
+    {
+      "value": "Solaris",
+      "label": "Solaris"
+    },
+    {
+      "value": "FreeBSD",
+      "label": "FreeBSD"
+    },
+    {
+      "value": "OpenBSD",
+      "label": "OpenBSD"
+    },
+    {
+      "value": "Elementary",
+      "label": "Elementary"
+    },
+    {
+      "value": "Zorin",
+      "label": "Zorin"
+    },
+    {
+      "value": "Android",
+      "label": "Android"
+    },
+    {
+      "value": "iOS",
+      "label": "iOS"
+    }
+  ],
+  "applicationCategoryOptions": [
+    "Graphical user interface development",
+    "Ethernet driver",
+    "Internet protocol IP multimedia subsystem",
+    "LAN",
+    "Manufacturing execution system MES",
+    "Sales and marketing",
+    "Desktop publishing",
+    "Mobile messaging service",
+    "Data base management system",
+    "Inventory management",
+    "Communications server",
+    "Requirements analysis and system architecture",
+    "Network operating system enhancement",
+    "Dictionary",
+    "Data compression",
+    "Content workflow",
+    "Categorization or classification",
+    "Expert system",
+    "Metadata management",
+    "Action games",
+    "Internet browser",
+    "Enterprise system management",
+    "Network connectivity terminal emulation",
+    "Desktop communications",
+    "Embedded text entry",
+    "Motor Drive",
+    "Backup or archival",
+    "Aviation test",
+    "Word processing",
+    "Data mining",
+    "Network security or virtual private network VPN management",
+    "Analytical or scientific",
+    "Modem",
+    "Pattern design",
+    "Tax preparation",
+    "Contact center",
+    "Development environment",
+    "Computer based training",
+    "Phonebook",
+    "Instant messaging",
+    "Point of sale POS",
+    "Mobile operator specific standard",
+    "Industrial control",
+    "Spreadsheet",
+    "Video drivers",
+    "Materials requirements planning logistics and supply chain",
+    "Procurement",
+    "Family",
+    "Electronic mail",
+    "Multi-media educational",
+    "Web page creation and editing",
+    "Bar coding",
+    "Memory drivers",
+    "Web platform development",
+    "WAN switching and firmware",
+    "Compact disc CD or DVD or sound card",
+    "Document management",
+    "Clustering",
+    "License management",
+    "Object or component oriented development",
+    "Data base reporting",
+    "Graphics card driver",
+    "Gateway",
+    "Multiplexer",
+    "Authentication server",
+    "Interactive voice response",
+    "Printer driver",
+    "Mobile internet services",
+    "Accounting",
+    "Video conferencing",
+    "Filesystem",
+    "Network security and virtual private network VPN equipment",
+    "Platform interconnectivity",
+    "Voice recognition",
+    "Compliance",
+    "Calendar and scheduling",
+    "Multimedia stacks",
+    "Graphics or photo imaging",
+    "Financial analysis",
+    "Adventure games",
+    "Object oriented data base management",
+    "Spell checkers",
+    "Power Monitor",
+    "Codec stacks",
+    "Charting",
+    "Facilities management",
+    "Fonts",
+    "Helpdesk or call center",
+    "Data conversion",
+    "Program testing",
+    "Access",
+    "Music or sound editing",
+    "Encyclopedia",
+    "Network monitoring",
+    "Library",
+    "Storage networking",
+    "Ambient music or advertising messaging",
+    "Label making",
+    "Fax",
+    "Enterprise application integration",
+    "Operating system",
+    "Device drivers or system",
+    "Computer aided manufacturing CAM",
+    "Mobile operator specific application",
+    "Optical character reader OCR or scanning",
+    "Customer relationship management CRM",
+    "Project management",
+    "Data base user interface and query",
+    "Internet directory services",
+    "Bridge",
+    "Mobile location based services",
+    "Screen saver",
+    "Enterprise resource planning ERP",
+    "Information retrieval or search",
+    "Aviation ground support",
+    "Transaction security and virus protection",
+    "Wireless",
+    "Administration",
+    "Compiler and decompiler",
+    "Application server",
+    "Storage media loading",
+    "File versioning",
+    "Office suite",
+    "Video creation and editing",
+    "Sports games",
+    "Route navigation",
+    "Computer firmware",
+    "Programmable Logic Control",
+    "Presentation",
+    "Computer aided design CAD",
+    "Handwriting recognition components",
+    "Configuration management",
+    "Foreign language",
+    "Network conferencing",
+    "Medical",
+    "Network operation system",
+    "Flight control",
+    "Time accounting",
+    "Text to speech conversion",
+    "Human resources",
+    "Business function specific software",
+    "Finance accounting and enterprise resource planning ERP software",
+    "Computer game or entertainment software",
+    "Content authoring and editing software",
+    "Content management software",
+    "Data management and query software",
+    "Development software",
+    "Educational or reference software",
+    "Industry specific software",
+    "Network applications software",
+    "Network management software",
+    "Networking software",
+    "Operating environment software",
+    "Security and protection software",
+    "Utility and device driver software",
+    "Information exchange software",
+    "Electrical Equipment software",
+    "System management software"
+  ]
+}
