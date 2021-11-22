@@ -8,7 +8,7 @@ You will need two different instructions for windows and macOS/linux. `NVM` is r
 
 ### Windows
 
-```shell 
+```shell
 # create the conda environment from the file
 conda env create -f .\dev\sodacovid-dev.yml
 
