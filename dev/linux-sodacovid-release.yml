@@ -7,7 +7,7 @@ dependencies:
   - _openmp_mutex=4.5
   - bzip2=1.0.8
   - c-ares=1.18.1
-  - ca-certificates=2021.10.8
+  - ca-certificates=2021.10.26
   - curl=7.80.0
   - expat=2.4.1
   - gettext=0.19.8.1
@@ -30,7 +30,6 @@ dependencies:
   - libuv=1.42.0
   - libzlib=1.2.11
   - ncurses=6.2
-  - nodejs=16.12.0
   - openssl=3.0.0
   - pcre2=10.37
   - perl=5.32.1
@@ -44,7 +43,6 @@ dependencies:
   - tzdata=2021e
   - wheel=0.37.0
   - xz=5.2.5
-  - yarn=1.22.17
   - zlib=1.2.11
   - pip:
       - altgraph==0.17.2
