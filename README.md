@@ -6,13 +6,13 @@ Use a python environment (Anaconda) to separate your dev and release instance.
 
 You will need two different instructions for windows and macOS/linux. `NVM` is required for macOS and Linux at the moment while the conda-forge release channel is updated.
 
-```shell 
+```shell
 # windows
 
 # create the conda environment from the file
 conda env create -f .\dev\sodacovid-dev.yml
 
-# activate the anaconda environment 
+# activate the anaconda environment
 conda activate sodacovid-dev
 
 # install all the project dependencies
