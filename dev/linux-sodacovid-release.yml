@@ -1,4 +1,4 @@
-name: sodacovid-dev
+name: sodacovid-release
 channels:
   - conda-forge
   - defaults
