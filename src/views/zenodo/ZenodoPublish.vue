@@ -51,8 +51,8 @@
 <script>
 // import { Icon } from "@iconify/vue";
 import { Star } from "@element-plus/icons";
-import axios from "axios";
-import { ElMessageBox } from "element-plus";
+// import axios from "axios";
+import { ElMessageBox, ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "../../store/datasets";
 import { useTokenStore } from "../../store/access.js";
@@ -73,21 +73,36 @@ export default {
   },
   computed: {},
   methods: {
+    async sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    },
     async publishDeposition() {
-      const depositionID = this.workflow.destination.zenodo.deposition_id;
+      // const depositionID = this.workflow.destination.zenodo.deposition_id;
 
-      const response = await axios
-        .post(`${this.$server_url}/zenodo/publish`, {
-          access_token: this.zenodoToken,
-          deposition_id: depositionID,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
+      // const response = await axios
+      //   .post(`${this.$server_url}/zenodo/publish`, {
+      //     access_token: this.zenodoToken,
+      //     deposition_id: depositionID,
+      //   })
+      //   .then((response) => {
+      //     return response.data;
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //     return "ERROR";
+      //   });
+
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
+      await this.sleep(3000);
+
+      const response = {
+        id: "https://stackoverflow.com/questions/50949594/axios-having-cors-issue",
+      };
 
       if (response === "ERROR") {
         this.statusMessage =
@@ -100,7 +115,9 @@ export default {
           {
             confirmButtonText: "OK",
             callback: (action) => {
-              if (action === "OK") {
+              console.log(action);
+              if (action === "confirm") {
+                console.log(`Opening ${response.id}`);
                 window.ipcRenderer.send(
                   "open-link-in-browser",
                   `https://sandbox.zenodo.org/record/${response.id}`
@@ -110,6 +127,8 @@ export default {
           }
         );
       }
+
+      loading.close();
     },
   },
   async mounted() {

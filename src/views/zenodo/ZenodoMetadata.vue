@@ -383,6 +383,7 @@
                       v-model="zenodoMetadataForm.license.licenseName"
                       filterable
                       placeholder="Select a license"
+                      class="w-full"
                     >
                       <el-option
                         v-for="item in licenseOptions"

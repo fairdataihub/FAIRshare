@@ -422,7 +422,31 @@
                     >
                     </el-option>
                   </el-select>
-                  <p class="text-xs pt-2 text-gray-500">Required.</p>
+
+                  <p
+                    class="
+                      text-sm
+                      pt-2
+                      text-gray-500
+                      cursor-pointer
+                      hover:text-gray-800
+                    "
+                    v-if="codeForm.license != ''"
+                    @click="openLicenseDetails"
+                  >
+                    Show license details.
+                  </p>
+
+                  <el-drawer
+                    v-model="showLicenseDetails"
+                    :title="licenseTitle"
+                    direction="rtl"
+                  >
+                    <iframe
+                      :src="licenseHtmlUrl"
+                      class="w-full h-full"
+                    ></iframe>
+                  </el-drawer>
                 </el-form-item>
 
                 <el-form-item label="Application category">
@@ -861,6 +885,9 @@ export default {
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
       invalidStatus: {},
+      showLicenseDetails: false,
+      licenseTitle: "",
+      licenseHtmlUrl: "",
     };
   },
   watch: {
@@ -1244,6 +1271,19 @@ export default {
     },
   },
   methods: {
+    async openLicenseDetails() {
+      const licenseId = this.codeForm.license;
+
+      //get license object
+      const licenseObject = this.licenseOptions.find(
+        (license) => license.licenseId === licenseId
+      );
+
+      this.licenseHtmlUrl = licenseObject.reference;
+      this.licenseTitle = licenseObject.name;
+
+      this.showLicenseDetails = true;
+    },
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();
@@ -1395,6 +1435,9 @@ export default {
         this.addIds(this.generalForm.keywords);
         this.addIds(this.generalForm.authors);
         this.addIds(this.generalForm.contributors);
+      } else {
+        this.generalForm.name = this.dataset.name;
+        this.generalForm.description = this.dataset.description;
       }
 
       if (this.codePresent) {

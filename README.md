@@ -10,7 +10,7 @@ You will need two different instructions for windows and macOS/linux. `NVM` is r
 
 ```shell
 # create the conda environment from the file
-conda env create -f .\dev\sodacovid-dev.yml
+conda env create -f .\dev\win-sodacovid-dev.yml
 
 # activate the anaconda environment
 conda activate sodacovid-dev
@@ -23,7 +23,8 @@ yarn install
 
 ```shell
 # create the conda environment from the file
-conda env create -f .\dev\sodacovid-dev.yml
+conda env create -f .\dev\mac-sodacovid-dev.yml   # for macOS
+conda env create -f .\dev\linux-sodacovid-dev.yml # for linux
 
 # activate the conda environment
 conda activate sodacovid-dev

@@ -52,3 +52,11 @@ html {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+
+.el-form-item__label {
+  @apply flex flex-row-reverse;
+}
+
+.el-form-item__label:before {
+  @apply ml-1;
+}

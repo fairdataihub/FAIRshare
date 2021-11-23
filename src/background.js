@@ -205,6 +205,9 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
   shell.openExternal("https://google.com").then(() => {
     console.log("hello");
   });
+  shell.openExternal(link).then(() => {
+    console.log("opened link");
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
