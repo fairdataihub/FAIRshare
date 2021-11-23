@@ -411,6 +411,7 @@
                     v-model="codeForm.license"
                     filterable
                     placeholder="Select a license"
+                    class="w-full"
                   >
                     <el-option
                       v-for="item in licenseOptions"
@@ -424,12 +425,12 @@
                 </el-form-item>
 
                 <el-form-item label="Application category">
-                  <el-input v-model="codeForm.applicationCategory"></el-input>
                   <el-select
                     v-model="codeForm.applicationCategory"
                     filterable
                     allow-create
                     placeholder="Select an application category"
+                    class="w-full"
                   >
                     <el-option
                       v-for="item in applicationCategoryOptions"
@@ -861,7 +862,6 @@ export default {
   watch: {
     "generalForm.authors": {
       handler(val) {
-        console.log("authors length", val.length);
         if (val.length === 0) {
           this.authorsErrorMessage = "Please provide at least one author.";
           this.invalidStatus.authors = true;
@@ -875,7 +875,6 @@ export default {
         if (val.length > 0) {
           for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
-              console.log("author error");
               this.authorsErrorMessage =
                 "Name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
@@ -920,20 +919,9 @@ export default {
     },
     "generalForm.contributors": {
       handler(val) {
-        if (val.length === 0) {
-          this.contributorsErrorMessage = "Please provide at least one author.";
-          this.invalidStatus.contributors = true;
-          this.$refs.gmForm.validate();
-          return;
-        } else {
-          this.contributorsErrorMessage = ""; //clear error message
-          this.invalidStatus.contributors = false;
-        }
-
         if (val.length > 0) {
           for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
-              console.log("author error");
               this.contributorsErrorMessage =
                 "Name and Affiliation for each author is mandatory";
               this.invalidStatus.contributors = true;
@@ -972,6 +960,9 @@ export default {
               }
             }
           }
+        } else {
+          this.contributorsErrorMessage = "";
+          this.invalidStatus.contributors = false;
         }
       },
       deep: true,
@@ -1003,7 +994,6 @@ export default {
           }
 
           if (!validIdentifier) {
-            console.log(val);
             this.isPartOfErrorMessage = "Please provide a valid URL";
             this.$refs.cmForm.validate();
             this.invalidStatus.isPartOf = true;
@@ -1032,7 +1022,6 @@ export default {
           }
 
           if (!validIdentifier) {
-            console.log(val);
             this.codeRepositoryErrorMessage = "Please provide a valid URL";
             this.$refs.cmForm.validate();
             this.invalidStatus.codeRepository = true;
@@ -1061,7 +1050,6 @@ export default {
           }
 
           if (!validIdentifier) {
-            console.log(val);
             this.continuousIntegrationErrorMessage =
               "Please provide a valid URL";
             this.$refs.cmForm.validate();
@@ -1091,7 +1079,6 @@ export default {
           }
 
           if (!validIdentifier) {
-            console.log(val);
             this.issueTrackerErrorMessage = "Please provide a valid URL";
             this.$refs.cmForm.validate();
             this.invalidStatus.issueTracker = true;
@@ -1120,7 +1107,6 @@ export default {
           }
 
           if (!validIdentifier) {
-            console.log(val);
             this.currentVersionDownloadLinkErrorMessage =
               "Please provide a valid URL";
             this.$refs.cmForm.validate();
@@ -1328,11 +1314,8 @@ export default {
       }, 10);
     },
   },
-  created() {
-    console.log("created");
-  },
+
   beforeMount() {
-    console.log("before mount");
     this.hideLoading();
     this.loading = ElLoading.service({
       lock: true,
@@ -1342,8 +1325,6 @@ export default {
     });
   },
   mounted() {
-    console.log("mounted");
-
     this.$nextTick(async function () {
       this.dataset = await this.datasetStore.getCurrentDataset();
 
@@ -1353,15 +1334,11 @@ export default {
         this.workflow.expandOptions = ["general"];
       }
 
-      console.log(this.workflow.expandOptions);
-
       if (this.workflow.expandOptions.length === 0) {
         this.activeNames = ["general"];
       } else {
         this.activeNames = this.workflow.expandOptions;
       }
-
-      console.log(this.activeNames);
 
       if (
         this.dataset.data.general.questions &&
