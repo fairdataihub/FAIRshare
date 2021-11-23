@@ -368,6 +368,7 @@
                   >
                     <Icon icon="carbon:add" />
                     <span> Add a contributor </span>
+                    {{ contributorsErrorMessage }}
                   </div>
                 </el-form-item>
               </el-form>
@@ -795,6 +796,9 @@ import contributorTypesJSON from "../../assets/supplementalFiles/contributorType
 import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "../../assets/supplementalFiles/codeMetadata.json";
 
+const emailRegex =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export default {
   name: "CreateMetadata",
   components: { ArrowRightBold, draggable, Icon },
@@ -911,6 +915,19 @@ export default {
                 this.invalidStatus.authors = true;
                 break;
               }
+
+              // validate email
+              if (author.email !== "") {
+                if (!emailRegex.test(author.email)) {
+                  this.authorsErrorMessage = "Email is not valid";
+                  this.$refs.gmForm.validate();
+                  this.invalidStatus.authors = true;
+                  break;
+                } else {
+                  this.authorsErrorMessage = "";
+                  this.invalidStatus.authors = false;
+                }
+              }
             }
           }
         }
@@ -920,10 +937,12 @@ export default {
     "generalForm.contributors": {
       handler(val) {
         if (val.length > 0) {
-          for (let author of val) {
-            if (author.name === "" || author.affiliation === "") {
+          for (let contributor of val) {
+            console.log(contributor);
+
+            if (contributor.name === "" || contributor.affiliation === "") {
               this.contributorsErrorMessage =
-                "Name and Affiliation for each author is mandatory";
+                "Name and Affiliation for each contributor is mandatory";
               this.invalidStatus.contributors = true;
               this.$refs.gmForm.validate();
               break;
@@ -933,8 +952,8 @@ export default {
             }
 
             // validate orcid
-            if (author.orcid !== "") {
-              const orcid = author.orcid;
+            if (contributor.orcid !== "") {
+              const orcid = contributor.orcid;
               let total = 0;
               for (let i = 0; i < orcid.length - 1; i++) {
                 const digit = parseInt(orcid.substr(i, 1));
@@ -958,6 +977,31 @@ export default {
                 this.invalidStatus.contributors = true;
                 break;
               }
+            }
+
+            // validate email
+            if (contributor.email !== "") {
+              if (!emailRegex.test(contributor.email)) {
+                this.contributorsErrorMessage = "Email is not valid";
+                this.$refs.gmForm.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              } else {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              }
+            }
+
+            // validate contributor role
+            if (contributor.contributorType === "") {
+              this.contributorsErrorMessage =
+                "Please select contributor type for each contributor";
+              this.invalidStatus.contributors = true;
+              this.$refs.gmForm.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
             }
           }
         } else {

@@ -1702,8 +1702,8 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     if (this.workflow.expandOptions.length === 0) {
-      // this.activeNames = ["basicInformation", "license"];
-      this.activeNames = ["relatedIdentifiers"];
+      this.activeNames = ["basicInformation", "license"];
+      // this.activeNames = ["relatedIdentifiers"];
     } else {
       this.activeNames = this.workflow.expandOptions;
       this.workflow.expandOptions = [];
