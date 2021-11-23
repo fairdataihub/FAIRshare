@@ -345,7 +345,7 @@
 
               <el-collapse-item title="License" name="license">
                 <div>
-                  <el-form-item label="Access right" prop="accessRight">
+                  <el-form-item label="Access right" :required="true">
                     <el-radio-group
                       v-model="zenodoMetadataForm.license.accessRight"
                       class="flex flex-col"
@@ -378,7 +378,7 @@
                     </p>
                   </el-form-item>
 
-                  <el-form-item label="License" prop="license">
+                  <el-form-item label="License" prop="license" :required="true">
                     <el-select
                       v-model="zenodoMetadataForm.license.licenseName"
                       filterable
