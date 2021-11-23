@@ -1,5 +1,6 @@
 from __future__ import print_function
 import json
+import os
 
 
 def createCodeMetadata(code_data, general_data, folder_path):
@@ -152,7 +153,7 @@ def createCodeMetadata(code_data, general_data, folder_path):
             metadata["contributor"].append(new_contributor)
 
     # Create the metadata file
-    with open(folder_path + "\\codemetadata.json", "w") as f:
+    with open(os.path.join(folder_path, "codemetadata.json"), "w") as f:
         f.write(json.dumps(metadata))
     return True
 

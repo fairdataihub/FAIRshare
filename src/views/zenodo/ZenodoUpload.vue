@@ -100,11 +100,16 @@ export default {
 
       metadata.creators = [];
       zenodoMetadata.authors.forEach((author) => {
-        metadata.creators.push({
-          name: author.name,
-          affiliation: author.affiliation,
-          orcid: author.orcid,
-        });
+        const creatorObject = {};
+
+        creatorObject.name = author.name;
+        creatorObject.affiliation = author.affiliation;
+
+        if (author.orcid != "") {
+          creatorObject.orcid = author.orcid;
+        }
+
+        metadata.creators.push(creatorObject);
       });
 
       metadata.description = zenodoMetadata.description;
