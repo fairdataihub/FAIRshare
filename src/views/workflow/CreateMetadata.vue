@@ -443,6 +443,7 @@
                     direction="rtl"
                   >
                     <iframe
+                      sandbox
                       :src="licenseHtmlUrl"
                       class="w-full h-full"
                     ></iframe>
@@ -1272,6 +1273,7 @@ export default {
   },
   methods: {
     async openLicenseDetails() {
+      this.licenseHtmlUrl = "/";
       const licenseId = this.codeForm.license;
 
       //get license object

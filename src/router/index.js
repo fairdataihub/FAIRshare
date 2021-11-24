@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ShowAllProjects from "../views/project/ShowAllProjects.vue";
 import CreateNewProject from "../views/project/CreateNewProject.vue";
 import CreateNewProjectConfirm from "../views/project/CreateNewProjectConfirm.vue";
+import EditProject from "../views/project/EditProject.vue";
 import ShowAllWorkflows from "../views/project/ShowAllWorkflows.vue";
 
 import SelectSourceFolder from "../views/workflow/SelectSourceFolder.vue";
@@ -32,6 +33,10 @@ const routes = [
   {
     path: "/datasets/new/:datasetID/confirm",
     component: CreateNewProjectConfirm,
+  },
+  {
+    path: "/datasets/:datasetID/edit",
+    component: EditProject,
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectFolder",

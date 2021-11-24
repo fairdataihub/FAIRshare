@@ -45,47 +45,72 @@
                 items-center
                 w-full
                 p-3
+                my-1
                 hover:bg-gray-100
                 transition-all
                 cursor-pointer
               "
-              @click="navigateToDataset(`${dataset.id}`)"
+              :class="{ 'selected-project': dataset.id === selectedDataset }"
+              @click="selectDataset($event, dataset.id)"
             >
+              <!-- @click="navigateToDataset(`${dataset.id}`)" -->
               <div class="flex flex-row items-center">
-                <img :src="dataset.image" alt="" class="w-14" />
+                <img :src="dataset.image" alt="" class="w-20" />
                 <div class="flex flex-col px-4">
-                  <span class="text-sm font-medium">
+                  <span class="text-md font-medium">
                     {{ dataset.name }}
                   </span>
-                  <p class="text-sm line-clamp-3">
+                  <p class="text-sm line-clamp-4">
                     {{ dataset.description }}
                   </p>
                 </div>
               </div>
-              <div class="flex items-center ml-2">
+              <div class="items-center ml-2 hidden">
                 <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
               </div>
             </div>
           </div>
           <el-divider> </el-divider>
-          <router-link to="/datasets/new">
-            <div
-              ref="startFromEmpty"
-              class="
-                flex flex-row
-                items-center
-                w-max
-                text-purple-800
-                cursor-pointer
-                mb-5
-                pb-1
-                hover-underline-animation
-              "
-            >
-              <span class="font-medium"> Or start from an empty project </span>
-              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+          <div class="flex flex-row justify-between mb-5">
+            <router-link to="/datasets/new">
+              <div
+                ref="startFromEmpty"
+                class="
+                  flex flex-row
+                  items-center
+                  w-max
+                  text-purple-800
+                  cursor-pointer
+                  hover-underline-animation
+                  py-3
+                "
+              >
+                <span class="font-medium">
+                  Or start from an empty project
+                </span>
+                <Icon
+                  icon="grommet-icons:form-next-link"
+                  class="ml-2 h-5 w-5"
+                />
+              </div>
+            </router-link>
+            <div class="flex flex-row" v-if="selectedDataset !== ''">
+              <el-button type="info" plain @click="editProject">
+                Edit project details
+              </el-button>
+              <el-button
+                type="primary"
+                plain
+                class="flex flex-row items-center"
+                @click="startCuratingProject"
+              >
+                Start curating this dataset
+                <el-icon>
+                  <ArrowRightBold />
+                </el-icon>
+              </el-button>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
       <div
@@ -123,30 +148,60 @@
 
 <script>
 import { Icon } from "@iconify/vue";
+import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "ShowAllProjects",
-  components: { Icon },
+  components: { Icon, ArrowRightBold },
 
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      selectedDataset: "",
     };
   },
   methods: {
-    navigateToDataset(datasetID) {
-      this.datasetStore.getDataset(datasetID);
-      // const routerPath = `/datasets/${datasetID}`;
+    selectDataset(event, datasetID) {
+      if (event) {
+        if (event.detail === 1) {
+          if (datasetID === this.selectedDataset) {
+            this.selectedDataset = "";
+          } else {
+            this.selectedDataset = datasetID;
+          }
+        } else if (event.detail === 2) {
+          this.selectedDataset = "";
+          this.navigateToDataset(datasetID);
+        }
+      }
+    },
+    startCuratingProject() {
+      this.navigateToDataset(this.selectedDataset);
+    },
+    async editProject() {
+      await this.datasetStore.getDataset(this.selectedDataset);
+      const routerPath = `/datasets/${this.selectedDataset}/edit`;
+      this.$router.push({ path: routerPath });
+    },
+    async navigateToDataset(datasetID) {
+      await this.datasetStore.getDataset(datasetID);
+      const routerPath = `/datasets/${datasetID}`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`;
       // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/accessToken`;
-      const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/publish`;
+      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/publish`;
       this.$router.push({ path: routerPath });
     },
   },
   mounted() {},
 };
 </script>
+
+<style lang="postcss" scoped>
+.selected-project {
+  background-color: #e0dede;
+}
+</style>

@@ -9,10 +9,13 @@
       lg:justify-center
     "
   >
-    <div class="p-3 h-full flex flex-row items-center">
-      <div class="flex flex-col h-full">
-        <span class="font-medium"> Create a new dataset </span>
-        <span> Fill out some general details about your dataset here. </span>
+    <div class="p-3 w-full h-full flex flex-row items-center">
+      <div class="flex flex-col h-full w-full">
+        <span class="font-medium"> Edit your project details </span>
+        <span>
+          If you want to change your project name or description you may edit
+          them here.
+        </span>
 
         <el-divider> </el-divider>
 
@@ -23,11 +26,11 @@
           @submit.prevent
           :rules="rules"
         >
-          <el-form-item label="Project name" prop="datasetName">
+          <el-form-item label="Dataset name" prop="datasetName">
             <el-input v-model="datasetForm.datasetName"></el-input>
           </el-form-item>
 
-          <el-form-item label="Project description">
+          <el-form-item label="Dataset description">
             <el-popover
               ref="popover"
               placement="bottom"
@@ -38,6 +41,7 @@
                 <el-input
                   v-model="datasetForm.datasetDescription"
                   type="textarea"
+                  autosize
                 ></el-input>
               </template>
 
@@ -49,7 +53,7 @@
             </el-popover>
           </el-form-item>
 
-          <el-form-item label="Data type" prop="dataType">
+          <!-- <el-form-item label="Data type" prop="dataType" >
             <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
               <el-checkbox label="Code" name="type"></el-checkbox>
 
@@ -88,17 +92,14 @@
                 ></el-checkbox>
               </el-tooltip>
             </el-checkbox-group>
-          </el-form-item>
-
-          <el-form-item>
-            <div class="py-2 w-full flex flex-row lg:justify-center">
-              <el-button type="primary" @click="submitForm('datasetForm')">
-                Create
-              </el-button>
-              <el-button @click="cancelNewDataset"> Cancel </el-button>
-            </div>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
+        <div class="py-2 flex flex-row justify-center">
+          <el-button @click="cancelNewDataset"> Cancel </el-button>
+          <el-button type="primary" @click="submitForm('datasetForm')">
+            Save changes
+          </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -106,20 +107,21 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
-import { v4 as uuidv4 } from "uuid";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
-  name: "CreateNewProject",
+  name: "EditProject",
   // components: { Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      datasetID: this.$route.params.datasetID,
+      dataset: {},
       datasetForm: {
         datasetName: "",
         datasetDescription: "",
-        dataType: [],
+        // dataType: [],
       },
       rules: {
         datasetName: [
@@ -129,14 +131,14 @@ export default {
             trigger: "blur",
           },
         ],
-        dataType: [
-          {
-            type: "array",
-            required: true,
-            message: "Please select at least one data type",
-            trigger: "change",
-          },
-        ],
+        // dataType: [
+        //   {
+        //     type: "array",
+        //     required: true,
+        //     message: "Please select at least one data type",
+        //     trigger: "change",
+        //   },
+        // ],
       },
     };
   },
@@ -144,33 +146,26 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const datasetID = uuidv4();
-          const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
+          this.dataset.name = this.datasetForm.datasetName;
+          this.dataset.description = this.datasetForm.datasetDescription;
 
-          let dataset = {
-            id: datasetID,
-            image: datasetImage,
-            name: this.datasetForm.datasetName,
-            description: this.datasetForm.datasetDescription,
-            dataType: this.datasetForm.dataType,
-            data: {},
-            workflowConfirmed: false,
-          };
+          this.datasetStore.updateCurrentDataset(this.dataset);
+          this.datasetStore.syncDatasets();
 
-          dataset.data.general = {
-            questions: {},
-          };
+          //   dataset.data.general = {
+          //     questions: {},
+          //   };
 
-          for (const type of dataset.dataType) {
-            dataset.data[type] = {
-              uploaded: false,
-              questions: {},
-            };
-          }
+          //   for (const type of dataset.dataType) {
+          //     dataset.data[type] = {
+          //       uploaded: false,
+          //       questions: {},
+          //     };
+          //   }
 
-          this.datasetStore.addDataset(dataset, datasetID);
+          //   this.datasetStore.addDataset(dataset, datasetID);
 
-          this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
+          this.$router.push({ name: "ShowAllProjects" });
         } else {
           console.log("error submit!!");
           return false;
@@ -181,6 +176,12 @@ export default {
       this.$router.push({ name: "ShowAllProjects" });
     },
   },
-  mounted() {},
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.datasetForm.datasetName = this.dataset.name;
+    this.datasetForm.datasetDescription = this.dataset.description;
+    // this.datasetForm.dataType = this.dataset.dataType;
+  },
 };
 </script>
