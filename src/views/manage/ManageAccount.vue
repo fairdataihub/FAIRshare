@@ -27,7 +27,7 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
+          <el-button type="text" class="button" @click="openDialog"
             >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
           >
         </div>
@@ -61,7 +61,7 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
+          <el-button type="text" class="button" @click="openDialog"
             >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
           >
         </div>
@@ -95,7 +95,7 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
+          <el-button type="text" class="button" 
             >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
           >
         </div>
@@ -129,26 +129,31 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi($event)"
+          <el-button type="text" class="button"
             >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
           >
         </div>
       </div>
     </div>
 
+    <DialogForm v-model="dialogFormVisible" :callback = "closeDialog"></DialogForm>
   </div>
 </template>
 
 <script>
 import { useManage } from "../../store/manage";
+import DialogForm from "../../components/popping-ups/DialogForm.vue";
 export default {
   name: "ManageAccount",
+  components: { DialogForm },
   setup() {
     const manager = useManage();
     return { manager };
   },
   data() {
-    return {};
+    return {
+      dialogFormVisible: false,
+    };
   },
   methods:{
     // updateApi(e){
@@ -158,6 +163,13 @@ export default {
 
     //   }
     // }
+    closeDialog(){
+      this.dialogFormVisible = false
+    },
+
+    openDialog(){
+      this.dialogFormVisible = true
+    }
   }
 };
 </script>
