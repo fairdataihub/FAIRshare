@@ -2,17 +2,27 @@
   <el-dialog>
     <div class="dialog-Container">
       <div class="inputField">
-          <div class="centering-Container fix-Width">
-              <div class="inputBar-Header">User Name</div>
-          </div>
-        <el-input class="inputBar" size="large" v-model="input1" placeholder="User Name" />
+        <div class="centering-Container fix-Width">
+          <div class="inputBar-Header">User Name</div>
+        </div>
+        <el-input
+          class="inputBar"
+          size="large"
+          v-model="input1"
+          placeholder="User Name"
+        />
       </div>
 
       <div class="inputField">
-          <div class="centering-Container fix-Width">
-              <div class="inputBar-Header">Password</div>
-          </div>
-        <el-input class="inputBar" size="large" v-model="input2" placeholder="Password" />
+        <div class="centering-Container fix-Width">
+          <div class="inputBar-Header">Password</div>
+        </div>
+        <el-input
+          class="inputBar"
+          size="large"
+          v-model="input2"
+          placeholder="Password"
+        />
       </div>
       <div class="bottom">
         <el-button type="text" class="button" @click="closeDialogFromParent"
@@ -24,16 +34,16 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from "vue";
 export default {
   props: {
     callback: { type: Function },
   },
   setup() {
     return {
-      input1: ref(''),
-      input2: ref(''),
-    }
+      input1: ref(""),
+      input2: ref(""),
+    };
   },
   methods: {
     closeDialogFromParent() {
@@ -54,14 +64,14 @@ export default {
   justify-content: right;
 }
 
-.fix-Width{
-    width: 10vw;
+.fix-Width {
+  width: 10vw;
 }
 
-.dialog-Container{
-    display: flex;
-    flex-direction: column;
-    gap: 2vh;
+.dialog-Container {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
 }
 
 .inputField {
@@ -69,18 +79,17 @@ export default {
   gap: 1vw;
 }
 
-.inputBar-Header{
-    font-size: 1.4vw;
-
+.inputBar-Header {
+  font-size: 1.4vw;
 }
 
-.inputBar{
-    width: 30vw;
+.inputBar {
+  width: 30vw;
 }
 
-.bottom{
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 </style>
