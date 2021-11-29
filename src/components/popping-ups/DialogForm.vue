@@ -1,12 +1,7 @@
 <template>
-  <el-dialog title="Shipping address">
+  <el-dialog title="Please provide">
     <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="closeDialogFromParent">Cancel</el-button>
-        <el-button type="primary" @click="closeDialogFromParent"
-          >Confirm</el-button
-        >
-      </span>
+        <el-button type="text" class="button" @click="closeDialogFromParent">SAVE</el-button>
     </template>
   </el-dialog>
 </template>
@@ -18,11 +13,18 @@ export default {
   props: {
     callback: { type: Function },
   },
-  setup() {},
-  methods: {
-    closeDialogFromParent() {
-      this.callback();
-    },
+  setup() {
   },
+  methods:{
+      closeDialogFromParent(){
+          this.callback()
+      }
+  }
 };
 </script>
+
+<style scoped>
+.el-button--text{
+  font-size: 2vmin;
+}
+</style>
