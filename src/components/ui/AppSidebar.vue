@@ -36,7 +36,9 @@
         <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
           Continue curation
         </router-link>
-        <router-link to="/manageAccount" class="sideBarMenuItem"> Manage account </router-link>
+        <router-link to="/manageAccount" class="sideBarMenuItem">
+          Manage account
+        </router-link>
         <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link
           to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
