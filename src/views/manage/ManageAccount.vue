@@ -2,10 +2,7 @@
   <div class="page-Container">
     <div class="app-Card">
       <div class="image-Container">
-        <img
-          src="../../assets/github.jpeg"
-          class="image"
-        />
+        <img src="../../assets/github.jpeg" class="image" />
       </div>
       <div class="app-Card-Content">
         <div class="app-Card-Status">
@@ -14,7 +11,11 @@
           </div>
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
-              {{ this.manager.checkApiKey("zenodo")==""?"Disconnected":"Connected" }}
+              {{
+                this.manager.checkApiKey("zenodo") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
             </div>
           </div>
         </div>
@@ -27,9 +28,9 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
-            >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
-          >
+          <el-button type="text" class="button" @click="updateApi">{{
+            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -48,7 +49,11 @@
           </div>
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
-              {{ this.manager.checkApiKey("zenodo")==""?"Disconnected":"Connected" }}
+              {{
+                this.manager.checkApiKey("zenodo") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
             </div>
           </div>
         </div>
@@ -61,9 +66,9 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
-            >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
-          >
+          <el-button type="text" class="button" @click="updateApi">{{
+            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -82,7 +87,11 @@
           </div>
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
-              {{ this.manager.checkApiKey("zenodo")==""?"Disconnected":"Connected" }}
+              {{
+                this.manager.checkApiKey("zenodo") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
             </div>
           </div>
         </div>
@@ -95,9 +104,9 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi"
-            >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
-          >
+          <el-button type="text" class="button" @click="updateApi">{{
+            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -116,7 +125,11 @@
           </div>
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
-              {{ this.manager.checkApiKey("zenodo")==""?"Disconnected":"Connected" }}
+              {{
+                this.manager.checkApiKey("zenodo") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
             </div>
           </div>
         </div>
@@ -129,13 +142,12 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="updateApi($event)"
-            >{{ this.manager.checkApiKey("zenodo")==""?"Connect":"Disconnect" }}</el-button
-          >
+          <el-button type="text" class="button" @click="updateApi($event)">{{
+            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+          }}</el-button>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -150,15 +162,13 @@ export default {
   data() {
     return {};
   },
-  methods:{
+  methods: {
     // updateApi(e){
     //   if(e.target.innerHTML == "Connect"){
-
     //   } else if(e.target.innerHTML == "Disconnect"){
-
     //   }
     // }
-  }
+  },
 };
 </script>
 
