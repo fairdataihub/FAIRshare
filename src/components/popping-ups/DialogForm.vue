@@ -3,7 +3,9 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closeDialogFromParent">Cancel</el-button>
-        <el-button type="primary" @click="closeDialogFromParent">Confirm</el-button>
+        <el-button type="primary" @click="closeDialogFromParent"
+          >Confirm</el-button
+        >
       </span>
     </template>
   </el-dialog>
@@ -16,12 +18,11 @@ export default {
   props: {
     callback: { type: Function },
   },
-  setup() {
+  setup() {},
+  methods: {
+    closeDialogFromParent() {
+      this.callback();
+    },
   },
-  methods:{
-      closeDialogFromParent(){
-          this.callback()
-      }
-  }
 };
 </script>
