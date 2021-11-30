@@ -28,7 +28,7 @@
               }"
             >
               {{
-                this.manager.checkApiKey("github") == ''
+                this.manager.checkApiKey("github") == ""
                   ? "Disconnected"
                   : "Connected"
               }}
@@ -82,7 +82,7 @@
               }"
             >
               {{
-                this.manager.checkApiKey("zenodo") == ''
+                this.manager.checkApiKey("zenodo") == ""
                   ? "Disconnected"
                   : "Connected"
               }}
@@ -105,10 +105,6 @@
       </div>
     </div>
 
-
-
-
-
     <div class="app-Card">
       <div class="image-Container">
         <img
@@ -141,7 +137,9 @@
         </div>
         <div class="centering-Container bottom">
           <el-button type="text" class="button">{{
-            this.manager.checkApiKey("placeholder") == "" ? "Connect" : "Disconnect"
+            this.manager.checkApiKey("placeholder") == ""
+              ? "Connect"
+              : "Disconnect"
           }}</el-button>
         </div>
       </div>
@@ -179,7 +177,9 @@
         </div>
         <div class="centering-Container bottom">
           <el-button type="text" class="button">{{
-            this.manager.checkApiKey("placeholder") == "" ? "Connect" : "Disconnect"
+            this.manager.checkApiKey("placeholder") == ""
+              ? "Connect"
+              : "Disconnect"
           }}</el-button>
         </div>
       </div>
