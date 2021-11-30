@@ -4,7 +4,7 @@ export const useManage = defineStore({
   id: "manageAccount",
   state: () => ({
     statusText: "Disconnected",
-    apiKeys: { zenodo: "", github: "" },
+    apiKeys: { zenodo: "", github: "", placeholder:""},
   }),
   getters: {
     getStatusText() {

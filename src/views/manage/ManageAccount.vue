@@ -7,12 +7,28 @@
       <div class="app-Card-Content">
         <div class="app-Card-Status">
           <div class="centering-Container">
-            <span class="dot disconnected-Dot"></span>
+            <span
+              class="dot"
+              :style="{
+                backgroundColor:
+                  this.manager.checkApiKey('github') == ''
+                    ? 'lightgray'
+                    : 'lightgreen',
+              }"
+            ></span>
           </div>
           <div class="centering-Container">
-            <div class="app-Card-Status-Text disconnected-Text">
+            <div
+              class="app-Card-Status-Text"
+              :style="{
+                color:
+                  this.manager.checkApiKey('github') == ''
+                    ? 'gray'
+                    : 'lightgreen',
+              }"
+            >
               {{
-                this.manager.checkApiKey("zenodo") == ""
+                this.manager.checkApiKey("github") == ''
                   ? "Disconnected"
                   : "Connected"
               }}
@@ -28,12 +44,70 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="openDialog">{{
+          <el-button type="text" class="button" @click="openDialog('github')">{{
+            this.manager.checkApiKey("github") == "" ? "Connect" : "Disconnect"
+          }}</el-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-Card">
+      <div class="image-Container">
+        <img
+          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
+          class="image"
+        />
+      </div>
+      <div class="app-Card-Content">
+        <div class="app-Card-Status">
+          <div class="centering-Container">
+            <span
+              class="dot"
+              :style="{
+                backgroundColor:
+                  this.manager.checkApiKey('zenodo') == ''
+                    ? 'lightgray'
+                    : 'lightgreen',
+              }"
+            ></span>
+          </div>
+          <div class="centering-Container">
+            <div
+              class="app-Card-Status-Text"
+              :style="{
+                color:
+                  this.manager.checkApiKey('zenodo') == ''
+                    ? 'gray'
+                    : 'lightgreen',
+              }"
+            >
+              {{
+                this.manager.checkApiKey("zenodo") == ''
+                  ? "Disconnected"
+                  : "Connected"
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="centering-Container center">
+          <span
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
+            egestas dui id ornare arcu odio ut sem.</span
+          >
+        </div>
+        <div class="centering-Container bottom">
+          <el-button type="text" class="button" @click="openDialog('zenodo')">{{
             this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
           }}</el-button>
         </div>
       </div>
     </div>
+
+
+
+
 
     <div class="app-Card">
       <div class="image-Container">
@@ -50,45 +124,7 @@
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
               {{
-                this.manager.checkApiKey("zenodo") == ""
-                  ? "Disconnected"
-                  : "Connected"
-              }}
-            </div>
-          </div>
-        </div>
-        <div class="centering-Container center">
-          <span
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
-            egestas dui id ornare arcu odio ut sem.</span
-          >
-        </div>
-        <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="openDialog">{{
-            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
-          }}</el-button>
-        </div>
-      </div>
-    </div>
-
-    <div class="app-Card">
-      <div class="image-Container">
-        <img
-          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-          class="image"
-        />
-      </div>
-      <div class="app-Card-Content">
-        <div class="app-Card-Status">
-          <div class="centering-Container">
-            <span class="dot disconnected-Dot"></span>
-          </div>
-          <div class="centering-Container">
-            <div class="app-Card-Status-Text disconnected-Text">
-              {{
-                this.manager.checkApiKey("zenodo") == ""
+                this.manager.checkApiKey("placeholder") == ""
                   ? "Disconnected"
                   : "Connected"
               }}
@@ -105,7 +141,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button type="text" class="button">{{
-            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+            this.manager.checkApiKey("placeholder") == "" ? "Connect" : "Disconnect"
           }}</el-button>
         </div>
       </div>
@@ -126,7 +162,7 @@
           <div class="centering-Container">
             <div class="app-Card-Status-Text disconnected-Text">
               {{
-                this.manager.checkApiKey("zenodo") == ""
+                this.manager.checkApiKey("placeholder") == ""
                   ? "Disconnected"
                   : "Connected"
               }}
@@ -143,7 +179,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button type="text" class="button">{{
-            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
+            this.manager.checkApiKey("placeholder") == "" ? "Connect" : "Disconnect"
           }}</el-button>
         </div>
       </div>
@@ -152,6 +188,7 @@
     <DialogForm
       v-model="dialogFormVisible"
       :callback="closeDialog"
+      :selected="selectedApp"
     ></DialogForm>
   </div>
 </template>
@@ -169,6 +206,7 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      selectedApp: "",
     };
   },
   methods: {
@@ -183,7 +221,8 @@ export default {
       this.dialogFormVisible = false;
     },
 
-    openDialog() {
+    openDialog(s) {
+      this.selectedApp = s;
       this.dialogFormVisible = true;
     },
   },
