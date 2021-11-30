@@ -57,7 +57,7 @@ export default {
       if (this.selected == "zenodo" || this.selected == "github") {
         try {
           this.manager.addApiKey(this.selected, this.input1);
-        } catch (e){
+        } catch (e) {
           errorFound = true;
         }
       }
