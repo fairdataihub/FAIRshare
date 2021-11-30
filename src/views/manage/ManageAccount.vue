@@ -113,9 +113,7 @@
               type="text"
               class="link-Font"
               @click="
-                openWebsite(
-                  'https://developers.zenodo.org/#quickstart-upload'
-                )
+                openWebsite('https://developers.zenodo.org/#quickstart-upload')
               "
             >
               zenodo access token documentation
