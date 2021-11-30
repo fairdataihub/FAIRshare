@@ -32,7 +32,7 @@
 
 <script>
 import { useManage } from "../../store/manage";
-import { ElNotification } from 'element-plus'
+import { ElNotification } from "element-plus";
 export default {
   props: {
     callback: { type: Function },
@@ -59,8 +59,8 @@ export default {
         ElNotification({
           type: "success",
           message: "Deleted",
-          position: 'bottom-right',
-          duration: 2000
+          position: "bottom-right",
+          duration: 2000,
         });
       }
     },

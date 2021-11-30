@@ -37,7 +37,7 @@
 <script>
 import { ref } from "vue";
 import { useManage } from "../../store/manage";
-import { ElNotification } from 'element-plus'
+import { ElNotification } from "element-plus";
 export default {
   props: {
     callback: { type: Function },
@@ -57,10 +57,10 @@ export default {
       if (this.selected == "zenodo" || this.selected == "github") {
         try {
           this.manager.addApiKey(this.selected, this.input1);
-          if(this.input1 == ""){
-              errorFound = true
+          if (this.input1 == "") {
+            errorFound = true;
           }
-        } catch (e){
+        } catch (e) {
           errorFound = true;
         }
       }
@@ -69,8 +69,8 @@ export default {
         ElNotification({
           type: "success",
           message: "Saved successfully",
-          position: 'bottom-right',
-          duration: 2000
+          position: "bottom-right",
+          duration: 2000,
         });
       }
     },
