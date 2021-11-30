@@ -37,11 +37,20 @@
         </div>
         <div class="centering-Container center">
           <span
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
-            egestas dui id ornare arcu odio ut sem.</span
-          >
+            >Connect with your github account by using an access token. Please
+            see more details at
+            <button
+              type="text"
+              class="link-Font"
+              @click="
+                openWebsite(
+                  'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                )
+              "
+            >
+              github access token documentation
+            </button>
+          </span>
         </div>
         <div class="centering-Container bottom">
           <el-button
@@ -98,11 +107,20 @@
         </div>
         <div class="centering-Container center">
           <span
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
-            egestas dui id ornare arcu odio ut sem.</span
-          >
+            >Connect with your zenodo account by using an access token. Please
+            see more details at
+            <button
+              type="text"
+              class="link-Font"
+              @click="
+                openWebsite(
+                  'https://developers.zenodo.org/#quickstart-upload'
+                )
+              "
+            >
+              zenodo access token documentation
+            </button>
+          </span>
         </div>
         <div class="centering-Container bottom">
           <el-button
@@ -255,6 +273,9 @@ export default {
         this.warningVisable = true;
       }
     },
+    openWebsite(url) {
+      require("electron").shell.openExternal(url);
+    },
   },
 };
 </script>
@@ -292,6 +313,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .app-Card-Content {
@@ -356,7 +378,7 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   overflow: auto;
-  font-size: 1.8vmin;
+  font-size: 1.8vmin !important;
   color: rgb(99, 99, 99);
 }
 ::-webkit-scrollbar {
@@ -368,5 +390,9 @@ export default {
   justify-content: flex-end;
   padding-right: 2.2vw;
   box-sizing: border-box;
+}
+
+.link-Font {
+  color: #409eff;
 }
 </style>

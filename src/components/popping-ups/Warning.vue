@@ -95,7 +95,7 @@ export default {
 }
 
 .Warning-text {
-  font-size: 1.4vw;
+  font-size: 1vw;
 }
 
 .inputBar {
