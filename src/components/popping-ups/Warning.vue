@@ -17,7 +17,7 @@
       <div class="inputField">
         <div class="centering-Container">
           <div class="Warning-text">
-            Deleting API key will disconnect SODA from the app. Continue?
+            Disconnecting will delete the access token stored. Continue?
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
 
 <script>
 import { useManage } from "../../store/manage";
-import { ElMessage } from "element-plus";
+import { ElNotification } from 'element-plus'
 export default {
   props: {
     callback: { type: Function },
@@ -56,9 +56,11 @@ export default {
       }
       await this.callback();
       if (!errorFound) {
-        ElMessage({
+        ElNotification({
           type: "success",
-          message: "Delete completed",
+          message: "Deleted",
+          position: 'bottom-right',
+          duration: 2000
         });
       }
     },

@@ -44,9 +44,16 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="openDialog('github')">{{
-            this.manager.checkApiKey("github") == "" ? "Connect" : "Disconnect"
-          }}</el-button>
+          <el-button
+            type="text"
+            class="button"
+            @click="openDialog($event, 'github')"
+            >{{
+              this.manager.checkApiKey("github") == ""
+                ? "Connect"
+                : "Disconnect"
+            }}</el-button
+          >
         </div>
       </div>
     </div>
@@ -98,9 +105,16 @@
           >
         </div>
         <div class="centering-Container bottom">
-          <el-button type="text" class="button" @click="openDialog('zenodo')">{{
-            this.manager.checkApiKey("zenodo") == "" ? "Connect" : "Disconnect"
-          }}</el-button>
+          <el-button
+            type="text"
+            class="button"
+            @click="openDialog($event, 'zenodo')"
+            >{{
+              this.manager.checkApiKey("zenodo") == ""
+                ? "Connect"
+                : "Disconnect"
+            }}</el-button
+          >
         </div>
       </div>
     </div>
@@ -212,7 +226,7 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
-      warningVisable: true,
+      warningVisable: false,
       selectedApp: "",
     };
   },
@@ -232,9 +246,14 @@ export default {
       this.warningVisable = false;
     },
 
-    openDialog(s) {
+    openDialog(e, s) {
+      console.log(e.target.innerHTML);
       this.selectedApp = s;
-      this.dialogFormVisible = true;
+      if (e.target.innerHTML == "Connect") {
+        this.dialogFormVisible = true;
+      } else if (e.target.innerHTML == "Disconnect") {
+        this.warningVisable = true;
+      }
     },
   },
 };
