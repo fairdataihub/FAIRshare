@@ -190,7 +190,7 @@
       :callback="closeDialog"
       :selected="selectedApp"
     ></DialogForm>
-    <Warning v-model="warningVisable"></Warning>
+    <Warning v-model="warningVisable" :callback="closeWarning" :selected="selectedApp"></Warning>
   </div>
 </template>
 

@@ -37,6 +37,7 @@
 <script>
 import { ref } from "vue";
 import { useManage } from "../../store/manage";
+import { ElMessage } from "element-plus";
 export default {
   props: {
     callback: { type: Function },
@@ -51,11 +52,22 @@ export default {
     };
   },
   methods: {
-    closeDialogFromParent() {
+    async closeDialogFromParent() {
+      let errorFound = false;
       if (this.selected == "zenodo" || this.selected == "github") {
-        this.manager.addApiKey(this.selected, this.input1);
+        try {
+          this.manager.addApiKey(this.selected, this.input1);
+        } catch (e){
+          errorFound = true;
+        }
       }
-      this.callback();
+      await this.callback();
+      if (!errorFound) {
+        ElMessage({
+          type: "success",
+          message: "Saved successfully",
+        });
+      }
     },
   },
 };

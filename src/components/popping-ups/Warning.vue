@@ -1,33 +1,108 @@
 <template>
-  <div></div>
+  <el-dialog title="Alert">
+    <div class="dialog-Container">
+      <!-- <div class="inputField">
+          <div class="centering-Container fix-Width">
+              <div class="inputBar-Header">User Name</div>
+          </div>
+        <el-input class="inputBar" size="large" v-model="input1" placeholder="User Name" />
+      </div>
+
+      <div class="inputField">
+          <div class="centering-Container fix-Width">
+              <div class="inputBar-Header">Password</div>
+          </div>
+        <el-input class="inputBar" size="large" v-model="input2" placeholder="Password" />
+      </div> -->
+      <div class="inputField">
+        <div class="centering-Container">
+          <div class="Warning-text">
+            Deleting API key will disconnect SODA from the app. Continue?
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <el-button type="text" class="button" @click="closeWarningFromParent"
+          >Confirm</el-button
+        >
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
-import { ElMessageBox, ElMessage } from "element-plus";
-
+import { useManage } from "../../store/manage";
+import { ElMessage } from "element-plus";
 export default {
+  props: {
+    callback: { type: Function },
+    selected: { type: String },
+  },
   setup() {
-    ElMessageBox.confirm(
-      "Deleting API key will disconnect SODA from the software. Continue?",
-      "Warning",
-      {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-        type: "warning",
+    const manager = useManage();
+    return {
+      manager,
+    };
+  },
+  methods: {
+    async closeWarningFromParent() {
+      let errorFound = false;
+      if (this.selected == "zenodo" || this.selected == "github") {
+        try {
+          this.manager.addApiKey(this.selected, "");
+        } catch (e) {
+          errorFound = true;
+        }
       }
-    )
-      .then(async () => {
-        await ElMessage({
+      await this.callback();
+      if (!errorFound) {
+        ElMessage({
           type: "success",
           message: "Delete completed",
         });
-      })
-      .catch(async () => {
-        await ElMessage({
-          type: "info",
-          message: "Delete canceled",
-        });
-      });
+      }
+    },
   },
 };
 </script>
+
+<style scoped>
+.el-button--text {
+  font-size: 1.3vw;
+}
+
+.centering-Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fix-Width {
+  width: 10vw;
+}
+
+.dialog-Container {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.inputField {
+  display: flex;
+  gap: 1vw;
+}
+
+.Warning-text {
+  font-size: 1.4vw;
+}
+
+.inputBar {
+  width: 30vw;
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+</style>
