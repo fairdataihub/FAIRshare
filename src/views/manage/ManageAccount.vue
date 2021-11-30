@@ -190,15 +190,17 @@
       :callback="closeDialog"
       :selected="selectedApp"
     ></DialogForm>
+    <Warning v-model="warningVisable" ></Warning>
   </div>
 </template>
 
 <script>
 import { useManage } from "../../store/manage";
 import DialogForm from "../../components/popping-ups/DialogForm.vue";
+import Warning from "../../components/popping-ups/Warning.vue";
 export default {
   name: "ManageAccount",
-  components: { DialogForm },
+  components: { DialogForm, Warning },
   setup() {
     const manager = useManage();
     return { manager };
@@ -206,6 +208,7 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      warningVisable: true,
       selectedApp: "",
     };
   },
@@ -219,6 +222,10 @@ export default {
     // }
     closeDialog() {
       this.dialogFormVisible = false;
+    },
+
+    closeWarning() {
+      this.warningVisable = false;
     },
 
     openDialog(s) {
