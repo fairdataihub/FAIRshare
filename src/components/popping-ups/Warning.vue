@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
 .el-button--text {
-  font-size: 1.3vw;
+  font-size: 1vw;
 }
 
 .centering-Container {

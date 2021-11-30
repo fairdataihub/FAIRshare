@@ -395,4 +395,8 @@ export default {
 .link-Font {
   color: #409eff;
 }
+
+.el-button--text {
+  font-size: 1.8vmin;
+}
 </style>
