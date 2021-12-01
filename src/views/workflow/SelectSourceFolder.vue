@@ -122,9 +122,9 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      console.log(
-        `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`
-      );
+      // console.log(
+      //   `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`
+      // );
 
       this.$router.push({
         path: `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`,

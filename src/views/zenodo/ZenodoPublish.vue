@@ -117,7 +117,6 @@ export default {
           {
             confirmButtonText: "OK",
             callback: (action) => {
-              console.log(action);
               if (action === "confirm") {
                 console.log(`Opening ${response.id}`);
                 window.ipcRenderer.send(

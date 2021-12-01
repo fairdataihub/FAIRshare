@@ -208,7 +208,7 @@ export default {
       metadata.version = zenodoMetadata.version;
       metadata.language = zenodoMetadata.language;
 
-      console.log(metadata);
+      // console.log(metadata);
 
       const metadataObject = JSON.stringify({
         metadata: metadata,
@@ -257,7 +257,7 @@ export default {
       await this.sleep(300);
 
       const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-      console.log(folderPath);
+      // console.log(folderPath);
 
       const response = await axios
         .post(`${this.$server_url}/utilities/checkforfolders`, {
@@ -288,7 +288,7 @@ export default {
             return "ERROR";
           });
 
-        console.log(zippedPath);
+        // console.log(zippedPath);
 
         this.statusMessage =
           "Created a zipped folder successfully. Getting ready to upload to Zenodo";
@@ -371,7 +371,7 @@ export default {
           response.metadata.prereserve_doi.doi;
 
         response = await this.createCodeMetadataFile();
-        console.log(response);
+        // console.log(response);
 
         if (response === "ERROR") {
           this.statusMessage =
@@ -398,7 +398,7 @@ export default {
           "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
-        console.log(response);
+        // console.log(response);
         this.statusMessage =
           "Metadata successfully added to the Zenodo deposition";
       }
