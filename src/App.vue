@@ -2,6 +2,7 @@
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div class="flex flex-row bg-white">
     <AppSidebar :environment="environment"></AppSidebar>
+
     <router-view v-slot="{ Component }" class="pt-2">
       <transition name="fade" appear mode="out-in">
         <component :is="Component" />

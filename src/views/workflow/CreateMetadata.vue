@@ -3,6 +3,8 @@
     <div class="w-full h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pl-5 pr-8">
+          <workflow-progress-bar :currentStep="2" />
+
           <span class="text-lg font-medium text-left">
             Lets make your data FAIR
           </span>

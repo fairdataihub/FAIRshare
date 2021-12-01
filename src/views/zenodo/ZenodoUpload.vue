@@ -3,6 +3,7 @@
     <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
+          <workflow-progress-bar :currentStep="5" />
           <span class="text-lg font-medium text-left">
             Uploading your data to Zenodo
           </span>

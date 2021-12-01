@@ -5,6 +5,7 @@
   >
     <div class="p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
+        <workflow-progress-bar :currentStep="3" />
         <div
           class="
             flex flex-col

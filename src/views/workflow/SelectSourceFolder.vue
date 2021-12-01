@@ -1,8 +1,10 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
+  <div class="h-screen w-screen flex flex-row lg:justify-center items-center">
     <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full overflow-y-auto pr-5">
+          <workflow-progress-bar :currentStep="1" />
+
           <span class="text-lg font-medium text-left">
             General information regarding your data
           </span>
@@ -24,7 +26,7 @@
 
           <div class="w-full flex flex-row justify-center py-2">
             <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
+              <el-button type="danger" plain> Return </el-button>
             </router-link>
 
             <el-button
@@ -129,8 +131,8 @@ export default {
       });
     },
   },
-  mounted() {
-    this.dataset = this.datasetStore.currentDataset;
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
     // split this up when separate

@@ -57,6 +57,7 @@ export const useDatasetsStore = defineStore({
   state: () => ({
     datasets: {},
     currentDataset: {},
+    showProgressBar: false,
   }),
   getters: {
     datasetCount: function () {
@@ -111,6 +112,12 @@ export const useDatasetsStore = defineStore({
       } else {
         return "NO_DATASET_FOUND";
       }
+    },
+    async showProgress() {
+      this.showProgressBar = true;
+    },
+    async hideProgress() {
+      this.showProgressBar = false;
     },
   },
 });

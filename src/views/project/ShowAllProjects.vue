@@ -45,7 +45,6 @@
                 items-center
                 w-full
                 p-3
-                my-1
                 hover:bg-gray-100
                 transition-all
                 cursor-pointer

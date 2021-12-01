@@ -1,7 +1,16 @@
 <template>
   <!-- component -->
   <div
-    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50 relative"
+    class="
+      flex flex-col
+      min-h-screen
+      mr-3
+      debug-screens
+      bg-gray-50
+      relative
+      w-full
+      max-w-xs
+    "
     :class="{
       'w-64': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -16,15 +25,22 @@
           class="w-28"
           src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
         />
-        <div class="absolute top-0 right-2" @click="sideBarOpen = !sideBarOpen">
+        <div
+          class="
+            absolute
+            top-0
+            right-2
+            cursor-pointer
+            p-1
+            transition-all
+            transform
+            scale-100
+            hover:scale-110
+          "
+          @click="sideBarOpen = !sideBarOpen"
+          title="Open or close the sidebar"
+        >
           <div id="menu-hamburger" :class="{ open: sideBarOpen }">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-        <div class="invisible">
-          <div id="menu-hamburger">
             <span></span>
             <span></span>
             <span></span>
@@ -36,13 +52,13 @@
         <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
           Continue curation
         </router-link>
-        <router-link to="/about" class="sideBarMenuItem"> About </router-link>
+        <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link
           to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
           class="sideBarMenuItem"
         >
           Confirm
-        </router-link>
+        </router-link> -->
       </nav>
     </div>
     <div class="absolute bottom-0 right-3">
@@ -95,7 +111,7 @@ export default {
   margin: 10px 0;
   transform: rotate(0deg);
   transition: 0.5s ease-in-out;
-  cursor: pointer;
+  pointer-events: none;
 }
 
 #menu-hamburger span {

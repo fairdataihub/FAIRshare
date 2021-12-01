@@ -12,6 +12,7 @@
     <div class="w-full p-3 h-full flex flex-row items-center">
       <div class="h-full w-full">
         <div class="flex flex-col h-full pr-5">
+          <workflow-progress-bar :currentStep="2" />
           <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
           <span class="text-left"> Lets upload your data to Zenodo. </span>
 
