@@ -307,8 +307,7 @@ export default {
     return { manager, openDialog };
   },
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     openWebsite(url) {
