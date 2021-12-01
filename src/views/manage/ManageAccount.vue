@@ -1,226 +1,220 @@
 <template>
-
-
-        <div class="page-Container">
-          <div class="app-Card">
-            <div class="image-Container">
-              <img src="../../assets/github.jpeg" class="image" />
-            </div>
-            <div class="app-Card-Content">
-              <div class="app-Card-Status">
-                <div class="centering-Container">
-                  <span
-                    class="dot"
-                    :style="{
-                      backgroundColor:
-                        this.manager.checkApiKey('github') == ''
-                          ? 'lightgray'
-                          : 'lightgreen',
-                    }"
-                  ></span>
-                </div>
-                <div class="centering-Container">
-                  <div
-                    class="app-Card-Status-Text"
-                    :style="{
-                      color:
-                        this.manager.checkApiKey('github') == ''
-                          ? 'gray'
-                          : 'lightgreen',
-                    }"
-                  >
-                    {{
-                      this.manager.checkApiKey("github") == ""
-                        ? "Disconnected"
-                        : "Connected"
-                    }}
-                  </div>
-                </div>
-              </div>
-              <div class="centering-Container center">
-                <span
-                  >Connect with your github account by using an access token.
-                  Please see more details at
-                  <button
-                    type="text"
-                    class="link-Font"
-                    @click="
-                      openWebsite(
-                        'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-                      )
-                    "
-                  >
-                    github access token documentation
-                  </button>
-                </span>
-              </div>
-              <div class="centering-Container bottom">
-                <el-button
-                  type="text"
-                  class="button"
-                  @click="openDialog($event, 'github')"
-                  >{{
-                    this.manager.checkApiKey("github") == ""
-                      ? "Connect"
-                      : "Disconnect"
-                  }}</el-button
-                >
-              </div>
-            </div>
+  <div class="page-Container">
+    <div class="app-Card">
+      <div class="image-Container">
+        <img src="../../assets/github.jpeg" class="image" />
+      </div>
+      <div class="app-Card-Content">
+        <div class="app-Card-Status">
+          <div class="centering-Container">
+            <span
+              class="dot"
+              :style="{
+                backgroundColor:
+                  this.manager.checkApiKey('github') == ''
+                    ? 'lightgray'
+                    : 'lightgreen',
+              }"
+            ></span>
           </div>
-
-          <div class="app-Card">
-            <div class="image-Container">
-              <img
-                src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-                class="image"
-              />
-            </div>
-            <div class="app-Card-Content">
-              <div class="app-Card-Status">
-                <div class="centering-Container">
-                  <span
-                    class="dot"
-                    :style="{
-                      backgroundColor:
-                        this.manager.checkApiKey('zenodo') == ''
-                          ? 'lightgray'
-                          : 'lightgreen',
-                    }"
-                  ></span>
-                </div>
-                <div class="centering-Container">
-                  <div
-                    class="app-Card-Status-Text"
-                    :style="{
-                      color:
-                        this.manager.checkApiKey('zenodo') == ''
-                          ? 'gray'
-                          : 'lightgreen',
-                    }"
-                  >
-                    {{
-                      this.manager.checkApiKey("zenodo") == ""
-                        ? "Disconnected"
-                        : "Connected"
-                    }}
-                  </div>
-                </div>
-              </div>
-              <div class="centering-Container center">
-                <span
-                  >Connect with your zenodo account by using an access token.
-                  Please see more details at
-                  <button
-                    type="text"
-                    class="link-Font"
-                    @click="
-                      openWebsite(
-                        'https://developers.zenodo.org/#quickstart-upload'
-                      )
-                    "
-                  >
-                    zenodo access token documentation
-                  </button>
-                </span>
-              </div>
-              <div class="centering-Container bottom">
-                <el-button
-                  type="text"
-                  class="button"
-                  @click="openDialog($event, 'zenodo')"
-                  >{{
-                    this.manager.checkApiKey("zenodo") == ""
-                      ? "Connect"
-                      : "Disconnect"
-                  }}</el-button
-                >
-              </div>
-            </div>
-          </div>
-
-          <div class="app-Card">
-            <div class="image-Container">
-              <img
-                src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-                class="image"
-              />
-            </div>
-            <div class="app-Card-Content">
-              <div class="app-Card-Status">
-                <div class="centering-Container">
-                  <span class="dot disconnected-Dot"></span>
-                </div>
-                <div class="centering-Container">
-                  <div class="app-Card-Status-Text disconnected-Text">
-                    {{
-                      this.manager.checkApiKey("placeholder") == ""
-                        ? "Disconnected"
-                        : "Connected"
-                    }}
-                  </div>
-                </div>
-              </div>
-              <div class="centering-Container center">
-                <span
-                  >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Convallis aenean et tortor at risus viverra adipiscing at. Est
-                  velit egestas dui id ornare arcu odio ut sem.</span
-                >
-              </div>
-              <div class="centering-Container bottom">
-                <el-button type="text" class="button">{{
-                  this.manager.checkApiKey("placeholder") == ""
-                    ? "Connect"
-                    : "Disconnect"
-                }}</el-button>
-              </div>
-            </div>
-          </div>
-
-          <div class="app-Card">
-            <div class="image-Container">
-              <img
-                src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-                class="image"
-              />
-            </div>
-            <div class="app-Card-Content">
-              <div class="app-Card-Status">
-                <div class="centering-Container">
-                  <span class="dot disconnected-Dot"></span>
-                </div>
-                <div class="centering-Container">
-                  <div class="app-Card-Status-Text disconnected-Text">
-                    {{
-                      this.manager.checkApiKey("placeholder") == ""
-                        ? "Disconnected"
-                        : "Connected"
-                    }}
-                  </div>
-                </div>
-              </div>
-              <div class="centering-Container center">
-                <span
-                  >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Convallis aenean et tortor at risus viverra adipiscing at. Est
-                  velit egestas dui id ornare arcu odio ut sem.</span
-                >
-              </div>
-              <div class="centering-Container bottom">
-                <el-button type="text" class="button">{{
-                  this.manager.checkApiKey("placeholder") == ""
-                    ? "Connect"
-                    : "Disconnect"
-                }}</el-button>
-              </div>
+          <div class="centering-Container">
+            <div
+              class="app-Card-Status-Text"
+              :style="{
+                color:
+                  this.manager.checkApiKey('github') == ''
+                    ? 'gray'
+                    : 'lightgreen',
+              }"
+            >
+              {{
+                this.manager.checkApiKey("github") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
             </div>
           </div>
         </div>
+        <div class="centering-Container center">
+          <span
+            >Connect with your github account by using an access token. Please
+            see more details at
+            <button
+              type="text"
+              class="link-Font"
+              @click="
+                openWebsite(
+                  'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                )
+              "
+            >
+              github access token documentation
+            </button>
+          </span>
+        </div>
+        <div class="centering-Container bottom">
+          <el-button
+            type="text"
+            class="button"
+            @click="openDialog($event, 'github')"
+            >{{
+              this.manager.checkApiKey("github") == ""
+                ? "Connect"
+                : "Disconnect"
+            }}</el-button
+          >
+        </div>
+      </div>
+    </div>
 
+    <div class="app-Card">
+      <div class="image-Container">
+        <img
+          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
+          class="image"
+        />
+      </div>
+      <div class="app-Card-Content">
+        <div class="app-Card-Status">
+          <div class="centering-Container">
+            <span
+              class="dot"
+              :style="{
+                backgroundColor:
+                  this.manager.checkApiKey('zenodo') == ''
+                    ? 'lightgray'
+                    : 'lightgreen',
+              }"
+            ></span>
+          </div>
+          <div class="centering-Container">
+            <div
+              class="app-Card-Status-Text"
+              :style="{
+                color:
+                  this.manager.checkApiKey('zenodo') == ''
+                    ? 'gray'
+                    : 'lightgreen',
+              }"
+            >
+              {{
+                this.manager.checkApiKey("zenodo") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="centering-Container center">
+          <span
+            >Connect with your zenodo account by using an access token. Please
+            see more details at
+            <button
+              type="text"
+              class="link-Font"
+              @click="
+                openWebsite('https://developers.zenodo.org/#quickstart-upload')
+              "
+            >
+              zenodo access token documentation
+            </button>
+          </span>
+        </div>
+        <div class="centering-Container bottom">
+          <el-button
+            type="text"
+            class="button"
+            @click="openDialog($event, 'zenodo')"
+            >{{
+              this.manager.checkApiKey("zenodo") == ""
+                ? "Connect"
+                : "Disconnect"
+            }}</el-button
+          >
+        </div>
+      </div>
+    </div>
 
+    <div class="app-Card">
+      <div class="image-Container">
+        <img
+          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
+          class="image"
+        />
+      </div>
+      <div class="app-Card-Content">
+        <div class="app-Card-Status">
+          <div class="centering-Container">
+            <span class="dot disconnected-Dot"></span>
+          </div>
+          <div class="centering-Container">
+            <div class="app-Card-Status-Text disconnected-Text">
+              {{
+                this.manager.checkApiKey("placeholder") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="centering-Container center">
+          <span
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
+            egestas dui id ornare arcu odio ut sem.</span
+          >
+        </div>
+        <div class="centering-Container bottom">
+          <el-button type="text" class="button">{{
+            this.manager.checkApiKey("placeholder") == ""
+              ? "Connect"
+              : "Disconnect"
+          }}</el-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-Card">
+      <div class="image-Container">
+        <img
+          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
+          class="image"
+        />
+      </div>
+      <div class="app-Card-Content">
+        <div class="app-Card-Status">
+          <div class="centering-Container">
+            <span class="dot disconnected-Dot"></span>
+          </div>
+          <div class="centering-Container">
+            <div class="app-Card-Status-Text disconnected-Text">
+              {{
+                this.manager.checkApiKey("placeholder") == ""
+                  ? "Disconnected"
+                  : "Connected"
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="centering-Container center">
+          <span
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
+            egestas dui id ornare arcu odio ut sem.</span
+          >
+        </div>
+        <div class="centering-Container bottom">
+          <el-button type="text" class="button">{{
+            this.manager.checkApiKey("placeholder") == ""
+              ? "Connect"
+              : "Disconnect"
+          }}</el-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
