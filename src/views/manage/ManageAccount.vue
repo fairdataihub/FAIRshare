@@ -329,7 +329,7 @@ export default {
 }
 
 .app-Card:hover {
-  transform: scale(1.1, 1.1);
+  transform: scale(1.02, 1.02);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
