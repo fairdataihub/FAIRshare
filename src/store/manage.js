@@ -24,7 +24,7 @@ export const useManage = defineStore({
       }
     },
 
-    async addApiKey(key, value) {
+    async changeApiKey(key, value) {
       try {
         this.apiKeys[key] = value;
         return "OK";

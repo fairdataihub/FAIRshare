@@ -233,7 +233,7 @@ export default {
       })
         .then(({ value }) => {
           try {
-            manager.addApiKey(key, value);
+            manager.changeApiKey(key, value);
           } catch (e) {
             console.log(e);
             errorFound = true;
@@ -271,7 +271,7 @@ export default {
       )
         .then(() => {
           try {
-            manager.addApiKey(key, "");
+            manager.changeApiKey(key, "");
           } catch (e) {
             errorFound = true;
           }
