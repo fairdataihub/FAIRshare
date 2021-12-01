@@ -214,63 +214,103 @@
         </div>
       </div>
     </div>
-
-    <DialogForm
-      v-model="dialogFormVisible"
-      :callback="closeDialog"
-      :selected="selectedApp"
-    ></DialogForm>
-    <Warning
-      v-model="warningVisable"
-      :callback="closeWarning"
-      :selected="selectedApp"
-    ></Warning>
   </div>
 </template>
 
 <script>
 import { useManage } from "../../store/manage";
-import DialogForm from "../../components/popping-ups/DialogForm.vue";
-import Warning from "../../components/popping-ups/Warning.vue";
+import { ElMessageBox } from "element-plus";
+import { ElNotification } from "element-plus";
 export default {
   name: "ManageAccount",
-  components: { DialogForm, Warning },
   setup() {
     const manager = useManage();
-    return { manager };
+    function useAPIkey(key) {
+      let errorFound = false;
+      ElMessageBox.prompt("Please input your API key", "", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+      })
+        .then(({ value }) => {
+          try {
+            manager.addApiKey(key, value);
+          } catch (e) {
+            console.log(e);
+            errorFound = true;
+          }
+          console.log(errorFound);
+          if (!errorFound) {
+            ElNotification({
+              type: "success",
+              message: "Saved successfully",
+              position: "bottom-right",
+              duration: 2000,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            type: "info",
+            message: "Input canceled",
+            position: "bottom-right",
+            duration: 2000,
+          });
+        });
+    }
+
+    function APIkeyWarning(key) {
+      let errorFound = false;
+      ElMessageBox.confirm(
+        "Disconnecting will delete the access token stored. Continue?",
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          try {
+            manager.addApiKey(key, "");
+          } catch (e) {
+            errorFound = true;
+          }
+          if (!errorFound) {
+            ElNotification({
+              type: "success",
+              message: "Deleted",
+              position: "bottom-right",
+              duration: 2000,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            type: "info",
+            message: "Delete canceled",
+            position: "bottom-right",
+            duration: 2000,
+          });
+        });
+    }
+    const openDialog = (e, s) => {
+      if (e.target.innerHTML == "Connect") {
+        if (s == "github" || s == "zenodo") {
+          useAPIkey(s);
+        }
+      } else if (e.target.innerHTML == "Disconnect") {
+        if (s == "github" || s == "zenodo") {
+          APIkeyWarning(s);
+        }
+      }
+    };
+    return { manager, openDialog };
   },
   data() {
     return {
-      dialogFormVisible: false,
-      warningVisable: false,
-      selectedApp: "",
     };
   },
   methods: {
-    // updateApi(e){
-    //   if(e.target.innerHTML == "Connect"){
-
-    //   } else if(e.target.innerHTML == "Disconnect"){
-
-    //   }
-    // }
-    closeDialog() {
-      this.dialogFormVisible = false;
-    },
-
-    closeWarning() {
-      this.warningVisable = false;
-    },
-
-    openDialog(e, s) {
-      console.log(e.target.innerHTML);
-      this.selectedApp = s;
-      if (e.target.innerHTML == "Connect") {
-        this.dialogFormVisible = true;
-      } else if (e.target.innerHTML == "Disconnect") {
-        this.warningVisable = true;
-      }
-    },
     openWebsite(url) {
       require("electron").shell.openExternal(url);
     },
