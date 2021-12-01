@@ -786,8 +786,11 @@
           </el-collapse>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
+            <router-link
+              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`"
+              class="mx-6"
+            >
+              <el-button type="danger" plain> Back </el-button>
             </router-link>
 
             <el-button
