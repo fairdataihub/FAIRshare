@@ -1142,12 +1142,9 @@
           </el-form>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <router-link
-              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`"
-              class="mx-6"
-            >
-              <el-button type="danger" plain> Back </el-button>
-            </router-link>
+            <el-button type="danger" plain @click="navigateBack" class="mx-6">
+              Back
+            </el-button>
 
             <el-button
               type="primary"
@@ -1180,6 +1177,8 @@ import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
 import doiRegex from "doi-regex";
+import { ElMessageBox } from "element-plus";
+import _ from "lodash";
 
 import { useDatasetsStore } from "../../store/datasets";
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
@@ -1247,6 +1246,7 @@ export default {
           },
         ],
       },
+      originalObject: {},
     };
   },
   computed: {
@@ -1373,7 +1373,7 @@ export default {
           return supervisor.name !== id;
         });
     },
-    addZenodoMetadata() {
+    addZenodoMetadata(_evt, shouldNavigateBack = false) {
       //validate first
       this.workflow = this.dataset.workflows[this.workflowID];
 
@@ -1382,6 +1382,14 @@ export default {
       this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
+
+      if (shouldNavigateBack) {
+        console.log("shouldNavigateBack");
+        this.$router.push(
+          `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
+        );
+        return;
+      }
 
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
       this.$router.push({ path: routerPath });
@@ -1432,6 +1440,40 @@ export default {
           });
           this.zenodoMetadataForm.contributors = newContributors;
         }
+      }
+    },
+    navigateBack() {
+      let newChanges = false;
+
+      if (!_.isEqual(this.originalObject, this.zenodoMetadataForm)) {
+        newChanges = true;
+      }
+
+      if (newChanges) {
+        ElMessageBox.confirm(
+          "You have some unsaved changes. Do you want to save your edits?",
+          "Warning",
+          {
+            confirmButtonText: "Save and go back",
+            cancelButtonText: "Don't save and go back",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            // save changes
+            this.addZenodoMetadata(true, true);
+          })
+          .catch(() => {
+            // don't save changes
+            console.log("changes discarded");
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
+            });
+          });
+      } else {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
+        });
       }
     },
   },
@@ -1702,7 +1744,11 @@ export default {
       background: "rgba(0, 0, 0, 0.7)",
     });
 
-    this.dataset = await this.datasetStore.getCurrentDataset();
+    this.zenodoMetadataForm = zenodoMetadataOptions.defaultForm;
+
+    this.dataset = JSON.parse(
+      JSON.stringify(await this.datasetStore.getCurrentDataset())
+    );
 
     this.workflow = this.dataset.workflows[this.workflowID];
 
@@ -1749,8 +1795,13 @@ export default {
       this.addIds(this.zenodoMetadataForm.thesis.supervisors);
       this.addIds(this.zenodoMetadataForm.subjects);
       this.loading.close();
+
+      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
     } else {
       this.prefillZenodoQuestions();
+
+      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
+
       this.loading.close();
     }
 

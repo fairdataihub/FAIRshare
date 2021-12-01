@@ -786,12 +786,9 @@
           </el-collapse>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <router-link
-              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`"
-              class="mx-6"
-            >
-              <el-button type="danger" plain> Back </el-button>
-            </router-link>
+            <el-button type="danger" plain @click="navigateBack" class="mx-6">
+              Back
+            </el-button>
 
             <el-button
               type="primary"
@@ -817,8 +814,9 @@ import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElLoading } from "element-plus";
+import { ElLoading, ElMessageBox } from "element-plus";
 import semver from "semver";
+import _ from "lodash";
 
 import { useDatasetsStore } from "../../store/datasets";
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
@@ -894,6 +892,7 @@ export default {
       showLicenseDetails: false,
       licenseTitle: "",
       licenseHtmlUrl: "",
+      originalObject: {},
     };
   },
   watch: {
@@ -1374,7 +1373,7 @@ export default {
           }
         );
     },
-    navigateToSelectDestination() {
+    navigateToSelectDestination(_evt, shouldNavigateBack = false) {
       this.dataset.data.general.questions = this.generalForm;
 
       if (this.codePresent) {
@@ -1384,10 +1383,20 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
+      console.log("val", shouldNavigateBack);
+
+      if (shouldNavigateBack) {
+        console.log("navigate back");
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+        });
+        return;
+      }
+
       this.workflow.expandOptions = [];
 
       const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata/review`;
-      console.log(routerPath);
+
       this.$router.push({ path: routerPath });
     },
     hideLoading() {
@@ -1404,8 +1413,47 @@ export default {
         }
       }, 10);
     },
-  },
+    navigateBack() {
+      let newChanges = false;
 
+      if (
+        !newChanges &&
+        !_.isEqual(this.originalObject.general, this.generalForm)
+      ) {
+        newChanges = true;
+      }
+
+      if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
+        newChanges = true;
+      }
+
+      if (newChanges) {
+        ElMessageBox.confirm(
+          "You have some unsaved changes. Do you want to save your edits?",
+          "Warning",
+          {
+            confirmButtonText: "Save and go back",
+            cancelButtonText: "Don't save and go back",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            // save changes
+            this.navigateToSelectDestination(true, true);
+          })
+          .catch(() => {
+            // don't save changes
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+            });
+          });
+      } else {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+        });
+      }
+    },
+  },
   beforeMount() {
     this.hideLoading();
     this.loading = ElLoading.service({
@@ -1442,9 +1490,16 @@ export default {
         this.addIds(this.generalForm.keywords);
         this.addIds(this.generalForm.authors);
         this.addIds(this.generalForm.contributors);
+
+        this.originalObject.general = JSON.parse(
+          JSON.stringify(this.generalForm)
+        );
       } else {
         this.generalForm.name = this.dataset.name;
         this.generalForm.description = this.dataset.description;
+        this.originalObject.general = JSON.parse(
+          JSON.stringify(this.generalForm)
+        );
       }
 
       if (this.codePresent) {
@@ -1456,6 +1511,8 @@ export default {
 
           this.addIds(this.codeForm.relatedLinks);
           this.addIds(this.codeForm.otherSoftwareRequirements);
+
+          this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
         }
       }
     });
