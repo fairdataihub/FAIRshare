@@ -941,7 +941,7 @@ export default {
                 this.authorsErrorMessage = "";
                 this.invalidStatus.authors = false;
               } else {
-                console.log("invalid orcid");
+                // console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
                 this.$refs.gmForm.validate();
                 this.invalidStatus.authors = true;
@@ -970,8 +970,6 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
-            console.log(contributor);
-
             if (contributor.name === "" || contributor.affiliation === "") {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
@@ -1003,7 +1001,7 @@ export default {
                 this.contributorsErrorMessage = "";
                 this.invalidStatus.contributors = false;
               } else {
-                console.log("invalid orcid");
+                // console.log("invalid orcid");
                 this.contributorsErrorMessage = "ORCID is not valid";
                 this.$refs.gmForm.validate();
                 this.invalidStatus.contributors = true;
@@ -1383,10 +1381,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      console.log("val", shouldNavigateBack);
-
       if (shouldNavigateBack) {
-        console.log("navigate back");
         this.$router.push({
           path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
         });
@@ -1409,7 +1404,7 @@ export default {
           that.loading.close();
           clearInterval(that.interval);
         } else {
-          console.log("waiting for loading");
+          // console.log("waiting for loading");
         }
       }, 10);
     },

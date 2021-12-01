@@ -201,12 +201,8 @@ autoUpdater.on("update-downloaded", () => {
 });
 
 ipcMain.on("open-link-in-browser", async (_event, link) => {
-  console.log("opening link", link);
-  shell.openExternal("https://google.com").then(() => {
-    console.log("hello");
-  });
   shell.openExternal(link).then(() => {
-    console.log("opened link");
+    console.log("opened link", link);
   });
 });
 

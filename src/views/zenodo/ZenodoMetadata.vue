@@ -1384,7 +1384,7 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (shouldNavigateBack) {
-        console.log("shouldNavigateBack");
+        // console.log("shouldNavigateBack");
         this.$router.push(
           `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
         );
@@ -1400,7 +1400,7 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        console.log(generalForm);
+        // console.log(generalForm);
 
         if ("name" in generalForm) {
           this.zenodoMetadataForm.title = generalForm.name;
@@ -1465,7 +1465,6 @@ export default {
           })
           .catch(() => {
             // don't save changes
-            console.log("changes discarded");
             this.$router.push({
               path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
             });
@@ -1494,7 +1493,7 @@ export default {
         if (val.length > 0) {
           for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
-              console.log("author error");
+              // console.log("author error");
               this.authorsErrorMessage =
                 "Name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
@@ -1511,7 +1510,7 @@ export default {
               let total = 0;
               for (let i = 0; i < orcid.length - 1; i++) {
                 const digit = parseInt(orcid.substr(i, 1));
-                console.log(digit);
+                // console.log(digit);
                 if (isNaN(digit)) {
                   continue;
                 }
@@ -1526,7 +1525,7 @@ export default {
                 this.authorsErrorMessage = "";
                 this.invalidStatus.authors = false;
               } else {
-                console.log("invalid orcid");
+                // console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
                 this.invalidStatus.authors = true;
@@ -1543,7 +1542,7 @@ export default {
         if (val.length > 0) {
           for (let contributor of val) {
             if (contributor.name === "" || contributor.affiliation === "") {
-              console.log("contributor error");
+              // console.log("contributor error");
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.$refs.zmForm.validate();
@@ -1574,7 +1573,7 @@ export default {
                 this.contributorsErrorMessage = "";
                 this.invalidStatus.contributors = false;
               } else {
-                console.log("invalid orcid");
+                // console.log("invalid orcid");
                 this.contributorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
                 this.invalidStatus.contributors = true;
@@ -1653,7 +1652,7 @@ export default {
           this.invalidStatus.relatedIdentifiers = false;
         } else {
           for (let relatedIdentifier of val) {
-            console.log(relatedIdentifier.identifier);
+            // console.log(relatedIdentifier.identifier);
             if (relatedIdentifier.identifier === "") {
               this.relatedIdentifiersErrorMessage =
                 "Please provide a related identifier.";
@@ -1700,7 +1699,7 @@ export default {
         if (val.length > 0) {
           for (let subject of val) {
             if (subject.term === "") {
-              console.log("subject error");
+              // console.log("subject error");
               this.subjectsErrorMessage =
                 "Please provide a valid and identifiable subject.";
               this.$refs.zmForm.validate();

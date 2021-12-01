@@ -28,8 +28,8 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route);
-    console.log(this.datasets.datasets);
+    // console.log(this.$route);
+    // console.log(this.datasets.datasets);
     // console.log(this.$store.state.user.name);
     // console.log(this.$store.getters.postsCount);
   },
