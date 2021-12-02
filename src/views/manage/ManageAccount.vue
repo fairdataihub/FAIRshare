@@ -116,15 +116,15 @@ import { useTokenStore } from "../../store/access";
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
-import {LoadingFoldingCube} from '../../components/spinners/LoadingFoldingCube.vue'
+import { LoadingFoldingCube } from "../../components/spinners/LoadingFoldingCube.vue";
 export default {
   name: "ManageAccount",
-  components:{LoadingFoldingCube},
+  components: { LoadingFoldingCube },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
-    const loading = ref(false)
+    const loading = ref(false);
     const status = ref({
       github: ["lightgrey", "grey", "Disconnected", "Connect"],
       zenodo: ["lightgrey", "grey", "Disconnected", "Connect"],
@@ -200,11 +200,11 @@ export default {
               }
             } else {
               ElNotification({
-                  type: "error",
-                  message: "Cannot verify the token provided",
-                  position: "bottom-right",
-                  duration: 2000,
-                });
+                type: "error",
+                message: "Cannot verify the token provided",
+                position: "bottom-right",
+                duration: 2000,
+              });
             }
           }
         })
@@ -272,7 +272,7 @@ export default {
       zenodoOffline,
       status,
       updateStatus,
-      loading
+      loading,
     };
   },
   data() {

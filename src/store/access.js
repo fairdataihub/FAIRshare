@@ -115,6 +115,6 @@ export const useTokenStore = defineStore({
       } else {
         return false;
       }
-    }
+    },
   },
 });
