@@ -322,7 +322,7 @@ export default {
   },
   methods: {
     openWebsite(url) {
-      window.ipcRenderer.send("open-link-in-browser",url);
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
   async mounted() {
