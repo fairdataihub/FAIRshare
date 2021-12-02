@@ -106,8 +106,6 @@
         </div>
       </div>
     </div>
-
-    <LoadingFoldingCube v-show="loading"></LoadingFoldingCube>
   </div>
 </template>
 
@@ -116,15 +114,13 @@ import { useTokenStore } from "../../store/access";
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
-import { LoadingFoldingCube } from "../../components/spinners/LoadingFoldingCube.vue";
+import { ElLoading } from "element-plus";
 export default {
   name: "ManageAccount",
-  components: { LoadingFoldingCube },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
-    const loading = ref(false);
     const status = ref({
       github: ["lightgrey", "grey", "Disconnected", "Connect"],
       zenodo: ["lightgrey", "grey", "Disconnected", "Connect"],
@@ -175,37 +171,15 @@ export default {
     }
 
     function useAPIkey(key) {
-      let errorFound = false;
       ElMessageBox.prompt("Please input your API key", "", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
       })
         .then(async ({ value }) => {
           if (key == "zenodo") {
-            if (await manager.checkZenodoToken(value)) {
-              try {
-                await manager.saveToken(key, value);
-              } catch (e) {
-                console.log(e);
-                errorFound = true;
-              }
-              updateStatus(key);
-              if (!errorFound) {
-                ElNotification({
-                  type: "success",
-                  message: "Saved successfully",
-                  position: "bottom-right",
-                  duration: 2000,
-                });
-              }
-            } else {
-              ElNotification({
-                type: "error",
-                message: "Cannot verify the token provided",
-                position: "bottom-right",
-                duration: 2000,
-              });
-            }
+            processZenodo(key, value);
+          } else if (key == "github") {
+            processGithub(key, value);
           }
         })
         .catch(() => {
@@ -216,6 +190,74 @@ export default {
             duration: 2000,
           });
         });
+    }
+
+    function createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Verifying...",
+      });
+      return loading;
+    }
+
+    async function processZenodo(key, value) {
+      let spinner = createLoading();
+      let errorFound = false;
+      if (await manager.checkZenodoToken(value)) {
+        try {
+          await manager.saveToken(key, value);
+        } catch (e) {
+          console.log(e);
+          errorFound = true;
+        }
+        updateStatus(key);
+        if (!errorFound) {
+          ElNotification({
+            type: "success",
+            message: "Saved successfully",
+            position: "bottom-right",
+            duration: 2000,
+          });
+        }
+      } else {
+        ElNotification({
+          type: "error",
+          message: "Cannot verify the token provided",
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
+      spinner.close();
+    }
+
+    async function processGithub(key, value) {
+      let spinner = createLoading();
+      let errorFound = false;
+      if (await manager.checkGithubToken(value)) {
+        try {
+          await manager.saveToken(key, value);
+        } catch (e) {
+          console.log(e);
+          errorFound = true;
+        }
+        updateStatus(key);
+        if (!errorFound) {
+          ElNotification({
+            type: "success",
+            message: "Saved successfully",
+            position: "bottom-right",
+            duration: 2000,
+          });
+        }
+      } else {
+        ElNotification({
+          type: "error",
+          message: "Cannot verify the token provided",
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
+      spinner.close();
     }
 
     function APIkeyWarning(key) {
@@ -272,7 +314,7 @@ export default {
       zenodoOffline,
       status,
       updateStatus,
-      loading,
+      createLoading,
     };
   },
   data() {
