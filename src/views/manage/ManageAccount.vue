@@ -106,6 +106,8 @@
         </div>
       </div>
     </div>
+
+    <LoadingFoldingCube v-show="loading"></LoadingFoldingCube>
   </div>
 </template>
 
@@ -114,12 +116,15 @@ import { useTokenStore } from "../../store/access";
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
+import {LoadingFoldingCube} from '../../components/spinners/LoadingFoldingCube.vue'
 export default {
   name: "ManageAccount",
+  components:{LoadingFoldingCube},
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
+    const loading = ref(false)
     const status = ref({
       github: ["lightgrey", "grey", "Disconnected", "Connect"],
       zenodo: ["lightgrey", "grey", "Disconnected", "Connect"],
@@ -168,6 +173,7 @@ export default {
         }
       });
     }
+
     function useAPIkey(key) {
       let errorFound = false;
       ElMessageBox.prompt("Please input your API key", "", {
@@ -175,20 +181,31 @@ export default {
         cancelButtonText: "Cancel",
       })
         .then(async ({ value }) => {
-          try {
-            await manager.saveToken(key, value);
-          } catch (e) {
-            console.log(e);
-            errorFound = true;
-          }
-          await updateStatus(key);
-          if (!errorFound) {
-            ElNotification({
-              type: "success",
-              message: "Saved successfully",
-              position: "bottom-right",
-              duration: 2000,
-            });
+          if (key == "zenodo") {
+            if (await manager.checkZenodoToken(value)) {
+              try {
+                await manager.saveToken(key, value);
+              } catch (e) {
+                console.log(e);
+                errorFound = true;
+              }
+              updateStatus(key);
+              if (!errorFound) {
+                ElNotification({
+                  type: "success",
+                  message: "Saved successfully",
+                  position: "bottom-right",
+                  duration: 2000,
+                });
+              }
+            } else {
+              ElNotification({
+                  type: "error",
+                  message: "Cannot verify the token provided",
+                  position: "bottom-right",
+                  duration: 2000,
+                });
+            }
           }
         })
         .catch(() => {
@@ -218,7 +235,7 @@ export default {
           } catch (e) {
             errorFound = true;
           }
-          await updateStatus(key);
+          updateStatus(key);
           if (!errorFound) {
             ElNotification({
               type: "success",
@@ -255,6 +272,7 @@ export default {
       zenodoOffline,
       status,
       updateStatus,
+      loading
     };
   },
   data() {

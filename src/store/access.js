@@ -5,6 +5,7 @@ import path from "path";
 import { app } from "@electron/remote";
 import { defineStore } from "pinia";
 import CryptoJS from "crypto-js";
+import axios from "axios";
 
 const USER_PATH = app.getPath("home");
 const TOKEN_STORE_PATH = path.join(
@@ -89,5 +90,31 @@ export const useTokenStore = defineStore({
       await this.syncTokens();
       console.log("now accessTokens: ", this.accessTokens);
     },
+
+    async getDepositions(token) {
+      return await axios
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+          params: {
+            access_token: token,
+          },
+        })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+    },
+
+    async checkZenodoToken(token) {
+      const response = await this.getDepositions(token);
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        return false;
+      } else {
+        return false;
+      }
+    }
   },
 });
