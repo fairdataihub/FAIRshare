@@ -76,11 +76,9 @@ export const useTokenStore = defineStore({
     },
     // decrypt the token and return it
     async getToken(key) {
-      console.log("this.accessTokens: ", this.accessTokens);
       if (key in this.accessTokens) {
         return await decrypt(this.accessTokens[key]);
       } else {
-        console.log("?????????");
         return "NO_TOKEN_FOUND";
       }
     },
@@ -88,7 +86,6 @@ export const useTokenStore = defineStore({
     async deleteToken(key) {
       delete this.accessTokens[key];
       await this.syncTokens();
-      console.log("now accessTokens: ", this.accessTokens);
     },
 
     async getDepositions(token) {
@@ -118,7 +115,6 @@ export const useTokenStore = defineStore({
     },
 
     async checkGithubToken(token) {
-      console.log("token: ", token);
       return true;
     },
   },
