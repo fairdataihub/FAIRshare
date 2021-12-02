@@ -10,10 +10,7 @@
             <span
               class="dot"
               :style="{
-                backgroundColor:
-                  this.manager.checkApiKey('github') == ''
-                    ? 'lightgray'
-                    : 'lightgreen',
+                backgroundColor: status.github[0],
               }"
             ></span>
           </div>
@@ -21,17 +18,10 @@
             <div
               class="app-Card-Status-Text"
               :style="{
-                color:
-                  this.manager.checkApiKey('github') == ''
-                    ? 'gray'
-                    : 'lightgreen',
+                color: status.github[1],
               }"
             >
-              {{
-                this.manager.checkApiKey("github") == ""
-                  ? "Disconnected"
-                  : "Connected"
-              }}
+              {{ status.github[2] }}
             </div>
           </div>
         </div>
@@ -57,11 +47,7 @@
             type="text"
             class="button"
             @click="openDialog($event, 'github')"
-            >{{
-              this.manager.checkApiKey("github") == ""
-                ? "Connect"
-                : "Disconnect"
-            }}</el-button
+            >{{ status.github[3] }}</el-button
           >
         </div>
       </div>
@@ -80,10 +66,7 @@
             <span
               class="dot"
               :style="{
-                backgroundColor:
-                  this.manager.checkApiKey('zenodo') == ''
-                    ? 'lightgray'
-                    : 'lightgreen',
+                backgroundColor: status.zenodo[0],
               }"
             ></span>
           </div>
@@ -91,17 +74,10 @@
             <div
               class="app-Card-Status-Text"
               :style="{
-                color:
-                  this.manager.checkApiKey('zenodo') == ''
-                    ? 'gray'
-                    : 'lightgreen',
+                color: status.zenodo[1],
               }"
             >
-              {{
-                this.manager.checkApiKey("zenodo") == ""
-                  ? "Disconnected"
-                  : "Connected"
-              }}
+              {{ status.zenodo[2] }}
             </div>
           </div>
         </div>
@@ -125,92 +101,8 @@
             type="text"
             class="button"
             @click="openDialog($event, 'zenodo')"
-            >{{
-              this.manager.checkApiKey("zenodo") == ""
-                ? "Connect"
-                : "Disconnect"
-            }}</el-button
+            >{{ status.zenodo[3] }}</el-button
           >
-        </div>
-      </div>
-    </div>
-
-    <div class="app-Card">
-      <div class="image-Container">
-        <img
-          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-          class="image"
-        />
-      </div>
-      <div class="app-Card-Content">
-        <div class="app-Card-Status">
-          <div class="centering-Container">
-            <span class="dot disconnected-Dot"></span>
-          </div>
-          <div class="centering-Container">
-            <div class="app-Card-Status-Text disconnected-Text">
-              {{
-                this.manager.checkApiKey("placeholder") == ""
-                  ? "Disconnected"
-                  : "Connected"
-              }}
-            </div>
-          </div>
-        </div>
-        <div class="centering-Container center">
-          <span
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
-            egestas dui id ornare arcu odio ut sem.</span
-          >
-        </div>
-        <div class="centering-Container bottom">
-          <el-button type="text" class="button">{{
-            this.manager.checkApiKey("placeholder") == ""
-              ? "Connect"
-              : "Disconnect"
-          }}</el-button>
-        </div>
-      </div>
-    </div>
-
-    <div class="app-Card">
-      <div class="image-Container">
-        <img
-          src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-          class="image"
-        />
-      </div>
-      <div class="app-Card-Content">
-        <div class="app-Card-Status">
-          <div class="centering-Container">
-            <span class="dot disconnected-Dot"></span>
-          </div>
-          <div class="centering-Container">
-            <div class="app-Card-Status-Text disconnected-Text">
-              {{
-                this.manager.checkApiKey("placeholder") == ""
-                  ? "Disconnected"
-                  : "Connected"
-              }}
-            </div>
-          </div>
-        </div>
-        <div class="centering-Container center">
-          <span
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Convallis aenean et tortor at risus viverra adipiscing at. Est velit
-            egestas dui id ornare arcu odio ut sem.</span
-          >
-        </div>
-        <div class="centering-Container bottom">
-          <el-button type="text" class="button">{{
-            this.manager.checkApiKey("placeholder") == ""
-              ? "Connect"
-              : "Disconnect"
-          }}</el-button>
         </div>
       </div>
     </div>
@@ -218,27 +110,78 @@
 </template>
 
 <script>
-import { useManage } from "../../store/manage";
+import { useTokenStore } from "../../store/access";
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
+import { ref } from "vue";
 export default {
   name: "ManageAccount",
   setup() {
-    const manager = useManage();
+    const manager = useTokenStore();
+    const githubOffline = ref(true);
+    const zenodoOffline = ref(true);
+    const status = ref({
+      github: ["lightgrey", "grey", "Disconnected", "Connect"],
+      zenodo: ["lightgrey", "grey", "Disconnected", "Connect"],
+    });
+
+    function updateStatus(key) {
+      manager.getToken(key).then((value) => {
+        if (key == "github") {
+          if (value == "NO_TOKEN_FOUND") {
+            githubOffline.value = true;
+            status.value.github = [
+              "lightgrey",
+              "grey",
+              "Disconnected",
+              "Connect",
+            ];
+          } else {
+            githubOffline.value = false;
+            status.value.github = [
+              "lightgreen",
+              "lightgreen",
+              "Connected",
+              "Disconnect",
+            ];
+          }
+        }
+
+        if (key == "zenodo") {
+          if (value == "NO_TOKEN_FOUND") {
+            zenodoOffline.value = true;
+            status.value.zenodo = [
+              "lightgrey",
+              "grey",
+              "Disconnected",
+              "Connect",
+            ];
+          } else {
+            zenodoOffline.value = false;
+            status.value.zenodo = [
+              "lightgreen",
+              "lightgreen",
+              "Connected",
+              "Disconnect",
+            ];
+          }
+        }
+      });
+    }
     function useAPIkey(key) {
       let errorFound = false;
       ElMessageBox.prompt("Please input your API key", "", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
       })
-        .then(({ value }) => {
+        .then(async ({ value }) => {
           try {
-            manager.changeApiKey(key, value);
+            await manager.saveToken(key, value);
           } catch (e) {
             console.log(e);
             errorFound = true;
           }
-          console.log(errorFound);
+          await updateStatus(key);
           if (!errorFound) {
             ElNotification({
               type: "success",
@@ -269,12 +212,13 @@ export default {
           type: "warning",
         }
       )
-        .then(() => {
+        .then(async () => {
           try {
-            manager.changeApiKey(key, "");
+            await manager.deleteToken(key);
           } catch (e) {
             errorFound = true;
           }
+          await updateStatus(key);
           if (!errorFound) {
             ElNotification({
               type: "success",
@@ -304,7 +248,7 @@ export default {
         }
       }
     };
-    return { manager, openDialog };
+    return { manager, openDialog, githubOffline, zenodoOffline, status, updateStatus };
   },
   data() {
     return {};
@@ -313,6 +257,12 @@ export default {
     openWebsite(url) {
       require("electron").shell.openExternal(url);
     },
+  },
+  async mounted() {
+    console.log(">>>>>>")
+    await this.manager.loadTokens()
+    this.updateStatus("github")
+    this.updateStatus("zenodo")
   },
 };
 </script>
