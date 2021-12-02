@@ -114,7 +114,7 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async checkGithubToken(token) {
+    async checkGithubToken() {
       return true;
     },
   },

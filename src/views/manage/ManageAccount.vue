@@ -322,11 +322,10 @@ export default {
   },
   methods: {
     openWebsite(url) {
-      require("electron").shell.openExternal(url);
+      window.ipcRenderer.send("open-link-in-browser",url);
     },
   },
   async mounted() {
-    console.log(">>>>>>");
     await this.manager.loadTokens();
     this.updateStatus("github");
     this.updateStatus("zenodo");
