@@ -248,7 +248,14 @@ export default {
         }
       }
     };
-    return { manager, openDialog, githubOffline, zenodoOffline, status, updateStatus };
+    return {
+      manager,
+      openDialog,
+      githubOffline,
+      zenodoOffline,
+      status,
+      updateStatus,
+    };
   },
   data() {
     return {};
@@ -259,10 +266,10 @@ export default {
     },
   },
   async mounted() {
-    console.log(">>>>>>")
-    await this.manager.loadTokens()
-    this.updateStatus("github")
-    this.updateStatus("zenodo")
+    console.log(">>>>>>");
+    await this.manager.loadTokens();
+    this.updateStatus("github");
+    this.updateStatus("zenodo");
   },
 };
 </script>
