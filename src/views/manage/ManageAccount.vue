@@ -1,5 +1,5 @@
 <template>
-  <div class="page-Container">
+  <div class="page-Container font-medium h-screen w-full flex flex-col items-center overflow-scroll box-border">
     <div class="app-Card">
       <div class="image-Container">
         <img src="../../assets/github.jpeg" class="image" />
@@ -44,7 +44,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button
-            type="text"
+           plain
             class="button"
             @click="openDialog($event, 'github')"
             >{{ status.github[3] }}</el-button
@@ -98,7 +98,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button
-            type="text"
+           plain
             class="button"
             @click="openDialog($event, 'zenodo')"
             >{{ status.zenodo[3] }}</el-button
@@ -335,18 +335,9 @@ export default {
 
 <style scoped>
 .page-Container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 5vw;
   padding-top: 5vh;
   padding-bottom: 5vh;
-  overflow: scroll;
-  /* padding-left: 12vw;
-  padding-right: 12vw; */
-  box-sizing: border-box;
 }
 
 .app-Card {
@@ -356,7 +347,7 @@ export default {
   padding: 0px;
   padding-top: 1vh;
   border-radius: 0.25em;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-sizing: border-box;
 }
@@ -378,29 +369,11 @@ export default {
   box-sizing: border-box;
 }
 
-.app-Card::after {
-  border-radius: 5px;
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.app-Card:hover {
-  transform: scale(1.013, 1.013);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.app-Card:hover::after {
-  opacity: 1;
-}
 .dot {
-  height: 1.5vmin;
-  width: 1.5vmin;
+  height: 12px;
+  width: 12px;
   border-radius: 50%;
   display: inline-block;
-}
-
-.app-Card-Status-Text {
-  font-size: 1.5vmin;
 }
 
 .disconnected-Text {
@@ -432,7 +405,6 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   overflow: auto;
-  font-size: 1.8vmin !important;
   color: rgb(99, 99, 99);
 }
 ::-webkit-scrollbar {
@@ -444,13 +416,19 @@ export default {
   justify-content: flex-end;
   padding-right: 2.2vw;
   box-sizing: border-box;
+  padding-bottom: 1vh;
 }
 
 .link-Font {
   color: #409eff;
 }
 
-.el-button--text {
-  font-size: 1.8vmin;
+.el-button {
+  padding: 0px;
+  min-height: 0px;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
 }
 </style>
