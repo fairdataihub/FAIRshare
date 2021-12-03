@@ -1,5 +1,5 @@
 <template>
-  <div class="page-Container font-medium h-screen w-full flex flex-col items-center overflow-scroll box-border">
+  <div class="page-Container h-screen w-full flex flex-col items-center overflow-scroll box-border">
     <div class="app-Card">
       <div class="image-Container">
         <img src="../../assets/github.jpeg" class="image" />
