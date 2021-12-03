@@ -116,7 +116,7 @@ export const useTokenStore = defineStore({
 
     async getGithubUser(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
           headers: {
             Authorization: `token ${token}`,
           },
