@@ -24,6 +24,7 @@
               }"
             ></span>
           </div>
+
           <div class="centering-Container">
             <div
               class="app-Card-Status-Text"
@@ -33,6 +34,16 @@
             >
               {{ status.github[2] }}
             </div>
+          </div>
+
+          <div class="centering-Container">
+            <el-tag
+              v-if="status.github[2] === 'Connected'"
+              type="success"
+              effect="plain"
+            >
+              test
+            </el-tag>
           </div>
         </div>
         <div class="centering-Container center">
@@ -56,7 +67,7 @@
           <el-button
             plain
             class="button"
-            @click="openDialog($event, 'github')"
+            @click="openDialog('github')"
             >{{ status.github[3] }}</el-button
           >
         </div>
@@ -110,7 +121,7 @@
           <el-button
             plain
             class="button"
-            @click="openDialog($event, 'zenodo')"
+            @click="openDialog('zenodo')"
             >{{ status.zenodo[3] }}</el-button
           >
         </div>
@@ -306,12 +317,12 @@ export default {
           });
         });
     }
-    const openDialog = (e, s) => {
-      if (e.target.innerHTML == "Connect") {
+    const openDialog = (s) => {
+      if (status.value[s][3] == "Connect") {
         if (s == "github" || s == "zenodo") {
           useAPIkey(s);
         }
-      } else if (e.target.innerHTML == "Disconnect") {
+      } else if (status.value[s][3] == "Disconnect") {
         if (s == "github" || s == "zenodo") {
           APIkeyWarning(s);
         }
