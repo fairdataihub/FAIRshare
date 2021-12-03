@@ -1,5 +1,15 @@
 <template>
-  <div class="page-Container h-screen w-full flex flex-col items-center overflow-scroll box-border">
+  <div
+    class="
+      page-Container
+      h-screen
+      w-full
+      flex flex-col
+      items-center
+      overflow-scroll
+      box-border
+    "
+  >
     <div class="app-Card">
       <div class="image-Container">
         <img src="../../assets/github.jpeg" class="image" />
@@ -44,7 +54,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button
-           plain
+            plain
             class="button"
             @click="openDialog($event, 'github')"
             >{{ status.github[3] }}</el-button
@@ -98,7 +108,7 @@
         </div>
         <div class="centering-Container bottom">
           <el-button
-           plain
+            plain
             class="button"
             @click="openDialog($event, 'zenodo')"
             >{{ status.zenodo[3] }}</el-button
