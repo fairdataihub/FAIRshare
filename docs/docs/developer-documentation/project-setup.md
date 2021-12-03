@@ -74,7 +74,7 @@ pip install <package-name>
 
 ### NodeJS
 
-You can use the vast library provided via [npm](https://www.npmjs.com/) to add any funcionality via JavaScript. In this application we use Vue 3 so please verify that your package is supported by this framework if neccessary. Please use Yarn as your package manager. 
+You can use the vast library provided via [npm](https://www.npmjs.com/) to add any funcionality via JavaScript. In this application we use Vue 3 so please verify that your package is supported by this framework if necessary. Please use Yarn as your package manager. 
 
 ```shell
 yarn add <package-name>
