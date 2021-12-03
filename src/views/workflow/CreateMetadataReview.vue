@@ -1,268 +1,246 @@
 <template>
-  <div
-    class="
-      h-screen
-      w-full
-      flex flex-row
-      lg:justify-center
-      items-center
-      overflow-y-auto
-    "
-  >
-    <div class="w-full p-3 h-full flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full pr-5">
-          <workflow-progress-bar :currentStep="2" />
-          <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-          <span class="text-left"> Lets upload your data to Zenodo. </span>
+  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
+      <span class="text-left"> Lets upload your data to Zenodo. </span>
 
-          <line-divider></line-divider>
+      <line-divider></line-divider>
 
-          <div class="my-2">
-            <el-descriptions
-              class="margin-top"
-              title="Basic Information"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button type="primary" @click="editInformation(['general'])">
-                  Edit basic information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Dataset name </template>
-                {{ generalMetadata.name }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Dataset description </template>
-                {{ generalMetadata.description }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Authors </template>
-
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="author in generalMetadata.authors"
-                      :key="author.id"
-                    >
-                      Name: {{ author.familyName }}, {{ author.givenName }}
-                      <ul class="ml-6">
-                        <li>Affiliation: {{ author.affiliation }}</li>
-                        <li>ORCID: {{ author.orcid }}</li>
-                        <li>E-mail: {{ author.email }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Keywords </template>
-                <div>
-                  <el-tag
-                    size="medium"
-                    v-for="element in generalMetadata.keywords"
-                    :key="element.id"
-                    class="mx-1"
-                  >
-                    {{ element.keyword }}</el-tag
-                  >
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Contributors </template>
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="contributor in generalMetadata.contributors"
-                      :key="contributor.id"
-                    >
-                      Name: {{ contributor.familyName }},
-                      {{ contributor.givenName }}
-                      <ul class="ml-6">
-                        <li>Affiliation: {{ contributor.affiliation }}</li>
-                        <li>ORCID: {{ contributor.orcid }}</li>
-                        <li>E-mail: {{ contributor.email }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Funding code </template>
-                {{ generalMetadata.funding.code }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Funding organization </template>
-                {{ generalMetadata.funding.organization }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Reference publication </template>
-                {{ generalMetadata.referencePublication }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="codePresent">
-            <el-descriptions
-              class="margin-top"
-              title="Code"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button type="primary" @click="editInformation(['code'])">
-                  Edit code metadata
-                </el-button>
-              </template>
-
-              <el-descriptions-item>
-                <template #label> Creation date </template>
-                {{ displayCreationDate }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> First release date </template>
-                {{ displayFirstReleaseDate }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> License </template>
-                {{ codeMetadata.license }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Application category </template>
-                {{ codeMetadata.applicationCategory }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Repository </template>
-                <span class="break-all xl:break-normal">
-                  {{ codeMetadata.codeRepository }}
-                </span>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Continuous integration </template>
-                {{ codeMetadata.continuousIntegration }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Issue tracker </template>
-                <span class="break-all xl:break-normal">
-                  {{ codeMetadata.issueTracker }}
-                </span>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Related links </template>
-                <div class="flex flex-col">
-                  <span
-                    v-for="link in codeMetadata.relatedLinks"
-                    :key="link.id"
-                    class="mb-1 break-all xl:break-normal"
-                  >
-                    {{ link.link }}
-                  </span>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Programming language </template>
-                <div>
-                  <el-tag
-                    size="medium"
-                    v-for="element in codeMetadata.programmingLanguage"
-                    :key="element"
-                    class="mx-1"
-                  >
-                    {{ element }}
-                  </el-tag>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Runtime platform </template>
-                <div>
-                  <el-tag
-                    size="medium"
-                    v-for="element in codeMetadata.runtimePlatform"
-                    :key="element"
-                    class="mx-1"
-                  >
-                    {{ element }}
-                  </el-tag>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Operating system </template>
-                <div>
-                  <el-tag
-                    size="medium"
-                    v-for="element in codeMetadata.operatingSystem"
-                    :key="element"
-                    class="mx-1"
-                  >
-                    {{ element }}
-                  </el-tag>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Other software requirements </template>
-                <div class="flex flex-col">
-                  <span
-                    v-for="link in codeMetadata.otherSoftwareRequirements"
-                    :key="link.id"
-                    class="mb-1 break-all xl:break-normal"
-                  >
-                    {{ link.link }}
-                  </span>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Current version </template>
-                {{ codeMetadata.currentVersion }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Current version release date </template>
-                {{ displayCurrentVersionReleaseDate }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Current version download URL </template>
-                <span class="break-all xl:break-normal">
-                  {{ codeMetadata.currentVersionDownloadLink }}
-                </span>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Current version release notes </template>
-                {{ codeMetadata.currentVersionReleaseNotes }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Development Status </template>
-                {{ displayDevelopmentStatus }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Is part of </template>
-                <span class="break-all">
-                  {{ codeMetadata.isPartOf }}
-                </span>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="w-full flex flex-row justify-center py-2">
-            <router-link
-              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
-              class="mx-6"
-            >
-              <el-button type="danger" plain> Back </el-button>
-            </router-link>
-
-            <el-button
-              type="primary"
-              class="flex flex-row items-center"
-              @click="selectDestination"
-            >
-              Continue
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
+      <div class="my-2">
+        <el-descriptions
+          class="margin-top"
+          title="Basic Information"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button type="primary" @click="editInformation(['general'])">
+              Edit basic information
             </el-button>
-          </div>
-        </div>
+          </template>
+          <el-descriptions-item>
+            <template #label> Dataset name </template>
+            {{ generalMetadata.name }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Dataset description </template>
+            {{ generalMetadata.description }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Authors </template>
+
+            <div>
+              <ul class="list-disc list-inside">
+                <li v-for="author in generalMetadata.authors" :key="author.id">
+                  Name: {{ author.familyName }}, {{ author.givenName }}
+                  <ul class="ml-6">
+                    <li>Affiliation: {{ author.affiliation }}</li>
+                    <li>ORCID: {{ author.orcid }}</li>
+                    <li>E-mail: {{ author.email }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Keywords </template>
+            <div>
+              <el-tag
+                size="medium"
+                v-for="element in generalMetadata.keywords"
+                :key="element.id"
+                class="mx-1"
+              >
+                {{ element.keyword }}</el-tag
+              >
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Contributors </template>
+            <div>
+              <ul class="list-disc list-inside">
+                <li
+                  v-for="contributor in generalMetadata.contributors"
+                  :key="contributor.id"
+                >
+                  Name: {{ contributor.familyName }},
+                  {{ contributor.givenName }}
+                  <ul class="ml-6">
+                    <li>Affiliation: {{ contributor.affiliation }}</li>
+                    <li>ORCID: {{ contributor.orcid }}</li>
+                    <li>E-mail: {{ contributor.email }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Funding code </template>
+            {{ generalMetadata.funding.code }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Funding organization </template>
+            {{ generalMetadata.funding.organization }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Reference publication </template>
+            {{ generalMetadata.referencePublication }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="codePresent">
+        <el-descriptions class="margin-top" title="Code" size="small" border>
+          <template #extra>
+            <el-button type="primary" @click="editInformation(['code'])">
+              Edit code metadata
+            </el-button>
+          </template>
+
+          <el-descriptions-item>
+            <template #label> Creation date </template>
+            {{ displayCreationDate }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> First release date </template>
+            {{ displayFirstReleaseDate }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> License </template>
+            {{ codeMetadata.license }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Application category </template>
+            {{ codeMetadata.applicationCategory }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Repository </template>
+            <span class="break-all xl:break-normal">
+              {{ codeMetadata.codeRepository }}
+            </span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Continuous integration </template>
+            {{ codeMetadata.continuousIntegration }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Issue tracker </template>
+            <span class="break-all xl:break-normal">
+              {{ codeMetadata.issueTracker }}
+            </span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Related links </template>
+            <div class="flex flex-col">
+              <span
+                v-for="link in codeMetadata.relatedLinks"
+                :key="link.id"
+                class="mb-1 break-all xl:break-normal"
+              >
+                {{ link.link }}
+              </span>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Programming language </template>
+            <div>
+              <el-tag
+                size="medium"
+                v-for="element in codeMetadata.programmingLanguage"
+                :key="element"
+                class="mx-1"
+              >
+                {{ element }}
+              </el-tag>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Runtime platform </template>
+            <div>
+              <el-tag
+                size="medium"
+                v-for="element in codeMetadata.runtimePlatform"
+                :key="element"
+                class="mx-1"
+              >
+                {{ element }}
+              </el-tag>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Operating system </template>
+            <div>
+              <el-tag
+                size="medium"
+                v-for="element in codeMetadata.operatingSystem"
+                :key="element"
+                class="mx-1"
+              >
+                {{ element }}
+              </el-tag>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Other software requirements </template>
+            <div class="flex flex-col">
+              <span
+                v-for="link in codeMetadata.otherSoftwareRequirements"
+                :key="link.id"
+                class="mb-1 break-all xl:break-normal"
+              >
+                {{ link.link }}
+              </span>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Current version </template>
+            {{ codeMetadata.currentVersion }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Current version release date </template>
+            {{ displayCurrentVersionReleaseDate }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Current version download URL </template>
+            <span class="break-all xl:break-normal">
+              {{ codeMetadata.currentVersionDownloadLink }}
+            </span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Current version release notes </template>
+            {{ codeMetadata.currentVersionReleaseNotes }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Development Status </template>
+            {{ displayDevelopmentStatus }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Is part of </template>
+            <span class="break-all">
+              {{ codeMetadata.isPartOf }}
+            </span>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="w-full flex flex-row justify-center py-2">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
+          class="mx-6"
+        >
+          <el-button type="danger" plain> Back </el-button>
+        </router-link>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          @click="selectDestination"
+        >
+          Continue
+          <el-icon>
+            <ArrowRightBold />
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -374,6 +352,10 @@ export default {
       text: "Loading data from stores...",
       background: "rgba(255, 255, 255, 0.95)",
     });
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(2);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 

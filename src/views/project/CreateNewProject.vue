@@ -1,105 +1,92 @@
 <template>
-  <div
-    class="
-      h-screen
-      w-full
-      flex flex-row
-      items-center
-      overflow-y-auto
-      lg:justify-center
-    "
-  >
-    <div class="p-3 h-full flex flex-row items-center">
-      <div class="flex flex-col h-full">
-        <span class="font-medium"> Create a new dataset </span>
-        <span> Fill out some general details about your dataset here. </span>
+  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
+    <div class="flex flex-col h-full w-full">
+      <span class="font-medium"> Create a new dataset </span>
+      <span> Fill out some general details about your dataset here. </span>
 
-        <el-divider> </el-divider>
+      <el-divider> </el-divider>
 
-        <el-form
-          ref="datasetForm"
-          :model="datasetForm"
-          label-width="150px"
-          @submit.prevent
-          :rules="rules"
-        >
-          <el-form-item label="Project name" prop="datasetName">
-            <el-input v-model="datasetForm.datasetName"></el-input>
-          </el-form-item>
+      <el-form
+        ref="datasetForm"
+        :model="datasetForm"
+        label-width="150px"
+        @submit.prevent
+        :rules="rules"
+      >
+        <el-form-item label="Project name" prop="datasetName">
+          <el-input v-model="datasetForm.datasetName"></el-input>
+        </el-form-item>
 
-          <el-form-item label="Project description">
-            <el-popover
-              ref="popover"
-              placement="bottom"
-              :width="300"
-              trigger="manual"
+        <el-form-item label="Project description">
+          <el-popover
+            ref="popover"
+            placement="bottom"
+            :width="300"
+            trigger="manual"
+          >
+            <template #reference>
+              <el-input
+                v-model="datasetForm.datasetDescription"
+                type="textarea"
+              ></el-input>
+            </template>
+
+            <span class="break-normal text-left text-sm">
+              Use a description that is easily identifiable. This will be shown
+              in the dataset selection screen and is not part of your submitted
+              metadata.
+            </span>
+          </el-popover>
+        </el-form-item>
+
+        <el-form-item label="Data type" prop="dataType">
+          <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
+            <el-checkbox label="Code" name="type"></el-checkbox>
+
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Coming soon..."
+              placement="top-end"
             >
-              <template #reference>
-                <el-input
-                  v-model="datasetForm.datasetDescription"
-                  type="textarea"
-                ></el-input>
-              </template>
+              <el-checkbox
+                label="Publications"
+                name="type"
+                disabled
+              ></el-checkbox>
+            </el-tooltip>
 
-              <span class="break-normal text-left text-sm">
-                Use a description that is easily identifiable. This will be
-                shown in the dataset selection screen and is not part of your
-                submitted metadata.
-              </span>
-            </el-popover>
-          </el-form-item>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Coming soon..."
+              placement="top-end"
+            >
+              <el-checkbox label="Images" name="type" disabled></el-checkbox>
+            </el-tooltip>
 
-          <el-form-item label="Data type" prop="dataType">
-            <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
-              <el-checkbox label="Code" name="type"></el-checkbox>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Coming soon..."
+              placement="top-end"
+            >
+              <el-checkbox
+                label="Genomic Data"
+                name="type"
+                disabled
+              ></el-checkbox>
+            </el-tooltip>
+          </el-checkbox-group>
+        </el-form-item>
 
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="top-end"
-              >
-                <el-checkbox
-                  label="Publications"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
-
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="top-end"
-              >
-                <el-checkbox label="Images" name="type" disabled></el-checkbox>
-              </el-tooltip>
-
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="top-end"
-              >
-                <el-checkbox
-                  label="Genomic Data"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
-            </el-checkbox-group>
-          </el-form-item>
-
-          <el-form-item>
-            <div class="py-2 w-full flex flex-row lg:justify-center">
-              <el-button type="primary" @click="submitForm('datasetForm')">
-                Create
-              </el-button>
-              <el-button @click="cancelNewDataset"> Cancel </el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-      </div>
+        <div class="py-2 flex flex-row justify-center">
+          <el-button type="primary" @click="submitForm('datasetForm')">
+            Create
+          </el-button>
+          <el-button @click="cancelNewDataset"> Cancel </el-button>
+        </div>
+      </el-form>
     </div>
   </div>
 </template>

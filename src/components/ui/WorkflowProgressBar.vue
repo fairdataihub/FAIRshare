@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="mx-auto w-auto py-2 mb-4 px-10"
     :style="{ '--barWidth': barWidth }"
   >
@@ -14,10 +14,26 @@
         <span class="hover-content">{{ step.description }}</span>
       </li>
     </ul>
+  </div> -->
+  <div v-if="progressBar.show" class="w-full">
+    <el-steps
+      :active="progressBar.currentStep"
+      align-center
+      finish-status="success"
+      v-if="progressBar.type === 'zenodo'"
+    >
+      <el-step
+        v-for="step in steps"
+        :key="step.description"
+        :description="step.description"
+      ></el-step>
+    </el-steps>
   </div>
 </template>
 
 <script>
+import { useDatasetsStore } from "../../store/datasets";
+
 export default {
   name: "WorkflowProgressBar",
   props: {
@@ -28,6 +44,8 @@ export default {
   },
   data() {
     return {
+      datasetStore: useDatasetsStore(),
+      progressBar: {},
       barWidth: "0%",
       steps: [
         {
@@ -66,12 +84,18 @@ export default {
       return false;
     },
   },
-  mounted() {},
+  async mounted() {
+    this.progressBar = await this.datasetStore.getProgressBar();
+  },
 };
 </script>
 
-<style lang="postcss" scoped>
-ul {
+<style lang="postcss">
+.el-step__description {
+  @apply py-2;
+}
+
+/* ul {
   @apply sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[900px] 2xl:w-[1200px];
   display: flex;
   align-items: center;
@@ -137,5 +161,5 @@ ul li.active .step-number {
 
 .step:hover .hover-content {
   @apply opacity-100 transition-all;
-}
+} */
 </style>

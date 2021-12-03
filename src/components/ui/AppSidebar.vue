@@ -4,6 +4,7 @@
     class="
       flex flex-col
       min-h-screen
+      h-full
       mr-3
       debug-screens
       bg-gray-50

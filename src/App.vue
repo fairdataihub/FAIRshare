@@ -3,16 +3,19 @@
   <div class="flex flex-row bg-white">
     <AppSidebar :environment="environment"></AppSidebar>
 
-    <router-view v-slot="{ Component }" class="pt-2">
-      <transition name="fade" appear mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <AppContent>
+      <router-view v-slot="{ Component }" class="pt-2">
+        <transition name="fade" appear mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </AppContent>
   </div>
 </template>
 
 <script>
 import AppSidebar from "./components/ui/AppSidebar.vue";
+import AppContent from "./components/ui/AppContent.vue";
 
 import { app } from "@electron/remote";
 import semver from "semver";
@@ -29,6 +32,7 @@ export default {
   name: "App",
   components: {
     AppSidebar,
+    AppContent,
   },
   data() {
     return {

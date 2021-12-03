@@ -1,809 +1,773 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="w-full h-full flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto pl-5 pr-8">
-          <workflow-progress-bar :currentStep="2" />
+  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left">
+        Lets make your data FAIR
+      </span>
 
-          <span class="text-lg font-medium text-left">
-            Lets make your data FAIR
-          </span>
+      <line-divider></line-divider>
 
-          <line-divider></line-divider>
+      <span class="mb-2">
+        We need to know some general details your dataset. Please fill all the
+        fields in this section and we'll take care of the rest.
+      </span>
 
-          <span class="mb-2">
-            We need to know some general details your dataset. Please fill all
-            the fields in this section and we'll take care of the rest.
-          </span>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item
+          class="text-lg"
+          title="Basic Information"
+          name="general"
+        >
+          <el-form
+            :model="generalForm"
+            label-width="160px"
+            label-position="right"
+            size="small"
+            ref="gmForm"
+            @submit.prevent
+          >
+            <el-form-item label="Dataset name">
+              <el-input v-model="generalForm.name"></el-input>
+            </el-form-item>
 
-          <el-collapse v-model="activeNames">
-            <el-collapse-item
-              class="text-lg"
-              title="Basic Information"
-              name="general"
-            >
-              <el-form
-                :model="generalForm"
-                label-width="160px"
-                label-position="right"
-                size="small"
-                ref="gmForm"
-                @submit.prevent
+            <el-form-item label="Dataset description">
+              <el-input
+                v-model="generalForm.description"
+                type="textarea"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Keywords">
+              <draggable
+                tag="div"
+                :list="generalForm.keywords"
+                item-key="id"
+                handle=".handle"
               >
-                <el-form-item label="Dataset name">
-                  <el-input v-model="generalForm.name"></el-input>
-                </el-form-item>
-
-                <el-form-item label="Dataset description">
-                  <el-input
-                    v-model="generalForm.description"
-                    type="textarea"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Keywords">
-                  <draggable
-                    tag="div"
-                    :list="generalForm.keywords"
-                    item-key="id"
-                    handle=".handle"
+                <template #item="{ element }">
+                  <div
+                    class="flex flex-row mb-2 justify-between transition-all"
                   >
-                    <template #item="{ element }">
+                    <div class="flex flex-row justify-between w-11/12">
+                      <el-input
+                        v-model="element.keyword"
+                        type="text"
+                        placeholder=""
+                      ></el-input>
+                      <div class="mx-2"></div>
+                    </div>
+                    <div class="flex flex-row justify-evenly w-1/12">
                       <div
                         class="
-                          flex flex-row
-                          mb-2
-                          justify-between
-                          transition-all
+                          flex
+                          justify-center
+                          items-center
+                          handle
+                          text-gray-400
+                          hover:text-gray-700
                         "
                       >
-                        <div class="flex flex-row justify-between w-11/12">
-                          <el-input
-                            v-model="element.keyword"
-                            type="text"
-                            placeholder=""
-                          ></el-input>
-                          <div class="mx-2"></div>
-                        </div>
-                        <div class="flex flex-row justify-evenly w-1/12">
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              handle
-                              text-gray-400
-                              hover:text-gray-700
-                            "
-                          >
-                            <Icon icon="ic:outline-drag-indicator" />
-                          </div>
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              text-gray-600
-                              hover:text-gray-800
-                              cursor-pointer
-                            "
-                          >
-                            <el-popconfirm
-                              title="Are you sure you want to remove this?"
-                              icon-color="red"
-                              confirm-button-text="Yes"
-                              cancel-button-text="No"
-                              @confirm="deleteKeyword(element.id)"
-                            >
-                              <template #reference>
-                                <Icon icon="bx:bx-x" />
-                              </template>
-                            </el-popconfirm>
-                          </div>
-                        </div>
+                        <Icon icon="ic:outline-drag-indicator" />
                       </div>
-                    </template>
-                  </draggable>
-
-                  <div
-                    class="
-                      flex
-                      items-center
-                      cursor-pointer
-                      text-gray-500
-                      hover:text-black
-                      w-max
-                    "
-                    @click="addKeyword()"
-                  >
-                    <Icon icon="carbon:add" />
-                    <span> Add a keyword </span>
-                  </div>
-                </el-form-item>
-
-                <el-form-item label="Funding code">
-                  <el-input
-                    v-model="generalForm.funding.code"
-                    type="text"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Funding organization">
-                  <el-input
-                    v-model="generalForm.funding.organization"
-                    type="text"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Reference publication">
-                  <el-input
-                    v-model="generalForm.referencePublication"
-                    type="text"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Authors" :error="authorsErrorMessage">
-                  <draggable
-                    tag="div"
-                    :list="generalForm.authors"
-                    item-key="id"
-                    handle=".handle"
-                  >
-                    <template #item="{ element }">
                       <div
                         class="
-                          flex flex-row
-                          mb-2
-                          justify-between
-                          transition-all
+                          flex
+                          justify-center
+                          items-center
+                          text-gray-600
+                          hover:text-gray-800
+                          cursor-pointer
                         "
                       >
-                        <div class="flex flex-row justify-between w-11/12">
-                          <el-input
-                            v-model="element.givenName"
-                            type="text"
-                            placeholder="Given name"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                          <el-input
-                            v-model="element.familyName"
-                            type="text"
-                            placeholder="Family name"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                          <el-input
-                            v-model="element.affiliation"
-                            type="text"
-                            placeholder="Affiliation"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                          <el-input
-                            v-model="element.email"
-                            type="text"
-                            placeholder="E-mail address"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                          <el-input
-                            v-model="element.orcid"
-                            type="text"
-                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                        </div>
-                        <div class="flex flex-row justify-evenly w-1/12">
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              handle
-                              text-gray-400
-                              hover:text-gray-700
-                            "
-                          >
-                            <Icon icon="ic:outline-drag-indicator" />
-                          </div>
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              text-gray-600
-                              hover:text-gray-800
-                              cursor-pointer
-                            "
-                          >
-                            <el-popconfirm
-                              title="Are you sure you want to remove this?"
-                              icon-color="red"
-                              confirm-button-text="Yes"
-                              cancel-button-text="No"
-                              @confirm="deleteAuthor(element.id)"
-                            >
-                              <template #reference>
-                                <Icon icon="bx:bx-x" />
-                              </template>
-                            </el-popconfirm>
-                          </div>
-                        </div>
+                        <el-popconfirm
+                          title="Are you sure you want to remove this?"
+                          icon-color="red"
+                          confirm-button-text="Yes"
+                          cancel-button-text="No"
+                          @confirm="deleteKeyword(element.id)"
+                        >
+                          <template #reference>
+                            <Icon icon="bx:bx-x" />
+                          </template>
+                        </el-popconfirm>
                       </div>
-                    </template>
-                  </draggable>
-
-                  <div
-                    class="
-                      flex
-                      items-center
-                      cursor-pointer
-                      text-gray-500
-                      hover:text-black
-                      w-max
-                    "
-                    @click="addAuthor()"
-                  >
-                    <Icon icon="carbon:add" />
-                    <span> Add an author </span>
+                    </div>
                   </div>
-                </el-form-item>
+                </template>
+              </draggable>
 
-                <el-form-item
-                  label="Contributors"
-                  :error="contributorsErrorMessage"
+              <div
+                class="
+                  flex
+                  items-center
+                  cursor-pointer
+                  text-gray-500
+                  hover:text-black
+                  w-max
+                "
+                @click="addKeyword()"
+              >
+                <Icon icon="carbon:add" />
+                <span> Add a keyword </span>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="Funding code">
+              <el-input
+                v-model="generalForm.funding.code"
+                type="text"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Funding organization">
+              <el-input
+                v-model="generalForm.funding.organization"
+                type="text"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Reference publication">
+              <el-input
+                v-model="generalForm.referencePublication"
+                type="text"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Authors" :error="authorsErrorMessage">
+              <draggable
+                tag="div"
+                :list="generalForm.authors"
+                item-key="id"
+                handle=".handle"
+              >
+                <template #item="{ element }">
+                  <div
+                    class="flex flex-row mb-2 justify-between transition-all"
+                  >
+                    <div class="flex flex-row justify-between w-11/12">
+                      <el-input
+                        v-model="element.givenName"
+                        type="text"
+                        placeholder="Given name"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                      <el-input
+                        v-model="element.familyName"
+                        type="text"
+                        placeholder="Family name"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                      <el-input
+                        v-model="element.affiliation"
+                        type="text"
+                        placeholder="Affiliation"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                      <el-input
+                        v-model="element.email"
+                        type="text"
+                        placeholder="E-mail address"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                      <el-input
+                        v-model="element.orcid"
+                        type="text"
+                        placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                    </div>
+                    <div class="flex flex-row justify-evenly w-1/12">
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          handle
+                          text-gray-400
+                          hover:text-gray-700
+                        "
+                      >
+                        <Icon icon="ic:outline-drag-indicator" />
+                      </div>
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          text-gray-600
+                          hover:text-gray-800
+                          cursor-pointer
+                        "
+                      >
+                        <el-popconfirm
+                          title="Are you sure you want to remove this?"
+                          icon-color="red"
+                          confirm-button-text="Yes"
+                          cancel-button-text="No"
+                          @confirm="deleteAuthor(element.id)"
+                        >
+                          <template #reference>
+                            <Icon icon="bx:bx-x" />
+                          </template>
+                        </el-popconfirm>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <div
+                class="
+                  flex
+                  items-center
+                  cursor-pointer
+                  text-gray-500
+                  hover:text-black
+                  w-max
+                "
+                @click="addAuthor()"
+              >
+                <Icon icon="carbon:add" />
+                <span> Add an author </span>
+              </div>
+            </el-form-item>
+
+            <el-form-item
+              label="Contributors"
+              :error="contributorsErrorMessage"
+            >
+              <draggable
+                tag="div"
+                :list="generalForm.contributors"
+                item-key="id"
+                handle=".handle"
+              >
+                <template #item="{ element }">
+                  <div
+                    class="flex flex-row mb-2 justify-between transition-all"
+                  >
+                    <div class="flex flex-row justify-between w-11/12">
+                      <div class="mr-2 w-1/5">
+                        <el-input
+                          v-model="element.givenName"
+                          type="text"
+                          placeholder="Given name"
+                        ></el-input>
+                      </div>
+                      <div class="mx-2 w-1/5">
+                        <el-input
+                          v-model="element.familyName"
+                          type="text"
+                          placeholder="Family name"
+                        ></el-input>
+                      </div>
+                      <div class="mx-2 w-1/5">
+                        <el-input
+                          v-model="element.affiliation"
+                          type="text"
+                          placeholder="Affiliation"
+                        ></el-input>
+                      </div>
+                      <div class="mx-2 w-1/5">
+                        <el-input
+                          v-model="element.email"
+                          type="text"
+                          placeholder="E-mail address"
+                        ></el-input>
+                      </div>
+                      <div class="mx-2 w-1/5">
+                        <el-input
+                          v-model="element.orcid"
+                          type="text"
+                          placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                        ></el-input>
+                      </div>
+                      <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                        <el-select
+                          v-model="element.contributorType"
+                          filterable
+                          placeholder="Select a contributor type"
+                        >
+                          <el-option
+                            v-for="item in contributorTypes"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          >
+                          </el-option>
+                        </el-select>
+                      </div>
+                    </div>
+                    <div class="flex flex-row justify-evenly w-1/12">
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          handle
+                          text-gray-400
+                          hover:text-gray-700
+                        "
+                      >
+                        <Icon icon="ic:outline-drag-indicator" />
+                      </div>
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          text-gray-600
+                          hover:text-gray-800
+                          cursor-pointer
+                        "
+                      >
+                        <el-popconfirm
+                          title="Are you sure you want to remove this?"
+                          icon-color="red"
+                          confirm-button-text="Yes"
+                          cancel-button-text="No"
+                          @confirm="deleteContributor(element.id)"
+                        >
+                          <template #reference>
+                            <Icon icon="bx:bx-x" />
+                          </template>
+                        </el-popconfirm>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <div
+                class="
+                  flex
+                  items-center
+                  cursor-pointer
+                  text-gray-500
+                  hover:text-black
+                  w-max
+                "
+                @click="addContributor()"
+              >
+                <Icon icon="carbon:add" />
+                <span> Add a contributor </span>
+                {{ contributorsErrorMessage }}
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+
+        <el-collapse-item title="Code" name="code" v-if="codePresent">
+          <p class="mb-2">
+            Lets make your code FAIR. Please fill the following fields.
+          </p>
+
+          <el-form
+            :model="codeForm"
+            label-width="214px"
+            label-position="right"
+            size="small"
+            @submit.prevent
+            ref="cmForm"
+          >
+            <el-form-item label="Creation date">
+              <el-date-picker
+                v-model="codeForm.creationDate"
+                type="date"
+                placeholder="Pick a day"
+                value-format="YYYY-MM-DD"
+              >
+              </el-date-picker>
+            </el-form-item>
+
+            <el-form-item label="First release date">
+              <el-date-picker
+                v-model="codeForm.firstReleaseDate"
+                type="date"
+                placeholder="Pick a day"
+                value-format="YYYY-MM-DD"
+              >
+              </el-date-picker>
+            </el-form-item>
+
+            <el-form-item label="License">
+              <el-select
+                v-model="codeForm.license"
+                filterable
+                placeholder="Select a license"
+                class="w-full"
+              >
+                <el-option
+                  v-for="item in licenseOptions"
+                  :key="item.licenseId"
+                  :label="item.name"
+                  :value="item.licenseId"
                 >
-                  <draggable
-                    tag="div"
-                    :list="generalForm.contributors"
-                    item-key="id"
-                    handle=".handle"
-                  >
-                    <template #item="{ element }">
-                      <div
-                        class="
-                          flex flex-row
-                          mb-2
-                          justify-between
-                          transition-all
-                        "
-                      >
-                        <div class="flex flex-row justify-between w-11/12">
-                          <div class="mr-2 w-1/5">
-                            <el-input
-                              v-model="element.givenName"
-                              type="text"
-                              placeholder="Given name"
-                            ></el-input>
-                          </div>
-                          <div class="mx-2 w-1/5">
-                            <el-input
-                              v-model="element.familyName"
-                              type="text"
-                              placeholder="Family name"
-                            ></el-input>
-                          </div>
-                          <div class="mx-2 w-1/5">
-                            <el-input
-                              v-model="element.affiliation"
-                              type="text"
-                              placeholder="Affiliation"
-                            ></el-input>
-                          </div>
-                          <div class="mx-2 w-1/5">
-                            <el-input
-                              v-model="element.email"
-                              type="text"
-                              placeholder="E-mail address"
-                            ></el-input>
-                          </div>
-                          <div class="mx-2 w-1/5">
-                            <el-input
-                              v-model="element.orcid"
-                              type="text"
-                              placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                            ></el-input>
-                          </div>
-                          <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
-                            <el-select
-                              v-model="element.contributorType"
-                              filterable
-                              placeholder="Select a contributor type"
-                            >
-                              <el-option
-                                v-for="item in contributorTypes"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                              >
-                              </el-option>
-                            </el-select>
-                          </div>
-                        </div>
-                        <div class="flex flex-row justify-evenly w-1/12">
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              handle
-                              text-gray-400
-                              hover:text-gray-700
-                            "
-                          >
-                            <Icon icon="ic:outline-drag-indicator" />
-                          </div>
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              text-gray-600
-                              hover:text-gray-800
-                              cursor-pointer
-                            "
-                          >
-                            <el-popconfirm
-                              title="Are you sure you want to remove this?"
-                              icon-color="red"
-                              confirm-button-text="Yes"
-                              cancel-button-text="No"
-                              @confirm="deleteContributor(element.id)"
-                            >
-                              <template #reference>
-                                <Icon icon="bx:bx-x" />
-                              </template>
-                            </el-popconfirm>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </draggable>
+                </el-option>
+              </el-select>
 
-                  <div
-                    class="
-                      flex
-                      items-center
-                      cursor-pointer
-                      text-gray-500
-                      hover:text-black
-                      w-max
-                    "
-                    @click="addContributor()"
-                  >
-                    <Icon icon="carbon:add" />
-                    <span> Add a contributor </span>
-                    {{ contributorsErrorMessage }}
-                  </div>
-                </el-form-item>
-              </el-form>
-            </el-collapse-item>
-
-            <el-collapse-item title="Code" name="code" v-if="codePresent">
-              <p class="mb-2">
-                Lets make your code FAIR. Please fill the following fields.
+              <p
+                class="
+                  text-sm
+                  pt-2
+                  text-gray-500
+                  cursor-pointer
+                  hover:text-gray-800
+                "
+                v-if="codeForm.license != ''"
+                @click="openLicenseDetails"
+              >
+                Show license details.
               </p>
 
-              <el-form
-                :model="codeForm"
-                label-width="214px"
-                label-position="right"
-                size="small"
-                @submit.prevent
-                ref="cmForm"
+              <el-drawer
+                v-model="showLicenseDetails"
+                :title="licenseTitle"
+                direction="rtl"
               >
-                <el-form-item label="Creation date">
-                  <el-date-picker
-                    v-model="codeForm.creationDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                </el-form-item>
+                <iframe
+                  sandbox
+                  :src="licenseHtmlUrl"
+                  class="w-full h-full"
+                ></iframe>
+              </el-drawer>
+            </el-form-item>
 
-                <el-form-item label="First release date">
-                  <el-date-picker
-                    v-model="codeForm.firstReleaseDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                </el-form-item>
-
-                <el-form-item label="License">
-                  <el-select
-                    v-model="codeForm.license"
-                    filterable
-                    placeholder="Select a license"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in licenseOptions"
-                      :key="item.licenseId"
-                      :label="item.name"
-                      :value="item.licenseId"
-                    >
-                    </el-option>
-                  </el-select>
-
-                  <p
-                    class="
-                      text-sm
-                      pt-2
-                      text-gray-500
-                      cursor-pointer
-                      hover:text-gray-800
-                    "
-                    v-if="codeForm.license != ''"
-                    @click="openLicenseDetails"
-                  >
-                    Show license details.
-                  </p>
-
-                  <el-drawer
-                    v-model="showLicenseDetails"
-                    :title="licenseTitle"
-                    direction="rtl"
-                  >
-                    <iframe
-                      sandbox
-                      :src="licenseHtmlUrl"
-                      class="w-full h-full"
-                    ></iframe>
-                  </el-drawer>
-                </el-form-item>
-
-                <el-form-item label="Application category">
-                  <el-select
-                    v-model="codeForm.applicationCategory"
-                    filterable
-                    allow-create
-                    placeholder="Select an application category"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in applicationCategoryOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item
-                  label="Code repository"
-                  :error="codeRepositoryErrorMessage"
+            <el-form-item label="Application category">
+              <el-select
+                v-model="codeForm.applicationCategory"
+                filterable
+                allow-create
+                placeholder="Select an application category"
+                class="w-full"
+              >
+                <el-option
+                  v-for="item in applicationCategoryOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 >
-                  <el-input v-model="codeForm.codeRepository"></el-input>
-                </el-form-item>
+                </el-option>
+              </el-select>
+            </el-form-item>
 
-                <el-form-item
-                  label="Continuous integration"
-                  :error="continuousIntegrationErrorMessage"
-                >
-                  <el-input v-model="codeForm.continuousIntegration"></el-input>
-                </el-form-item>
-
-                <el-form-item
-                  label="Issue Tracker"
-                  :error="issueTrackerErrorMessage"
-                >
-                  <el-input v-model="codeForm.issueTracker"></el-input>
-                </el-form-item>
-
-                <el-form-item
-                  label="Related links"
-                  :error="relatedLinksErrorMessage"
-                >
-                  <draggable
-                    tag="div"
-                    :list="codeForm.relatedLinks"
-                    item-key="id"
-                    handle=".handle"
-                  >
-                    <template #item="{ element }">
-                      <div
-                        class="
-                          flex flex-row
-                          mb-2
-                          justify-between
-                          transition-all
-                        "
-                      >
-                        <div class="flex flex-row justify-between w-11/12">
-                          <el-input
-                            v-model="element.link"
-                            type="text"
-                            placeholder=""
-                          ></el-input>
-                          <div class="mx-2"></div>
-                        </div>
-                        <div class="flex flex-row justify-evenly w-1/12">
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              handle
-                              text-gray-400
-                              hover:text-gray-700
-                            "
-                          >
-                            <Icon icon="ic:outline-drag-indicator" />
-                          </div>
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              text-gray-600
-                              hover:text-gray-800
-                              cursor-pointer
-                            "
-                          >
-                            <el-popconfirm
-                              title="Are you sure you want to remove this?"
-                              icon-color="red"
-                              confirm-button-text="Yes"
-                              cancel-button-text="No"
-                              @confirm="deleteRelatedLink(element.id)"
-                            >
-                              <template #reference>
-                                <Icon icon="bx:bx-x" />
-                              </template>
-                            </el-popconfirm>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </draggable>
-
-                  <div
-                    class="
-                      flex
-                      items-center
-                      cursor-pointer
-                      text-gray-500
-                      hover:text-black
-                      w-max
-                    "
-                    @click="addRelatedLink()"
-                  >
-                    <Icon icon="carbon:add" />
-                    <span> Add a related link </span>
-                  </div>
-                </el-form-item>
-
-                <el-form-item label="Programming Language">
-                  <el-select
-                    v-model="codeForm.programmingLanguage"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="C#, Java, Python 3"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in programmingLanguageOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="Runtime platform">
-                  <el-select
-                    v-model="codeForm.runtimePlatform"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder=".Net, Java"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in runtimePlatformOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="Operating system">
-                  <el-select
-                    v-model="codeForm.operatingSystem"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="Linux, Windows"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in operatingSystemOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="Other software requirements">
-                  <draggable
-                    tag="div"
-                    :list="codeForm.otherSoftwareRequirements"
-                    item-key="id"
-                    handle=".handle"
-                  >
-                    <template #item="{ element }">
-                      <div
-                        class="
-                          flex flex-row
-                          mb-2
-                          justify-between
-                          transition-all
-                        "
-                      >
-                        <div class="flex flex-row justify-between w-11/12">
-                          <el-input
-                            v-model="element.link"
-                            type="text"
-                            placeholder="Python 3.4 or https://github.com/pst/requests"
-                          ></el-input>
-                          <div class="mx-2"></div>
-                        </div>
-                        <div class="flex flex-row justify-evenly w-1/12">
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              handle
-                              text-gray-400
-                              hover:text-gray-700
-                            "
-                          >
-                            <Icon icon="ic:outline-drag-indicator" />
-                          </div>
-                          <div
-                            class="
-                              flex
-                              justify-center
-                              items-center
-                              text-gray-600
-                              hover:text-gray-800
-                              cursor-pointer
-                            "
-                          >
-                            <el-popconfirm
-                              title="Are you sure you want to remove this?"
-                              icon-color="red"
-                              confirm-button-text="Yes"
-                              cancel-button-text="No"
-                              @confirm="
-                                deleteOtherSoftwareRequirements(element.id)
-                              "
-                            >
-                              <template #reference>
-                                <Icon icon="bx:bx-x" />
-                              </template>
-                            </el-popconfirm>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </draggable>
-
-                  <div
-                    class="
-                      flex
-                      items-center
-                      cursor-pointer
-                      text-gray-500
-                      hover:text-black
-                      w-max
-                    "
-                    @click="addOtherSoftwareRequirements()"
-                  >
-                    <Icon icon="carbon:add" />
-                    <span> Add an additional software requirement </span>
-                  </div>
-                </el-form-item>
-
-                <el-form-item
-                  label="Current version"
-                  :error="versionErrorMessage"
-                >
-                  <el-input
-                    v-model="codeForm.currentVersion"
-                    placeholder="1.5.6"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Current version release date">
-                  <el-date-picker
-                    v-model="codeForm.currentVersionReleaseDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                </el-form-item>
-
-                <el-form-item
-                  label="Current version download URL"
-                  :error="currentVersionDownloadLinkErrorMessage"
-                >
-                  <el-input
-                    v-model="codeForm.currentVersionDownloadLink"
-                    type="url"
-                    placeholder="https://www.python.org/downloads/release/python-3100/"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Current version release notes">
-                  <el-input
-                    v-model="codeForm.currentVersionReleaseNotes"
-                    type="textarea"
-                    placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Development status">
-                  <el-select
-                    v-model="codeForm.developmentStatus"
-                    filterable
-                    placeholder=""
-                  >
-                    <el-option
-                      v-for="item in repoStatusOptions"
-                      :key="item.value"
-                      :label="item.display_name"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                  <p class="text-xs pt-2 text-gray-500">
-                    {{ developmentStatus }}
-                  </p>
-                </el-form-item>
-
-                <el-form-item label="Is part of" :error="isPartOfErrorMessage">
-                  <el-input
-                    v-model="codeForm.isPartOf"
-                    type="url"
-                    placeholder="https://thebiggerframework.org"
-                  ></el-input>
-                </el-form-item>
-              </el-form>
-            </el-collapse-item>
-          </el-collapse>
-
-          <div class="w-full flex flex-row justify-center py-2">
-            <el-button type="danger" plain @click="navigateBack" class="mx-6">
-              Back
-            </el-button>
-
-            <el-button
-              type="primary"
-              class="flex flex-row items-center"
-              @click="navigateToSelectDestination"
-              id="existElement"
-              :disabled="checkInvalidStatus"
+            <el-form-item
+              label="Code repository"
+              :error="codeRepositoryErrorMessage"
             >
-              Continue
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
-            </el-button>
-          </div>
-        </div>
+              <el-input v-model="codeForm.codeRepository"></el-input>
+            </el-form-item>
+
+            <el-form-item
+              label="Continuous integration"
+              :error="continuousIntegrationErrorMessage"
+            >
+              <el-input v-model="codeForm.continuousIntegration"></el-input>
+            </el-form-item>
+
+            <el-form-item
+              label="Issue Tracker"
+              :error="issueTrackerErrorMessage"
+            >
+              <el-input v-model="codeForm.issueTracker"></el-input>
+            </el-form-item>
+
+            <el-form-item
+              label="Related links"
+              :error="relatedLinksErrorMessage"
+            >
+              <draggable
+                tag="div"
+                :list="codeForm.relatedLinks"
+                item-key="id"
+                handle=".handle"
+              >
+                <template #item="{ element }">
+                  <div
+                    class="flex flex-row mb-2 justify-between transition-all"
+                  >
+                    <div class="flex flex-row justify-between w-11/12">
+                      <el-input
+                        v-model="element.link"
+                        type="text"
+                        placeholder=""
+                      ></el-input>
+                      <div class="mx-2"></div>
+                    </div>
+                    <div class="flex flex-row justify-evenly w-1/12">
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          handle
+                          text-gray-400
+                          hover:text-gray-700
+                        "
+                      >
+                        <Icon icon="ic:outline-drag-indicator" />
+                      </div>
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          text-gray-600
+                          hover:text-gray-800
+                          cursor-pointer
+                        "
+                      >
+                        <el-popconfirm
+                          title="Are you sure you want to remove this?"
+                          icon-color="red"
+                          confirm-button-text="Yes"
+                          cancel-button-text="No"
+                          @confirm="deleteRelatedLink(element.id)"
+                        >
+                          <template #reference>
+                            <Icon icon="bx:bx-x" />
+                          </template>
+                        </el-popconfirm>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <div
+                class="
+                  flex
+                  items-center
+                  cursor-pointer
+                  text-gray-500
+                  hover:text-black
+                  w-max
+                "
+                @click="addRelatedLink()"
+              >
+                <Icon icon="carbon:add" />
+                <span> Add a related link </span>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="Programming Language">
+              <el-select
+                v-model="codeForm.programmingLanguage"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                placeholder="C#, Java, Python 3"
+                class="w-full"
+              >
+                <el-option
+                  v-for="item in programmingLanguageOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Runtime platform">
+              <el-select
+                v-model="codeForm.runtimePlatform"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                placeholder=".Net, Java"
+                class="w-full"
+              >
+                <el-option
+                  v-for="item in runtimePlatformOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Operating system">
+              <el-select
+                v-model="codeForm.operatingSystem"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                placeholder="Linux, Windows"
+                class="w-full"
+              >
+                <el-option
+                  v-for="item in operatingSystemOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Other software requirements">
+              <draggable
+                tag="div"
+                :list="codeForm.otherSoftwareRequirements"
+                item-key="id"
+                handle=".handle"
+              >
+                <template #item="{ element }">
+                  <div
+                    class="flex flex-row mb-2 justify-between transition-all"
+                  >
+                    <div class="flex flex-row justify-between w-11/12">
+                      <el-input
+                        v-model="element.link"
+                        type="text"
+                        placeholder="Python 3.4 or https://github.com/pst/requests"
+                      ></el-input>
+                      <div class="mx-2"></div>
+                    </div>
+                    <div class="flex flex-row justify-evenly w-1/12">
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          handle
+                          text-gray-400
+                          hover:text-gray-700
+                        "
+                      >
+                        <Icon icon="ic:outline-drag-indicator" />
+                      </div>
+                      <div
+                        class="
+                          flex
+                          justify-center
+                          items-center
+                          text-gray-600
+                          hover:text-gray-800
+                          cursor-pointer
+                        "
+                      >
+                        <el-popconfirm
+                          title="Are you sure you want to remove this?"
+                          icon-color="red"
+                          confirm-button-text="Yes"
+                          cancel-button-text="No"
+                          @confirm="deleteOtherSoftwareRequirements(element.id)"
+                        >
+                          <template #reference>
+                            <Icon icon="bx:bx-x" />
+                          </template>
+                        </el-popconfirm>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <div
+                class="
+                  flex
+                  items-center
+                  cursor-pointer
+                  text-gray-500
+                  hover:text-black
+                  w-max
+                "
+                @click="addOtherSoftwareRequirements()"
+              >
+                <Icon icon="carbon:add" />
+                <span> Add an additional software requirement </span>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="Current version" :error="versionErrorMessage">
+              <el-input
+                v-model="codeForm.currentVersion"
+                placeholder="1.5.6"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Current version release date">
+              <el-date-picker
+                v-model="codeForm.currentVersionReleaseDate"
+                type="date"
+                placeholder="Pick a day"
+                value-format="YYYY-MM-DD"
+              >
+              </el-date-picker>
+            </el-form-item>
+
+            <el-form-item
+              label="Current version download URL"
+              :error="currentVersionDownloadLinkErrorMessage"
+            >
+              <el-input
+                v-model="codeForm.currentVersionDownloadLink"
+                type="url"
+                placeholder="https://www.python.org/downloads/release/python-3100/"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Current version release notes">
+              <el-input
+                v-model="codeForm.currentVersionReleaseNotes"
+                type="textarea"
+                placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="Development status">
+              <el-select
+                v-model="codeForm.developmentStatus"
+                filterable
+                placeholder=""
+              >
+                <el-option
+                  v-for="item in repoStatusOptions"
+                  :key="item.value"
+                  :label="item.display_name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+              <p class="text-xs pt-2 text-gray-500">
+                {{ developmentStatus }}
+              </p>
+            </el-form-item>
+
+            <el-form-item label="Is part of" :error="isPartOfErrorMessage">
+              <el-input
+                v-model="codeForm.isPartOf"
+                type="url"
+                placeholder="https://thebiggerframework.org"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+      </el-collapse>
+
+      <div class="w-full flex flex-row justify-center py-2">
+        <el-button type="danger" plain @click="navigateBack" class="mx-6">
+          Back
+        </el-button>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          @click="navigateToSelectDestination"
+          id="existElement"
+          :disabled="checkInvalidStatus"
+        >
+          Continue
+          <el-icon>
+            <ArrowRightBold />
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -1463,6 +1427,10 @@ export default {
       this.dataset = await this.datasetStore.getCurrentDataset();
 
       this.workflow = this.dataset.workflows[this.workflowID];
+
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(2);
 
       if (!("expandOptions" in this.workflow)) {
         this.workflow.expandOptions = ["general"];

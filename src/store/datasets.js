@@ -57,7 +57,11 @@ export const useDatasetsStore = defineStore({
   state: () => ({
     datasets: {},
     currentDataset: {},
-    showProgressBar: false,
+    progressBar: {
+      show: false,
+      type: "",
+      currentStep: 0,
+    },
   }),
   getters: {
     datasetCount: function () {
@@ -113,11 +117,20 @@ export const useDatasetsStore = defineStore({
         return "NO_DATASET_FOUND";
       }
     },
-    async showProgress() {
-      this.showProgressBar = true;
+    async getProgressBar() {
+      return this.progressBar;
     },
-    async hideProgress() {
-      this.showProgressBar = false;
+    showProgressBar() {
+      this.progressBar.show = true;
+    },
+    hideProgressBar() {
+      this.progressBar.show = false;
+    },
+    setProgressBarType(type) {
+      this.progressBar.type = type;
+    },
+    setCurrentStep(step) {
+      this.progressBar.currentStep = step - 1;
     },
   },
 });

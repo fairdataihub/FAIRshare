@@ -1,72 +1,64 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <workflow-progress-bar :currentStep="5" />
-          <span class="text-lg font-medium text-left">
-            Uploading your data to Zenodo
-          </span>
-          <span class="text-left">
-            This ones on us. SODA is creating a Zenodo record for you and
-            uploading all your files with the relevant metadata.
-          </span>
+  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left">
+        Uploading your data to Zenodo
+      </span>
+      <span class="text-left">
+        This ones on us. SODA is creating a Zenodo record for you and uploading
+        all your files with the relevant metadata.
+      </span>
 
-          <el-divider class="my-4"> </el-divider>
+      <el-divider class="my-4"> </el-divider>
 
-          <div class="flex flex-col justify-center h-full">
-            <el-progress
-              :percentage="percentage"
-              :indeterminate="indeterminate"
-              :status="progressStatus"
-              :stroke-width="10"
-            />
-            <el-alert
-              class="my-2"
-              v-if="showAlert"
-              :title="alertTitle"
-              type="error"
-              :description="alertMessage"
-              show-icon
-            >
-            </el-alert>
-            <div class="flex flex-row justify-start items-center py-3" v-else>
-              <LoadingCubeGrid
-                class="w-5 h-5"
-                v-if="percentage !== 100"
-              ></LoadingCubeGrid>
-              <p class="pl-4">
-                {{ statusMessage }}
-                <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
-              </p>
-            </div>
-            <div class="pl-2 pt-2" v-if="errorMessage != ''">
-              <p style="white-space: pre-line">
-                {{ errorMessage }}
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="w-full flex flex-row justify-center py-2"
-            v-if="showAlert"
-          >
-            <router-link
-              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
-              class="mx-6"
-            >
-              <el-button type="danger" plain> Back </el-button>
-            </router-link>
-
-            <el-button
-              type="primary"
-              class="flex flex-row items-center"
-              @click="retryUpload"
-            >
-              Retry
-            </el-button>
-          </div>
+      <div class="flex flex-col justify-center h-full">
+        <el-progress
+          :percentage="percentage"
+          :indeterminate="indeterminate"
+          :status="progressStatus"
+          :stroke-width="10"
+        />
+        <el-alert
+          class="my-2"
+          v-if="showAlert"
+          :title="alertTitle"
+          type="error"
+          :description="alertMessage"
+          show-icon
+        >
+        </el-alert>
+        <div class="flex flex-row justify-start items-center py-3" v-else>
+          <LoadingCubeGrid
+            class="w-5 h-5"
+            v-if="percentage !== 100"
+          ></LoadingCubeGrid>
+          <p class="pl-4">
+            {{ statusMessage }}
+            <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
+          </p>
         </div>
+        <div class="pl-2 pt-2" v-if="errorMessage != ''">
+          <p style="white-space: pre-line">
+            {{ errorMessage }}
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full flex flex-row justify-center py-2" v-if="showAlert">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
+          class="mx-6"
+        >
+          <el-button type="danger" plain> Back </el-button>
+        </router-link>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          @click="retryUpload"
+        >
+          Retry
+        </el-button>
       </div>
     </div>
   </div>
@@ -498,8 +490,21 @@ export default {
         this.indeterminate = true;
         this.progressStatus = "exception";
         this.showAlert = true;
+
+        this.workflow.datasetUploaded = false;
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
         return;
       } else {
+        this.workflow.datasetUploaded = true;
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
         const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
         this.$router.push({ path: routerPath });
       }
@@ -512,10 +517,14 @@ export default {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
+
     this.zenodoToken = await this.tokens.getToken("zenodo");
     // console.log(this.zenodoToken);
 
-    this.runZenodoUpload();
+    // this.runZenodoUpload();
   },
 };
 </script>
