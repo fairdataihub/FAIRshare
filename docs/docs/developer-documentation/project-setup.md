@@ -80,4 +80,9 @@ You can use the vast library provided via [npm](https://www.npmjs.com/) to add a
 yarn add <package-name>
 ```
 
+## Language and framework versions
 
+The minimum required programming language and compiler versions are provided below. Please be aware that this is subject to change.
+
+* Python: 3.9
+* Nodejs: ^16.13.0
