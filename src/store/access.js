@@ -114,8 +114,29 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async checkGithubToken() {
-      return true;
+    async getGithubUser(token) {
+      return await axios.get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        headers: {
+          'Authorization': `token ${token}`
+        }
+      })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        })
+    },
+
+    async checkGithubToken(token) {
+      const response = await this.getGithubUser(token);
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        return false;
+      } else {
+        return false;
+      }
     },
   },
 });
