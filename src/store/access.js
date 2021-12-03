@@ -105,7 +105,7 @@ export const useTokenStore = defineStore({
 
     async checkZenodoToken(token) {
       const response = await this.getDepositions(token);
-      console.log("************** ****", response)
+      console.log("************** ****", response);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {
@@ -132,7 +132,7 @@ export const useTokenStore = defineStore({
 
     async checkGithubToken(token) {
       const response = await this.getGithubUser(token);
-      console.log("??? ???????????????????????????????", response.data.login)
+      console.log("??? ???????????????????????????????", response.data.login);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {

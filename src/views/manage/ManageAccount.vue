@@ -64,12 +64,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            plain
-            class="button"
-            @click="openDialog('github')"
-            >{{ status.github[3] }}</el-button
-          >
+          <el-button plain class="button" @click="openDialog('github')">{{
+            status.github[3]
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -118,12 +115,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            plain
-            class="button"
-            @click="openDialog('zenodo')"
-            >{{ status.zenodo[3] }}</el-button
-          >
+          <el-button plain class="button" @click="openDialog('zenodo')">{{
+            status.zenodo[3]
+          }}</el-button>
         </div>
       </div>
     </div>
