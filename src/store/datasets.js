@@ -62,15 +62,15 @@ export const useDatasetsStore = defineStore({
       type: "",
       currentStep: 0,
     },
+    loading: false,
   }),
   getters: {
     datasetCount: function () {
       return Object.keys(this.datasets).length;
     },
-
-    getAllDatasets() {
-      return this.datasets;
-    },
+    // getAllDatasets() {
+    //   return this.datasets;
+    // },
   },
   actions: {
     async loadDatasets() {
@@ -79,6 +79,14 @@ export const useDatasetsStore = defineStore({
         this.datasets = datasets;
       } catch (error) {
         console.error(error);
+      }
+    },
+    async loadandReturnDatasets() {
+      try {
+        const datasets = await loadFile();
+        return datasets;
+      } catch (error) {
+        return {};
       }
     },
     async writeDatasetsToFile() {
@@ -116,6 +124,9 @@ export const useDatasetsStore = defineStore({
       } else {
         return "NO_DATASET_FOUND";
       }
+    },
+    async getAllDatasets() {
+      return this.loadandReturnDatasets();
     },
     async getProgressBar() {
       return this.progressBar;
