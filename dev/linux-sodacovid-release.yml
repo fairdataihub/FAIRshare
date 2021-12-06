@@ -5,51 +5,36 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
-  - bzip2=1.0.8
-  - c-ares=1.18.1
-  - ca-certificates=2021.10.26
-  - curl=7.80.0
-  - expat=2.4.1
-  - gettext=0.19.8.1
-  - git=2.33.1
+  - ca-certificates=2021.10.8
+  - certifi=2021.10.8
   - icu=69.1
-  - krb5=1.19.2
-  - ld_impl_linux-64=2.36.1
-  - libcurl=7.80.0
-  - libedit=3.1.20191231
-  - libev=4.33
-  - libffi=3.4.2
+  - ld_impl_linux-64=2.35.1
+  - libffi=3.3
   - libgcc-ng=11.2.0
-  - libgomp=11.2.0
-  - libiconv=1.16
-  - libnghttp2=1.43.0
-  - libnsl=2.0.0
-  - libssh2=1.10.0
   - libstdcxx-ng=11.2.0
-  - libuuid=2.32.1
   - libuv=1.42.0
   - libzlib=1.2.11
-  - ncurses=6.2
-  - openssl=3.0.0
-  - pcre2=10.37
-  - perl=5.32.1
-  - pip=21.3.1
-  - python=3.10.0
-  - python_abi=3.10
+  - llvm-openmp=12.0.1
+  - ncurses=6.3
+  - nodejs=16.13.0
+  - openssl=1.1.1l
+  - pip=21.2.4
+  - python=3.9.7
+  - python_abi=3.9
   - readline=8.1
-  - setuptools=59.2.0
+  - setuptools=58.0.4
   - sqlite=3.36.0
   - tk=8.6.11
   - tzdata=2021e
   - wheel=0.37.0
   - xz=5.2.5
+  - yarn=1.22.17
   - zlib=1.2.11
   - pip:
       - altgraph==0.17.2
       - aniso8601==9.0.1
       - attrs==21.2.0
-      - certifi==2021.10.8
-      - charset-normalizer==2.0.7
+      - charset-normalizer==2.0.9
       - click==8.0.3
       - flask==2.0.2
       - flask-cors==3.0.10
@@ -60,7 +45,7 @@ dependencies:
       - jsonschema==4.2.1
       - markupsafe==2.0.1
       - pyinstaller==4.7
-      - pyinstaller-hooks-contrib==2021.3
+      - pyinstaller-hooks-contrib==2021.4
       - pyrsistent==0.18.0
       - python-dotenv==0.19.2
       - pytz==2021.3
