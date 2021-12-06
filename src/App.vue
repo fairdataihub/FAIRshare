@@ -65,6 +65,8 @@ export default {
     },
   },
   mounted() {
+    console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
+
     const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 3 });
 

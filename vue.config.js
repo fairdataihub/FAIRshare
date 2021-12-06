@@ -10,7 +10,7 @@ module.exports = {
         asar: true,
         afterSign: "./scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
-        files: ["**/*", "!pyflask/", "!build/", "!api.spec"],
+        files: ["**/*", "!pyflask/", "!build/", "!api.spec", ".env"],
         win: {
           target: "nsis",
           icon: "./src/assets/app-icons/windowsAppIcon.ico",
@@ -39,8 +39,7 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repository:
-            "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
+          repo: "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git",
         },
       },
     },

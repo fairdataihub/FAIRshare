@@ -522,9 +522,9 @@ export default {
     this.datasetStore.setCurrentStep(5);
 
     this.zenodoToken = await this.tokens.getToken("zenodo");
-    // console.log(this.zenodoToken);
+    console.log(this.zenodoToken);
 
-    // this.runZenodoUpload();
+    this.runZenodoUpload();
   },
 };
 </script>
