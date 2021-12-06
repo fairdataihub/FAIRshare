@@ -42,7 +42,11 @@
               type="success"
               effect="plain"
             >
-              <el-avatar shape="square" size="small" src='https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'></el-avatar>
+              <el-avatar
+                shape="square"
+                size="small"
+                src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+              ></el-avatar>
               {{ status.github[4] }}
             </el-tag>
           </div>
@@ -65,9 +69,13 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button plain :type="status.github[5]" class="button" @click="openDialog('github')">{{
-            status.github[3]
-          }}</el-button>
+          <el-button
+            plain
+            :type="status.github[5]"
+            class="button"
+            @click="openDialog('github')"
+            >{{ status.github[3] }}</el-button
+          >
         </div>
       </div>
     </div>
@@ -116,9 +124,13 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button plain :type="status.zenodo[5]" class="button" @click="openDialog('zenodo')">{{
-            status.zenodo[3]
-          }}</el-button>
+          <el-button
+            plain
+            :type="status.zenodo[5]"
+            class="button"
+            @click="openDialog('zenodo')"
+            >{{ status.zenodo[3] }}</el-button
+          >
         </div>
       </div>
     </div>
@@ -153,7 +165,7 @@ export default {
               "Not connected",
               "Connect",
               userName,
-              ""
+              "",
             ];
           } else {
             githubOffline.value = false;
@@ -163,7 +175,7 @@ export default {
               "Connected",
               "Disconnect",
               userName,
-              "danger"
+              "danger",
             ];
           }
         }
@@ -177,7 +189,7 @@ export default {
               "Not connected",
               "Connect",
               userName,
-              ""
+              "",
             ];
           } else {
             zenodoOffline.value = false;
@@ -187,7 +199,7 @@ export default {
               "Connected",
               "Disconnect",
               userName,
-              "danger"
+              "danger",
             ];
           }
         }
@@ -234,7 +246,7 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        let name = await manager.getZenodoUser(value)
+        let name = await manager.getZenodoUser(value);
         updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
@@ -265,7 +277,7 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        let name = await manager.getGithubUser()
+        let name = await manager.getGithubUser();
         updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
@@ -355,7 +367,7 @@ export default {
     let keys = await this.manager.loadTokens();
     let githubUserName = "";
     let zenodoUserName = "";
-    console.log("keys ", keys)
+    console.log("keys ", keys);
     if (keys.includes("github")) {
       githubUserName = await this.manager.getGithubUser();
     } else if (keys.includes("zenodo")) {
@@ -496,7 +508,7 @@ export default {
   --el-tag-hover-color: lightgreen;
 }
 
-.el-avatar--small{
+.el-avatar--small {
   height: 12px;
   width: 12px;
   line-height: 12px;
