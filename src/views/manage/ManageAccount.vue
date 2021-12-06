@@ -36,13 +36,14 @@
             </div>
           </div>
 
-          <div class="centering-Container">
+          <div class="centering-Container tag-Container">
             <el-tag
               v-if="status.github[2] === 'Connected'"
               type="success"
               effect="plain"
             >
-              test
+              <el-avatar shape="square" size="small" src='https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'></el-avatar>
+              {{ status.github[4] }}
             </el-tag>
           </div>
         </div>
@@ -64,12 +65,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            plain
-            class="button"
-            @click="openDialog('github')"
-            >{{ status.github[3] }}</el-button
-          >
+          <el-button plain :type="status.github[5]" class="button" @click="openDialog('github')">{{
+            status.github[3]
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -118,12 +116,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            plain
-            class="button"
-            @click="openDialog('zenodo')"
-            >{{ status.zenodo[3] }}</el-button
-          >
+          <el-button plain :type="status.zenodo[5]" class="button" @click="openDialog('zenodo')">{{
+            status.zenodo[3]
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -143,11 +138,11 @@ export default {
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
     const status = ref({
-      github: ["lightgrey", "grey", "Disconnected", "Connect"],
-      zenodo: ["lightgrey", "grey", "Disconnected", "Connect"],
+      github: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
+      zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
     });
 
-    function updateStatus(key) {
+    function updateStatus(key, userName) {
       manager.getToken(key).then((value) => {
         if (key == "github") {
           if (value == "NO_TOKEN_FOUND") {
@@ -155,8 +150,10 @@ export default {
             status.value.github = [
               "lightgrey",
               "grey",
-              "Disconnected",
+              "Not connected",
               "Connect",
+              userName,
+              ""
             ];
           } else {
             githubOffline.value = false;
@@ -165,6 +162,8 @@ export default {
               "lightgreen",
               "Connected",
               "Disconnect",
+              userName,
+              "danger"
             ];
           }
         }
@@ -175,8 +174,10 @@ export default {
             status.value.zenodo = [
               "lightgrey",
               "grey",
-              "Disconnected",
+              "Not connected",
               "Connect",
+              userName,
+              ""
             ];
           } else {
             zenodoOffline.value = false;
@@ -185,6 +186,8 @@ export default {
               "lightgreen",
               "Connected",
               "Disconnect",
+              userName,
+              "danger"
             ];
           }
         }
@@ -231,7 +234,8 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        updateStatus(key);
+        let name = await manager.getZenodoUser(value)
+        updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
             type: "success",
@@ -261,7 +265,8 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        updateStatus(key);
+        let name = await manager.getGithubUser()
+        updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
             type: "success",
@@ -298,7 +303,7 @@ export default {
           } catch (e) {
             errorFound = true;
           }
-          updateStatus(key);
+          updateStatus(key, "");
           if (!errorFound) {
             ElNotification({
               type: "success",
@@ -347,9 +352,18 @@ export default {
     },
   },
   async mounted() {
-    await this.manager.loadTokens();
-    this.updateStatus("github");
-    this.updateStatus("zenodo");
+    let keys = await this.manager.loadTokens();
+    let githubUserName = "";
+    let zenodoUserName = "";
+    console.log("keys ", keys)
+    if (keys.includes("github")) {
+      githubUserName = await this.manager.getGithubUser();
+    } else if (keys.includes("zenodo")) {
+      zenodoUserName = await this.manager.getZenodoUser();
+    }
+
+    this.updateStatus("github", githubUserName);
+    this.updateStatus("zenodo", zenodoUserName);
   },
 };
 </script>
@@ -406,9 +420,11 @@ export default {
 }
 
 .app-Card-Status {
-  height: 10%;
+  height: 15%;
   display: flex;
   gap: 0.5vw;
+
+  box-sizing: border-box;
 }
 
 .centering-Container {
@@ -418,7 +434,7 @@ export default {
 }
 
 .center {
-  height: 60%;
+  height: 55%;
   padding-top: 0.5vh;
   padding-bottom: 0.5vh;
   padding-right: 0.8vw;
@@ -444,6 +460,11 @@ export default {
   color: #409eff;
 }
 
+.tag-Container {
+  box-sizing: border-box;
+  margin-left: 0.5vw;
+}
+
 .el-button {
   padding: 0px;
   min-height: 0px;
@@ -451,5 +472,33 @@ export default {
   padding-bottom: 1vh;
   padding-left: 1vw;
   padding-right: 1vw;
+}
+
+.el-tag {
+  padding: 0px;
+  min-height: 0px;
+  height: auto;
+  line-height: 0px;
+  padding-top: 0.4vh;
+  padding-bottom: 0.4vh;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.el-tag--plain.el-tag--success {
+  --el-tag-background-color: white;
+  --el-tag-border-color: lightgreen;
+  --el-tag-font-color: lightgreen;
+  --el-tag-hover-color: lightgreen;
+}
+
+.el-avatar--small{
+  height: 12px;
+  width: 12px;
+  line-height: 12px;
 }
 </style>

@@ -61,6 +61,7 @@ export const useTokenStore = defineStore({
       } catch (error) {
         console.error(error);
       }
+      return Object.keys(this.accessTokens)
     },
     // save an encrypted version of the token in the store also save it to the file.
     async saveToken(key, value) {
@@ -115,9 +116,9 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async getGithubUser(token) {
+    async verifyGithub(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -131,8 +132,7 @@ export const useTokenStore = defineStore({
     },
 
     async checkGithubToken(token) {
-      const response = await this.getGithubUser(token);
-      console.log("??? ???????????????????????????????", response.data.login)
+      const response = await this.verifyGithub(token);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {
@@ -141,5 +141,51 @@ export const useTokenStore = defineStore({
         return false;
       }
     },
+
+    async getGithubUser() {
+      let token = await this.getToken("github")
+      let response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+
+      if (response.status === 200) {
+        return response.data.login;
+      } else if (response.status === 401) {
+        return "";
+      }
+    },
+
+    async getZenodoUser() {
+      let token = await this.getToken("zenodo")
+      let response = await axios
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+          params: {
+            access_token: token,
+          },
+        })
+        .then((response) => {
+          console.log("inner response", response)
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { error: error };
+        });
+
+      console.log("data zenodo", response)
+      if (response.status === 200) {
+        return response.data.login;
+      } else if (response.status === 401) {
+        return "";
+      }
+    }
   },
 });
