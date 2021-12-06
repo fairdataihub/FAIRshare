@@ -193,17 +193,15 @@ export default {
   computed: {},
   methods: {
     selectDataset(event, datasetID) {
-      if (event) {
-        if (event.detail === 1) {
-          if (datasetID === this.selectedDataset) {
-            this.selectedDataset = "";
-          } else {
-            this.selectedDataset = datasetID;
-          }
-        } else if (event.detail === 2) {
-          this.selectedDataset = "";
-          this.navigateToDataset(datasetID);
-        }
+      if (datasetID === this.selectedDataset) {
+        this.selectedDataset = "";
+      } else {
+        this.selectedDataset = datasetID;
+      }
+
+      if (event && event.detail === 2) {
+        this.selectedDataset = "";
+        this.navigateToDataset(datasetID);
       }
     },
     startCuratingProject() {

@@ -32,7 +32,7 @@
             w-30
           "
           :class="{ selected: repoID === repo.id }"
-          @click="selectRepo(repo.id)"
+          @click="selectRepo($event, repo.id)"
         >
           <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
           <span class="text-lg mx-5"> {{ repo.name }} </span>
@@ -107,8 +107,11 @@ export default {
   },
   computed: {},
   methods: {
-    selectRepo(repoID) {
+    selectRepo(event, repoID) {
       this.repoID = repoID;
+      if (event && event.detail === 2) {
+        this.addMetadata();
+      }
     },
     addMetadata() {
       this.dataset.destinationSelected = true;
