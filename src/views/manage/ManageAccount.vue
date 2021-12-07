@@ -122,17 +122,22 @@
         </div>
       </div>
     </div>
+
+    <Dialog v-model="dialogFormVisible"></Dialog>
   </div>
 </template>
 
 <script>
 import { useTokenStore } from "../../store/access";
+import { h } from 'vue'
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { ElLoading } from "element-plus";
+import Dialog from "../../components/dialogs/Dialog";
 export default {
   name: "ManageAccount",
+  components: {Dialog},
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -195,16 +200,13 @@ export default {
     }
 
     function useAPIkey(key) {
-      ElMessageBox.prompt("Please input your API key", "", {
+      if(key == "github"){
+        ElMessageBox.prompt("Please input your API key", "", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
       })
         .then(async ({ value }) => {
-          if (key == "zenodo") {
-            processZenodo(key, value);
-          } else if (key == "github") {
             processGithub(key, value);
-          }
         })
         .catch(() => {
           ElNotification({
@@ -214,6 +216,31 @@ export default {
             duration: 2000,
           });
         });
+      } else if (key == "zenodo"){
+        ElMessageBox({
+        title: 'Message',
+        message: h('div', null, [
+          h('el-input', null, ''),
+          h('i', { style: 'color: teal' }, 'VNode'),
+        ]),
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+      })
+        .then(async ({ value }) => {
+
+            processZenodo(key, value);
+          
+        })
+        .catch(() => {
+          ElNotification({
+            type: "info",
+            message: "Input canceled",
+            position: "bottom-right",
+            duration: 2000,
+          });
+        });
+      }
     }
 
     function createLoading() {
@@ -344,7 +371,9 @@ export default {
     };
   },
   data() {
-    return {};
+    return {
+      dialogFormVisible: true
+    };
   },
   methods: {
     openWebsite(url) {
