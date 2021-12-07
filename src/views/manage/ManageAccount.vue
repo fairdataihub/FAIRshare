@@ -135,7 +135,12 @@
       </div>
     </div>
 
-    <Dialog v-model="dialogVisable" :numInput = "1" :headers="['test1']" :callback="getInputs"></Dialog>
+    <Dialog
+      v-model="dialogVisable"
+      :numInput="1"
+      :headers="['test1']"
+      :callback="getInputs"
+    ></Dialog>
   </div>
 </template>
 
@@ -148,7 +153,7 @@ import { ElLoading } from "element-plus";
 import Dialog from "../../components/dialogs/Dialog";
 export default {
   name: "ManageAccount",
-  components: {Dialog},
+  components: { Dialog },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -159,10 +164,19 @@ export default {
       zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
     });
 
-    async function getInputs(userInputs){
-      dialogVisable.value = false
-      console.log(userInputs)
-      processZenodo(userInputs[0])
+    async function getInputs(response) {
+      dialogVisable.value = false;
+      console.log(response, response[1]);
+      if (response[0] == "OK") {
+        processZenodo(response[1][0]);
+      } else {
+        ElNotification({
+          type: "info",
+          message: "Input canceled",
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
     }
 
     function updateStatus(key, userName) {
@@ -218,24 +232,24 @@ export default {
     }
 
     function useAPIkey(key) {
-      if(key == "github"){
+      if (key == "github") {
         ElMessageBox.prompt("Please input your API key", "", {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-      })
-        .then(async ({ value }) => {
-            processGithub(key, value);
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
         })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Input canceled",
-            position: "bottom-right",
-            duration: 2000,
+          .then(async ({ value }) => {
+            processGithub(key, value);
+          })
+          .catch(() => {
+            ElNotification({
+              type: "info",
+              message: "Input canceled",
+              position: "bottom-right",
+              duration: 2000,
+            });
           });
-        });
-      } else if (key == "zenodo"){
-        dialogVisable.value = true
+      } else if (key == "zenodo") {
+        dialogVisable.value = true;
       }
     }
 
@@ -248,7 +262,7 @@ export default {
     }
 
     async function processZenodo(value) {
-      let key = "zenodo"
+      let key = "zenodo";
       let spinner = createLoading();
       let errorFound = false;
       if (await manager.checkZenodoToken(value)) {
@@ -366,12 +380,12 @@ export default {
       updateStatus,
       createLoading,
       dialogVisable,
-      getInputs
+      getInputs,
     };
   },
   data() {
     return {
-      dialogFormVisible: true
+      dialogFormVisible: true,
     };
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="400px" v-model="dialogVisable">
+  <el-dialog width="400px" destroy-on-close :before-close="beforeCloseRootLevel">
     <div class="dialog-Container">
 
       <div class="inputField" v-for="i in this.numInput" :key="i">
@@ -8,8 +8,8 @@
       </div>
 
       <div class="bottom">
-        <el-button class="button" size="small" @click="closeDialog">Cancel</el-button>
-        <el-button class="button" size="small" type="primary" @click="closeDialog">OK</el-button>
+        <el-button class="button" size="small" @click="closeDialog('Cancelled')">Cancel</el-button>
+        <el-button class="button" size="small" type="primary" @click="confirmInput">OK</el-button>
       </div>
     </div>
 
@@ -33,13 +33,21 @@ export default {
     console.log("user inputs: ", userInputs)
     return {
       userInputs,
-      dialogVisable
+      dialogVisable,
     }
   },
   methods: {
-    async closeDialog() {
-      this.callback(this.userInputs)
+    async closeDialog(status) {
+      this.callback([status, this.userInputs])
     },
+
+    async confirmInput(){
+      this.closeDialog("OK")
+    },
+
+    async beforeCloseRootLevel(){
+      this.closeDialog("Cancelled")
+    }
   },
 };
 </script>
