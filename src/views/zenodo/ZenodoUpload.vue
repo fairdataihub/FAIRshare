@@ -99,7 +99,14 @@ export default {
       alertMessage: "",
     };
   },
-  computed: {},
+  computed: {
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+  },
   methods: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -385,7 +392,6 @@ export default {
           console.error(error);
           return "ERROR";
         });
-
       return response;
     },
     async uploadWorkflow() {
@@ -416,7 +422,7 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent() && "metadata" in response) {
+      if (this.codePresent && "metadata" in response) {
         this.dataset.data.Code.questions.uniqueIdentifier =
           response.metadata.prereserve_doi.doi;
 
@@ -474,11 +480,30 @@ export default {
 
       return "SUCCESS";
     },
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
+    async deleteDraftZenodoDeposition() {
+      if ("deposition_id" in this.workflow.destination.zenodo) {
+        console.log(
+          this.zenodoToken,
+          this.workflow.destination.zenodo.deposition_id
+        );
+        const response = await axios
+          .delete(`${this.$server_url}/zenodo/delete`, {
+            data: {
+              access_token: this.zenodoToken,
+              deposition_id: this.workflow.destination.zenodo.deposition_id,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+        return response.data;
       }
-      return false;
+      return "NO_DEPOSITION_FOUND";
     },
     async runZenodoUpload() {
       this.statusMessage = "Preparing backend services...";
@@ -490,6 +515,8 @@ export default {
         this.indeterminate = true;
         this.progressStatus = "exception";
         this.showAlert = true;
+
+        this.deleteDraftZenodoDeposition();
 
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;

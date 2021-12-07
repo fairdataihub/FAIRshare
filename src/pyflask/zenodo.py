@@ -90,3 +90,23 @@ def publishZenodoDeposition(access_token, deposition_id):
         return r.json()
     except Exception as e:
         raise e
+
+
+def deleteZenodoDeposition(access_token, deposition_id):
+    try:
+        headers = {"Content-Type": "application/json"}
+        params = {"access_token": access_token}
+        r = requests.delete(
+            config.ZENODO_SERVER_URL + "deposit/depositions/%s" % deposition_id,
+            params=params,
+            headers=headers,
+        )
+        statusCode = r.status_code
+
+        if statusCode == 204:
+            return "Delete successful"
+        else:
+            return "Delete failed"
+
+    except Exception as e:
+        raise e
