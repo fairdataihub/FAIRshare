@@ -135,13 +135,12 @@
       </div>
     </div>
 
-    <Dialog v-model="dialogFormVisible"></Dialog>
+    <Dialog v-model="dialogVisable" :numInput = "1" :headers="['test1']" :callback="getInputs"></Dialog>
   </div>
 </template>
 
 <script>
 import { useTokenStore } from "../../store/access";
-import { h } from 'vue'
 import { ElMessageBox } from "element-plus";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
@@ -154,10 +153,17 @@ export default {
     const manager = useTokenStore();
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
+    const dialogVisable = ref(false);
     const status = ref({
       github: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
       zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
     });
+
+    async function getInputs(userInputs){
+      dialogVisable.value = false
+      console.log(userInputs)
+      processZenodo(userInputs[0])
+    }
 
     function updateStatus(key, userName) {
       manager.getToken(key).then((value) => {
@@ -229,29 +235,7 @@ export default {
           });
         });
       } else if (key == "zenodo"){
-        ElMessageBox({
-        title: 'Message',
-        message: h('div', null, [
-          h('el-input', null, ''),
-          h('i', { style: 'color: teal' }, 'VNode'),
-        ]),
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-      })
-        .then(async ({ value }) => {
-
-            processZenodo(key, value);
-          
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Input canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        });
+        dialogVisable.value = true
       }
     }
 
@@ -263,7 +247,8 @@ export default {
       return loading;
     }
 
-    async function processZenodo(key, value) {
+    async function processZenodo(value) {
+      let key = "zenodo"
       let spinner = createLoading();
       let errorFound = false;
       if (await manager.checkZenodoToken(value)) {
@@ -380,6 +365,8 @@ export default {
       status,
       updateStatus,
       createLoading,
+      dialogVisable,
+      getInputs
     };
   },
   data() {

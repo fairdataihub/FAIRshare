@@ -1,23 +1,18 @@
 <template>
-  <el-dialog width="400px">
+  <el-dialog width="400px" v-model="dialogVisable">
     <div class="dialog-Container">
 
-      <div class="inputField">
-        <div class="inputBar-Header">Password</div>
-        <el-input class="inputBar" size="large" v-model="input2" />
+      <div class="inputField" v-for="i in this.numInput" :key="i">
+        <div class="inputBar-Header">{{this.headers[i-1]}}</div>
+        <el-input class="inputBar" size="large" v-model="userInputs[i-1]" />
       </div>
-
-      <div class="inputField">
-        <div class="inputBar-Header">Password</div>
-        <el-input class="inputBar" size="large" v-model="input2" />
-      </div>
-
 
       <div class="bottom">
-        <el-button class="button" size="small" @click="closeDialogFromParent">Cancel</el-button>
-        <el-button class="button" size="small" type="primary" @click="closeDialogFromParent">OK</el-button>
+        <el-button class="button" size="small" @click="closeDialog">Cancel</el-button>
+        <el-button class="button" size="small" type="primary" @click="closeDialog">OK</el-button>
       </div>
     </div>
+
   </el-dialog>
 </template>
 
@@ -25,19 +20,25 @@
 import { ref } from 'vue'
 export default {
   props: {
-    callback: { type: Function },
     numInput: { type: Number},
-    headers: { type: Array }
+    headers: { type: Array },
+    callback: {type: Function}
   },
-  setup() {
+  setup(props) {
+    const userInputs = ref([])
+    const dialogVisable = ref(false)
+    for(let i = 0; i < props.numInput-1; i++){
+      userInputs.value.push("")
+    }
+    console.log("user inputs: ", userInputs)
     return {
-      userInputs: ref([])
+      userInputs,
+      dialogVisable
     }
   },
   methods: {
-    async closeDialogFromParent() {
-      await this.callback()
-      return this.userInputs
+    async closeDialog() {
+      this.callback(this.userInputs)
     },
   },
 };
