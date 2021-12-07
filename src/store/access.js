@@ -61,7 +61,7 @@ export const useTokenStore = defineStore({
       } catch (error) {
         console.error(error);
       }
-      return Object.keys(this.accessTokens)
+      return Object.keys(this.accessTokens);
     },
     // save an encrypted version of the token in the store also save it to the file.
     async saveToken(key, value) {
@@ -143,7 +143,7 @@ export const useTokenStore = defineStore({
     },
 
     async getGithubUser() {
-      let token = await this.getToken("github")
+      let token = await this.getToken("github");
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
@@ -165,7 +165,7 @@ export const useTokenStore = defineStore({
     },
 
     async getZenodoUser() {
-      let token = await this.getToken("zenodo")
+      let token = await this.getToken("zenodo");
       let response = await axios
         .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
           params: {
@@ -173,19 +173,19 @@ export const useTokenStore = defineStore({
           },
         })
         .then((response) => {
-          console.log("inner response", response)
+          console.log("inner response", response);
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
           return { error: error };
         });
 
-      console.log("data zenodo", response)
+      console.log("data zenodo", response);
       if (response.status === 200) {
         return response.data.login;
       } else if (response.status === 401) {
         return "";
       }
-    }
+    },
   },
 });
