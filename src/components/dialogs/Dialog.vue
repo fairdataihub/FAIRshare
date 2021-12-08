@@ -48,7 +48,8 @@ export default {
   },
   methods: {
     async closeDialog(status) {
-      this.callback([status, this.userInputs]);
+      await this.callback([status, this.userInputs]);
+      this.clearInput();
     },
 
     async confirmInput() {
@@ -58,6 +59,12 @@ export default {
     async beforeCloseRootLevel() {
       this.closeDialog("Cancelled");
     },
+
+    clearInput(){
+      for(let i = 0; i < this.userInputs.length; i++){
+        this.userInputs[i] = ""
+      }
+    }
   },
 };
 </script>

@@ -97,6 +97,7 @@
               }"
             ></span>
           </div>
+
           <div class="centering-Container">
             <div
               class="app-Card-Status-Text"
@@ -107,6 +108,22 @@
               {{ status.zenodo[2] }}
             </div>
           </div>
+
+          <div class="centering-Container tag-Container">
+            <el-tag
+              v-if="status.zenodo[2] === 'Connected'"
+              type="success"
+              effect="plain"
+            >
+              <el-avatar
+                shape="square"
+                size="small"
+                src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+              ></el-avatar>
+              {{ status.zenodo[4] }}
+            </el-tag>
+          </div>
+
         </div>
         <div class="centering-Container center">
           <span
@@ -137,8 +154,8 @@
 
     <Dialog
       v-model="dialogVisable"
-      :numInput="1"
-      :headers="['test1']"
+      :numInput="dialogNumInput"
+      :headers="dialogHeaders"
       :callback="getInputs"
     ></Dialog>
   </div>
@@ -159,6 +176,9 @@ export default {
     const githubOffline = ref(true);
     const zenodoOffline = ref(true);
     const dialogVisable = ref(false);
+    const dialogOpener = ref(null);
+    const dialogNumInput = ref(null);
+    const dialogHeaders = ref([]);
     const status = ref({
       github: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
       zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
@@ -166,9 +186,13 @@ export default {
 
     async function getInputs(response) {
       dialogVisable.value = false;
-      console.log(response, response[1]);
       if (response[0] == "OK") {
-        processZenodo(response[1][0]);
+        if(dialogOpener.value == "github"){
+          await processGithub(response[1]);
+        } else if (dialogOpener.value == "zenodo"){
+          await processZenodo(response[1]);
+        }
+        console.log("dialogOpener: ", dialogOpener.value)
       } else {
         ElNotification({
           type: "info",
@@ -233,24 +257,15 @@ export default {
 
     function useAPIkey(key) {
       if (key == "github") {
-        ElMessageBox.prompt("Please input your API key", "", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-        })
-          .then(async ({ value }) => {
-            processGithub(key, value);
-          })
-          .catch(() => {
-            ElNotification({
-              type: "info",
-              message: "Input canceled",
-              position: "bottom-right",
-              duration: 2000,
-            });
-          });
+        dialogOpener.value = "github";
+        dialogNumInput.value = 1;
+        dialogHeaders.value = ["Github access token"]
       } else if (key == "zenodo") {
-        dialogVisable.value = true;
+        dialogOpener.value = "zenodo";
+        dialogNumInput.value = 2;
+        dialogHeaders.value = ["Zenodo access token", "Token nick name"]
       }
+      dialogVisable.value = true;
     }
 
     function createLoading() {
@@ -261,10 +276,12 @@ export default {
       return loading;
     }
 
-    async function processZenodo(value) {
+    async function processZenodo(userInput) {
+      console.log("user Input: ", userInput)
       let key = "zenodo";
       let spinner = createLoading();
       let errorFound = false;
+      let value = userInput[0];
       if (await manager.checkZenodoToken(value)) {
         try {
           await manager.saveToken(key, value);
@@ -272,7 +289,7 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        let name = await manager.getZenodoUser(value);
+        let name = userInput[1]
         updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
@@ -293,7 +310,9 @@ export default {
       spinner.close();
     }
 
-    async function processGithub(key, value) {
+    async function processGithub(userInput) {
+      let key = "github";
+      let value = userInput[0];
       let spinner = createLoading();
       let errorFound = false;
       if (await manager.checkGithubToken(value)) {
@@ -381,6 +400,9 @@ export default {
       createLoading,
       dialogVisable,
       getInputs,
+      dialogOpener,
+      dialogNumInput,
+      dialogHeaders
     };
   },
   data() {
