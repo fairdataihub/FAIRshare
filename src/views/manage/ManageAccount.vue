@@ -123,7 +123,6 @@
               {{ status.zenodo[4] }}
             </el-tag>
           </div>
-
         </div>
         <div class="centering-Container center">
           <span
@@ -187,12 +186,12 @@ export default {
     async function getInputs(response) {
       dialogVisable.value = false;
       if (response[0] == "OK") {
-        if(dialogOpener.value == "github"){
+        if (dialogOpener.value == "github") {
           await processGithub(response[1]);
-        } else if (dialogOpener.value == "zenodo"){
+        } else if (dialogOpener.value == "zenodo") {
           await processZenodo(response[1]);
         }
-        console.log("dialogOpener: ", dialogOpener.value)
+        console.log("dialogOpener: ", dialogOpener.value);
       } else {
         ElNotification({
           type: "info",
@@ -259,11 +258,11 @@ export default {
       if (key == "github") {
         dialogOpener.value = "github";
         dialogNumInput.value = 1;
-        dialogHeaders.value = ["Github access token"]
+        dialogHeaders.value = ["Github access token"];
       } else if (key == "zenodo") {
         dialogOpener.value = "zenodo";
         dialogNumInput.value = 2;
-        dialogHeaders.value = ["Zenodo access token", "Token nick name"]
+        dialogHeaders.value = ["Zenodo access token", "Token nick name"];
       }
       dialogVisable.value = true;
     }
@@ -277,7 +276,7 @@ export default {
     }
 
     async function processZenodo(userInput) {
-      console.log("user Input: ", userInput)
+      console.log("user Input: ", userInput);
       let key = "zenodo";
       let spinner = createLoading();
       let errorFound = false;
@@ -289,7 +288,7 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        let name = userInput[1]
+        let name = userInput[1];
         updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
@@ -402,7 +401,7 @@ export default {
       getInputs,
       dialogOpener,
       dialogNumInput,
-      dialogHeaders
+      dialogHeaders,
     };
   },
   data() {

@@ -60,11 +60,11 @@ export default {
       this.closeDialog("Cancelled");
     },
 
-    clearInput(){
-      for(let i = 0; i < this.userInputs.length; i++){
-        this.userInputs[i] = ""
+    clearInput() {
+      for (let i = 0; i < this.userInputs.length; i++) {
+        this.userInputs[i] = "";
       }
-    }
+    },
   },
 };
 </script>
