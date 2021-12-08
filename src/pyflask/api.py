@@ -15,6 +15,7 @@ from zenodo import (
     uploadFileToZenodoDeposition,
     addMetadataToZenodoDeposition,
     publishZenodoDeposition,
+    deleteZenodoDeposition,
 )
 from metadata import createMetadata
 from utilities import foldersPresent, zipFolder, deleteFile
@@ -289,6 +290,40 @@ class zenodoPublish(Resource):
         deposition_id = args["deposition_id"]
 
         return publishZenodoDeposition(access_token, deposition_id)
+
+
+@zenodo.route("/delete", endpoint="zenodoDelete")
+class zenodoDelete(Resource):
+    @zenodo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "deposition id of the zenodo object",
+        },
+    )
+    def delete(self):
+        """Delete a zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "deposition_id",
+            type=str,
+            required=True,
+            help="deposition_id is required. deposition_id needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        deposition_id = args["deposition_id"]
+
+        return deleteZenodoDeposition(access_token, deposition_id)
 
 
 ###############################################################################

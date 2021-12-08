@@ -1,123 +1,149 @@
 <template>
   <div
-    class="h-screen w-full flex flex-row items-center"
+    class="h-full w-full flex flex-row items-center"
     :class="{ 'justify-center': datasetStore.datasetCount === 0 }"
   >
     <div
-      ref="startCuration"
       class="px-3 h-full flex flex-row items-center"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
       <div
-        ref="continueCurating"
-        class="h-full w-full"
+        class="h-full w-full flex flex-col"
         v-if="datasetStore.datasetCount > 0"
       >
-        <div class="flex flex-col h-full">
-          <span class="font-medium"> Continue curating your datasets </span>
+        <!-- <div class="flex flex-col h-full"> -->
+        <span class="font-medium"> Continue curating your datasets </span>
 
-          <span>
-            You have some unpublished projects. Do you want to continue working
-            on these items?
-          </span>
+        <span>
+          You have some unpublished projects. Do you want to continue working on
+          these items?
+        </span>
 
-          <el-divider content-position="left">
-            Click on one of the projects below</el-divider
-          >
+        <!-- <el-divider> </el-divider> -->
 
-          <div
-            ref="unpublishedDatasets"
-            id="unpublishedDatasets"
-            class="
-              divide-y divide-gray-200
-              px-4
-              flex-grow
-              h-full
-              overflow-y-auto
-            "
-          >
-            <div
-              v-for="dataset in datasetStore.datasets"
-              :key="dataset"
-              class="
-                flex flex-row
-                justify-between
-                items-center
-                w-full
-                p-3
-                my-1
-                hover:bg-gray-100
-                transition-all
-                cursor-pointer
-              "
-              :class="{ 'selected-project': dataset.id === selectedDataset }"
-              @click="selectDataset($event, dataset.id)"
-            >
-              <!-- @click="navigateToDataset(`${dataset.id}`)" -->
-              <div class="flex flex-row items-center">
-                <img :src="dataset.image" alt="" class="w-20" />
-                <div class="flex flex-col px-4">
-                  <span class="text-md font-medium">
-                    {{ dataset.name }}
-                  </span>
-                  <p class="text-sm line-clamp-4">
-                    {{ dataset.description }}
-                  </p>
+        <div class="flex-grow h-full overflow-y-auto">
+          <div>
+            <el-divider content-position="left">
+              Projects currently in progress
+            </el-divider>
+
+            <div class="divide-y divide-gray-200 px-4">
+              <div
+                v-for="dataset in datasetsInProgress"
+                :key="dataset"
+                class="
+                  flex flex-row
+                  justify-between
+                  items-center
+                  w-full
+                  p-3
+                  hover:bg-gray-100
+                  transition-all
+                  cursor-pointer
+                "
+                :class="{ 'selected-project': dataset.id === selectedDataset }"
+                @click="selectDataset($event, dataset.id)"
+              >
+                <!-- @click="navigateToDataset(`${dataset.id}`)" -->
+                <div class="flex flex-row items-center">
+                  <img :src="dataset.image" alt="" class="w-20" />
+                  <div class="flex flex-col px-4">
+                    <span class="text-md font-medium">
+                      {{ dataset.name }}
+                    </span>
+                    <p class="text-sm line-clamp-4">
+                      {{ dataset.description }}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div class="items-center ml-2 hidden">
-                <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
+                <div class="items-center ml-2 hidden">
+                  <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
+                </div>
               </div>
             </div>
           </div>
-          <el-divider> </el-divider>
-          <div class="flex flex-row justify-between mb-5">
-            <router-link to="/datasets/new">
+
+          <div class="mt-5" v-if="datasetsPublished.length > 0">
+            <el-divider content-position="left">
+              Fully published projects
+            </el-divider>
+
+            <div class="divide-y divide-gray-200 px-4">
               <div
-                ref="startFromEmpty"
+                v-for="dataset in datasetsPublished"
+                :key="dataset"
                 class="
                   flex flex-row
+                  justify-between
                   items-center
-                  w-max
-                  text-purple-800
+                  w-full
+                  p-3
+                  hover:bg-gray-100
+                  transition-all
                   cursor-pointer
-                  hover-underline-animation
-                  py-3
                 "
+                :class="{ 'selected-project': dataset.id === selectedDataset }"
+                @click="selectDataset($event, dataset.id)"
               >
-                <span class="font-medium">
-                  Or start from an empty project
-                </span>
-                <Icon
-                  icon="grommet-icons:form-next-link"
-                  class="ml-2 h-5 w-5"
-                />
+                <!-- @click="navigateToDataset(`${dataset.id}`)" -->
+                <div class="flex flex-row items-center">
+                  <img :src="dataset.image" alt="" class="w-20" />
+                  <div class="flex flex-col px-4">
+                    <span class="text-md font-medium">
+                      {{ dataset.name }}
+                    </span>
+                    <p class="text-sm line-clamp-4">
+                      {{ dataset.description }}
+                    </p>
+                  </div>
+                </div>
+                <div class="items-center ml-2 hidden">
+                  <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
+                </div>
               </div>
-            </router-link>
-            <div class="flex flex-row" v-if="selectedDataset !== ''">
-              <el-button type="info" plain @click="editProject">
-                Edit project details
-              </el-button>
-              <el-button
-                type="primary"
-                plain
-                class="flex flex-row items-center"
-                @click="startCuratingProject"
-              >
-                Start curating this dataset
-                <el-icon>
-                  <ArrowRightBold />
-                </el-icon>
-              </el-button>
             </div>
           </div>
         </div>
+
+        <el-divider> </el-divider>
+
+        <div class="flex flex-row justify-between mb-5">
+          <router-link to="/datasets/new">
+            <div
+              class="
+                flex flex-row
+                items-center
+                w-max
+                text-purple-800
+                cursor-pointer
+                hover-underline-animation
+                py-3
+              "
+            >
+              <span class="font-medium"> Or start from an empty project </span>
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+            </div>
+          </router-link>
+          <div class="flex flex-row" v-if="selectedDataset !== ''">
+            <el-button type="info" plain @click="editProject">
+              Edit project details
+            </el-button>
+            <el-button
+              type="primary"
+              plain
+              class="flex flex-row items-center"
+              @click="startCuratingProject"
+            >
+              Start curating this dataset
+              <el-icon>
+                <ArrowRightBold />
+              </el-icon>
+            </el-button>
+          </div>
+        </div>
+        <!-- </div> -->
       </div>
-      <div
-        ref="startCurating"
-        class="flex flex-row justify-center items-center p-10"
-        v-else
-      >
+      <div class="flex flex-row justify-center items-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
             class="
@@ -160,21 +186,22 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       selectedDataset: "",
+      datasetsInProgress: [],
+      datasetsPublished: [],
     };
   },
+  computed: {},
   methods: {
     selectDataset(event, datasetID) {
-      if (event) {
-        if (event.detail === 1) {
-          if (datasetID === this.selectedDataset) {
-            this.selectedDataset = "";
-          } else {
-            this.selectedDataset = datasetID;
-          }
-        } else if (event.detail === 2) {
-          this.selectedDataset = "";
-          this.navigateToDataset(datasetID);
-        }
+      if (datasetID === this.selectedDataset) {
+        this.selectedDataset = "";
+      } else {
+        this.selectedDataset = datasetID;
+      }
+
+      if (event && event.detail === 2) {
+        this.selectedDataset = "";
+        this.navigateToDataset(datasetID);
       }
     },
     startCuratingProject() {
@@ -186,17 +213,77 @@ export default {
       this.$router.push({ path: routerPath });
     },
     async navigateToDataset(datasetID) {
+      let routerPath;
+
       await this.datasetStore.getDataset(datasetID);
-      const routerPath = `/datasets/${datasetID}`;
-      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata`;
-      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
-      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`;
-      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/accessToken`;
-      // const routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/publish`;
+
+      routerPath = `/datasets/${datasetID}`;
+      routerPath = `/datasets/new/${datasetID}/confirm`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
+      // routerPath = `/datasets/${datasetID}/workflow1/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
+
       this.$router.push({ path: routerPath });
     },
   },
-  mounted() {},
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+
+    let test = await this.datasetStore.getAllDatasets();
+
+    // make a local copy of the datasets object
+    const datasets = JSON.parse(JSON.stringify(test));
+
+    // filter datasets in progress
+    let datasetsInProgressIDs = [];
+
+    for (const key in datasets) {
+      if ("workflows" in datasets[key]) {
+        for (const workflow in datasets[key].workflows) {
+          if (!("datasetPublished" in datasets[key].workflows[workflow])) {
+            datasetsInProgressIDs.push(key);
+          } else {
+            if (
+              "datasetPublished" in datasets[key].workflows[workflow] &&
+              !datasets[key].workflows[workflow].datasetPublished
+            ) {
+              datasetsInProgressIDs.push(key);
+            }
+          }
+        }
+      } else {
+        datasetsInProgressIDs.push(key);
+      }
+    }
+
+    // remove duplicates from array
+    datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
+
+    // filter datasets that are in progress based on the IDs
+    for (const datasetID of datasetsInProgressIDs) {
+      this.datasetsInProgress.push(datasets[datasetID]);
+    }
+
+    // get list of all IDs
+    let datasetIDs = [];
+    for (const key in datasets) {
+      datasetIDs.push(key);
+    }
+
+    // get the difference of array of datasetIds
+    let datasetsPublishedIDs = datasetIDs.filter(
+      (datasetID) => !datasetsInProgressIDs.includes(datasetID)
+    );
+
+    // filter datasets that are published based on the IDs
+    for (const datasetID of datasetsPublishedIDs) {
+      this.datasetsPublished.push(datasets[datasetID]);
+    }
+  },
 };
 </script>
 

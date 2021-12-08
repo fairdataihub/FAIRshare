@@ -28,7 +28,7 @@
               <el-button
                 type="primary"
                 @click="navigateToCurate(`${key}`)"
-                :disabled="workflow.completed"
+                :disabled="workflow.datasetPublished"
               >
                 Curate {{ combineDataTypes(workflow.type) }}
                 <el-icon>
@@ -80,10 +80,21 @@ export default {
       }
     },
     navigateToCurate(workflowID) {
-      this.datasetStore.updateCurrentDataset(this.dataset);
+      // this.datasetStore.updateCurrentDataset(this.dataset);
+      let routerPath = "";
+      console.log(this.dataset.workflows);
+      console.log(this.dataset);
 
-      const routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
-      console.log(routerPath);
+      if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
+        if (this.dataset.workflows[workflowID].datasetUploaded) {
+          routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+        } else {
+          routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+        }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+      }
+
       this.$router.push({ path: routerPath });
     },
   },

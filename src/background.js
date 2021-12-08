@@ -84,6 +84,7 @@ async function createWindow() {
     height: 600,
     minWidth: 1022,
     minHeight: 600,
+    show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -93,6 +94,29 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  ///// splash screen
+  // remove this section if not good.
+  // Also remove from the copy-files script from package.json
+
+  const splash = new BrowserWindow({
+    width: 1022,
+    height: 600,
+    frame: false,
+    icon: __dirname + "/assets/menu-icon/soda_icon.png",
+    alwaysOnTop: true,
+    transparent: true,
+  });
+  splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
+
+  mainWindow.once("ready-to-show", () => {
+    setTimeout(function () {
+      splash.close();
+      mainWindow.show();
+    }, 500);
+  });
+
+  ////// splash screen end
 
   enableWebContents(mainWindow.webContents);
 
@@ -201,12 +225,8 @@ autoUpdater.on("update-downloaded", () => {
 });
 
 ipcMain.on("open-link-in-browser", async (_event, link) => {
-  console.log("opening link", link);
-  shell.openExternal("https://google.com").then(() => {
-    console.log("hello");
-  });
   shell.openExternal(link).then(() => {
-    console.log("opened link");
+    console.log("opened link", link);
   });
 });
 

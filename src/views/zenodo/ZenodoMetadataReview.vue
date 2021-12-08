@@ -1,425 +1,402 @@
 <template>
-  <div
-    class="
-      h-screen
-      w-full
-      flex flex-row
-      lg:justify-center
-      items-center
-      overflow-y-auto
-    "
-  >
-    <div class="w-full p-3 h-full flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="w-full flex flex-col h-full pr-5">
-          <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-          <span class="text-left"> Lets upload your data to Zenodo. </span>
+  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
+      <span class="text-left"> Lets upload your data to Zenodo. </span>
 
-          <line-divider></line-divider>
+      <line-divider></line-divider>
 
-          <div class="my-2">
-            <el-descriptions
-              class="margin-top"
-              title="Basic Information"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['basicInformation', 'license'])"
-                  class="ml-2"
-                >
-                  Edit basic information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Publication Date </template>
-                {{ displayPublicationDate }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Title </template>
-                {{ zenodoMetadata.title }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Authors </template>
-
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="author in zenodoMetadata.authors"
-                      :key="author.id"
-                    >
-                      Name: {{ author.name }}
-                      <ul class="ml-6">
-                        <li>Affiliation: {{ author.affiliation }}</li>
-                        <li>ORCID: {{ author.orcid }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Keywords </template>
-                <div>
-                  <el-tag
-                    size="medium"
-                    v-for="element in zenodoMetadata.keywords"
-                    :key="element.id"
-                    class="mx-1"
-                  >
-                    {{ element.keyword }}</el-tag
-                  >
-                </div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Description </template>
-                {{ zenodoMetadata.description }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Language </template>
-                {{ displayLanguage }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Access right </template>
-                {{ zenodoMetadata.license.accessRight }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> License </template>
-                {{ zenodoMetadata.license.licenseName }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Version </template>
-                {{ zenodoMetadata.version }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Additional notes </template>
-                {{ zenodoMetadata.additionalNotes }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showRelatedAlternateIdentifiers">
-            <el-descriptions
-              class="margin-top"
-              title="Related/alternate identifiers"
-              direction="vertical"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['relatedIdentifiers'])"
-                  class="ml-2"
-                >
-                  Edit related/alternate identifiers
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Related/alternate identifiers </template>
-
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="element in zenodoMetadata.relatedIdentifiers"
-                      :key="element.id"
-                    >
-                      Identifier: {{ element.identifier }}
-                      <ul class="ml-6">
-                        <li>Relationship: {{ element.relationship }}</li>
-                        <li>Type: {{ element.resourceType }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showContributors">
-            <el-descriptions
-              class="margin-top"
-              title="Contributors"
-              direction="vertical"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['contributors'])"
-                  class="ml-2"
-                >
-                  Edit contributors
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Contributors </template>
-
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="contributor in zenodoMetadata.contributors"
-                      :key="contributor.id"
-                    >
-                      Name: {{ contributor.name }}
-                      <ul class="ml-6">
-                        <li>Affiliation: {{ contributor.affiliation }}</li>
-                        <li>ORCID: {{ contributor.orcid }}</li>
-                        <li>Type: {{ contributor.contributorType }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showReferences">
-            <el-descriptions
-              class="margin-top"
-              title="References"
-              direction="vertical"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['references'])"
-                  class="ml-2"
-                >
-                  Edit references
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> References </template>
-                <div class="flex flex-col">
-                  <span
-                    v-for="reference in zenodoMetadata.references"
-                    :key="reference.id"
-                    class="mb-2"
-                  >
-                    {{ reference.reference }}
-                  </span>
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showJournal">
-            <el-descriptions
-              class="margin-top"
-              title="Journal"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['journal'])"
-                  class="ml-2"
-                >
-                  Edit journal information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Title </template>
-                {{ zenodoMetadata.journal.title }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Volume </template>
-                {{ zenodoMetadata.journal.volume }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Issue </template>
-                {{ zenodoMetadata.journal.issue }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Pages </template>
-                {{ zenodoMetadata.journal.pages }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showConference">
-            <el-descriptions
-              class="margin-top"
-              title="Conference"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['conference'])"
-                  class="ml-2"
-                >
-                  Edit conference information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Title </template>
-                {{ zenodoMetadata.conference.title }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Acronym </template>
-                {{ zenodoMetadata.conference.acronym }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Dates </template>
-                {{ displayConferenceDate }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Place </template>
-                {{ zenodoMetadata.conference.place }}
-              </el-descriptions-item>
-
-              <el-descriptions-item>
-                <template #label> Session </template>
-                {{ zenodoMetadata.conference.session }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Part </template>
-                {{ zenodoMetadata.conference.part }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Website </template>
-                {{ zenodoMetadata.conference.website }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showBookReportChapter">
-            <el-descriptions
-              class="margin-top"
-              title="Book/report/chapter"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['bookReportChapter'])"
-                  class="ml-2"
-                >
-                  Edit book/report/chapter information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Title </template>
-                {{ zenodoMetadata.bookReportChapter.title }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Publisher </template>
-                {{ zenodoMetadata.bookReportChapter.publisher }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> ISBN </template>
-                {{ zenodoMetadata.bookReportChapter.isbn }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Pages </template>
-                {{ zenodoMetadata.bookReportChapter.pages }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Place </template>
-                {{ zenodoMetadata.bookReportChapter.place }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2" v-if="showThesis">
-            <el-descriptions
-              class="margin-top"
-              title="Thesis"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['thesis'])"
-                  class="ml-2"
-                >
-                  Edit thesis information
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Awarding University </template>
-                {{ zenodoMetadata.thesis.awardingUniversity }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template #label> Supervisors </template>
-
-                <div>
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="supervisor in zenodoMetadata.thesis.supervisors"
-                      :key="supervisor.id"
-                    >
-                      Name: {{ supervisor.name }}
-                      <ul class="ml-6">
-                        <li>Affiliation: {{ supervisor.affiliation }}</li>
-                        <li>ORCID: {{ supervisor.orcid }}</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="my-2 mb-6" v-if="showSubjects">
-            <el-descriptions
-              class="margin-top"
-              title="Subjects"
-              direction="vertical"
-              size="small"
-              border
-            >
-              <template #extra>
-                <el-button
-                  type="primary"
-                  @click="editInformation(['subjects'])"
-                  class="ml-2"
-                >
-                  Edit subjects
-                </el-button>
-              </template>
-              <el-descriptions-item>
-                <template #label> Subjects </template>
-                <div class="flex flex-col">
-                  <span
-                    v-for="subject in zenodoMetadata.subjects"
-                    :key="subject.id"
-                    class="mb-2"
-                  >
-                    {{ subject.term }} - {{ subject.identifier }}
-                  </span>
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-
-          <div class="w-full flex flex-row justify-center py-2">
-            <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
-            </router-link>
-
+      <div class="my-2">
+        <el-descriptions
+          class="margin-top"
+          title="Basic Information"
+          size="small"
+          border
+        >
+          <template #extra>
             <el-button
               type="primary"
-              class="flex flex-row items-center"
-              @click="checkZenodoAccessToken"
+              @click="editInformation(['basicInformation', 'license'])"
+              class="ml-2"
             >
-              Continue
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
+              Edit basic information
             </el-button>
-          </div>
-        </div>
+          </template>
+          <el-descriptions-item>
+            <template #label> Publication Date </template>
+            {{ displayPublicationDate }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Title </template>
+            {{ zenodoMetadata.title }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Authors </template>
+
+            <div>
+              <ul class="list-disc list-inside">
+                <li v-for="author in zenodoMetadata.authors" :key="author.id">
+                  Name: {{ author.name }}
+                  <ul class="ml-6">
+                    <li>Affiliation: {{ author.affiliation }}</li>
+                    <li>ORCID: {{ author.orcid }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Keywords </template>
+            <div>
+              <el-tag
+                size="medium"
+                v-for="element in zenodoMetadata.keywords"
+                :key="element.id"
+                class="mx-1"
+              >
+                {{ element.keyword }}</el-tag
+              >
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Description </template>
+            {{ zenodoMetadata.description }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Language </template>
+            {{ displayLanguage }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Access right </template>
+            {{ zenodoMetadata.license.accessRight }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> License </template>
+            {{ zenodoMetadata.license.licenseName }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Version </template>
+            {{ zenodoMetadata.version }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Additional notes </template>
+            {{ zenodoMetadata.additionalNotes }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showRelatedAlternateIdentifiers">
+        <el-descriptions
+          class="margin-top"
+          title="Related/alternate identifiers"
+          direction="vertical"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['relatedIdentifiers'])"
+              class="ml-2"
+            >
+              Edit related/alternate identifiers
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Related/alternate identifiers </template>
+
+            <div>
+              <ul class="list-disc list-inside">
+                <li
+                  v-for="element in zenodoMetadata.relatedIdentifiers"
+                  :key="element.id"
+                >
+                  Identifier: {{ element.identifier }}
+                  <ul class="ml-6">
+                    <li>Relationship: {{ element.relationship }}</li>
+                    <li>Type: {{ element.resourceType }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showContributors">
+        <el-descriptions
+          class="margin-top"
+          title="Contributors"
+          direction="vertical"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['contributors'])"
+              class="ml-2"
+            >
+              Edit contributors
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Contributors </template>
+
+            <div>
+              <ul class="list-disc list-inside">
+                <li
+                  v-for="contributor in zenodoMetadata.contributors"
+                  :key="contributor.id"
+                >
+                  Name: {{ contributor.name }}
+                  <ul class="ml-6">
+                    <li>Affiliation: {{ contributor.affiliation }}</li>
+                    <li>ORCID: {{ contributor.orcid }}</li>
+                    <li>Type: {{ contributor.contributorType }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showReferences">
+        <el-descriptions
+          class="margin-top"
+          title="References"
+          direction="vertical"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['references'])"
+              class="ml-2"
+            >
+              Edit references
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> References </template>
+            <div class="flex flex-col">
+              <span
+                v-for="reference in zenodoMetadata.references"
+                :key="reference.id"
+                class="mb-2"
+              >
+                {{ reference.reference }}
+              </span>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showJournal">
+        <el-descriptions class="margin-top" title="Journal" size="small" border>
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['journal'])"
+              class="ml-2"
+            >
+              Edit journal information
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Title </template>
+            {{ zenodoMetadata.journal.title }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Volume </template>
+            {{ zenodoMetadata.journal.volume }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Issue </template>
+            {{ zenodoMetadata.journal.issue }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Pages </template>
+            {{ zenodoMetadata.journal.pages }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showConference">
+        <el-descriptions
+          class="margin-top"
+          title="Conference"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['conference'])"
+              class="ml-2"
+            >
+              Edit conference information
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Title </template>
+            {{ zenodoMetadata.conference.title }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Acronym </template>
+            {{ zenodoMetadata.conference.acronym }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Dates </template>
+            {{ displayConferenceDate }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Place </template>
+            {{ zenodoMetadata.conference.place }}
+          </el-descriptions-item>
+
+          <el-descriptions-item>
+            <template #label> Session </template>
+            {{ zenodoMetadata.conference.session }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Part </template>
+            {{ zenodoMetadata.conference.part }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Website </template>
+            {{ zenodoMetadata.conference.website }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showBookReportChapter">
+        <el-descriptions
+          class="margin-top"
+          title="Book/report/chapter"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['bookReportChapter'])"
+              class="ml-2"
+            >
+              Edit book/report/chapter information
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Title </template>
+            {{ zenodoMetadata.bookReportChapter.title }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Publisher </template>
+            {{ zenodoMetadata.bookReportChapter.publisher }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> ISBN </template>
+            {{ zenodoMetadata.bookReportChapter.isbn }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Pages </template>
+            {{ zenodoMetadata.bookReportChapter.pages }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Place </template>
+            {{ zenodoMetadata.bookReportChapter.place }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2" v-if="showThesis">
+        <el-descriptions class="margin-top" title="Thesis" size="small" border>
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['thesis'])"
+              class="ml-2"
+            >
+              Edit thesis information
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Awarding University </template>
+            {{ zenodoMetadata.thesis.awardingUniversity }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label> Supervisors </template>
+
+            <div>
+              <ul class="list-disc list-inside">
+                <li
+                  v-for="supervisor in zenodoMetadata.thesis.supervisors"
+                  :key="supervisor.id"
+                >
+                  Name: {{ supervisor.name }}
+                  <ul class="ml-6">
+                    <li>Affiliation: {{ supervisor.affiliation }}</li>
+                    <li>ORCID: {{ supervisor.orcid }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="my-2 mb-6" v-if="showSubjects">
+        <el-descriptions
+          class="margin-top"
+          title="Subjects"
+          direction="vertical"
+          size="small"
+          border
+        >
+          <template #extra>
+            <el-button
+              type="primary"
+              @click="editInformation(['subjects'])"
+              class="ml-2"
+            >
+              Edit subjects
+            </el-button>
+          </template>
+          <el-descriptions-item>
+            <template #label> Subjects </template>
+            <div class="flex flex-col">
+              <span
+                v-for="subject in zenodoMetadata.subjects"
+                :key="subject.id"
+                class="mb-2"
+              >
+                {{ subject.term }} - {{ subject.identifier }}
+              </span>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <div class="w-full flex flex-row justify-center py-2">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+          class="mx-6"
+        >
+          <el-button type="danger" plain> Back </el-button>
+        </router-link>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          @click="checkZenodoAccessToken"
+        >
+          Continue
+          <el-icon>
+            <ArrowRightBold />
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -560,7 +537,7 @@ export default {
       ) {
         return true;
       } else {
-        console.log(this.zenodoMetadata.conference);
+        // console.log(this.zenodoMetadata.conference);
         return false;
       }
     },
@@ -624,6 +601,10 @@ export default {
 
     this.workflow = this.dataset.workflows[this.workflowID];
     this.zenodoMetadata = this.workflow.destination.zenodo.questions;
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(4);
 
     this.loading.close();
   },

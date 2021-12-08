@@ -1,36 +1,64 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="text-lg font-medium text-left">
-            Uploading your data to Zenodo
-          </span>
-          <span class="text-left">
-            This ones on us. SODA is creating a Zenodo record for you and
-            uploading all your files with the relevant metadata.
-          </span>
+  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left">
+        Uploading your data to Zenodo
+      </span>
+      <span class="text-left">
+        This ones on us. SODA is creating a Zenodo record for you and uploading
+        all your files with the relevant metadata.
+      </span>
 
-          <el-divider class="my-4"> </el-divider>
+      <el-divider class="my-4"> </el-divider>
 
-          <div class="flex flex-col justify-center h-full">
-            <el-progress
-              :percentage="percentage"
-              :indeterminate="indeterminate"
-              :stroke-width="10"
-            />
-            <div class="flex flex-row justify-start items-center py-3">
-              <LoadingCubeGrid
-                class="w-5 h-5"
-                v-if="percentage !== 100"
-              ></LoadingCubeGrid>
-              <p class="pl-4">
-                {{ statusMessage }}
-                <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
-              </p>
-            </div>
-          </div>
+      <div class="flex flex-col justify-center h-full">
+        <el-progress
+          :percentage="percentage"
+          :indeterminate="indeterminate"
+          :status="progressStatus"
+          :stroke-width="10"
+        />
+        <el-alert
+          class="my-2"
+          v-if="showAlert"
+          :title="alertTitle"
+          type="error"
+          :description="alertMessage"
+          show-icon
+        >
+        </el-alert>
+        <div class="flex flex-row justify-start items-center py-3" v-else>
+          <LoadingCubeGrid
+            class="w-5 h-5"
+            v-if="percentage !== 100"
+          ></LoadingCubeGrid>
+          <p class="pl-4">
+            {{ statusMessage }}
+            <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
+          </p>
         </div>
+        <div class="pl-2 pt-2" v-if="errorMessage != ''">
+          <p style="white-space: pre-line">
+            {{ errorMessage }}
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full flex flex-row justify-center py-2" v-if="showAlert">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
+          class="mx-6"
+        >
+          <el-button type="danger" plain> Back </el-button>
+        </router-link>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          @click="retryUpload"
+        >
+          Retry
+        </el-button>
       </div>
     </div>
   </div>
@@ -62,11 +90,23 @@ export default {
       workflow: {},
       percentage: 0,
       indeterminate: true,
+      progressStatus: "",
       zenodoToken: "",
       statusMessage: "some status message here",
+      errorMessage: "",
+      showAlert: false,
+      alertTitle: "",
+      alertMessage: "",
     };
   },
-  computed: {},
+  computed: {
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+  },
   methods: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -74,7 +114,7 @@ export default {
     async createZenodoDeposition() {
       this.statusMessage = "Creating an empty dataset on Zenodo";
       await this.sleep(300);
-
+      // return "ERROR";
       return axios
         .post(`${this.$server_url}/zenodo/new`, {
           access_token: this.zenodoToken,
@@ -105,7 +145,7 @@ export default {
         creatorObject.name = author.name;
         creatorObject.affiliation = author.affiliation;
 
-        if (author.orcid != "") {
+        if (author.orcid !== "") {
           creatorObject.orcid = author.orcid;
         }
 
@@ -135,12 +175,17 @@ export default {
 
       metadata.contributors = [];
       zenodoMetadata.contributors.forEach((contributor) => {
-        metadata.contributors.push({
-          name: contributor.name,
-          affiliation: contributor.affiliation,
-          orcid: contributor.orcid,
-          type: contributor.contributorType,
-        });
+        const contributorObject = {};
+
+        contributorObject.name = contributor.name;
+        contributorObject.affiliation = contributor.affiliation;
+        contributorObject.type = contributor.contributorType;
+
+        if (contributor.orcid !== "") {
+          contributorObject.orcid = contributor.orcid;
+        }
+
+        metadata.contributors.push(contributorObject);
       });
 
       metadata.references = [];
@@ -220,7 +265,20 @@ export default {
           metadata: metadataObject,
         })
         .then((response) => {
-          return response.data;
+          console.log(response);
+          if ("status" in response.data && response.data.status != 200) {
+            if ("errors" in response.data) {
+              response.data.errors.forEach((error) => {
+                this.errorMessage += `${error.field} - ${error.message} \n`;
+              });
+            }
+            this.alertTitle = "Metadata error";
+            this.alertMessage =
+              "Could not add your metadata to the dataset. Please try again.";
+            return "ERROR";
+          } else {
+            return response.data;
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -256,7 +314,7 @@ export default {
       await this.sleep(300);
 
       const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-      console.log(folderPath);
+      // console.log(folderPath);
 
       const response = await axios
         .post(`${this.$server_url}/utilities/checkforfolders`, {
@@ -287,7 +345,7 @@ export default {
             return "ERROR";
           });
 
-        console.log(zippedPath);
+        // console.log(zippedPath);
 
         this.statusMessage =
           "Created a zipped folder successfully. Getting ready to upload to Zenodo";
@@ -334,7 +392,6 @@ export default {
           console.error(error);
           return "ERROR";
         });
-
       return response;
     },
     async uploadWorkflow() {
@@ -342,7 +399,7 @@ export default {
       response = await this.createZenodoDeposition();
 
       if (response === "ERROR") {
-        this.statusMessage = "There was an error creating the deposition";
+        this.alertMessage = "There was an error creating the deposition";
         return "FAIL";
       } else {
         this.statusMessage = "Empty deposition created on Zenodo";
@@ -365,20 +422,20 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent() && "metadata" in response) {
+      if (this.codePresent && "metadata" in response) {
         this.dataset.data.Code.questions.uniqueIdentifier =
           response.metadata.prereserve_doi.doi;
 
         response = await this.createCodeMetadataFile();
-        console.log(response);
+        // console.log(response);
 
         if (response === "ERROR") {
-          this.statusMessage =
+          this.alertMessage =
             "There was an error with creating the code metadata file";
           return "FAIL";
         } else {
           this.statusMessage =
-            "Created the codemetadata.json file in the target folder";
+            "Created the codemeta.json file in the target folder";
 
           await this.datasetStore.updateCurrentDataset(this.dataset);
           await this.datasetStore.syncDatasets();
@@ -393,7 +450,7 @@ export default {
       response = await this.addMetadaToZenodoDeposition();
 
       if (response === "ERROR") {
-        this.statusMessage =
+        this.alertMessage =
           "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
@@ -412,7 +469,7 @@ export default {
       response = await this.checkForFoldersAndUpload();
 
       if (response === "ERROR") {
-        this.statusMessage =
+        this.alertMessage =
           "There was an error with uploading files to the Zenodo deposition";
         return "FAIL";
       } else {
@@ -423,32 +480,78 @@ export default {
 
       return "SUCCESS";
     },
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
+    async deleteDraftZenodoDeposition() {
+      if ("deposition_id" in this.workflow.destination.zenodo) {
+        console.log(
+          this.zenodoToken,
+          this.workflow.destination.zenodo.deposition_id
+        );
+        const response = await axios
+          .delete(`${this.$server_url}/zenodo/delete`, {
+            data: {
+              access_token: this.zenodoToken,
+              deposition_id: this.workflow.destination.zenodo.deposition_id,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+        return response.data;
       }
-      return false;
+      return "NO_DEPOSITION_FOUND";
+    },
+    async runZenodoUpload() {
+      this.statusMessage = "Preparing backend services...";
+      await this.sleep(300);
+
+      let response = await this.uploadWorkflow();
+
+      if (response === "FAIL") {
+        this.indeterminate = true;
+        this.progressStatus = "exception";
+        this.showAlert = true;
+
+        this.deleteDraftZenodoDeposition();
+
+        this.workflow.datasetUploaded = false;
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
+        return;
+      } else {
+        this.workflow.datasetUploaded = true;
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        this.$router.push({ path: routerPath });
+      }
+    },
+    async retryUpload() {
+      this.runZenodoUpload();
     },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
+
     this.zenodoToken = await this.tokens.getToken("zenodo");
-    // console.log(this.zenodoToken);
+    console.log(this.zenodoToken);
 
-    this.statusMessage = "Preparing backend services...";
-    await this.sleep(300);
-
-    let response = await this.uploadWorkflow();
-
-    if (response === "FAIL") {
-      alert("Something went wrong. Please try again at a later time.");
-      return;
-    } else {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
-      this.$router.push({ path: routerPath });
-    }
+    this.runZenodoUpload();
   },
 };
 </script>

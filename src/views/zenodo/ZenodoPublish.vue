@@ -1,48 +1,44 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="text-lg font-medium text-left">
-            Lets publish your work to Zenodo
-          </span>
-          <span class="text-left">
-            All your data has been uploaded to Zenodo. It's now time to publish
-            your work.
-          </span>
+  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left">
+        Lets publish your work to Zenodo
+      </span>
+      <span class="text-left">
+        All your data has been uploaded to Zenodo. It's now time to publish your
+        work.
+      </span>
 
-          <el-divider class="my-4"> </el-divider>
+      <el-divider class="my-4"> </el-divider>
 
-          <div class="flex flex-col justify-center items-center h-full px-10">
-            <p class="text-center pb-5">
-              Once the record is published you will no longer be able to change
-              the files in this upload. This is because a Digital Object
-              Identifier (DOI) will be registered immediately after publishing.
-              You will still be able to update the record's metadata later.
-            </p>
-            <el-button
-              type="primary"
-              plain
-              class="blob transition-all"
-              @click="publishDeposition"
-            >
-              Publish <el-icon> <Star /> </el-icon>
-            </el-button>
-          </div>
+      <div class="flex flex-col justify-center items-center h-full px-10">
+        <p class="text-center pb-5">
+          Once the record is published you will no longer be able to change the
+          files in this upload. This is because a Digital Object Identifier
+          (DOI) will be registered immediately after publishing. You will still
+          be able to update the record's metadata later.
+        </p>
+        <el-button
+          type="primary"
+          plain
+          class="blob transition-all"
+          @click="publishDeposition"
+        >
+          Publish <el-icon> <Star /> </el-icon>
+        </el-button>
+      </div>
 
-          <div class="w-full flex-row justify-center py-2 hidden">
-            <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
-            </router-link>
+      <div class="w-full flex-row justify-center py-2 hidden">
+        <router-link to="/datasets" class="mx-6">
+          <el-button type="danger" plain> Cancel </el-button>
+        </router-link>
 
-            <el-button type="primary" class="flex flex-row items-center">
-              Continue
-              <el-icon>
-                <!-- <ArrowRightBold /> -->
-              </el-icon>
-            </el-button>
-          </div>
-        </div>
+        <el-button type="primary" class="flex flex-row items-center">
+          Continue
+          <el-icon>
+            <!-- <ArrowRightBold /> -->
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -66,6 +62,7 @@ export default {
       tokens: useTokenStore(),
       dataset: {},
       folderPath: "",
+      datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
       zenodoToken: "",
@@ -101,27 +98,39 @@ export default {
       await this.sleep(3000);
 
       const response = {
-        id: "https://stackoverflow.com/questions/50949594/axios-having-cors-issue",
+        id: "5750415",
       };
 
       if (response === "ERROR") {
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
         this.statusMessage =
           "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
+        this.workflow.datasetPublished = true;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
         ElMessageBox.alert(
           "Your dataset was published to Zenodo. Click 'OK' to view this record on Zenodo.",
           "Published to Zenodo",
           {
             confirmButtonText: "OK",
             callback: (action) => {
-              console.log(action);
               if (action === "confirm") {
                 console.log(`Opening ${response.id}`);
+
                 window.ipcRenderer.send(
                   "open-link-in-browser",
                   `https://sandbox.zenodo.org/record/${response.id}`
                 );
+
+                this.$router.push({ path: `/datasets/${this.datasetID}` });
               }
             },
           }
@@ -134,6 +143,10 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(6);
 
     this.zenodoToken = await this.tokens.getToken("zenodo");
     // console.log(this.zenodoToken);

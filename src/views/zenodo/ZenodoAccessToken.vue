@@ -1,55 +1,54 @@
 <template>
-  <div class="h-screen w-full flex flex-row lg:justify-center items-center">
-    <div class="p-3 h-full w-full lg:w-auto flex flex-row items-center">
-      <div class="h-full w-full">
-        <div class="flex flex-col h-full overflow-y-auto pr-5">
-          <span class="text-lg font-medium text-left">
-            Zenodo Access Token Verification
-          </span>
-          <span class="text-left">
-            Let's see if we already have your Zenodo login details
-          </span>
+  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+    <div class="flex flex-col h-full w-full">
+      <span class="text-lg font-medium text-left">
+        Zenodo Access Token Verification
+      </span>
+      <span class="text-left">
+        Let's see if we already have your Zenodo login details
+      </span>
 
-          <el-divider class="my-4"> </el-divider>
+      <el-divider class="my-4"> </el-divider>
 
-          <div v-if="ready">
-            <span v-if="validTokenAvailable" class="mb-10">
-              Looks like we already have your Zenodo login details. Click on the
-              continue button below.
-            </span>
-            <!-- show error message if token is not valid -->
-            <div v-if="errorMessage !== ''">
-              <p class="mb-5">
-                {{ errorMessage }}
-              </p>
+      <div v-if="ready">
+        <p v-if="validTokenAvailable" class="my-10 text-center w-full">
+          Looks like we already have your Zenodo login details. Click on the
+          continue button below.
+        </p>
+        <!-- show error message if token is not valid -->
+        <div v-if="errorMessage !== ''">
+          <p class="mb-5">
+            {{ errorMessage }}
+          </p>
 
-              <el-input
-                v-model="zenodoAccessToken"
-                placeholder="Zenodo Access Token"
-                class="mb-10"
-              />
-            </div>
-          </div>
-          <LoadingFoldingCube v-else></LoadingFoldingCube>
-
-          <div class="w-full flex flex-row justify-center py-2">
-            <router-link to="/datasets" class="mx-6">
-              <el-button type="danger" plain> Cancel </el-button>
-            </router-link>
-
-            <el-button
-              type="primary"
-              class="flex flex-row items-center"
-              :disabled="disableContinue"
-              @click="uploadToZenodo"
-            >
-              Continue
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
-            </el-button>
-          </div>
+          <el-input
+            v-model="zenodoAccessToken"
+            placeholder="Zenodo Access Token"
+            class="mb-10"
+          />
         </div>
+      </div>
+      <LoadingFoldingCube v-else></LoadingFoldingCube>
+
+      <div class="w-full flex flex-row justify-center py-2">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
+          class="mx-6"
+        >
+          <el-button type="danger" plain> Back </el-button>
+        </router-link>
+
+        <el-button
+          type="primary"
+          class="flex flex-row items-center"
+          :disabled="disableContinue"
+          @click="uploadToZenodo"
+        >
+          Continue
+          <el-icon>
+            <ArrowRightBold />
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -143,6 +142,10 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
 
     const zenodoToken = await this.tokens.getToken("zenodo");
     if (zenodoToken === "NO_TOKEN_FOUND") {
