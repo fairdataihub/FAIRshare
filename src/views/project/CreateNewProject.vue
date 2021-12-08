@@ -41,7 +41,9 @@
 
         <el-form-item label="Data type" prop="dataType">
           <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
-            <el-checkbox label="Code" name="type"></el-checkbox>
+            <div>
+              <el-checkbox label="Code" name="type"></el-checkbox>
+            </div>
 
             <el-tooltip
               class="item"
@@ -49,34 +51,42 @@
               content="Coming soon..."
               placement="top-end"
             >
-              <el-checkbox
-                label="Publications"
-                name="type"
-                disabled
-              ></el-checkbox>
+              <div class="w-max">
+                <el-checkbox label="Figure" name="type" disabled></el-checkbox>
+                <el-checkbox label="Media" name="type" disabled></el-checkbox>
+                <el-checkbox label="Poster" name="type" disabled></el-checkbox>
+              </div>
             </el-tooltip>
 
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Coming soon..."
-              placement="top-end"
-            >
-              <el-checkbox label="Images" name="type" disabled></el-checkbox>
-            </el-tooltip>
+            <div>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Coming soon..."
+                placement="top-end"
+              >
+                <el-checkbox
+                  label="Publications"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+              </el-tooltip>
+            </div>
 
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Coming soon..."
-              placement="top-end"
-            >
-              <el-checkbox
-                label="Genomic Data"
-                name="type"
-                disabled
-              ></el-checkbox>
-            </el-tooltip>
+            <div>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Coming soon..."
+                placement="top-end"
+              >
+                <el-checkbox
+                  label="Genomic Data"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+              </el-tooltip>
+            </div>
           </el-checkbox-group>
         </el-form-item>
 

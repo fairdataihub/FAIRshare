@@ -218,11 +218,12 @@ export default {
       await this.datasetStore.getDataset(datasetID);
 
       routerPath = `/datasets/${datasetID}`;
-      // routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata`;
-      // routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/review`;
-      // routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/createMetadata`;
-      // routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/accessToken`;
-      // routerPath = `/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/publish`;
+      routerPath = `/datasets/new/${datasetID}/confirm`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
+      // routerPath = `/datasets/${datasetID}/workflow1/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
 
       this.$router.push({ path: routerPath });
     },

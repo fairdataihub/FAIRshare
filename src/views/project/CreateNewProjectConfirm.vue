@@ -1,18 +1,20 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
     <div class="flex flex-col h-full w-full">
-      <span class="font-medium text-left"> SODA suggestions </span>
+      <span class="font-medium text-left"> Split up data types </span>
 
-      <span>
-        Based on your selected data types, this is what we suggest you should
-        use for FAIR sharing of your data.
-      </span>
+      <span> Lets maximise the FAIRness of your data. </span>
 
       <el-divider> </el-divider>
 
-      <span>
-        We recommend the following repositories for your selected data types.
-      </span>
+      <p>
+        When multiple data types are used in a single dataset, it is important
+        to split up the data types into separate datasets to ensure that all the
+        relevant metadata for each data type is always present.
+        <br />
+        In order to do this, SODA will automatically try to group up similar
+        data into their own datasets.
+      </p>
 
       <div class="grid grid-cols-3 gap-4">
         <div class="flex flex-col divide-y-2 p-4">
