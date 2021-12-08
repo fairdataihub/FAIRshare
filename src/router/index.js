@@ -17,6 +17,8 @@ import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 
+import ManageAccount from "../views/manage/ManageAccount.vue";
+
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
 import About from "../views/about.vue";
@@ -84,6 +86,7 @@ const routes = [
     name: "FigshareMetadata",
   },
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
+  { path: "/manageAccount", component: ManageAccount },
   { path: "/about", component: About },
 ];
 
