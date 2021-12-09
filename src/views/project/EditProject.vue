@@ -1,11 +1,13 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
     <div class="flex flex-col h-full w-full">
-      <span class="font-medium"> Edit your project details </span>
-      <span>
-        If you want to change your project name or description you may edit them
-        here.
-      </span>
+      <el-page-header
+        content="Project settings"
+        @back="goBack"
+        class="text-lg pb-3"
+      />
+
+      <span> Update your project name, description and other settings. </span>
 
       <el-divider> </el-divider>
 
@@ -83,9 +85,20 @@
               </el-tooltip>
             </el-checkbox-group>
           </el-form-item> -->
+
+        <el-form-item label="Delete project">
+          <span>
+            Once you delete a project, there is no going back. Please be
+            certain.
+          </span>
+          <br />
+          <el-button type="danger" plain @click="deleteDataset">
+            Delete project
+          </el-button>
+        </el-form-item>
       </el-form>
       <div class="py-2 flex flex-row justify-center">
-        <el-button @click="cancelNewDataset"> Cancel </el-button>
+        <el-button @click="goBack"> Cancel </el-button>
         <el-button type="primary" @click="submitForm('datasetForm')">
           Save changes
         </el-button>
@@ -96,12 +109,13 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
+import { ElMessageBox, ElMessage } from "element-plus";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "EditProject",
-  // components: { Icon },
+  // components: { icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -112,6 +126,8 @@ export default {
         datasetDescription: "",
         // dataType: [],
       },
+      originalName: "",
+      deleteDisabled: false,
       rules: {
         datasetName: [
           {
@@ -136,6 +152,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.dataset.name = this.datasetForm.datasetName;
+          this.originalName = this.datasetForm.datasetName;
           this.dataset.description = this.datasetForm.datasetDescription;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
@@ -161,8 +178,42 @@ export default {
         }
       });
     },
-    cancelNewDataset() {
+    goBack() {
       this.$router.push({ name: "ShowAllProjects" });
+    },
+    deleteDataset() {
+      ElMessageBox.prompt(
+        `This action cannot be undone. This will permanently delete the project.
+        <br />
+        Please type <strong> ${this.originalName} </strong> to confirm.`,
+        "Are you absolutely sure?",
+        {
+          showCancelButton: false,
+          confirmButtonText:
+            "I understand the consequences, delete this project",
+          confirmButtonClass: "el-button--danger plain",
+          dangerouslyUseHTMLString: true,
+          inputValidator: (value) => {
+            if (value === this.originalName) {
+              return true;
+            }
+            return "Please type the project name correctly";
+          },
+        }
+      )
+        .then(async ({ value }) => {
+          console.log(value);
+
+          await this.datasetStore.deleteDataset(this.datasetID);
+
+          ElMessage({
+            type: "success",
+            message: `Project ${value} deleted.`,
+          });
+
+          this.goBack();
+        })
+        .catch(() => {});
     },
   },
   async mounted() {
@@ -173,6 +224,7 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     this.datasetForm.datasetName = this.dataset.name;
+    this.originalName = this.dataset.name;
     this.datasetForm.datasetDescription = this.dataset.description;
     // this.datasetForm.dataType = this.dataset.dataType;
   },

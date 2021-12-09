@@ -102,6 +102,14 @@ export const useDatasetsStore = defineStore({
         console.log(error);
       }
     },
+    async deleteDataset(datasetID) {
+      try {
+        delete this.datasets[datasetID];
+        this.writeDatasetsToFile();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async syncDatasets() {
       const datasetID = this.currentDataset.id;
       this.datasets[datasetID] = this.currentDataset;
