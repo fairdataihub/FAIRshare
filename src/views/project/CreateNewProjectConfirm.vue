@@ -21,7 +21,7 @@
 
       <p class="py-2">
         Based on your selections, we would suggest you split up your data into
-        the following seperate datasets:
+        the following separate datasets:
       </p>
 
       <div class="flex flex-col divide-y-2 divide-gray-200 py-4">
