@@ -328,7 +328,7 @@ ipcMain.on("OAuth-Github", async (_event, test) => {
               "OAuth-Github-Reply",
               response.data.access_token
             );
-            success = true
+            success = true;
           })
           .catch((error) => {
             console.log("request token error: ", error);
@@ -338,13 +338,10 @@ ipcMain.on("OAuth-Github", async (_event, test) => {
     .catch((error) => {
       console.log("request code error: ", error);
     });
-    if(!success){
-      mainWindow.webContents.send(
-        "OAuth-Github-Reply",
-        "failed"
-      );
-    }
-    mainWindow.webContents.session.clearStorageData()
+  if (!success) {
+    mainWindow.webContents.send("OAuth-Github-Reply", "failed");
+  }
+  mainWindow.webContents.session.clearStorageData();
 });
 
 // Exit cleanly on request from parent process in development mode.
