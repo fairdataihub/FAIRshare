@@ -157,6 +157,7 @@
       :headers="dialogHeaders"
       :callback="getInputs"
     ></Dialog>
+    <OAuthDialog v-model="OAuthDialogVisable"></OAuthDialog>
   </div>
 </template>
 
@@ -167,9 +168,10 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { ElLoading } from "element-plus";
 import Dialog from "../../components/dialogs/Dialog";
+import OAuthDialog from "../../components/dialogs/OAuthDialog";
 export default {
   name: "ManageAccount",
-  components: { Dialog },
+  components: { Dialog, OAuthDialog },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -178,6 +180,7 @@ export default {
     const dialogOpener = ref(null);
     const dialogNumInput = ref(null);
     const dialogHeaders = ref([]);
+    const OAuthDialogVisable = ref(true);
     const status = ref({
       github: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
       zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
@@ -402,6 +405,7 @@ export default {
       dialogOpener,
       dialogNumInput,
       dialogHeaders,
+      OAuthDialogVisable
     };
   },
   data() {
@@ -429,6 +433,7 @@ export default {
     this.updateStatus("zenodo", zenodoUserName);
   },
 };
+
 </script>
 
 <style scoped>

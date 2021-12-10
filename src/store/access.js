@@ -53,6 +53,7 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
+    OAuthTokens: {}
   }),
   actions: {
     async loadTokens() {
@@ -165,27 +166,7 @@ export const useTokenStore = defineStore({
     },
 
     async getZenodoUser() {
-      let token = await this.getToken("zenodo");
-      let response = await axios
-        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
-          params: {
-            access_token: token,
-          },
-        })
-        .then((response) => {
-          console.log("inner response", response);
-          return { data: response.data, status: response.status };
-        })
-        .catch((error) => {
-          return { error: error };
-        });
-
-      console.log("data zenodo", response);
-      if (response.status === 200) {
-        return response.data.login;
-      } else if (response.status === 401) {
-        return "";
-      }
+      return ""
     },
   },
 });
