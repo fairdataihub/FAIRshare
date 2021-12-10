@@ -53,8 +53,8 @@
         </div>
         <div class="centering-Container center">
           <span
-            >Connect with your github account by using an access token or OAuth. Please
-            see more details at
+            >Connect with your github account by using an access token or OAuth.
+            Please see more details at
             <button
               type="text"
               class="link-Font"
@@ -377,7 +377,7 @@ export default {
               position: "bottom-right",
               duration: 2000,
             });
-            OAuthButtonVisable.value = true
+            OAuthButtonVisable.value = true;
           }
         })
         .catch(() => {
@@ -425,7 +425,6 @@ export default {
       backgroundHasResponse,
       spinnerGlobal,
       processGithub,
-      
     };
   },
   watch: {
@@ -435,7 +434,7 @@ export default {
       this.manager.getToken("github").then((res) => {
         this.processGithub([res]);
         this.spinnerGlobal.close();
-        this.OAuthButtonVisable = false
+        this.OAuthButtonVisable = false;
       });
     },
   },
