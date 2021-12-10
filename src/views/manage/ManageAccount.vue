@@ -53,7 +53,7 @@
         </div>
         <div class="centering-Container center">
           <span
-            >Connect with your github account by using an access token. Please
+            >Connect with your github account by using an access token or OAuth. Please
             see more details at
             <button
               type="text"
@@ -69,6 +69,13 @@
           </span>
         </div>
         <div class="centering-Container bottom">
+          <el-button
+            v-if="OAuthButtonVisable"
+            plain
+            class="button"
+            @click="connectOAuth('github')"
+            >Connect via OAuth</el-button
+          >
           <el-button
             plain
             :type="status.github[5]"
@@ -157,7 +164,6 @@
       :headers="dialogHeaders"
       :callback="getInputs"
     ></Dialog>
-    <OAuthDialog v-model="OAuthDialogVisable"></OAuthDialog>
   </div>
 </template>
 
@@ -168,10 +174,9 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { ElLoading } from "element-plus";
 import Dialog from "../../components/dialogs/Dialog";
-import OAuthDialog from "../../components/dialogs/OAuthDialog";
 export default {
   name: "ManageAccount",
-  components: { Dialog, OAuthDialog },
+  components: { Dialog },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -180,10 +185,12 @@ export default {
     const dialogOpener = ref(null);
     const dialogNumInput = ref(null);
     const dialogHeaders = ref([]);
-    const OAuthDialogVisable = ref(true);
+    const OAuthButtonVisable = ref(true);
+    const backgroundHasResponse = ref(false);
+    const spinnerGlobal = ref(null);
     const status = ref({
-      github: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
-      zenodo: ["lightgrey", "grey", "Not connected", "Connect", "", ""],
+      github: ["lightgrey", "grey", "Not connected", "Connect token", "", ""],
+      zenodo: ["lightgrey", "grey", "Not connected", "Connect token", "", ""],
     });
 
     async function getInputs(response) {
@@ -214,7 +221,7 @@ export default {
               "lightgrey",
               "grey",
               "Not connected",
-              "Connect",
+              "Connect token",
               userName,
               "",
             ];
@@ -238,7 +245,7 @@ export default {
               "lightgrey",
               "grey",
               "Not connected",
-              "Connect",
+              "Connect token",
               userName,
               "",
             ];
@@ -370,6 +377,7 @@ export default {
               position: "bottom-right",
               duration: 2000,
             });
+            OAuthButtonVisable.value = true
           }
         })
         .catch(() => {
@@ -382,7 +390,7 @@ export default {
         });
     }
     const openDialog = (s) => {
-      if (status.value[s][3] == "Connect") {
+      if (status.value[s][3] == "Connect token") {
         if (s == "github" || s == "zenodo") {
           useAPIkey(s);
         }
@@ -392,6 +400,13 @@ export default {
         }
       }
     };
+
+    async function connectOAuth(key) {
+      if (key == "github") {
+        spinnerGlobal.value = createLoading();
+        window.ipcRenderer.send("OAuth-Github", "test");
+      }
+    }
     return {
       manager,
       openDialog,
@@ -405,8 +420,24 @@ export default {
       dialogOpener,
       dialogNumInput,
       dialogHeaders,
-      OAuthDialogVisable
+      OAuthButtonVisable,
+      connectOAuth,
+      backgroundHasResponse,
+      spinnerGlobal,
+      processGithub,
+      
     };
+  },
+  watch: {
+    // whenever question changes, this function will run
+    backgroundHasResponse: function () {
+      console.log("catched!");
+      this.manager.getToken("github").then((res) => {
+        this.processGithub([res]);
+        this.spinnerGlobal.close();
+        this.OAuthButtonVisable = false
+      });
+    },
   },
   data() {
     return {
@@ -419,6 +450,14 @@ export default {
     },
   },
   async mounted() {
+    window.ipcRenderer.on("OAuth-Github-Reply", async (_e, _arg) => {
+      if (this.manager.checkGithubToken(_arg)) {
+        console.log("passed!");
+        await this.manager.saveToken("github", _arg);
+        this.backgroundHasResponse = true;
+      }
+    });
+
     let keys = await this.manager.loadTokens();
     let githubUserName = "";
     let zenodoUserName = "";
@@ -433,7 +472,6 @@ export default {
     this.updateStatus("zenodo", zenodoUserName);
   },
 };
-
 </script>
 
 <style scoped>

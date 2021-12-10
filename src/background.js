@@ -325,7 +325,6 @@ ipcMain.on("OAuth-Github", async (_event, test) => {
     .catch((error) => {
       console.log("request code error: ", error);
     });
-
 });
 
 // Exit cleanly on request from parent process in development mode.

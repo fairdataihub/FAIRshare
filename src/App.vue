@@ -131,11 +131,6 @@ export default {
       console.log("Update downloaded");
     });
 
-    window.ipcRenderer.on("OAuth-Github-Reply", (_e, _arg) => {
-      console.log("????????????????????");
-      //useTokenStore.saveToken("github", access_token)
-    });
-
     console.log(this.appPath);
   },
 };
