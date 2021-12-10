@@ -15,6 +15,18 @@ export default {
       manager: useTokenStore(),
     };
   },
+  methods: {
+    showConnectionPrompt() {
+      // Show the dialog to get the token
+      // verifyToken(token)          // this function should be defined in the store
+      // Add token to store
+      // set zenodoConnected in store to true
+    },
+    disconnect() {
+      // delete token from store
+      // set zenodoConnected in store to false
+    },
+  },
 };
 </script>
 

@@ -53,6 +53,8 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
+    zenodoConnected: false,
+    githubConnected: false,
   }),
   actions: {
     async loadTokens() {

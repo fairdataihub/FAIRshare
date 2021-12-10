@@ -15,6 +15,19 @@ export default {
       manager: useTokenStore(),
     };
   },
+  methods: {
+    showConnectionPrompt() {
+      // Show the dialog to get the token
+      // verifyToken(token)     // this function should be defined in the store
+      // Add token to store
+      // set githubConnected in store to true
+      //when its ready the ouath items can also be added to here
+    },
+    disconnect() {
+      // delete token from store
+      // set githubConnected in store to false
+    },
+  },
 };
 </script>
 
