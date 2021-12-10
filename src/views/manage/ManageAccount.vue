@@ -450,7 +450,16 @@ export default {
   },
   async mounted() {
     window.ipcRenderer.on("OAuth-Github-Reply", async (_e, _arg) => {
-      if (this.manager.checkGithubToken(_arg)) {
+      if(_arg == "failed"){
+        ElNotification({
+          type: "error",
+          message: "Login failed",
+          position: "bottom-right",
+          duration: 2000,
+        });
+        this.spinnerGlobal.close()
+      }
+      else if (this.manager.checkGithubToken(_arg)) {
         console.log("passed!");
         await this.manager.saveToken("github", _arg);
         this.backgroundHasResponse = true;
