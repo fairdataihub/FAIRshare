@@ -115,11 +115,11 @@
               type="success"
               effect="plain"
             >
-              <el-avatar
+              <!-- <el-avatar
                 shape="square"
                 size="small"
                 src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
-              ></el-avatar>
+              ></el-avatar> -->
               {{ status.zenodo[4] }}
             </el-tag>
           </div>
@@ -281,15 +281,22 @@ export default {
       let spinner = createLoading();
       let errorFound = false;
       let value = userInput[0];
+
       if (await manager.checkZenodoToken(value)) {
+        let name = userInput[1];
+        let tokenObject = {};
         try {
-          await manager.saveToken(key, value);
+          tokenObject.token = value;
+          tokenObject.name = name;
+
+          await manager.saveToken(key, tokenObject);
         } catch (e) {
           console.log(e);
           errorFound = true;
         }
-        let name = userInput[1];
+
         updateStatus(key, name);
+
         if (!errorFound) {
           ElNotification({
             type: "success",
@@ -316,7 +323,11 @@ export default {
       let errorFound = false;
       if (await manager.checkGithubToken(value)) {
         try {
-          await manager.saveToken(key, value);
+          let tokenObject = {};
+
+          tokenObject.token = value;
+
+          await manager.saveToken(key, tokenObject);
         } catch (e) {
           console.log(e);
           errorFound = true;
@@ -425,6 +436,9 @@ export default {
       zenodoUserName = await this.manager.getZenodoUser();
     }
 
+    console.log("githubUserName ", githubUserName);
+    console.log("zenodoUserName ", zenodoUserName);
+
     this.updateStatus("github", githubUserName);
     this.updateStatus("zenodo", zenodoUserName);
   },
@@ -528,7 +542,7 @@ export default {
   margin-left: 0.5vw;
 }
 
-.el-button {
+/* .el-button {
   padding: 0px;
   min-height: 0px;
   padding-top: 1vh;
@@ -563,5 +577,5 @@ export default {
   height: 12px;
   width: 12px;
   line-height: 12px;
-}
+} */
 </style>
