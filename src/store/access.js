@@ -53,7 +53,8 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
-    OAuthTokens: {},
+    zenodoConnected: false,
+    githubConnected: false,
   }),
   actions: {
     async loadTokens() {
@@ -65,8 +66,9 @@ export const useTokenStore = defineStore({
       return Object.keys(this.accessTokens);
     },
     // save an encrypted version of the token in the store also save it to the file.
-    async saveToken(key, value) {
-      this.accessTokens[key] = await encrypt(value);
+    async saveToken(key, tokenObject) {
+      tokenObject.token = await encrypt(tokenObject.token);
+      this.accessTokens[key] = tokenObject;
       await this.syncTokens();
     },
     async writeDatasetsToFile() {
@@ -79,7 +81,11 @@ export const useTokenStore = defineStore({
     // decrypt the token and return it
     async getToken(key) {
       if (key in this.accessTokens) {
-        return await decrypt(this.accessTokens[key]);
+        const tokenObject = this.accessTokens[key];
+        console.log(tokenObject);
+        tokenObject.token = await decrypt(tokenObject.token);
+
+        return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
       }
@@ -144,7 +150,9 @@ export const useTokenStore = defineStore({
     },
 
     async getGithubUser() {
-      let token = await this.getToken("github");
+      const tokenObject = await this.getToken("github");
+      const token = tokenObject.token;
+
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
