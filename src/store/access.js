@@ -53,7 +53,7 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
-    OAuthTokens: {}
+    OAuthTokens: {},
   }),
   actions: {
     async loadTokens() {
@@ -166,7 +166,7 @@ export const useTokenStore = defineStore({
     },
 
     async getZenodoUser() {
-      return ""
+      return "";
     },
   },
 });

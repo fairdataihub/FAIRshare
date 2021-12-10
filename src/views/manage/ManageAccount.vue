@@ -405,7 +405,7 @@ export default {
       dialogOpener,
       dialogNumInput,
       dialogHeaders,
-      OAuthDialogVisable
+      OAuthDialogVisable,
     };
   },
   data() {
@@ -433,7 +433,6 @@ export default {
     this.updateStatus("zenodo", zenodoUserName);
   },
 };
-
 </script>
 
 <style scoped>
