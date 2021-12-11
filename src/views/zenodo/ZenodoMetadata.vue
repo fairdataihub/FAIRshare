@@ -14,6 +14,7 @@
 
       <el-form
         :model="zenodoMetadataForm"
+        :rules="rulesForZenodoMetadataForm"
         label-width="150px"
         label-position="right"
         size="small"
@@ -357,7 +358,7 @@
                 </p>
               </el-form-item>
 
-              <el-form-item label="License" prop="license" :required="true">
+              <el-form-item label="License" prop="license">
                 <el-select
                   v-model="zenodoMetadataForm.license.licenseName"
                   filterable
@@ -1123,7 +1124,7 @@ import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
 import doiRegex from "doi-regex";
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import _ from "lodash";
 
 import { useDatasetsStore } from "../../store/datasets";
@@ -1203,11 +1204,22 @@ export default {
       };
     },
     checkInvalidStatus() {
+      console.log(this.invalidStatus);
+
+      if (this.$refs.zmForm) {
+        this.$refs.zmForm.validate();
+      }
+
+      if (this.invalidStatus == {}) {
+        return true;
+      }
+
       for (const key in this.invalidStatus) {
         if (this.invalidStatus[key]) {
           return true;
         }
       }
+
       return false;
     },
   },
@@ -1320,7 +1332,11 @@ export default {
         });
     },
     addZenodoMetadata(_evt, shouldNavigateBack = false) {
-      //validate first
+      if (this.zenodoMetadataForm.license.licenseName === "") {
+        ElMessage.error("Please select a license.");
+        return;
+      }
+
       this.workflow = this.dataset.workflows[this.workflowID];
 
       this.workflow.expandOptions = [];
@@ -1339,6 +1355,8 @@ export default {
 
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
       this.$router.push({ path: routerPath });
+
+      //validate first
     },
     prefillZenodoQuestions() {
       if (
@@ -1348,15 +1366,24 @@ export default {
         const generalForm = this.dataset.data.general.questions;
         // console.log(generalForm);
 
+        let date = new Date();
+
+        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${
+          date.getMonth() + 1
+        }-${date.getDate()}`;
+
         if ("name" in generalForm) {
           this.zenodoMetadataForm.title = generalForm.name;
         }
+
         if ("description" in generalForm) {
           this.zenodoMetadataForm.description = generalForm.description;
         }
+
         if ("keywords" in generalForm) {
           this.zenodoMetadataForm.keywords = generalForm.keywords;
         }
+
         if ("authors" in generalForm) {
           let authors = generalForm.authors;
           let newAuthors = [];
@@ -1371,6 +1398,7 @@ export default {
           });
           this.zenodoMetadataForm.authors = newAuthors;
         }
+
         if ("contributors" in generalForm) {
           let contributors = generalForm.contributors;
           let newContributors = [];
@@ -1425,7 +1453,6 @@ export default {
   watch: {
     "zenodoMetadataForm.authors": {
       handler(val) {
-        console.log("authors length", val.length);
         if (val.length === 0) {
           this.authorsErrorMessage = "Please provide at least one author.";
           this.invalidStatus.authors = true;
@@ -1557,6 +1584,22 @@ export default {
         } else {
           this.titleErrorMessage = "";
           this.invalidStatus.title = false;
+        }
+      },
+      deep: true,
+    },
+    "zenodoMetadataForm.license": {
+      handler(val) {
+        const value = val.licensename;
+        if (value === "") {
+          // this.titleErrorMessage =
+          ("Please provide a valid and descriptive title.");
+          this.$refs.zmForm.validate();
+          this.invalidStatus.license = true;
+          return;
+        } else {
+          // this.titleErrorMessage = "";
+          this.invalidStatus.license = false;
         }
       },
       deep: true,

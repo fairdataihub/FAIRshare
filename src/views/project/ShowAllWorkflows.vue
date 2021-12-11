@@ -82,8 +82,8 @@ export default {
     navigateToCurate(workflowID) {
       // this.datasetStore.updateCurrentDataset(this.dataset);
       let routerPath = "";
-      console.log(this.dataset.workflows);
-      console.log(this.dataset);
+      // console.log(this.dataset.workflows);
+      // console.log(this.dataset);
 
       if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
         if (this.dataset.workflows[workflowID].datasetUploaded) {
