@@ -214,7 +214,6 @@ export default {
 
     function updateStatus(key, userName) {
       manager.getToken(key).then((value) => {
-        
         if (key == "github") {
           if (value == "NO_TOKEN_FOUND") {
             githubOffline.value = true;
@@ -342,7 +341,7 @@ export default {
           errorFound = true;
         }
         let name = await manager.getGithubUser();
-        tokenObject.name = name
+        tokenObject.name = name;
         await manager.saveToken(key, tokenObject);
         updateStatus(key, name);
         if (!errorFound) {
@@ -447,9 +446,9 @@ export default {
         this.processGithub([res.token]);
         this.spinnerGlobal.close();
         this.OAuthButtonVisable = false;
-        this.manager.checkGithubToken(res.token).then((res)=>{
-          console.log("check???: ", res)
-        })
+        this.manager.checkGithubToken(res.token).then((res) => {
+          console.log("check???: ", res);
+        });
       });
     },
   },

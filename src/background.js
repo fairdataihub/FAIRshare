@@ -260,13 +260,13 @@ function retrieveCode(url) {
 
       if (error) {
         reject(error);
-        authWindow.removeAllListeners('closed');
+        authWindow.removeAllListeners("closed");
         setImmediate(function () {
           authWindow.close();
         });
       } else if (code) {
         resolve(code);
-        authWindow.removeAllListeners('closed');
+        authWindow.removeAllListeners("closed");
         setImmediate(function () {
           authWindow.close();
         });
