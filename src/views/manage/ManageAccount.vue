@@ -122,11 +122,11 @@
               type="success"
               effect="plain"
             >
-              <!-- <el-avatar
+              <el-avatar
                 shape="square"
                 size="small"
                 src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
-              ></el-avatar> -->
+              ></el-avatar>
               {{ status.zenodo[4] }}
             </el-tag>
           </div>
@@ -214,6 +214,7 @@ export default {
 
     function updateStatus(key, userName) {
       manager.getToken(key).then((value) => {
+        
         if (key == "github") {
           if (value == "NO_TOKEN_FOUND") {
             githubOffline.value = true;
@@ -332,17 +333,17 @@ export default {
       let spinner = createLoading();
       let errorFound = false;
       if (await manager.checkGithubToken(value)) {
+        let tokenObject = {};
         try {
-          let tokenObject = {};
-
           tokenObject.token = value;
-
           await manager.saveToken(key, tokenObject);
         } catch (e) {
           console.log(e);
           errorFound = true;
         }
         let name = await manager.getGithubUser();
+        tokenObject.name = name
+        await manager.saveToken(key, tokenObject);
         updateStatus(key, name);
         if (!errorFound) {
           ElNotification({
@@ -443,9 +444,12 @@ export default {
     backgroundHasResponse: function () {
       console.log("catched!");
       this.manager.getToken("github").then((res) => {
-        this.processGithub([res]);
+        this.processGithub([res.token]);
         this.spinnerGlobal.close();
         this.OAuthButtonVisable = false;
+        this.manager.checkGithubToken(res.token).then((res)=>{
+          console.log("check???: ", res)
+        })
       });
     },
   },
@@ -471,7 +475,12 @@ export default {
         this.spinnerGlobal.close();
       } else if (this.manager.checkGithubToken(_arg)) {
         console.log("passed!");
-        await this.manager.saveToken("github", _arg);
+        let tokenObject = {};
+        tokenObject.token = _arg;
+        await this.manager.saveToken("github", tokenObject);
+        // let name = await this.manager.getGithubUser();
+        // tokenObject.name = name;
+        // await this.manager.saveToken("github", tokenObject);
         this.backgroundHasResponse = true;
       }
     });
@@ -592,7 +601,7 @@ export default {
   margin-left: 0.5vw;
 }
 
-/* .el-button {
+.el-button {
   padding: 0px;
   min-height: 0px;
   padding-top: 1vh;
@@ -627,5 +636,5 @@ export default {
   height: 12px;
   width: 12px;
   line-height: 12px;
-} */
+}
 </style>

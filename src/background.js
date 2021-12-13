@@ -260,16 +260,16 @@ function retrieveCode(url) {
 
       if (error) {
         reject(error);
-        // authWindow.removeAllListeners('closed');
-        // setImmediate(function () {
-        //   authWindow.close();
-        // });
+        authWindow.removeAllListeners('closed');
+        setImmediate(function () {
+          authWindow.close();
+        });
       } else if (code) {
         resolve(code);
-        // authWindow.removeAllListeners('closed');
-        // setImmediate(function () {
-        //   authWindow.close();
-        // });
+        authWindow.removeAllListeners('closed');
+        setImmediate(function () {
+          authWindow.close();
+        });
       }
     }
 
@@ -295,16 +295,6 @@ ipcMain.on("OAuth-Github", async (_event, test) => {
       },
     })
     .then(async (responseCode) => {
-      //mainWindow.loadURL("https://www.github.com")
-      let aWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        show: false,
-        "node-integration": false,
-        "web-security": false,
-      });
-      aWindow.loadURL("https://www.github.com");
-      aWindow.show();
       let authUrl = responseCode.request.res.responseUrl;
       await retrieveCode(authUrl).then(async (code) => {
         console.log("code:", code);
