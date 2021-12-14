@@ -2,10 +2,11 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Zenodo Access Token Verification
+        Add Zenodo connection details
       </span>
       <span class="text-left">
-        Let's see if we already have your Zenodo login details
+        Let's see if we already have your Zenodo login details. We will use this
+        to upload and edit your dataset on your Zenodo account.
       </span>
 
       <el-divider class="my-4"> </el-divider>

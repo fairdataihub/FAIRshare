@@ -12,7 +12,8 @@
         Please click one of the following options:
       </span>
 
-      <div class="grid grid-cols-2 gap-4">
+      <!-- change to grid-cols-2 -->
+      <div class="grid grid-cols-1 gap-4">
         <div
           v-for="repo of repositories"
           :key="repo.id"
@@ -97,11 +98,11 @@ export default {
           name: "Zenodo",
           imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
         },
-        {
-          id: "figshare",
-          name: "Figshare",
-          imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
-        },
+        // {
+        //   id: "figshare",
+        //   name: "Figshare",
+        //   imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
+        // },
       ],
     };
   },

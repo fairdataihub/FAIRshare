@@ -2,9 +2,8 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        General information regarding your data
+        Where is your data located?
       </span>
-      <span class="text-left"> Where is your data located? </span>
 
       <el-divider class="my-4"> </el-divider>
 

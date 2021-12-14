@@ -5,8 +5,8 @@
         Uploading your data to Zenodo
       </span>
       <span class="text-left">
-        This ones on us. SODA is creating a Zenodo record for you and uploading
-        all your files with the relevant metadata.
+        This one is on us. SODA is creating a Zenodo record for you and
+        uploading all your files with the relevant metadata.
       </span>
 
       <el-divider class="my-4"> </el-divider>

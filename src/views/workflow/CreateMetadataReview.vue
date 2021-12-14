@@ -1,8 +1,11 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
     <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-      <span class="text-left"> Lets upload your data to Zenodo. </span>
+      <span class="text-lg font-medium text-left"> Review metadata </span>
+      <span class="text-left">
+        Let's go through all your submitted metadata and verify that everything
+        looks good.
+      </span>
 
       <line-divider></line-divider>
 
@@ -19,11 +22,11 @@
             </el-button>
           </template>
           <el-descriptions-item>
-            <template #label> Dataset name </template>
+            <template #label> Software name </template>
             {{ generalMetadata.name }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template #label> Dataset description </template>
+            <template #label> Software description </template>
             {{ generalMetadata.description }}
           </el-descriptions-item>
           <el-descriptions-item>

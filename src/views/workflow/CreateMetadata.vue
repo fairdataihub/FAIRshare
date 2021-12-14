@@ -5,11 +5,11 @@
         Lets make your data FAIR
       </span>
 
-      <line-divider></line-divider>
+      <!-- <line-divider></line-divider> -->
 
       <span class="mb-2">
-        We need to know some general details your dataset. Please fill all the
-        fields in this section and we'll take care of the rest.
+        We need to know some general details about your data. Please fill all
+        the fields in this section and we'll take care of the rest.
       </span>
 
       <el-collapse v-model="activeNames">
@@ -26,11 +26,11 @@
             ref="gmForm"
             @submit.prevent
           >
-            <el-form-item label="Dataset name">
+            <el-form-item label="Software name">
               <el-input v-model="generalForm.name"></el-input>
             </el-form-item>
 
-            <el-form-item label="Dataset description">
+            <el-form-item label="Software description">
               <el-input
                 v-model="generalForm.description"
                 type="textarea"

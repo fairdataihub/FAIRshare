@@ -1,8 +1,14 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-      <span class="text-left"> Lets upload your data to Zenodo. </span>
+      <span class="text-lg font-medium text-left">
+        Zenodo metadata review
+      </span>
+      <span class="text-left">
+        Let's review your Zenodo record details. This will be information that
+        is shown on your dataset publicly when other users are browsing the
+        dataset.
+      </span>
 
       <line-divider></line-divider>
 

@@ -2,14 +2,11 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
-      <span class="text-left"> Lets upload your data to Zenodo. </span>
-
-      <line-divider></line-divider>
 
       <span class="mb-2">
-        Before we send this data over, Zenodo requires some metadata from you.
-        We have filled any information we have learned from the data as well as
-        your previous metadata.
+        Before we send this data over, Zenodo requires some additional
+        information from you. We will use this information to create a Zenodo
+        record. Please fill out the following form.
       </span>
 
       <el-form
