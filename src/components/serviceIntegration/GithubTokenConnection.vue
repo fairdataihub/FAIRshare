@@ -26,6 +26,9 @@ import Dialog from "../dialogs/Dialog";
 export default {
   name: "GithubTokenConnection",
   components: { Dialog },
+  props: {
+    callback: { type: Function },
+  },
   setup() {
     const status = ref(["Connect token", ""]);
     const dialogVisable = ref(false);
@@ -77,6 +80,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback()
       }
     },
 
@@ -109,6 +113,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
+          this.callback()
         }
       } else {
         ElNotification({
@@ -117,6 +122,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback()
       }
       spinner.close();
     },
@@ -147,6 +153,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
+          this.callback()
         });
     },
 
@@ -176,6 +183,7 @@ export default {
           duration: 2000,
         });
         this.manager.confirmGithubTokenDisconnected();
+        this.callback()
       }
       this.updateStatus();
     },

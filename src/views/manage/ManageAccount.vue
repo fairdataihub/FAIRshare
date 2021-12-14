@@ -76,7 +76,7 @@
             @click="connectOAuth('githubOAuth')"
             >Connect via OAuth</el-button
           >
-          <GithubTokenConnection></GithubTokenConnection>
+          <GithubTokenConnection :callback="reRenderByChild"></GithubTokenConnection>
         </div>
       </div>
     </div>
@@ -219,6 +219,10 @@ export default {
           duration: 2000,
         });
       }
+    }
+
+    function reRenderByChild(){
+      updateStatus()
     }
 
     function updateStatus() {
@@ -420,6 +424,7 @@ export default {
       backgroundHasResponse,
       spinnerGlobal,
       processGithub,
+      reRenderByChild
     };
   },
   watch: {
@@ -430,12 +435,13 @@ export default {
         this.processGithub([res.token]);
         this.spinnerGlobal.close();
         this.OAuthButtonVisable = false;
-        this.manager.checkGithubToken(res.token).then((res) => {
-          console.log("check???: ", res);
-        });
+        // this.manager.checkGithubToken(res.token).then((res) => {
+        //   console.log("check???: ", res);
+        // });
       });
     },
   },
+
   data() {
     return {
       dialogFormVisible: true,
