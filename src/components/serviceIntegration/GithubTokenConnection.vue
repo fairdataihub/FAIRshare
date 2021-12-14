@@ -95,10 +95,10 @@ export default {
           errorFound = true;
         }
         let name = await this.manager.getGithubUser(key);
-        let newTokenObject = {}
+        let newTokenObject = {};
         newTokenObject.name = name;
-        newTokenObject.token = value
-        console.log("save token: ", newTokenObject)
+        newTokenObject.token = value;
+        console.log("save token: ", newTokenObject);
         await this.manager.saveToken(key, newTokenObject);
         this.manager.confirmGithubTokenConnected();
         this.updateStatus();

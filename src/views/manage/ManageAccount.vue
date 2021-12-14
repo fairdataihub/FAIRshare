@@ -461,7 +461,7 @@ export default {
         let tokenObject = {};
         tokenObject.token = _arg;
         await this.manager.saveToken("githubOAuth", tokenObject);
-        let name = await this.manager.getGithubUser("githubOAuth",);
+        let name = await this.manager.getGithubUser("githubOAuth");
         tokenObject.name = name;
         await this.manager.saveToken("githubOAuth", tokenObject);
         this.backgroundHasResponse = true;

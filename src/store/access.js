@@ -71,7 +71,7 @@ const loadStatusFile = async () => {
   }
 };
 
-const converter = {"false":false, "true":true}
+const converter = { false: false, true: true };
 
 export const useTokenStore = defineStore({
   id: "TokenStore",
@@ -81,11 +81,11 @@ export const useTokenStore = defineStore({
       // "zenodoTokenConnected": false,
       // "githubTokenConnected": false,
       // "githubOAuthConnected": false
-    }
+    },
   }),
   actions: {
     async getGithubTokenConnected() {
-      await this.loadStatus()
+      await this.loadStatus();
       //console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
       if ("githubTokenConnected" in this.connnectionStatus) {
         let result = this.connnectionStatus["githubTokenConnected"];
@@ -96,10 +96,10 @@ export const useTokenStore = defineStore({
       }
     },
     confirmGithubTokenConnected() {
-      this.saveStatus("githubTokenConnected", "true")
+      this.saveStatus("githubTokenConnected", "true");
     },
     confirmGithubTokenDisconnected() {
-      this.saveStatus("githubTokenConnected", "false")
+      this.saveStatus("githubTokenConnected", "false");
     },
     async loadStatus() {
       try {
@@ -150,7 +150,7 @@ export const useTokenStore = defineStore({
         const tokenObject = Object.assign({}, this.accessTokens[key]);
         console.log("Old object: ", this.accessTokens[key]);
         tokenObject.token = await decrypt(this.accessTokens[key].token);
-        console.log("new Object: ", this.accessTokens[key])
+        console.log("new Object: ", this.accessTokens[key]);
         return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
@@ -218,7 +218,7 @@ export const useTokenStore = defineStore({
     async getGithubUser(key) {
       const tokenObject = await this.getToken(key);
       const token = tokenObject.token;
-      console.log("??: ", token)
+      console.log("??: ", token);
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
