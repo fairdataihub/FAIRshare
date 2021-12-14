@@ -13,6 +13,11 @@ const TOKEN_STORE_PATH = path.join(
   ".sodaforcovid19research",
   "accessTokens.json"
 );
+const CONNECTION_STATUS_PATH = path.join(
+  USER_PATH,
+  ".sodaforcovid19research",
+  "connectionStatus.json"
+);
 
 // will change to use an actual secret key
 const SECRET_KEY = "TEST_SECRET_KEY";
@@ -49,14 +54,60 @@ const loadFile = async () => {
   }
 };
 
+const loadStatusFile = async () => {
+  const exists = await fs.pathExists(CONNECTION_STATUS_PATH);
+
+  if (!exists) {
+    createFile();
+    return {};
+  } else {
+    try {
+      let allStatus = fs.readJsonSync(CONNECTION_STATUS_PATH);
+      return allStatus;
+    } catch (err) {
+      console.error(err);
+      return {};
+    }
+  }
+};
+
+const converter = {"false":false, "true":true}
+
 export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
-    zenodoConnected: false,
-    githubConnected: false,
+    connnectionStatus: {
+      // "zenodoTokenConnected": false,
+      // "githubTokenConnected": false,
+      // "githubOAuthConnected": false
+    }
   }),
   actions: {
+    async getGithubTokenConnected() {
+      await this.loadStatus()
+      //console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
+      if ("githubTokenConnected" in this.connnectionStatus) {
+        let result = this.connnectionStatus["githubTokenConnected"];
+        result = await decrypt(result);
+        return converter[result];
+      } else {
+        return false;
+      }
+    },
+    confirmGithubTokenConnected() {
+      this.saveStatus("githubTokenConnected", "true")
+    },
+    confirmGithubTokenDisconnected() {
+      this.saveStatus("githubTokenConnected", "false")
+    },
+    async loadStatus() {
+      try {
+        this.connnectionStatus = await loadStatusFile();
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async loadTokens() {
       try {
         this.accessTokens = await loadFile();
@@ -78,13 +129,28 @@ export const useTokenStore = defineStore({
     async syncTokens() {
       this.writeDatasetsToFile();
     },
+
+    async saveStatus(key, status) {
+      let encryptedStatus = await encrypt(status);
+      this.connnectionStatus[key] = encryptedStatus;
+      await this.syncStatus();
+    },
+    async writeStatusToFile() {
+      fs.ensureFileSync(CONNECTION_STATUS_PATH);
+      fs.writeJsonSync(CONNECTION_STATUS_PATH, this.connnectionStatus);
+    },
+    async syncStatus() {
+      this.writeStatusToFile();
+    },
+
     // decrypt the token and return it
     async getToken(key) {
+      //await this.loadTokens()
       if (key in this.accessTokens) {
-        const tokenObject = this.accessTokens[key];
-        console.log(tokenObject);
-        tokenObject.token = await decrypt(tokenObject.token);
-
+        const tokenObject = Object.assign({}, this.accessTokens[key]);
+        console.log("Old object: ", this.accessTokens[key]);
+        tokenObject.token = await decrypt(this.accessTokens[key].token);
+        console.log("new Object: ", this.accessTokens[key])
         return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
@@ -149,10 +215,10 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async getGithubUser() {
-      const tokenObject = await this.getToken("github");
+    async getGithubUser(key) {
+      const tokenObject = await this.getToken(key);
       const token = tokenObject.token;
-
+      console.log("??: ", token)
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
@@ -169,7 +235,7 @@ export const useTokenStore = defineStore({
       if (response.status === 200) {
         return response.data.login;
       } else if (response.status === 401) {
-        return "";
+        return "??";
       }
     },
 

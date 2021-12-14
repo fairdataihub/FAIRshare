@@ -20,7 +20,7 @@
             <span
               class="dot"
               :style="{
-                backgroundColor: status.github[0],
+                backgroundColor: status.githubToken[0],
               }"
             ></span>
           </div>
@@ -29,16 +29,16 @@
             <div
               class="app-Card-Status-Text"
               :style="{
-                color: status.github[1],
+                color: status.githubToken[1],
               }"
             >
-              {{ status.github[2] }}
+              {{ status.githubToken[2] }}
             </div>
           </div>
 
           <div class="centering-Container tag-Container">
             <el-tag
-              v-if="status.github[2] === 'Connected'"
+              v-if="status.githubToken[2] === 'Connected'"
               type="success"
               effect="plain"
             >
@@ -47,7 +47,7 @@
                 size="small"
                 src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
               ></el-avatar>
-              {{ status.github[4] }}
+              {{ status.githubToken[4] }}
             </el-tag>
           </div>
         </div>
@@ -73,16 +73,10 @@
             v-if="OAuthButtonVisable"
             plain
             class="button"
-            @click="connectOAuth('github')"
+            @click="connectOAuth('githubOAuth')"
             >Connect via OAuth</el-button
           >
-          <el-button
-            plain
-            :type="status.github[5]"
-            class="button"
-            @click="openDialog('github')"
-            >{{ status.github[3] }}</el-button
-          >
+          <GithubTokenConnection></GithubTokenConnection>
         </div>
       </div>
     </div>
@@ -100,7 +94,7 @@
             <span
               class="dot"
               :style="{
-                backgroundColor: status.zenodo[0],
+                backgroundColor: status.zenodoToken[0],
               }"
             ></span>
           </div>
@@ -109,16 +103,16 @@
             <div
               class="app-Card-Status-Text"
               :style="{
-                color: status.zenodo[1],
+                color: status.zenodoToken[1],
               }"
             >
-              {{ status.zenodo[2] }}
+              {{ status.zenodoToken[2] }}
             </div>
           </div>
 
           <div class="centering-Container tag-Container">
             <el-tag
-              v-if="status.zenodo[2] === 'Connected'"
+              v-if="status.zenodoToken[2] === 'Connected'"
               type="success"
               effect="plain"
             >
@@ -127,7 +121,7 @@
                 size="small"
                 src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
               ></el-avatar>
-              {{ status.zenodo[4] }}
+              {{ status.zenodoToken[4] }}
             </el-tag>
           </div>
         </div>
@@ -149,10 +143,10 @@
         <div class="centering-Container bottom">
           <el-button
             plain
-            :type="status.zenodo[5]"
+            :type="status.zenodoToken[5]"
             class="button"
-            @click="openDialog('zenodo')"
-            >{{ status.zenodo[3] }}</el-button
+            @click="openDialog('zenodoToken')"
+            >{{ status.zenodoToken[3] }}</el-button
           >
         </div>
       </div>
@@ -174,9 +168,10 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { ElLoading } from "element-plus";
 import Dialog from "../../components/dialogs/Dialog";
+import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
 export default {
   name: "ManageAccount",
-  components: { Dialog },
+  components: { Dialog, GithubTokenConnection },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -189,16 +184,30 @@ export default {
     const backgroundHasResponse = ref(false);
     const spinnerGlobal = ref(null);
     const status = ref({
-      github: ["lightgrey", "grey", "Not connected", "Connect token", "", ""],
-      zenodo: ["lightgrey", "grey", "Not connected", "Connect token", "", ""],
+      githubToken: [
+        "lightgrey",
+        "grey",
+        "Not connected",
+        "Connect token",
+        "",
+        "",
+      ],
+      zenodoToken: [
+        "lightgrey",
+        "grey",
+        "Not connected",
+        "Connect token",
+        "",
+        "",
+      ],
     });
 
     async function getInputs(response) {
       dialogVisable.value = false;
       if (response[0] == "OK") {
-        if (dialogOpener.value == "github") {
+        if (dialogOpener.value == "githubToken") {
           await processGithub(response[1]);
-        } else if (dialogOpener.value == "zenodo") {
+        } else if (dialogOpener.value == "zenodoToken") {
           await processZenodo(response[1]);
         }
         console.log("dialogOpener: ", dialogOpener.value);
@@ -212,67 +221,42 @@ export default {
       }
     }
 
-    function updateStatus(key, userName) {
-      manager.getToken(key).then((value) => {
-        if (key == "github") {
-          if (value == "NO_TOKEN_FOUND") {
-            githubOffline.value = true;
-            status.value.github = [
-              "lightgrey",
-              "grey",
-              "Not connected",
-              "Connect token",
-              userName,
-              "",
-            ];
-          } else {
-            githubOffline.value = false;
-            status.value.github = [
+    function updateStatus() {
+      manager.getGithubTokenConnected().then((res) => {
+        if (!res) {
+          status.value.githubToken = [
+            "lightgrey",
+            "grey",
+            "Not connected",
+            "Connect token",
+            "",
+            "",
+          ];
+        } else {
+          manager.getGithubUser("githubToken").then((name) => {
+            console.log("name now: ", name);
+            status.value.githubToken = [
               "lightgreen",
               "lightgreen",
               "Connected",
               "Disconnect",
-              userName,
+              name,
               "danger",
             ];
-          }
-        }
-
-        if (key == "zenodo") {
-          if (value == "NO_TOKEN_FOUND") {
-            zenodoOffline.value = true;
-            status.value.zenodo = [
-              "lightgrey",
-              "grey",
-              "Not connected",
-              "Connect token",
-              userName,
-              "",
-            ];
-          } else {
-            zenodoOffline.value = false;
-            status.value.zenodo = [
-              "lightgreen",
-              "lightgreen",
-              "Connected",
-              "Disconnect",
-              userName,
-              "danger",
-            ];
-          }
+          });
         }
       });
     }
 
     function useAPIkey(key) {
-      if (key == "github") {
-        dialogOpener.value = "github";
+      if (key == "githubToken") {
+        dialogOpener.value = "githubToken";
         dialogNumInput.value = 1;
-        dialogHeaders.value = ["Github access token"];
-      } else if (key == "zenodo") {
-        dialogOpener.value = "zenodo";
+        dialogHeaders.value = ["githubToken access token"];
+      } else if (key == "zenodoToken") {
+        dialogOpener.value = "zenodoToken";
         dialogNumInput.value = 2;
-        dialogHeaders.value = ["Zenodo access token", "Token nick name"];
+        dialogHeaders.value = ["zenodoToken access token", "Token nick name"];
       }
       dialogVisable.value = true;
     }
@@ -287,7 +271,7 @@ export default {
 
     async function processZenodo(userInput) {
       console.log("user Input: ", userInput);
-      let key = "zenodo";
+      let key = "zenodoToken";
       let spinner = createLoading();
       let errorFound = false;
       let value = userInput[0];
@@ -327,7 +311,7 @@ export default {
     }
 
     async function processGithub(userInput) {
-      let key = "github";
+      let key = "githubToken";
       let value = userInput[0];
       let spinner = createLoading();
       let errorFound = false;
@@ -402,18 +386,18 @@ export default {
     }
     const openDialog = (s) => {
       if (status.value[s][3] == "Connect token") {
-        if (s == "github" || s == "zenodo") {
+        if (s == "githubToken" || s == "zenodoToken") {
           useAPIkey(s);
         }
       } else if (status.value[s][3] == "Disconnect") {
-        if (s == "github" || s == "zenodo") {
+        if (s == "githubToken" || s == "zenodoToken") {
           APIkeyWarning(s);
         }
       }
     };
 
     async function connectOAuth(key) {
-      if (key == "github") {
+      if (key == "githubOAuth") {
         spinnerGlobal.value = createLoading();
         window.ipcRenderer.send("OAuth-Github", "test");
       }
@@ -442,7 +426,7 @@ export default {
     // whenever question changes, this function will run
     backgroundHasResponse: function () {
       console.log("catched!");
-      this.manager.getToken("github").then((res) => {
+      this.manager.getToken("githubOAuth").then((res) => {
         this.processGithub([res.token]);
         this.spinnerGlobal.close();
         this.OAuthButtonVisable = false;
@@ -476,29 +460,16 @@ export default {
         console.log("passed!");
         let tokenObject = {};
         tokenObject.token = _arg;
-        await this.manager.saveToken("github", tokenObject);
-        // let name = await this.manager.getGithubUser();
-        // tokenObject.name = name;
-        // await this.manager.saveToken("github", tokenObject);
+        await this.manager.saveToken("githubOAuth", tokenObject);
+        let name = await this.manager.getGithubUser("githubOAuth",);
+        tokenObject.name = name;
+        await this.manager.saveToken("githubOAuth", tokenObject);
         this.backgroundHasResponse = true;
       }
     });
 
-    let keys = await this.manager.loadTokens();
-    let githubUserName = "";
-    let zenodoUserName = "";
-    console.log("keys ", keys);
-    if (keys.includes("github")) {
-      githubUserName = await this.manager.getGithubUser();
-    } else if (keys.includes("zenodo")) {
-      zenodoUserName = await this.manager.getZenodoUser();
-    }
-
-    console.log("githubUserName ", githubUserName);
-    console.log("zenodoUserName ", zenodoUserName);
-
-    this.updateStatus("github", githubUserName);
-    this.updateStatus("zenodo", zenodoUserName);
+    await this.manager.loadTokens();
+    this.updateStatus();
   },
 };
 </script>
@@ -589,6 +560,8 @@ export default {
   padding-right: 2.2vw;
   box-sizing: border-box;
   padding-bottom: 1vh;
+  display: flex;
+  gap: 1vw;
 }
 
 .link-Font {
