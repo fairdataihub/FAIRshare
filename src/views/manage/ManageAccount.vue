@@ -183,11 +183,12 @@ export default {
     const OAuthButtonVisable = ref(true);
     const backgroundHasResponse = ref(false);
     const spinnerGlobal = ref(null);
+    const connectionList = ref(new Set([]))
     const status = ref({
       githubToken: [
         "lightgrey",
         "grey",
-        "Not connected",
+        "initial status",
         "Connect token",
         "",
         "",
@@ -195,7 +196,7 @@ export default {
       zenodoToken: [
         "lightgrey",
         "grey",
-        "Not connected",
+        "initial status",
         "Connect token",
         "",
         "",
@@ -226,30 +227,47 @@ export default {
     }
 
     function updateStatus() {
-      manager.getGithubTokenConnected().then((res) => {
+      manager.getGithubTokenConnected().then(async (res) => {
         if (!res) {
+          connectionList.value.delete("githubToken")
           status.value.githubToken = [
             "lightgrey",
             "grey",
-            "Not connected",
+            "checking status 1...",
             "Connect token",
             "",
             "",
           ];
+          checkGithubConnectionMethods()
         } else {
-          manager.getGithubUser("githubToken").then((name) => {
-            console.log("name now: ", name);
+          connectionList.value.add("githubToken")
+          await manager.getGithubUser("githubToken").then((name) => {
             status.value.githubToken = [
               "lightgreen",
               "lightgreen",
-              "Connected",
+              "checking status 2...",
               "Disconnect",
               name,
               "danger",
             ];
           });
+          checkGithubConnectionMethods()
         }
       });
+    }
+
+    function checkGithubConnectionMethods(){
+      console.log("aaaa: ", connectionList.value, connectionList.value.has("githubToken"))
+      if(connectionList.value.has("githubToken") && connectionList.value.has("githubOAuth")){
+        status.value.githubToken[2] = "Connect via token and account"
+      } else if(connectionList.value.has("githubOAuth")) {
+        status.value.githubToken[2] = "Connect via account"
+      } else if(connectionList.value.has("githubToken")) {
+        console.log("YYYYY")
+        status.value.githubToken[2] = "Connect via token"
+      } else {
+        status.value.githubToken[2] = "Not connected"
+      }
     }
 
     function useAPIkey(key) {
@@ -424,7 +442,8 @@ export default {
       backgroundHasResponse,
       spinnerGlobal,
       processGithub,
-      reRenderByChild
+      reRenderByChild,
+      connectionList
     };
   },
   watch: {
