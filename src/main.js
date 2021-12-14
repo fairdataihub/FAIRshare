@@ -11,6 +11,7 @@ import "./assets/css/utilities-theme.css";
 
 import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
+import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
 let app = createApp(App);
 
@@ -21,6 +22,7 @@ app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
 app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
 app.component("Popper", Popper);
+app.component("form-help-content", FormHelpContent);
 
 // additional vue libraries to be used in the app
 app.use(router);

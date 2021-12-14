@@ -27,14 +27,24 @@
             @submit.prevent
           >
             <el-form-item label="Software name">
-              <el-input v-model="generalForm.name"></el-input>
+              <div class="flex flex-row items-center">
+                <el-input v-model="generalForm.name"></el-input>
+                <form-help-content
+                  popoverContent="The name of the software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Software description">
-              <el-input
-                v-model="generalForm.description"
-                type="textarea"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="generalForm.description"
+                  type="textarea"
+                ></el-input>
+                <form-help-content
+                  popoverContent="A brief description of the software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Keywords">
@@ -109,28 +119,46 @@
               >
                 <Icon icon="carbon:add" />
                 <span> Add a keyword </span>
+                <form-help-content
+                  popoverContent="A brief description of the software"
+                ></form-help-content>
               </div>
             </el-form-item>
 
             <el-form-item label="Funding code">
-              <el-input
-                v-model="generalForm.funding.code"
-                type="text"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="generalForm.funding.code"
+                  type="text"
+                ></el-input>
+                <form-help-content
+                  popoverContent="The grant funding software development"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Funding organization">
-              <el-input
-                v-model="generalForm.funding.organization"
-                type="text"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="generalForm.funding.organization"
+                  type="text"
+                ></el-input>
+                <form-help-content
+                  popoverContent="The organization funding software development"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Reference publication">
-              <el-input
-                v-model="generalForm.referencePublication"
-                type="text"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="generalForm.referencePublication"
+                  type="text"
+                ></el-input>
+                <form-help-content
+                  popoverContent="Scholarly publication that describes the software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Authors" :error="authorsErrorMessage">
@@ -229,6 +257,9 @@
               >
                 <Icon icon="carbon:add" />
                 <span> Add an author </span>
+                <form-help-content
+                  popoverContent="Add a developer of the software"
+                ></form-help-content>
               </div>
             </el-form-item>
 
@@ -351,7 +382,9 @@
               >
                 <Icon icon="carbon:add" />
                 <span> Add a contributor </span>
-                {{ contributorsErrorMessage }}
+                <form-help-content
+                  popoverContent="Add a person who contributed to the software"
+                ></form-help-content>
               </div>
             </el-form-item>
           </el-form>
@@ -371,23 +404,33 @@
             ref="cmForm"
           >
             <el-form-item label="Creation date">
-              <el-date-picker
-                v-model="codeForm.creationDate"
-                type="date"
-                placeholder="Pick a day"
-                value-format="YYYY-MM-DD"
-              >
-              </el-date-picker>
+              <div class="flex flex-row items-center">
+                <el-date-picker
+                  v-model="codeForm.creationDate"
+                  type="date"
+                  placeholder="Pick a day"
+                  value-format="YYYY-MM-DD"
+                >
+                </el-date-picker>
+                <form-help-content
+                  popoverContent="The date on which the software was created"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="First release date">
-              <el-date-picker
-                v-model="codeForm.firstReleaseDate"
-                type="date"
-                placeholder="Pick a day"
-                value-format="YYYY-MM-DD"
-              >
-              </el-date-picker>
+              <div class="flex flex-row items-center">
+                <el-date-picker
+                  v-model="codeForm.firstReleaseDate"
+                  type="date"
+                  placeholder="Pick a day"
+                  value-format="YYYY-MM-DD"
+                >
+                </el-date-picker>
+                <form-help-content
+                  popoverContent="The date on which the software was first released"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="License">
@@ -434,42 +477,62 @@
             </el-form-item>
 
             <el-form-item label="Application category">
-              <el-select
-                v-model="codeForm.applicationCategory"
-                filterable
-                allow-create
-                placeholder="Select an application category"
-                class="w-full"
-              >
-                <el-option
-                  v-for="item in applicationCategoryOptions"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+              <div class="flex flex-row items-center">
+                <el-select
+                  v-model="codeForm.applicationCategory"
+                  filterable
+                  allow-create
+                  placeholder="Select an application category"
+                  class="w-full"
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in applicationCategoryOptions"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  >
+                  </el-option>
+                </el-select>
+                <form-help-content
+                  popoverContent="Type of application, e.g. scientific, business, etc."
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item
               label="Code repository"
               :error="codeRepositoryErrorMessage"
             >
-              <el-input v-model="codeForm.codeRepository"></el-input>
+              <div class="flex flex-row items-center">
+                <el-input v-model="codeForm.codeRepository"></el-input>
+                <form-help-content
+                  popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, Github, CodePlex, institutional GitLab instance, etc.)"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item
               label="Continuous integration"
               :error="continuousIntegrationErrorMessage"
             >
-              <el-input v-model="codeForm.continuousIntegration"></el-input>
+              <div class="flex flex-row items-center">
+                <el-input v-model="codeForm.continuousIntegration"></el-input>
+                <form-help-content
+                  popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item
               label="Issue Tracker"
               :error="issueTrackerErrorMessage"
             >
-              <el-input v-model="codeForm.issueTracker"></el-input>
+              <div class="flex flex-row items-center">
+                <el-input v-model="codeForm.issueTracker"></el-input>
+                <form-help-content
+                  popoverContent="Link to issue tracker (Jira, Github issues, etc.)"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item
@@ -547,67 +610,85 @@
               >
                 <Icon icon="carbon:add" />
                 <span> Add a related link </span>
+                <form-help-content
+                  popoverContent="Related documents, software, tools, etc."
+                ></form-help-content>
               </div>
             </el-form-item>
 
             <el-form-item label="Programming Language">
-              <el-select
-                v-model="codeForm.programmingLanguage"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                placeholder="C#, Java, Python 3"
-                class="w-full"
-              >
-                <el-option
-                  v-for="item in programmingLanguageOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+              <div class="flex flex-row items-center">
+                <el-select
+                  v-model="codeForm.programmingLanguage"
+                  multiple
+                  filterable
+                  allow-create
+                  default-first-option
+                  placeholder="C#, Java, Python 3"
+                  class="w-full"
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in programmingLanguageOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <form-help-content
+                  popoverContent="All programming languages used in this software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Runtime platform">
-              <el-select
-                v-model="codeForm.runtimePlatform"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                placeholder=".Net, Java"
-                class="w-full"
-              >
-                <el-option
-                  v-for="item in runtimePlatformOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+              <div class="flex flex-row items-center">
+                <el-select
+                  v-model="codeForm.runtimePlatform"
+                  multiple
+                  filterable
+                  allow-create
+                  default-first-option
+                  placeholder=".Net, Java"
+                  class="w-full"
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in runtimePlatformOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <form-help-content
+                  popoverContent="All runtime platforms used in this software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Operating system">
-              <el-select
-                v-model="codeForm.operatingSystem"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                placeholder="Linux, Windows"
-                class="w-full"
-              >
-                <el-option
-                  v-for="item in operatingSystemOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+              <div class="flex flex-row items-center">
+                <el-select
+                  v-model="codeForm.operatingSystem"
+                  multiple
+                  filterable
+                  allow-create
+                  default-first-option
+                  placeholder="Linux, Windows"
+                  class="w-full"
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in operatingSystemOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <form-help-content
+                  popoverContent="All operating systems this software can run on"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Other software requirements">
@@ -682,70 +763,104 @@
               >
                 <Icon icon="carbon:add" />
                 <span> Add an additional software requirement </span>
+                <form-help-content
+                  popoverContent="Required software to run/compile/use this software."
+                ></form-help-content>
               </div>
             </el-form-item>
 
             <el-form-item label="Current version" :error="versionErrorMessage">
-              <el-input
-                v-model="codeForm.currentVersion"
-                placeholder="1.5.6"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="codeForm.currentVersion"
+                  placeholder="1.5.6"
+                ></el-input>
+                <form-help-content
+                  popoverContent="Version number of this software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Current version release date">
-              <el-date-picker
-                v-model="codeForm.currentVersionReleaseDate"
-                type="date"
-                placeholder="Pick a day"
-                value-format="YYYY-MM-DD"
-              >
-              </el-date-picker>
+              <div class="flex flex-row items-center">
+                <el-date-picker
+                  v-model="codeForm.currentVersionReleaseDate"
+                  type="date"
+                  placeholder="Pick a day"
+                  value-format="YYYY-MM-DD"
+                >
+                </el-date-picker>
+                <form-help-content
+                  popoverContent="The date on which the current version was released"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item
               label="Current version download URL"
               :error="currentVersionDownloadLinkErrorMessage"
             >
-              <el-input
-                v-model="codeForm.currentVersionDownloadLink"
-                type="url"
-                placeholder="https://www.python.org/downloads/release/python-3100/"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="codeForm.currentVersionDownloadLink"
+                  type="url"
+                  placeholder="https://www.python.org/downloads/release/python-3100/"
+                ></el-input>
+                <form-help-content
+                  popoverContent="URL to download the current version of this software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Current version release notes">
-              <el-input
-                v-model="codeForm.currentVersionReleaseNotes"
-                type="textarea"
-                placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="codeForm.currentVersionReleaseNotes"
+                  type="textarea"
+                  placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
+                ></el-input>
+                <form-help-content
+                  popoverContent="Release notes for the current version of this software"
+                ></form-help-content>
+              </div>
             </el-form-item>
 
             <el-form-item label="Development status">
-              <el-select
-                v-model="codeForm.developmentStatus"
-                filterable
-                placeholder=""
-              >
-                <el-option
-                  v-for="item in repoStatusOptions"
-                  :key="item.value"
-                  :label="item.display_name"
-                  :value="item.value"
+              <div class="flex flex-row items-center">
+                <el-select
+                  v-model="codeForm.developmentStatus"
+                  filterable
+                  placeholder=""
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in repoStatusOptions"
+                    :key="item.value"
+                    :label="item.display_name"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <form-help-content
+                  popoverContent="The current development status of this software"
+                ></form-help-content>
+              </div>
+
               <p class="text-xs pt-2 text-gray-500">
                 {{ developmentStatus }}
               </p>
             </el-form-item>
 
             <el-form-item label="Is part of" :error="isPartOfErrorMessage">
-              <el-input
-                v-model="codeForm.isPartOf"
-                type="url"
-                placeholder="https://thebiggerframework.org"
-              ></el-input>
+              <div class="flex flex-row items-center">
+                <el-input
+                  v-model="codeForm.isPartOf"
+                  type="url"
+                  placeholder="https://thebiggerframework.org"
+                ></el-input>
+                <form-help-content
+                  popoverContent="URL to the project this software is part of"
+                ></form-help-content>
+              </div>
             </el-form-item>
           </el-form>
         </el-collapse-item>
