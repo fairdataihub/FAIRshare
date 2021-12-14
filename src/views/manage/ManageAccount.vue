@@ -76,7 +76,9 @@
             @click="connectOAuth('githubOAuth')"
             >Connect via OAuth</el-button
           >
-          <GithubTokenConnection :callback="reRenderByChild"></GithubTokenConnection>
+          <GithubTokenConnection
+            :callback="reRenderByChild"
+          ></GithubTokenConnection>
         </div>
       </div>
     </div>
@@ -222,8 +224,8 @@ export default {
       }
     }
 
-    function reRenderByChild(){
-      updateStatus()
+    function reRenderByChild() {
+      updateStatus();
     }
 
     function updateStatus() {

@@ -80,7 +80,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.callback()
+        this.callback();
       }
     },
 
@@ -113,7 +113,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
-          this.callback()
+          this.callback();
         }
       } else {
         ElNotification({
@@ -122,7 +122,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.callback()
+        this.callback();
       }
       spinner.close();
     },
@@ -153,7 +153,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
-          this.callback()
+          this.callback();
         });
     },
 
@@ -183,7 +183,7 @@ export default {
           duration: 2000,
         });
         this.manager.confirmGithubTokenDisconnected();
-        this.callback()
+        this.callback();
       }
       this.updateStatus();
     },
