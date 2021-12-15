@@ -101,6 +101,24 @@ export const useTokenStore = defineStore({
     confirmGithubTokenDisconnected() {
       this.saveStatus("githubTokenConnected", "false");
     },
+
+    async getZenodoTokenConnected(){
+      await this.loadStatus();
+      if ("zenodoTokenConnected" in this.connnectionStatus) {
+        let result = this.connnectionStatus["zenodoTokenConnected"];
+        result = await decrypt(result);
+        return converter[result];
+      } else {
+        return false;
+      }
+    },
+    confirmZenodoTokenConnected() {
+      this.saveStatus("zenodoTokenConnected", "true");
+    },
+    confirmZenodoTokenDisconnected() {
+      this.saveStatus("zenodoTokenConnected", "false");
+    },
+
     async loadStatus() {
       try {
         this.connnectionStatus = await loadStatusFile();
@@ -239,8 +257,14 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async getZenodoUser() {
-      return "";
+    async readZenodoUser(key) {
+      this.getToken(key).then((res) => {
+        if(res == "NO_TOKEN_FOUND"){
+          return "no user found"
+        } else {
+          return res.name
+        }
+      })
     },
   },
 });

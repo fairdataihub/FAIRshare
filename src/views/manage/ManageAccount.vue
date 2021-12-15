@@ -143,13 +143,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            plain
-            :type="status.zenodoToken[5]"
-            class="button"
-            @click="openDialog('zenodoToken')"
-            >{{ status.zenodoToken[3] }}</el-button
-          >
+          <ZenodoTokenConnection
+            :callback="reRenderByChild"
+          ></ZenodoTokenConnection>
         </div>
       </div>
     </div>
@@ -171,9 +167,10 @@ import { ref } from "vue";
 import { ElLoading } from "element-plus";
 import Dialog from "../../components/dialogs/Dialog";
 import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
+import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTokenConnection";
 export default {
   name: "ManageAccount",
-  components: { Dialog, GithubTokenConnection },
+  components: { Dialog, GithubTokenConnection, ZenodoTokenConnection },
   setup() {
     const manager = useTokenStore();
     const githubOffline = ref(true);
@@ -256,14 +253,37 @@ export default {
           checkGithubConnectionMethods();
         }
       });
+
+      manager.getZenodoTokenConnected().then(async (res) => {
+        if (!res) {
+          connectionList.value.delete("zenodoToken");
+          status.value.zenodoToken = [
+            "lightgrey",
+            "grey",
+            "checking status 1...",
+            "Connect token",
+            "",
+            "",
+          ];
+          checkZenodoConnectionMethods();
+        } else {
+          connectionList.value.add("zenodoToken");
+          await manager.readZenodoUser("zenodoToken").then((name) => {
+            status.value.zenodoToken = [
+              "lightgreen",
+              "lightgreen",
+              "checking status 2...",
+              "Disconnect",
+              name,
+              "danger",
+            ];
+          });
+          checkZenodoConnectionMethods();
+        }
+      });
     }
 
     function checkGithubConnectionMethods() {
-      console.log(
-        "aaaa: ",
-        connectionList.value,
-        connectionList.value.has("githubToken")
-      );
       if (
         connectionList.value.has("githubToken") &&
         connectionList.value.has("githubOAuth")
@@ -272,10 +292,24 @@ export default {
       } else if (connectionList.value.has("githubOAuth")) {
         status.value.githubToken[2] = "Connect via account";
       } else if (connectionList.value.has("githubToken")) {
-        console.log("YYYYY");
         status.value.githubToken[2] = "Connect via token";
       } else {
         status.value.githubToken[2] = "Not connected";
+      }
+    }
+
+    function checkZenodoConnectionMethods() {
+      if (
+        connectionList.value.has("zenodoToken") &&
+        connectionList.value.has("zenodoOAuth")
+      ) {
+        status.value.zenodoToken[2] = "Connect via token and account";
+      } else if (connectionList.value.has("zenodoOAuth")) {
+        status.value.zenodoToken[2] = "Connect via account";
+      } else if (connectionList.value.has("zenodoToken")) {
+        status.value.zenodoToken[2] = "Connect via token";
+      } else {
+        status.value.zenodoToken[2] = "Not connected";
       }
     }
 
