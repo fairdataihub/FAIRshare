@@ -273,19 +273,19 @@ function retrieveCode(url) {
       }
     }
 
-    authWindow.webContents.on("will-navigate", (event, url) => {
+    authWindow.webContents.on("will-navigate", (_event, url) => {
       newlink(url);
     });
 
     authWindow.webContents.on(
       "did-get-redirect-request",
-      (event, oldUrl, newUrl) => {
+      (_event, _oldUrl, newUrl) => {
         newlink(newUrl);
       }
     );
   });
 }
-ipcMain.on("OAuth-Github", async (_event, test) => {
+ipcMain.on("OAuth-Github", async (_event, _test) => {
   // console.log(test)
   let success = false;
   await axios
