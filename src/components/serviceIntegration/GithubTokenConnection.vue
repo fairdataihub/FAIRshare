@@ -62,7 +62,7 @@ export default {
       //when its ready the ouath items can also be added to here
       this.manager.getGithubTokenConnected().then((res) => {
         if (!res) {
-          console.log("!!");
+          // console.log("!!");
           this.useAPIkey();
         } else {
           this.APIkeyWarning(s);
@@ -95,14 +95,14 @@ export default {
           tokenObject.token = value;
           await this.manager.saveToken(key, tokenObject);
         } catch (e) {
-          console.log(e);
+          // console.log(e);
           errorFound = true;
         }
         let name = await this.manager.getGithubUser(key);
         let newTokenObject = {};
         newTokenObject.name = name;
         newTokenObject.token = value;
-        console.log("save token: ", newTokenObject);
+        // console.log("save token: ", newTokenObject);
         await this.manager.saveToken(key, newTokenObject);
         this.manager.confirmGithubTokenConnected();
         this.updateStatus();
@@ -159,11 +159,11 @@ export default {
 
     updateStatus() {
       this.manager.getGithubTokenConnected().then((res) => {
-        console.log("current: ", res);
+        // console.log("current: ", res);
         if (!res) {
           this.status = ["Connect token", ""];
         } else {
-          this.status = ["Disconnect", "danger"];
+          this.status = ["Disconnect token", "danger"];
         }
       });
     },

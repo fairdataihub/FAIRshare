@@ -69,12 +69,7 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <el-button
-            v-if="OAuthButtonVisable"
-            plain
-            class="button"
-            @click="connectOAuth('githubOAuth')"
-            >Connect via OAuth</el-button
+          <GithubOAuthConnection :callback="reRenderByChild"></GithubOAuthConnection
           >
           <GithubTokenConnection
             :callback="reRenderByChild"
@@ -149,39 +144,20 @@
         </div>
       </div>
     </div>
-
-    <Dialog
-      v-model="dialogVisable"
-      :numInput="dialogNumInput"
-      :headers="dialogHeaders"
-      :callback="getInputs"
-    ></Dialog>
   </div>
 </template>
 
 <script>
 import { useTokenStore } from "../../store/access";
-import { ElMessageBox } from "element-plus";
-import { ElNotification } from "element-plus";
 import { ref } from "vue";
-import { ElLoading } from "element-plus";
-import Dialog from "../../components/dialogs/Dialog";
 import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
 import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTokenConnection";
+import GithubOAuthConnection from "../../components/serviceIntegration/GithubOAuthConnection";
 export default {
   name: "ManageAccount",
-  components: { Dialog, GithubTokenConnection, ZenodoTokenConnection },
+  components: { GithubTokenConnection, ZenodoTokenConnection, GithubOAuthConnection },
   setup() {
     const manager = useTokenStore();
-    const githubOffline = ref(true);
-    const zenodoOffline = ref(true);
-    const dialogVisable = ref(false);
-    const dialogOpener = ref(null);
-    const dialogNumInput = ref(null);
-    const dialogHeaders = ref([]);
-    const OAuthButtonVisable = ref(true);
-    const backgroundHasResponse = ref(false);
-    const spinnerGlobal = ref(null);
     const connectionList = ref(new Set([]));
     const status = ref({
       githubToken: [
@@ -202,24 +178,6 @@ export default {
       ],
     });
 
-    async function getInputs(response) {
-      dialogVisable.value = false;
-      if (response[0] == "OK") {
-        if (dialogOpener.value == "githubToken") {
-          await processGithub(response[1]);
-        } else if (dialogOpener.value == "zenodoToken") {
-          await processZenodo(response[1]);
-        }
-        console.log("dialogOpener: ", dialogOpener.value);
-      } else {
-        ElNotification({
-          type: "info",
-          message: "Input canceled",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-    }
 
     function reRenderByChild() {
       updateStatus();
@@ -232,7 +190,7 @@ export default {
           status.value.githubToken = [
             "lightgrey",
             "grey",
-            "checking status 1...",
+            "checking status...",
             "Connect token",
             "",
             "",
@@ -244,7 +202,7 @@ export default {
             status.value.githubToken = [
               "lightgreen",
               "lightgreen",
-              "checking status 2...",
+              "checking status...",
               "Disconnect",
               name,
               "danger",
@@ -260,7 +218,7 @@ export default {
           status.value.zenodoToken = [
             "lightgrey",
             "grey",
-            "checking status 1...",
+            "checking status...",
             "Connect token",
             "",
             "",
@@ -272,13 +230,41 @@ export default {
             status.value.zenodoToken = [
               "lightgreen",
               "lightgreen",
-              "checking status 2...",
+              "checking status...",
               "Disconnect",
               name,
               "danger",
             ];
           });
           checkZenodoConnectionMethods();
+        }
+      });
+
+      manager.getGithubOAuthConnected().then(async (res) => {
+        if (!res) {
+          connectionList.value.delete("githubOAuth");
+          status.value.githubToken = [
+            "lightgrey",
+            "grey",
+            "checking status...",
+            "Connect token",
+            "",
+            "",
+          ];
+          checkGithubConnectionMethods();
+        } else {
+          connectionList.value.add("githubOAuth");
+          await manager.getGithubUser("githubOAuth").then((name) => {
+            status.value.githubToken = [
+              "lightgreen",
+              "lightgreen",
+              "checking status...",
+              "Disconnect",
+              name,
+              "danger",
+            ];
+          });
+          checkGithubConnectionMethods();
         }
       });
     }
@@ -313,195 +299,13 @@ export default {
       }
     }
 
-    function useAPIkey(key) {
-      if (key == "githubToken") {
-        dialogOpener.value = "githubToken";
-        dialogNumInput.value = 1;
-        dialogHeaders.value = ["githubToken access token"];
-      } else if (key == "zenodoToken") {
-        dialogOpener.value = "zenodoToken";
-        dialogNumInput.value = 2;
-        dialogHeaders.value = ["zenodoToken access token", "Token nick name"];
-      }
-      dialogVisable.value = true;
-    }
-
-    function createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Verifying...",
-      });
-      return loading;
-    }
-
-    async function processZenodo(userInput) {
-      console.log("user Input: ", userInput);
-      let key = "zenodoToken";
-      let spinner = createLoading();
-      let errorFound = false;
-      let value = userInput[0];
-
-      if (await manager.checkZenodoToken(value)) {
-        let name = userInput[1];
-        let tokenObject = {};
-        try {
-          tokenObject.token = value;
-          tokenObject.name = name;
-
-          await manager.saveToken(key, tokenObject);
-        } catch (e) {
-          console.log(e);
-          errorFound = true;
-        }
-
-        updateStatus(key, name);
-
-        if (!errorFound) {
-          ElNotification({
-            type: "success",
-            message: "Saved successfully",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        }
-      } else {
-        ElNotification({
-          type: "error",
-          message: "Cannot verify the token provided",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-      spinner.close();
-    }
-
-    async function processGithub(userInput) {
-      let key = "githubToken";
-      let value = userInput[0];
-      let spinner = createLoading();
-      let errorFound = false;
-      if (await manager.checkGithubToken(value)) {
-        let tokenObject = {};
-        try {
-          tokenObject.token = value;
-          await manager.saveToken(key, tokenObject);
-        } catch (e) {
-          console.log(e);
-          errorFound = true;
-        }
-        let name = await manager.getGithubUser();
-        tokenObject.name = name;
-        await manager.saveToken(key, tokenObject);
-        updateStatus(key, name);
-        if (!errorFound) {
-          ElNotification({
-            type: "success",
-            message: "Saved successfully",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        }
-      } else {
-        ElNotification({
-          type: "error",
-          message: "Cannot verify the token provided",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-      spinner.close();
-    }
-
-    function APIkeyWarning(key) {
-      let errorFound = false;
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          try {
-            await manager.deleteToken(key);
-          } catch (e) {
-            errorFound = true;
-          }
-          updateStatus(key, "");
-          if (!errorFound) {
-            ElNotification({
-              type: "success",
-              message: "Deleted",
-              position: "bottom-right",
-              duration: 2000,
-            });
-            OAuthButtonVisable.value = true;
-          }
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        });
-    }
-    const openDialog = (s) => {
-      if (status.value[s][3] == "Connect token") {
-        if (s == "githubToken" || s == "zenodoToken") {
-          useAPIkey(s);
-        }
-      } else if (status.value[s][3] == "Disconnect") {
-        if (s == "githubToken" || s == "zenodoToken") {
-          APIkeyWarning(s);
-        }
-      }
-    };
-
-    async function connectOAuth(key) {
-      if (key == "githubOAuth") {
-        spinnerGlobal.value = createLoading();
-        window.ipcRenderer.send("OAuth-Github", "test");
-      }
-    }
     return {
       manager,
-      openDialog,
-      githubOffline,
-      zenodoOffline,
       status,
       updateStatus,
-      createLoading,
-      dialogVisable,
-      getInputs,
-      dialogOpener,
-      dialogNumInput,
-      dialogHeaders,
-      OAuthButtonVisable,
-      connectOAuth,
-      backgroundHasResponse,
-      spinnerGlobal,
-      processGithub,
       reRenderByChild,
       connectionList,
     };
-  },
-  watch: {
-    // whenever question changes, this function will run
-    backgroundHasResponse: function () {
-      console.log("catched!");
-      this.manager.getToken("githubOAuth").then((res) => {
-        this.processGithub([res.token]);
-        this.spinnerGlobal.close();
-        this.OAuthButtonVisable = false;
-        // this.manager.checkGithubToken(res.token).then((res) => {
-        //   console.log("check???: ", res);
-        // });
-      });
-    },
   },
 
   data() {
@@ -515,27 +319,6 @@ export default {
     },
   },
   async mounted() {
-    window.ipcRenderer.on("OAuth-Github-Reply", async (_e, _arg) => {
-      if (_arg == "failed") {
-        ElNotification({
-          type: "error",
-          message: "Login failed",
-          position: "bottom-right",
-          duration: 2000,
-        });
-        this.spinnerGlobal.close();
-      } else if (this.manager.checkGithubToken(_arg)) {
-        console.log("passed!");
-        let tokenObject = {};
-        tokenObject.token = _arg;
-        await this.manager.saveToken("githubOAuth", tokenObject);
-        let name = await this.manager.getGithubUser("githubOAuth");
-        tokenObject.name = name;
-        await this.manager.saveToken("githubOAuth", tokenObject);
-        this.backgroundHasResponse = true;
-      }
-    });
-
     await this.manager.loadTokens();
     this.updateStatus();
   },

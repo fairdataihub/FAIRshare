@@ -86,7 +86,7 @@ export const useTokenStore = defineStore({
   actions: {
     async getGithubTokenConnected() {
       await this.loadStatus();
-      //console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
+      //// console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
       if ("githubTokenConnected" in this.connnectionStatus) {
         let result = this.connnectionStatus["githubTokenConnected"];
         result = await decrypt(result);
@@ -100,6 +100,24 @@ export const useTokenStore = defineStore({
     },
     confirmGithubTokenDisconnected() {
       this.saveStatus("githubTokenConnected", "false");
+    },
+
+    async getGithubOAuthConnected() {
+      await this.loadStatus();
+      //// console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
+      if ("githubOAuthConnected" in this.connnectionStatus) {
+        let result = this.connnectionStatus["githubOAuthConnected"];
+        result = await decrypt(result);
+        return converter[result];
+      } else {
+        return false;
+      }
+    },
+    confirmGithubOAuthConnected() {
+      this.saveStatus("githubOAuthConnected", "true");
+    },
+    confirmGithubOAuthDisconnected() {
+      this.saveStatus("githubOAuthConnected", "false");
     },
 
     async getZenodoTokenConnected() {
@@ -166,9 +184,9 @@ export const useTokenStore = defineStore({
       //await this.loadTokens()
       if (key in this.accessTokens) {
         const tokenObject = Object.assign({}, this.accessTokens[key]);
-        console.log("Old object: ", this.accessTokens[key]);
+        // console.log("Old object: ", this.accessTokens[key]);
         tokenObject.token = await decrypt(this.accessTokens[key].token);
-        console.log("new Object: ", this.accessTokens[key]);
+        // console.log("new Object: ", this.accessTokens[key]);
         return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
@@ -197,7 +215,7 @@ export const useTokenStore = defineStore({
 
     async checkZenodoToken(token) {
       const response = await this.getDepositions(token);
-      console.log("************** ****", response);
+      // console.log("************** ****", response);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {
@@ -236,7 +254,7 @@ export const useTokenStore = defineStore({
     async getGithubUser(key) {
       const tokenObject = await this.getToken(key);
       const token = tokenObject.token;
-      console.log("??: ", token);
+      // console.log("??: ", token);
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
