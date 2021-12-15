@@ -84,7 +84,7 @@ export const useTokenStore = defineStore({
   actions: {
     async getGithubTokenConnected() {
       await this.loadStatus();
-      return this.connnectionStatus["githubTokenConnected"]
+      return this.connnectionStatus["githubTokenConnected"];
     },
     // confirmGithubTokenConnected() {
     //   this.saveStatus("githubTokenConnected", "true");
@@ -96,7 +96,7 @@ export const useTokenStore = defineStore({
     async getGithubOAuthConnected() {
       await this.loadStatus();
       //// console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
-      return this.connnectionStatus["githubOAuthConnected"]
+      return this.connnectionStatus["githubOAuthConnected"];
     },
     // confirmGithubOAuthConnected() {
     //   this.saveStatus("githubOAuthConnected", "true");
@@ -107,7 +107,7 @@ export const useTokenStore = defineStore({
 
     async getZenodoTokenConnected() {
       await this.loadStatus();
-      return this.connnectionStatus["zenodoTokenConnected"]
+      return this.connnectionStatus["zenodoTokenConnected"];
     },
     // confirmZenodoTokenConnected() {
     //   this.saveStatus("zenodoTokenConnected", "true");
@@ -136,7 +136,7 @@ export const useTokenStore = defineStore({
       tokenObject.token = await encrypt(tokenObject.token);
       this.accessTokens[key] = tokenObject;
       await this.syncTokens();
-      this.loadStatus()
+      this.loadStatus();
     },
     async writeDatasetsToFile() {
       fs.ensureFileSync(TOKEN_STORE_PATH);
@@ -159,23 +159,23 @@ export const useTokenStore = defineStore({
     // async loadStatus() {
     //   this.writeStatusToFile();
     // },
-    async loadStatus(){
-      if("githubOAuth" in this.accessTokens){
-        this.connnectionStatus["githubOAuthConnected"] = true
+    async loadStatus() {
+      if ("githubOAuth" in this.accessTokens) {
+        this.connnectionStatus["githubOAuthConnected"] = true;
       } else {
-        this.connnectionStatus["githubOAuthConnected"] = false
+        this.connnectionStatus["githubOAuthConnected"] = false;
       }
 
-      if("githubToken" in this.accessTokens){
-        this.connnectionStatus["githubTokenConnected"] = true
+      if ("githubToken" in this.accessTokens) {
+        this.connnectionStatus["githubTokenConnected"] = true;
       } else {
-        this.connnectionStatus["githubTokenConnected"] = false
+        this.connnectionStatus["githubTokenConnected"] = false;
       }
 
-      if("zenodoToken" in this.accessTokens){
-        this.connnectionStatus["zenodoTokenConnected"] = true
+      if ("zenodoToken" in this.accessTokens) {
+        this.connnectionStatus["zenodoTokenConnected"] = true;
       } else {
-        this.connnectionStatus["zenodoTokenConnected"] = false
+        this.connnectionStatus["zenodoTokenConnected"] = false;
       }
     },
 

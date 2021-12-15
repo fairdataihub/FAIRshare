@@ -190,7 +190,7 @@ export default {
   },
   async mounted() {
     await this.manager.loadTokens();
-    await this.manager.loadStatus()
+    await this.manager.loadStatus();
     this.updateStatus();
   },
 };
