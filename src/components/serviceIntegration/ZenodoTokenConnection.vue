@@ -98,7 +98,7 @@ export default {
           console.log(e);
           errorFound = true;
         }
-        let name = userInput[1]
+        let name = userInput[1];
         let newTokenObject = {};
         newTokenObject.name = name;
         newTokenObject.token = value;

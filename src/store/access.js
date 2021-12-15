@@ -102,7 +102,7 @@ export const useTokenStore = defineStore({
       this.saveStatus("githubTokenConnected", "false");
     },
 
-    async getZenodoTokenConnected(){
+    async getZenodoTokenConnected() {
       await this.loadStatus();
       if ("zenodoTokenConnected" in this.connnectionStatus) {
         let result = this.connnectionStatus["zenodoTokenConnected"];
@@ -259,12 +259,12 @@ export const useTokenStore = defineStore({
 
     async readZenodoUser(key) {
       this.getToken(key).then((res) => {
-        if(res == "NO_TOKEN_FOUND"){
-          return "no user found"
+        if (res == "NO_TOKEN_FOUND") {
+          return "no user found";
         } else {
-          return res.name
+          return res.name;
         }
-      })
+      });
     },
   },
 });
