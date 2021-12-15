@@ -40,7 +40,7 @@ export default {
     for (let i = 0; i < props.numInput - 1; i++) {
       userInputs.value.push("");
     }
-    console.log("user inputs: ", userInputs);
+    //console.log("user inputs: ", userInputs);
     return {
       userInputs,
       dialogVisable,

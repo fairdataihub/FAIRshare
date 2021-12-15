@@ -230,6 +230,110 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
   });
 });
 
+// OAuth
+//import { useTokenStore } from "./store/access";
+import axios from "axios";
+const nodeUrl = require("url");
+const CLIENT_ID = "3282f35bdcceeb2cc9f8";
+const CLIENT_SECRET = "c603c25b557624f5b07cad52c0da798ee7ca4300";
+
+function retrieveCode(url) {
+  return new Promise(function (resolve, reject) {
+    let authWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      show: false,
+      "node-integration": false,
+      "web-security": false,
+    });
+    authWindow.loadURL(url, { userAgent: "Chrome" });
+    authWindow.show();
+    authWindow.on("closed", () => {
+      reject(new Error("closed"));
+    });
+
+    function newlink(url) {
+      let parsedURL = nodeUrl.parse(url, true);
+      let query = parsedURL.query;
+      let code = query.code;
+      let error = query.error;
+
+      if (error) {
+        reject(error);
+        authWindow.removeAllListeners("closed");
+        setImmediate(function () {
+          authWindow.close();
+        });
+      } else if (code) {
+        resolve(code);
+        authWindow.removeAllListeners("closed");
+        setImmediate(function () {
+          authWindow.close();
+        });
+      }
+    }
+
+    authWindow.webContents.on("will-navigate", (event, url) => {
+      newlink(url);
+    });
+
+    authWindow.webContents.on(
+      "did-get-redirect-request",
+      (event, oldUrl, newUrl) => {
+        newlink(newUrl);
+      }
+    );
+  });
+}
+ipcMain.on("OAuth-Github", async (_event, test) => {
+  // console.log(test)
+  let success = false;
+  await axios
+    .get("https://github.com/login/oauth/authorize", {
+      params: {
+        client_id: CLIENT_ID,
+      },
+    })
+    .then(async (responseCode) => {
+      let authUrl = responseCode.request.res.responseUrl;
+      await retrieveCode(authUrl).then(async (code) => {
+        console.log("code:", code);
+        await axios
+          .post(
+            "https://github.com/login/oauth/access_token",
+            {
+              client_id: CLIENT_ID,
+              client_secret: CLIENT_SECRET,
+              code: code,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+              },
+            }
+          )
+          .then(async (response) => {
+            console.log("response after code: ", response.data.access_token);
+            mainWindow.webContents.send(
+              "OAuth-Github-Reply",
+              response.data.access_token
+            );
+            success = true;
+          })
+          .catch((error) => {
+            console.log("request token error: ", error);
+          });
+      });
+    })
+    .catch((error) => {
+      console.log("request code error: ", error);
+    });
+  if (!success) {
+    mainWindow.webContents.send("OAuth-Github-Reply", "failed");
+  }
+  mainWindow.webContents.session.clearStorageData();
+});
+
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {

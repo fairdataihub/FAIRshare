@@ -58,7 +58,7 @@
 <script>
 // import { Icon } from "@iconify/vue";
 import { ArrowRightBold } from "@element-plus/icons";
-import axios from "axios";
+// import axios from "axios";
 
 import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
 
@@ -94,22 +94,23 @@ export default {
     },
   },
   methods: {
-    async getDepositions(token) {
-      return await axios
-        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
-          params: {
-            access_token: token,
-          },
-        })
-        .then((response) => {
-          return { data: response.data, status: response.status };
-        })
-        .catch((error) => {
-          return { data: error.response.data, status: error.response.status };
-        });
-    },
+    // async getDepositions(token) {
+    //   return await axios
+    //     .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+    //       params: {
+    //         access_token: token,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       return { data: response.data, status: response.status };
+    //     })
+    //     .catch((error) => {
+    //       return { data: error.response.data, status: error.response.status };
+    //     });
+    // },
     async checkToken(token) {
-      const response = await this.getDepositions(token);
+      console.log(token);
+      const response = await this.tokens.getDepositions(token);
 
       if (response.status === 200) {
         this.validTokenAvailable = true;
@@ -148,7 +149,9 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
-    const zenodoToken = await this.tokens.getToken("zenodo");
+    const zenodoTokenObject = await this.tokens.getToken("zenodo");
+    const zenodoToken = zenodoTokenObject.token;
+    console.log(zenodoTokenObject);
     if (zenodoToken === "NO_TOKEN_FOUND") {
       this.errorMessage =
         "No Zenodo access token found. Please enter a valid Zenodo access token.";
