@@ -104,7 +104,7 @@ export default {
         newTokenObject.token = value;
         // console.log("save token: ", newTokenObject);
         await this.manager.saveToken(key, newTokenObject);
-        this.manager.confirmGithubTokenConnected();
+        //this.manager.confirmGithubTokenConnected();
         this.updateStatus();
         if (!errorFound) {
           ElNotification({
@@ -159,7 +159,7 @@ export default {
 
     updateStatus() {
       this.manager.getGithubTokenConnected().then((res) => {
-        // console.log("current: ", res);
+        console.log("current: ", res);
         if (!res) {
           this.status = ["Connect token", ""];
         } else {
@@ -182,14 +182,15 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.manager.confirmGithubTokenDisconnected();
+        //this.manager.confirmGithubTokenDisconnected();
         this.callback();
       }
       this.updateStatus();
     },
   },
   async mounted() {
-    //await this.manager.loadTokens();
+    await this.manager.loadTokens();
+    await this.manager.loadStatus();
     this.updateStatus();
   },
 };
