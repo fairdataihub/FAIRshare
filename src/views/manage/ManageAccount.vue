@@ -38,7 +38,7 @@
 
           <div class="centering-Container tag-Container">
             <el-tag
-              v-if="status.githubToken[2] === 'Connected'"
+              v-if="status.githubToken[2].slice(0, 9) === 'Connected'"
               type="success"
               effect="plain"
             >
@@ -114,7 +114,7 @@
 
           <div class="centering-Container tag-Container">
             <el-tag
-              v-if="status.zenodoToken[2] === 'Connected'"
+              v-if="status.zenodoToken[2].slice(0, 9) === 'Connected'"
               type="success"
               effect="plain"
             >
@@ -288,11 +288,11 @@ export default {
         connectionList.value.has("githubToken") &&
         connectionList.value.has("githubOAuth")
       ) {
-        status.value.githubToken[2] = "Connect via token and account";
+        status.value.githubToken[2] = "Connected via token and account";
       } else if (connectionList.value.has("githubOAuth")) {
-        status.value.githubToken[2] = "Connect via account";
+        status.value.githubToken[2] = "Connected via account";
       } else if (connectionList.value.has("githubToken")) {
-        status.value.githubToken[2] = "Connect via token";
+        status.value.githubToken[2] = "Connected via token";
       } else {
         status.value.githubToken[2] = "Not connected";
       }
@@ -303,11 +303,11 @@ export default {
         connectionList.value.has("zenodoToken") &&
         connectionList.value.has("zenodoOAuth")
       ) {
-        status.value.zenodoToken[2] = "Connect via token and account";
+        status.value.zenodoToken[2] = "Connected via token and account";
       } else if (connectionList.value.has("zenodoOAuth")) {
-        status.value.zenodoToken[2] = "Connect via account";
+        status.value.zenodoToken[2] = "Connected via account";
       } else if (connectionList.value.has("zenodoToken")) {
-        status.value.zenodoToken[2] = "Connect via token";
+        status.value.zenodoToken[2] = "Connected via token";
       } else {
         status.value.zenodoToken[2] = "Not connected";
       }

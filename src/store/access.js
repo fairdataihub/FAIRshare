@@ -258,13 +258,15 @@ export const useTokenStore = defineStore({
     },
 
     async readZenodoUser(key) {
-      this.getToken(key).then((res) => {
-        if (res == "NO_TOKEN_FOUND") {
-          return "no user found";
+      let result;
+      await this.getToken(key).then((res) => {
+        if(res == "NO_TOKEN_FOUND"){
+          result = "no user found"
         } else {
-          return res.name;
+          result = res.name
         }
-      });
+      })
+      return result
     },
   },
 });
