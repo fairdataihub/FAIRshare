@@ -28,7 +28,7 @@ export default {
     return {
       status,
       backgroundHasResponse,
-      spinnerGlobal
+      spinnerGlobal,
     };
   },
   data() {
@@ -41,12 +41,11 @@ export default {
       this.manager.getGithubOAuthConnected().then((res) => {
         if (!res) {
           this.spinnerGlobal = this.createLoading();
-        window.ipcRenderer.send("OAuth-Github", "test");
+          window.ipcRenderer.send("OAuth-Github", "test");
         } else {
           this.APIkeyWarning("githubOAuth");
         }
       });
-      
     },
 
     createLoading() {
@@ -187,8 +186,8 @@ export default {
         tokenObject.token = _arg;
         await this.manager.saveToken("githubOAuth", tokenObject);
         let name = await this.manager.getGithubUser("githubOAuth");
-        let newObject = {}
-        newObject.token = _arg
+        let newObject = {};
+        newObject.token = _arg;
         newObject.name = name;
         await this.manager.saveToken("githubOAuth", newObject);
         this.backgroundHasResponse = true;

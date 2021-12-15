@@ -69,8 +69,9 @@
           </span>
         </div>
         <div class="centering-Container bottom">
-          <GithubOAuthConnection :callback="reRenderByChild"></GithubOAuthConnection
-          >
+          <GithubOAuthConnection
+            :callback="reRenderByChild"
+          ></GithubOAuthConnection>
           <GithubTokenConnection
             :callback="reRenderByChild"
           ></GithubTokenConnection>
@@ -155,7 +156,11 @@ import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTok
 import GithubOAuthConnection from "../../components/serviceIntegration/GithubOAuthConnection";
 export default {
   name: "ManageAccount",
-  components: { GithubTokenConnection, ZenodoTokenConnection, GithubOAuthConnection },
+  components: {
+    GithubTokenConnection,
+    ZenodoTokenConnection,
+    GithubOAuthConnection,
+  },
   setup() {
     const manager = useTokenStore();
     const connectionList = ref(new Set([]));
@@ -177,7 +182,6 @@ export default {
         "",
       ],
     });
-
 
     function reRenderByChild() {
       updateStatus();
