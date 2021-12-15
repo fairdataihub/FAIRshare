@@ -19,24 +19,33 @@
         @submit.prevent
       >
         <el-collapse v-model="activeNames">
-          <el-collapse-item
-            class="text-lg"
-            title="Basic Information"
-            name="basicInformation"
-          >
+          <el-collapse-item class="text-lg" name="basicInformation">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Basic Information</p>
+                <span class="pr-2 text-gray-400"> required </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item
                 label="Publication Date"
                 :required="true"
                 :error="publicationDateErrorMessage"
               >
-                <el-date-picker
-                  v-model="zenodoMetadataForm.publicationDate"
-                  type="date"
-                  placeholder="Pick a day"
-                  value-format="YYYY-MM-DD"
-                >
-                </el-date-picker>
+                <div class="flex flex-col">
+                  <el-date-picker
+                    v-model="zenodoMetadataForm.publicationDate"
+                    type="date"
+                    placeholder="Pick a day"
+                    value-format="YYYY-MM-DD"
+                  >
+                  </el-date-picker>
+                  <p class="text-xs pt-2 text-gray-500">
+                    In case your upload was already published elsewhere, please
+                    use the date of first publication.
+                  </p>
+                </div>
               </el-form-item>
 
               <el-form-item
@@ -45,18 +54,8 @@
                 :error="titleErrorMessage"
                 :required="true"
               >
-                <Popper
-                  :hover="true"
-                  offsetDistance="0"
-                  content="Use a description that is easily identifiable. This will
-                        be shown in the dataset selection screen and is not part
-                        of your submitted metadata."
-                  class="w-full"
-                >
-                  <el-input v-model="zenodoMetadataForm.title" type="text">
-                    text
-                  </el-input>
-                </Popper>
+                <el-input v-model="zenodoMetadataForm.title" type="text">
+                </el-input>
               </el-form-item>
 
               <el-form-item
@@ -178,22 +177,13 @@
               </el-form-item>
 
               <el-form-item label="Version" :error="versionErrorMessage">
-                <el-popover
-                  ref="popover"
-                  placement="bottom"
-                  :width="300"
-                  trigger="hover"
-                  content=""
-                >
-                  <template #reference>
-                    <el-input
-                      v-model="zenodoMetadataForm.version"
-                      type="text"
-                      placeholder="1.0.4"
-                    ></el-input>
-                  </template>
-
-                  <span class="break-normal text-left text-sm">
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.version"
+                    type="text"
+                    placeholder="1.0.4"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">
                     Optional. Mostly relevant for software and dataset uploads.
                     Any string will be accepted, but semantically-versioned tag
                     is recommended. <br />
@@ -202,8 +192,8 @@
                       semver.org
                     </a>
                     for more information on semantic versioning.
-                  </span>
-                </el-popover>
+                  </p>
+                </div>
               </el-form-item>
 
               <el-form-item label="Language">
@@ -312,15 +302,25 @@
               </el-form-item>
 
               <el-form-item label="Additional Notes">
-                <el-input
-                  v-model="zenodoMetadataForm.additionalNotes"
-                  type="textarea"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.additionalNotes"
+                    type="textarea"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="License" name="license">
+          <el-collapse-item name="license">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>License</p>
+                <span class="pr-2 text-gray-400"> required </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item label="Access right" :required="true">
                 <el-radio-group
@@ -403,36 +403,20 @@
             </div>
           </el-collapse-item>
 
-          <!-- <el-collapse-item title="Funding" name="funding">
-                <span class="text-xs">
-                  Zenodo is integrated into reporting lines for research funded
-                  by the European Commission via OpenAIRE. Specify grants which
-                  have funded your research, and we will let your funding agency
-                  know!
-                </span>
-                <div>
-                  <p class="text-xs pt-2 text-gray-500">
-                    Optional. OpenAIRE-supported projects only. For other
-                    funding acknowledgements, please use the Additional Notes
-                    field. Note: a human Zenodo curator will need to validate
-                    your upload - you may experience a delay before it is
-                    available in OpenAIRE.
-                  </p>
-                </div>
-              </el-collapse-item> -->
+          <el-collapse-item name="relatedIdentifiers">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Related/alternate identifiers</p>
+                <span class="pr-2 text-gray-400"> recommended </span>
+              </div>
+            </template>
 
-          <el-collapse-item
-            title="Related/alternate identifiers"
-            name="relatedIdentifiers"
-            :required="false"
-            :error="relatedIdentifiersErrorMessage"
-          >
             <p class="text-xs mb-4">
               Specify identifiers of related publications and datasets.
               Supported identifiers include: DOI and URLs.
               <br />
-              {{ relatedIdentifiersErrorMessage }}
             </p>
+
             <div>
               <el-form-item
                 label="Related identifiers"
@@ -471,25 +455,30 @@
                             </el-option>
                           </el-select>
                           <div class="mx-2 block 2xl:hidden"></div>
-                          <el-select
-                            v-model="element.resourceType"
-                            placeholder="Select a resource type"
-                          >
-                            <el-option-group
-                              v-for="group in relatedIdentifierTypes"
-                              :key="group.label"
-                              :label="group.label"
-                              v-show="group.options"
+                          <div class="flex flex-col">
+                            <el-select
+                              v-model="element.resourceType"
+                              placeholder="Select a resource type"
                             >
-                              <el-option
-                                v-for="item in group.options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                              <el-option-group
+                                v-for="group in relatedIdentifierTypes"
+                                :key="group.label"
+                                :label="group.label"
+                                v-show="group.options"
                               >
-                              </el-option>
-                            </el-option-group>
-                          </el-select>
+                                <el-option
+                                  v-for="item in group.options"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value"
+                                >
+                                </el-option>
+                              </el-option-group>
+                            </el-select>
+                            <p class="text-xs pt-2 text-gray-500">
+                              Optional. Resource type of the related identifier.
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
@@ -550,7 +539,14 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="Contributors" name="contributors">
+          <el-collapse-item name="contributors">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Contributors</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item
                 label="Contributors"
@@ -670,7 +666,14 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="References" name="references">
+          <el-collapse-item name="references">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>References</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item label="References">
                 <draggable
@@ -749,74 +752,115 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="Journal" name="journal">
+          <el-collapse-item name="journal">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Journal</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item label="Journal title">
-                <el-input
-                  v-model="zenodoMetadataForm.journal.title"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.journal.title"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Volume">
-                <el-input
-                  v-model="zenodoMetadataForm.journal.volume"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.journal.volume"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Issue">
-                <el-input
-                  v-model="zenodoMetadataForm.journal.issue"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.journal.issue"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Pages">
-                <el-input
-                  v-model="zenodoMetadataForm.journal.pages"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.journal.pages"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="Conference" name="conference">
+          <el-collapse-item name="conference">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Conference</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item label="Conference title">
-                <el-input
-                  v-model="zenodoMetadataForm.conference.title"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.conference.title"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Acronym">
-                <el-input
-                  v-model="zenodoMetadataForm.conference.acronym"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.conference.acronym"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Dates">
-                <el-date-picker
-                  v-model="zenodoMetadataForm.conference.dates"
-                  type="daterange"
-                  range-separator="-"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                  size="medium"
-                  value-format="YYYY-MM-DD"
-                >
-                </el-date-picker>
+                <div class="flex flex-col">
+                  <el-date-picker
+                    v-model="zenodoMetadataForm.conference.dates"
+                    type="daterange"
+                    range-separator="-"
+                    start-placeholder="Start date"
+                    end-placeholder="End date"
+                    size="medium"
+                    value-format="YYYY-MM-DD"
+                  >
+                  </el-date-picker>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Place">
-                <el-input
-                  v-model="zenodoMetadataForm.conference.place"
-                  type="text"
-                  placeholder="e.g. city, country"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.conference.place"
+                    type="text"
+                    placeholder="e.g. city, country"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Website">
-                <el-input
-                  v-model="zenodoMetadataForm.conference.website"
-                  type="text"
-                  placeholder="e.g. http://zenodo.org"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.conference.website"
+                    type="text"
+                    placeholder="e.g. http://zenodo.org"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Session">
                 <div class="flex flex-col">
@@ -845,31 +889,44 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item
-            title="Book/Report/Chapter"
-            name="bookReportChapter"
-          >
+          <el-collapse-item name="bookReportChapter">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Book/Report/Chapter</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <p class="text-xs mb-4">For parts of books and reports. <br /></p>
             <div>
               <el-form-item label="Publisher">
-                <el-input
-                  v-model="zenodoMetadataForm.bookReportChapter.publisher"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.bookReportChapter.publisher"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Place">
-                <el-input
-                  v-model="zenodoMetadataForm.bookReportChapter.place"
-                  type="text"
-                  placeholder="e.g. city, country"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.bookReportChapter.place"
+                    type="text"
+                    placeholder="e.g. city, country"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="ISBN">
-                <el-input
-                  v-model="zenodoMetadataForm.bookReportChapter.isbn"
-                  type="text"
-                  placeholder="e.g. 0-06-251587-X"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.bookReportChapter.isbn"
+                    type="text"
+                    placeholder="e.g. 0-06-251587-X"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
               <el-form-item label="Book title">
                 <div class="flex flex-col">
@@ -884,21 +941,34 @@
                 </div>
               </el-form-item>
               <el-form-item label="Pages">
-                <el-input
-                  v-model="zenodoMetadataForm.bookReportChapter.pages"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.bookReportChapter.pages"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="Thesis" name="thesis">
+          <el-collapse-item name="thesis">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Thesis</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <div>
               <el-form-item label="Awarding university">
-                <el-input
-                  v-model="zenodoMetadataForm.thesis.awardingUniversity"
-                  type="text"
-                ></el-input>
+                <div class="flex flex-col">
+                  <el-input
+                    v-model="zenodoMetadataForm.thesis.awardingUniversity"
+                    type="text"
+                  ></el-input>
+                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                </div>
               </el-form-item>
 
               <el-form-item label="Supervisors">
@@ -925,11 +995,16 @@
                           placeholder="Affiliation"
                         ></el-input>
                         <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.orcid"
-                          type="text"
-                          placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                        ></el-input>
+                        <div class="flex flex-col w-full">
+                          <el-input
+                            v-model="element.orcid"
+                            type="text"
+                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                          ></el-input>
+                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                            Optional
+                          </span>
+                        </div>
                         <div class="mx-2"></div>
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
@@ -937,7 +1012,8 @@
                           class="
                             flex
                             justify-center
-                            items-center
+                            items-start
+                            py-2
                             handle
                             text-gray-400
                             hover:text-gray-700
@@ -949,7 +1025,8 @@
                           class="
                             flex
                             justify-center
-                            items-center
+                            items-start
+                            py-2
                             text-gray-600
                             hover:text-gray-800
                             cursor-pointer
@@ -990,7 +1067,14 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item title="Subjects" name="subjects">
+          <el-collapse-item name="subjects">
+            <template #title>
+              <div class="w-full flex flex-row justify-between font-inter">
+                <p>Subjects</p>
+                <span class="pr-2 text-gray-400"> optional </span>
+              </div>
+            </template>
+
             <p class="text-xs mb-4">
               Specify subjects from a taxonomy or controlled vocabulary. Each
               term must be uniquely identified (e.g. a URL). For free form text,
@@ -1557,7 +1641,7 @@ export default {
     },
     "zenodoMetadataForm.publicationDate": {
       handler(val) {
-        if (val === "") {
+        if (val === "" || val === null) {
           this.publicationDateErrorMessage =
             "Please provide the date of publication.";
           this.$refs.zmForm.validate();
