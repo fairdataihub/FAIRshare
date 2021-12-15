@@ -105,7 +105,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.manager.confirmGithubOAuthDisconnected();
+        //this.manager.confirmGithubOAuthDisconnected();
         this.callback();
       }
       this.updateStatus();
@@ -131,7 +131,7 @@ export default {
         newTokenObject.token = value;
         // console.log("save token: ", newTokenObject);
         await this.manager.saveToken(key, newTokenObject);
-        this.manager.confirmGithubOAuthConnected();
+        //this.manager.confirmGithubOAuthConnected();
         this.updateStatus();
         if (!errorFound) {
           ElNotification({
@@ -193,7 +193,8 @@ export default {
         this.backgroundHasResponse = true;
       }
     });
-
+    await this.manager.loadTokens();
+    await this.manager.loadStatus();
     this.updateStatus();
   },
 };

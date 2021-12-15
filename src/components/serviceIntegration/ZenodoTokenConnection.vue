@@ -104,7 +104,7 @@ export default {
         newTokenObject.token = value;
         // console.log("save token: ", newTokenObject);
         await this.manager.saveToken(key, newTokenObject);
-        this.manager.confirmZenodoTokenConnected();
+        //this.manager.confirmZenodoTokenConnected();
         this.updateStatus();
         if (!errorFound) {
           ElNotification({
@@ -182,14 +182,15 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.manager.confirmZenodoTokenDisconnected();
+        //this.manager.confirmZenodoTokenDisconnected();
         this.callback();
       }
       this.updateStatus();
     },
   },
   async mounted() {
-    //await this.manager.loadTokens();
+    await this.manager.loadTokens();
+    await this.manager.loadStatus();
     this.updateStatus();
   },
 };
