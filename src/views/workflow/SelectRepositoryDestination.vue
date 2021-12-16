@@ -17,21 +17,7 @@
         <div
           v-for="repo of repositories"
           :key="repo.id"
-          class="
-            flex flex-col
-            justify-between
-            items-center
-            bg-gray-200
-            p-4
-            my-5
-            shadow-md
-            rounded-lg
-            hover:bg-gray-300 hover:shadow-lg
-            transition-all
-            cursor-pointer
-            h-30
-            w-30
-          "
+          class="flex flex-col justify-between items-center bg-gray-200 p-4 my-5 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
           :class="{ selected: repoID === repo.id }"
           @click="selectRepo($event, repo.id)"
         >
@@ -41,14 +27,7 @@
       </div>
 
       <div
-        class="
-          absolute
-          bottom-0
-          w-max-content
-          flex flex-row
-          justify-center
-          py-2
-        "
+        class="absolute bottom-0 w-max-content flex flex-row justify-center py-2"
       >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata/review`"

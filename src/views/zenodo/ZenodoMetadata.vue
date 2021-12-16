@@ -100,28 +100,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-start py-2 handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-start py-2 text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -141,14 +125,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addAuthor()"
                 >
                   <Icon icon="carbon:add" />
@@ -247,26 +224,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -286,14 +249,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addKeyword()"
                 >
                   <Icon icon="carbon:add" />
@@ -483,26 +439,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -522,14 +464,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addRelatedIdentifier()"
                 >
                   <Icon icon="carbon:add" />
@@ -608,28 +543,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-start py-2 handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-start py-2 text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -649,14 +568,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addContributor()"
                 >
                   <Icon icon="carbon:add" />
@@ -696,26 +608,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -735,14 +633,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addReference()"
                 >
                   <Icon icon="carbon:add" />
@@ -1009,28 +900,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-start py-2 handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-start
-                            py-2
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-start py-2 text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -1050,14 +925,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addSupervisor()"
                 >
                   <Icon icon="carbon:add" />
@@ -1113,26 +981,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            handle
-                            text-gray-400
-                            hover:text-gray-700
-                          "
+                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="
-                            flex
-                            justify-center
-                            items-center
-                            text-gray-600
-                            hover:text-gray-800
-                            cursor-pointer
-                          "
+                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -1152,14 +1006,7 @@
                 </draggable>
 
                 <div
-                  class="
-                    flex
-                    items-center
-                    cursor-pointer
-                    text-gray-500
-                    hover:text-black
-                    w-max
-                  "
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
                   @click="addSubject()"
                 >
                   <Icon icon="carbon:add" />

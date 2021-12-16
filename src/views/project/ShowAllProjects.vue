@@ -31,16 +31,7 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="
-                  flex flex-row
-                  justify-between
-                  items-center
-                  w-full
-                  p-3
-                  hover:bg-gray-100
-                  transition-all
-                  cursor-pointer
-                "
+                class="flex flex-row justify-between items-center w-full p-3 hover:bg-gray-100 transition-all cursor-pointer"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -72,16 +63,7 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="
-                  flex flex-row
-                  justify-between
-                  items-center
-                  w-full
-                  p-3
-                  hover:bg-gray-100
-                  transition-all
-                  cursor-pointer
-                "
+                class="flex flex-row justify-between items-center w-full p-3 hover:bg-gray-100 transition-all cursor-pointer"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -110,15 +92,7 @@
         <div class="flex flex-row justify-between mb-5">
           <router-link to="/datasets/new">
             <div
-              class="
-                flex flex-row
-                items-center
-                w-max
-                text-purple-800
-                cursor-pointer
-                hover-underline-animation
-                py-3
-              "
+              class="flex flex-row items-center w-max text-purple-800 cursor-pointer hover-underline-animation py-3"
             >
               <span class="font-medium"> Or start from an empty project </span>
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
@@ -146,19 +120,7 @@
       <div class="flex flex-row justify-center items-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="
-              flex flex-col
-              justify-center
-              items-center
-              border-2 border-dashed
-              hover:border-solid
-              w-max
-              p-10
-              rounded-lg
-              hover:bg-gray-100
-              transition-all
-              cursor-pointer
-            "
+            class="flex flex-col justify-center items-center border-2 border-dashed hover:border-solid w-max p-10 rounded-lg hover:bg-gray-100 transition-all cursor-pointer"
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
