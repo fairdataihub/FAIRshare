@@ -28,9 +28,7 @@
               :disabled="workflow.datasetPublished"
             >
               Curate {{ combineDataTypes(workflow.type) }}
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
+              <el-icon><arrow-right-bold /></el-icon>
             </el-button>
             <br />
           </div>
@@ -42,13 +40,12 @@
 
 <script>
 // import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "ShowAllWorkflows",
-  components: { ArrowRightBold },
+
   data() {
     return {
       datasetStore: useDatasetsStore(),

@@ -24,10 +24,49 @@ app.component("workflow-progress-bar", WorkflowProgressBarVue);
 app.component("Popper", Popper);
 app.component("form-help-content", FormHelpContent);
 
+// import and register icons globally
+import {
+  ArrowRightBold,
+  CircleCheckFilled,
+  CircleCloseFilled,
+  DArrowLeft,
+  DArrowRight,
+  DataLine,
+  Delete,
+  Edit,
+  HomeFilled,
+  Key,
+  Lock,
+  QuestionFilled,
+  RemoveFilled,
+  Setting,
+  Star,
+  Unlock,
+  User,
+} from "@element-plus/icons-vue";
+
+app.component("arrow-right-bold", ArrowRightBold);
+app.component("circle-check-filled", CircleCheckFilled);
+app.component("circle-close-filled", CircleCloseFilled);
+app.component("d-arrow-left", DArrowLeft);
+app.component("d-arrow-right", DArrowRight);
+app.component("data-line", DataLine);
+app.component("delete", Delete);
+app.component("edit", Edit);
+app.component("home-filled", HomeFilled);
+app.component("key", Key);
+app.component("lock", Lock);
+app.component("question-filled", QuestionFilled);
+app.component("remove-filled", RemoveFilled);
+app.component("setting", Setting);
+app.component("star", Star);
+app.component("unlock", Unlock);
+app.component("user", User);
+
 // additional vue libraries to be used in the app
-app.use(router);
-app.use(createPinia());
-app.use(ElementPlus);
+app.use(router); // vue router
+app.use(createPinia()); // pinia
+app.use(ElementPlus); // element plus
 
 // Mount application to the root element
 app.mount("#app");

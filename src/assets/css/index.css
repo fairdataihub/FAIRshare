@@ -60,3 +60,11 @@ html {
 .el-form-item__label:before {
   @apply ml-1;
 }
+
+.el-button span {
+  @apply flex flex-row justify-center items-center;
+}
+
+.el-icon {
+  @apply mx-1;
+}

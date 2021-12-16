@@ -24,20 +24,7 @@
           class="blob transition-all"
           @click="publishDeposition"
         >
-          Publish <el-icon> <Star /> </el-icon>
-        </el-button>
-      </div>
-
-      <div class="w-full flex-row justify-center py-2 hidden">
-        <router-link to="/datasets" class="mx-6">
-          <el-button type="danger" plain> Cancel </el-button>
-        </router-link>
-
-        <el-button type="primary" class="flex flex-row items-center">
-          Continue
-          <el-icon>
-            <!-- <ArrowRightBold /> -->
-          </el-icon>
+          Publish <el-icon><star /></el-icon>
         </el-button>
       </div>
     </div>
@@ -45,8 +32,6 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { Star } from "@element-plus/icons";
 // import axios from "axios";
 import { ElMessageBox, ElLoading } from "element-plus";
 
@@ -55,7 +40,6 @@ import { useTokenStore } from "../../store/access.js";
 
 export default {
   name: "ZenodoPublish",
-  components: { Star },
   data() {
     return {
       datasetStore: useDatasetsStore(),

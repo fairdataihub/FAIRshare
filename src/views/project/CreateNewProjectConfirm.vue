@@ -106,19 +106,17 @@
       </p>
 
       <div class="w-full flex flex-row justify-center py-6">
-        <router-link to="/datasets" class="mx-6 hidden">
+        <router-link to="/datasets" class="mx-3 hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           @click="createWorkflows"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -126,14 +124,11 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
-
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "CreateNewProjectConfirm",
-  components: { ArrowRightBold },
+
   data() {
     return {
       datasetStore: useDatasetsStore(),

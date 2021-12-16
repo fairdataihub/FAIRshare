@@ -93,14 +93,20 @@
           </span>
           <br />
           <el-button type="danger" plain @click="deleteDataset">
-            Delete project
+            <el-icon><delete /></el-icon> Delete project
           </el-button>
         </el-form-item>
       </el-form>
       <div class="py-2 flex flex-row justify-center">
-        <el-button @click="goBack"> Cancel </el-button>
-        <el-button type="primary" @click="submitForm('datasetForm')">
-          Save changes
+        <el-button @click="goBack" class="mx-3">
+          <el-icon><circle-close-filled /></el-icon> Cancel
+        </el-button>
+        <el-button
+          type="primary"
+          @click="submitForm('datasetForm')"
+          class="mx-3"
+        >
+          Save changes <el-icon><circle-check-filled /></el-icon>
         </el-button>
       </div>
     </div>
@@ -108,14 +114,13 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "EditProject",
-  // components: { icon },
+
   data() {
     return {
       datasetStore: useDatasetsStore(),

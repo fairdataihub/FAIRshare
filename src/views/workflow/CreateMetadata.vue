@@ -758,21 +758,19 @@
       </el-collapse>
 
       <div class="w-full flex flex-row justify-center py-2">
-        <el-button type="danger" plain @click="navigateBack" class="mx-6">
-          Back
+        <el-button type="danger" plain @click="navigateBack" class="mx-3">
+          <el-icon><d-arrow-left /></el-icon> Back
         </el-button>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           @click="navigateToSelectDestination"
           id="existElement"
           :disabled="checkInvalidStatus"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -781,7 +779,7 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
+
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElLoading, ElMessageBox } from "element-plus";
@@ -799,7 +797,7 @@ const emailRegex =
 
 export default {
   name: "CreateMetadata",
-  components: { ArrowRightBold, draggable, Icon },
+  components: { draggable, Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),

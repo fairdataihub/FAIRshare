@@ -3,7 +3,7 @@
   <div
     class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs"
     :class="{
-      'w-64': sideBarOpen,
+      'w-72': sideBarOpen,
       'w-12': !sideBarOpen,
       'debug-screens': process.env.NODE_ENV === 'production',
     }"
@@ -29,12 +29,14 @@
         </div>
       </div>
       <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
-        <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
+        <router-link to="/home" class="sideBarMenuItem">
+          <el-icon><home-filled /></el-icon> Overview
+        </router-link>
         <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
-          Continue curation
+          <el-icon><data-line /></el-icon> Curate & Share
         </router-link>
         <router-link to="/manageAccount" class="sideBarMenuItem">
-          Manage account
+          <el-icon><user /></el-icon> Manage Accounts
         </router-link>
         <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link

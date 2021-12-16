@@ -1021,20 +1021,18 @@
       </el-form>
 
       <div class="w-full flex flex-row justify-center py-2">
-        <el-button type="danger" plain @click="navigateBack" class="mx-6">
-          Back
+        <el-button type="danger" plain @click="navigateBack" class="mx-3">
+          <el-icon><d-arrow-left /></el-icon> Back
         </el-button>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           @click="addZenodoMetadata"
           :disabled="checkInvalidStatus"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon><d-arrow-right /></el-icon>
         </el-button>
       </div>
     </div>
@@ -1043,13 +1041,6 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import {
-  ArrowRightBold,
-  Lock,
-  Unlock,
-  RemoveFilled,
-  Key,
-} from "@element-plus/icons";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
@@ -1066,11 +1057,6 @@ import languagesJSON from "../../assets/supplementalFiles/zenodoLanguages.json";
 export default {
   name: "ZenodoMetadata",
   components: {
-    ArrowRightBold,
-    Lock,
-    Unlock,
-    RemoveFilled,
-    Key,
     draggable,
     Icon,
   },

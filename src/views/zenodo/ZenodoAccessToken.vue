@@ -42,21 +42,21 @@
       >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
-          class="mx-6"
+          class="mx-3"
         >
-          <el-button type="danger" plain> Back </el-button>
+          <el-button type="danger" plain>
+            <el-icon><d-arrow-left /></el-icon> Back
+          </el-button>
         </router-link>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           :disabled="disableContinue"
           @click="uploadToZenodo"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -64,8 +64,6 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 // import axios from "axios";
 
 import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
@@ -76,7 +74,7 @@ import { useTokenStore } from "../../store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
-  components: { ArrowRightBold, LoadingFoldingCube, ZenodoTokenConnectionVue },
+  components: { LoadingFoldingCube, ZenodoTokenConnectionVue },
   data() {
     return {
       datasetStore: useDatasetsStore(),

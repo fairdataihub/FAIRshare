@@ -18,7 +18,7 @@
         >
           <template #extra>
             <el-button type="primary" @click="editInformation(['general'])">
-              Edit basic information
+              <el-icon><edit /></el-icon> Edit basic information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -96,7 +96,7 @@
         <el-descriptions class="margin-top" title="Code" size="small" border>
           <template #extra>
             <el-button type="primary" @click="editInformation(['code'])">
-              Edit code metadata
+              <el-icon><edit /></el-icon> Edit code metadata
             </el-button>
           </template>
 
@@ -229,20 +229,20 @@
       <div class="w-full flex flex-row justify-center py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
-          class="mx-6"
+          class="mx-3"
         >
-          <el-button type="danger" plain> Back </el-button>
+          <el-button type="danger" plain>
+            <el-icon><d-arrow-left /></el-icon> Back
+          </el-button>
         </router-link>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           @click="selectDestination"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -250,8 +250,6 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
@@ -260,9 +258,6 @@ import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
 
 export default {
   name: "CreateMetadataReview",
-  components: {
-    ArrowRightBold,
-  },
   data() {
     return {
       datasetStore: useDatasetsStore(),

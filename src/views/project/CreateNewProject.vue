@@ -93,10 +93,16 @@
         </el-form-item>
 
         <div class="py-2 flex flex-row justify-center">
-          <el-button type="primary" @click="submitForm('datasetForm')">
-            Create
+          <el-button @click="cancelNewDataset" type="danger" plain class="mx-3">
+            <el-icon><d-arrow-left /></el-icon> Cancel
           </el-button>
-          <el-button @click="cancelNewDataset"> Cancel </el-button>
+          <el-button
+            type="primary"
+            @click="submitForm('datasetForm')"
+            class="mx-3"
+          >
+            Create new project <el-icon><d-arrow-right /></el-icon>
+          </el-button>
         </div>
       </el-form>
     </div>
@@ -104,14 +110,12 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "CreateNewProject",
-  // components: { Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),

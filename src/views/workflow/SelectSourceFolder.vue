@@ -22,21 +22,22 @@
       />
 
       <div class="w-full flex flex-row justify-center py-2">
-        <router-link :to="`/datasets/${datasetID}`" class="mx-6">
-          <el-button type="danger" plain> Back </el-button>
+        <router-link :to="`/datasets/${datasetID}`" class="mx-3">
+          <el-button type="danger" plain>
+            <el-icon><d-arrow-left /></el-icon> Back
+          </el-button>
         </router-link>
 
         <el-button
           type="primary"
           :disabled="emptyInput"
-          class="flex flex-row items-center"
+          class="flex flex-row justify-center items-center mx-3"
           @click="startCuration"
           id="continue"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -44,15 +45,12 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 import { dialog } from "@electron/remote";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "SelectSourceFolder",
-  components: { ArrowRightBold },
   data() {
     return {
       datasetStore: useDatasetsStore(),

@@ -99,19 +99,17 @@
             </div>
           </router-link>
           <div class="flex flex-row" v-if="selectedDataset !== ''">
-            <el-button type="info" plain @click="editProject">
-              Edit project details
+            <el-button type="info" plain @click="editProject" class="mx-3">
+              <el-icon><setting /></el-icon> Project settings
             </el-button>
             <el-button
               type="primary"
               plain
-              class="flex flex-row items-center"
+              class="flex flex-row items-center mx-3"
               @click="startCuratingProject"
             >
               Start curating this dataset
-              <el-icon>
-                <ArrowRightBold />
-              </el-icon>
+              <el-icon> <d-arrow-right /> </el-icon>
             </el-button>
           </div>
         </div>
@@ -136,13 +134,12 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 
 import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "ShowAllProjects",
-  components: { Icon, ArrowRightBold },
+  components: { Icon },
 
   data() {
     return {

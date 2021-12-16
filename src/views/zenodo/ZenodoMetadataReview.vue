@@ -25,7 +25,7 @@
               @click="editInformation(['basicInformation', 'license'])"
               class="ml-2"
             >
-              Edit basic information
+              <el-icon><edit /></el-icon> Edit basic information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -105,7 +105,7 @@
               @click="editInformation(['relatedIdentifiers'])"
               class="ml-2"
             >
-              Edit related/alternate identifiers
+              <el-icon><edit /></el-icon> Edit related/alternate identifiers
             </el-button>
           </template>
           <el-descriptions-item>
@@ -143,7 +143,7 @@
               @click="editInformation(['contributors'])"
               class="ml-2"
             >
-              Edit contributors
+              <el-icon><edit /></el-icon> Edit contributors
             </el-button>
           </template>
           <el-descriptions-item>
@@ -182,7 +182,7 @@
               @click="editInformation(['references'])"
               class="ml-2"
             >
-              Edit references
+              <el-icon><edit /></el-icon> Edit references
             </el-button>
           </template>
           <el-descriptions-item>
@@ -208,7 +208,7 @@
               @click="editInformation(['journal'])"
               class="ml-2"
             >
-              Edit journal information
+              <el-icon><edit /></el-icon> Edit journal information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -243,7 +243,7 @@
               @click="editInformation(['conference'])"
               class="ml-2"
             >
-              Edit conference information
+              <el-icon><edit /></el-icon> Edit conference information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -291,7 +291,7 @@
               @click="editInformation(['bookReportChapter'])"
               class="ml-2"
             >
-              Edit book/report/chapter information
+              <el-icon><edit /></el-icon> Edit book/report/chapter information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -325,7 +325,7 @@
               @click="editInformation(['thesis'])"
               class="ml-2"
             >
-              Edit thesis information
+              <el-icon><edit /></el-icon> Edit thesis information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -367,7 +367,7 @@
               @click="editInformation(['subjects'])"
               class="ml-2"
             >
-              Edit subjects
+              <el-icon><edit /></el-icon> Edit subjects
             </el-button>
           </template>
           <el-descriptions-item>
@@ -388,20 +388,20 @@
       <div class="w-full flex flex-row justify-center py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
-          class="mx-6"
+          class="mx-3"
         >
-          <el-button type="danger" plain> Back </el-button>
+          <el-button type="danger" plain>
+            <el-icon><d-arrow-left /></el-icon> Back
+          </el-button>
         </router-link>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center mx-3"
           @click="checkZenodoAccessToken"
         >
           Continue
-          <el-icon>
-            <ArrowRightBold />
-          </el-icon>
+          <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
     </div>
@@ -409,8 +409,6 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-import { ArrowRightBold } from "@element-plus/icons";
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
@@ -419,9 +417,6 @@ import languagesJson from "../../assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadataReview",
-  components: {
-    ArrowRightBold,
-  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
