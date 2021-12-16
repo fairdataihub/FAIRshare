@@ -548,8 +548,9 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
-    this.zenodoToken = await this.tokens.getToken("zenodo");
-    console.log(this.zenodoToken);
+    const tokenObject = await this.tokens.getToken("zenodoToken");
+    this.zenodoToken = tokenObject.token;
+    // console.log(this.zenodoToken);
 
     this.runZenodoUpload();
   },
