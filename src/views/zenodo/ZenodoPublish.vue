@@ -95,6 +95,10 @@ export default {
           "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
+        this.datasetStore.showProgressBar();
+        this.datasetStore.setProgressBarType("zenodo");
+        this.datasetStore.setCurrentStep(7);
+
         this.workflow.datasetPublished = true;
 
         await this.datasetStore.updateCurrentDataset(this.dataset);

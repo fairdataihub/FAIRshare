@@ -2,7 +2,7 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Add Zenodo connection details
+        Zenodo connection details
       </span>
       <span class="text-left">
         Let's see if we already have your Zenodo login details. We will use this
@@ -161,7 +161,7 @@ export default {
 
     const validZenodoConnection = await this.tokens.getZenodoTokenConnected();
 
-    console.log(validZenodoConnection);
+    // console.log(validZenodoConnection);
 
     if (validZenodoConnection) {
       this.validTokenAvailable = true;
