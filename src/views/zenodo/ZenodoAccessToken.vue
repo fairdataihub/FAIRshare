@@ -17,21 +17,29 @@
           continue button below.
         </p>
         <!-- show error message if token is not valid -->
-        <div v-if="errorMessage !== ''">
+        <div v-else class="flex flex-col justify-center items-center py-10">
           <p class="mb-5">
-            {{ errorMessage }}
+            We couldn't find your Zenodo login details. Please click on the
+            button below to connect to your Zenodo account.
           </p>
 
-          <el-input
+          <ZenodoTokenConnectionVue
+            :callback="showConnection"
+          ></ZenodoTokenConnectionVue>
+
+          <!-- <el-input
             v-model="zenodoAccessToken"
             placeholder="Zenodo Access Token"
             class="mb-10"
-          />
+          /> -->
         </div>
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div class="w-full flex flex-row justify-center py-2">
+      <div
+        class="w-full flex flex-row justify-center py-2"
+        v-if="validTokenAvailable"
+      >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
           class="mx-6"
@@ -61,13 +69,14 @@ import { ArrowRightBold } from "@element-plus/icons";
 // import axios from "axios";
 
 import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
+import ZenodoTokenConnectionVue from "../../components/serviceIntegration/ZenodoTokenConnection.vue";
 
 import { useDatasetsStore } from "../../store/datasets";
 import { useTokenStore } from "../../store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
-  components: { ArrowRightBold, LoadingFoldingCube },
+  components: { ArrowRightBold, LoadingFoldingCube, ZenodoTokenConnectionVue },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -140,6 +149,9 @@ export default {
         }
       }
     },
+    async showConnection() {
+      this.validTokenAvailable = true;
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -149,18 +161,30 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
-    const zenodoTokenObject = await this.tokens.getToken("zenodo");
-    const zenodoToken = zenodoTokenObject.token;
-    console.log(zenodoTokenObject);
-    if (zenodoToken === "NO_TOKEN_FOUND") {
-      this.errorMessage =
-        "No Zenodo access token found. Please enter a valid Zenodo access token.";
-      this.validTokenAvailable = false;
+    const validZenodoConnection = await this.tokens.getZenodoTokenConnected();
+
+    console.log(validZenodoConnection);
+
+    if (validZenodoConnection) {
+      this.validTokenAvailable = true;
       this.ready = true;
     } else {
-      await this.checkToken(zenodoToken);
+      this.validTokenAvailable = false;
       this.ready = true;
     }
+
+    // const zenodoTokenObject = await this.tokens.getToken("zenodo");
+    // const zenodoToken = zenodoTokenObject.token;
+    // console.log(zenodoTokenObject);
+    // if (zenodoToken === "NO_TOKEN_FOUND") {
+    //   this.errorMessage =
+    //     "No Zenodo access token found. Please enter a valid Zenodo access token.";
+    //   this.validTokenAvailable = false;
+    //   this.ready = true;
+    // } else {
+    //   await this.checkToken(zenodoToken);
+    //   this.ready = true;
+    // }
   },
 };
 </script>

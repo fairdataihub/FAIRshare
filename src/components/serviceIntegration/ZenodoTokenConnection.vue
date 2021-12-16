@@ -74,13 +74,13 @@ export default {
       if (response[0] == "OK") {
         await this.processZenodo(response[1]);
       } else {
-        ElNotification({
-          type: "info",
-          message: "Input canceled",
-          position: "bottom-right",
-          duration: 2000,
-        });
-        this.callback();
+        // ElNotification({
+        //   type: "info",
+        //   message: "Input canceled",
+        //   position: "bottom-right",
+        //   duration: 2000,
+        // });
+        // this.callback();
       }
     },
 

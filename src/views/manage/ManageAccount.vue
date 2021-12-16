@@ -1,14 +1,6 @@
 <template>
   <div
-    class="
-      page-Container
-      h-screen
-      w-full
-      flex flex-col
-      items-center
-      overflow-scroll
-      box-border
-    "
+    class="page-Container h-screen w-full flex flex-col items-center overflow-scroll box-border"
   >
     <div class="app-Card">
       <div class="image-Container">
@@ -323,6 +315,10 @@ export default {
     },
   },
   async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+
     await this.manager.loadTokens();
     await this.manager.loadStatus();
     this.updateStatus();
