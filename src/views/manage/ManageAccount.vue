@@ -142,6 +142,8 @@
 
 <script>
 import { useTokenStore } from "../../store/access";
+import { useDatasetsStore } from "../../store/datasets";
+
 import { ref } from "vue";
 import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
 import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTokenConnection";
@@ -307,6 +309,7 @@ export default {
   data() {
     return {
       dialogFormVisible: true,
+      datasetStore: useDatasetsStore(),
     };
   },
   methods: {
