@@ -1,17 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="
-      flex flex-col
-      min-h-screen
-      h-full
-      mr-3
-      debug-screens
-      bg-gray-50
-      relative
-      w-full
-      max-w-xs
-    "
+    class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs"
     :class="{
       'w-64': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -27,17 +17,7 @@
           src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
         />
         <div
-          class="
-            absolute
-            top-0
-            right-2
-            cursor-pointer
-            p-1
-            transition-all
-            transform
-            scale-100
-            hover:scale-110
-          "
+          class="absolute top-0 right-2 cursor-pointer p-1 transition-all transform scale-100 hover:scale-110"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"
         >
