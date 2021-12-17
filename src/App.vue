@@ -22,6 +22,7 @@ import semver from "semver";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { ElLoading } from "element-plus";
+import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
@@ -66,6 +67,29 @@ export default {
   },
   mounted() {
     console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
+
+    console.log(process.env.NODE_ENV);
+
+    // disable the mouse back and forward buttons
+    window.addEventListener("mouseup", (e) => {
+      if (e.button === 3 || e.button === 4) {
+        e.preventDefault();
+      }
+    });
+
+    // disable the refresh button on macOS
+    Mousetrap.bind("command+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
+
+    // disable the refresh button on Windows
+    Mousetrap.bind("ctrl+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
 
     const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 3 });
