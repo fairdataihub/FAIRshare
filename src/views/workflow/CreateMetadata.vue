@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
@@ -21,9 +21,106 @@
         size="small"
         ref="cmForm"
         @submit.prevent
+        class="py-4"
       >
-        <pill-progress-bar :totalSteps="5" :currentStep="3">
-        </pill-progress-bar>
+        <div>
+          <div class="py-3">
+            <pill-progress-bar :totalSteps="5" :currentStep="currentStep" />
+          </div>
+          <div class="py-2">
+            <FormCardContent
+              :stepId="1"
+              :currentStepId="currentStep"
+              :nextStep="nextFormStep"
+              :prevStep="prevFormStep"
+            >
+              <el-form-item label="Software name">
+                <div class="flex flex-row items-center">
+                  <el-input v-model="codeForm.name"></el-input>
+                  <form-help-content
+                    popoverContent="The name of the software"
+                  ></form-help-content>
+                </div>
+              </el-form-item>
+
+              <el-form-item label="Software description">
+                <div class="flex flex-row items-center">
+                  <el-input
+                    v-model="codeForm.description"
+                    type="textarea"
+                  ></el-input>
+                  <form-help-content
+                    popoverContent="A brief description of the software"
+                  ></form-help-content>
+                </div>
+              </el-form-item>
+            </FormCardContent>
+            <FormCardContent
+              :stepId="2"
+              :currentStepId="currentStep"
+              :nextStep="nextFormStep"
+              :prevStep="prevFormStep"
+            >
+              <el-form-item label="Keywords">
+                <draggable
+                  tag="div"
+                  :list="codeForm.keywords"
+                  item-key="id"
+                  handle=".handle"
+                >
+                  <template #item="{ element }">
+                    <div
+                      class="flex flex-row mb-2 justify-between transition-all"
+                    >
+                      <div class="flex flex-row justify-between w-11/12">
+                        <el-input
+                          v-model="element.keyword"
+                          type="text"
+                          placeholder=""
+                        ></el-input>
+                        <div class="mx-2"></div>
+                      </div>
+                      <div class="flex flex-row justify-evenly w-1/12">
+                        <div
+                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                        >
+                          <Icon icon="ic:outline-drag-indicator" />
+                        </div>
+                        <div
+                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                        >
+                          <el-popconfirm
+                            title="Are you sure you want to remove this?"
+                            icon-color="red"
+                            confirm-button-text="Yes"
+                            cancel-button-text="No"
+                            @confirm="deleteKeyword(element.id)"
+                          >
+                            <template #reference>
+                              <Icon icon="bx:bx-x" />
+                            </template>
+                          </el-popconfirm>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
+
+                <div
+                  class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max"
+                  @click="addKeyword()"
+                >
+                  <Icon icon="carbon:add" />
+                  <span> Add a keyword </span>
+                  <form-help-content
+                    popoverContent="A brief description of the software"
+                  ></form-help-content>
+                </div>
+              </el-form-item>
+            </FormCardContent>
+          </div>
+        </div>
+
         <div>
           <el-collapse v-model="activeNames">
             <el-collapse-item
@@ -787,7 +884,6 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElLoading, ElMessageBox } from "element-plus";
@@ -797,6 +893,7 @@ import _ from "lodash";
 import { useDatasetsStore } from "../../store/datasets";
 
 import PillProgressBar from "../../components/ui/PillProgressBar.vue";
+import FormCardContent from "../../components/ui/FormCardContent.vue";
 
 import licensesJSON from "../../assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
@@ -808,10 +905,11 @@ const emailRegex =
 
 export default {
   name: "CreateMetadata",
-  components: { draggable, Icon, PillProgressBar },
+  components: { draggable, Icon, PillProgressBar, FormCardContent },
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      currentStep: 1,
       dataset: {},
       workflowID: this.$route.params.workflowID,
       workflow: {},
@@ -872,6 +970,7 @@ export default {
       originalObject: {},
     };
   },
+
   watch: {
     "codeForm.authors": {
       handler(val) {
@@ -1251,6 +1350,19 @@ export default {
     },
   },
   methods: {
+    prevFormStep() {
+      if (this.currentStep - 1 < 1) {
+        this.currentStep--;
+      }
+    },
+    nextFormStep() {
+      const totalSteps = 2;
+      if (this.currentStep + 1 > totalSteps) {
+        this.currentStep = totalSteps;
+      } else {
+        this.currentStep++;
+      }
+    },
     async openLicenseDetails() {
       this.licenseHtmlUrl = "/";
       const licenseId = this.codeForm.license;
