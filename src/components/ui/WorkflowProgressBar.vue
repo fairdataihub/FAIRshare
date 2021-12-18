@@ -52,7 +52,7 @@ export default {
           description: "Pick data source",
         },
         {
-          description: "Add dataset metadata",
+          description: "Provide metadata",
         },
         {
           description: "Select repository",
@@ -61,10 +61,10 @@ export default {
           description: "Add repository metadata",
         },
         {
-          description: "Upload your data",
+          description: "Upload dataset",
         },
         {
-          description: "Publish your data ",
+          description: "Publish dataset",
         },
       ],
     };

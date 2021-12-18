@@ -15,8 +15,7 @@
         <span class="font-medium"> Continue curating your datasets </span>
 
         <span>
-          You have some unpublished projects. Do you want to continue working on
-          these items?
+          You have some incomplete projects. Select one to continue working on it.
         </span>
 
         <!-- <el-divider> </el-divider> -->
