@@ -94,7 +94,7 @@
             <div
               class="flex flex-row items-center w-max text-purple-800 cursor-pointer hover-underline-animation py-3"
             >
-              <span class="font-medium"> Or start from an empty project </span>
+              <span class="font-medium"> Or start a new data curation project </span>
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
@@ -108,7 +108,7 @@
               class="flex flex-row items-center mx-3"
               @click="startCuratingProject"
             >
-              Start curating this dataset
+              Continue working on this project
               <el-icon> <d-arrow-right /> </el-icon>
             </el-button>
           </div>
