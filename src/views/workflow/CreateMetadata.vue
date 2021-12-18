@@ -14,23 +14,23 @@
         the fields in this section and we'll take care of the rest.
       </span>
 
-      <el-collapse v-model="activeNames">
-        <el-collapse-item
-          class="text-lg"
-          title="Basic Information"
-          name="general"
-        >
-          <el-form
-            :model="generalForm"
-            label-width="160px"
-            label-position="right"
-            size="small"
-            ref="gmForm"
-            @submit.prevent
+      <el-form
+        :model="codeForm"
+        label-width="160px"
+        label-position="right"
+        size="small"
+        ref="cmForm"
+        @submit.prevent
+      >
+        <el-collapse v-model="activeNames">
+          <el-collapse-item
+            class="text-lg"
+            title="Basic Information"
+            name="general"
           >
             <el-form-item label="Software name">
               <div class="flex flex-row items-center">
-                <el-input v-model="generalForm.name"></el-input>
+                <el-input v-model="codeForm.name"></el-input>
                 <form-help-content
                   popoverContent="The name of the software"
                 ></form-help-content>
@@ -40,7 +40,7 @@
             <el-form-item label="Software description">
               <div class="flex flex-row items-center">
                 <el-input
-                  v-model="generalForm.description"
+                  v-model="codeForm.description"
                   type="textarea"
                 ></el-input>
                 <form-help-content
@@ -52,7 +52,7 @@
             <el-form-item label="Keywords">
               <draggable
                 tag="div"
-                :list="generalForm.keywords"
+                :list="codeForm.keywords"
                 item-key="id"
                 handle=".handle"
               >
@@ -109,7 +109,7 @@
             <el-form-item label="Funding code">
               <div class="flex flex-row items-center">
                 <el-input
-                  v-model="generalForm.funding.code"
+                  v-model="codeForm.funding.code"
                   type="text"
                 ></el-input>
                 <form-help-content
@@ -121,7 +121,7 @@
             <el-form-item label="Funding organization">
               <div class="flex flex-row items-center">
                 <el-input
-                  v-model="generalForm.funding.organization"
+                  v-model="codeForm.funding.organization"
                   type="text"
                 ></el-input>
                 <form-help-content
@@ -133,7 +133,7 @@
             <el-form-item label="Reference publication">
               <div class="flex flex-row items-center">
                 <el-input
-                  v-model="generalForm.referencePublication"
+                  v-model="codeForm.referencePublication"
                   type="text"
                 ></el-input>
                 <form-help-content
@@ -145,7 +145,7 @@
             <el-form-item label="Authors" :error="authorsErrorMessage">
               <draggable
                 tag="div"
-                :list="generalForm.authors"
+                :list="codeForm.authors"
                 item-key="id"
                 handle=".handle"
               >
@@ -229,7 +229,7 @@
             >
               <draggable
                 tag="div"
-                :list="generalForm.contributors"
+                :list="codeForm.contributors"
                 item-key="id"
                 handle=".handle"
               >
@@ -326,22 +326,21 @@
                 ></form-help-content>
               </div>
             </el-form-item>
-          </el-form>
-        </el-collapse-item>
+          </el-collapse-item>
 
-        <el-collapse-item title="Code" name="code" v-if="codePresent">
-          <p class="mb-2">
-            Lets make your code FAIR. Please fill the following fields.
-          </p>
+          <el-collapse-item title="Code" name="code" v-if="codePresent">
+            <p class="mb-2">
+              Lets make your code FAIR. Please fill the following fields.
+            </p>
 
-          <el-form
+            <!-- <el-form
             :model="codeForm"
             label-width="214px"
             label-position="right"
             size="small"
             @submit.prevent
             ref="cmForm"
-          >
+          > -->
             <el-form-item label="Creation date">
               <div class="flex flex-row items-center">
                 <el-date-picker
@@ -753,9 +752,9 @@
                 ></form-help-content>
               </div>
             </el-form-item>
-          </el-form>
-        </el-collapse-item>
-      </el-collapse>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
 
       <div class="w-full flex flex-row justify-center py-2">
         <el-button type="danger" plain @click="navigateBack" class="mx-3">
@@ -814,7 +813,7 @@ export default {
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
-      generalForm: {
+      codeForm: {
         name: "",
         description: "",
         keywords: [],
@@ -825,8 +824,6 @@ export default {
         referencePublication: "",
         authors: [],
         contributors: [],
-      },
-      codeForm: {
         creationDate: "",
         firstReleaseDate: "",
         license: "",
@@ -864,7 +861,7 @@ export default {
     };
   },
   watch: {
-    "generalForm.authors": {
+    "codeForm.authors": {
       handler(val) {
         if (val.length === 0) {
           this.authorsErrorMessage = "Please provide at least one author.";
@@ -934,7 +931,7 @@ export default {
       },
       deep: true,
     },
-    "generalForm.contributors": {
+    "codeForm.contributors": {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
@@ -1267,20 +1264,18 @@ export default {
       }
     },
     addKeyword() {
-      this.generalForm.keywords.push({
+      this.codeForm.keywords.push({
         keyword: "",
         id: uuidv4(),
       });
     },
     deleteKeyword(id) {
-      this.generalForm.keywords = this.generalForm.keywords.filter(
-        (keyword) => {
-          return keyword.id !== id;
-        }
-      );
+      this.codeForm.keywords = this.codeForm.keywords.filter((keyword) => {
+        return keyword.id !== id;
+      });
     },
     addAuthor() {
-      this.generalForm.authors.push({
+      this.codeForm.authors.push({
         givenName: "",
         familyName: "",
         affiliation: "",
@@ -1290,12 +1285,12 @@ export default {
       });
     },
     deleteAuthor(id) {
-      this.generalForm.authors = this.generalForm.authors.filter((author) => {
+      this.codeForm.authors = this.codeForm.authors.filter((author) => {
         return author.id !== id;
       });
     },
     addContributor() {
-      this.generalForm.contributors.push({
+      this.codeForm.contributors.push({
         contributorType: "",
         givenName: "",
         familyName: "",
@@ -1306,7 +1301,7 @@ export default {
       });
     },
     deleteContributor(id) {
-      this.generalForm.contributors = this.generalForm.contributors.filter(
+      this.codeForm.contributors = this.codeForm.contributors.filter(
         (contributor) => {
           return contributor.id !== id;
         }
@@ -1340,7 +1335,16 @@ export default {
         );
     },
     navigateToSelectDestination(_evt, shouldNavigateBack = false) {
-      this.dataset.data.general.questions = this.generalForm;
+      this.dataset.data.general.questions.name = this.codeForm.name;
+      this.dataset.data.general.questions.description =
+        this.codeForm.description;
+      this.dataset.data.general.questions.keywords = this.codeForm.keywords;
+      this.dataset.data.general.questions.authors = this.codeForm.authors;
+      this.dataset.data.general.questions.contributors =
+        this.codeForm.contributors;
+      this.dataset.data.general.questions.funding = this.codeForm.funding;
+      this.dataset.data.general.questions.referencePublication =
+        this.codeForm.referencePublication;
 
       if (this.codePresent) {
         this.dataset.data.Code.questions = this.codeForm;
@@ -1378,13 +1382,6 @@ export default {
     },
     navigateBack() {
       let newChanges = false;
-
-      if (
-        !newChanges &&
-        !_.isEqual(this.originalObject.general, this.generalForm)
-      ) {
-        newChanges = true;
-      }
 
       if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
         newChanges = true;
@@ -1446,29 +1443,6 @@ export default {
         this.activeNames = this.workflow.expandOptions;
       }
 
-      if (
-        this.dataset.data.general.questions &&
-        Object.keys(this.dataset.data.general.questions).length !== 0
-      ) {
-        this.generalForm = this.dataset.data.general.questions;
-
-        this.initializeEmptyObjects(this.generalForm, this.generalForm.funding);
-
-        this.addIds(this.generalForm.keywords);
-        this.addIds(this.generalForm.authors);
-        this.addIds(this.generalForm.contributors);
-
-        this.originalObject.general = JSON.parse(
-          JSON.stringify(this.generalForm)
-        );
-      } else {
-        this.generalForm.name = this.dataset.name;
-        this.generalForm.description = this.dataset.description;
-        this.originalObject.general = JSON.parse(
-          JSON.stringify(this.generalForm)
-        );
-      }
-
       if (this.codePresent) {
         if (
           this.dataset.data.Code.questions &&
@@ -1476,12 +1450,36 @@ export default {
         ) {
           this.codeForm = this.dataset.data.Code.questions;
 
+          this.initializeEmptyObjects(this.codeForm, this.codeForm.funding);
+
+          this.addIds(this.codeForm.keywords);
+          this.addIds(this.codeForm.authors);
+          this.addIds(this.codeForm.contributors);
+
           this.addIds(this.codeForm.relatedLinks);
           this.addIds(this.codeForm.otherSoftwareRequirements);
 
           this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+        } else {
+          this.codeForm.name = this.dataset.name;
+          this.codeForm.description = this.dataset.description;
+          this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
         }
       }
+
+      // if (this.codePresent) {
+      //   if (
+      //     this.dataset.data.Code.questions &&
+      //     Object.keys(this.dataset.data.Code.questions).length !== 0
+      //   ) {
+      //     this.codeForm = this.dataset.data.Code.questions;
+
+      //     this.addIds(this.codeForm.relatedLinks);
+      //     this.addIds(this.codeForm.otherSoftwareRequirements);
+
+      //     this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+      //   }
+      // }
     });
   },
 };
