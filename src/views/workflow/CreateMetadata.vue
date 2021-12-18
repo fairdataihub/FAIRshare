@@ -22,7 +22,8 @@
         ref="cmForm"
         @submit.prevent
       >
-       <pill-progress-bar :totalSteps="5" :currentStep="3"> </pill-progress-bar>
+        <pill-progress-bar :totalSteps="5" :currentStep="3">
+        </pill-progress-bar>
         <div>
           <el-collapse v-model="activeNames">
             <el-collapse-item
