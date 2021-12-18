@@ -15,7 +15,8 @@
         <span class="font-medium"> Continue curating your datasets </span>
 
         <span>
-          You have some incomplete projects. Select one to continue working on it.
+          You have some incomplete projects. Select one to continue working on
+          it.
         </span>
 
         <!-- <el-divider> </el-divider> -->
