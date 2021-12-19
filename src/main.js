@@ -6,7 +6,7 @@ import { createPinia } from "pinia";
 import Popper from "vue3-popper";
 
 import "element-plus/dist/index.css";
-import "./assets/css/index.css";
+import "./assets/css/tailwind.css";
 import "./assets/css/utilities-theme.css";
 
 import LineDivider from "./components/ui/LineDivider.vue";
