@@ -10,7 +10,7 @@ module.exports = {
         asar: true,
         afterSign: "./scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
-        files: ["**/*", "!pyflask/", "!build/", "!api.spec", ".env"],
+        files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
         win: {
           target: "nsis",
           icon: "./src/assets/app-icons/windowsAppIcon.ico",
@@ -18,8 +18,7 @@ module.exports = {
         },
         mac: {
           target: ["dmg", "zip"],
-          icon: "./src/assets/app-icons/macAppIcon.png",
-
+          icon: "./src/assets/app-icons/macAppIcon.icns",
           extraResources: [{ from: "./src/pyflaskdist/api" }],
           darkModeSupport: false,
           hardenedRuntime: true,

@@ -33,3 +33,4 @@ api.spec
 *.ipynb
 .env
 .env.production
+src/assets/css/tailwind.css
