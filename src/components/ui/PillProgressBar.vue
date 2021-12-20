@@ -3,10 +3,19 @@
     <div
       v-for="step in totalSteps"
       :key="step"
-      class="h-2 w-full rounded text-purple-500"
+      class="h-2 w-full rounded text-purple-500 transition-all cursor-pointer hover:bg-purple-400 relative group"
       style="border: 1px solid"
       :class="{ 'bg-purple-500 ': step <= currentStep }"
-    ></div>
+      @click="setCurrentStep(step)"
+    >
+      <span
+        class="absolute hidden group-hover:block text-center pt-2 text-sm text-gray-400 w-full px-2"
+      >
+        {{ titles[step - 1] }}
+      </span>
+      <!-- Add this if we want to show title on active step 
+      :class="{ hidden: step !== currentStep }" -->
+    </div>
   </div>
 </template>
 
@@ -22,11 +31,20 @@ export default {
       type: Number,
       default: 1,
     },
+    titles: {
+      type: Array,
+      default: () => [],
+    },
   },
+  emits: ["updateCurrentStep"],
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    setCurrentStep(step) {
+      this.$emit("updateCurrentStep", step);
+    },
+  },
   async mounted() {},
 };
 </script>

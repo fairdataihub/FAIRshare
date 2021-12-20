@@ -27,6 +27,7 @@ app.component("form-help-content", FormHelpContent);
 // import and register icons globally
 import {
   ArrowRightBold,
+  Back,
   CircleCheckFilled,
   CircleCloseFilled,
   DArrowLeft,
@@ -39,6 +40,7 @@ import {
   Lock,
   QuestionFilled,
   RemoveFilled,
+  Right,
   Setting,
   Star,
   Unlock,
@@ -46,6 +48,7 @@ import {
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
+app.component("back", Back);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
 app.component("d-arrow-left", DArrowLeft);
@@ -58,6 +61,7 @@ app.component("key", Key);
 app.component("lock", Lock);
 app.component("question-filled", QuestionFilled);
 app.component("remove-filled", RemoveFilled);
+app.component("right", Right);
 app.component("setting", Setting);
 app.component("star", Star);
 app.component("unlock", Unlock);
