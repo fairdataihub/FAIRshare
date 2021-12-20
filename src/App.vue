@@ -22,6 +22,7 @@ import semver from "semver";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { ElLoading } from "element-plus";
+import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
@@ -66,6 +67,29 @@ export default {
   },
   mounted() {
     console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
+
+    console.log(process.env.NODE_ENV);
+
+    // disable the mouse back and forward buttons
+    window.addEventListener("mouseup", (e) => {
+      if (e.button === 3 || e.button === 4) {
+        e.preventDefault();
+      }
+    });
+
+    // disable the refresh button on macOS
+    Mousetrap.bind("command+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
+
+    // disable the refresh button on Windows
+    Mousetrap.bind("ctrl+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
 
     const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 3 });
@@ -139,12 +163,25 @@ export default {
 <style lang="postcss">
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
   /* transform: translateY(-20px); */
+}
+
+.lightfadeleft-enter-active,
+.lightfadeleft-leave-active {
+  transition: all 0.3s ease-in-out;
+  overflow-x: hidden;
+  opacity: 0.7;
+}
+
+.lightfadeleft-enter-from,
+.lightfadeleft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>
