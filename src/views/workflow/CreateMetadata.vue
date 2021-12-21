@@ -2235,7 +2235,7 @@ export default {
 
       this.workflow.expandOptions = [];
 
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata/review`;
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/selectDestination`;
 
       this.$router.push({ path: routerPath });
     },

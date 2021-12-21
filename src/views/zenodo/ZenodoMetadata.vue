@@ -1269,7 +1269,7 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/review`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
       this.$router.push({ path: routerPath });
 
       //validate first

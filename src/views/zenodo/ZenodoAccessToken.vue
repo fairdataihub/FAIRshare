@@ -37,12 +37,12 @@
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
       <div
-        class="w-full flex flex-row justify-center py-2"
+        class="w-full flex flex-row justify-center py-2 space-x-4"
         v-if="validTokenAvailable"
       >
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
-          class="mx-3"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+          class=""
         >
           <el-button type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Back
@@ -51,7 +51,7 @@
 
         <el-button
           type="primary"
-          class="flex flex-row items-center mx-3"
+          class="flex flex-row items-center"
           :disabled="disableContinue"
           @click="uploadToZenodo"
         >
