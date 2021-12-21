@@ -27,9 +27,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style>
-.el-step {
-  @apply flex flex-row items-center justify-center;
-}
-</style>

@@ -55,7 +55,7 @@ export default {
         //   "zenodo",
         //   process.env.VUE_APP_ZENODO_ACCESS_TOKEN
         // );
-        console.log(await this.tokens.getToken("zenodo"));
+        // console.log(await this.tokens.getToken("zenodo"));
 
         this.loading.close();
       } catch (error) {
@@ -159,29 +159,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  /* transform: translateY(-20px); */
-}
-
-.lightfadeleft-enter-active,
-.lightfadeleft-leave-active {
-  transition: all 0.3s ease-in-out;
-  overflow-x: hidden;
-  opacity: 0.7;
-}
-
-.lightfadeleft-enter-from,
-.lightfadeleft-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

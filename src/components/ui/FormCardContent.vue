@@ -92,10 +92,6 @@ export default {
     },
   },
   methods: {},
-  async mounted() {
-    console.log(this.lastStep);
-  },
+  async mounted() {},
 };
 </script>
-
-<style></style>

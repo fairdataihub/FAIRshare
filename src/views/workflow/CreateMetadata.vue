@@ -2308,10 +2308,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-.el-form--label-top .el-form-item__label {
-  @apply font-medium;
-  padding-bottom: 2px !important;
-}
-</style>

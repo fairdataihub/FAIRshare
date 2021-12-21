@@ -99,19 +99,3 @@ export default {
   justify-content: flex-end;
 }
 </style>
-
-<style>
-.el-overlay-dialog {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.el-dialog {
-  margin: 0 !important;
-}
-
-.el-dialog__header {
-  padding: 0 !important;
-}
-</style>

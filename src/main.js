@@ -5,9 +5,9 @@ import ElementPlus from "element-plus";
 import { createPinia } from "pinia";
 import Popper from "vue3-popper";
 
-import "element-plus/dist/index.css";
 import "./assets/css/tailwind.css";
 import "./assets/css/utilities-theme.css";
+import "element-plus/dist/index.css";
 
 import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";

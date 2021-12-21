@@ -91,10 +91,6 @@ export default {
 </script>
 
 <style lang="postcss">
-.el-step__description {
-  @apply py-2;
-}
-
 /* ul {
   @apply sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[900px] 2xl:w-[1200px];
   display: flex;

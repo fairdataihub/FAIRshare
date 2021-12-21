@@ -43,6 +43,7 @@ gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen"));
 
 gulp.task("watch-dev", function () {
   gulp.watch("./src/index.css", gulp.series("build-css"));
+  gulp.watch("./tailwind.config.js", gulp.series("build-css"));
   gulp.watch("./src/app.vue", gulp.series("build-css"));
   gulp.watch("./src/components/**/*", gulp.series("build-css"));
   gulp.watch("./src/views/**/*", gulp.series("build-css"));

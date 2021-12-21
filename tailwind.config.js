@@ -12,6 +12,7 @@ module.exports = {
       position: ["bottom", "left"],
     },
   },
+
   plugins: [
     require("@tailwindcss/line-clamp"),
     require("tailwindcss-debug-screens"),

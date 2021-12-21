@@ -7,5 +7,3 @@ export default {
   name: "LineDivider",
 };
 </script>
-
-<style></style>

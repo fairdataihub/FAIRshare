@@ -53,6 +53,11 @@ html {
   transform-origin: bottom left;
 }
 
+/* ------------------------------------------
+Custom styles for anything provided by element plus
+Trying to keep this minimal since we want to use much of the predefined styles as possible 
+--------------------------------------------- */
+
 .el-form-item__label {
   @apply flex flex-row-reverse;
 }
@@ -67,4 +72,59 @@ html {
 
 .el-icon {
   @apply mx-1;
+}
+
+.el-form--label-top .el-form-item__label {
+  @apply font-medium;
+  padding-bottom: 1px !important;
+}
+
+.el-step {
+  @apply flex flex-row items-center justify-center;
+}
+
+.el-step__description {
+  @apply py-2;
+}
+
+.el-overlay-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-dialog {
+  margin: 0 !important;
+}
+
+.el-dialog__header {
+  padding: 0 !important;
+}
+
+/* ------------------------------------------
+Transition styles for <transition />
+--------------------------------------------- */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  /* transform: translateY(-20px); */
+}
+
+.lightfadeleft-enter-active,
+.lightfadeleft-leave-active {
+  transition: all 0.3s ease-in-out;
+  overflow-x: hidden;
+  opacity: 0.7;
+}
+
+.lightfadeleft-enter-from,
+.lightfadeleft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
