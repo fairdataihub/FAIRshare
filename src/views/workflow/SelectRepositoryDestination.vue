@@ -12,26 +12,60 @@
         Please click one of the following options:
       </span>
 
+      <div class="grid grid-cols-2 gap-4 my-5">
+        <div
+          class="flex flex-col justify-between items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
+          :class="{ 'selected-repo': repoID === 'zenodo' }"
+          @click="selectRepo($event, 'zenodo')"
+        >
+          <img
+            src="https://api.iconify.design/simple-icons/zenodo.svg"
+            alt=""
+            class="h-16 mb-3"
+          />
+          <span class="text-lg mx-5"> Zenodo </span>
+        </div>
+        <el-popover placement="bottom" trigger="hover" content="Coming soon...">
+          <template #reference>
+            <div>
+              <div
+                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30 pointer-events-none text-stone-400"
+                :class="{ 'selected-repo': repoID === 'figshare' }"
+                @click="selectRepo($event, 'figshare')"
+              >
+                <img
+                  src="https://api.iconify.design/simple-icons/figshare.svg"
+                  alt=""
+                  class="h-16 mb-3 opacity-50"
+                />
+                <span class="text-lg mx-5"> Figshare </span>
+              </div>
+            </div>
+          </template>
+        </el-popover>
+      </div>
+
+      <!-- This will be enabled in the future. -->
       <!-- change to grid-cols-2 -->
-      <div class="grid grid-cols-1 gap-4">
+      <!-- <div class="grid grid-cols-1 gap-4">
         <div
           v-for="repo of repositories"
           :key="repo.id"
           class="flex flex-col justify-between items-center bg-gray-200 p-4 my-5 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
-          :class="{ selected: repoID === repo.id }"
+          :class="{ 'selected-repo': repoID === repo.id }"
           @click="selectRepo($event, repo.id)"
         >
           <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
           <span class="text-lg mx-5"> {{ repo.name }} </span>
         </div>
-      </div>
+      </div> -->
 
       <div
-        class="absolute bottom-0 w-max-content flex flex-row justify-center py-2"
+        class="absolute bottom-0 w-max-content flex flex-row justify-center py-2 space-x-4"
       >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata/review`"
-          class="mx-3"
+          class=""
         >
           <el-button type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Back
@@ -40,7 +74,7 @@
 
         <el-button
           type="primary"
-          class="flex flex-row items-center mx-3"
+          class="flex flex-row items-center"
           @click="addMetadata"
           :disabled="repoID === ''"
           id="continue"
@@ -73,11 +107,11 @@ export default {
           name: "Zenodo",
           imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
         },
-        // {
-        //   id: "figshare",
-        //   name: "Figshare",
-        //   imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
-        // },
+        {
+          id: "figshare",
+          name: "Figshare",
+          imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
+        },
       ],
     };
   },
@@ -137,8 +171,4 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
-.selected {
-  @apply border-2 border-solid border-green-500 bg-green-100;
-}
-</style>
+<style lang="postcss" scoped></style>

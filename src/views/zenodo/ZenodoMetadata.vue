@@ -412,7 +412,7 @@
                             >
                             </el-option>
                           </el-select>
-                          <div class="mx-2 block 2xl:hidden"></div>
+                          <div class="mx-2 block"></div>
                           <div class="flex flex-col">
                             <el-select
                               v-model="element.resourceType"
@@ -441,12 +441,12 @@
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex justify-center items-start py-2 handle text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex justify-center items-start py-2 text-gray-600 hover:text-gray-800 cursor-pointer"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -1020,14 +1020,14 @@
         </el-collapse>
       </el-form>
 
-      <div class="w-full flex flex-row justify-center py-2">
-        <el-button type="danger" plain @click="navigateBack" class="mx-3">
+      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+        <el-button type="danger" plain @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
         </el-button>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center mx-3"
+          class="flex flex-row items-center"
           @click="addZenodoMetadata"
           :disabled="checkInvalidStatus"
         >

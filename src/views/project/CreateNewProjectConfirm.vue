@@ -5,7 +5,7 @@
     <div class="flex flex-col h-full w-full">
       <span class="font-medium text-left"> Split up data types </span>
 
-      <span> Lets maximise the FAIRness of your data. </span>
+      <span> Let's maximise the FAIRness of your data. </span>
 
       <el-divider> </el-divider>
 
@@ -105,14 +105,14 @@
         Do you want to continue?
       </p>
 
-      <div class="w-full flex flex-row justify-center py-6">
-        <router-link to="/datasets" class="mx-3 hidden">
+      <div class="w-full flex flex-row justify-center py-6 space-x-4">
+        <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
 
         <el-button
           type="primary"
-          class="flex flex-row items-center mx-3"
+          class="flex flex-row items-center"
           @click="createWorkflows"
         >
           Continue

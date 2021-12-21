@@ -21,8 +21,8 @@
         @click="selectFolderPath"
       />
 
-      <div class="w-full flex flex-row justify-center py-2">
-        <router-link :to="`/datasets/${datasetID}`" class="mx-3">
+      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+        <router-link :to="`/datasets/${datasetID}`" class="">
           <el-button type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Back
           </el-button>
@@ -31,7 +31,7 @@
         <el-button
           type="primary"
           :disabled="emptyInput"
-          class="flex flex-row justify-center items-center mx-3"
+          class="flex flex-row justify-center items-center"
           @click="startCuration"
           id="continue"
         >
@@ -56,6 +56,7 @@ export default {
       datasetStore: useDatasetsStore(),
       dataset: {},
       folderPath: "",
+      folderDialogOpen: false,
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
@@ -95,11 +96,17 @@ export default {
   },
   methods: {
     selectFolderPath() {
-      dialog.showOpenDialog({ properties: ["openDirectory"] }).then((data) => {
-        if (!data.canceled) {
-          this.folderPath = data.filePaths[0];
-        }
-      });
+      if (!this.folderDialogOpen) {
+        this.folderDialogOpen = true;
+        dialog
+          .showOpenDialog({ properties: ["openDirectory"] })
+          .then((data) => {
+            if (!data.canceled) {
+              this.folderPath = data.filePaths[0];
+            }
+            this.folderDialogOpen = false;
+          });
+      }
     },
     startCuration() {
       const dataTypes = this.workflow.type;

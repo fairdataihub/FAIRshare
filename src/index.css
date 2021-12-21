@@ -53,6 +53,14 @@ html {
   transform-origin: bottom left;
 }
 
+.selected-repo {
+  @apply border-2 border-solid border-green-500 bg-green-100;
+}
+
+.handle:hover {
+  @apply cursor-grab;
+}
+
 /* ------------------------------------------
 Custom styles for anything provided by element plus
 Trying to keep this minimal since we want to use much of the predefined styles as possible 
@@ -99,6 +107,10 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 
 .el-dialog__header {
   padding: 0 !important;
+}
+
+.el-select-group > .el-select-dropdown__item {
+  margin-left: 5px;
 }
 
 /* ------------------------------------------

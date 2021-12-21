@@ -80,9 +80,9 @@ const createPyProc = () => {
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1022,
+    width: 1069,
     height: 600,
-    minWidth: 1022,
+    minWidth: 1069,
     minHeight: 600,
     show: false,
     webPreferences: {

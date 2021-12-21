@@ -97,15 +97,11 @@
           </el-button>
         </el-form-item>
       </el-form>
-      <div class="py-2 flex flex-row justify-center">
-        <el-button @click="goBack" class="mx-3">
+      <div class="py-2 flex flex-row justify-center space-x-4">
+        <el-button @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
         </el-button>
-        <el-button
-          type="primary"
-          @click="submitForm('datasetForm')"
-          class="mx-3"
-        >
+        <el-button type="primary" @click="submitForm('datasetForm')">
           Save changes <el-icon><circle-check-filled /></el-icon>
         </el-button>
       </div>

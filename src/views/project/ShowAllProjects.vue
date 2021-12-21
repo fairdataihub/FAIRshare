@@ -100,14 +100,14 @@
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
-          <div class="flex flex-row" v-if="selectedDataset !== ''">
-            <el-button type="info" plain @click="editProject" class="mx-3">
+          <div class="flex flex-row space-x-4" v-if="selectedDataset !== ''">
+            <el-button type="info" plain @click="editProject" class="">
               <el-icon><setting /></el-icon> Project settings
             </el-button>
             <el-button
               type="primary"
               plain
-              class="flex flex-row items-center mx-3"
+              class="flex flex-row items-center"
               @click="startCuratingProject"
             >
               Continue working on this project

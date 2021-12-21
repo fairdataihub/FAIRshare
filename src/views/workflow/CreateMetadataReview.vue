@@ -226,10 +226,10 @@
         </el-descriptions>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2">
+      <div class="w-full flex flex-row justify-center py-2 space-x-4">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
-          class="mx-3"
+          class=""
         >
           <el-button type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Back
@@ -238,7 +238,7 @@
 
         <el-button
           type="primary"
-          class="flex flex-row items-center mx-3"
+          class="flex flex-row items-center"
           @click="selectDestination"
         >
           Continue
@@ -370,13 +370,3 @@ export default {
 };
 // Add computed to hide properties
 </script>
-
-<style lang="postcss">
-.handle {
-  cursor: move;
-}
-
-.el-select-group > .el-select-dropdown__item {
-  margin-left: 5px;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
   >
     <div class="flex flex-col h-full w-full">
       <span class="font-medium"> Create a new dataset </span>
@@ -51,7 +51,7 @@
               class="item"
               effect="dark"
               content="Coming soon..."
-              placement="top-end"
+              placement="right-end"
             >
               <div class="w-max">
                 <el-checkbox label="Figure" name="type" disabled></el-checkbox>
@@ -65,7 +65,7 @@
                 class="item"
                 effect="dark"
                 content="Coming soon..."
-                placement="top-end"
+                placement="right-end"
               >
                 <el-checkbox
                   label="Publications"
@@ -80,7 +80,7 @@
                 class="item"
                 effect="dark"
                 content="Coming soon..."
-                placement="top-end"
+                placement="right-end"
               >
                 <el-checkbox
                   label="Genomic Data"
@@ -92,15 +92,11 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-2 flex flex-row justify-center">
-          <el-button @click="cancelNewDataset" type="danger" plain class="mx-3">
+        <div class="py-2 flex flex-row justify-center space-x-4">
+          <el-button @click="cancelNewDataset" type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Cancel
           </el-button>
-          <el-button
-            type="primary"
-            @click="submitForm('datasetForm')"
-            class="mx-3"
-          >
+          <el-button type="primary" @click="submitForm('datasetForm')">
             Create new project <el-icon><d-arrow-right /></el-icon>
           </el-button>
         </div>
@@ -113,6 +109,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { useDatasetsStore } from "../../store/datasets";
+import { ElNotification } from "element-plus";
 
 export default {
   name: "CreateNewProject",
@@ -172,6 +169,13 @@ export default {
           }
 
           this.datasetStore.addDataset(dataset, datasetID);
+
+          ElNotification({
+            type: "success",
+            message: "Created your new project!",
+            position: "bottom-right",
+            duration: 3000,
+          });
 
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
