@@ -1104,7 +1104,7 @@ export default {
           {
             required: true,
             message:
-              "Required. Selected license applies to all of your files displayed on the top of the form.",
+              "Required. Selected license applies to all of your files in the dataset.",
             trigger: "change",
           },
         ],

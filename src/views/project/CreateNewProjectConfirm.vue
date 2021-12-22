@@ -3,17 +3,10 @@
     class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
   >
     <div class="flex flex-col h-full w-full">
-      <span class="font-medium text-left"> Split up data types </span>
+      <span class="font-medium text-left"> FAIRifying </span>
 
-      <span> Let's maximise the FAIRness of your data. </span>
+      <span> Let's make your research software FAIR. </span>
 
-      <el-divider> </el-divider>
-
-      <p>
-        When multiple data types are used in a single dataset, it is important
-        to split up the data types into separate datasets to ensure that the
-        relevant metadata for each data type is also present.
-      </p>
       <!-- <p class="py-1">
         In order to do this, SODA will automatically try to group up similar
         data into their own datasets.
@@ -22,88 +15,53 @@
       <line-divider> </line-divider>
 
       <p class="py-2">
-        Based on your selections, we would suggest you split up your data into
-        the following separate datasets:
+        FAIRShare will help you make you research software by guiding you step-by-step through the following process:
       </p>
 
-      <div class="flex flex-col divide-y-2 divide-gray-200 py-4">
-        <el-descriptions :column="2" border class="py-4">
-          <el-descriptions-item
-            label="Data type"
-            label-align="left"
-            align="left"
-          >
-            Code
-          </el-descriptions-item>
-          <el-descriptions-item
-            label="Repository destination"
-            label-align="left"
-            align="left"
-          >
-            Zenodo
-          </el-descriptions-item>
-        </el-descriptions>
-        <!-- <el-descriptions :column="2" border title="Dataset 2" class="py-4">
-          <el-descriptions-item
-            label="Data type"
-            label-align="left"
-            align="left"
-          >
-            Code
-          </el-descriptions-item>
-          <el-descriptions-item
-            label="Repository destination"
-            label-align="left"
-            align="left"
-          >
-            Zenodo
-          </el-descriptions-item>
-        </el-descriptions> -->
-      </div>
+      <ul class="list-decimal m-5">
+        <li class="pb-3"> 
+          <b> Select data files to be included </b> 
+          <p class="text-xs"> You will be asked to select the location of the files (source code, executable, etc.) you want to include  
+          </p> 
+        </li>
+         
+        <li class="pb-3"> 
+          <b> Ensure standard development practices are followed </b> 
+          <p class="text-xs">You will be asked a series a question to ensure standard practices have been followed when developing your software 
+          </p> 
+        </li>
+        
+        <li class="pb-3"> 
+          <b> Provide metadata </b> 
+          <p class="text-xs">Information about your software will be requested and will be used to include the standard codemeta.json file in your dataset
+          </p> 
+        </li>
 
-      <!-- <div class="grid grid-cols-2 gap-4 py-4">
-        <div
-          class="
-            w-full
-            bg-white
-            h-full
-            border border-black-800
-            mx-1
-            rounded-lg
-            relative
-          "
-        >
-          <div class="w-1 h-20 bg-blue-600 absolute rounded-tl-md"></div>
-          <h5 class="text-lg font-semibold px-6 pt-6 pb-2">Data Type: Code</h5>
-          <p class="text-md font-regular p-6 pt-2 text-gray-500">
-            Destination: Zenodo
-          </p>
-        </div>
-      </div> -->
+        <li class="pb-3"> 
+          <b> Select a suitable repository </b> 
+          <p class="text-xs">You will be prompted to select one of the suitable repositories for research software currently supported by FAIRShare
+          </p> 
+        </li>
 
-      <!-- <div class="grid grid-cols-3 gap-4">
-        <div class="flex flex-col divide-y-2 p-4">
-          <span class="font-bold p-2"> Code </span>
-          <div class="flex flex-col">
-            <span class="p-1"> Zenodo </span>
-            <span class="p-1"> FigShare </span>
-          </div>
-        </div>
-        <div class="flex flex-col divide-y-2 p-4">
-          <span class="font-bold p-2"> Genomic Data </span>
-          <div class="flex flex-col">
-            <span class="p-1"> Zenodo </span>
-            <span class="p-1"> FigShare </span>
-          </div>
-        </div>
-      </div> -->
+        <li class="pb-3"> 
+          <b> Provide repository-specific metadata </b> 
+          <p class="text-xs"> Metadata required by the selected repository will be requested (pre-populated from step #3 where there is an overlap)
+          </p> 
+        </li>
+      
+        <li class="pb-3"> 
+          <b> Upload dataset </b> 
+          <p class="text-xs"> The standard codemeta.json and citation.json metadata files will be automatically included amongst your data files before uploading everything on the repository
+          </p> 
+        </li>
 
-      <p class="text-center">
-        SODA will help you split up your data into multiple datasets and add the
-        relevant metadata to each dataset.
-        <br />
-        Do you want to continue?
-      </p>
+        <li class="pb-3"> 
+          <b> Publish dataset </b> 
+          <p class="text-xs"> You will be requested to make the dataset visible on the repository to complete the process
+          </p> 
+        </li>
+        
+      </ul> 
 
       <div class="w-full flex flex-row justify-center py-6 space-x-4">
         <router-link to="/datasets" class="hidden">
@@ -115,7 +73,7 @@
           class="flex flex-row items-center"
           @click="createWorkflows"
         >
-          Continue
+          Start curating
           <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>

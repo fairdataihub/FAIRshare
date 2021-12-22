@@ -3,7 +3,7 @@
     class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
   >
     <div class="flex flex-col h-full w-full">
-      <span class="font-medium"> Create a new dataset </span>
+      <span class="font-medium"> Start a new data curation project </span>
       <span> Fill out some general details about your dataset here. </span>
 
       <el-divider> </el-divider>

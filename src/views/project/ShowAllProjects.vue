@@ -126,7 +126,7 @@
               icon="fluent:quiz-new-24-regular"
               class="h-20 w-10/12 text-gray-700"
             />
-            <span class="font-medium text-large"> Create a new dataset </span>
+            <span class="font-medium text-large"> Start a new data curation project </span>
           </div>
         </router-link>
       </div>
