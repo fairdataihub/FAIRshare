@@ -15,53 +15,68 @@
       <line-divider> </line-divider>
 
       <p class="py-2">
-        FAIRShare will help you make you research software by guiding you step-by-step through the following process:
+        FAIRShare will help you make you research software by guiding you
+        step-by-step through the following process:
       </p>
 
       <ul class="list-decimal m-5">
-        <li class="pb-3"> 
-          <b> Select data files to be included </b> 
-          <p class="text-xs"> You will be asked to select the location of the files (source code, executable, etc.) you want to include  
-          </p> 
-        </li>
-         
-        <li class="pb-3"> 
-          <b> Ensure standard development practices are followed </b> 
-          <p class="text-xs">You will be asked a series a question to ensure standard practices have been followed when developing your software 
-          </p> 
-        </li>
-        
-        <li class="pb-3"> 
-          <b> Provide metadata </b> 
-          <p class="text-xs">Information about your software will be requested and will be used to include the standard codemeta.json file in your dataset
-          </p> 
+        <li class="pb-3">
+          <b> Select data files to be included </b>
+          <p class="text-xs">
+            You will be asked to select the location of the files (source code,
+            executable, etc.) you want to include
+          </p>
         </li>
 
-        <li class="pb-3"> 
-          <b> Select a suitable repository </b> 
-          <p class="text-xs">You will be prompted to select one of the suitable repositories for research software currently supported by FAIRShare
-          </p> 
+        <li class="pb-3">
+          <b> Ensure standard development practices are followed </b>
+          <p class="text-xs">
+            You will be asked a series a question to ensure standard practices
+            have been followed when developing your software
+          </p>
         </li>
 
-        <li class="pb-3"> 
-          <b> Provide repository-specific metadata </b> 
-          <p class="text-xs"> Metadata required by the selected repository will be requested (pre-populated from step #3 where there is an overlap)
-          </p> 
-        </li>
-      
-        <li class="pb-3"> 
-          <b> Upload dataset </b> 
-          <p class="text-xs"> The standard codemeta.json and citation.json metadata files will be automatically included amongst your data files before uploading everything on the repository
-          </p> 
+        <li class="pb-3">
+          <b> Provide metadata </b>
+          <p class="text-xs">
+            Information about your software will be requested and will be used
+            to include the standard codemeta.json file in your dataset
+          </p>
         </li>
 
-        <li class="pb-3"> 
-          <b> Publish dataset </b> 
-          <p class="text-xs"> You will be requested to make the dataset visible on the repository to complete the process
-          </p> 
+        <li class="pb-3">
+          <b> Select a suitable repository </b>
+          <p class="text-xs">
+            You will be prompted to select one of the suitable repositories for
+            research software currently supported by FAIRShare
+          </p>
         </li>
-        
-      </ul> 
+
+        <li class="pb-3">
+          <b> Provide repository-specific metadata </b>
+          <p class="text-xs">
+            Metadata required by the selected repository will be requested
+            (pre-populated from step #3 where there is an overlap)
+          </p>
+        </li>
+
+        <li class="pb-3">
+          <b> Upload dataset </b>
+          <p class="text-xs">
+            The standard codemeta.json and citation.json metadata files will be
+            automatically included amongst your data files before uploading
+            everything on the repository
+          </p>
+        </li>
+
+        <li class="pb-3">
+          <b> Publish dataset </b>
+          <p class="text-xs">
+            You will be requested to make the dataset visible on the repository
+            to complete the process
+          </p>
+        </li>
+      </ul>
 
       <div class="w-full flex flex-row justify-center py-6 space-x-4">
         <router-link to="/datasets" class="hidden">
