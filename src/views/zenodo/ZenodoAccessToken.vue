@@ -55,7 +55,7 @@
           :disabled="disableContinue"
           @click="uploadToZenodo"
         >
-          Continue
+          Start upload
           <el-icon> <d-arrow-right /> </el-icon>
         </el-button>
       </div>
@@ -149,6 +149,7 @@ export default {
     },
     async showConnection() {
       this.validTokenAvailable = true;
+      this.uploadToZenodo();
     },
   },
   async mounted() {
