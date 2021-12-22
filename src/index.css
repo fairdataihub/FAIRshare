@@ -16,7 +16,7 @@ html {
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  @apply font-inter;
+  @apply font-inter text-base;
 }
 
 #app {
@@ -53,17 +53,90 @@ html {
   transform-origin: bottom left;
 }
 
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
+.selected-repo {
+  @apply border-2 border-solid border-green-500 bg-green-100;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
+.handle:hover {
+  @apply cursor-grab;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #424242;
+/* ------------------------------------------
+Custom styles for anything provided by element plus
+Trying to keep this minimal since we want to use much of the predefined styles as possible 
+--------------------------------------------- */
+
+.el-form-item__label {
+  @apply flex flex-row-reverse;
+}
+
+.el-form-item__label:before {
+  @apply ml-1;
+}
+
+.el-button span {
+  @apply flex flex-row justify-center items-center;
+}
+
+.el-icon {
+  @apply mx-1;
+}
+
+.el-form--label-top .el-form-item__label {
+  @apply font-medium;
+  padding-bottom: 1px !important;
+}
+
+.el-step {
+  @apply flex flex-row items-center justify-center;
+}
+
+.el-step__description {
+  @apply py-2;
+}
+
+.el-overlay-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-dialog {
+  margin: 0 !important;
+}
+
+.el-dialog__header {
+  padding: 0 !important;
+}
+
+.el-select-group > .el-select-dropdown__item {
+  margin-left: 5px;
+}
+
+/* ------------------------------------------
+Transition styles for <transition />
+--------------------------------------------- */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  /* transform: translateY(-20px); */
+}
+
+.lightfadeleft-enter-active,
+.lightfadeleft-leave-active {
+  transition: all 0.3s ease-in-out;
+  overflow-x: hidden;
+  opacity: 0.7;
+}
+
+.lightfadeleft-enter-from,
+.lightfadeleft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }

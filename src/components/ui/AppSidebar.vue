@@ -1,9 +1,9 @@
 <template>
   <!-- component -->
   <div
-    class="flex flex-col min-h-screen mr-3 debug-screens bg-gray-50"
+    class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs"
     :class="{
-      'w-64': sideBarOpen,
+      'w-72': sideBarOpen,
       'w-12': !sideBarOpen,
       'debug-screens': process.env.NODE_ENV === 'production',
     }"
@@ -16,15 +16,12 @@
           class="w-28"
           src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
         />
-        <div class="absolute top-0 right-2" @click="sideBarOpen = !sideBarOpen">
+        <div
+          class="absolute top-0 right-2 cursor-pointer p-1 transition-all transform scale-100 hover:scale-110"
+          @click="sideBarOpen = !sideBarOpen"
+          title="Open or close the sidebar"
+        >
           <div id="menu-hamburger" :class="{ open: sideBarOpen }">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-        <div class="invisible">
-          <div id="menu-hamburger">
             <span></span>
             <span></span>
             <span></span>
@@ -32,18 +29,26 @@
         </div>
       </div>
       <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
-        <router-link to="/home" class="sideBarMenuItem"> Overview </router-link>
-        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
-          Continue curation
+        <router-link to="/home" class="sideBarMenuItem">
+          <el-icon><home-filled /></el-icon> Overview
         </router-link>
-        <router-link to="/about" class="sideBarMenuItem"> About </router-link>
+        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
+          <el-icon><data-line /></el-icon> Curate & Share
+        </router-link>
+        <router-link to="/manageAccount" class="sideBarMenuItem">
+          <el-icon><user /></el-icon> Manage Accounts
+        </router-link>
+        <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link
-          to="/datasets/new/f1f6c588-d79c-4235-b9ef-7cb7bfb95b8e/confirm"
+          to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
           class="sideBarMenuItem"
         >
           Confirm
-        </router-link>
+        </router-link> -->
       </nav>
+    </div>
+    <div class="absolute bottom-0 right-3">
+      <span class="text-gray-400 text-xs">{{ environment }}</span>
     </div>
   </div>
 </template>
@@ -52,6 +57,7 @@
 export default {
   name: "AppSidebar",
   components: {},
+  props: ["environment"],
   data() {
     return { dropdownOpen: false, sideBarOpen: true, process: process };
   },
@@ -91,7 +97,7 @@ export default {
   margin: 10px 0;
   transform: rotate(0deg);
   transition: 0.5s ease-in-out;
-  cursor: pointer;
+  pointer-events: none;
 }
 
 #menu-hamburger span {

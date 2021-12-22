@@ -4,11 +4,51 @@
 
 Use a python environment (Anaconda) to separate your dev and release instance.
 
+You will need two different instructions for windows and macOS/linux. `NVM` is required for macOS and Linux at the moment while the conda-forge release channel is updated.
+
+### Windows
+
 ```shell
-conda env create -f .\dev\sodacovid-dev.yml
+# create the conda environment from the file
+conda env create -f .\dev\win-sodacovid-dev.yml
+
+# activate the anaconda environment
 conda activate sodacovid-dev
+
+# install all the project dependencies
 yarn install
 ```
+
+### macOS/Linux
+
+```shell
+# create the conda environment from the file
+conda env create -f .\dev\mac-sodacovid-dev.yml   # for macOS
+conda env create -f .\dev\linux-sodacovid-dev.yml # for linux
+
+# activate the conda environment
+conda activate sodacovid-dev
+
+# if you don't have nvm installed use the following instruction
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# install nodejs
+nvm install 16
+
+# activate nodejs
+nvm use 16
+
+# verify that you are on node v16.13.0 or higher
+node -v
+
+# install yarn
+npm install -g yarn
+
+# install all the project dependencies
+yarn install
+```
+
+`Note:` These instructions are subject to change. At the moment, Node v16.13.0 is not available in the conda-forge release channel. When that version gets added, the macOS and linux project setup will use the same instructions as windows.
 
 ## Running the application
 

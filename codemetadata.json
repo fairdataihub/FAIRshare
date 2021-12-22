@@ -1,0 +1,59 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "license": "https://spdx.org/licenses/MIT-CMU",
+  "codeRepository": "https://github.com/fairdataihub/SODA-for-COVID-19-Research",
+  "contIntegration": "https://travis-ci.org/",
+  "dateCreated": "2021-05-23",
+  "datePublished": "2021-05-27",
+  "dateModified": "2021-06-23",
+  "downloadUrl": "https://stackoverflow.com/questions/68466874/vue-pinia-firebase-authentication-fetch-currentuser-before-route-guard",
+  "issueTracker": "https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues",
+  "name": "somename",
+  "version": "1.4.56",
+  "identifier": "10.1101/2021.10.22.465507",
+  "description": "some description",
+  "applicationCategory": "Astronomy",
+  "releaseNotes": "Bug fixes:\nEdited documentation links according to the new changes made to SODA's documentation website.\nKnown issues:\nThere is a bug with removing dataset permissions using both SODA and Pennsieve. If you want to remove your own permission from a dataset, another user with either 'Manager' or 'Owner' permissions must remove you from the dataset. This is an issue with Pennsieve's backend system and will be updated soon.",
+  "funding": "PROJ_34",
+  "developmentStatus": "active",
+  "isPartOf": "https://fairdataihub.org/sodaforsparc",
+  "referencePublication": "https://doi.org/10.1096/fasebj.2020.34.s1.02483",
+  "funder": {
+    "@type": "Organization",
+    "name": "NASA"
+  },
+  "keywords": ["key1", "key2", "key3"],
+  "programmingLanguage": ["Java", "Python", "C++"],
+  "runtimePlatform": [".Net", "JVM"],
+  "operatingSystem": ["Linux", "Windows"],
+  "softwareRequirements": ["Python", "NodeJS"],
+  "relatedLink": [
+    "https://github.com/fairdataihub",
+    "https://github.com/fairdataihub/SODA-for-SPARC"
+  ],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Killua ",
+      "familyName": "Zoldyck",
+      "email": "k.zol@hxh.com",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "assasin org"
+      }
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Gon",
+      "familyName": "Freecss",
+      "email": "g.free@hxh.com",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "hunters assoc"
+      }
+    }
+  ]
+}

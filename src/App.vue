@@ -1,26 +1,31 @@
 <template>
   <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div class="flex flex-row bg-white">
-    <AppSidebar></AppSidebar>
-    <router-view v-slot="{ Component }">
-      <transition name="fade" appear mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
-    <span></span>
+    <AppSidebar :environment="environment"></AppSidebar>
+
+    <AppContent>
+      <router-view v-slot="{ Component }" class="pt-2">
+        <transition name="fade" appear mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </AppContent>
   </div>
 </template>
 
 <script>
 import AppSidebar from "./components/ui/AppSidebar.vue";
+import AppContent from "./components/ui/AppContent.vue";
 
 import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { ElLoading } from "element-plus";
+import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
+import { useTokenStore } from "./store/access.js";
 
 const MIN_API_VERSION = "0.0.1";
 
@@ -28,18 +33,29 @@ export default {
   name: "App",
   components: {
     AppSidebar,
+    AppContent,
   },
   data() {
     return {
       appPath: app.getAppPath(),
       unpublishedDatasets: useDatasetsStore(),
+      tokens: useTokenStore(),
       loading: "",
+      environment: "",
     };
   },
   methods: {
-    loadStores() {
+    async loadStores() {
       try {
-        this.unpublishedDatasets.loadDatasets();
+        await this.unpublishedDatasets.loadDatasets();
+        await this.tokens.loadTokens();
+
+        // sample implementation of access tokens
+        // await this.tokens.saveToken(
+        //   "zenodo",
+        //   process.env.VUE_APP_ZENODO_ACCESS_TOKEN
+        // );
+        // console.log(await this.tokens.getToken("zenodo"));
 
         this.loading.close();
       } catch (error) {
@@ -50,7 +66,32 @@ export default {
     },
   },
   mounted() {
-    const client = axios.create({ baseURL: `${this.SERVERURL}` });
+    console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
+
+    console.log(process.env.NODE_ENV);
+
+    // disable the mouse back and forward buttons
+    window.addEventListener("mouseup", (e) => {
+      if (e.button === 3 || e.button === 4) {
+        e.preventDefault();
+      }
+    });
+
+    // disable the refresh button on macOS
+    Mousetrap.bind("command+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
+
+    // disable the refresh button on Windows
+    Mousetrap.bind("ctrl+r", function () {
+      if (process.env.NODE_ENV !== "development") {
+        return false;
+      }
+    });
+
+    const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 3 });
 
     this.loading = ElLoading.service({
@@ -69,7 +110,7 @@ export default {
       .then((response) => {
         console.log(response.data);
         axios
-          .get(`${this.SERVERURL}/api_version`)
+          .get(`${this.$server_url}/api_version`)
           .then((response) => {
             if (
               semver.lte(
@@ -93,6 +134,19 @@ export default {
         console.error(error);
       });
 
+    axios
+      .get(`${this.$server_url}/zenodo/env`)
+      .then((response) => {
+        if (response.data.search("sandbox") === -1) {
+          this.environment = "production";
+        } else {
+          this.environment = "sandbox";
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     window.ipcRenderer.on("update-available", (_e, _arg) => {
       console.log("New update available");
     });
@@ -105,16 +159,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.2s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  /* transform: translateY(-20px); */
-}
-</style>

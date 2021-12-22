@@ -1,13 +1,6 @@
 name: Build release for linux
 
 on:
-  # Trigger the workflow
-  push:
-    branches:
-      - "production"
-  pull_request:
-    branches:
-      - "production"
   workflow_dispatch:
 
 jobs:
@@ -26,6 +19,14 @@ jobs:
 
       - name: Install Node.js dependencies
         run: yarn install 
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9.7
+
+      - name: Install Python dependencies
+        run: pip install -r dev/requirements.txt
 
       - name: Set up Python
         uses: actions/setup-python@v1

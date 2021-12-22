@@ -5,17 +5,23 @@ import path from "path";
 import { app } from "@electron/remote";
 import { defineStore } from "pinia";
 
-const USER_PATH = app.getPath("userData");
+// const USER_PATH = app.getPath("userData");
+// const DATASETS_STORE_PATH = path.join(
+//   USER_PATH,
+//   "Store",
+//   "unpublishedDatasets.json"
+// );
+const USER_PATH = app.getPath("home");
 const DATASETS_STORE_PATH = path.join(
   USER_PATH,
-  "Store",
-  "unpublishedDatasets.soda"
+  ".sodaforcovid19research",
+  "unpublishedDatasets.json"
 );
 
 // function to create the dataset store file in the user path
 const createFile = async () => {
   fs.ensureFileSync(DATASETS_STORE_PATH);
-  fs.writeJsonSync(DATASETS_STORE_PATH, []);
+  fs.writeJsonSync(DATASETS_STORE_PATH, {});
 };
 
 // function to load the dataset file into the store.
@@ -24,52 +30,49 @@ const loadFile = async () => {
 
   if (!exists) {
     createFile();
-    return [];
+    return {};
   } else {
     try {
       let unpublishedDatasets = fs.readJsonSync(DATASETS_STORE_PATH);
       return unpublishedDatasets;
     } catch (err) {
       console.error(err);
-      return [];
+      return {};
     }
   }
 };
 
 // Schema to follow
-// datasets = [
-//   ...
-//   {id: uuid, image: url, name: String, desciption: String}
-//   ...
-// ]
+// datasets = {
+//   datasetID: {
+//     id: uuid,
+//     image: url,
+//     name: String,
+//     description: String,
+//   },
+// };
 
 export const useDatasetsStore = defineStore({
   id: "DatasetsStore",
   state: () => ({
-    datasets: [],
+    datasets: {},
+    currentDataset: {},
+    progressBar: {
+      show: false,
+      type: "",
+      currentStep: 0,
+    },
+    loading: false,
   }),
   getters: {
     datasetCount: function () {
-      return this.datasets.length;
+      return Object.keys(this.datasets).length;
     },
-
-    getAllDatasets() {
-      return this.datasets;
-    },
+    // getAllDatasets() {
+    //   return this.datasets;
+    // },
   },
   actions: {
-    async addDataset(dataset) {
-      // contains logic for altering different pieces of state
-      try {
-        this.datasets.push(dataset);
-        // OR alternatively use .$patch to group change of posts and user.postsCount in devtools timeline
-        // this.$patch((state) => {
-        //   state.posts.push(post);
-        // });
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async loadDatasets() {
       try {
         const datasets = await loadFile();
@@ -78,18 +81,75 @@ export const useDatasetsStore = defineStore({
         console.error(error);
       }
     },
+    async loadandReturnDatasets() {
+      try {
+        const datasets = await loadFile();
+        return datasets;
+      } catch (error) {
+        return {};
+      }
+    },
     async writeDatasetsToFile() {
       fs.ensureFileSync(DATASETS_STORE_PATH);
       fs.writeJsonSync(DATASETS_STORE_PATH, this.datasets);
     },
-    getDataset(datasetID) {
-      for (let dataset of this.datasets) {
-        console.log(dataset.id, datasetID);
-        if (dataset.id === datasetID) {
-          return dataset;
-        }
+    async addDataset(dataset, datasetID) {
+      try {
+        this.datasets[datasetID] = dataset;
+        this.currentDataset = dataset;
+        this.writeDatasetsToFile();
+      } catch (error) {
+        console.log(error);
       }
-      return "NO_DATASET_FOUND";
+    },
+    async deleteDataset(datasetID) {
+      try {
+        delete this.datasets[datasetID];
+        this.writeDatasetsToFile();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async syncDatasets() {
+      const datasetID = this.currentDataset.id;
+      this.datasets[datasetID] = this.currentDataset;
+      this.writeDatasetsToFile();
+    },
+    async updateCurrentDataset(dataset) {
+      try {
+        this.currentDataset = dataset;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCurrentDataset() {
+      return this.currentDataset;
+    },
+    async getDataset(datasetID) {
+      if (datasetID in this.datasets) {
+        this.currentDataset = this.datasets[datasetID];
+        return this.currentDataset;
+      } else {
+        return "NO_DATASET_FOUND";
+      }
+    },
+    async getAllDatasets() {
+      return this.loadandReturnDatasets();
+    },
+    async getProgressBar() {
+      return this.progressBar;
+    },
+    showProgressBar() {
+      this.progressBar.show = true;
+    },
+    hideProgressBar() {
+      this.progressBar.show = false;
+    },
+    setProgressBarType(type) {
+      this.progressBar.type = type;
+    },
+    setCurrentStep(step) {
+      this.progressBar.currentStep = step - 1;
     },
   },
 });

@@ -1,6 +1,7 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, shell } from "electron";
+import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
@@ -14,6 +15,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const path = require("path");
 
 require("@electron/remote/main").initialize();
+// require("@electron/remote/main").enable(webContents);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -26,7 +28,7 @@ const PY_MODULE = "api";
 let mainWindow;
 
 let pyProc = null;
-const pyPort = "5000"; // Flask default port
+const pyPort = "7632";
 
 const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
@@ -78,10 +80,11 @@ const createPyProc = () => {
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1069,
     height: 600,
-    minWidth: 900,
+    minWidth: 1069,
     minHeight: 600,
+    show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -91,6 +94,31 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  ///// splash screen
+  // remove this section if not good.
+  // Also remove from the copy-files script from package.json
+
+  const splash = new BrowserWindow({
+    width: 1022,
+    height: 600,
+    frame: false,
+    icon: __dirname + "/assets/menu-icon/soda_icon.png",
+    alwaysOnTop: true,
+    transparent: true,
+  });
+  splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
+
+  mainWindow.once("ready-to-show", () => {
+    setTimeout(function () {
+      splash.close();
+      mainWindow.show();
+    }, 500);
+  });
+
+  ////// splash screen end
+
+  enableWebContents(mainWindow.webContents);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -194,6 +222,116 @@ autoUpdater.on("update-downloaded", () => {
   // exitPyProc(process.pid).then(() => {
   // autoUpdater.quitAndInstall();
   // });
+});
+
+ipcMain.on("open-link-in-browser", async (_event, link) => {
+  shell.openExternal(link).then(() => {
+    console.log("opened link", link);
+  });
+});
+
+// OAuth
+//import { useTokenStore } from "./store/access";
+import axios from "axios";
+const nodeUrl = require("url");
+const CLIENT_ID = "3282f35bdcceeb2cc9f8";
+const CLIENT_SECRET = "c603c25b557624f5b07cad52c0da798ee7ca4300";
+
+function retrieveCode(url) {
+  return new Promise(function (resolve, reject) {
+    let authWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      show: false,
+      "node-integration": false,
+      "web-security": false,
+    });
+    authWindow.loadURL(url, { userAgent: "Chrome" });
+    authWindow.show();
+    authWindow.on("closed", () => {
+      reject(new Error("closed"));
+    });
+
+    function newlink(url) {
+      let parsedURL = nodeUrl.parse(url, true);
+      let query = parsedURL.query;
+      let code = query.code;
+      let error = query.error;
+
+      if (error) {
+        reject(error);
+        authWindow.removeAllListeners("closed");
+        setImmediate(function () {
+          authWindow.close();
+        });
+      } else if (code) {
+        resolve(code);
+        authWindow.removeAllListeners("closed");
+        setImmediate(function () {
+          authWindow.close();
+        });
+      }
+    }
+
+    authWindow.webContents.on("will-navigate", (_event, url) => {
+      newlink(url);
+    });
+
+    authWindow.webContents.on(
+      "did-get-redirect-request",
+      (_event, _oldUrl, newUrl) => {
+        newlink(newUrl);
+      }
+    );
+  });
+}
+ipcMain.on("OAuth-Github", async (_event, _test) => {
+  // console.log(test)
+  let success = false;
+  await axios
+    .get("https://github.com/login/oauth/authorize", {
+      params: {
+        client_id: CLIENT_ID,
+      },
+    })
+    .then(async (responseCode) => {
+      let authUrl = responseCode.request.res.responseUrl;
+      await retrieveCode(authUrl).then(async (code) => {
+        console.log("code:", code);
+        await axios
+          .post(
+            "https://github.com/login/oauth/access_token",
+            {
+              client_id: CLIENT_ID,
+              client_secret: CLIENT_SECRET,
+              code: code,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+              },
+            }
+          )
+          .then(async (response) => {
+            console.log("response after code: ", response.data.access_token);
+            mainWindow.webContents.send(
+              "OAuth-Github-Reply",
+              response.data.access_token
+            );
+            success = true;
+          })
+          .catch((error) => {
+            console.log("request token error: ", error);
+          });
+      });
+    })
+    .catch((error) => {
+      console.log("request code error: ", error);
+    });
+  if (!success) {
+    mainWindow.webContents.send("OAuth-Github-Reply", "failed");
+  }
+  mainWindow.webContents.session.clearStorageData();
 });
 
 // Exit cleanly on request from parent process in development mode.
