@@ -4,7 +4,7 @@
     <div class="form-card-content">
       <slot> </slot>
     </div>
-    <div class="form-navigation-buttons w-full flex justify-end px-5">
+    <div class="form-navigation-buttons w-full flex justify-end px-5 space-x-4">
       <el-button
         @click="prevStep"
         :type="prevType"
@@ -15,17 +15,16 @@
         <el-icon v-if="!firstStep"><back /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
       </el-button>
-      <el-button
+      <!-- :plain="!lastStep" -->
+      <button
+        class="primary-button"
         @click="nextStep"
-        type="primary"
-        :plain="!lastStep"
-        size="medium"
         :disabled="checkInvalidStatus"
       >
         {{ nextText }}
         <el-icon v-if="lastStep"><d-arrow-right /></el-icon>
         <el-icon v-else><right /></el-icon>
-      </el-button>
+      </button>
     </div>
   </div>
   <!-- </transition> -->

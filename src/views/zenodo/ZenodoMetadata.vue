@@ -43,7 +43,7 @@
                     value-format="YYYY-MM-DD"
                   >
                   </el-date-picker>
-                  <p class="text-xs pt-2 text-gray-500">
+                  <p class="text-xs pt-1 text-gray-500">
                     In case your upload was already published elsewhere, please
                     use the date of first publication.
                   </p>
@@ -162,7 +162,7 @@
                     type="text"
                     placeholder="1.0.4"
                   ></el-input>
-                  <p class="text-xs pt-2 text-gray-500">
+                  <p class="text-xs pt-1 text-gray-500">
                     Optional. Mostly relevant for software and dataset uploads.
                     Any string will be accepted, but semantically-versioned tag
                     is recommended. <br />
@@ -189,7 +189,7 @@
                   >
                   </el-option>
                 </el-select>
-                <p class="text-xs pt-2 text-gray-500">
+                <p class="text-xs pt-1 text-gray-500">
                   Optional. Primary language of the record. Start by typing the
                   language's common name in English, or its ISO 639 code (two or
                   three-letter code).
@@ -265,7 +265,7 @@
                     v-model="zenodoMetadataForm.additionalNotes"
                     type="textarea"
                   ></el-input>
-                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                  <p class="text-xs pt-1 text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
             </div>
@@ -307,7 +307,7 @@
                     Closed Access
                   </el-radio>
                 </el-radio-group>
-                <p class="text-xs pt-2 text-gray-500">
+                <p class="text-xs pt-1 text-gray-500">
                   Required. Open access uploads have considerably higher
                   visibility on Zenodo.
                 </p>
@@ -1025,15 +1025,13 @@
           <el-icon><d-arrow-left /></el-icon> Back
         </el-button>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="primary-button"
           @click="addZenodoMetadata"
           :disabled="checkInvalidStatus"
         >
-          Continue
-          <el-icon><d-arrow-right /></el-icon>
-        </el-button>
+          Continue <el-icon> <d-arrow-right /> </el-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -1583,7 +1581,7 @@ export default {
               const regexp =
                 /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 
-              if (regexp.test(val)) {
+              if (regexp.test(relatedIdentifier.identifier)) {
                 validIdentifier = true;
               } else {
                 validIdentifier = false;
@@ -1632,7 +1630,7 @@ export default {
               const regexp =
                 /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 
-              if (regexp.test(val)) {
+              if (regexp.test(subject.identifier)) {
                 validIdentifier = true;
               } else {
                 validIdentifier = false;

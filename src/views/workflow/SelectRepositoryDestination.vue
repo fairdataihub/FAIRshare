@@ -90,16 +90,14 @@
           </el-button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="primary-button"
           @click="addMetadata"
           :disabled="repoID === ''"
           id="continue"
         >
-          Continue
-          <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+          Continue <el-icon> <d-arrow-right /> </el-icon>
+        </button>
       </div>
     </div>
   </div>

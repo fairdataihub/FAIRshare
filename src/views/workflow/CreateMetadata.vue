@@ -156,31 +156,44 @@
                           type="text"
                           placeholder="Given name"
                         ></el-input>
+
                         <div class="mx-2"></div>
+
                         <el-input
                           v-model="element.familyName"
                           type="text"
                           placeholder="Family name"
                         ></el-input>
+
                         <div class="mx-2"></div>
+
                         <el-input
                           v-model="element.affiliation"
                           type="text"
                           placeholder="Affiliation"
                         ></el-input>
-                        <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.email"
-                          type="text"
-                          placeholder="E-mail address"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.orcid"
-                          type="text"
-                          placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                        ></el-input>
-                        <div class="mx-2"></div>
+
+                        <div class="flex flex-col w-full mx-2">
+                          <el-input
+                            v-model="element.email"
+                            type="text"
+                            placeholder="E-mail address"
+                          ></el-input>
+                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                            Optional
+                          </span>
+                        </div>
+
+                        <div class="flex flex-col w-full mx-2">
+                          <el-input
+                            v-model="element.orcid"
+                            type="text"
+                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                          ></el-input>
+                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                            Optional
+                          </span>
+                        </div>
                       </div>
                       <div class="flex flex-row justify-evenly w-1/12">
                         <div
@@ -241,6 +254,7 @@
                             placeholder="Given name"
                           ></el-input>
                         </div>
+
                         <div class="mx-2 w-1/5">
                           <el-input
                             v-model="element.familyName"
@@ -248,6 +262,7 @@
                             placeholder="Family name"
                           ></el-input>
                         </div>
+
                         <div class="mx-2 w-1/5">
                           <el-input
                             v-model="element.affiliation"
@@ -255,20 +270,29 @@
                             placeholder="Affiliation"
                           ></el-input>
                         </div>
-                        <div class="mx-2 w-1/5">
+
+                        <div class="mx-2 w-1/5 flex flex-col">
                           <el-input
                             v-model="element.email"
                             type="text"
                             placeholder="E-mail address"
                           ></el-input>
+                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                            Optional
+                          </span>
                         </div>
-                        <div class="mx-2 w-1/5">
+
+                        <div class="mx-2 w-1/5 flex flex-col">
                           <el-input
                             v-model="element.orcid"
                             type="text"
                             placeholder="ORCID (e.g. 0000-0002-1825-0097)"
                           ></el-input>
+                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                            Optional
+                          </span>
                         </div>
+
                         <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
                           <el-select
                             v-model="element.contributorType"
@@ -498,7 +522,7 @@
                         <el-input
                           v-model="element.link"
                           type="text"
-                          placeholder=""
+                          placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
@@ -1992,18 +2016,13 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let relatedLink of val) {
-            if (relatedLink.link === "") {
-              this.relatedLinksErrorMessage = "Please provide a valid URL";
-              this.$refs.cmForm.validate();
-              this.invalidStatus.relatedLinks = true;
-              break;
-            } else {
+            if (relatedLink.link !== "") {
               let validIdentifier = false;
 
               const regexp =
                 /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 
-              if (regexp.test(val)) {
+              if (regexp.test(relatedLink.link)) {
                 validIdentifier = true;
               } else {
                 validIdentifier = false;
@@ -2225,6 +2244,11 @@ export default {
       this.dataset.data.general.questions.funding = this.codeForm.funding;
       this.dataset.data.general.questions.referencePublication =
         this.codeForm.referencePublication;
+
+      this.codeForm.relatedLinks = this.filterArrayOfObjects(
+        this.codeForm.relatedLinks,
+        "link"
+      );
 
       this.codeForm.otherSoftwareRequirements = this.filterArrayOfObjects(
         this.codeForm.otherSoftwareRequirements,

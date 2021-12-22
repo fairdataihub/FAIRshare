@@ -1,17 +1,24 @@
 <template>
-  <Popper
-    :hover="true"
-    offsetDistance="0"
-    :content="popoverContent"
-    class="z-10 flex justify-center items-center"
+  <div
+    class="flex flex-row justify-center items-center text-gray-500 hover:text-black"
   >
-    <el-icon
-      class="ml-4 cursor-help flex justify-center items-center text-gray-500 hover:text-black z-0"
-      size="17"
+    <el-popover
+      placement="bottom"
+      :width="`full`"
+      trigger="hover"
+      :content="popoverContent"
+      class="cursor-help text-gray-500 hover:text-black"
     >
-      <el-icon><question-filled /></el-icon>
-    </el-icon>
-  </Popper>
+      <template #reference>
+        <el-icon
+          class="px-2 cursor-help flex justify-center items-center text-gray-500 hover:text-black z-0"
+          size="18"
+        >
+          <question-filled />
+        </el-icon>
+      </template>
+    </el-popover>
+  </div>
 </template>
 
 <script>

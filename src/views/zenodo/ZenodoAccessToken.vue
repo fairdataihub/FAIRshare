@@ -36,10 +36,7 @@
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div
-        class="w-full flex flex-row justify-center py-2 space-x-4"
-        v-if="validTokenAvailable"
-      >
+      <div class="w-full flex flex-row justify-center py-2 space-x-4">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class=""
@@ -54,6 +51,7 @@
           class="flex flex-row items-center"
           :disabled="disableContinue"
           @click="uploadToZenodo"
+          v-if="validTokenAvailable"
         >
           Start upload
           <el-icon> <d-arrow-right /> </el-icon>

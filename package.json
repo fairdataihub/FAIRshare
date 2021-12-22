@@ -17,7 +17,7 @@
     "electron:build-release": "vue-cli-service electron:build -p always",
     "electron:pre-serve": "copyfiles -u 1 ./src/pyflask/** ./dist_electron && copyfiles -u 1 ./src/splash-screen.html ./dist_electron",
     "pre-build": "yarn gulp build-css && yarn gulp copy-all",
-    "electron:serve": "yarn gul copy-all && vue-cli-service electron:serve",
+    "electron:serve": "yarn gulp copy-all && vue-cli-service electron:serve",
     "electron:dev:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
