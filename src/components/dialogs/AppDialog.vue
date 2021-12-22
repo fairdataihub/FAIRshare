@@ -29,6 +29,7 @@
 <script>
 import { ref } from "vue";
 export default {
+  name: "AppDialog",
   props: {
     numInput: { type: Number },
     headers: { type: Array },

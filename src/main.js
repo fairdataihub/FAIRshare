@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createApp } from "vue";
 import App from "./App.vue";
 import { router } from "./router";
@@ -5,7 +6,7 @@ import ElementPlus from "element-plus";
 import { createPinia } from "pinia";
 import Popper from "vue3-popper";
 
-import "./assets/css/tailwind.css";
+import "./assets/css/index.css";
 import "./assets/css/utilities-theme.css";
 import "element-plus/dist/index.css";
 

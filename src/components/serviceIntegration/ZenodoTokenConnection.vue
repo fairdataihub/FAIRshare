@@ -7,12 +7,12 @@
       @click="openDialog('zenodoToken')"
       >{{ status[0] }}</el-button
     >
-    <Dialog
+    <AppDialog
       v-model="dialogVisable"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
       :callback="getInputs"
-    ></Dialog>
+    ></AppDialog>
   </div>
 </template>
 
@@ -22,10 +22,10 @@ import { ref } from "vue";
 import { ElNotification } from "element-plus";
 import { ElLoading } from "element-plus";
 import { ElMessageBox } from "element-plus";
-import Dialog from "../dialogs/Dialog";
+import AppDialog from "../dialogs/AppDialog";
 export default {
   name: "ZenodoTokenConnection",
-  components: { Dialog },
+  components: { AppDialog },
   props: {
     callback: { type: Function },
   },
