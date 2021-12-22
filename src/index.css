@@ -29,7 +29,7 @@ html {
   @apply text-gray-900;
   @apply hover:text-gray-900;
   @apply hover:bg-primary-200;
-  @apply focus:outline-none active:outline-none;
+  @apply outline-none focus:outline-none active:outline-none;
 }
 
 .sideBarMenuItem.router-link-active {
@@ -38,7 +38,7 @@ html {
   @apply text-gray-900;
   @apply hover:text-gray-900 focus:text-gray-900;
   @apply bg-primary-300 hover:bg-primary-200 focus:bg-primary-300;
-  @apply focus:outline-none active:outline-none;
+  @apply outline-none focus:outline-none active:outline-none;
 }
 
 #menu-hamburger {

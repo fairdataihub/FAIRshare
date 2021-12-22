@@ -162,7 +162,11 @@ export default {
           };
 
           for (const type of dataset.dataType) {
-            dataset.data[type] = {
+            let tempType = type;
+            if (tempType == "Research software") {
+              tempType = "Code";
+            }
+            dataset.data[tempType] = {
               uploaded: false,
               questions: {},
             };

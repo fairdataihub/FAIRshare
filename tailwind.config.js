@@ -9,6 +9,7 @@ module.exports = {
       },
       colors: {
         primary: {
+          //currently using 100-600
           50: "#f0f9ff",
           100: "#e0f2fe",
           200: "#bae6fd",
@@ -21,6 +22,7 @@ module.exports = {
           900: "#0c4a6e",
         },
         secondary: {
+          //currently using 100, 300 and 600
           50: "#fdf4ff",
           100: "#fae8ff",
           200: "#f5d0fe",

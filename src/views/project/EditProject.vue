@@ -111,11 +111,22 @@
         <el-button type="primary" @click="submitForm('datasetForm')">
           Save changes <el-icon><circle-check-filled /></el-icon>
         </el-button>
-        <button class="primary-button">
-          Save changes <el-icon><circle-check-filled /></el-icon>
-        </button>
+      </div>
+      <div class="py-2 flex flex-row justify-center space-x-4">
         <button class="primary-plain-button">
-          Save changes <el-icon><circle-check-filled /></el-icon>
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="secondary-plain-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="danger-plain-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="primary-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="danger-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
         </button>
       </div>
     </div>
