@@ -28,18 +28,18 @@ gulp.task("copy-python", function () {
     .pipe(gulp.dest("./dist_electron/pyflask"));
 });
 
-gulp.task("copy-splash-screen", function () {
-  return gulp
-    .src(["./src/splash-screen.html"])
-    .pipe(gulp.dest("./dist_electron"));
-});
+// gulp.task("copy-splash-screen", function () {
+//   return gulp
+//     .src(["./src/splash-screen.html"])
+//     .pipe(gulp.dest("./dist_electron"));
+// });
 
 gulp.task(
   "build-css",
   gulp.series("compile-tailwind", "rename-css", "clean-css")
 );
 
-gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen"));
+gulp.task("copy-all", gulp.parallel("copy-python"));
 
 gulp.task("watch-dev", function () {
   gulp.watch("./src/index.css", gulp.series("build-css"));
