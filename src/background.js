@@ -60,6 +60,7 @@ const createPyProc = () => {
   let script = getScriptPath();
 
   console.log(`Starting python process at ${script}`);
+  console.log(`API documentation hosted at http://127.0.0.1:7632/docs`);
   if (guessPackaged()) {
     pyProc = require("child_process").execFile(script, [pyPort], {
       stdio: "ignore",

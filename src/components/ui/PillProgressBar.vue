@@ -9,7 +9,7 @@
       @click="setCurrentStep(step)"
     >
       <span
-        class="absolute hidden group-hover:block text-center pt-2 text-sm text-gray-400 w-full px-2"
+        class="absolute hidden group-hover:block text-center pt-3 text-xs text-gray-400 w-full px-2"
       >
         {{ titles[step - 1] }}
       </span>
