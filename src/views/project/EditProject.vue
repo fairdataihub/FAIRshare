@@ -1,13 +1,20 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
     <div class="flex flex-col h-full w-full">
-      <el-page-header
-        content="Project settings"
-        @back="goBack"
-        class="text-lg pb-3"
-      />
+      <el-page-header @back="goBack" class="text-lg">
+        <template #content>
+          <p>
+            Project settings -
+            <span class="text-sm">
+              Update your project name, description and other settings
+            </span>
+          </p>
+        </template>
+      </el-page-header>
 
-      <span> Update your project name, description and other settings. </span>
+      <span class="hidden">
+        Update your project name, description and other settings.
+      </span>
 
       <el-divider> </el-divider>
 
@@ -104,6 +111,12 @@
         <el-button type="primary" @click="submitForm('datasetForm')">
           Save changes <el-icon><circle-check-filled /></el-icon>
         </el-button>
+        <button class="primary-button">
+          Save changes <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="primary-plain-button">
+          Save changes <el-icon><circle-check-filled /></el-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -192,7 +205,7 @@ export default {
           showCancelButton: false,
           confirmButtonText:
             "I understand the consequences, delete this project",
-          confirmButtonClass: "el-button--danger plain",
+          confirmButtonClass: "el-button el-button--danger is-plain",
           dangerouslyUseHTMLString: true,
           inputValidator: (value) => {
             if (value === this.originalName) {

@@ -21,15 +21,23 @@
               {{ combineDataTypes(workflow.type) }}
             </span>
           </div>
-          <div class="bg-gray-200 px-4 py-2">
-            <el-button
+          <div class="bg-gray-200 px-4 py-2 flex justify-start items-center">
+            <!-- <el-button
               type="primary"
               @click="navigateToCurate(`${key}`)"
               :disabled="workflow.datasetPublished"
             >
               Curate {{ combineDataTypes(workflow.type) }}
               <el-icon><arrow-right-bold /></el-icon>
-            </el-button>
+            </el-button> -->
+            <button
+              class="primary-plain-button"
+              @click="navigateToCurate(`${key}`)"
+              :disabled="workflow.datasetPublished"
+            >
+              Curate {{ combineDataTypes(workflow.type) }}
+              <el-icon><arrow-right-bold /></el-icon>
+            </button>
             <br />
           </div>
         </div>

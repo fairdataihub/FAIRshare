@@ -3,7 +3,7 @@
     :hover="true"
     offsetDistance="0"
     :content="popoverContent"
-    class="z-10 pl-4"
+    class="z-10 flex justify-center items-center"
   >
     <el-icon
       class="ml-4 cursor-help flex justify-center items-center text-gray-500 hover:text-black z-0"

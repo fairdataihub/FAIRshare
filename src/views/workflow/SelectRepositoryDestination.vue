@@ -12,7 +12,7 @@
         Please click one of the following options:
       </span>
 
-      <div class="grid grid-cols-2 gap-4 my-5">
+      <div class="grid grid-cols-3 gap-4 my-8">
         <div
           class="flex flex-col justify-between items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
           :class="{ 'selected-repo': repoID === 'zenodo' }"
@@ -34,11 +34,29 @@
                 @click="selectRepo($event, 'figshare')"
               >
                 <img
-                  src="https://api.iconify.design/simple-icons/figshare.svg"
+                  src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
                   alt=""
                   class="h-16 mb-3 opacity-50"
                 />
                 <span class="text-lg mx-5"> Figshare </span>
+              </div>
+            </div>
+          </template>
+        </el-popover>
+        <el-popover placement="bottom" trigger="hover" content="Coming soon...">
+          <template #reference>
+            <div>
+              <div
+                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30 pointer-events-none text-stone-400"
+                :class="{ 'selected-repo': repoID === 'softwareheritage' }"
+                @click="selectRepo($event, 'softwareheritage')"
+              >
+                <img
+                  src="https://www.softwareheritage.org/wp-content/uploads/2015/08/swh-logo.png"
+                  alt=""
+                  class="h-16 mb-3 opacity-50"
+                />
+                <span class="text-lg mx-5"> Software Heritage </span>
               </div>
             </div>
           </template>

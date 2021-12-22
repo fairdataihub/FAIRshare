@@ -31,7 +31,7 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="flex flex-row justify-between items-center w-full p-3 hover:bg-gray-100 transition-all cursor-pointer"
+                class="project"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -100,11 +100,14 @@
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
-          <div class="flex flex-row space-x-4" v-if="selectedDataset !== ''">
-            <el-button type="info" plain @click="editProject" class="">
+          <div
+            class="flex flex-row space-x-4 px-2"
+            v-if="selectedDataset !== ''"
+          >
+            <!-- <el-button type="info" plain @click="editProject" class="">
               <el-icon><setting /></el-icon> Project settings
-            </el-button>
-            <el-button
+            </el-button> -->
+            <!-- <el-button
               type="primary"
               plain
               class="flex flex-row items-center"
@@ -112,7 +115,17 @@
             >
               Continue working on this project
               <el-icon> <d-arrow-right /> </el-icon>
-            </el-button>
+            </el-button> -->
+            <button class="primary-plain-button" @click="editProject">
+              <el-icon><setting /></el-icon> Project settings
+            </button>
+            <button
+              class="secondary-plain-button"
+              @click="startCuratingProject"
+            >
+              Continue working on this project
+              <el-icon> <d-arrow-right /> </el-icon>
+            </button>
           </div>
         </div>
         <!-- </div> -->
@@ -247,9 +260,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-.selected-project {
-  background-color: #e0dede;
-}
-</style>

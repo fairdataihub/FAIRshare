@@ -24,11 +24,78 @@ html {
 }
 
 .sideBarMenuItem {
-  @apply block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none active:outline-none font-inter transition-all;
+  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply font-semibold text-sm font-inter;
+  @apply text-gray-900;
+  @apply hover:text-gray-900;
+  @apply hover:bg-primary-200;
+  @apply focus:outline-none active:outline-none;
 }
 
 .sideBarMenuItem.router-link-active {
-  @apply block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg  bg-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none;
+  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply font-semibold text-sm font-inter;
+  @apply text-gray-900;
+  @apply hover:text-gray-900 focus:text-gray-900;
+  @apply bg-primary-300 hover:bg-primary-200 focus:bg-primary-300;
+  @apply focus:outline-none active:outline-none;
+}
+
+#menu-hamburger {
+  width: 23px;
+  height: 10px;
+  position: relative;
+  margin: 10px 0;
+  transform: rotate(0deg);
+  transition: 0.5s ease-in-out;
+}
+
+#menu-hamburger span {
+  display: block;
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  border-radius: 9px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  @apply transition-all;
+  @apply group-hover:text-primary-400;
+  @apply bg-zinc-800 group-hover:bg-primary-400;
+}
+
+#menu-hamburger span:nth-child(1) {
+  top: 0px;
+  transform-origin: left center;
+}
+
+#menu-hamburger span:nth-child(2) {
+  top: 8px;
+  transform-origin: left center;
+}
+
+#menu-hamburger span:nth-child(3) {
+  top: 16px;
+  transform-origin: left center;
+}
+
+#menu-hamburger.open span:nth-child(1) {
+  width: 23px;
+  transform: rotate(45deg);
+  top: 0px;
+  left: 6px;
+}
+
+#menu-hamburger.open span:nth-child(2) {
+  width: 0%;
+  opacity: 0;
+}
+
+#menu-hamburger.open span:nth-child(3) {
+  width: 23px;
+  transform: rotate(-45deg);
+  top: 16px;
+  left: 6px;
 }
 
 .hover-underline-animation {
@@ -53,12 +120,75 @@ html {
   transform-origin: bottom left;
 }
 
+.project {
+  @apply flex flex-row justify-between items-center;
+  @apply w-full p-3;
+  @apply hover:bg-primary-100;
+  @apply transition-all cursor-pointer;
+}
+
+.selected-project {
+  @apply bg-primary-200 hover:bg-primary-200;
+}
+
 .selected-repo {
   @apply border-2 border-solid border-green-500 bg-green-100;
 }
 
 .handle:hover {
   @apply cursor-grab;
+}
+
+/* Colours come from here: https://tailwindcss.com/docs/customizing-colors */
+
+.primary-plain-button {
+  @apply flex flex-row justify-center items-center;
+  @apply px-5 py-2 rounded;
+  @apply text-[14px] font-medium;
+  @apply text-gray-900  hover:text-primary-600;
+  @apply border border-primary-300;
+  @apply hover:bg-primary-100;
+  @apply transition-all;
+}
+
+.secondary-plain-button {
+  @apply flex flex-row justify-center items-center;
+  @apply px-5 py-2 rounded;
+  @apply text-[14px] font-medium;
+  @apply text-gray-900  hover:text-secondary-600;
+  @apply border border-secondary-300;
+  @apply hover:bg-secondary-100;
+  @apply transition-all;
+}
+
+.danger-plain-button {
+  @apply flex flex-row justify-center items-center;
+  @apply px-5 py-2 rounded;
+  @apply text-[14px] font-medium;
+  @apply text-gray-900  hover:text-red-600;
+  @apply border border-red-300;
+  @apply hover:bg-red-100;
+  @apply transition-all;
+}
+
+.primary-button {
+  @apply flex flex-row justify-center items-center;
+  @apply px-5 py-2 rounded;
+  @apply text-[14px] font-medium;
+  @apply text-white;
+  @apply border;
+  @apply bg-primary-500 hover:bg-primary-400;
+  @apply transition-all;
+}
+
+.danger-button {
+  @apply flex flex-row justify-center items-center;
+  @apply px-5 py-2 rounded;
+  @apply text-[14px] font-medium;
+  @apply text-red-700;
+  @apply border border-red-300;
+  @apply bg-red-100 hover:bg-red-200;
+  @apply transition-all;
 }
 
 /* ------------------------------------------
@@ -116,6 +246,21 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 /* ------------------------------------------
 Transition styles for <transition />
 --------------------------------------------- */
+
+.sideBarFade-enter-active,
+.sideBarFade-leave-active {
+  @apply transition-all;
+}
+
+.sideBarFade-enter-to,
+.sideBarFade-leave {
+  @apply opacity-100 scale-100;
+}
+
+.sideBarFade-enter,
+.sideBarFade-leave-to {
+  @apply opacity-0 scale-95;
+}
 
 .fade-enter-active,
 .fade-leave-active {
