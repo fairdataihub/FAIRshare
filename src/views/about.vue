@@ -14,6 +14,7 @@
 import { useDatasetsStore } from "../store/datasets";
 
 export default {
+  /* eslint-disable */
   name: "About",
   data() {
     return {
