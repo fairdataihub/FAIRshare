@@ -44,7 +44,7 @@
         <el-form-item label="Data type" prop="dataType">
           <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
             <div>
-              <el-checkbox label="Code" name="type"></el-checkbox>
+              <el-checkbox label="Research software" name="type"></el-checkbox>
             </div>
 
             <el-tooltip
