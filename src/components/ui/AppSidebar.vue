@@ -1,11 +1,11 @@
 <template>
   <!-- component -->
   <div
-    class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs"
+    class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs pb-10 pt-2"
     :class="{
       'w-72': sideBarOpen,
       'w-12': !sideBarOpen,
-      'debug-screens': process.env.NODE_ENV === 'production',
+      'debug-screens': environment !== 'production',
     }"
     style="transition: width 0.3s"
   >
@@ -17,11 +17,11 @@
           src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
         />
         <div
-          class="absolute top-0 right-2 cursor-pointer p-1 transition-all transform scale-100 hover:scale-110"
+          class="absolute top-0 right-2 cursor-pointer p-1 transition-all transform scale-100 hover:scale-110 flex justify-center items-center group"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"
         >
-          <div id="menu-hamburger" :class="{ open: sideBarOpen }">
+          <div id="menu-hamburger" :class="{ open: sideBarOpen }" class="">
             <span></span>
             <span></span>
             <span></span>
@@ -71,79 +71,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-.sideBarFade-enter-active,
-.sideBarFade-leave-active {
-  @apply transition-all;
-}
-
-.sideBarFade-enter-to,
-.sideBarFade-leave {
-  @apply opacity-100 scale-100;
-}
-
-.sideBarFade-enter,
-.sideBarFade-leave-to {
-  @apply opacity-0 scale-95;
-}
-</style>
-
-<style lang="postcss">
-#menu-hamburger {
-  width: 23px;
-  height: 10px;
-  position: relative;
-  margin: 10px 0;
-  transform: rotate(0deg);
-  transition: 0.5s ease-in-out;
-  pointer-events: none;
-}
-
-#menu-hamburger span {
-  display: block;
-  position: absolute;
-  height: 4px;
-  width: 100%;
-  background: #5f5d5b;
-  border-radius: 9px;
-  opacity: 1;
-  left: 0;
-  transform: rotate(0deg);
-  transition: 0.25s ease-in-out;
-}
-
-#menu-hamburger span:nth-child(1) {
-  top: 0px;
-  transform-origin: left center;
-}
-
-#menu-hamburger span:nth-child(2) {
-  top: 8px;
-  transform-origin: left center;
-}
-
-#menu-hamburger span:nth-child(3) {
-  top: 16px;
-  transform-origin: left center;
-}
-
-#menu-hamburger.open span:nth-child(1) {
-  width: 23px;
-  transform: rotate(45deg);
-  top: 0px;
-  left: 6px;
-}
-
-#menu-hamburger.open span:nth-child(2) {
-  width: 0%;
-  opacity: 0;
-}
-
-#menu-hamburger.open span:nth-child(3) {
-  width: 23px;
-  transform: rotate(-45deg);
-  top: 16px;
-  left: 6px;
-}
-</style>

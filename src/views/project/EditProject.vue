@@ -1,13 +1,20 @@
 <template>
   <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
     <div class="flex flex-col h-full w-full">
-      <el-page-header
-        content="Project settings"
-        @back="goBack"
-        class="text-lg pb-3"
-      />
+      <el-page-header @back="goBack" class="text-lg">
+        <template #content>
+          <p>
+            Project settings -
+            <span class="text-sm">
+              Update your project name, description and other settings
+            </span>
+          </p>
+        </template>
+      </el-page-header>
 
-      <span> Update your project name, description and other settings. </span>
+      <span class="hidden">
+        Update your project name, description and other settings.
+      </span>
 
       <el-divider> </el-divider>
 
@@ -105,6 +112,23 @@
           Save changes <el-icon><circle-check-filled /></el-icon>
         </el-button>
       </div>
+      <div class="py-2 flex flex-row justify-center space-x-4">
+        <button class="primary-plain-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="secondary-plain-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="danger-plain-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="primary-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+        <button class="danger-button">
+          Test button <el-icon><circle-check-filled /></el-icon>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -192,7 +216,7 @@ export default {
           showCancelButton: false,
           confirmButtonText:
             "I understand the consequences, delete this project",
-          confirmButtonClass: "el-button--danger plain",
+          confirmButtonClass: "el-button el-button--danger is-plain",
           dangerouslyUseHTMLString: true,
           inputValidator: (value) => {
             if (value === this.originalName) {

@@ -44,7 +44,7 @@
         <el-form-item label="Data type" prop="dataType">
           <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
             <div>
-              <el-checkbox label="Code" name="type"></el-checkbox>
+              <el-checkbox label="Research software" name="type"></el-checkbox>
             </div>
 
             <el-tooltip
@@ -162,7 +162,11 @@ export default {
           };
 
           for (const type of dataset.dataType) {
-            dataset.data[type] = {
+            let tempType = type;
+            if (tempType == "Research software") {
+              tempType = "Code";
+            }
+            dataset.data[tempType] = {
               uploaded: false,
               questions: {},
             };
