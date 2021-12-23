@@ -98,21 +98,23 @@
             Once you delete a project, there is no going back. Please be
             certain.
           </span>
+
           <br />
-          <el-button type="danger" plain @click="deleteDataset">
+
+          <button class="danger-button py-0" @click="deleteDataset">
             <el-icon><delete /></el-icon> Delete project
-          </el-button>
+          </button>
         </el-form-item>
       </el-form>
       <div class="py-2 flex flex-row justify-center space-x-4">
-        <el-button @click="goBack">
+        <button class="danger-plain-button" @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
-        </el-button>
-        <el-button type="primary" @click="submitForm('datasetForm')">
+        </button>
+        <button class="primary-button" @click="submitForm('datasetForm')">
           Save changes <el-icon><circle-check-filled /></el-icon>
-        </el-button>
+        </button>
       </div>
-      <div class="py-2 flex flex-row justify-center space-x-4">
+      <div class="py-2 flex flex-row justify-center space-x-4 hidden">
         <button class="primary-plain-button">
           Test button <el-icon><circle-check-filled /></el-icon>
         </button>

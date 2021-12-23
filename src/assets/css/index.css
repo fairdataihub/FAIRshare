@@ -24,20 +24,20 @@ html {
 }
 
 .sideBarMenuItem {
-  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply flex flex-row justify-start items-center;
+  @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
-  @apply text-gray-900;
-  @apply hover:text-gray-900;
-  @apply hover:bg-primary-200;
+  @apply text-gray-900 hover:text-gray-900;
+  @apply hover:bg-sky-200;
   @apply focus:outline-none active:outline-none;
 }
 
 .sideBarMenuItem.router-link-active {
-  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply flex flex-row justify-start items-center;
+  @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
-  @apply text-gray-900;
-  @apply hover:text-gray-900 focus:text-gray-900;
-  @apply bg-primary-300 hover:bg-primary-200 focus:bg-primary-300;
+  @apply text-white;
+  @apply bg-sky-400 hover:bg-sky-400 focus:bg-sky-400;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -141,54 +141,66 @@ html {
 
 /* Colours come from here: https://tailwindcss.com/docs/customizing-colors */
 
-.primary-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-primary-600;
-  @apply border border-primary-300;
-  @apply hover:bg-primary-100;
-  @apply transition-all;
-}
+@layer components {
+  .primary-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-gray-900  hover:text-primary-600;
+    @apply border border-primary-300;
+    @apply hover:bg-primary-100;
+    @apply transition-all;
+  }
 
-.secondary-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-secondary-600;
-  @apply border border-secondary-300;
-  @apply hover:bg-secondary-100;
-  @apply transition-all;
-}
+  .primary-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-white;
+    @apply border border-primary-600;
+    @apply bg-primary-500 hover:bg-primary-400;
+    @apply transition-all;
+  }
 
-.danger-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-red-600;
-  @apply border border-red-300;
-  @apply hover:bg-red-100;
-  @apply transition-all;
-}
+  .secondary-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-gray-900  hover:text-secondary-600;
+    @apply border border-secondary-300;
+    @apply hover:bg-secondary-100;
+    @apply transition-all;
+  }
 
-.primary-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-white;
-  @apply border;
-  @apply bg-primary-500 hover:bg-primary-400;
-  @apply transition-all;
-}
+  .secondary-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-black;
+    @apply border border-secondary-500;
+    @apply bg-secondary-200 hover:bg-secondary-300;
+    @apply transition-all;
+  }
 
-.danger-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-red-700;
-  @apply border border-red-300;
-  @apply bg-red-100 hover:bg-red-200;
-  @apply transition-all;
+  .danger-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-black hover:text-red-700;
+    @apply border border-red-300;
+    @apply hover:bg-red-50;
+    @apply transition-all;
+  }
+
+  .danger-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply text-[14px] font-medium;
+    @apply text-red-700;
+    @apply border border-red-300;
+    @apply bg-red-50 hover:bg-red-100;
+    @apply transition-all;
+  }
 }
 
 /* ------------------------------------------
