@@ -49,7 +49,7 @@ export default {
       };
       if (
         "zenodo" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
+        this.manager.accessTokens.zenodo.type == "token"
       ) {
         zenodoObject.buttonText = "Disconnect zenodo token";
         zenodoObject.buttonStyle = "danger";
@@ -96,7 +96,7 @@ export default {
     },
 
     async processZenodo(userInput) {
-      let key = "zenodoToken";
+      let key = "zenodo";
       let value = userInput[0];
       let spinner = this.createLoading();
       let errorFound = false;
