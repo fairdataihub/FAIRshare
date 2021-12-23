@@ -62,8 +62,13 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <el-button plain class="button" @click="interactWithService('github')" :type="githubDetails.buttonStyle"
-            >{{githubDetails.action}}</el-button>
+            <el-button
+              plain
+              class="button"
+              @click="interactWithService('github')"
+              :type="githubDetails.buttonStyle"
+              >{{ githubDetails.action }}</el-button
+            >
           </div>
         </div>
       </div>
@@ -132,8 +137,13 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <el-button plain class="button" @click="interactWithService('zenodo')" :type="zenodoDetails.buttonStyle"
-            >{{zenodoDetails.action}}</el-button>
+            <el-button
+              plain
+              class="button"
+              @click="interactWithService('zenodo')"
+              :type="zenodoDetails.buttonStyle"
+              >{{ zenodoDetails.action }}</el-button
+            >
           </div>
         </div>
       </div>
@@ -149,9 +159,9 @@
 
 <script>
 /* eslint-disable vue/no-unused-components */
-import { markRaw } from 'vue'
+import { markRaw } from "vue";
 import { useTokenStore } from "../../store/access";
-import ButtonInputDialog from "../../components/dialogs/ButtonInputDialog"
+import ButtonInputDialog from "../../components/dialogs/ButtonInputDialog";
 import { useDatasetsStore } from "../../store/datasets";
 import { UserFilled } from "@element-plus/icons";
 import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
@@ -162,11 +172,11 @@ import { ElMessageBox } from "element-plus";
 export default {
   name: "ManageAccount",
   components: {
-    "GithubTokenConnection":GithubTokenConnection,
-    "ZenodoTokenConnection":ZenodoTokenConnection,
-    "GithubOAuthConnection":GithubOAuthConnection,
+    GithubTokenConnection: GithubTokenConnection,
+    ZenodoTokenConnection: ZenodoTokenConnection,
+    GithubOAuthConnection: GithubOAuthConnection,
     UserFilled,
-    ButtonInputDialog
+    ButtonInputDialog,
   },
   setup() {
     const manager = useTokenStore();
@@ -179,17 +189,17 @@ export default {
       datasetStore: useDatasetsStore(),
       buttonList: [],
       dialogVisable: false,
-      dialogNumInput: 0
+      dialogNumInput: 0,
     };
   },
   methods: {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
-    closeButtonDialog(){
-      this.dialogVisable = false
-      this.buttonList = []
-      this.dialogNumInput = 0
+    closeButtonDialog() {
+      this.dialogVisable = false;
+      this.buttonList = [];
+      this.dialogNumInput = 0;
     },
     APIkeyWarning(key) {
       ElMessageBox.confirm(
@@ -229,25 +239,28 @@ export default {
         });
       }
     },
-    interactWithService(serviceName){
-      if(serviceName == "github"){
-        if ("github" in this.manager.accessTokens){
-          this.APIkeyWarning("github")
+    interactWithService(serviceName) {
+      if (serviceName == "github") {
+        if ("github" in this.manager.accessTokens) {
+          this.APIkeyWarning("github");
         } else {
-          this.buttonList = [markRaw(GithubTokenConnection), markRaw(GithubOAuthConnection)]
-          this.dialogNumInput = 2
-          this.dialogVisable = true
+          this.buttonList = [
+            markRaw(GithubTokenConnection),
+            markRaw(GithubOAuthConnection),
+          ];
+          this.dialogNumInput = 2;
+          this.dialogVisable = true;
         }
-      } else if (serviceName == "zenodo"){
-        if ("zenodo" in this.manager.accessTokens){
-          this.APIkeyWarning("zenodo")
+      } else if (serviceName == "zenodo") {
+        if ("zenodo" in this.manager.accessTokens) {
+          this.APIkeyWarning("zenodo");
         } else {
-          this.buttonList = [markRaw(ZenodoTokenConnection)]
-          this.dialogNumInput = 1
-          this.dialogVisable = true
+          this.buttonList = [markRaw(ZenodoTokenConnection)];
+          this.dialogNumInput = 1;
+          this.dialogVisable = true;
         }
       }
-    }
+    },
   },
   computed: {
     zenodoDetails() {
@@ -255,36 +268,36 @@ export default {
         status: "Not Connected",
         name: "",
         action: "Connect",
-        buttonStyle: ""
+        buttonStyle: "",
       };
       if ("zenodo" in this.manager.accessTokens) {
         zenodoObject.status = "Connected";
         zenodoObject.name = this.manager.accessTokens.zenodo.name;
         zenodoObject.action = "Disconnect";
-        zenodoObject.buttonStyle = "danger"
+        zenodoObject.buttonStyle = "danger";
       }
       return zenodoObject;
     },
     connectedToZenodo() {
-      return ("zenodo" in this.manager.accessTokens)
+      return "zenodo" in this.manager.accessTokens;
     },
     githubDetails() {
       let githubObject = {
         status: "Not Connected",
         name: "",
         action: "Connect",
-        buttonStyle: ""
+        buttonStyle: "",
       };
       if ("github" in this.manager.accessTokens) {
         githubObject.status = "Connected";
         githubObject.name = this.manager.accessTokens.github.name;
         githubObject.action = "Disconnect";
-        githubObject.buttonStyle = "danger"
+        githubObject.buttonStyle = "danger";
       }
       return githubObject;
     },
     connectedToGithub() {
-      return ("github" in this.manager.accessTokens)
+      return "github" in this.manager.accessTokens;
     },
   },
   async mounted() {

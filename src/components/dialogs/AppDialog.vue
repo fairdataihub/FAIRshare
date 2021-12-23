@@ -14,10 +14,7 @@
         <el-button class="button" size="small" @click="closeDialog('Cancelled')"
           >Cancel</el-button
         >
-        <el-button
-          class="button"
-          size="small"
-          @click="confirmInput"
+        <el-button class="button" size="small" @click="confirmInput"
           >OK</el-button
         >
       </div>
@@ -68,22 +65,22 @@ export default {
 
 <style scoped>
 .el-button--text {
-  @apply text-base
+  @apply text-base;
 }
 
 .dialog-Container {
-  @apply flex flex-col gap-3
+  @apply flex flex-col gap-3;
 }
 .inputField {
-  @apply flex flex-col
+  @apply flex flex-col;
 }
 .inputBar-Header {
-  @apply text-base pl-3 box-border
+  @apply text-base pl-3 box-border;
 }
 .inputBar {
-  @apply w-full
+  @apply w-full;
 }
 .bottom {
-  @apply pt-3 box-border flex items-end justify-end
+  @apply pt-3 box-border flex items-end justify-end;
 }
 </style>

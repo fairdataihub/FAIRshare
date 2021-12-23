@@ -7,8 +7,7 @@
     <div class="dialog-Container">
       <div class="inputField">
         <div v-for="i in this.numInput" :key="i">
-          <component v-bind:is="buttons[i-1]">
-          </component >
+          <component v-bind:is="buttons[i - 1]"> </component>
         </div>
       </div>
     </div>

@@ -1,8 +1,11 @@
 <template>
   <div class="buttonContainer">
-    <el-button plain class="button" @click="connectOAuth()" :type="buttonStatus.buttonStyle">{{
-      buttonStatus.buttonText
-    }}</el-button
+    <el-button
+      plain
+      class="button"
+      @click="connectOAuth()"
+      :type="buttonStatus.buttonStyle"
+      >{{ buttonStatus.buttonText }}</el-button
     >
   </div>
 </template>
@@ -35,18 +38,22 @@ export default {
     buttonStatus() {
       let githubObject = {
         buttonText: "Connect github account",
-        buttonStyle: ""
+        buttonStyle: "",
       };
-      if ("github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "OAuth") {
+      if (
+        "github" in this.manager.accessTokens &&
+        this.manager.accessTokens.github.type == "OAuth"
+      ) {
         githubObject.buttonText = "Disconnect github account";
-        githubObject.buttonStyle = "danger"
+        githubObject.buttonStyle = "danger";
       }
       return githubObject;
     },
     connectedToGithubByOAuth() {
-      return ("github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "OAuth")
+      return (
+        "github" in this.manager.accessTokens &&
+        this.manager.accessTokens.github.type == "OAuth"
+      );
     },
   },
   methods: {
@@ -157,5 +164,3 @@ export default {
   },
 };
 </script>
-
-
