@@ -46,16 +46,15 @@
           </el-button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="primary-button"
           :disabled="disableContinue"
           @click="uploadToZenodo"
           v-if="validTokenAvailable"
         >
           Start upload
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>
