@@ -34,6 +34,7 @@
               class="primary-plain-button"
               @click="navigateToCurate(`${key}`)"
               :disabled="workflow.datasetPublished"
+              ref="continueButton"
             >
               Curate {{ combineDataTypes(workflow.type) }}
               <el-icon><arrow-right-bold /></el-icon>
@@ -105,6 +106,8 @@ export default {
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
     }
+
+    this.navigateToCurate("workflow1");
   },
 };
 </script>
