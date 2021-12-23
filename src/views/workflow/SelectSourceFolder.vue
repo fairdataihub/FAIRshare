@@ -147,6 +147,7 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+    console.log(this.workflow);
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");

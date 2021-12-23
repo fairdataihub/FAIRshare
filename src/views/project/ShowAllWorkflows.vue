@@ -96,7 +96,7 @@ export default {
       } else {
         routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
       }
-
+      console.log(routerPath);
       this.$router.push({ path: routerPath });
     },
   },

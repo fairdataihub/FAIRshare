@@ -78,19 +78,15 @@
         </li>
       </ul>
 
-      <div class="w-full flex flex-row justify-center py-6 space-x-4">
+      <div class="w-full flex flex-row justify-center py-6">
         <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
-          @click="createWorkflows"
-        >
+        <button class="primary-button" @click="createWorkflows">
           Start curating
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>

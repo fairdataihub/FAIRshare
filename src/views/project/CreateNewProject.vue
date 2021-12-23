@@ -96,9 +96,10 @@
           <el-button @click="cancelNewDataset" type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Cancel
           </el-button>
-          <el-button type="primary" @click="submitForm('datasetForm')">
+
+          <button class="primary-button" @click="submitForm('datasetForm')">
             Create new project <el-icon><d-arrow-right /></el-icon>
-          </el-button>
+          </button>
         </div>
       </el-form>
     </div>
@@ -147,6 +148,12 @@ export default {
           const datasetID = uuidv4();
           const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
 
+          var index = this.datasetForm.dataType.indexOf("Research software");
+
+          if (index !== -1) {
+            this.datasetForm.dataType[index] = "Code";
+          }
+
           let dataset = {
             id: datasetID,
             image: datasetImage,
@@ -163,6 +170,7 @@ export default {
 
           for (const type of dataset.dataType) {
             let tempType = type;
+            console.log(type);
             if (tempType == "Research software") {
               tempType = "Code";
             }
