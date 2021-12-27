@@ -19,7 +19,7 @@
         step-by-step through the following process:
       </p>
 
-      <ul class="list-decimal m-5">
+      <!-- <ul class="list-decimal m-5">
         <li class="pb-3">
           <b> Select data files to be included </b>
           <p class="text-xs">
@@ -76,7 +76,53 @@
             to complete the process
           </p>
         </li>
-      </ul>
+      </ul> -->
+
+      <el-timeline>
+      <el-timeline-item timestamp="Step 1" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Select data files to be included</h4>
+          <p>You will be asked to select the location of the files (source code,
+            executable, etc.) you want to include</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="Step 2" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Ensure standard development practices are followed</h4>
+          <p>You will be asked a series a question to ensure standard practices
+            have been followed when developing your software</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="Step 3" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Provide metadata</h4>
+          <p>Information about your software will be requested and will be used
+            to include the standard codemeta.json file in your dataset</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="Step 4" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Select a suitable repository</h4>
+          <p>You will be prompted to select one of the suitable repositories for
+            research software currently supported by FAIRShare</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="Step 5" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Upload dataset</h4>
+          <p>The standard codemeta.json and citation.json metadata files will be
+            automatically included amongst your data files before uploading
+            everything on the repository</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="Step 6" placement="top">
+        <el-card class="dynamic-card">
+          <h4 class="font-bold text-base">Publish dataset</h4>
+          <p>You will be requested to make the dataset visible on the repository
+            to complete the process</p>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
 
       <div class="w-full flex flex-row justify-center py-6">
         <router-link to="/datasets" class="hidden">
@@ -148,3 +194,18 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.dynamic-card::after {
+  border-radius: 5px;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.dynamic-card:hover {
+  transform: scale(1.005, 1.005);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+.dynamic-card:hover::after {
+  opacity: 1;
+}
+</style>
