@@ -42,8 +42,8 @@
         </el-form-item>
 
         <el-form-item label="Data type" prop="dataType">
-          <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
-            <div>
+          <el-checkbox-group v-model="datasetForm.dataType" class="p-0 flex gap-3">
+            <!-- <div>
               <el-checkbox label="Research software" name="type"></el-checkbox>
             </div>
 
@@ -88,7 +88,33 @@
                   disabled
                 ></el-checkbox>
               </el-tooltip>
-            </div>
+            </div> -->
+            <el-card class="box-card">
+              <h4 class="text-base">Group 1</h4>
+              <el-checkbox label="Research software" name="type"></el-checkbox>
+              <el-checkbox
+                  label="Publications"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+            </el-card>
+
+            <el-card class="box-card">
+              <h4 class="text-base">Group 2</h4>
+              <el-checkbox label="Figure" name="type" disabled></el-checkbox>
+                <el-checkbox label="Media" name="type" disabled></el-checkbox>
+                <el-checkbox label="Poster" name="type" disabled></el-checkbox>
+            </el-card>
+
+            <el-card class="box-card">
+              <h4 class="text-base">Group 3</h4>
+                <el-checkbox
+                  label="Genomic Data"
+                  name="type"
+                  disabled
+                ></el-checkbox>
+            </el-card>
+
           </el-checkbox-group>
         </el-form-item>
 
@@ -203,3 +229,9 @@ export default {
   mounted() {},
 };
 </script>
+
+<style scoped>
+.box-card {
+  width: 200px;
+}
+</style>
