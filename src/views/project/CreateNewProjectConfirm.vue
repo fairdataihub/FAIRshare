@@ -1,6 +1,15 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="
+      h-full
+      w-full
+      flex flex-col
+      justify-center
+      items-center
+      p-3
+      px-5
+      max-w-screen-xl
+    "
   >
     <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
@@ -140,25 +149,26 @@ export default {
       this.$router.push({ path: `/datasets/${this.datasetID}` });
     },
   },
-  mounted() {
+  async mounted() {
     this.datasetStore.getDataset(this.datasetID);
     this.dataset = this.datasetStore.currentDataset;
 
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     for (let i = 1; i <= 6; i++) {
       document.getElementById("step" + i).style.display = "none";
     }
-    document.getElementById("button-area").style.display = "none"
-    for (let i = 1; i <= 6; i++) {
-      setTimeout(() => {
-        document.getElementById("step" + i).style.display = "";
-      }, i * 500);
+    document.getElementById("button-area").style.display = "none";
+    async function showCard(id) {
+      document.getElementById(id).style.display = "";
+      await delay(500);
     }
-    setTimeout(() => {
-      document.getElementById("button-area").style.display = ""
-    }, 3500);
+    for (let i = 1; i <= 6; i++) {
+      await showCard("step" + i);
+    }
+    document.getElementById("button-area").style.display = "";
   },
 };
 </script>
@@ -184,7 +194,7 @@ export default {
   }
 }
 
-#button-area{
+#button-area {
   animation-name: button-animation;
   animation-duration: 1.5s;
 }
