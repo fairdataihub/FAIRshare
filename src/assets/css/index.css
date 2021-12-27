@@ -37,7 +37,7 @@ html {
   @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
   @apply text-white;
-  @apply bg-sky-400 hover:bg-sky-400 focus:bg-sky-400;
+  @apply bg-sky-500 hover:bg-sky-500 focus:bg-sky-500;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -123,12 +123,12 @@ html {
 .project {
   @apply flex flex-row justify-between items-center;
   @apply w-full p-3;
-  @apply hover:bg-primary-100;
+  @apply hover:bg-sky-100;
   @apply transition-all cursor-pointer;
 }
 
 .selected-project {
-  @apply bg-primary-200 hover:bg-primary-200;
+  @apply bg-sky-200 hover:bg-sky-200;
 }
 
 .selected-repo {
@@ -157,7 +157,7 @@ html {
     @apply px-5 py-2 rounded;
     @apply text-[14px] font-medium;
     @apply text-white;
-    @apply border border-primary-600;
+    @apply border border-primary-500;
     @apply bg-primary-500 hover:bg-primary-400;
     @apply transition-all;
   }

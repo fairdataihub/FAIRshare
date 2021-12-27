@@ -1505,7 +1505,7 @@ export default {
     "zenodoMetadataForm.license": {
       handler(val) {
         const value = val.licensename;
-        if (value === "") {
+        if (value === "" || val === null) {
           // this.titleErrorMessage =
           ("Please provide a valid and descriptive title.");
           this.$refs.zmForm.validate();

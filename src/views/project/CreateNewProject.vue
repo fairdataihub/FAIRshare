@@ -148,7 +148,7 @@ export default {
           const datasetID = uuidv4();
           const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
 
-          var index = this.datasetForm.dataType.indexOf("Research software");
+          const index = this.datasetForm.dataType.indexOf("Research software");
 
           if (index !== -1) {
             this.datasetForm.dataType[index] = "Code";

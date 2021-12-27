@@ -216,9 +216,11 @@ export default {
         "Are you absolutely sure?",
         {
           showCancelButton: false,
+          type: "warning",
           confirmButtonText:
             "I understand the consequences, delete this project",
-          confirmButtonClass: "el-button el-button--danger is-plain",
+          confirmButtonClass:
+            "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
           dangerouslyUseHTMLString: true,
           inputValidator: (value) => {
             if (value === this.originalName) {
