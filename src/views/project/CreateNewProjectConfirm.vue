@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      h-full
-      w-full
-      flex flex-col
-      justify-center
-      items-center
-      p-3
-      px-5
-      max-w-screen-xl
-    "
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
   >
     <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
@@ -169,12 +160,23 @@ export default {
 </script>
 
 <style scoped>
-#step1, #step2,#step3,#step4,#step5,#step6{
+#step1,
+#step2,
+#step3,
+#step4,
+#step5,
+#step6 {
   animation-name: example;
   animation-duration: 2s;
 }
 @keyframes example {
-  from {opacity: 0;transform: scale(0.5, 0.5);}
-  to {opacity: 1;transform: scale(1, 1);}
+  from {
+    opacity: 0;
+    transform: scale(0.5, 0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
 }
 </style>
