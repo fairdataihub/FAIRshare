@@ -150,14 +150,14 @@ export default {
     for (let i = 1; i <= 6; i++) {
       document.getElementById("step" + i).style.display = "none";
     }
-    document.getElementById("button-area").style.display = "none"
+    document.getElementById("button-area").style.display = "none";
     for (let i = 1; i <= 6; i++) {
       setTimeout(() => {
         document.getElementById("step" + i).style.display = "";
       }, i * 500);
     }
     setTimeout(() => {
-      document.getElementById("button-area").style.display = ""
+      document.getElementById("button-area").style.display = "";
     }, 3500);
   },
 };
@@ -184,7 +184,7 @@ export default {
   }
 }
 
-#button-area{
+#button-area {
   animation-name: button-animation;
   animation-duration: 1.5s;
 }
