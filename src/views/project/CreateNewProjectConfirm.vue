@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      h-full
-      w-full
-      flex flex-col
-      justify-center
-      items-center
-      p-3
-      px-5
-      max-w-screen-xl
-    "
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
   >
     <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
