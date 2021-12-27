@@ -81,7 +81,7 @@
         </el-timeline-item>
       </el-timeline>
 
-      <div class="w-full flex flex-row justify-center py-6">
+      <div class="w-full flex flex-row justify-center py-6" id="button-area">
         <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
@@ -150,11 +150,15 @@ export default {
     for (let i = 1; i <= 6; i++) {
       document.getElementById("step" + i).style.display = "none";
     }
+    document.getElementById("button-area").style.display = "none"
     for (let i = 1; i <= 6; i++) {
       setTimeout(() => {
         document.getElementById("step" + i).style.display = "";
       }, i * 500);
     }
+    setTimeout(() => {
+      document.getElementById("button-area").style.display = ""
+    }, 3500);
   },
 };
 </script>
@@ -166,10 +170,10 @@ export default {
 #step4,
 #step5,
 #step6 {
-  animation-name: example;
+  animation-name: card-animation;
   animation-duration: 2s;
 }
-@keyframes example {
+@keyframes card-animation {
   from {
     opacity: 0;
     transform: scale(0.5, 0.5);
@@ -177,6 +181,20 @@ export default {
   to {
     opacity: 1;
     transform: scale(1, 1);
+  }
+}
+
+#button-area{
+  animation-name: button-animation;
+  animation-duration: 1.5s;
+}
+
+@keyframes button-animation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
