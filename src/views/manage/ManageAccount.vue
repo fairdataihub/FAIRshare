@@ -137,13 +137,19 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <el-button
+            <!-- <el-button
               plain
               class="button"
               @click="interactWithService('zenodo')"
               :type="zenodoDetails.buttonStyle"
               >{{ zenodoDetails.action }}</el-button
+            > -->
+            <button
+              :class="zenodoDetails.buttonStyle"
+              @click="interactWithService('zenodo')"
             >
+              {{ zenodoDetails.action }}
+            </button>
           </div>
         </div>
       </div>
@@ -266,13 +272,13 @@ export default {
         status: "Not Connected",
         name: "",
         action: "Connect",
-        buttonStyle: "",
+        buttonStyle: "primary-plain-button",
       };
       if ("zenodo" in this.manager.accessTokens) {
         zenodoObject.status = "Connected";
         zenodoObject.name = this.manager.accessTokens.zenodo.name;
         zenodoObject.action = "Disconnect";
-        zenodoObject.buttonStyle = "danger";
+        zenodoObject.buttonStyle = "danger-plain-button";
       }
       return zenodoObject;
     },
@@ -284,13 +290,13 @@ export default {
         status: "Not Connected",
         name: "",
         action: "Connect",
-        buttonStyle: "",
+        buttonStyle: "primary-plain-button",
       };
       if ("github" in this.manager.accessTokens) {
         githubObject.status = "Connected";
         githubObject.name = this.manager.accessTokens.github.name;
         githubObject.action = "Disconnect";
-        githubObject.buttonStyle = "danger";
+        githubObject.buttonStyle = "danger-plain-button";
       }
       return githubObject;
     },

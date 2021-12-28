@@ -24,7 +24,7 @@
           </p>
 
           <ZenodoTokenConnectionVue
-            :callback="showConnection"
+            :callbackFunction="showConnection"
           ></ZenodoTokenConnectionVue>
 
           <!-- <el-input
@@ -146,7 +146,7 @@ export default {
     },
     async showConnection() {
       this.validTokenAvailable = true;
-      this.uploadToZenodo();
+      // this.uploadToZenodo();
     },
   },
   async mounted() {
@@ -157,7 +157,7 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
-    const validZenodoConnection = await this.tokens.getZenodoTokenConnected();
+    const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 
     // console.log(validZenodoConnection);
 

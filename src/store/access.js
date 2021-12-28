@@ -121,6 +121,20 @@ export const useTokenStore = defineStore({
       }
     },
 
+    async verifyZenodoConnection() {
+      const tokenObject = await this.getToken("zenodo");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = await this.verifyZenodoToken(token);
+
+        return response;
+      }
+    },
+
     async verifyGithubTokenByTokenConnection(token) {
       return await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
@@ -147,6 +161,20 @@ export const useTokenStore = defineStore({
       }
     },
 
+    verifyGithubConnection() {
+      const tokenObject = this.getToken("github");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = this.verifyGithubToken(token);
+
+        return response;
+      }
+    },
+
     async getGithubUser(token) {
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
@@ -166,6 +194,11 @@ export const useTokenStore = defineStore({
       } else if (response.status === 401) {
         return "No user found";
       }
+    },
+
+    async verifyAllConnections() {
+      this.verifyZenodoConnection();
+      this.verifyGithubConnection();
     },
   },
 });

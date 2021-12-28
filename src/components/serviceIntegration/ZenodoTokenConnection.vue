@@ -1,12 +1,15 @@
 <template>
   <div class="buttonContainer">
-    <el-button
+    <!-- <el-button
       plain
       class="button"
       @click="openDialog()"
       :type="buttonStatus.buttonStyle"
       >{{ buttonStatus.buttonText }}</el-button
-    >
+    > -->
+    <button :class="buttonStatus.buttonStyle" @click="openDialog()">
+      {{ buttonStatus.buttonText }}
+    </button>
     <AppDialog
       v-model="dialogVisable"
       :numInput="dialogNumInput"
@@ -36,6 +39,13 @@ export default {
       dialogNumInput,
     };
   },
+  props: {
+    callbackFunction: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+  },
   data() {
     return {
       manager: useTokenStore(),
@@ -45,14 +55,14 @@ export default {
     buttonStatus() {
       let zenodoObject = {
         buttonText: "Connect zenodo token",
-        buttonStyle: "",
+        buttonStyle: "primary-plain-button",
       };
       if (
         "zenodo" in this.manager.accessTokens &&
         this.manager.accessTokens.zenodo.type == "token"
       ) {
         zenodoObject.buttonText = "Disconnect zenodo token";
-        zenodoObject.buttonStyle = "danger";
+        zenodoObject.buttonStyle = "danger-plain-button";
       }
       return zenodoObject;
     },
@@ -86,12 +96,12 @@ export default {
       if (response[0] == "OK") {
         await this.processZenodo(response[1]);
       } else {
-        ElNotification({
-          type: "info",
-          message: "Input canceled",
-          position: "bottom-right",
-          duration: 2000,
-        });
+        // ElNotification({
+        //   type: "info",
+        //   message: "Input canceled",
+        //   position: "bottom-right",
+        //   duration: 2000,
+        // });
       }
     },
 
@@ -113,9 +123,10 @@ export default {
           errorFound = true;
         }
         if (!errorFound) {
+          this.callbackFunction();
           ElNotification({
             type: "success",
-            message: "Saved successfully",
+            message: "Connected to Zenodo successfully",
             position: "bottom-right",
             duration: 2000,
           });
@@ -123,7 +134,7 @@ export default {
       } else {
         ElNotification({
           type: "error",
-          message: "Cannot verify the token provided",
+          message: "Could not verify the token provided",
           position: "bottom-right",
           duration: 2000,
         });
@@ -139,7 +150,7 @@ export default {
 
     APIkeyWarning() {
       ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
+        "Do you want to remove the connection to Zenodo?",
         "Warning",
         {
           confirmButtonText: "OK",
@@ -149,14 +160,15 @@ export default {
       )
         .then(async () => {
           this.deleteToken("zenodo");
+          this.callbackFunction();
         })
         .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
+          // ElNotification({
+          //   type: "info",
+          //   message: "Delete canceled",
+          //   position: "bottom-right",
+          //   duration: 2000,
+          // });
         });
     },
 
@@ -170,7 +182,7 @@ export default {
       if (!errorFound) {
         ElNotification({
           type: "success",
-          message: "Deleted",
+          message: "Successfully disconnected from Zenodo",
           position: "bottom-right",
           duration: 2000,
         });
