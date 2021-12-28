@@ -21,6 +21,7 @@
       align-center
       finish-status="success"
       v-if="progressBar.type === 'zenodo'"
+      class="py-3"
     >
       <el-step
         v-for="step in steps"

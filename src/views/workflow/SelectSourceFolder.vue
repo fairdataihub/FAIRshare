@@ -22,7 +22,7 @@
       />
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
-        <router-link :to="`/datasets/${datasetID}`" class="">
+        <router-link :to="`/datasets/new/${datasetID}/confirm`" class="">
           <button class="danger-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
@@ -154,9 +154,10 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     // split this up when separate
-    if (this.workflow.folderSelected) {
-      this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-    }
+    // if (this.workflow.folderSelected) {
+    this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+    // }
+    // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {
     //   this.folderPath = this.workflow.folderPath;

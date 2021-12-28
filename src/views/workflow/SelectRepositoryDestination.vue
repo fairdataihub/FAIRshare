@@ -12,16 +12,16 @@
         Please click one of the following options:
       </span>
 
-      <div class="grid grid-cols-3 gap-4 my-8">
+      <div class="grid grid-cols-3 my-8 gap-8">
         <div
-          class="flex flex-col justify-between items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
+          class="flex flex-col justify-between items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-stone-200 hover:shadow-lg transition-all cursor-pointer h-[150px] w-[200px]"
           :class="{ 'selected-repo': repoID === 'zenodo' }"
           @click="selectRepo($event, 'zenodo')"
         >
           <img
             src="https://api.iconify.design/simple-icons/zenodo.svg"
             alt=""
-            class="h-16 mb-3"
+            class="h-16 w-16 mb-3"
           />
           <span class="text-lg mx-5"> Zenodo </span>
         </div>
@@ -29,7 +29,7 @@
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30 pointer-events-none text-stone-400"
+                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 transition-all cursor-pointer h-[150px] w-[200px] pointer-events-none text-stone-400"
                 :class="{ 'selected-repo': repoID === 'figshare' }"
                 @click="selectRepo($event, 'figshare')"
               >
@@ -47,7 +47,7 @@
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30 pointer-events-none text-stone-400"
+                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-[150px] w-[200px] pointer-events-none text-stone-400"
                 :class="{ 'selected-repo': repoID === 'softwareheritage' }"
                 @click="selectRepo($event, 'softwareheritage')"
               >
@@ -56,7 +56,9 @@
                   alt=""
                   class="h-16 mb-3 opacity-50"
                 />
-                <span class="text-lg mx-5"> Software Heritage </span>
+                <span class="text-lg mx-5 w-full text-center">
+                  Software Heritage
+                </span>
               </div>
             </div>
           </template>
@@ -142,7 +144,7 @@ export default {
     addMetadata() {
       this.dataset.destinationSelected = true;
 
-      if (!this.workflow.destination) {
+      if (!("destination" in this.workflow)) {
         this.workflow.destination = {};
       }
 
@@ -154,12 +156,17 @@ export default {
         };
       }
 
+      console.log(this.workflow.destination);
+
       if (this.workflow.destination.name === this.repoID) {
         //do nothing
+        this.workflow.destination.name = this.repoID;
       } else {
         // warn the user that they are changing repos (add a sweetalert or something)
         this.workflow.destination.name = this.repoID;
       }
+
+      console.log(this.workflow.destination);
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
@@ -181,6 +188,8 @@ export default {
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;
     }
+
+    console.log(this.workflow.destination);
 
     this.loading = false;
   },

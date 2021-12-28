@@ -27,8 +27,8 @@ html {
   @apply flex flex-row justify-start items-center;
   @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
-  @apply text-gray-900 hover:text-gray-900;
-  @apply hover:bg-sky-200;
+  @apply text-black hover:text-white;
+  @apply hover:bg-primary-400;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -37,7 +37,7 @@ html {
   @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
   @apply text-white;
-  @apply bg-sky-500 hover:bg-sky-500 focus:bg-sky-500;
+  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-500;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -123,12 +123,12 @@ html {
 .project {
   @apply flex flex-row justify-between items-center;
   @apply w-full p-3;
-  @apply hover:bg-sky-100;
+  @apply hover:bg-primary-100;
   @apply transition-all cursor-pointer;
 }
 
 .selected-project {
-  @apply bg-sky-200 hover:bg-sky-200;
+  @apply bg-primary-200 hover:bg-primary-200;
 }
 
 .selected-repo {
@@ -158,8 +158,12 @@ html {
     @apply text-[14px] font-medium;
     @apply text-white;
     @apply border border-primary-500;
-    @apply bg-primary-500 hover:bg-primary-400;
+    @apply bg-primary-600 hover:bg-primary-500;
     @apply transition-all;
+  }
+
+  .primary-button:disabled {
+    @apply opacity-50;
   }
 
   .secondary-plain-button {
@@ -253,6 +257,10 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;
+}
+
+.el-collapse-item__header {
+  @apply bg-gray-100;
 }
 
 /* ------------------------------------------

@@ -39,6 +39,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Basic Information"
             >
               <el-form-item label="Software name">
                 <div class="flex flex-row items-center">
@@ -138,6 +139,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Authors and Contributors"
             >
               <el-form-item label="Authors" :error="authorsErrorMessage">
                 <draggable
@@ -354,6 +356,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Discoverability"
             >
               <el-form-item label="Application category">
                 <div class="flex flex-row items-center">
@@ -467,6 +470,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Development tools"
             >
               <el-form-item
                 label="Code repository"
@@ -570,6 +574,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Run-time environment"
             >
               <el-form-item label="Programming Language">
                 <div class="flex flex-row items-center">
@@ -711,6 +716,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Current version of the software"
             >
               <el-form-item
                 label="Current version"
@@ -778,6 +784,7 @@
               :nextStep="nextFormStep"
               :prevStep="prevFormStep"
               :validityCheck="invalidStatus"
+              stepTitle="Additional Information"
               :lastStep="true"
             >
               <el-form-item label="Reference publication">

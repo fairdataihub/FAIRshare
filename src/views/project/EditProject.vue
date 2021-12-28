@@ -1,5 +1,7 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
+  <div
+    class="h-screen w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+  >
     <div class="flex flex-col h-full w-full">
       <el-page-header @back="goBack" class="text-lg">
         <template #content>
@@ -23,6 +25,7 @@
         :model="datasetForm"
         label-width="150px"
         @submit.prevent
+        class="border-2 border-slate-100 p-4 rounded-lg"
         :rules="rules"
       >
         <el-form-item label="Dataset name" prop="datasetName">
