@@ -46,6 +46,7 @@ import {
   Star,
   Unlock,
   User,
+  UserFilled,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -67,6 +68,7 @@ app.component("setting", Setting);
 app.component("star", Star);
 app.component("unlock", Unlock);
 app.component("user", User);
+app.component("user-filled", UserFilled);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router

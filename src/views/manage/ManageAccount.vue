@@ -38,7 +38,7 @@
                 effect="plain"
                 class="text-green-600 border-green-400"
               >
-                <el-icon> <UserFilled /> </el-icon>
+                <el-icon> <user-filled /> </el-icon>
                 <span class="px-2">
                   {{ githubDetails.name }}
                 </span>
@@ -113,7 +113,7 @@
                 effect="plain"
                 class="text-green-600 border-green-400"
               >
-                <el-icon> <UserFilled /> </el-icon>
+                <el-icon> <user-filled /> </el-icon>
                 <span class="px-2">
                   {{ zenodoDetails.name }}
                 </span>
@@ -163,7 +163,6 @@ import { markRaw } from "vue";
 import { useTokenStore } from "../../store/access";
 import ButtonInputDialog from "../../components/dialogs/ButtonInputDialog";
 import { useDatasetsStore } from "../../store/datasets";
-import { UserFilled } from "@element-plus/icons";
 import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
 import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTokenConnection";
 import GithubOAuthConnection from "../../components/serviceIntegration/GithubOAuthConnection";
@@ -175,7 +174,6 @@ export default {
     GithubTokenConnection: GithubTokenConnection,
     ZenodoTokenConnection: ZenodoTokenConnection,
     GithubOAuthConnection: GithubOAuthConnection,
-    UserFilled,
     ButtonInputDialog,
   },
   setup() {
