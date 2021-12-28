@@ -14,11 +14,7 @@
         <el-button class="button" size="small" @click="closeDialog('Cancelled')"
           >Cancel</el-button
         >
-        <el-button
-          class="button"
-          size="small"
-          type="primary"
-          @click="confirmInput"
+        <el-button class="button" size="small" @click="confirmInput"
           >OK</el-button
         >
       </div>
@@ -29,7 +25,6 @@
 <script>
 import { ref } from "vue";
 export default {
-  name: "AppDialog",
   props: {
     numInput: { type: Number },
     headers: { type: Array },
@@ -37,14 +32,12 @@ export default {
   },
   setup(props) {
     const userInputs = ref([]);
-    const dialogVisable = ref(false);
     for (let i = 0; i < props.numInput - 1; i++) {
       userInputs.value.push("");
     }
     //console.log("user inputs: ", userInputs);
     return {
       userInputs,
-      dialogVisable,
     };
   },
   methods: {
@@ -72,31 +65,22 @@ export default {
 
 <style scoped>
 .el-button--text {
-  font-size: 15px;
+  @apply text-base;
 }
 
 .dialog-Container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-3;
 }
 .inputField {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 .inputBar-Header {
-  font-size: 13.5px;
-  padding-left: 3px;
-  box-sizing: border-box;
+  @apply text-base pl-3 box-border;
 }
 .inputBar {
-  width: 100%;
+  @apply w-full;
 }
 .bottom {
-  padding-top: 5px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  @apply pt-3 box-border flex items-end justify-end;
 }
 </style>

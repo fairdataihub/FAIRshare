@@ -54,75 +54,12 @@ const loadFile = async () => {
   }
 };
 
-// const loadStatusFile = async () => {
-//   const exists = await fs.pathExists(CONNECTION_STATUS_PATH);
-
-//   if (!exists) {
-//     createFile();
-//     return {};
-//   } else {
-//     try {
-//       let allStatus = fs.readJsonSync(CONNECTION_STATUS_PATH);
-//       return allStatus;
-//     } catch (err) {
-//       console.error(err);
-//       return {};
-//     }
-//   }
-// };
-
 export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
-    connnectionStatus: {
-      // "zenodoTokenConnected": false,
-      // "githubTokenConnected": false,
-      // "githubOAuthConnected": false
-    },
   }),
   actions: {
-    async getGithubTokenConnected() {
-      await this.loadStatus();
-      return this.connnectionStatus["githubTokenConnected"];
-    },
-    // confirmGithubTokenConnected() {
-    //   this.saveStatus("githubTokenConnected", "true");
-    // },
-    // confirmGithubTokenDisconnected() {
-    //   this.saveStatus("githubTokenConnected", "false");
-    // },
-
-    async getGithubOAuthConnected() {
-      await this.loadStatus();
-      //// console.log("this.connnectionStatus: ", this.connnectionStatus, "githubTokenConnected" in this.connnectionStatus)
-      return this.connnectionStatus["githubOAuthConnected"];
-    },
-    // confirmGithubOAuthConnected() {
-    //   this.saveStatus("githubOAuthConnected", "true");
-    // },
-    // confirmGithubOAuthDisconnected() {
-    //   this.saveStatus("githubOAuthConnected", "false");
-    // },
-
-    async getZenodoTokenConnected() {
-      await this.loadStatus();
-      return this.connnectionStatus["zenodoTokenConnected"];
-    },
-    // confirmZenodoTokenConnected() {
-    //   this.saveStatus("zenodoTokenConnected", "true");
-    // },
-    // confirmZenodoTokenDisconnected() {
-    //   this.saveStatus("zenodoTokenConnected", "false");
-    // },
-
-    // async loadStatus() {
-    //   try {
-    //     this.connnectionStatus = await loadStatusFile();
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // },
     async loadTokens() {
       try {
         this.accessTokens = await loadFile();
@@ -136,7 +73,6 @@ export const useTokenStore = defineStore({
       tokenObject.token = await encrypt(tokenObject.token);
       this.accessTokens[key] = tokenObject;
       await this.syncTokens();
-      this.loadStatus();
     },
     async writeDatasetsToFile() {
       fs.ensureFileSync(TOKEN_STORE_PATH);
@@ -145,61 +81,21 @@ export const useTokenStore = defineStore({
     async syncTokens() {
       this.writeDatasetsToFile();
     },
-
-    // async saveStatus(key, status) {
-    //   let encryptedStatus = await encrypt(status);
-    //   this.connnectionStatus[key] = encryptedStatus;
-    //   //await this.loadStatus();
-    //   await this.loadStatus()
-    // },
-    // async writeStatusToFile() {
-    //   fs.ensureFileSync(CONNECTION_STATUS_PATH);
-    //   fs.writeJsonSync(CONNECTION_STATUS_PATH, this.connnectionStatus);
-    // },
-    // async loadStatus() {
-    //   this.writeStatusToFile();
-    // },
-    async loadStatus() {
-      if ("githubOAuth" in this.accessTokens) {
-        this.connnectionStatus["githubOAuthConnected"] = true;
-      } else {
-        this.connnectionStatus["githubOAuthConnected"] = false;
-      }
-
-      if ("githubToken" in this.accessTokens) {
-        this.connnectionStatus["githubTokenConnected"] = true;
-      } else {
-        this.connnectionStatus["githubTokenConnected"] = false;
-      }
-
-      if ("zenodoToken" in this.accessTokens) {
-        this.connnectionStatus["zenodoTokenConnected"] = true;
-      } else {
-        this.connnectionStatus["zenodoTokenConnected"] = false;
-      }
-    },
-
-    // decrypt the token and return it
     async getToken(key) {
-      //await this.loadTokens()
       if (key in this.accessTokens) {
         const tokenObject = Object.assign({}, this.accessTokens[key]);
-        // console.log("Old object: ", this.accessTokens[key]);
         tokenObject.token = await decrypt(this.accessTokens[key].token);
-        // console.log("new Object: ", this.accessTokens[key]);
         return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
       }
     },
-
     async deleteToken(key) {
       delete this.accessTokens[key];
       await this.syncTokens();
       this.loadStatus();
     },
-
-    async getDepositions(token) {
+    async verifyZenodoTokenByDepositions(token) {
       return await axios
         .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
           params: {
@@ -214,9 +110,8 @@ export const useTokenStore = defineStore({
         });
     },
 
-    async checkZenodoToken(token) {
-      const response = await this.getDepositions(token);
-      // console.log("************** ****", response);
+    async verifyZenodoToken(token) {
+      const response = await this.verifyZenodoTokenByDepositions(token);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {
@@ -226,7 +121,7 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async verifyGithub(token) {
+    async verifyGithubTokenByTokenConnection(token) {
       return await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
           headers: {
@@ -241,8 +136,8 @@ export const useTokenStore = defineStore({
         });
     },
 
-    async checkGithubToken(token) {
-      const response = await this.verifyGithub(token);
+    async verifyGithubToken(token) {
+      const response = await this.verifyGithubTokenByTokenConnection(token);
       if (response.status === 200) {
         return true;
       } else if (response.status === 401) {
@@ -252,10 +147,7 @@ export const useTokenStore = defineStore({
       }
     },
 
-    async getGithubUser(key) {
-      const tokenObject = await this.getToken(key);
-      const token = tokenObject.token;
-      // console.log("??: ", token);
+    async getGithubUser(token) {
       let response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
@@ -272,20 +164,8 @@ export const useTokenStore = defineStore({
       if (response.status === 200) {
         return response.data.login;
       } else if (response.status === 401) {
-        return "??";
+        return "No user found";
       }
-    },
-
-    async readZenodoUser(key) {
-      let result;
-      await this.getToken(key).then((res) => {
-        if (res == "NO_TOKEN_FOUND") {
-          result = "no user found";
-        } else {
-          result = res.name;
-        }
-      });
-      return result;
     },
   },
 });
