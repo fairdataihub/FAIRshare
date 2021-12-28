@@ -2,7 +2,7 @@
   <div
     class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
 
       <span> Let's make your research software FAIR. </span>
@@ -19,66 +19,69 @@
         step-by-step through the following process:
       </p>
 
-      <ul class="list-decimal m-5">
-        <li class="pb-3">
-          <b> Select data files to be included </b>
-          <p class="text-xs">
-            You will be asked to select the location of the files (source code,
-            executable, etc.) you want to include
-          </p>
-        </li>
+      <el-timeline>
+        <el-timeline-item id="step1" timestamp="Step 1" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">
+              Select data files to be included
+            </h4>
+            <p>
+              You will be asked to select the location of the files (source
+              code, executable, etc.) you want to include
+            </p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item id="step2" timestamp="Step 2" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">
+              Ensure standard development practices are followed
+            </h4>
+            <p>
+              You will be asked a series a question to ensure standard practices
+              have been followed when developing your software
+            </p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item id="step3" timestamp="Step 3" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">Provide metadata</h4>
+            <p>
+              Information about your software will be requested and will be used
+              to include the standard codemeta.json file in your dataset
+            </p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item id="step4" timestamp="Step 4" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">Select a suitable repository</h4>
+            <p>
+              You will be prompted to select one of the suitable repositories
+              for research software currently supported by FAIRShare
+            </p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item id="step5" timestamp="Step 5" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">Upload dataset</h4>
+            <p>
+              The standard codemeta.json and citation.json metadata files will
+              be automatically included amongst your data files before uploading
+              everything on the repository
+            </p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item id="step6" timestamp="Step 6" placement="top">
+          <el-card class="dynamic-card">
+            <h4 class="font-bold text-base">Publish dataset</h4>
+            <p>
+              You will be requested to make the dataset visible on the
+              repository to complete the process
+            </p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
 
-        <li class="pb-3">
-          <b> Ensure standard development practices are followed </b>
-          <p class="text-xs">
-            You will be asked a series a question to ensure standard practices
-            have been followed when developing your software
-          </p>
-        </li>
-
-        <li class="pb-3">
-          <b> Provide metadata </b>
-          <p class="text-xs">
-            Information about your software will be requested and will be used
-            to include the standard codemeta.json file in your dataset
-          </p>
-        </li>
-
-        <li class="pb-3">
-          <b> Select a suitable repository </b>
-          <p class="text-xs">
-            You will be prompted to select one of the suitable repositories for
-            research software currently supported by FAIRShare
-          </p>
-        </li>
-
-        <li class="pb-3">
-          <b> Provide repository-specific metadata </b>
-          <p class="text-xs">
-            Metadata required by the selected repository will be requested
-            (pre-populated from step #3 where there is an overlap)
-          </p>
-        </li>
-
-        <li class="pb-3">
-          <b> Upload dataset </b>
-          <p class="text-xs">
-            The standard codemeta.json and citation.json metadata files will be
-            automatically included amongst your data files before uploading
-            everything on the repository
-          </p>
-        </li>
-
-        <li class="pb-3">
-          <b> Publish dataset </b>
-          <p class="text-xs">
-            You will be requested to make the dataset visible on the repository
-            to complete the process
-          </p>
-        </li>
-      </ul>
-
-      <div class="w-full flex flex-row justify-center py-6">
+      <div class="w-full flex flex-row justify-center py-6" id="button-area">
         <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
@@ -97,7 +100,6 @@ import { useDatasetsStore } from "../../store/datasets";
 
 export default {
   name: "CreateNewProjectConfirm",
-
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -138,13 +140,62 @@ export default {
       this.$router.push({ path: `/datasets/${this.datasetID}` });
     },
   },
-  mounted() {
+  async mounted() {
     this.datasetStore.getDataset(this.datasetID);
     this.dataset = this.datasetStore.currentDataset;
 
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    for (let i = 1; i <= 6; i++) {
+      document.getElementById("step" + i).style.display = "none";
+    }
+    document.getElementById("button-area").style.display = "none";
+    async function showCard(id) {
+      document.getElementById(id).style.display = "";
+      await delay(500);
+    }
+    for (let i = 1; i <= 6; i++) {
+      await showCard("step" + i);
+    }
+    document.getElementById("button-area").style.display = "";
   },
 };
 </script>
+
+<style scoped>
+#step1,
+#step2,
+#step3,
+#step4,
+#step5,
+#step6 {
+  animation-name: card-animation;
+  animation-duration: 2s;
+}
+@keyframes card-animation {
+  from {
+    opacity: 0;
+    transform: scale(0.5, 0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+
+#button-area {
+  animation-name: button-animation;
+  animation-duration: 1.5s;
+}
+
+@keyframes button-animation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+</style>
