@@ -92,7 +92,7 @@
                   <span class="text-sm">Epidemiology</span>
                 </div>
               </el-checkbox>
-              </div>
+            </div>
 
             <div class="flex gap-4">
               <el-checkbox
@@ -210,7 +210,7 @@ export default {
             data: {},
             workflowConfirmed: false,
           };
-          console.log("dataset: ", dataset)
+          console.log("dataset: ", dataset);
           dataset.data.general = {
             questions: {},
           };
@@ -291,9 +291,8 @@ export default {
       .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
       .forEach((el) => {
         el.style.marginRight = "0px";
-        el.style.setProperty("--el-checkbox-checked-text-color","#f97316")
+        el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
       });
-    
   },
 };
 </script>
@@ -314,14 +313,13 @@ export default {
   align-items: center;
   justify-content: center;
   @apply transition-all
-  /* transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); */
+  /* transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); */;
 }
-.createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked{
-  @apply border-secondary-500
+.createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
+  @apply border-secondary-500;
 }
 
 .single-check-box:hover {
-  @apply border-secondary-500 shadow-lg shadow-secondary-500/50
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
 }
-
 </style>
