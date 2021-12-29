@@ -1,6 +1,15 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
+    class="
+      h-full
+      w-full
+      flex flex-col
+      justify-center
+      items-center
+      p-3
+      px-5
+      max-w-screen-lg
+    "
   >
     <div class="flex flex-col h-full w-full">
       <span class="font-medium"> Start a new data curation project </span>
@@ -41,54 +50,67 @@
           </el-popover>
         </el-form-item>
 
-        <el-form-item label="Data type" prop="dataType">
-          <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
-            <div>
-              <el-checkbox label="Research software" name="type"></el-checkbox>
-            </div>
-
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Coming soon..."
-              placement="right-end"
-            >
-              <div class="w-max">
-                <el-checkbox label="Figure" name="type" disabled></el-checkbox>
-                <el-checkbox label="Media" name="type" disabled></el-checkbox>
-                <el-checkbox label="Poster" name="type" disabled></el-checkbox>
-              </div>
-            </el-tooltip>
-
-            <div>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="right-end"
+        <el-form-item
+          label="Data type"
+          prop="dataType"
+          class="createNewProjectFormItemContainer"
+        >
+          <el-checkbox-group
+            v-model="datasetForm.dataType"
+            class="checkbox-group"
+          >
+            <div class="flex gap-4">
+              <el-checkbox
+                border
+                name="type1"
+                class="single-check-box"
+                label="Research software"
               >
-                <el-checkbox
-                  label="Publications"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
+                <div class="flex flex-col items-center">
+                  <monitor class="h-6 w-6"></monitor>
+                  <span class="text-xs">Research</span>
+                  <span class="text-xs">software</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox border name="type" class="single-check-box" label="Immunology">
+                <div class="flex flex-col items-center">
+                  <Icon icon="mdi:virus-outline" class="h-6 w-6"/>
+                  <span class="text-xs">Immunology</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox border name="type" class="single-check-box" label="Epidemiology">
+                <div class="flex flex-col items-center">
+                  <Icon icon="healthicons:virus-patient-outline" class="h-6 w-6"/>
+                  <span class="text-xs">Epidemiology</span>
+                </div>
+              </el-checkbox>
+            <!-- </div>
+
+            <div class="flex"> -->
+              <el-checkbox border name="type" class="single-check-box" label="Genomic">
+                <div class="flex flex-col items-center">
+                  <Icon icon="uil:dna" class="h-6 w-6"/>
+                  <span class="text-xs">Genomic</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox border name="type" class="single-check-box" label="Document">
+                <div class="flex flex-col items-center">
+                  <document class="h-6 w-6"></document>
+                  <span class="text-xs">Document</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox border name="type" class="single-check-box" label="Media">
+                <div class="flex flex-col items-center">
+                  <video-play class="h-6 w-6"></video-play>
+                  <span class="text-xs">Media</span>
+                </div>
+              </el-checkbox>
             </div>
 
-            <div>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="right-end"
-              >
-                <el-checkbox
-                  label="Genomic Data"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
-            </div>
           </el-checkbox-group>
         </el-form-item>
 
@@ -108,12 +130,14 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
-
 import { useDatasetsStore } from "../../store/datasets";
 import { ElNotification } from "element-plus";
-
+import { Icon } from '@iconify/vue';
 export default {
   name: "CreateNewProject",
+  components: {
+		Icon,
+	},
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -200,6 +224,71 @@ export default {
       this.$router.push({ name: "ShowAllProjects" });
     },
   },
-  mounted() {},
+  mounted() {
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__label"
+      )
+      .forEach((el) => {
+        el.style.paddingLeft = "0px";
+      });
+
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
+      .forEach((el) => {
+        el.style.display = "flex";
+        el.style.flexDirection = "column-reverse";
+        el.style.gap = "2px";
+      });
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__input"
+      )
+      .forEach((el) => {
+        el.style.display = "none";
+      });
+    
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.padding = "0px";
+        // el.style.width = "100px";
+        // el.style.height = "100px";
+      });
+
+      document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered+.el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.marginLeft = "0px";
+      });
+
+      document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox"
+      )
+      .forEach((el) => {
+        el.style.marginRight = "0px";
+      });
+  },
 };
 </script>
+<style scoped>
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  box-sizing: border-box;
+  gap: 20px;
+}
+.single-check-box {
+  width: 100px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
