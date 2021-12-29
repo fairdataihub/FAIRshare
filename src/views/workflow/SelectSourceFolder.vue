@@ -22,7 +22,7 @@
       />
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
-        <router-link :to="`/datasets/new/${datasetID}/confirm`" class="">
+        <router-link :to="`/datasets/${datasetID}/landing`" class="">
           <button class="danger-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>

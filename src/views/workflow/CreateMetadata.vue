@@ -2093,17 +2093,20 @@ export default {
     },
   },
   methods: {
+    async sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    },
     setCurrentStep(step) {
       this.currentStep = step;
     },
-    prevFormStep() {
+    async prevFormStep() {
       if (this.currentStep - 1 > 0) {
         this.currentStep--;
       } else {
         this.navigateBack();
       }
     },
-    nextFormStep() {
+    async nextFormStep() {
       const totalSteps = 7;
 
       if (this.currentStep + 1 > totalSteps) {

@@ -11,7 +11,7 @@
     >
       <template #reference>
         <el-icon
-          class="px-2 cursor-help flex justify-center items-center text-gray-500 hover:text-black z-0"
+          class="px-2 text-gray-500 hover:text-black text-lg cursor-help"
           size="18"
         >
           <question-filled />

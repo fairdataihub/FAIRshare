@@ -1,5 +1,4 @@
 <template>
-  <!-- <transition name="lightfadeleft"> -->
   <div v-if="currentStepId == stepId" :key="stepId">
     <div
       class="form-card-content border-2 border-slate-100 rounded-lg mb-4 shadow-md"
@@ -38,7 +37,6 @@
       </button>
     </div>
   </div>
-  <!-- </transition> -->
 </template>
 
 <script>

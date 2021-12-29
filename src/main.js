@@ -37,6 +37,7 @@ import {
   Delete,
   Edit,
   HomeFilled,
+  InfoFilled,
   Key,
   Lock,
   QuestionFilled,
@@ -59,6 +60,7 @@ app.component("data-line", DataLine);
 app.component("delete", Delete);
 app.component("edit", Edit);
 app.component("home-filled", HomeFilled);
+app.component("info-filled", InfoFilled);
 app.component("key", Key);
 app.component("lock", Lock);
 app.component("question-filled", QuestionFilled);
