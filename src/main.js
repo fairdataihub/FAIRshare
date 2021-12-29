@@ -53,7 +53,7 @@ import {
   PictureFilled,
   Reading,
   VideoPlay,
-  Document
+  Document,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);

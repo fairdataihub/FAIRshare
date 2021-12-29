@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      h-full
-      w-full
-      flex flex-col
-      justify-center
-      items-center
-      p-3
-      px-5
-      max-w-screen-lg
-    "
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
   >
     <div class="flex flex-col h-full w-full">
       <span class="font-medium"> Start a new data curation project </span>
@@ -75,23 +66,26 @@
 
               <el-checkbox border name="type" class="single-check-box" label="Immunology" disabled>
                 <div class="flex flex-col items-center">
-                  <Icon icon="mdi:virus-outline" class="h-6 w-6"/>
+                  <Icon icon="mdi:virus-outline" class="h-6 w-6" />
                   <span class="text-xs">Immunology</span>
                 </div>
               </el-checkbox>
 
               <el-checkbox border name="type" class="single-check-box" label="Epidemiology" disabled>
                 <div class="flex flex-col items-center">
-                  <Icon icon="healthicons:virus-patient-outline" class="h-6 w-6"/>
+                  <Icon
+                    icon="healthicons:virus-patient-outline"
+                    class="h-6 w-6"
+                  />
                   <span class="text-xs">Epidemiology</span>
                 </div>
               </el-checkbox>
-            <!-- </div>
+              <!-- </div>
 
             <div class="flex"> -->
               <el-checkbox border name="type" class="single-check-box" label="Genomic" disabled>
                 <div class="flex flex-col items-center">
-                  <Icon icon="uil:dna" class="h-6 w-6"/>
+                  <Icon icon="uil:dna" class="h-6 w-6" />
                   <span class="text-xs">Genomic</span>
                 </div>
               </el-checkbox>
@@ -110,7 +104,6 @@
                 </div>
               </el-checkbox>
             </div>
-
           </el-checkbox-group>
         </el-form-item>
 
@@ -132,12 +125,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { useDatasetsStore } from "../../store/datasets";
 import { ElNotification } from "element-plus";
-import { Icon } from '@iconify/vue';
+import { Icon } from "@iconify/vue";
 export default {
   name: "CreateNewProject",
   components: {
-		Icon,
-	},
+    Icon,
+  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -247,7 +240,7 @@ export default {
       .forEach((el) => {
         el.style.display = "none";
       });
-    
+
     document
       .querySelectorAll(
         ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
@@ -258,7 +251,7 @@ export default {
         // el.style.height = "100px";
       });
 
-      document
+    document
       .querySelectorAll(
         ".createNewProjectFormItemContainer .el-checkbox.is-bordered+.el-checkbox.is-bordered"
       )
@@ -266,10 +259,8 @@ export default {
         el.style.marginLeft = "0px";
       });
 
-      document
-      .querySelectorAll(
-        ".createNewProjectFormItemContainer .el-checkbox"
-      )
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
       .forEach((el) => {
         el.style.marginRight = "0px";
       });
