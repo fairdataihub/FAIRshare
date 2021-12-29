@@ -2251,6 +2251,7 @@ export default {
       this.dataset.data.general.questions.funding = this.codeForm.funding;
       this.dataset.data.general.questions.referencePublication =
         this.codeForm.referencePublication;
+      this.dataset.data.general.questions.license = this.codeForm.license;
 
       this.codeForm.relatedLinks = this.filterArrayOfObjects(
         this.codeForm.relatedLinks,

@@ -1356,6 +1356,10 @@ export default {
           this.zenodoMetadataForm.keywords = generalForm.keywords;
         }
 
+        if ("license" in generalForm) {
+          this.zenodoMetadataForm.license.licenseName = generalForm.license;
+        }
+
         if ("authors" in generalForm) {
           let authors = generalForm.authors;
           let newAuthors = [];

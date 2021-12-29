@@ -5,6 +5,7 @@ import CreateNewProject from "../views/project/CreateNewProject.vue";
 import CreateNewProjectConfirm from "../views/project/CreateNewProjectConfirm.vue";
 import EditProject from "../views/project/EditProject.vue";
 import ShowAllWorkflows from "../views/project/ShowAllWorkflows.vue";
+import ProjectLanding from "../views/project/ProjectLanding.vue";
 
 import SelectSourceFolder from "../views/workflow/SelectSourceFolder.vue";
 import CreateMetadata from "../views/workflow/CreateMetadata.vue";
@@ -39,6 +40,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/edit",
     component: EditProject,
+  },
+  {
+    path: "/datasets/:datasetID/landing",
+    component: ProjectLanding,
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectFolder",

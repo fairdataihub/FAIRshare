@@ -7,79 +7,16 @@
 
       <span> Let's make your research software FAIR. </span>
 
-      <!-- <p class="py-1">
-        In order to do this, SODA will automatically try to group up similar
-        data into their own datasets.
-      </p> -->
-
       <line-divider> </line-divider>
 
       <p class="py-2">
+        In order to do this, SODA will automatically try to group up similar
+        data into their own datasets.
+      </p>
+      <!-- <p class="py-2">
         FAIRShare will help you make you research software by guiding you
         step-by-step through the following process:
-      </p>
-
-      <el-timeline>
-        <el-timeline-item id="step1" timestamp="Step 1" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">
-              Select data files to be included
-            </h4>
-            <p>
-              You will be asked to select the location of the files (source
-              code, executable, etc.) you want to include
-            </p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item id="step2" timestamp="Step 2" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">
-              Ensure standard development practices are followed
-            </h4>
-            <p>
-              You will be asked a series a question to ensure standard practices
-              have been followed when developing your software
-            </p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item id="step3" timestamp="Step 3" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">Provide metadata</h4>
-            <p>
-              Information about your software will be requested and will be used
-              to include the standard codemeta.json file in your dataset
-            </p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item id="step4" timestamp="Step 4" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">Select a suitable repository</h4>
-            <p>
-              You will be prompted to select one of the suitable repositories
-              for research software currently supported by FAIRShare
-            </p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item id="step5" timestamp="Step 5" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">Upload dataset</h4>
-            <p>
-              The standard codemeta.json and citation.json metadata files will
-              be automatically included amongst your data files before uploading
-              everything on the repository
-            </p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item id="step6" timestamp="Step 6" placement="top">
-          <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">Publish dataset</h4>
-            <p>
-              You will be requested to make the dataset visible on the
-              repository to complete the process
-            </p>
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
+      </p> -->
 
       <div class="w-full flex flex-row justify-center py-6" id="button-area">
         <router-link to="/datasets" class="hidden">
@@ -137,7 +74,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push({ path: `/datasets/${this.datasetID}` });
+      this.$router.push({ path: `/datasets/${this.datasetID}/landing` });
     },
   },
   async mounted() {
@@ -147,19 +84,6 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-    for (let i = 1; i <= 6; i++) {
-      document.getElementById("step" + i).style.display = "none";
-    }
-    document.getElementById("button-area").style.display = "none";
-    async function showCard(id) {
-      document.getElementById(id).style.display = "";
-      await delay(500);
-    }
-    for (let i = 1; i <= 6; i++) {
-      await showCard("step" + i);
-    }
-    document.getElementById("button-area").style.display = "";
   },
 };
 </script>

@@ -137,43 +137,82 @@ export default {
       let metadata = {};
 
       metadata.upload_type = "software";
-      metadata.title = zenodoMetadata.title;
-      metadata.publication_date = zenodoMetadata.publicationDate;
-
-      metadata.creators = [];
-      zenodoMetadata.authors.forEach((author) => {
-        const creatorObject = {};
-
-        creatorObject.name = author.name;
-        creatorObject.affiliation = author.affiliation;
-
-        if (author.orcid !== "") {
-          creatorObject.orcid = author.orcid;
-        }
-
-        metadata.creators.push(creatorObject);
-      });
-
-      metadata.description = zenodoMetadata.description;
-      metadata.access_right = zenodoMetadata.license.accessRight;
-      metadata.license = zenodoMetadata.license.licenseName;
       metadata.prereserve_doi = true;
 
-      metadata.keywords = [];
-      zenodoMetadata.keywords.forEach((keyword) => {
-        metadata.keywords.push(keyword.keyword);
-      });
+      if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
+        metadata.title = zenodoMetadata.title;
+      }
+      if (
+        "publicationDate" in zenodoMetadata &&
+        zenodoMetadata.publicationDate != ""
+      ) {
+        metadata.publication_date = zenodoMetadata.publicationDate;
+      }
 
-      metadata.notes = zenodoMetadata.additionalNotes;
+      if ("authors" in zenodoMetadata) {
+        metadata.creators = [];
+        zenodoMetadata.authors.forEach((author) => {
+          const creatorObject = {};
 
-      metadata.related_identifiers = [];
-      zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
-        metadata.related_identifiers.push({
-          relation: relatedIdentifier.relationship,
-          identifier: relatedIdentifier.identifier,
-          resource_type: relatedIdentifier.resourceType,
+          creatorObject.name = author.name;
+          creatorObject.affiliation = author.affiliation;
+
+          if (author.orcid !== "") {
+            creatorObject.orcid = author.orcid;
+          }
+
+          metadata.creators.push(creatorObject);
         });
-      });
+      }
+
+      if ("description" in zenodoMetadata && zenodoMetadata.description != "") {
+        metadata.description = zenodoMetadata.description;
+      }
+      if ("license" in zenodoMetadata) {
+        if ("accessRight" in zenodoMetadata.license) {
+          metadata.access_right = zenodoMetadata.license.accessRight;
+        }
+        if ("licenseName" in zenodoMetadata.license) {
+          metadata.license = zenodoMetadata.license.licenseName;
+        }
+      }
+
+      if ("keywords" in zenodoMetadata) {
+        if (zenodoMetadata.keywords.length > 0) {
+          metadata.keywords = [];
+          zenodoMetadata.keywords.forEach((keyword) => {
+            metadata.keywords.push(keyword.keyword);
+          });
+        }
+      }
+
+      if ("version" in zenodoMetadata && zenodoMetadata.version !== "") {
+        metadata.version = zenodoMetadata.version;
+      }
+
+      if ("language" in zenodoMetadata && zenodoMetadata.language !== "") {
+        metadata.language = zenodoMetadata.language;
+      }
+
+      if (
+        "additionalNotes" in zenodoMetadata &&
+        zenodoMetadata.additionalNotes != ""
+      ) {
+        metadata.notes = zenodoMetadata.additionalNotes;
+      }
+
+      if ("relatedIdentifiers" in zenodoMetadata) {
+        if (zenodoMetadata.relatedIdentifiers.length > 0) {
+          metadata.related_identifiers = [];
+          zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
+            metadata.related_identifiers.push({
+              relation: relatedIdentifier.relationship,
+              identifier: relatedIdentifier.identifier,
+              resource_type: relatedIdentifier.resourceType,
+            });
+          });
+        }
+      }
 
       if ("contributors" in zenodoMetadata) {
         if (zenodoMetadata.contributors.length > 0) {
@@ -204,25 +243,43 @@ export default {
       }
 
       if ("journal" in zenodoMetadata) {
-        if (zenodoMetadata.journal.title !== "") {
+        if (
+          "title" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.title !== ""
+        ) {
           metadata.journal_title = zenodoMetadata.journal.title;
         }
-        if (zenodoMetadata.journal.volume !== "") {
+        if (
+          "volume" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.volume !== ""
+        ) {
           metadata.journal_volume = zenodoMetadata.journal.volume;
         }
-        if (zenodoMetadata.journal.issue !== "") {
+        if (
+          "issue" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.issue !== ""
+        ) {
           metadata.journal_issue = zenodoMetadata.journal.issue;
         }
-        if (zenodoMetadata.journal.pages !== "") {
+        if (
+          "pages" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.pages !== ""
+        ) {
           metadata.journal_pages = zenodoMetadata.journal.pages;
         }
       }
 
       if ("conference" in zenodoMetadata) {
-        if (zenodoMetadata.conference.title !== "") {
+        if (
+          "title" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.title !== ""
+        ) {
           metadata.conference_title = zenodoMetadata.conference.title;
         }
-        if (zenodoMetadata.conference.acronym !== "") {
+        if (
+          "acronym" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.acronym !== ""
+        ) {
           metadata.conference_acronym = zenodoMetadata.conference.acronym;
         }
 
@@ -235,42 +292,90 @@ export default {
           }
         }
 
-        if (zenodoMetadata.conference.place !== "") {
+        if (
+          "place" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.place !== ""
+        ) {
           metadata.conference_place = zenodoMetadata.conference.place;
         }
-        if (zenodoMetadata.conference.url !== "") {
+        if (
+          "url" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.url !== ""
+        ) {
           metadata.conference_url = zenodoMetadata.conference.url;
         }
-        if (zenodoMetadata.conference.session !== "") {
+        if (
+          "session" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.session !== ""
+        ) {
           metadata.conference_session = zenodoMetadata.conference.session;
         }
-        if (zenodoMetadata.conference.part !== "") {
+        if (
+          "part" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.part !== ""
+        ) {
           metadata.conference_session_part = zenodoMetadata.conference.part;
         }
       }
 
       if ("bookReportChapter" in zenodoMetadata) {
-        metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
-        metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
-        metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
-        metadata.partof_title = zenodoMetadata.bookReportChapter.title;
-        metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
+        if (
+          "publisher" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.publisher !== ""
+        ) {
+          metadata.imprint_publisher =
+            zenodoMetadata.bookReportChapter.publisher;
+        }
+        if (
+          "isbn" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.isbn !== ""
+        ) {
+          metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
+        }
+        if (
+          "place" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.place !== ""
+        ) {
+          metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
+        }
+        if (
+          "title" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.title !== ""
+        ) {
+          metadata.partof_title = zenodoMetadata.bookReportChapter.title;
+        }
+        if (
+          "pages" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.pages !== ""
+        ) {
+          metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
+        }
       }
 
       if ("thesis" in zenodoMetadata) {
-        metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
+        if (
+          "awardingUniversity" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.awardingUniversity !== ""
+        ) {
+          metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
+        }
 
-        metadata.thesis_supervisors = [];
-        zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
-          metadata.thesis_supervisors.push({
-            name: supervisor.name,
-            affiliation: supervisor.affiliation,
-            orcid: supervisor.orcid,
+        if (
+          "thesis_supervisors" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.thesis_supervisors.length > 0
+        ) {
+          metadata.thesis_supervisors = [];
+          zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
+            metadata.thesis_supervisors.push({
+              name: supervisor.name,
+              affiliation: supervisor.affiliation,
+              orcid: supervisor.orcid,
+            });
           });
-        });
+        }
       }
 
-      if ("subjects" in zenodoMetadata) {
+      if ("subjects" in zenodoMetadata && zenodoMetadata.subjects.length > 0) {
         metadata.subjects = [];
         zenodoMetadata.subjects.forEach((subject) => {
           metadata.subjects.push({
@@ -279,18 +384,6 @@ export default {
             scheme: "url",
           });
         });
-      }
-
-      if ("version" in zenodoMetadata) {
-        if (zenodoMetadata.version !== "") {
-          metadata.version = zenodoMetadata.version;
-        }
-      }
-
-      if ("language" in zenodoMetadata) {
-        if (zenodoMetadata.language !== "") {
-          metadata.language = zenodoMetadata.language;
-        }
       }
 
       console.log(metadata);

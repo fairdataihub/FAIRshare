@@ -14,7 +14,7 @@
 
       <div class="grid grid-cols-3 my-8 gap-8">
         <div
-          class="flex flex-col justify-between items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-stone-200 hover:shadow-lg transition-all cursor-pointer h-[150px] w-[200px]"
+          class="flex flex-col justify-evenly items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-stone-200 hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px]"
           :class="{ 'selected-repo': repoID === 'zenodo' }"
           @click="selectRepo($event, 'zenodo')"
         >
@@ -29,7 +29,7 @@
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 transition-all cursor-pointer h-[150px] w-[200px] pointer-events-none text-stone-400"
+                class="flex flex-col justify-evenly items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400"
                 :class="{ 'selected-repo': repoID === 'figshare' }"
                 @click="selectRepo($event, 'figshare')"
               >
@@ -47,7 +47,7 @@
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-between items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-[150px] w-[200px] pointer-events-none text-stone-400"
+                class="flex flex-col justify-evenly items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400"
                 :class="{ 'selected-repo': repoID === 'softwareheritage' }"
                 @click="selectRepo($event, 'softwareheritage')"
               >
