@@ -64,14 +64,26 @@
                 </div>
               </el-checkbox>
 
-              <el-checkbox border name="type" class="single-check-box" label="Immunology" disabled>
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Immunology"
+                disabled
+              >
                 <div class="flex flex-col items-center">
                   <Icon icon="mdi:virus-outline" class="h-6 w-6" />
                   <span class="text-xs">Immunology</span>
                 </div>
               </el-checkbox>
 
-              <el-checkbox border name="type" class="single-check-box" label="Epidemiology" disabled>
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Epidemiology"
+                disabled
+              >
                 <div class="flex flex-col items-center">
                   <Icon
                     icon="healthicons:virus-patient-outline"
@@ -83,21 +95,39 @@
               <!-- </div>
 
             <div class="flex"> -->
-              <el-checkbox border name="type" class="single-check-box" label="Genomic" disabled>
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Genomic"
+                disabled
+              >
                 <div class="flex flex-col items-center">
                   <Icon icon="uil:dna" class="h-6 w-6" />
                   <span class="text-xs">Genomic</span>
                 </div>
               </el-checkbox>
 
-              <el-checkbox border name="type" class="single-check-box" label="Document" disabled>
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Document"
+                disabled
+              >
                 <div class="flex flex-col items-center">
                   <document class="h-6 w-6"></document>
                   <span class="text-xs">Document</span>
                 </div>
               </el-checkbox>
 
-              <el-checkbox border name="type" class="single-check-box" label="Media" disabled>
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Media"
+                disabled
+              >
                 <div class="flex flex-col items-center">
                   <video-play class="h-6 w-6"></video-play>
                   <span class="text-xs">Media</span>
