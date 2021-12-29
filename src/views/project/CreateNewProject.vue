@@ -58,9 +58,9 @@
                 label="Research software"
               >
                 <div class="flex flex-col items-center">
-                  <monitor class="h-6 w-6"></monitor>
-                  <span class="text-xs">Research</span>
-                  <span class="text-xs">software</span>
+                  <monitor class="h-12 w-12"></monitor>
+                  <span class="text-sm">Research</span>
+                  <span class="text-sm">software</span>
                 </div>
               </el-checkbox>
 
@@ -72,8 +72,8 @@
                 disabled
               >
                 <div class="flex flex-col items-center">
-                  <Icon icon="mdi:virus-outline" class="h-6 w-6" />
-                  <span class="text-xs">Immunology</span>
+                  <Icon icon="mdi:virus-outline" class="h-12 w-12" />
+                  <span class="text-sm">Immunology</span>
                 </div>
               </el-checkbox>
 
@@ -87,14 +87,14 @@
                 <div class="flex flex-col items-center">
                   <Icon
                     icon="healthicons:virus-patient-outline"
-                    class="h-6 w-6"
+                    class="h-12 w-12"
                   />
-                  <span class="text-xs">Epidemiology</span>
+                  <span class="text-sm">Epidemiology</span>
                 </div>
               </el-checkbox>
-              <!-- </div>
+              </div>
 
-            <div class="flex"> -->
+            <div class="flex gap-4">
               <el-checkbox
                 border
                 name="type"
@@ -103,8 +103,8 @@
                 disabled
               >
                 <div class="flex flex-col items-center">
-                  <Icon icon="uil:dna" class="h-6 w-6" />
-                  <span class="text-xs">Genomic</span>
+                  <Icon icon="uil:dna" class="h-12 w-12" />
+                  <span class="text-sm">Genomic</span>
                 </div>
               </el-checkbox>
 
@@ -116,8 +116,8 @@
                 disabled
               >
                 <div class="flex flex-col items-center">
-                  <document class="h-6 w-6"></document>
-                  <span class="text-xs">Document</span>
+                  <document class="h-12 w-12"></document>
+                  <span class="text-sm">Document</span>
                 </div>
               </el-checkbox>
 
@@ -129,8 +129,8 @@
                 disabled
               >
                 <div class="flex flex-col items-center">
-                  <video-play class="h-6 w-6"></video-play>
-                  <span class="text-xs">Media</span>
+                  <video-play class="h-12 w-12"></video-play>
+                  <span class="text-sm">Media</span>
                 </div>
               </el-checkbox>
             </div>
@@ -210,7 +210,7 @@ export default {
             data: {},
             workflowConfirmed: false,
           };
-
+          console.log("dataset: ", dataset)
           dataset.data.general = {
             questions: {},
           };
@@ -277,8 +277,6 @@ export default {
       )
       .forEach((el) => {
         el.style.padding = "0px";
-        // el.style.width = "100px";
-        // el.style.height = "100px";
       });
 
     document
@@ -293,7 +291,9 @@ export default {
       .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
       .forEach((el) => {
         el.style.marginRight = "0px";
+        el.style.setProperty("--el-checkbox-checked-text-color","#f97316")
       });
+    
   },
 };
 </script>
@@ -306,10 +306,22 @@ export default {
   gap: 20px;
 }
 .single-check-box {
-  width: 100px;
-  height: 80px;
+  /* width: 100px;
+  height: 80px; */
+  width: 200px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
+  @apply transition-all
+  /* transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); */
 }
+.createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked{
+  @apply border-secondary-500
+}
+
+.single-check-box:hover {
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50
+}
+
 </style>
