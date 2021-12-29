@@ -14,7 +14,7 @@
 
       <line-divider> </line-divider>
 
-      <p class="py-2">
+      <p class="py-2 pb-4">
         FAIRShare will help you make you research software by guiding you
         step-by-step through the following process:
       </p>
@@ -86,7 +86,11 @@
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
 
-        <button class="primary-button" @click="navigateToWorkflows">
+        <button
+          class="primary-button"
+          @click="navigateToWorkflows"
+          ref="continueButton"
+        >
           Let's go
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -97,6 +101,7 @@
 
 <script>
 import { useDatasetsStore } from "../../store/datasets";
+import gsap from "gsap";
 
 export default {
   name: "ProjectLanding",
@@ -117,55 +122,27 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-    for (let i = 1; i <= 6; i++) {
-      document.getElementById("step" + i).style.display = "none";
-    }
-    document.getElementById("button-area").style.display = "none";
-    async function showCard(id) {
-      document.getElementById(id).style.display = "";
-      await delay(500);
-    }
-    for (let i = 1; i <= 6; i++) {
-      await showCard("step" + i);
-    }
-    document.getElementById("button-area").style.display = "";
+    gsap
+      .fromTo(
+        ".el-timeline-item",
+        {
+          opacity: 0,
+          y: -50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: 0.5,
+          stagger: 0.2,
+        }
+      )
+      .then(() => {
+        const el = this.$refs.continueButton;
+        el.scrollIntoView({ behavior: "smooth" });
+      });
   },
 };
 </script>
 
-<style scoped>
-#step1,
-#step2,
-#step3,
-#step4,
-#step5,
-#step6 {
-  animation-name: card-animation;
-  animation-duration: 2s;
-}
-@keyframes card-animation {
-  from {
-    opacity: 0;
-    transform: scale(0.5, 0.5);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1, 1);
-  }
-}
-
-#button-area {
-  animation-name: button-animation;
-  animation-duration: 1.5s;
-}
-
-@keyframes button-animation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-</style>
+<style scoped></style>
