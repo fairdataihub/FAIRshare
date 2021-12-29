@@ -23,6 +23,28 @@ html {
   @apply h-screen w-screen;
 }
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #919191 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #919191;
+  border-radius: 15px;
+  border: 3px solid #ffffff;
+}
+
 .sideBarMenuItem {
   @apply flex flex-row justify-start items-center;
   @apply px-4 py-3 mt-2 rounded-lg transition-all;

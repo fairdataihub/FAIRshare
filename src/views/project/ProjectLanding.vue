@@ -127,7 +127,7 @@ export default {
         ".el-timeline-item",
         {
           opacity: 0,
-          y: -50,
+          y: -60,
         },
         {
           opacity: 1,
