@@ -125,6 +125,7 @@ html {
 }
 
 .hover-underline-animation:after {
+  @apply bg-secondary-600;
   content: "";
   position: absolute;
   width: 100%;
@@ -132,7 +133,6 @@ html {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #0087ca;
   transform-origin: bottom right;
   transition: transform 0.25s ease-out;
 }
@@ -235,7 +235,9 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 --------------------------------------------- */
 
 .el-form-item__label {
-  @apply flex flex-row-reverse;
+  display: flex !important;
+  justify-content: flex-end;
+  @apply flex-row-reverse;
 }
 
 .el-form-item__label:before {

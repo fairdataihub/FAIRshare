@@ -109,7 +109,7 @@
           </button>
         </el-form-item>
       </el-form>
-      <div class="py-2 flex flex-row justify-center space-x-4">
+      <div class="py-4 flex flex-row justify-center space-x-4">
         <button class="danger-plain-button" @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
         </button>
