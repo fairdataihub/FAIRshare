@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      h-full
-      w-full
-      flex flex-col
-      justify-center
-      items-center
-      p-3
-      px-5
-      max-w-screen-lg
-    "
+    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
   >
     <div class="flex flex-col h-full w-full">
       <span class="font-medium"> Start a new data curation project </span>
