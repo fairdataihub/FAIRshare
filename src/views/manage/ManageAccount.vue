@@ -62,13 +62,19 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <el-button
+            <!-- <el-button
               plain
               class="button"
               @click="interactWithService('github')"
               :type="githubDetails.buttonStyle"
               >{{ githubDetails.action }}</el-button
+            > -->
+            <button
+              :class="githubDetails.buttonStyle"
+              @click="interactWithService('github')"
             >
+              {{ githubDetails.action }}
+            </button>
           </div>
         </div>
       </div>

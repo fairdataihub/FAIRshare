@@ -1,12 +1,15 @@
 <template>
   <div class="buttonContainer">
-    <el-button
+    <!-- <el-button
       plain
       class="button"
       @click="connectOAuth()"
       :type="buttonStatus.buttonStyle"
       >{{ buttonStatus.buttonText }}</el-button
-    >
+    > -->
+    <button :class="buttonStatus.buttonStyle" @click="connectOAuth()">
+      {{ buttonStatus.buttonText }}
+    </button>
   </div>
 </template>
 
@@ -38,14 +41,14 @@ export default {
     buttonStatus() {
       let githubObject = {
         buttonText: "Connect github account",
-        buttonStyle: "",
+        buttonStyle: "primary-plain-button",
       };
       if (
         "github" in this.manager.accessTokens &&
         this.manager.accessTokens.github.type == "OAuth"
       ) {
         githubObject.buttonText = "Disconnect github account";
-        githubObject.buttonStyle = "danger";
+        githubObject.buttonStyle = "danger-plain-button";
       }
       return githubObject;
     },

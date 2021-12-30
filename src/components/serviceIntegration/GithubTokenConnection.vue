@@ -1,12 +1,15 @@
 <template>
   <div class="buttonContainer">
-    <el-button
+    <!-- <el-button
       plain
       class="button"
       @click="openDialog()"
       :type="buttonStatus.buttonStyle"
       >{{ buttonStatus.buttonText }}</el-button
-    >
+    > -->
+    <button :class="buttonStatus.buttonStyle" @click="openDialog()">
+      {{ buttonStatus.buttonText }}
+    </button>
     <AppDialog
       v-model="dialogVisable"
       :numInput="dialogNumInput"
@@ -47,14 +50,14 @@ export default {
     buttonStatus() {
       let githubObject = {
         buttonText: "Connect github token",
-        buttonStyle: "",
+        buttonStyle: "primary-plain-button",
       };
       if (
         "github" in this.manager.accessTokens &&
         this.manager.accessTokens.github.type == "token"
       ) {
         githubObject.buttonText = "Disconnect github token";
-        githubObject.buttonStyle = "danger";
+        githubObject.buttonStyle = "danger-plain-button";
       }
       return githubObject;
     },
