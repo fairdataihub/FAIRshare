@@ -1,6 +1,15 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
+    class="
+      h-full
+      w-full
+      flex flex-col
+      justify-center
+      items-center
+      p-3
+      px-5
+      max-w-screen-lg
+    "
   >
     <div class="flex flex-col h-full w-full">
       <span class="font-medium"> Start a new data curation project </span>
@@ -52,108 +61,144 @@
             class="checkbox-group"
           >
             <div class="flex gap-8">
-              <el-checkbox
-                border
-                name="type1"
-                class="single-check-box"
-                label="Research software"
-                @mouseenter="hovering[0] = true"
-                @mouseleave="hovering[0] = false"
+              <el-popover
+                placement="bottom"
+                title="Title"
+                :width="400"
+                hide-after="0"
+                trigger="hover"
+                content="this is content, this is content, this is content"
               >
-                <div class="flex flex-col items-center">
-                  <monitor class="h-12 w-12"></monitor>
-                  <span class="text-sm">Research</span>
-                  <span class="text-sm">software</span>
-                  <span class="text-xs" v-if="hovering[0]"
-                    >Random text Random text</span
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type1"
+                    class="single-check-box"
+                    label="Research software"
                   >
-                </div>
-              </el-checkbox>
+                    <div class="flex flex-col items-center">
+                      <monitor class="h-12 w-12"></monitor>
+                      <span class="text-sm">Research</span>
+                      <span class="text-sm">software</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
 
-              <el-checkbox
-                border
-                name="type"
-                class="single-check-box"
-                label="Immunology"
-                disabled
-                @mouseenter="hovering[1] = true"
-                @mouseleave="hovering[1] = false"
+              <el-popover
+                placement="bottom"
+                hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
               >
-                <div class="flex flex-col items-center">
-                  <Icon icon="mdi:virus-outline" class="h-12 w-12" />
-                  <span class="text-sm">Immunology</span>
-                  <span class="text-xs" v-if="hovering[1]">Coming soon...</span>
-                </div>
-              </el-checkbox>
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Immunology"
+                    disabled
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="mdi:virus-outline" class="h-12 w-12" />
+                      <span class="text-sm">Immunology</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
 
-              <el-checkbox
-                border
-                name="type"
-                class="single-check-box"
-                label="Epidemiology"
-                disabled
-                @mouseenter="hovering[2] = true"
-                @mouseleave="hovering[2] = false"
+              <el-popover
+                placement="bottom"
+                hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
               >
-                <div class="flex flex-col items-center">
-                  <Icon
-                    icon="healthicons:virus-patient-outline"
-                    class="h-12 w-12"
-                  />
-                  <span class="text-sm">Epidemiology</span>
-                  <span class="text-xs" v-if="hovering[2]">Coming soon...</span>
-                </div>
-              </el-checkbox>
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Epidemiology"
+                    disabled
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon
+                        icon="healthicons:virus-patient-outline"
+                        class="h-12 w-12"
+                      />
+                      <span class="text-sm">Epidemiology</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
             </div>
 
             <div class="flex gap-8">
-              <el-checkbox
-                border
-                name="type"
-                class="single-check-box"
-                label="Genomic"
-                disabled
-                @mouseenter="hovering[3] = true"
-                @mouseleave="hovering[3] = false"
+              <el-popover
+                placement="top"
+                hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
               >
-                <div class="flex flex-col items-center">
-                  <Icon icon="uil:dna" class="h-12 w-12" />
-                  <span class="text-sm">Genomic</span>
-                  <span class="text-xs" v-if="hovering[3]">Coming soon...</span>
-                </div>
-              </el-checkbox>
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Genomic"
+                    disabled
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="uil:dna" class="h-12 w-12" />
+                      <span class="text-sm">Genomic</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
 
-              <el-checkbox
-                border
-                name="type"
-                class="single-check-box"
-                label="Document"
-                disabled
-                @mouseenter="hovering[4] = true"
-                @mouseleave="hovering[4] = false"
+              <el-popover
+                placement="top"
+                hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
               >
-                <div class="flex flex-col items-center">
-                  <document class="h-12 w-12"></document>
-                  <span class="text-sm">Document</span>
-                  <span class="text-xs" v-if="hovering[4]">Coming soon...</span>
-                </div>
-              </el-checkbox>
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Document"
+                    disabled
+                  >
+                    <div class="flex flex-col items-center">
+                      <document class="h-12 w-12"></document>
+                      <span class="text-sm">Document</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
 
-              <el-checkbox
-                border
-                name="type"
-                class="single-check-box"
-                label="Media"
-                disabled
-                @mouseenter="hovering[5] = true"
-                @mouseleave="hovering[5] = false"
+              <el-popover
+                placement="top"
+                hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
               >
-                <div class="flex flex-col items-center">
-                  <video-play class="h-12 w-12"></video-play>
-                  <span class="text-sm">Media</span>
-                  <span class="text-xs" v-if="hovering[5]">Coming soon...</span>
-                </div>
-              </el-checkbox>
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Media"
+                    disabled
+                  >
+                    <div class="flex flex-col items-center">
+                      <video-play class="h-12 w-12"></video-play>
+                      <span class="text-sm">Media</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+              </el-popover>
             </div>
           </el-checkbox-group>
         </el-form-item>
