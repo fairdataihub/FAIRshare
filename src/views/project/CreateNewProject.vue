@@ -14,6 +14,7 @@
         label-width="150px"
         @submit.prevent
         :rules="rules"
+        label-position="top"
       >
         <el-form-item label="Project name" prop="datasetName">
           <el-input v-model="datasetForm.datasetName"></el-input>
@@ -41,58 +42,123 @@
           </el-popover>
         </el-form-item>
 
-        <el-form-item label="Data type" prop="dataType">
-          <el-checkbox-group v-model="datasetForm.dataType" class="p-0">
-            <div>
-              <el-checkbox label="Research software" name="type"></el-checkbox>
+        <el-form-item
+          label="Data type"
+          prop="dataType"
+          class="createNewProjectFormItemContainer"
+        >
+          <el-checkbox-group
+            v-model="datasetForm.dataType"
+            class="checkbox-group"
+          >
+            <div class="flex gap-8">
+              <el-checkbox
+                border
+                name="type1"
+                class="single-check-box"
+                label="Research software"
+                @mouseenter="hovering[0] = true"
+                @mouseleave="hovering[0] = false"
+              >
+                <div class="flex flex-col items-center">
+                  <monitor class="h-12 w-12"></monitor>
+                  <span class="text-sm">Research</span>
+                  <span class="text-sm">software</span>
+                  <span class="text-xs" v-if="hovering[0]"
+                    >Random text Random text</span
+                  >
+                </div>
+              </el-checkbox>
+
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Immunology"
+                disabled
+                @mouseenter="hovering[1] = true"
+                @mouseleave="hovering[1] = false"
+              >
+                <div class="flex flex-col items-center">
+                  <Icon icon="mdi:virus-outline" class="h-12 w-12" />
+                  <span class="text-sm">Immunology</span>
+                  <span class="text-xs" v-if="hovering[1]">Coming soon...</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Epidemiology"
+                disabled
+                @mouseenter="hovering[2] = true"
+                @mouseleave="hovering[2] = false"
+              >
+                <div class="flex flex-col items-center">
+                  <Icon
+                    icon="healthicons:virus-patient-outline"
+                    class="h-12 w-12"
+                  />
+                  <span class="text-sm">Epidemiology</span>
+                  <span class="text-xs" v-if="hovering[2]">Coming soon...</span>
+                </div>
+              </el-checkbox>
             </div>
 
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Coming soon..."
-              placement="right-end"
-            >
-              <div class="w-max">
-                <el-checkbox label="Figure" name="type" disabled></el-checkbox>
-                <el-checkbox label="Media" name="type" disabled></el-checkbox>
-                <el-checkbox label="Poster" name="type" disabled></el-checkbox>
-              </div>
-            </el-tooltip>
-
-            <div>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="right-end"
+            <div class="flex gap-8">
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Genomic"
+                disabled
+                @mouseenter="hovering[3] = true"
+                @mouseleave="hovering[3] = false"
               >
-                <el-checkbox
-                  label="Publications"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
-            </div>
+                <div class="flex flex-col items-center">
+                  <Icon icon="uil:dna" class="h-12 w-12" />
+                  <span class="text-sm">Genomic</span>
+                  <span class="text-xs" v-if="hovering[3]">Coming soon...</span>
+                </div>
+              </el-checkbox>
 
-            <div>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Coming soon..."
-                placement="right-end"
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Document"
+                disabled
+                @mouseenter="hovering[4] = true"
+                @mouseleave="hovering[4] = false"
               >
-                <el-checkbox
-                  label="Genomic Data"
-                  name="type"
-                  disabled
-                ></el-checkbox>
-              </el-tooltip>
+                <div class="flex flex-col items-center">
+                  <document class="h-12 w-12"></document>
+                  <span class="text-sm">Document</span>
+                  <span class="text-xs" v-if="hovering[4]">Coming soon...</span>
+                </div>
+              </el-checkbox>
+
+              <el-checkbox
+                border
+                name="type"
+                class="single-check-box"
+                label="Media"
+                disabled
+                @mouseenter="hovering[5] = true"
+                @mouseleave="hovering[5] = false"
+              >
+                <div class="flex flex-col items-center">
+                  <video-play class="h-12 w-12"></video-play>
+                  <span class="text-sm">Media</span>
+                  <span class="text-xs" v-if="hovering[5]">Coming soon...</span>
+                </div>
+              </el-checkbox>
             </div>
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-2 flex flex-row justify-center space-x-4">
+        <div class="py-2 flex flex-row justify-center space-x-4 gap-8">
           <el-button @click="cancelNewDataset" type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Cancel
           </el-button>
@@ -108,12 +174,14 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
-
 import { useDatasetsStore } from "../../store/datasets";
 import { ElNotification } from "element-plus";
-
+import { Icon } from "@iconify/vue";
 export default {
   name: "CreateNewProject",
+  components: {
+    Icon,
+  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -139,6 +207,7 @@ export default {
           },
         ],
       },
+      hovering: [false, false, false, false, false, false],
     };
   },
   methods: {
@@ -163,7 +232,7 @@ export default {
             data: {},
             workflowConfirmed: false,
           };
-
+          console.log("dataset: ", dataset);
           dataset.data.general = {
             questions: {},
           };
@@ -200,6 +269,82 @@ export default {
       this.$router.push({ name: "ShowAllProjects" });
     },
   },
-  mounted() {},
+  mounted() {
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__label"
+      )
+      .forEach((el) => {
+        el.style.paddingLeft = "0px";
+      });
+
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
+      .forEach((el) => {
+        el.style.display = "flex";
+        el.style.flexDirection = "column-reverse";
+        el.style.gap = "2px";
+      });
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__input"
+      )
+      .forEach((el) => {
+        el.style.display = "none";
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.padding = "0px";
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered+.el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.marginLeft = "0px";
+      });
+
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
+      .forEach((el) => {
+        el.style.marginRight = "0px";
+        el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-form-item__content"
+      )
+      .forEach((el) => {
+        el.style.marginRight = "0px";
+        el.style.setProperty("justify-content", "center");
+        el.style.setProperty("align-items", "center");
+      });
+  },
 };
 </script>
+<style scoped>
+.checkbox-group {
+  @apply gap-8 pt-4 flex flex-col box-border items-center justify-center;
+}
+.single-check-box {
+  @apply transition-all flex justify-center items-center w-48 h-48;
+}
+
+.createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
+  @apply border-secondary-500 shadow-md shadow-secondary-500/50;
+}
+
+.single-check-box:not(.is-disabled):hover {
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
+}
+
+.createNewProjectFormItemContainer .el-form-item__error {
+  @apply w-full flex justify-center;
+}
+</style>

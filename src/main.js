@@ -48,6 +48,13 @@ import {
   Unlock,
   User,
   UserFilled,
+  DataAnalysis,
+  Histogram,
+  Monitor,
+  PictureFilled,
+  Reading,
+  VideoPlay,
+  Document,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -71,6 +78,13 @@ app.component("star", Star);
 app.component("unlock", Unlock);
 app.component("user", User);
 app.component("user-filled", UserFilled);
+app.component("data-analysis", DataAnalysis);
+app.component("histogram", Histogram);
+app.component("monitor", Monitor);
+app.component("picture-filled", PictureFilled);
+app.component("reading", Reading);
+app.component("video-play", VideoPlay);
+app.component("document", Document);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router

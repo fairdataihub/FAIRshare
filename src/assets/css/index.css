@@ -329,3 +329,7 @@ Transition styles for <transition />
   opacity: 0;
   transform: translateY(-20px);
 }
+
+.createNewProjectFormItemContainer .el-form-item__error {
+  @apply w-full flex justify-center pt-2;
+}
