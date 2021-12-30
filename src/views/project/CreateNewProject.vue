@@ -64,7 +64,9 @@
                   <monitor class="h-12 w-12"></monitor>
                   <span class="text-sm">Research</span>
                   <span class="text-sm">software</span>
-                  <span class="text-xs" v-if="hovering[0]">Random text Random text</span>
+                  <span class="text-xs" v-if="hovering[0]"
+                    >Random text Random text</span
+                  >
                 </div>
               </el-checkbox>
 
@@ -205,7 +207,7 @@ export default {
           },
         ],
       },
-      hovering: [false, false, false, false, false, false]
+      hovering: [false, false, false, false, false, false],
     };
   },
   methods: {
@@ -313,24 +315,25 @@ export default {
         el.style.marginRight = "0px";
         el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
       });
-    
+
     document
-      .querySelectorAll(".createNewProjectFormItemContainer .el-form-item__content")
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-form-item__content"
+      )
       .forEach((el) => {
         el.style.marginRight = "0px";
         el.style.setProperty("justify-content", "center");
         el.style.setProperty("align-items", "center");
       });
-    
   },
 };
 </script>
 <style scoped>
 .checkbox-group {
-  @apply gap-8 pt-4 flex flex-col box-border items-center justify-center
+  @apply gap-8 pt-4 flex flex-col box-border items-center justify-center;
 }
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-48 h-48
+  @apply transition-all flex justify-center items-center w-48 h-48;
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
@@ -341,8 +344,7 @@ export default {
   @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
 }
 
-.createNewProjectFormItemContainer .el-form-item__error{
+.createNewProjectFormItemContainer .el-form-item__error {
   @apply w-full flex justify-center;
 }
-
 </style>
