@@ -91,10 +91,10 @@ export default {
         if (this.dataset.workflows[workflowID].datasetUploaded) {
           routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
         } else {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+          routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
         }
       } else {
-        routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
       }
       console.log(routerPath);
       this.$router.push({ path: routerPath });

@@ -84,7 +84,7 @@
         class="absolute bottom-0 w-max-content flex flex-row justify-center py-2 space-x-4"
       >
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""
         >
           <el-button type="danger" plain>

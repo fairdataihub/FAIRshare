@@ -253,8 +253,8 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
+import { useDatasetsStore } from "../../../store/datasets";
+import repoStatusJSON from "../../../assets/supplementalFiles/repoStatus.json";
 
 export default {
   name: "CreateMetadataReview",
