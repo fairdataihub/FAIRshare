@@ -12,6 +12,7 @@ import ProjectLanding from "../views/project/ProjectLanding.vue";
 import CodeSelectSourceFolder from "../views/workflow/Code/SelectSourceFolder.vue";
 import CodeCreateMetadata from "../views/workflow/Code/CreateMetadata.vue";
 import CodeCreateMetadataReview from "../views/workflow/Code/CreateMetadataReview.vue";
+import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
 
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
@@ -54,6 +55,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
     component: CodeSelectSourceFolder,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Code/reviewStandards",
+    component: CodeReviewStandards,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
