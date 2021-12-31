@@ -1609,16 +1609,16 @@ import { ElMessageBox } from "element-plus";
 // import semver from "semver";
 import _ from "lodash";
 
-import { useDatasetsStore } from "../../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
-import PillProgressBar from "../../../components/ui/PillProgressBar.vue";
-import FormCardContent from "../../../components/ui/FormCardContent.vue";
-import LoadingPulseCircle from "../../../components/spinners/LoadingPulseCircle.vue";
+import PillProgressBar from "@/components/ui/PillProgressBar.vue";
+import FormCardContent from "@/components/ui/FormCardContent.vue";
+import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
 
-import licensesJSON from "../../../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../../../assets/supplementalFiles/contributorTypes.json";
-import repoStatusJSON from "../../../assets/supplementalFiles/repoStatus.json";
-import codeMetadataJSON from "../../../assets/supplementalFiles/codeMetadata.json";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
+import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

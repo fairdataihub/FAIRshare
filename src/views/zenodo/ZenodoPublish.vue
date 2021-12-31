@@ -35,8 +35,8 @@
 // import axios from "axios";
 import { ElMessageBox, ElLoading } from "element-plus";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoPublish",

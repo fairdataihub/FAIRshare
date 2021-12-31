@@ -1104,11 +1104,11 @@ import doiRegex from "doi-regex";
 import { ElMessageBox, ElMessage } from "element-plus";
 import _ from "lodash";
 
-import { useDatasetsStore } from "../../store/datasets";
-import licensesJSON from "../../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
-import zenodoMetadataOptions from "../../assets/supplementalFiles/zenodoMetadataOptions.json";
-import languagesJSON from "../../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
+import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadata",

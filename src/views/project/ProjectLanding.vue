@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 import gsap from "gsap";
 
 export default {

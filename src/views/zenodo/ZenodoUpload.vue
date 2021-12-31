@@ -73,11 +73,11 @@ import dayjs from "dayjs";
 import path from "path";
 import fs from "fs-extra";
 
-import LoadingCubeGrid from "../../components/spinners/LoadingCubeGrid.vue";
-import LoadingEllipsis from "../../components/spinners/LoadingEllipsis.vue";
+import LoadingCubeGrid from "@/components/spinners/LoadingCubeGrid.vue";
+import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoUpload",

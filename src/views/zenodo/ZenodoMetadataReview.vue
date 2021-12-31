@@ -412,8 +412,8 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import languagesJson from "../../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import languagesJson from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadataReview",

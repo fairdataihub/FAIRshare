@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "CreateNewProjectConfirm",
