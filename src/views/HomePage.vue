@@ -13,29 +13,41 @@
         </span>
       </div>
       <div class="svg-containers">
-         <div class="flex flex-col w-72 item-center justify-center gap-4">
+        <div class="flex flex-col w-72 item-center justify-center gap-4">
           <div class="w-72 flex item-center justify-center">
-            <img src="../assets/1.svg" class="h-36 w-36 2xl:w-48 transition-all"/>
+            <img
+              src="../assets/1.svg"
+              class="h-36 w-36 2xl:w-48 transition-all"
+            />
           </div>
-          <div
-            >Example text text text text text text text text text text text text text text text text text text</div
-          >
+          <div>
+            Example text text text text text text text text text text text text
+            text text text text text text
+          </div>
         </div>
         <div class="flex flex-col w-72 item-center justify-center gap-4">
           <div class="w-72 flex item-center justify-center">
-            <img src="../assets/2.svg" class="h-36  w-36 2xl:w-48 transition-all"/>
+            <img
+              src="../assets/2.svg"
+              class="h-36 w-36 2xl:w-48 transition-all"
+            />
           </div>
-          <div
-            >Example text text text text text text text text text text text text text text text text text text</div
-          >
+          <div>
+            Example text text text text text text text text text text text text
+            text text text text text text
+          </div>
         </div>
-         <div class="flex flex-col w-72 item-center justify-center gap-4">
+        <div class="flex flex-col w-72 item-center justify-center gap-4">
           <div class="w-72 flex item-center justify-center">
-            <img src="../assets/1.svg" class=" h-36 w-36 2xl:w-48 transition-all"/>
+            <img
+              src="../assets/1.svg"
+              class="h-36 w-36 2xl:w-48 transition-all"
+            />
           </div>
-          <div
-            >Example text text text text text text text text text text text text text text text text text text</div
-          >
+          <div>
+            Example text text text text text text text text text text text text
+            text text text text text text
+          </div>
         </div>
       </div>
       <div class="button-container">
@@ -62,15 +74,7 @@
           </div>
           <div class="text-buttons">
             <div
-              class="
-                flex flex-row
-                items-center
-                w-max
-                text-primary-600
-                cursor-pointer
-                hover-underline-animation
-                my-3
-              "
+              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
             >
               <span
                 class="font-medium"
