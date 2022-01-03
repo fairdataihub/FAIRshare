@@ -198,9 +198,9 @@
         </el-form-item>
 
         <div class="py-2 flex flex-row justify-center space-x-4">
-          <el-button @click="cancelNewDataset" type="danger" plain>
+          <button class="danger-plain-button" @click="cancelNewDataset">
             <el-icon><d-arrow-left /></el-icon> Cancel
-          </el-button>
+          </button>
 
           <button class="primary-button" @click="submitForm('datasetForm')">
             Create new project <el-icon><d-arrow-right /></el-icon>

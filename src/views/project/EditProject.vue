@@ -3,7 +3,7 @@
     class="h-screen w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
   >
     <div class="flex flex-col h-full w-full">
-      <el-page-header @back="goBack" class="text-lg">
+      <el-page-header @back="goBack" class="text-lg hidden">
         <template #content>
           <p>
             Project settings -
@@ -14,7 +14,9 @@
         </template>
       </el-page-header>
 
-      <span class="hidden">
+      <span class="font-medium text-left"> Project settings </span>
+
+      <span class="pt-1">
         Update your project name, description and other settings.
       </span>
 
