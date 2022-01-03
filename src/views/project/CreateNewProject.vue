@@ -54,11 +54,10 @@
             <div class="flex gap-8">
               <el-popover
                 placement="bottom"
-                title="Title"
+                title=""
                 :width="400"
                 hide-after="0"
                 trigger="hover"
-                content="this is content, this is content, this is content"
               >
                 <template #reference>
                   <el-checkbox
@@ -74,6 +73,9 @@
                     </div>
                   </el-checkbox>
                 </template>
+                <span class="break-normal text-left text-sm">
+                  Computational code, scripts, models, notebooks, code libraries, etc.
+                </span>
               </el-popover>
 
               <el-popover
@@ -194,7 +196,7 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-2 flex flex-row justify-center space-x-4 gap-8">
+        <div class="py-2 flex flex-row justify-center space-x-4">
           <el-button @click="cancelNewDataset" type="danger" plain>
             <el-icon><d-arrow-left /></el-icon> Cancel
           </el-button>
@@ -232,7 +234,7 @@ export default {
         datasetName: [
           {
             required: true,
-            message: "Please type a dataset name",
+            message: "Please provide a project name",
             trigger: "blur",
           },
         ],
@@ -371,7 +373,7 @@ export default {
   @apply gap-8 pt-4 flex flex-col box-border items-center justify-center;
 }
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-48 h-48;
+  @apply transition-all flex justify-center items-center w-40 h-40;
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {

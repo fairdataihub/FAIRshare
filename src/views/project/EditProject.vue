@@ -162,7 +162,7 @@ export default {
         datasetName: [
           {
             required: true,
-            message: "Please type a dataset name",
+            message: "Please provide a project name",
             trigger: "blur",
           },
         ],
