@@ -74,7 +74,8 @@
                   </el-checkbox>
                 </template>
                 <span class="break-normal text-left text-sm">
-                  Computational code, scripts, models, notebooks, code libraries, etc.
+                  Computational code, scripts, models, notebooks, code
+                  libraries, etc.
                 </span>
               </el-popover>
 
