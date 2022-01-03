@@ -84,7 +84,7 @@
         class="absolute bottom-0 w-max-content flex flex-row justify-center py-2 space-x-4"
       >
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""
         >
           <el-button type="danger" plain>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "SelectRepositoryDestination",
@@ -183,7 +183,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(3);
+    this.datasetStore.setCurrentStep(4);
 
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;

@@ -35,8 +35,8 @@
 // import axios from "axios";
 import { ElMessageBox, ElLoading } from "element-plus";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoPublish",
@@ -134,7 +134,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(6);
+    this.datasetStore.setCurrentStep(7);
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;

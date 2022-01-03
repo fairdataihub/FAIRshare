@@ -63,11 +63,11 @@
 <script>
 // import axios from "axios";
 
-import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
-import ZenodoTokenConnectionVue from "../../components/serviceIntegration/ZenodoTokenConnection.vue";
+import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube.vue";
+import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection.vue";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
@@ -155,7 +155,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+    this.datasetStore.setCurrentStep(6);
 
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 

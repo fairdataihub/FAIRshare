@@ -171,15 +171,17 @@
 
 <script>
 /* eslint-disable vue/no-unused-components */
+import { useTokenStore } from "@/store/access";
+import { useDatasetsStore } from "@/store/datasets";
+
+import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
+import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
+import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
+import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
+
 import { markRaw } from "vue";
-import { useTokenStore } from "../../store/access";
-import ButtonInputDialog from "../../components/dialogs/ButtonInputDialog";
-import { useDatasetsStore } from "../../store/datasets";
-import GithubTokenConnection from "../../components/serviceIntegration/GithubTokenConnection";
-import ZenodoTokenConnection from "../../components/serviceIntegration/ZenodoTokenConnection";
-import GithubOAuthConnection from "../../components/serviceIntegration/GithubOAuthConnection";
-import { ElNotification } from "element-plus";
-import { ElMessageBox } from "element-plus";
+import { ElNotification, ElMessageBox } from "element-plus";
+
 export default {
   name: "ManageAccount",
   components: {

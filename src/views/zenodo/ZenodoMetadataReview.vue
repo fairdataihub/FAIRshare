@@ -412,8 +412,8 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import languagesJson from "../../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import languagesJson from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadataReview",
@@ -605,7 +605,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(4);
+    this.datasetStore.setCurrentStep(5);
 
     this.loading.close();
   },

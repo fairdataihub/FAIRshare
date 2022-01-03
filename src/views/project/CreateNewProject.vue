@@ -209,10 +209,12 @@
 </template>
 
 <script>
+import { useDatasetsStore } from "@/store/datasets";
+
 import { v4 as uuidv4 } from "uuid";
-import { useDatasetsStore } from "../../store/datasets";
 import { ElNotification } from "element-plus";
 import { Icon } from "@iconify/vue";
+
 export default {
   name: "CreateNewProject",
   components: {

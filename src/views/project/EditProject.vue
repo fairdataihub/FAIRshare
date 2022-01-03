@@ -141,7 +141,7 @@
 <script>
 import { ElMessageBox, ElMessage } from "element-plus";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "EditProject",

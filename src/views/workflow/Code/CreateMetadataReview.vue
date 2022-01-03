@@ -253,11 +253,11 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
+import { useDatasetsStore } from "@/store/datasets";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 
 export default {
-  name: "CreateMetadataReview",
+  name: "CodeCreateMetadataReview",
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -353,7 +353,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(2);
+    this.datasetStore.setCurrentStep(3);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 

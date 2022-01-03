@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch gap-2 max-w-screen-md mx-auto">
+  <div class="flex items-stretch gap-2 w-9/12 max-w-screen-md mx-auto">
     <div
       v-for="step in totalSteps"
       :key="step"

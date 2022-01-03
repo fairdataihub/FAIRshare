@@ -1609,22 +1609,22 @@ import { ElMessageBox } from "element-plus";
 // import semver from "semver";
 import _ from "lodash";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
-import PillProgressBar from "../../components/ui/PillProgressBar.vue";
-import FormCardContent from "../../components/ui/FormCardContent.vue";
-import LoadingPulseCircle from "../../components/spinners/LoadingPulseCircle.vue";
+import PillProgressBar from "@/components/ui/PillProgressBar.vue";
+import FormCardContent from "@/components/ui/FormCardContent.vue";
+import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
 
-import licensesJSON from "../../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
-import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
-import codeMetadataJSON from "../../assets/supplementalFiles/codeMetadata.json";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
+import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default {
-  name: "CreateMetadata",
+  name: "CodeCreateMetadata",
   components: {
     draggable,
     Icon,
@@ -1710,15 +1710,15 @@ export default {
   watch: {
     "codeForm.authors": {
       handler(val) {
-        if (val.length === 0) {
-          this.authorsErrorMessage = "Please provide at least one author.";
-          this.invalidStatus.authors = true;
-          this.$refs.cmForm.validate();
-          return;
-        } else {
-          this.authorsErrorMessage = ""; //clear error message
-          this.invalidStatus.authors = false;
-        }
+        // if (val.length === 0) {
+        //   this.authorsErrorMessage = "Please provide at least one author.";
+        //   this.invalidStatus.authors = true;
+        //   this.$refs.cmForm.validate();
+        //   return;
+        // } else {
+        //   this.authorsErrorMessage = ""; //clear error message
+        //   this.invalidStatus.authors = false;
+        // }
 
         if (val.length > 0) {
           for (let author of val) {
@@ -2324,12 +2324,12 @@ export default {
           .catch(() => {
             // don't save changes
             this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
             });
           });
       } else {
         this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
         });
       }
     },
@@ -2351,7 +2351,7 @@ export default {
 
       this.datasetStore.showProgressBar();
       this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(2);
+      this.datasetStore.setCurrentStep(3);
 
       if (!("expandOptions" in this.workflow)) {
         this.workflow.expandOptions = ["general"];
