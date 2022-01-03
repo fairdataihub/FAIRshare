@@ -154,7 +154,7 @@ html {
 }
 
 .selected-repo {
-  @apply border-2 border-solid border-green-500 bg-green-100;
+  @apply border border-secondary-500 shadow-md shadow-secondary-500/50; 
 }
 
 .handle:hover {

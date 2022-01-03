@@ -14,7 +14,7 @@
 
       <div class="grid grid-cols-3 my-8 gap-8">
         <div
-          class="flex flex-col justify-evenly items-center bg-gray-200 p-4 shadow-md rounded-lg hover:bg-stone-200 hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px]"
+          class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
           :class="{ 'selected-repo': repoID === 'zenodo' }"
           @click="selectRepo($event, 'zenodo')"
         >
@@ -24,12 +24,26 @@
             class="h-16 w-16 mb-3"
           />
           <span class="text-lg mx-5"> Zenodo </span>
+          <div
+              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+              v-if="repoID === 'zenodo'"
+              @click="
+                  openWebsite(
+                    'https://zenodo.org'
+                  )
+                "
+            >
+              <span class="font-medium">
+                Learn more...
+              </span>
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+            </div>
         </div>
         <el-popover placement="bottom" trigger="hover" content="Coming soon...">
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-evenly items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400"
+                class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
                 :class="{ 'selected-repo': repoID === 'figshare' }"
                 @click="selectRepo($event, 'figshare')"
               >
@@ -47,7 +61,7 @@
           <template #reference>
             <div>
               <div
-                class="flex flex-col justify-evenly items-center bg-gray-100 p-4 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400"
+                class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
                 :class="{ 'selected-repo': repoID === 'softwareheritage' }"
                 @click="selectRepo($event, 'softwareheritage')"
               >
@@ -107,9 +121,10 @@
 
 <script>
 import { useDatasetsStore } from "../../store/datasets";
-
+import { Icon } from "@iconify/vue";
 export default {
   name: "SelectRepositoryDestination",
+  components: { Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -140,6 +155,9 @@ export default {
       if (event && event.detail === 2) {
         this.addMetadata();
       }
+    },
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
     addMetadata() {
       this.dataset.destinationSelected = true;
@@ -196,4 +214,13 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped></style>
+<style scoped>
+.single-check-box {
+  @apply transition-all flex justify-center items-center w-48 h-48;
+}
+
+.single-check-box:not(.disabled-card):hover {
+  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50;
+}
+</style>
+
