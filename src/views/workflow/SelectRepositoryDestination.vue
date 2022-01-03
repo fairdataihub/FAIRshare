@@ -279,4 +279,3 @@ export default {
   @apply border border-secondary-500 shadow-lg shadow-secondary-500/50;
 }
 </style>
-
