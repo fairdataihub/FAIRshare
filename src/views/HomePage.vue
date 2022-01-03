@@ -56,9 +56,7 @@
           <button
             class="secondary-plain-button text-base"
             @click="
-              openWebsite(
-                'https://github.com/fairdataihub/SODA-for-COVID-19-Research-Docs'
-              )
+              openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
             "
           >
             See documentation

@@ -63,7 +63,7 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="flex flex-row justify-between items-center w-full p-3 hover:bg-gray-100 transition-all cursor-pointer"
+                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
