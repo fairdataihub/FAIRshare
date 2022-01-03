@@ -27,11 +27,11 @@
               Projects currently in progress
             </el-divider>
 
-            <div class="divide-y divide-gray-200 px-4">
+            <div class="px-10 w-full">
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="project"
+                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -42,7 +42,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-4">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -74,7 +74,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-4">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>

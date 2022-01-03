@@ -142,15 +142,8 @@ html {
   transform-origin: bottom left;
 }
 
-.project {
-  @apply flex flex-row justify-between items-center;
-  @apply w-full p-3;
-  @apply hover:bg-primary-100;
-  @apply transition-all cursor-pointer;
-}
-
 .selected-project {
-  @apply bg-primary-200 hover:bg-primary-200;
+  @apply bg-primary-200 hover:bg-primary-200 border-transparent;
 }
 
 .selected-repo {
@@ -164,6 +157,13 @@ html {
 /* Colours come from here: https://tailwindcss.com/docs/customizing-colors */
 
 @layer components {
+  .project {
+    @apply flex flex-row justify-between items-center;
+    @apply w-full p-3;
+    @apply hover:bg-primary-100;
+    @apply transition-all cursor-pointer;
+  }
+
   .primary-plain-button {
     @apply flex flex-row justify-center items-center;
     @apply px-5 py-2 rounded;
