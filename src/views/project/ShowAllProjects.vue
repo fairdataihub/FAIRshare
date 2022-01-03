@@ -59,7 +59,7 @@
               Fully published projects
             </el-divider>
 
-            <div class="divide-y divide-gray-200 px-4">
+            <div class="px-10 w-full">
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
