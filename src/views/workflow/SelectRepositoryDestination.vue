@@ -25,19 +25,13 @@
           />
           <span class="text-lg mx-5"> Zenodo </span>
           <div
-              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
-              v-if="repoID === 'zenodo'"
-              @click="
-                  openWebsite(
-                    'https://zenodo.org'
-                  )
-                "
-            >
-              <span class="font-medium">
-                Learn more...
-              </span>
-              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-            </div>
+            class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+            v-if="repoID === 'zenodo'"
+            @click="openWebsite('https://zenodo.org')"
+          >
+            <span class="font-medium"> Learn more... </span>
+            <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+          </div>
         </div>
         <el-popover placement="bottom" trigger="hover" content="Coming soon...">
           <template #reference>
@@ -223,4 +217,3 @@ export default {
   @apply border border-secondary-500 shadow-lg shadow-secondary-500/50;
 }
 </style>
-
