@@ -1624,7 +1624,7 @@ const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default {
-  name: "CreateMetadata",
+  name: "CodeCreateMetadata",
   components: {
     draggable,
     Icon,
@@ -2324,12 +2324,12 @@ export default {
           .catch(() => {
             // don't save changes
             this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`,
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
             });
           });
       } else {
         this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`,
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
         });
       }
     },

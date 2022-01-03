@@ -257,7 +257,7 @@ import { useDatasetsStore } from "@/store/datasets";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 
 export default {
-  name: "CreateMetadataReview",
+  name: "CodeCreateMetadataReview",
   data() {
     return {
       datasetStore: useDatasetsStore(),

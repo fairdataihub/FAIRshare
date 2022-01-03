@@ -62,7 +62,7 @@ import { dialog } from "@electron/remote";
 import { useDatasetsStore } from "@/store/datasets";
 
 export default {
-  name: "SelectSourceFolder",
+  name: "CodeSelectSourceFolder",
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -140,7 +140,7 @@ export default {
       // );
 
       this.$router.push({
-        path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/createMetadata`,
+        path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
       });
     },
   },

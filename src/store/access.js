@@ -161,7 +161,7 @@ export const useTokenStore = defineStore({
       }
     },
 
-    verifyGithubConnection() {
+    async verifyGithubConnection() {
       const tokenObject = this.getToken("github");
 
       if (tokenObject === "NO_TOKEN_FOUND") {
@@ -169,7 +169,7 @@ export const useTokenStore = defineStore({
       } else {
         const token = tokenObject.token;
 
-        const response = this.verifyGithubToken(token);
+        const response = await this.verifyGithubToken(token);
 
         return response;
       }
