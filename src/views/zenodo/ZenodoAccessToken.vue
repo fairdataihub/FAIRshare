@@ -155,7 +155,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+    this.datasetStore.setCurrentStep(6);
 
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 

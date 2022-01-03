@@ -49,12 +49,17 @@
 </template>
 
 <script>
+import { useDatasetsStore } from "@/store/datasets";
+
 export default {
   name: "CodeReviewStandards",
   data() {
     return {
+      datasetStore: useDatasetsStore(),
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
+      dataset: {},
+      workflow: {},
       questions: [
         "Is the data being curated in accordance with the standards?",
         "Is the data being curated in accordance with the standards?",
@@ -67,6 +72,15 @@ export default {
         `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
       );
     },
+  },
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(2);
   },
 };
 </script>

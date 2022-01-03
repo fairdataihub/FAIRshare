@@ -53,6 +53,9 @@ export default {
           description: "Pick data source",
         },
         {
+          description: "Review data standards",
+        },
+        {
           description: "Provide metadata",
         },
         {

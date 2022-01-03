@@ -353,7 +353,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(2);
+    this.datasetStore.setCurrentStep(3);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 

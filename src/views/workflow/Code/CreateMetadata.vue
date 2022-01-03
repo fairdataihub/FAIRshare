@@ -2351,7 +2351,7 @@ export default {
 
       this.datasetStore.showProgressBar();
       this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(2);
+      this.datasetStore.setCurrentStep(3);
 
       if (!("expandOptions" in this.workflow)) {
         this.workflow.expandOptions = ["general"];
