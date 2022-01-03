@@ -13,33 +13,42 @@
       >
         Make your COVID-19 related data, and beyond, FAIR
       </div>
-      <div class="w-full gap-28 flex justify-evenly py-5">
+      <div class="w-full flex justify-evenly py-5 space-x-14">
         <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center">
-            <img src="../assets/1.svg" class="w-full h-auto" />
+          <div class="w-full flex item-center justify-center py-3">
+            <img
+              src="../assets/1.svg"
+              class="w-full h-auto pointer-events-none"
+            />
           </div>
-          <div>
+          <p>
             Example text text text text text text text text text text text text
             text text text text text text
-          </div>
+          </p>
         </div>
         <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center">
-            <img src="../assets/1.svg" class="w-full h-auto" />
+          <div class="w-full flex item-center justify-center py-3">
+            <img
+              src="../assets/1.svg"
+              class="w-full h-auto pointer-events-none"
+            />
           </div>
-          <div>
+          <p>
             Example text text text text text text text text text text text text
             text text text text text text
-          </div>
+          </p>
         </div>
         <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center">
-            <img src="../assets/1.svg" class="w-full h-auto" />
+          <div class="w-full flex item-center justify-center py-3">
+            <img
+              src="../assets/1.svg"
+              class="w-full h-auto pointer-events-none"
+            />
           </div>
-          <div>
+          <p>
             Example text text text text text text text text text text text text
             text text text text text text
-          </div>
+          </p>
         </div>
       </div>
       <div class="flex flex-col justify-center items-center w-full py-3">
