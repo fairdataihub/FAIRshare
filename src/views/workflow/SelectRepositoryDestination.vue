@@ -98,9 +98,9 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
           class=""
         >
-          <el-button type="danger" plain>
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
-          </el-button>
+          </button>
         </router-link>
 
         <button

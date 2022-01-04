@@ -63,16 +63,12 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""
         >
-          <button class="danger-button">
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
         </router-link>
 
-        <button
-          class="primary-plain-button"
-          @click="startCuration"
-          id="continue"
-        >
+        <button class="primary-button" @click="startCuration" id="continue">
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
