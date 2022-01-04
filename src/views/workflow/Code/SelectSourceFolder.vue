@@ -23,27 +23,13 @@
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
-          <button class="danger-button">
+          <button class="secondary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
-          <!-- <el-button type="danger" plain>
-            <el-icon><d-arrow-left /></el-icon> Back
-          </el-button> -->
         </router-link>
 
-        <!-- <el-button
-          type="primary"
-          :disabled="emptyInput"
-          class="flex flex-row justify-center items-center"
-          @click="startCuration"
-          id="continue"
-        >
-          Continue
-          <el-icon> <d-arrow-right /> </el-icon>
-        </el-button> -->
-
         <button
-          class="primary-plain-button"
+          class="primary-button"
           :disabled="emptyInput"
           @click="startCuration"
           id="continue"

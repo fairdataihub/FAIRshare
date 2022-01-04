@@ -104,18 +104,6 @@
             class="flex flex-row space-x-4 px-2"
             v-if="selectedDataset !== ''"
           >
-            <!-- <el-button type="info" plain @click="editProject" class="">
-              <el-icon><setting /></el-icon> Project settings
-            </el-button> -->
-            <!-- <el-button
-              type="primary"
-              plain
-              class="flex flex-row items-center"
-              @click="startCuratingProject"
-            >
-              Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
-            </el-button> -->
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting /></el-icon> Project settings
             </button>

@@ -13,14 +13,9 @@ const TOKEN_STORE_PATH = path.join(
   ".sodaforcovid19research",
   "accessTokens.json"
 );
-// const CONNECTION_STATUS_PATH = path.join(
-//   USER_PATH,
-//   ".sodaforcovid19research",
-//   "connectionStatus.json"
-// );
 
 // will change to use an actual secret key
-const SECRET_KEY = "TEST_SECRET_KEY";
+const SECRET_KEY = process.env.VUE_APP_ENCRYPTION_KEY;
 
 const encrypt = async (plainToken) => {
   return CryptoJS.AES.encrypt(plainToken, SECRET_KEY).toString();
