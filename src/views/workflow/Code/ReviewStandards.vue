@@ -16,11 +16,15 @@
           class="flex flex-col py-3"
         >
           <span>
-            {{ question }}
+            {{ question.question }}
           </span>
           <div class="pb-3 pt-2">
-            <el-radio label="1" size="large"> Yes </el-radio>
-            <el-radio label="2" size="large"> No </el-radio>
+            <el-radio v-model="question.model" label="1" size="large">
+              Yes
+            </el-radio>
+            <el-radio v-model="question.model" label="2" size="large">
+              No
+            </el-radio>
           </div>
         </div>
       </div>
@@ -30,16 +34,12 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
           class=""
         >
-          <button class="danger-button">
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
         </router-link>
 
-        <button
-          class="primary-plain-button"
-          @click="startCuration"
-          id="continue"
-        >
+        <button class="primary-button" @click="startCuration" id="continue">
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -61,8 +61,16 @@ export default {
       dataset: {},
       workflow: {},
       questions: [
-        "Is the data being curated in accordance with the standards?",
-        "Is the data being curated in accordance with the standards?",
+        {
+          question:
+            "Is the data being curated in accordance with the standards?",
+          model: "",
+        },
+        {
+          question:
+            "Is the data being curated in accordance with the standards?",
+          model: "",
+        },
       ],
     };
   },
