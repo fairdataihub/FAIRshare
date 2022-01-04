@@ -11,6 +11,7 @@
       {{ buttonStatus.buttonText }}
     </button>
     <AppDialog
+      v-if="dialogVisable"
       v-model="dialogVisable"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
