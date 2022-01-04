@@ -95,7 +95,7 @@
         class="absolute bottom-0 w-max-content flex flex-row justify-center py-2 space-x-4"
       >
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
           class=""
         >
           <el-button type="danger" plain>
@@ -218,6 +218,6 @@ export default {
 }
 
 .single-check-box:not(.disabled-card):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50;
+  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
 }
 </style>

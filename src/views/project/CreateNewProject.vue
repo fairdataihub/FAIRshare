@@ -56,7 +56,7 @@
                 placement="bottom"
                 title=""
                 :width="400"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
               >
                 <template #reference>
@@ -81,7 +81,7 @@
 
               <el-popover
                 placement="bottom"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
                 content="Coming soon..."
               >
@@ -103,7 +103,7 @@
 
               <el-popover
                 placement="bottom"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
                 content="Coming soon..."
               >
@@ -130,7 +130,7 @@
             <div class="flex gap-8">
               <el-popover
                 placement="top"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
                 content="Coming soon..."
               >
@@ -152,7 +152,7 @@
 
               <el-popover
                 placement="top"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
                 content="Coming soon..."
               >
@@ -174,7 +174,7 @@
 
               <el-popover
                 placement="top"
-                hide-after="0"
+                :hide-after="0"
                 trigger="hover"
                 content="Coming soon..."
               >
@@ -248,7 +248,6 @@ export default {
           },
         ],
       },
-      hovering: [false, false, false, false, false, false],
     };
   },
   methods: {

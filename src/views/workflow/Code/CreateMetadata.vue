@@ -92,7 +92,8 @@
                 </div>
               </el-form-item>
 
-              <el-form-item label="License">
+              <!-- 
+                <el-form-item label="License">
                 <el-select
                   v-model="codeForm.license"
                   filterable
@@ -130,7 +131,8 @@
                     :load="(loadingLicenseDetails = false)"
                   ></iframe>
                 </el-drawer>
-              </el-form-item>
+              </el-form-item> 
+              -->
             </FormCardContent>
 
             <FormCardContent
@@ -1613,9 +1615,9 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 import FormCardContent from "@/components/ui/FormCardContent.vue";
-import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
+// import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
 
-import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+// import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
@@ -1630,7 +1632,7 @@ export default {
     Icon,
     PillProgressBar,
     FormCardContent,
-    LoadingPulseCircle,
+    // LoadingPulseCircle,
   },
   data() {
     return {
@@ -1647,13 +1649,13 @@ export default {
       ],
       showWizard: true,
       dataset: {},
-      loadingLicenseDetails: false,
+      // loadingLicenseDetails: false,
       workflowID: this.$route.params.workflowID,
       workflow: {},
       activeNames: ["general", "code"],
       loading: false,
       interval: null,
-      licenseOptions: licensesJSON.licenses,
+      // licenseOptions: licensesJSON.licenses,
       contributorTypes: contributorTypesJSON.contributorTypes,
       programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
@@ -1673,7 +1675,7 @@ export default {
         contributors: [],
         creationDate: "",
         firstReleaseDate: "",
-        license: "",
+        // license: "",
         uniqueIdentifier: "",
         applicationCategory: "",
         codeRepository: "",
@@ -1701,9 +1703,9 @@ export default {
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
       invalidStatus: {},
-      showLicenseDetails: false,
-      licenseTitle: "",
-      licenseHtmlUrl: "",
+      // showLicenseDetails: false,
+      // licenseTitle: "",
+      // licenseHtmlUrl: "",
       originalObject: {},
     };
   },
@@ -2125,21 +2127,21 @@ export default {
       // change cursor to grabbing
       this.$refs.cmForm.style.cursor = "grab";
     },
-    async openLicenseDetails() {
-      this.licenseHtmlUrl = "/";
-      const licenseId = this.codeForm.license;
+    // async openLicenseDetails() {
+    //   this.licenseHtmlUrl = "/";
+    //   const licenseId = this.codeForm.license;
 
-      //get license object
-      const licenseObject = this.licenseOptions.find(
-        (license) => license.licenseId === licenseId
-      );
+    //   //get license object
+    //   const licenseObject = this.licenseOptions.find(
+    //     (license) => license.licenseId === licenseId
+    //   );
 
-      this.licenseHtmlUrl = licenseObject.reference;
-      this.licenseTitle = licenseObject.name;
+    //   this.licenseHtmlUrl = licenseObject.reference;
+    //   this.licenseTitle = licenseObject.name;
 
-      this.showLicenseDetails = true;
-      this.loadingLicenseDetails = true;
-    },
+    //   this.showLicenseDetails = true;
+    //   this.loadingLicenseDetails = true;
+    // },
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();
@@ -2254,7 +2256,7 @@ export default {
       this.dataset.data.general.questions.funding = this.codeForm.funding;
       this.dataset.data.general.questions.referencePublication =
         this.codeForm.referencePublication;
-      this.dataset.data.general.questions.license = this.codeForm.license;
+      // this.dataset.data.general.questions.license = this.codeForm.license;
 
       this.codeForm.relatedLinks = this.filterArrayOfObjects(
         this.codeForm.relatedLinks,
@@ -2282,7 +2284,7 @@ export default {
 
       this.workflow.expandOptions = [];
 
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/selectDestination`;
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
 
       this.$router.push({ path: routerPath });
     },

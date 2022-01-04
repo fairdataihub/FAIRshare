@@ -1,5 +1,7 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
+  <div
+    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
+  >
     <div class="flex flex-col h-full w-full items-center">
       <div class="card-container">
         <div class="image-container">
@@ -328,7 +330,7 @@ export default {
 
 <style scoped>
 .card-container {
-  @apply flex flex-row h-44 py-3 my-5 rounded-sm shadow-lg w-[800px];
+  @apply flex flex-row  py-3 my-5 rounded-sm shadow-lg;
 }
 .image-container {
   @apply h-full w-4/12 flex justify-center items-center;

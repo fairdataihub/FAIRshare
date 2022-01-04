@@ -13,6 +13,7 @@ import CodeSelectSourceFolder from "../views/workflow/Code/SelectSourceFolder.vu
 import CodeCreateMetadata from "../views/workflow/Code/CreateMetadata.vue";
 import CodeCreateMetadataReview from "../views/workflow/Code/CreateMetadataReview.vue";
 import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
+import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
 
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
@@ -63,6 +64,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
+    component: CodePickLicense,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata/review",
