@@ -390,18 +390,18 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class="mx-3"
         >
-          <el-button class="primary-plain-button">
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
-          </el-button>
+          </button>
         </router-link>
 
-        <el-button
+        <button
           class="flex flex-row items-center mx-3 primary-button"
           @click="checkZenodoAccessToken"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>

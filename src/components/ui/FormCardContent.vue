@@ -17,7 +17,7 @@
     <div
       class="form-navigation-buttons w-full flex justify-center px-5 space-x-4"
     >
-      <el-button
+      <button
         @click="prevStep"
         :class="
           this.currentStepId === 1
@@ -29,7 +29,7 @@
       >
         <el-icon v-if="!firstStep"><back /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
-      </el-button>
+      </button>
       <!-- :plain="!lastStep" -->
       <button
         class="primary-button"

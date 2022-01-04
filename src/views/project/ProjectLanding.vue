@@ -136,10 +136,6 @@ export default {
           stagger: 0.1,
         }
       )
-      .then(() => {
-        const el = this.$refs.continueButton;
-        el.scrollIntoView({ behavior: "smooth" });
-      });
   },
 };
 </script>

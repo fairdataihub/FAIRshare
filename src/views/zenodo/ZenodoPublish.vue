@@ -18,12 +18,12 @@
           (DOI) will be registered immediately after publishing. You will still
           be able to update the record's metadata later.
         </p>
-        <el-button
+        <button
           class="blob transition-all primary-button"
           @click="publishDeposition"
         >
           Publish <el-icon><star /></el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>

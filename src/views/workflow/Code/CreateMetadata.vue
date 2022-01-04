@@ -1582,11 +1582,11 @@
           </el-collapse>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <el-button @click="navigateBack" class="primary-plain-button mx-3">
+            <button @click="navigateBack" class="primary-plain-button mx-3">
               <el-icon><d-arrow-left /></el-icon> Back
-            </el-button>
+            </button>
 
-            <el-button
+            <button
               class="flex flex-row items-center mx-3 primary-button"
               @click="navigateToSelectDestination"
               id="existElement"
@@ -1594,7 +1594,7 @@
             >
               Continue
               <el-icon> <d-arrow-right /> </el-icon>
-            </el-button>
+            </button>
           </div>
         </div>
       </el-form>
