@@ -122,20 +122,19 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
-    gsap
-      .fromTo(
-        ".el-timeline-item",
-        {
-          opacity: 0,
-          y: -60,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.1,
-          stagger: 0.1,
-        }
-      )
+    gsap.fromTo(
+      ".el-timeline-item",
+      {
+        opacity: 0,
+        y: -60,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.1,
+        stagger: 0.1,
+      }
+    );
   },
 };
 </script>
