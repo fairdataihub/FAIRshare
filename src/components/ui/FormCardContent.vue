@@ -14,10 +14,16 @@
         <slot> </slot>
       </div>
     </div>
-    <div class="form-navigation-buttons w-full flex justify-center px-5 space-x-4">
+    <div
+      class="form-navigation-buttons w-full flex justify-center px-5 space-x-4"
+    >
       <el-button
         @click="prevStep"
-        :class="this.currentStepId === 1?'primary-plain-button':'secondary-plain-button'"
+        :class="
+          this.currentStepId === 1
+            ? 'primary-plain-button'
+            : 'secondary-plain-button'
+        "
         size="medium"
         :disabled="checkInvalidStatus"
       >
