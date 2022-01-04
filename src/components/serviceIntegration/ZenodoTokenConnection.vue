@@ -11,6 +11,7 @@
       {{ buttonStatus.buttonText }}
     </button>
     <AppDialog
+      v-if="dialogVisable"
       v-model="dialogVisable"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
@@ -96,12 +97,12 @@ export default {
       if (response[0] == "OK") {
         await this.processZenodo(response[1]);
       } else {
-        // ElNotification({
-        //   type: "info",
-        //   message: "Input canceled",
-        //   position: "bottom-right",
-        //   duration: 2000,
-        // });
+        ElNotification({
+          type: "info",
+          message: "Input canceled",
+          position: "bottom-right",
+          duration: 2000,
+        });
       }
     },
 

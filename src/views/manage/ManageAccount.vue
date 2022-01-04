@@ -328,7 +328,8 @@ export default {
 
 <style scoped>
 .card-container {
-  @apply flex flex-row w-9/12 py-3 my-5 rounded-sm shadow-lg;
+  width: 800px;
+  @apply flex flex-row h-44 py-3 my-5 rounded-sm shadow-lg;
 }
 .image-container {
   @apply h-full w-4/12 flex justify-center items-center;
