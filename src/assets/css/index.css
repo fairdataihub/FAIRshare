@@ -142,6 +142,22 @@ html {
   transform-origin: bottom left;
 }
 
+.icon-animate {
+  animation: bounce ease-in-out 2s infinite alternate-reverse;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translatex(0);
+  }
+  50% {
+    transform: translatex(4px);
+  }
+  100% {
+    transform: translatex(0);
+  }
+}
+
 .selected-project {
   @apply bg-primary-200 hover:bg-primary-200 border-transparent;
 }

@@ -199,7 +199,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(4);
+    this.datasetStore.setCurrentStep(5);
 
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;

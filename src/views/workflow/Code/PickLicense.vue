@@ -153,7 +153,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(2);
+    this.datasetStore.setCurrentStep(4);
 
     if (
       "Code" in this.dataset.data &&

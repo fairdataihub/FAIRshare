@@ -109,7 +109,9 @@
             </button>
             <button class="primary-plain-button" @click="startCuratingProject">
               Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
+              <el-icon class="icon-animate">
+                <d-arrow-right />
+              </el-icon>
             </button>
           </div>
         </div>
