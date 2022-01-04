@@ -19,9 +19,7 @@
           be able to update the record's metadata later.
         </p>
         <el-button
-          type="primary"
-          plain
-          class="blob transition-all"
+          class="blob transition-all primary-button"
           @click="publishDeposition"
         >
           Publish <el-icon><star /></el-icon>

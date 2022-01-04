@@ -199,7 +199,7 @@
 
         <div class="py-2 flex flex-row justify-center space-x-4">
           <button class="danger-plain-button" @click="cancelNewDataset">
-            <el-icon><d-arrow-left /></el-icon> Cancel
+            <el-icon><circle-close-filled /></el-icon> Cancel
           </button>
 
           <button class="primary-button" @click="submitForm('datasetForm')">

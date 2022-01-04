@@ -231,14 +231,13 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
           class=""
         >
-          <el-button type="danger" plain>
+          <el-button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </el-button>
         </router-link>
 
         <el-button
-          type="primary"
-          class="flex flex-row items-center"
+          class="flex flex-row items-center primary-button"
           @click="selectDestination"
         >
           Continue

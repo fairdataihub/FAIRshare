@@ -49,10 +49,10 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
           class="mx-6"
         >
-          <el-button type="danger" plain> Back </el-button>
+          <el-button class="primary-plain-button"> Back </el-button>
         </router-link>
 
-        <button class="primary-plain-button" @click="retryUpload">Retry</button>
+        <button class="primary-button" @click="retryUpload">Retry</button>
 
         <!-- <el-button
           type="primary"
