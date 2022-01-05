@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      h-full
-      w-full
-      flex flex-col
-      justify-center
-      items-center
-      pr-5
-      p-3
-      max-w-screen-xl
-    "
+    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
@@ -19,14 +10,14 @@
       <el-divider class="my-4"> </el-divider>
 
       <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
-          <div
-            class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
-            :class="{ 'selected-repo': repoID === 'My computer' }"
-            @click="selectRepo('My computer')"
-          >
-            <monitor class="h-24 w-16"></monitor>
-            <span class="text-lg mx-5"> My computer </span>
-          </div>
+        <div
+          class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
+          :class="{ 'selected-repo': repoID === 'My computer' }"
+          @click="selectRepo('My computer')"
+        >
+          <monitor class="h-24 w-16"></monitor>
+          <span class="text-lg mx-5"> My computer </span>
+        </div>
 
         <el-popover placement="bottom" trigger="hover" content="Coming soon...">
           <template #reference>
@@ -60,7 +51,10 @@
         />
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4 pt-8 pr-[61px]" v-if="repoID != ''">
+      <div
+        class="w-full flex flex-row justify-center py-2 space-x-4 pt-8 pr-[61px]"
+        v-if="repoID != ''"
+      >
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
           <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
