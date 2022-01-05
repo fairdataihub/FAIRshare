@@ -9,19 +9,52 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <span class="mb-2">
-        Please select the folder where your
-        {{ combineDataTypes }} files are stored.
-      </span>
+      <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
+        <div
+          class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
+          :class="{ 'selected-repo': repoID === 'My computer' }"
+          @click="selectRepo('My computer')"
+        >
+          <monitor class="h-24 w-16"></monitor>
+          <span class="text-lg mx-5"> My computer </span>
+        </div>
 
-      <el-input
-        v-model="folderPath"
-        placeholder="Click here to select a folder"
-        class="my-3 w-full"
-        @click="selectFolderPath"
-      />
+        <el-popover placement="bottom" trigger="hover" content="Coming soon...">
+          <template #reference>
+            <div>
+              <div
+                class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
+              >
+                <img
+                  src="../../../assets/github.jpeg"
+                  alt=""
+                  class="h-24 w-full opacity-50"
+                />
+                <span class="text-lg mx-5"> On Github </span>
+              </div>
+            </div>
+          </template>
+        </el-popover>
+      </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex flex-col w-full pt-20" v-if="repoID === 'My computer'">
+        <span class="mb-2">
+          Please select the folder where your
+          {{ combineDataTypes }} files are stored.
+        </span>
+
+        <el-input
+          v-model="folderPath"
+          placeholder="Click here to select a folder"
+          class="my-3 w-full"
+          @click="selectFolderPath"
+        />
+      </div>
+
+      <div
+        class="w-full flex flex-row justify-center py-2 space-x-4 pt-8 pr-[61px]"
+        v-if="repoID != ''"
+      >
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
           <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
@@ -58,6 +91,7 @@ export default {
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
+      repoID: "",
     };
   },
   computed: {
@@ -93,6 +127,9 @@ export default {
     },
   },
   methods: {
+    selectRepo(repoID) {
+      this.repoID = repoID;
+    },
     selectFolderPath() {
       if (!this.folderDialogOpen) {
         this.folderDialogOpen = true;
@@ -151,3 +188,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+.single-check-box {
+  @apply transition-all flex justify-center items-center w-48 h-48;
+}
+
+.single-check-box:not(.disabled-card, .selected-repo):hover {
+  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+}
+</style>

@@ -217,7 +217,7 @@ export default {
   @apply transition-all flex justify-center items-center w-48 h-48;
 }
 
-.single-check-box:not(.disabled-card):hover {
+.single-check-box:not(.disabled-card, .selected-repo):hover {
   @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
 }
 </style>
