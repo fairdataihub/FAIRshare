@@ -153,7 +153,7 @@ export default {
   name: "ManageAccount",
   components: {
     ConnectGithub,
-    ConnectZenodo
+    ConnectZenodo,
   },
   setup() {
     const manager = useTokenStore();
