@@ -177,9 +177,9 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     // split this up when separate
-    // if (this.workflow.folderSelected) {
-    this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-    // }
+    if (this.workflow.folderSelected) {
+      this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+    }
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {
