@@ -14,17 +14,22 @@
         <slot> </slot>
       </div>
     </div>
-    <div class="form-navigation-buttons w-full flex justify-end px-5 space-x-4">
-      <el-button
+    <div
+      class="form-navigation-buttons w-full flex justify-center px-5 space-x-4"
+    >
+      <button
         @click="prevStep"
-        :type="prevType"
-        plain
+        :class="
+          this.currentStepId === 1
+            ? 'primary-plain-button'
+            : 'secondary-plain-button'
+        "
         size="medium"
         :disabled="checkInvalidStatus"
       >
         <el-icon v-if="!firstStep"><back /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
-      </el-button>
+      </button>
       <!-- :plain="!lastStep" -->
       <button
         class="primary-button"

@@ -1079,9 +1079,9 @@
       </el-form>
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
-        <el-button type="danger" plain @click="navigateBack">
+        <button class="primary-plain-button" @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
-        </el-button>
+        </button>
 
         <button
           class="primary-button"

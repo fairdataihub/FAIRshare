@@ -209,7 +209,7 @@ html {
     @apply px-5 py-2 rounded;
     @apply text-[14px] font-medium;
     @apply text-gray-900  hover:text-secondary-600;
-    @apply border border-secondary-300;
+    @apply border border-secondary-600 hover:border-secondary-600;
     @apply hover:bg-secondary-100;
     @apply transition-all;
   }

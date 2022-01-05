@@ -23,7 +23,7 @@
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
-          <button class="secondary-plain-button">
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
         </router-link>

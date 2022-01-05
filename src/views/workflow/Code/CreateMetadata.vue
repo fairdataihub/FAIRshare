@@ -1582,20 +1582,19 @@
           </el-collapse>
 
           <div class="w-full flex flex-row justify-center py-2">
-            <el-button type="danger" plain @click="navigateBack" class="mx-3">
+            <button @click="navigateBack" class="primary-plain-button mx-3">
               <el-icon><d-arrow-left /></el-icon> Back
-            </el-button>
+            </button>
 
-            <el-button
-              type="primary"
-              class="flex flex-row items-center mx-3"
+            <button
+              class="flex flex-row items-center mx-3 primary-button"
               @click="navigateToSelectDestination"
               id="existElement"
               :disabled="checkInvalidStatus"
             >
               Continue
               <el-icon> <d-arrow-right /> </el-icon>
-            </el-button>
+            </button>
           </div>
         </div>
       </el-form>

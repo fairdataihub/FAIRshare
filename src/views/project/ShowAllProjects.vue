@@ -107,7 +107,7 @@
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting /></el-icon> Project settings
             </button>
-            <button class="primary-plain-button" @click="startCuratingProject">
+            <button class="primary-button" @click="startCuratingProject">
               Continue working on this project
               <el-icon class="icon-animate">
                 <d-arrow-right />
