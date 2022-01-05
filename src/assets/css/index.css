@@ -202,6 +202,7 @@ html {
 
   .primary-button:disabled {
     @apply opacity-50;
+    @apply cursor-not-allowed;
   }
 
   .secondary-plain-button {
@@ -299,8 +300,11 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   margin-left: 5px;
 }
 
-.el-collapse-item__header {
+.zenodo-collapse-item div .el-collapse-item__header {
   @apply bg-gray-100;
+}
+.code-collapse-item div .el-collapse-item__header {
+  @apply border-b-0;
 }
 
 /* ------------------------------------------
