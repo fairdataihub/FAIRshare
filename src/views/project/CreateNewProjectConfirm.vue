@@ -5,13 +5,12 @@
     <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
 
-      <span> Let's make your research software FAIR. </span>
+      <span> Let's make your research software FAIR </span>
 
       <line-divider> </line-divider>
 
       <p class="py-2">
-        In order to do this, SODA will automatically try to group up similar
-        data into their own datasets.
+        
       </p>
       <!-- <p class="py-2">
         FAIRShare will help you make you research software by guiding you
