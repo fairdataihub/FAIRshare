@@ -65,11 +65,13 @@ export default {
           question:
             "Is the data being curated in accordance with the standards?",
           model: "",
+          learnMoreText: "",
         },
         {
           question:
             "Is the data being curated in accordance with the standards?",
           model: "",
+          learnMoreText: "",
         },
       ],
     };
