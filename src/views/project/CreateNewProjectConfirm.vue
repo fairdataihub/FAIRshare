@@ -9,9 +9,7 @@
 
       <line-divider> </line-divider>
 
-      <p class="py-2">
-        
-      </p>
+      <p class="py-2"></p>
       <!-- <p class="py-2">
         FAIRShare will help you make you research software by guiding you
         step-by-step through the following process:
