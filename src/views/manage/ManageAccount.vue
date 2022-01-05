@@ -64,19 +64,7 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <!-- <el-button
-              plain
-              class="button"
-              @click="interactWithService('github')"
-              :type="githubDetails.buttonStyle"
-              >{{ githubDetails.action }}</el-button
-            > -->
-            <button
-              :class="githubDetails.buttonStyle"
-              @click="interactWithService('github')"
-            >
-              {{ githubDetails.action }}
-            </button>
+            <ConnectGithub></ConnectGithub>
           </div>
         </div>
       </div>
@@ -145,29 +133,11 @@
             </p>
           </div>
           <div class="centering-container bottom">
-            <!-- <el-button
-              plain
-              class="button"
-              @click="interactWithService('zenodo')"
-              :type="zenodoDetails.buttonStyle"
-              >{{ zenodoDetails.action }}</el-button
-            > -->
-            <button
-              :class="zenodoDetails.buttonStyle"
-              @click="interactWithService('zenodo')"
-            >
-              {{ zenodoDetails.action }}
-            </button>
+            <ConnectZenodo></ConnectZenodo>
           </div>
         </div>
       </div>
     </div>
-    <ButtonInputDialog
-      v-model="dialogVisable"
-      :numInput="dialogNumInput"
-      :buttons="this.buttonList"
-      :callback="closeButtonDialog"
-    ></ButtonInputDialog>
   </div>
 </template>
 
@@ -176,21 +146,14 @@
 import { useTokenStore } from "@/store/access";
 import { useDatasetsStore } from "@/store/datasets";
 
-import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
-import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
-import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
-import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
-
-import { markRaw } from "vue";
-import { ElNotification, ElMessageBox } from "element-plus";
+import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
+import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
 export default {
   name: "ManageAccount",
   components: {
-    GithubTokenConnection: GithubTokenConnection,
-    ZenodoTokenConnection: ZenodoTokenConnection,
-    GithubOAuthConnection: GithubOAuthConnection,
-    ButtonInputDialog,
+    ConnectGithub,
+    ConnectZenodo
   },
   setup() {
     const manager = useTokenStore();
@@ -209,71 +172,6 @@ export default {
   methods: {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
-    },
-    closeButtonDialog() {
-      this.dialogVisable = false;
-      this.buttonList = [];
-      this.dialogNumInput = 0;
-    },
-    APIkeyWarning(key) {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken(key);
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        });
-    },
-    async deleteToken(key) {
-      let errorFound = false;
-      try {
-        await this.manager.deleteToken(key);
-      } catch (e) {
-        errorFound = true;
-      }
-      if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-    },
-    interactWithService(serviceName) {
-      if (serviceName == "github") {
-        if ("github" in this.manager.accessTokens) {
-          this.APIkeyWarning("github");
-        } else {
-          this.buttonList = [
-            markRaw(GithubTokenConnection),
-            markRaw(GithubOAuthConnection),
-          ];
-          this.dialogNumInput = 2;
-          this.dialogVisable = true;
-        }
-      } else if (serviceName == "zenodo") {
-        if ("zenodo" in this.manager.accessTokens) {
-          this.APIkeyWarning("zenodo");
-        } else {
-          this.buttonList = [markRaw(ZenodoTokenConnection)];
-          this.dialogNumInput = 1;
-          this.dialogVisable = true;
-        }
-      }
     },
   },
   computed: {
