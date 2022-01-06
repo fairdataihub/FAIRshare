@@ -448,7 +448,7 @@
                     type="text"
                   ></el-input>
                   <form-help-content
-                    popoverContent="Code of the grant funding this software (comma seperate if multiple)"
+                    popoverContent="Code of the grant funding this software (comma separate if multiple)"
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -460,7 +460,7 @@
                     type="text"
                   ></el-input>
                   <form-help-content
-                    popoverContent="The organization funding this software (comma seperate if multiple)"
+                    popoverContent="The organization funding this software (comma separate if multiple)"
                   ></form-help-content>
                 </div>
               </el-form-item>
