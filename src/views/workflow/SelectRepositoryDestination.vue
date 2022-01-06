@@ -5,8 +5,8 @@
   >
     <div class="h-full flex flex-col justify-center items-center">
       <span class="text-center">
-        Based on your dataset requirements, we suggest uploading your data to one
-        of these repositories.
+        Based on your dataset requirements, we suggest uploading your data to
+        one of these repositories.
       </span>
       <span class="text-sm text-center">
         Please click one of the following options:
