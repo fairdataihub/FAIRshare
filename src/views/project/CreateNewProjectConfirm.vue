@@ -55,7 +55,8 @@ export default {
         const key = `workflow${index + 1}`;
         that.dataset.workflows[key] = {};
         that.dataset.workflows[key].type = [type];
-        that.dataset.workflows[key].folderSelected = false;
+        that.dataset.workflows[key].sourceSelected = false;
+        that.dataset.workflows[key].source = {};
         that.dataset.workflows[key].destinationSelected = false;
         that.dataset.workflows[key].datasetUploaded = false;
         that.dataset.workflows[key].datasetPublished = false;
