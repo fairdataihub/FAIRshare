@@ -35,11 +35,11 @@
             <template #reference>
               <div>
                 <el-button
-                class="primary-plain-button"
-                @click="showZenodoOAuthConnect"
-                disabled
-                >Connect zenodo account</el-button
-              >
+                  class="primary-plain-button"
+                  @click="showZenodoOAuthConnect"
+                  disabled
+                  >Connect zenodo account</el-button
+                >
               </div>
             </template>
           </el-popover>
