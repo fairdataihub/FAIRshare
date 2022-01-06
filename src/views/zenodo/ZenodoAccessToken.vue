@@ -5,8 +5,7 @@
         Zenodo connection details
       </span>
       <span class="text-left">
-        We will use this
-        to upload and edit your dataset on your Zenodo account.
+        We will use this to upload and edit your dataset on your Zenodo account.
       </span>
 
       <el-divider class="my-4"> </el-divider>
