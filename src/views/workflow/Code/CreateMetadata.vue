@@ -2248,7 +2248,6 @@ export default {
         "keyword"
       );
       this.dataset.data.general.questions.keywords = this.codeForm.keywords;
-
       this.dataset.data.general.questions.authors = this.codeForm.authors;
       this.dataset.data.general.questions.contributors =
         this.codeForm.contributors;

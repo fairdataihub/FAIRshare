@@ -135,6 +135,8 @@ export default {
       this.$refs.licenseForm.validate((valid) => {
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
+          this.dataset.data.general.questions.license =
+            this.licenseForm.license;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();
