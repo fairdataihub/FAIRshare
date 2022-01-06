@@ -33,16 +33,16 @@ export default {
       progressBar: {},
       steps: [
         {
-          description: "Pick data source",
+          description: "Select data files",
         },
         {
-          description: "Review data standards",
+          description: "Review standards",
         },
         {
           description: "Provide metadata",
         },
         {
-          description: "Pick a license",
+          description: "Select a license",
         },
         {
           description: "Select repository",

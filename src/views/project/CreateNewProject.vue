@@ -67,7 +67,7 @@
                     label="Research software"
                   >
                     <div class="flex flex-col items-center">
-                      <monitor class="h-12 w-12"></monitor>
+                      <Icon icon="bx:bx-code-block" class="h-12 w-12 my-2" />
                       <span class="text-sm">Research</span>
                       <span class="text-sm">software</span>
                     </div>
@@ -94,7 +94,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="mdi:virus-outline" class="h-12 w-12" />
+                      <Icon icon="mdi:virus-outline" class="h-12 w-12 my-2" />
                       <span class="text-sm">Immunology</span>
                     </div>
                   </el-checkbox>
@@ -118,7 +118,7 @@
                     <div class="flex flex-col items-center">
                       <Icon
                         icon="healthicons:virus-patient-outline"
-                        class="h-12 w-12"
+                        class="h-12 w-12 my-2"
                       />
                       <span class="text-sm">Epidemiology</span>
                     </div>
@@ -143,7 +143,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="uil:dna" class="h-12 w-12" />
+                      <Icon icon="uil:dna" class="h-12 w-12 my-2" />
                       <span class="text-sm">Genomic</span>
                     </div>
                   </el-checkbox>
@@ -165,7 +165,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document class="h-12 w-12"></document>
+                      <document class="h-12 w-12 my-2"></document>
                       <span class="text-sm">Document</span>
                     </div>
                   </el-checkbox>
@@ -187,7 +187,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <video-play class="h-12 w-12"></video-play>
+                      <video-play class="h-12 w-12 my-2"></video-play>
                       <span class="text-sm">Media</span>
                     </div>
                   </el-checkbox>

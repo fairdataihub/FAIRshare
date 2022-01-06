@@ -4,11 +4,14 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Where is your data located?
+        Provide the location of the files you want to include in your research
+        software dataset
       </span>
 
       <el-divider class="my-4"> </el-divider>
-
+      <span class="mb-2">
+        Where are your research software files located?
+      </span>
       <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
         <div
           class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
@@ -153,14 +156,18 @@ export default {
         that.dataset.data[type].folderPath = that.folderPath;
       });
 
-      this.workflow.folderSelected = true;
+      this.workflow.sourceSelected = true;
+
+      if ("source" in this.workflow) {
+        this.workflow.source.type = this.repoID;
+      } else {
+        this.workflow.source = {
+          type: this.repoID,
+        };
+      }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
-
-      // console.log(
-      //   `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`
-      // );
 
       this.$router.push({
         path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
@@ -177,9 +184,10 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     // split this up when separate
-    // if (this.workflow.folderSelected) {
-    this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-    // }
+    if (this.workflow.sourceSelected) {
+      this.repoID = this.workflow.source.type;
+      this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+    }
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {

@@ -18,7 +18,7 @@
           ref="licenseForm"
           @submit.prevent
         >
-          <el-form-item label="License">
+          <el-form-item label="License" required prop="license">
             <el-select
               v-model="licenseForm.license"
               filterable
@@ -133,6 +133,7 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
+        console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license =
