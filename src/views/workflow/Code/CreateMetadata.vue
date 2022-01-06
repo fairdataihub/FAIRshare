@@ -43,18 +43,22 @@
             >
               <el-form-item label="Software name" required>
                 <div class="flex flex-row items-center">
-                  <el-input v-model="codeForm.name"></el-input>
+                  <el-input
+                    v-model="codeForm.name"
+                    placeholder="My Software"
+                  ></el-input>
                   <form-help-content
                     popoverContent="The name of the software"
                   ></form-help-content>
                 </div>
               </el-form-item>
 
-              <el-form-item label="Software description" required>
+              <el-form-item label="Software description/abstract" required>
                 <div class="flex flex-row items-center">
                   <el-input
                     v-model="codeForm.description"
                     type="textarea"
+                    placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
                   ></el-input>
                   <form-help-content
                     popoverContent="A brief description of the software"
@@ -410,7 +414,7 @@
                         <el-input
                           v-model="element.keyword"
                           type="text"
-                          placeholder=""
+                          placeholder="orbit"
                           v-on:keyup.enter="addKeyword"
                           :ref="element.id"
                         ></el-input>
@@ -458,6 +462,7 @@
                   <el-input
                     v-model="codeForm.funding.code"
                     type="text"
+                    placeholder="PRA_2018_73"
                   ></el-input>
                   <form-help-content
                     popoverContent="Code of the grant funding this software (comma separate if multiple)"
@@ -470,6 +475,7 @@
                   <el-input
                     v-model="codeForm.funding.organization"
                     type="text"
+                    placeholder="University of Michigan"
                   ></el-input>
                   <form-help-content
                     popoverContent="The organization funding this software (comma separate if multiple)"
@@ -491,7 +497,10 @@
                 :error="codeRepositoryErrorMessage"
               >
                 <div class="flex flex-row items-center">
-                  <el-input v-model="codeForm.codeRepository"></el-input>
+                  <el-input
+                    v-model="codeForm.codeRepository"
+                    placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                  ></el-input>
                   <form-help-content
                     popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, Github, CodePlex, institutional GitLab instance, etc.)"
                   ></form-help-content>
@@ -503,7 +512,10 @@
                 :error="continuousIntegrationErrorMessage"
               >
                 <div class="flex flex-row items-center">
-                  <el-input v-model="codeForm.continuousIntegration"></el-input>
+                  <el-input
+                    v-model="codeForm.continuousIntegration"
+                    placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
+                  ></el-input>
                   <form-help-content
                     popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
                   ></form-help-content>
@@ -515,7 +527,10 @@
                 :error="issueTrackerErrorMessage"
               >
                 <div class="flex flex-row items-center">
-                  <el-input v-model="codeForm.issueTracker"></el-input>
+                  <el-input
+                    v-model="codeForm.issueTracker"
+                    placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
+                  ></el-input>
                   <form-help-content
                     popoverContent="Link to issue tracker (Jira, Github issues, etc.)"
                   ></form-help-content>

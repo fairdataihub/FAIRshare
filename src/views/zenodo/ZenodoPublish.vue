@@ -18,12 +18,17 @@
           (DOI) will be registered immediately after publishing. You will still
           be able to update the record's metadata later.
         </p>
-        <button
-          class="blob transition-all primary-button"
-          @click="publishDeposition"
-        >
-          Publish <el-icon><star /></el-icon>
-        </button>
+        <div class="flex space-x-4">
+          <button class="primary-plain-button" @click="openDraftDataset">
+            View draft
+          </button>
+          <button
+            class="blob transition-all primary-button"
+            @click="publishDeposition"
+          >
+            Publish <el-icon><star /></el-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -124,6 +129,14 @@ export default {
       }
 
       loading.close();
+    },
+    async openDraftDataset() {
+      const depositionID = this.workflow.destination.zenodo.deposition_id;
+
+      window.ipcRenderer.send(
+        "open-link-in-browser",
+        `${process.env.VUE_APP_ZENODO_URL}deposit/${depositionID}`
+      );
     },
   },
   async mounted() {
