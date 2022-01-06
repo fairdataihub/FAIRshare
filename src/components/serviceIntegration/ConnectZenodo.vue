@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div>
     <button
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
@@ -12,6 +12,46 @@
       :buttons="this.buttonList"
       :callback="closeButtonDialog"
     ></ButtonInputDialog>
+  </div> -->
+  <div>
+    <button
+      :class="zenodoDetails.buttonStyle"
+      @click="interactWithService('zenodo')"
+    >
+      {{ zenodoDetails.action }}
+    </button>
+    <el-dialog width="600px" destroy-on-close v-model="dialogVisable">
+      <div class="dialog-Container">
+        <div class="inputField">
+          <button class="primary-plain-button" @click="showZenodoTokenConnect">
+            Connect zenodo token
+          </button>
+          <el-popover
+            placement="top"
+            :hide-after="0"
+            trigger="hover"
+            content="Coming soon..."
+          >
+            <template #reference>
+              <div>
+                <el-button
+                class="primary-plain-button"
+                @click="showZenodoOAuthConnect"
+                disabled
+                >Connect zenodo account</el-button
+              >
+              </div>
+            </template>
+          </el-popover>
+        </div>
+      </div>
+    </el-dialog>
+    <ZenodoTokenConnection
+      v-if="showTokenConnect"
+      v-model="showTokenConnect"
+      :callback="hideZenodoTokenConnect"
+    ></ZenodoTokenConnection>
+    <!-- <ZenodoOAuthConnection v-if="showOAuthConnect" v-model="showOAuthConnect" :callback = "hideZenodoOAuthConnect"></ZenodoOAuthConnection> -->
   </div>
 </template>
 
@@ -20,7 +60,6 @@
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
 import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
 import { useTokenStore } from "@/store/access";
-import { markRaw } from "vue";
 import { ElNotification, ElMessageBox } from "element-plus";
 export default {
   name: "ConnectZenodo",
@@ -36,24 +75,32 @@ export default {
   },
   data() {
     return {
-      buttonList: [],
       dialogVisable: false,
-      dialogNumInput: 0,
+
+      showTokenConnect: false,
+      showOAuthConnect: false,
     };
   },
   methods: {
-    closeButtonDialog() {
+    hideZenodoTokenConnect() {
+      this.showTokenConnect = false;
+    },
+    hideZenodoOAuthConnect() {
+      this.showOAuthConnect = false;
+    },
+    showZenodoTokenConnect() {
+      this.showTokenConnect = true;
       this.dialogVisable = false;
-      this.buttonList = [];
-      this.dialogNumInput = 0;
+    },
+    showZenodoOAuthConnect() {
+      this.showOAuthConnect = true;
+      this.dialogVisable = false;
     },
     interactWithService(serviceName) {
       if (serviceName == "zenodo") {
         if ("zenodo" in this.manager.accessTokens) {
           this.APIkeyWarning("zenodo");
         } else {
-          this.buttonList = [markRaw(ZenodoTokenConnection)];
-          this.dialogNumInput = 1;
           this.dialogVisable = true;
         }
       }
@@ -116,3 +163,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.dialog-Container {
+  @apply flex flex-col justify-center items-center gap-3 h-32;
+}
+.inputField {
+  @apply flex gap-6;
+}
+</style>

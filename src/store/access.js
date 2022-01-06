@@ -93,7 +93,6 @@ export const useTokenStore = defineStore({
     async deleteToken(key) {
       delete this.accessTokens[key];
       await this.syncTokens();
-      this.loadStatus();
     },
     async verifyZenodoTokenByDepositions(token) {
       return await axios

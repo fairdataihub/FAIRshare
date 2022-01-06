@@ -1,15 +1,5 @@
 <template>
-  <div class="buttonContainer">
-    <!-- <el-button
-      plain
-      class="button"
-      @click="openDialog()"
-      :type="buttonStatus.buttonStyle"
-      >{{ buttonStatus.buttonText }}</el-button
-    > -->
-    <button :class="buttonStatus.buttonStyle" @click="openDialog()">
-      {{ buttonStatus.buttonText }}
-    </button>
+  <div>
     <AppDialog
       v-if="dialogVisable"
       v-model="dialogVisable"
@@ -25,11 +15,13 @@ import { useTokenStore } from "../../store/access";
 import { ref } from "vue";
 import { ElNotification } from "element-plus";
 import { ElLoading } from "element-plus";
-import { ElMessageBox } from "element-plus";
 import AppDialog from "../dialogs/AppDialog";
 export default {
   name: "GithubTokenConnection",
   components: { AppDialog },
+  props: {
+    callback: { type: Function },
+  },
   setup() {
     const status = ref(["Connect github token", ""]);
     const dialogVisable = ref(false);
@@ -48,20 +40,6 @@ export default {
     };
   },
   computed: {
-    buttonStatus() {
-      let githubObject = {
-        buttonText: "Connect github token",
-        buttonStyle: "primary-plain-button",
-      };
-      if (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
-      ) {
-        githubObject.buttonText = "Disconnect github token";
-        githubObject.buttonStyle = "danger-plain-button";
-      }
-      return githubObject;
-    },
     connectedToGithubByToken() {
       return (
         "github" in this.manager.accessTokens &&
@@ -78,14 +56,7 @@ export default {
       return loading;
     },
     openDialog() {
-      if (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
-      ) {
-        this.APIkeyWarning();
-      } else {
-        this.useAPIkey();
-      }
+      this.useAPIkey();
     },
     async getInputs(response) {
       this.dialogVisable = false;
@@ -98,6 +69,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
     },
 
@@ -124,6 +96,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
+          this.callback();
         }
       } else {
         ElNotification({
@@ -132,6 +105,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
       spinner.close();
     },
@@ -141,49 +115,10 @@ export default {
       this.dialogHeaders = ["Github access token"];
       this.dialogVisable = true;
     },
-
-    APIkeyWarning() {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken("github");
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        });
-    },
-
-    async deleteToken(key) {
-      let errorFound = false;
-      try {
-        await this.manager.deleteToken(key);
-      } catch (e) {
-        errorFound = true;
-      }
-      if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-    },
   },
   async mounted() {
     await this.manager.loadTokens();
+    this.openDialog();
   },
 };
 </script>

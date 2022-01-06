@@ -1,15 +1,5 @@
 <template>
   <div class="buttonContainer">
-    <!-- <el-button
-      plain
-      class="button"
-      @click="openDialog()"
-      :type="buttonStatus.buttonStyle"
-      >{{ buttonStatus.buttonText }}</el-button
-    > -->
-    <button :class="buttonStatus.buttonStyle" @click="openDialog()">
-      {{ buttonStatus.buttonText }}
-    </button>
     <AppDialog
       v-if="dialogVisable"
       v-model="dialogVisable"
@@ -25,11 +15,13 @@ import { useTokenStore } from "../../store/access";
 import { ref } from "vue";
 import { ElNotification } from "element-plus";
 import { ElLoading } from "element-plus";
-import { ElMessageBox } from "element-plus";
 import AppDialog from "../dialogs/AppDialog";
 export default {
   name: "ZenodoTokenConnection",
   components: { AppDialog },
+  props: {
+    callback: { type: Function },
+  },
   setup() {
     const dialogVisable = ref(false);
     const dialogHeaders = ref(null);
@@ -40,33 +32,12 @@ export default {
       dialogNumInput,
     };
   },
-  props: {
-    callbackFunction: {
-      type: Function,
-      required: false,
-      default: () => {},
-    },
-  },
   data() {
     return {
       manager: useTokenStore(),
     };
   },
   computed: {
-    buttonStatus() {
-      let zenodoObject = {
-        buttonText: "Connect zenodo token",
-        buttonStyle: "primary-plain-button",
-      };
-      if (
-        "zenodo" in this.manager.accessTokens &&
-        this.manager.accessTokens.zenodo.type == "token"
-      ) {
-        zenodoObject.buttonText = "Disconnect zenodo token";
-        zenodoObject.buttonStyle = "danger-plain-button";
-      }
-      return zenodoObject;
-    },
     connectedToZenodoByToken() {
       return (
         "zenodo" in this.manager.accessTokens &&
@@ -83,14 +54,7 @@ export default {
       return loading;
     },
     openDialog() {
-      if (
-        "zenodo" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
-      ) {
-        this.APIkeyWarning();
-      } else {
-        this.useAPIkey();
-      }
+      this.useAPIkey();
     },
     async getInputs(response) {
       this.dialogVisable = false;
@@ -103,6 +67,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
     },
 
@@ -124,13 +89,13 @@ export default {
           errorFound = true;
         }
         if (!errorFound) {
-          this.callbackFunction();
           ElNotification({
             type: "success",
             message: "Connected to Zenodo successfully",
             position: "bottom-right",
             duration: 2000,
           });
+          this.callback();
         }
       } else {
         ElNotification({
@@ -139,6 +104,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
       spinner.close();
     },
@@ -148,50 +114,10 @@ export default {
       this.dialogHeaders = ["Zenodo access token", "Token nick name"];
       this.dialogVisable = true;
     },
-
-    APIkeyWarning() {
-      ElMessageBox.confirm(
-        "Do you want to remove the connection to Zenodo?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken("zenodo");
-          this.callbackFunction();
-        })
-        .catch(() => {
-          // ElNotification({
-          //   type: "info",
-          //   message: "Delete canceled",
-          //   position: "bottom-right",
-          //   duration: 2000,
-          // });
-        });
-    },
-
-    async deleteToken(key) {
-      let errorFound = false;
-      try {
-        await this.manager.deleteToken(key);
-      } catch (e) {
-        errorFound = true;
-      }
-      if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Successfully disconnected from Zenodo",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
-    },
   },
   async mounted() {
     await this.manager.loadTokens();
+    this.openDialog();
   },
 };
 </script>

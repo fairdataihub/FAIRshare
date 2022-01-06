@@ -6,12 +6,20 @@
     >
       {{ githubDetails.action }}
     </button>
-    <ButtonInputDialog
+    <el-dialog
+      width="600px"
+      destroy-on-close
       v-model="dialogVisable"
-      :numInput="dialogNumInput"
-      :buttons="this.buttonList"
-      :callback="closeButtonDialog"
-    ></ButtonInputDialog>
+    >
+      <div class="dialog-Container">
+        <div class="inputField">
+            <button class="primary-plain-button" @click="showGithubTokenConnect">Connect github token</button>
+            <button class="primary-plain-button" @click="showGithubOAuthConnect">Connect github account</button>
+        </div>
+      </div>
+    </el-dialog>
+    <GithubTokenConnection v-if="showTokenConnect" v-model="showTokenConnect" :callback = "hideGithubTokenConnect"></GithubTokenConnection>
+    <GithubOAuthConnection v-if="showOAuthConnect" v-model="showOAuthConnect" :callback = "hideGithubOAuthConnect"></GithubOAuthConnection>
   </div>
 </template>
 
@@ -21,7 +29,6 @@ import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenCo
 import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
 import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
 import { useTokenStore } from "@/store/access";
-import { markRaw } from "vue";
 import { ElNotification, ElMessageBox } from "element-plus";
 export default {
   name: "ConnectGithub",
@@ -38,27 +45,32 @@ export default {
   },
   data() {
     return {
-      buttonList: [],
       dialogVisable: false,
-      dialogNumInput: 0,
+
+      showTokenConnect: false,
+      showOAuthConnect: false,
     };
   },
   methods: {
-    closeButtonDialog() {
-      this.dialogVisable = false;
-      this.buttonList = [];
-      this.dialogNumInput = 0;
+    hideGithubTokenConnect(){
+      this.showTokenConnect = false
+    },
+    hideGithubOAuthConnect(){
+      this.showOAuthConnect = false
+    },
+    showGithubTokenConnect(){
+      this.showTokenConnect = true
+      this.dialogVisable = false
+    },
+    showGithubOAuthConnect(){
+      this.showOAuthConnect = true
+      this.dialogVisable = false
     },
     interactWithService(serviceName) {
       if (serviceName == "github") {
         if ("github" in this.manager.accessTokens) {
           this.APIkeyWarning("github");
         } else {
-          this.buttonList = [
-            markRaw(GithubTokenConnection),
-            markRaw(GithubOAuthConnection),
-          ];
-          this.dialogNumInput = 2;
           this.dialogVisable = true;
         }
       }
@@ -91,6 +103,7 @@ export default {
         await this.manager.deleteToken(key);
       } catch (e) {
         errorFound = true;
+        console.log(e)
       }
       if (!errorFound) {
         ElNotification({
@@ -121,3 +134,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.dialog-Container {
+  @apply flex flex-col justify-center items-center gap-3 h-32;
+}
+.inputField {
+  @apply flex gap-6;
+}
+</style>
