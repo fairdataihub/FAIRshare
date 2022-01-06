@@ -2,7 +2,7 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Let's publish your work to Zenodo
+        Publish your work to Zenodo
       </span>
       <span class="text-left">
         All your data has been uploaded to Zenodo. It's now time to publish your
