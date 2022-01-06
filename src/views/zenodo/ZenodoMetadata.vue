@@ -329,6 +329,7 @@
                 <el-select
                   v-model="zenodoMetadataForm.license.licenseName"
                   filterable
+                  disabled
                   placeholder="Select a license"
                   class="w-full"
                 >
@@ -1775,6 +1776,9 @@ export default {
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.thesis
       );
+
+      const generalForm = this.dataset.data.general.questions;
+      this.zenodoMetadataForm.license.licenseName = generalForm.license;
 
       this.addIds(this.zenodoMetadataForm.authors);
       this.addIds(this.zenodoMetadataForm.keywords);
