@@ -232,11 +232,13 @@
                 </draggable>
               </el-form-item>
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max pb-3 text-sm"
+                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max mb-6 text-sm"
                 @click="addAuthor"
               >
                 <Icon icon="carbon:add" />
-                <span> Add an author </span>
+                <span class="text-primary-600 hover:text-primary-500">
+                  Add an author
+                </span>
                 <form-help-content
                   popoverContent="Add a developer of the software"
                 ></form-help-content>
@@ -353,7 +355,9 @@
                 @click="addContributor"
               >
                 <Icon icon="carbon:add" />
-                <span> Add a contributor </span>
+                <span class="text-primary-600 hover:text-primary-500">
+                  Add a contributor
+                </span>
                 <form-help-content
                   popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
                 ></form-help-content>
@@ -1028,6 +1032,9 @@ export default {
               }
             }
           }
+        } else {
+          this.authorsErrorMessage = "";
+          this.invalidStatus.authors = false;
         }
       },
       deep: true,

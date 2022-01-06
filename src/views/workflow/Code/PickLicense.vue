@@ -35,13 +35,13 @@
               </el-option>
             </el-select>
 
-            <p
-              class="text-sm pt-2 text-gray-500 cursor-pointer hover:text-gray-800"
+            <button
+              class="secondary-plain-button my-4 px-2 py-1 h-[30px]"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
-              Show license details.
-            </p>
+              Show license details
+            </button>
 
             <el-drawer
               v-model="showLicenseDetails"
