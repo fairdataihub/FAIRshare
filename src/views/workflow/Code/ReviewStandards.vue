@@ -4,7 +4,8 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Verify if you have followed standard/best research software development practices
+        Verify if you have followed standard/best research software development
+        practices
       </span>
 
       <el-divider class="my-4"> </el-divider>
