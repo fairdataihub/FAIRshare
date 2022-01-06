@@ -4,7 +4,8 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Are standard development practices being followed?
+        Verify if you have followed standard/best research software development
+        practices
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -129,10 +130,10 @@ export default {
 
       if (showWarning) {
         ElMessageBox.confirm(
-          "To be FAIR, we highly recommend going back and adding all the relevant information needed within this questionaire. Do you still want to go ahead with your submission?",
+          "For your research software to be fully FAIR, we expect you to answer 'Yes' to all the questions. We suggest to review again where you answered 'No' and modyfying your data files if necessary before contuining.",
           "Warning",
           {
-            confirmButtonText: "Yes",
+            confirmButtonText: "Continue anyway",
             cancelButtonText: "I want to go back and review",
             type: "warning",
           }

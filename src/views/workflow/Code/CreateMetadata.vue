@@ -4,14 +4,14 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Let's make your data FAIR
+        Provide information about your research sofware
       </span>
 
       <line-divider></line-divider>
 
       <span class="mb-2">
-        We need to know some general details about your data. Please fill all
-        the fields in this section and we'll take care of the rest.
+        We will use this information to automatically include the standard
+        codemeta.json and CITATION.cff file in your dataset.
       </span>
 
       <el-form
@@ -72,7 +72,7 @@
                   >
                   </el-date-picker>
                   <form-help-content
-                    popoverContent="The date on which the software was created"
+                    popoverContent="The date on which the software was first created"
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -456,7 +456,7 @@
                     type="text"
                   ></el-input>
                   <form-help-content
-                    popoverContent="The grant funding software development"
+                    popoverContent="Code of the grant funding this software (comma separate if multiple)"
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -468,7 +468,7 @@
                     type="text"
                   ></el-input>
                   <form-help-content
-                    popoverContent="The organization funding software development"
+                    popoverContent="The organization funding this software (comma separate if multiple)"
                   ></form-help-content>
                 </div>
               </el-form-item>

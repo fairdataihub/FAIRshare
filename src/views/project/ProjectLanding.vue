@@ -32,7 +32,7 @@
         <el-timeline-item id="step2" timestamp="Step 2" placement="top">
           <el-card class="dynamic-card">
             <h4 class="font-bold text-base">
-              Check standard development practices
+              Review standard development practices
             </h4>
             <p>
               You will be asked a series a question to ensure standard practices
@@ -52,7 +52,7 @@
         </el-timeline-item>
         <el-timeline-item id="step3" timestamp="Step 4" placement="top">
           <el-card class="dynamic-card">
-            <h4 class="font-bold text-base">Select license</h4>
+            <h4 class="font-bold text-base">Select a license</h4>
             <p>
               Select the license under which you want to share your research
               software

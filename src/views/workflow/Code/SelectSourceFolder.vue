@@ -4,11 +4,14 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Where is your data located?
+        Provide the location of the files you want to include in your research
+        software dataset
       </span>
 
       <el-divider class="my-4"> </el-divider>
-
+      <span class="mb-2">
+        Where are your research software files located?
+      </span>
       <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
         <div
           class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
