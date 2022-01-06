@@ -445,7 +445,7 @@
                 <Icon icon="carbon:add" />
                 <span> Add a keyword </span>
                 <form-help-content
-                  popoverContent="A brief description of the software"
+                  popoverContent="Keywords relevant to your software"
                 ></form-help-content>
               </div>
 
@@ -573,7 +573,7 @@
                 <Icon icon="carbon:add" />
                 <span> Add a related link </span>
                 <form-help-content
-                  popoverContent="Related documents, software, tools, etc."
+                  popoverContent="Link to documents, software, tools, etc. related to your software"
                 ></form-help-content>
               </div>
             </FormCardContent>
@@ -606,7 +606,7 @@
                     </el-option>
                   </el-select>
                   <form-help-content
-                    popoverContent="All programming languages used in this software"
+                    popoverContent="All programming languages used in this software. Select from the suggested list or type your own."
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -631,7 +631,7 @@
                     </el-option>
                   </el-select>
                   <form-help-content
-                    popoverContent="All runtime platforms used in this software"
+                    popoverContent="All runtime platforms used in this software. Select from the suggested list or type your own."
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -656,7 +656,7 @@
                     </el-option>
                   </el-select>
                   <form-help-content
-                    popoverContent="All operating systems this software can run on"
+                    popoverContent="All operating systems this software can run on.  Select from the suggested list or type your own."
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -802,9 +802,10 @@
                   <el-input
                     v-model="codeForm.referencePublication"
                     type="text"
+                    placeholder="https://doi.org/10.100/xyz123"
                   ></el-input>
                   <form-help-content
-                    popoverContent="Scholarly publication that describes the software"
+                    popoverContent="Link to the scholarly publication that describes the software"
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -825,7 +826,7 @@
                     </el-option>
                   </el-select>
                   <form-help-content
-                    popoverContent="The current development status of this software"
+                    popoverContent="The current development status of this software. Select one to see the definition. See http://www.repostatus.org/ for more details."
                   ></form-help-content>
                 </div>
 
@@ -842,7 +843,7 @@
                     placeholder="https://thebiggerframework.org"
                   ></el-input>
                   <form-help-content
-                    popoverContent="URL to the project this software is part of"
+                    popoverContent="Link to the project this software is part of"
                   ></form-help-content>
                 </div>
               </el-form-item>
