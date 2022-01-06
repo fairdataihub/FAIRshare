@@ -4,7 +4,8 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Let's select an appropriate license for your data
+        Select a license that defines the desired conditions for using your
+        software
       </span>
 
       <el-divider> </el-divider>
