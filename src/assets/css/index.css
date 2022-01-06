@@ -120,6 +120,12 @@ html {
   left: 6px;
 }
 
+.text-url {
+  @apply text-primary-400 hover:text-primary-500;
+  @apply underline underline-offset-2;
+  @apply cursor-pointer;
+}
+
 .hover-underline-animation {
   position: relative;
 }

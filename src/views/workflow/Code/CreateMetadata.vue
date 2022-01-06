@@ -826,7 +826,7 @@
                     </el-option>
                   </el-select>
                   <form-help-content
-                    popoverContent="The current development status of this software. Select one to see the definition. See http://www.repostatus.org/ for more details."
+                    popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
                   ></form-help-content>
                 </div>
 
