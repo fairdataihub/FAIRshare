@@ -153,14 +153,18 @@ export default {
         that.dataset.data[type].folderPath = that.folderPath;
       });
 
-      this.workflow.folderSelected = true;
+      this.workflow.sourceSelected = true;
+
+      if ("source" in this.workflow) {
+        this.workflow.source.type = this.repoID;
+      } else {
+        this.workflow.source = {
+          type: this.repoID,
+        };
+      }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
-
-      // console.log(
-      //   `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`
-      // );
 
       this.$router.push({
         path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
@@ -177,7 +181,8 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     // split this up when separate
-    if (this.workflow.folderSelected) {
+    if (this.workflow.sourceSelected) {
+      this.repoID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
