@@ -5,8 +5,7 @@
         Zenodo connection details
       </span>
       <span class="text-left">
-        Let's see if we already have your Zenodo login details. We will use this
-        to upload and edit your dataset on your Zenodo account.
+        We will use this to upload and edit your dataset on your Zenodo account.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -14,7 +13,7 @@
       <div v-if="ready">
         <p v-if="validTokenAvailable" class="my-10 text-center w-full">
           Looks like we already have your Zenodo login details. Click on the
-          continue button below.
+          'Start upload' button below.
         </p>
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col justify-center items-center py-10">
