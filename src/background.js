@@ -60,6 +60,7 @@ const createPyProc = () => {
   let script = getScriptPath();
 
   console.log(`Starting python process at ${script}`);
+  console.log(`API documentation hosted at http://127.0.0.1:7632/docs`);
   if (guessPackaged()) {
     pyProc = require("child_process").execFile(script, [pyPort], {
       stdio: "ignore",
@@ -80,10 +81,10 @@ const createPyProc = () => {
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1069,
-    height: 600,
-    minWidth: 1069,
-    minHeight: 600,
+    width: 1150,
+    height: 800,
+    minWidth: 1150,
+    minHeight: 800,
     show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

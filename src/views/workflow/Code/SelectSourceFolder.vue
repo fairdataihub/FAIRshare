@@ -4,46 +4,68 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Where is your data located?
+        Provide the location of the files you want to include in your research
+        software dataset
       </span>
 
       <el-divider class="my-4"> </el-divider>
-
       <span class="mb-2">
-        Please select the folder where your
-        {{ combineDataTypes }} files are stored.
+        Where are your research software files located?
       </span>
+      <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
+        <div
+          class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
+          :class="{ 'selected-repo': repoID === 'My computer' }"
+          @click="selectRepo('My computer')"
+        >
+          <monitor class="h-24 w-16"></monitor>
+          <span class="text-lg mx-5"> My computer </span>
+        </div>
 
-      <el-input
-        v-model="folderPath"
-        placeholder="Click here to select a folder"
-        class="my-3 w-full"
-        @click="selectFolderPath"
-      />
+        <el-popover placement="bottom" trigger="hover" content="Coming soon...">
+          <template #reference>
+            <div>
+              <div
+                class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
+              >
+                <img
+                  src="../../../assets/github.jpeg"
+                  alt=""
+                  class="h-24 w-full opacity-50"
+                />
+                <span class="text-lg mx-5"> On Github </span>
+              </div>
+            </div>
+          </template>
+        </el-popover>
+      </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
-        <router-link :to="`/datasets/${datasetID}`" class="">
-          <button class="danger-button">
+      <div class="flex flex-col w-full pt-20" v-if="repoID === 'My computer'">
+        <span class="mb-2">
+          Please select the folder where your
+          {{ combineDataTypes }} files are stored.
+        </span>
+
+        <el-input
+          v-model="folderPath"
+          placeholder="Click here to select a folder"
+          class="my-3 w-full"
+          @click="selectFolderPath"
+        />
+      </div>
+
+      <div
+        class="w-full flex flex-row justify-center py-2 space-x-4 pt-8 pr-[61px]"
+        v-if="repoID != ''"
+      >
+        <router-link :to="`/datasets/${datasetID}/landing`" class="">
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
-          <!-- <el-button type="danger" plain>
-            <el-icon><d-arrow-left /></el-icon> Back
-          </el-button> -->
         </router-link>
 
-        <!-- <el-button
-          type="primary"
-          :disabled="emptyInput"
-          class="flex flex-row justify-center items-center"
-          @click="startCuration"
-          id="continue"
-        >
-          Continue
-          <el-icon> <d-arrow-right /> </el-icon>
-        </el-button> -->
-
         <button
-          class="primary-plain-button"
+          class="primary-button"
           :disabled="emptyInput"
           @click="startCuration"
           id="continue"
@@ -59,10 +81,10 @@
 <script>
 import { dialog } from "@electron/remote";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
-  name: "SelectSourceFolder",
+  name: "CodeSelectSourceFolder",
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -72,6 +94,7 @@ export default {
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
+      repoID: "",
     };
   },
   computed: {
@@ -107,6 +130,9 @@ export default {
     },
   },
   methods: {
+    selectRepo(repoID) {
+      this.repoID = repoID;
+    },
     selectFolderPath() {
       if (!this.folderDialogOpen) {
         this.folderDialogOpen = true;
@@ -130,32 +156,39 @@ export default {
         that.dataset.data[type].folderPath = that.folderPath;
       });
 
-      this.workflow.folderSelected = true;
+      this.workflow.sourceSelected = true;
+
+      if ("source" in this.workflow) {
+        this.workflow.source.type = this.repoID;
+      } else {
+        this.workflow.source = {
+          type: this.repoID,
+        };
+      }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      // console.log(
-      //   `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`
-      // );
-
       this.$router.push({
-        path: `/datasets/${this.dataset.id}/${this.workflowID}/createMetadata`,
+        path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
       });
     },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+    console.log(this.workflow);
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
     // split this up when separate
-    if (this.workflow.folderSelected) {
+    if (this.workflow.sourceSelected) {
+      this.repoID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
+    // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {
     //   this.folderPath = this.workflow.folderPath;
@@ -163,3 +196,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+.single-check-box {
+  @apply transition-all flex justify-center items-center w-48 h-48;
+}
+
+.single-check-box:not(.disabled-card, .selected-repo):hover {
+  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+}
+</style>

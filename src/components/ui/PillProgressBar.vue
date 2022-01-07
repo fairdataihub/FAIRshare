@@ -1,15 +1,15 @@
 <template>
-  <div class="flex items-stretch gap-2">
+  <div class="flex items-stretch gap-2 w-9/12 max-w-screen-md mx-auto">
     <div
       v-for="step in totalSteps"
       :key="step"
-      class="h-2 w-full rounded text-purple-500 transition-all cursor-pointer hover:bg-purple-400 relative group"
+      class="h-[7px] w-full rounded text-secondary-500 transition-all cursor-pointer hover:bg-secondary-400 relative group"
       style="border: 1px solid"
-      :class="{ 'bg-purple-500 ': step <= currentStep }"
+      :class="{ 'bg-secondary-500 ': step <= currentStep }"
       @click="setCurrentStep(step)"
     >
       <span
-        class="absolute hidden group-hover:block text-center pt-2 text-sm text-gray-400 w-full px-2"
+        class="absolute hidden text-center pt-3 text-xs text-gray-400 w-full px-2"
       >
         {{ titles[step - 1] }}
       </span>

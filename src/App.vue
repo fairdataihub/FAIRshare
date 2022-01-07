@@ -47,15 +47,14 @@ export default {
   methods: {
     async loadStores() {
       try {
+        // Load all the projects
         await this.unpublishedDatasets.loadDatasets();
+
+        // Load all the access tokens
         await this.tokens.loadTokens();
 
-        // sample implementation of access tokens
-        // await this.tokens.saveToken(
-        //   "zenodo",
-        //   process.env.VUE_APP_ZENODO_ACCESS_TOKEN
-        // );
-        // console.log(await this.tokens.getToken("zenodo"));
+        // Run all the integrations checks
+        this.tokens.verifyAllConnections();
 
         this.loading.close();
       } catch (error) {

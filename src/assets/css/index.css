@@ -23,21 +23,43 @@ html {
   @apply h-screen w-screen;
 }
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #919191 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #919191;
+  border-radius: 15px;
+  border: 3px solid #ffffff;
+}
+
 .sideBarMenuItem {
-  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply flex flex-row justify-start items-center;
+  @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
-  @apply text-gray-900;
-  @apply hover:text-gray-900;
-  @apply hover:bg-primary-200;
+  @apply text-black hover:text-white;
+  @apply hover:bg-primary-400;
   @apply focus:outline-none active:outline-none;
 }
 
 .sideBarMenuItem.router-link-active {
-  @apply block px-4 py-2 mt-2 rounded-lg transition-all;
+  @apply flex flex-row justify-start items-center;
+  @apply px-4 py-3 mt-2 rounded-lg transition-all;
   @apply font-semibold text-sm font-inter;
-  @apply text-gray-900;
-  @apply hover:text-gray-900 focus:text-gray-900;
-  @apply bg-primary-300 hover:bg-primary-200 focus:bg-primary-300;
+  @apply text-white;
+  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-500;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -98,11 +120,18 @@ html {
   left: 6px;
 }
 
+.text-url {
+  @apply text-primary-400 hover:text-primary-500;
+  @apply underline underline-offset-2;
+  @apply cursor-pointer;
+}
+
 .hover-underline-animation {
   position: relative;
 }
 
 .hover-underline-animation:after {
+  @apply bg-secondary-500;
   content: "";
   position: absolute;
   width: 100%;
@@ -110,7 +139,6 @@ html {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #0087ca;
   transform-origin: bottom right;
   transition: transform 0.25s ease-out;
 }
@@ -120,19 +148,28 @@ html {
   transform-origin: bottom left;
 }
 
-.project {
-  @apply flex flex-row justify-between items-center;
-  @apply w-full p-3;
-  @apply hover:bg-primary-100;
-  @apply transition-all cursor-pointer;
+.icon-animate {
+  animation: bounce ease-in-out 2s infinite alternate-reverse;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translatex(0);
+  }
+  50% {
+    transform: translatex(4px);
+  }
+  100% {
+    transform: translatex(0);
+  }
 }
 
 .selected-project {
-  @apply bg-primary-200 hover:bg-primary-200;
+  @apply bg-primary-200 hover:bg-primary-200 border-transparent;
 }
 
 .selected-repo {
-  @apply border-2 border-solid border-green-500 bg-green-100;
+  @apply border border-secondary-500 shadow-md shadow-secondary-500/50;
 }
 
 .handle:hover {
@@ -141,54 +178,109 @@ html {
 
 /* Colours come from here: https://tailwindcss.com/docs/customizing-colors */
 
-.primary-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-primary-600;
-  @apply border border-primary-300;
-  @apply hover:bg-primary-100;
-  @apply transition-all;
-}
+@layer components {
+  .project {
+    @apply flex flex-row justify-between items-center;
+    @apply w-full p-3;
+    @apply hover:bg-primary-100;
+    @apply transition-all cursor-pointer;
+  }
 
-.secondary-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-secondary-600;
-  @apply border border-secondary-300;
-  @apply hover:bg-secondary-100;
-  @apply transition-all;
-}
+  .primary-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-gray-900  hover:text-primary-600;
+    @apply border border-primary-300;
+    @apply hover:bg-primary-100;
+    @apply transition-all;
+  }
 
-.danger-plain-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-gray-900  hover:text-red-600;
-  @apply border border-red-300;
-  @apply hover:bg-red-100;
-  @apply transition-all;
-}
+  .primary-plain-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
 
-.primary-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-white;
-  @apply border;
-  @apply bg-primary-500 hover:bg-primary-400;
-  @apply transition-all;
-}
+  .primary-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-white;
+    @apply border border-primary-500;
+    @apply bg-primary-600 hover:bg-primary-500;
+    @apply transition-all;
+  }
 
-.danger-button {
-  @apply flex flex-row justify-center items-center;
-  @apply px-5 py-2 rounded;
-  @apply text-[14px] font-medium;
-  @apply text-red-700;
-  @apply border border-red-300;
-  @apply bg-red-100 hover:bg-red-200;
-  @apply transition-all;
+  .primary-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
+
+  .secondary-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-gray-900  hover:text-secondary-600;
+    @apply border border-secondary-500;
+    @apply hover:bg-secondary-100;
+    @apply transition-all;
+  }
+
+  .secondary-plain-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
+
+  .secondary-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-black;
+    @apply border border-secondary-500;
+    @apply bg-secondary-200 hover:bg-secondary-300;
+    @apply transition-all;
+  }
+
+  .secondary-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
+
+  .danger-plain-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-black hover:text-red-700;
+    @apply border border-red-500;
+    @apply hover:bg-red-50;
+    @apply transition-all;
+  }
+
+  .danger-plain-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
+
+  .danger-button {
+    @apply flex flex-row justify-center items-center;
+    @apply px-5 py-2 rounded;
+    @apply min-w-[130px];
+    @apply text-[14px] font-medium;
+    @apply text-red-700;
+    @apply border border-red-300;
+    @apply bg-red-50 hover:bg-red-100;
+    @apply transition-all;
+  }
+
+  .danger-button:disabled {
+    @apply opacity-50;
+    @apply cursor-not-allowed;
+  }
 }
 
 /* ------------------------------------------
@@ -197,7 +289,9 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 --------------------------------------------- */
 
 .el-form-item__label {
-  @apply flex flex-row-reverse;
+  display: flex !important;
+  justify-content: flex-end;
+  @apply flex-row-reverse;
 }
 
 .el-form-item__label:before {
@@ -235,12 +329,19 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   margin: 0 !important;
 }
 
-.el-dialog__header {
+/* .el-dialog__header {
   padding: 0 !important;
-}
+} */
 
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;
+}
+
+.zenodo-collapse-item div .el-collapse-item__header {
+  @apply bg-gray-100;
+}
+.code-collapse-item div .el-collapse-item__header {
+  @apply border-b-0;
 }
 
 /* ------------------------------------------
@@ -284,4 +385,8 @@ Transition styles for <transition />
 .lightfadeleft-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+.createNewProjectFormItemContainer .el-form-item__error {
+  @apply w-full flex justify-center pt-2;
 }

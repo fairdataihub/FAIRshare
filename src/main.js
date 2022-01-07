@@ -6,8 +6,8 @@ import ElementPlus from "element-plus";
 import { createPinia } from "pinia";
 import Popper from "vue3-popper";
 
-import "./assets/css/index.css";
 import "./assets/css/utilities-theme.css";
+import "./assets/css/index.css";
 import "element-plus/dist/index.css";
 
 import LineDivider from "./components/ui/LineDivider.vue";
@@ -37,6 +37,7 @@ import {
   Delete,
   Edit,
   HomeFilled,
+  InfoFilled,
   Key,
   Lock,
   QuestionFilled,
@@ -46,6 +47,14 @@ import {
   Star,
   Unlock,
   User,
+  UserFilled,
+  DataAnalysis,
+  Histogram,
+  Monitor,
+  PictureFilled,
+  Reading,
+  VideoPlay,
+  Document,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -58,6 +67,7 @@ app.component("data-line", DataLine);
 app.component("delete", Delete);
 app.component("edit", Edit);
 app.component("home-filled", HomeFilled);
+app.component("info-filled", InfoFilled);
 app.component("key", Key);
 app.component("lock", Lock);
 app.component("question-filled", QuestionFilled);
@@ -67,6 +77,14 @@ app.component("setting", Setting);
 app.component("star", Star);
 app.component("unlock", Unlock);
 app.component("user", User);
+app.component("user-filled", UserFilled);
+app.component("data-analysis", DataAnalysis);
+app.component("histogram", Histogram);
+app.component("monitor", Monitor);
+app.component("picture-filled", PictureFilled);
+app.component("reading", Reading);
+app.component("video-play", VideoPlay);
+app.component("document", Document);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router

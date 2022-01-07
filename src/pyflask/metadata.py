@@ -1,6 +1,7 @@
 from __future__ import print_function
 import json
 import os
+import yaml
 
 
 def createCodeMetadata(code_data, general_data, folder_path):
@@ -75,8 +76,7 @@ def createCodeMetadata(code_data, general_data, folder_path):
 
     if "isPartOf" in code_data:
         if code_data["isPartOf"] != "":
-            if code_data["isPartOf"] != "":
-                metadata["isPartOf"] = code_data["isPartOf"]
+            metadata["isPartOf"] = code_data["isPartOf"]
 
     if "referencePublication" in general_data:
         if general_data["referencePublication"] != "":
@@ -192,6 +192,124 @@ def createMetadata(data_types, data):
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
             createCodeMetadata(code_data, general_data, folder_path)
+
+        return "SUCCESS"
+    except Exception as e:
+        raise e
+
+
+def createCitationFromCode(code_data, general_data, folder_path):
+    # Create the citation file
+    citationObject = {}
+
+    if "name" in general_data:
+        if general_data["name"] != "":
+            citationObject["title"] = general_data["name"]
+
+    citationObject["message"] = "If you use this software, please cite it as below."
+    citationObject["type"] = "software"
+
+    if "authors" in general_data:
+        if len(general_data["authors"]) > 0:
+            citationObject["authors"] = []
+
+            for item in general_data["authors"]:
+                new_author = {}
+
+                if "orcid" in item:
+                    new_author["orcid"] = item["orcid"]
+
+                if "givenName" in item:
+                    new_author["given-names"] = item["givenName"]
+
+                if "familyName" in item:
+                    new_author["family-names"] = item["familyName"]
+
+                if "email" in item:
+                    new_author["email"] = item["email"]
+
+                if "affiliation" in item:
+                    new_author["affiliation"] = item["affiliation"]
+
+                citationObject["authors"].append(new_author)
+
+    if "uniqueIdentifier" in code_data:
+        if code_data["uniqueIdentifier"] != "":
+            citationObject["identifiers"] = []
+
+            identifier = {}
+            identifier["type"] = "doi"
+            identifier["value"] = code_data["uniqueIdentifier"]
+            identifier["description"] = "DOI for this software's record on Zenodo"
+
+            citationObject["identifiers"].append(identifier)
+
+    if "codeRepository" in code_data:
+        if code_data["codeRepository"] != "":
+            citationObject["repository-code"] = code_data["codeRepository"]
+
+    if "isPartOf" in code_data:
+        if code_data["isPartOf"] != "":
+            citationObject["url"] = code_data["isPartOf"]
+
+    if "currentVersionDownloadLink" in code_data:
+        if code_data["currentVersionDownloadLink"] != "":
+            citationObject["repository-artifact"] = code_data[
+                "currentVersionDownloadLink"
+            ]
+
+    if "description" in general_data:
+        if general_data["description"] != "":
+            citationObject["abstract"] = general_data["description"]
+
+    if "keywords" in general_data:
+        if len(general_data["keywords"]) > 0:
+            citationObject["keywords"] = []
+
+            for item in general_data["keywords"]:
+                citationObject["keywords"].append(item["keyword"])
+
+    if "license" in code_data:
+        citationObject["license"] = code_data["license"]
+
+    if "currentVersion" in code_data:
+        if code_data["currentVersion"] != "":
+            citationObject["version"] = code_data["currentVersion"]
+
+    if "currentVersionReleaseDate" in code_data:
+        if code_data["currentVersionReleaseDate"] != "":
+            citationObject["date-released"] = code_data["currentVersionReleaseDate"]
+
+    # Create the citation.cff file
+    with open(os.path.join(folder_path, "citation.cff"), "w") as file:
+        documents = yaml.dump(citationObject, file)
+
+    def line_prepender(filename, line):
+        with open(filename, "r+") as f:
+            content = f.read()
+            f.seek(0, 0)
+            f.write(line.rstrip("\r\n") + "\n" + content)
+
+    line_prepender(os.path.join(folder_path, "citation.cff"), "\n")
+    line_prepender(
+        os.path.join(folder_path, "citation.cff"),
+        "# Visit https://fairdataihub.org/sodaforcovid to learn more!",
+    )
+    line_prepender(
+        os.path.join(folder_path, "citation.cff"),
+        "# This CITATION.cff file was generated with Fair Share.",
+    )
+
+    return True
+
+
+def createCitationCFF(data_types, data):
+    try:
+        if "Code" in data_types:
+            code_data = data["Code"]["questions"]
+            general_data = data["general"]["questions"]
+            folder_path = data["Code"]["folderPath"]
+            createCitationFromCode(code_data, general_data, folder_path)
 
         return "SUCCESS"
     except Exception as e:

@@ -1,34 +1,47 @@
 <template>
-  <!-- <transition name="lightfadeleft"> -->
-  <div v-if="currentStepId == stepId">
-    <div class="form-card-content">
-      <slot> </slot>
+  <div v-if="currentStepId == stepId" :key="stepId">
+    <div
+      class="form-card-content border-2 border-slate-100 rounded-lg mb-4 shadow-md"
+    >
+      <div class="w-full bg-gray-100 px-4 py-2">
+        <span
+          class="font-semibold text-primary-600 text-lg pointer-events-none"
+        >
+          {{ stepTitle }}
+        </span>
+      </div>
+      <div class="p-4">
+        <slot> </slot>
+      </div>
     </div>
-    <div class="form-navigation-buttons w-full flex justify-end px-5">
-      <el-button
+    <div
+      class="form-navigation-buttons w-full flex justify-center px-5 space-x-4"
+    >
+      <button
         @click="prevStep"
-        :type="prevType"
-        plain
+        :class="
+          this.currentStepId === 1
+            ? 'primary-plain-button'
+            : 'secondary-plain-button'
+        "
         size="medium"
         :disabled="checkInvalidStatus"
       >
         <el-icon v-if="!firstStep"><back /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
-      </el-button>
-      <el-button
+      </button>
+      <!-- :plain="!lastStep" -->
+      <button
+        class="primary-button"
         @click="nextStep"
-        type="primary"
-        :plain="!lastStep"
-        size="medium"
         :disabled="checkInvalidStatus"
       >
         {{ nextText }}
         <el-icon v-if="lastStep"><d-arrow-right /></el-icon>
         <el-icon v-else><right /></el-icon>
-      </el-button>
+      </button>
     </div>
   </div>
-  <!-- </transition> -->
 </template>
 
 <script>
@@ -57,6 +70,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    stepTitle: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {};
@@ -66,7 +83,7 @@ export default {
       return this.currentStepId === 1;
     },
     nextText() {
-      return this.lastStep ? "Next" : "Continue";
+      return this.lastStep ? "Continue" : "Next";
     },
     prevText() {
       if (this.currentStepId === 1) {

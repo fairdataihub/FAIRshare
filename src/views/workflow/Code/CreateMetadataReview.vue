@@ -231,19 +231,18 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
           class=""
         >
-          <el-button type="danger" plain>
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
-          </el-button>
+          </button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="flex flex-row items-center primary-button"
           @click="selectDestination"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>
@@ -253,11 +252,11 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import repoStatusJSON from "../../assets/supplementalFiles/repoStatus.json";
+import { useDatasetsStore } from "@/store/datasets";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 
 export default {
-  name: "CreateMetadataReview",
+  name: "CodeCreateMetadataReview",
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -353,7 +352,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(2);
+    this.datasetStore.setCurrentStep(3);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
 

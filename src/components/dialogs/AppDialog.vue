@@ -1,11 +1,12 @@
 <template>
   <el-dialog
-    width="400px"
+    width="450px"
     destroy-on-close
+    title="Enter token information"
     :before-close="beforeCloseRootLevel"
   >
     <div class="dialog-Container">
-      <div class="inputField" v-for="i in this.numInput" :key="i">
+      <!-- <div class="inputField" v-for="i in this.numInput" :key="i">
         <div class="inputBar-Header">{{ this.headers[i - 1] }}</div>
         <el-input class="inputBar" size="large" v-model="userInputs[i - 1]" />
       </div>
@@ -14,47 +15,99 @@
         <el-button class="button" size="small" @click="closeDialog('Cancelled')"
           >Cancel</el-button
         >
-        <el-button
-          class="button"
-          size="small"
-          type="primary"
-          @click="confirmInput"
+        <el-button class="button" size="small" @click="confirmInput"
           >OK</el-button
         >
-      </div>
+      </div> -->
+      <el-form ref="formRef" :model="userInputs" label-position="top">
+        <div class="inputField" v-for="i in this.numInput" :key="i">
+          <el-form-item
+            :label="this.headers[i - 1]"
+            :prop="this.headers[i - 1]"
+            required
+          >
+            <el-input
+              class="inputBar"
+              size="large"
+              v-model="userInputs[this.headers[i - 1]]"
+            />
+          </el-form-item>
+        </div>
+        <div
+          class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+          @click="openWebsite(this.headers[0])"
+        >
+          <span class="font-medium">
+            How to generate a {{ this.headers[0].split(" ")[0] }} personal
+            access token?
+          </span>
+          <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+        </div>
+        <el-form-item>
+          <div class="bottom gap-[5px]">
+            <button
+              class="danger-plain-button h-9"
+              @click="closeDialog('Cancelled')"
+            >
+              Cancel
+            </button>
+            <button class="primary-button h-9" @click="confirmInput('formRef')">
+              OK
+            </button>
+          </div>
+        </el-form-item>
+      </el-form>
     </div>
   </el-dialog>
 </template>
 
 <script>
 import { ref } from "vue";
+import { Icon } from "@iconify/vue";
 export default {
-  name: "AppDialog",
+  components: { Icon },
   props: {
     numInput: { type: Number },
     headers: { type: Array },
     callback: { type: Function },
   },
   setup(props) {
-    const userInputs = ref([]);
-    const dialogVisable = ref(false);
-    for (let i = 0; i < props.numInput - 1; i++) {
-      userInputs.value.push("");
+    const userInputs = ref({});
+    for (let i = 0; i < props.numInput; i++) {
+      let key = props.headers[i];
+      userInputs.value[key] = "";
     }
-    //console.log("user inputs: ", userInputs);
+    console.log("user inputs: ", userInputs.value);
     return {
       userInputs,
-      dialogVisable,
     };
   },
   methods: {
+    openWebsite(header) {
+      if (header == "GitHub access token") {
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+        );
+      } else if (header == "Zenodo access token") {
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          "https://developers.zenodo.org/"
+        );
+      }
+    },
     async closeDialog(status) {
-      await this.callback([status, this.userInputs]);
+      await this.callback([status, Object.values(this.userInputs)]);
       this.clearInput();
     },
 
-    async confirmInput() {
-      this.closeDialog("OK");
+    async confirmInput(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log("user inputs: ", this.userInputs);
+          this.closeDialog("OK");
+        }
+      });
     },
 
     async beforeCloseRootLevel() {
@@ -62,9 +115,9 @@ export default {
     },
 
     clearInput() {
-      for (let i = 0; i < this.userInputs.length; i++) {
-        this.userInputs[i] = "";
-      }
+      Object.keys(this.userInputs).forEach((key) => {
+        this.userInputs[key] = "";
+      });
     },
   },
 };
@@ -72,31 +125,22 @@ export default {
 
 <style scoped>
 .el-button--text {
-  font-size: 15px;
+  @apply text-base;
 }
 
 .dialog-Container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-3;
 }
 .inputField {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 .inputBar-Header {
-  font-size: 13.5px;
-  padding-left: 3px;
-  box-sizing: border-box;
+  @apply text-base pl-3 box-border;
 }
 .inputBar {
-  width: 100%;
+  @apply w-full;
 }
 .bottom {
-  padding-top: 5px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  @apply pt-3 box-border flex items-end justify-end;
 }
 </style>

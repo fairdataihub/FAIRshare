@@ -1,7 +1,9 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
+  <div
+    class="h-screen w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+  >
     <div class="flex flex-col h-full w-full">
-      <el-page-header @back="goBack" class="text-lg">
+      <el-page-header @back="goBack" class="text-lg hidden">
         <template #content>
           <p>
             Project settings -
@@ -12,7 +14,9 @@
         </template>
       </el-page-header>
 
-      <span class="hidden">
+      <span class="font-medium text-left"> Project settings </span>
+
+      <span class="pt-1">
         Update your project name, description and other settings.
       </span>
 
@@ -23,6 +27,7 @@
         :model="datasetForm"
         label-width="150px"
         @submit.prevent
+        class="border-2 border-slate-100 p-4 rounded-lg"
         :rules="rules"
       >
         <el-form-item label="Dataset name" prop="datasetName">
@@ -98,21 +103,23 @@
             Once you delete a project, there is no going back. Please be
             certain.
           </span>
+
           <br />
-          <el-button type="danger" plain @click="deleteDataset">
+
+          <button class="danger-button py-0" @click="deleteDataset">
             <el-icon><delete /></el-icon> Delete project
-          </el-button>
+          </button>
         </el-form-item>
       </el-form>
-      <div class="py-2 flex flex-row justify-center space-x-4">
-        <el-button @click="goBack">
+      <div class="py-4 flex flex-row justify-center space-x-4">
+        <button class="danger-plain-button" @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
-        </el-button>
-        <el-button type="primary" @click="submitForm('datasetForm')">
+        </button>
+        <button class="primary-button" @click="submitForm('datasetForm')">
           Save changes <el-icon><circle-check-filled /></el-icon>
-        </el-button>
+        </button>
       </div>
-      <div class="py-2 flex flex-row justify-center space-x-4">
+      <div class="py-2 flex flex-row justify-center space-x-4 hidden">
         <button class="primary-plain-button">
           Test button <el-icon><circle-check-filled /></el-icon>
         </button>
@@ -136,7 +143,7 @@
 <script>
 import { ElMessageBox, ElMessage } from "element-plus";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "EditProject",
@@ -157,7 +164,7 @@ export default {
         datasetName: [
           {
             required: true,
-            message: "Please type a dataset name",
+            message: "Please provide a project name",
             trigger: "blur",
           },
         ],
@@ -214,9 +221,11 @@ export default {
         "Are you absolutely sure?",
         {
           showCancelButton: false,
+          type: "warning",
           confirmButtonText:
             "I understand the consequences, delete this project",
-          confirmButtonClass: "el-button el-button--danger is-plain",
+          confirmButtonClass:
+            "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
           dangerouslyUseHTMLString: true,
           inputValidator: (value) => {
             if (value === this.originalName) {

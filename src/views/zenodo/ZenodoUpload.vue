@@ -49,16 +49,18 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
           class="mx-6"
         >
-          <el-button type="danger" plain> Back </el-button>
+          <button class="primary-plain-button">Back</button>
         </router-link>
 
-        <el-button
+        <button class="primary-button" @click="retryUpload">Retry</button>
+
+        <!-- <el-button
           type="primary"
           class="flex flex-row items-center"
           @click="retryUpload"
         >
           Retry
-        </el-button>
+        </el-button> -->
       </div>
     </div>
   </div>
@@ -71,11 +73,11 @@ import dayjs from "dayjs";
 import path from "path";
 import fs from "fs-extra";
 
-import LoadingCubeGrid from "../../components/spinners/LoadingCubeGrid.vue";
-import LoadingEllipsis from "../../components/spinners/LoadingEllipsis.vue";
+import LoadingCubeGrid from "@/components/spinners/LoadingCubeGrid.vue";
+import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoUpload",
@@ -135,110 +137,245 @@ export default {
       let metadata = {};
 
       metadata.upload_type = "software";
-      metadata.title = zenodoMetadata.title;
-      metadata.publication_date = zenodoMetadata.publicationDate;
-
-      metadata.creators = [];
-      zenodoMetadata.authors.forEach((author) => {
-        const creatorObject = {};
-
-        creatorObject.name = author.name;
-        creatorObject.affiliation = author.affiliation;
-
-        if (author.orcid !== "") {
-          creatorObject.orcid = author.orcid;
-        }
-
-        metadata.creators.push(creatorObject);
-      });
-
-      metadata.description = zenodoMetadata.description;
-      metadata.access_right = zenodoMetadata.license.accessRight;
-      metadata.license = zenodoMetadata.license.licenseName;
       metadata.prereserve_doi = true;
 
-      metadata.keywords = [];
-      zenodoMetadata.keywords.forEach((keyword) => {
-        metadata.keywords.push(keyword.keyword);
-      });
+      if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
+        metadata.title = zenodoMetadata.title;
+      }
+      if (
+        "publicationDate" in zenodoMetadata &&
+        zenodoMetadata.publicationDate != ""
+      ) {
+        metadata.publication_date = zenodoMetadata.publicationDate;
+      }
 
-      metadata.notes = zenodoMetadata.additionalNotes;
+      if ("authors" in zenodoMetadata) {
+        metadata.creators = [];
+        zenodoMetadata.authors.forEach((author) => {
+          const creatorObject = {};
 
-      metadata.related_identifiers = [];
-      zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
-        metadata.related_identifiers.push({
-          relation: relatedIdentifier.relationship,
-          identifier: relatedIdentifier.identifier,
-          resource_type: relatedIdentifier.resourceType,
+          creatorObject.name = author.name;
+          creatorObject.affiliation = author.affiliation;
+
+          if (author.orcid !== "") {
+            creatorObject.orcid = author.orcid;
+          }
+
+          metadata.creators.push(creatorObject);
         });
-      });
+      }
 
-      metadata.contributors = [];
-      zenodoMetadata.contributors.forEach((contributor) => {
-        const contributorObject = {};
-
-        contributorObject.name = contributor.name;
-        contributorObject.affiliation = contributor.affiliation;
-        contributorObject.type = contributor.contributorType;
-
-        if (contributor.orcid !== "") {
-          contributorObject.orcid = contributor.orcid;
+      if ("description" in zenodoMetadata && zenodoMetadata.description != "") {
+        metadata.description = zenodoMetadata.description;
+      }
+      if ("license" in zenodoMetadata) {
+        if ("accessRight" in zenodoMetadata.license) {
+          metadata.access_right = zenodoMetadata.license.accessRight;
         }
+        if ("licenseName" in zenodoMetadata.license) {
+          metadata.license = zenodoMetadata.license.licenseName;
+        }
+      }
 
-        metadata.contributors.push(contributorObject);
-      });
+      if ("keywords" in zenodoMetadata) {
+        if (zenodoMetadata.keywords.length > 0) {
+          metadata.keywords = [];
+          zenodoMetadata.keywords.forEach((keyword) => {
+            metadata.keywords.push(keyword.keyword);
+          });
+        }
+      }
 
-      metadata.references = [];
-      zenodoMetadata.references.forEach((reference) => {
-        metadata.references.push(reference.reference);
-      });
+      if ("version" in zenodoMetadata && zenodoMetadata.version !== "") {
+        metadata.version = zenodoMetadata.version;
+      }
+
+      if ("language" in zenodoMetadata && zenodoMetadata.language !== "") {
+        metadata.language = zenodoMetadata.language;
+      }
+
+      if (
+        "additionalNotes" in zenodoMetadata &&
+        zenodoMetadata.additionalNotes != ""
+      ) {
+        metadata.notes = zenodoMetadata.additionalNotes;
+      }
+
+      if ("relatedIdentifiers" in zenodoMetadata) {
+        if (zenodoMetadata.relatedIdentifiers.length > 0) {
+          metadata.related_identifiers = [];
+          zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
+            metadata.related_identifiers.push({
+              relation: relatedIdentifier.relationship,
+              identifier: relatedIdentifier.identifier,
+              resource_type: relatedIdentifier.resourceType,
+            });
+          });
+        }
+      }
+
+      if ("contributors" in zenodoMetadata) {
+        if (zenodoMetadata.contributors.length > 0) {
+          metadata.contributors = [];
+          zenodoMetadata.contributors.forEach((contributor) => {
+            const contributorObject = {};
+
+            contributorObject.name = contributor.name;
+            contributorObject.affiliation = contributor.affiliation;
+            contributorObject.type = contributor.contributorType;
+
+            if (contributor.orcid !== "") {
+              contributorObject.orcid = contributor.orcid;
+            }
+
+            metadata.contributors.push(contributorObject);
+          });
+        }
+      }
+
+      if ("references" in zenodoMetadata) {
+        if (zenodoMetadata.references.length > 0) {
+          metadata.references = [];
+          zenodoMetadata.references.forEach((reference) => {
+            metadata.references.push(reference.reference);
+          });
+        }
+      }
 
       if ("journal" in zenodoMetadata) {
-        metadata.journal_title = zenodoMetadata.journal.title;
-        metadata.journal_volume = zenodoMetadata.journal.volume;
-        metadata.journal_issue = zenodoMetadata.journal.issue;
-        metadata.journal_pages = zenodoMetadata.journal.pages;
+        if (
+          "title" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.title !== ""
+        ) {
+          metadata.journal_title = zenodoMetadata.journal.title;
+        }
+        if (
+          "volume" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.volume !== ""
+        ) {
+          metadata.journal_volume = zenodoMetadata.journal.volume;
+        }
+        if (
+          "issue" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.issue !== ""
+        ) {
+          metadata.journal_issue = zenodoMetadata.journal.issue;
+        }
+        if (
+          "pages" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.pages !== ""
+        ) {
+          metadata.journal_pages = zenodoMetadata.journal.pages;
+        }
       }
 
       if ("conference" in zenodoMetadata) {
-        metadata.conference_title = zenodoMetadata.conference.title;
-        metadata.conference_acronym = zenodoMetadata.conference.acronym;
-
-        if (zenodoMetadata.conference.dates.length === 2) {
-          metadata.conference_dates =
-            dayjs(zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
-            " - " +
-            dayjs(zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY");
+        if (
+          "title" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.title !== ""
+        ) {
+          metadata.conference_title = zenodoMetadata.conference.title;
+        }
+        if (
+          "acronym" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.acronym !== ""
+        ) {
+          metadata.conference_acronym = zenodoMetadata.conference.acronym;
         }
 
-        metadata.conference_place = zenodoMetadata.conference.place;
-        metadata.conference_url = zenodoMetadata.conference.url;
-        metadata.conference_session = zenodoMetadata.conference.session;
-        metadata.conference_session_part = zenodoMetadata.conference.part;
+        if ("dates" in zenodoMetadata.conference) {
+          if (zenodoMetadata.conference.dates.length === 2) {
+            metadata.conference_dates =
+              dayjs(zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
+              " - " +
+              dayjs(zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY");
+          }
+        }
+
+        if (
+          "place" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.place !== ""
+        ) {
+          metadata.conference_place = zenodoMetadata.conference.place;
+        }
+        if (
+          "url" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.url !== ""
+        ) {
+          metadata.conference_url = zenodoMetadata.conference.url;
+        }
+        if (
+          "session" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.session !== ""
+        ) {
+          metadata.conference_session = zenodoMetadata.conference.session;
+        }
+        if (
+          "part" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.part !== ""
+        ) {
+          metadata.conference_session_part = zenodoMetadata.conference.part;
+        }
       }
 
       if ("bookReportChapter" in zenodoMetadata) {
-        metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
-        metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
-        metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
-        metadata.partof_title = zenodoMetadata.bookReportChapter.title;
-        metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
+        if (
+          "publisher" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.publisher !== ""
+        ) {
+          metadata.imprint_publisher =
+            zenodoMetadata.bookReportChapter.publisher;
+        }
+        if (
+          "isbn" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.isbn !== ""
+        ) {
+          metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
+        }
+        if (
+          "place" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.place !== ""
+        ) {
+          metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
+        }
+        if (
+          "title" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.title !== ""
+        ) {
+          metadata.partof_title = zenodoMetadata.bookReportChapter.title;
+        }
+        if (
+          "pages" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.pages !== ""
+        ) {
+          metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
+        }
       }
 
       if ("thesis" in zenodoMetadata) {
-        metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
+        if (
+          "awardingUniversity" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.awardingUniversity !== ""
+        ) {
+          metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
+        }
 
-        metadata.thesis_supervisors = [];
-        zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
-          metadata.thesis_supervisors.push({
-            name: supervisor.name,
-            affiliation: supervisor.affiliation,
-            orcid: supervisor.orcid,
+        if (
+          "thesis_supervisors" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.thesis_supervisors.length > 0
+        ) {
+          metadata.thesis_supervisors = [];
+          zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
+            metadata.thesis_supervisors.push({
+              name: supervisor.name,
+              affiliation: supervisor.affiliation,
+              orcid: supervisor.orcid,
+            });
           });
-        });
+        }
       }
 
-      if ("subjects" in zenodoMetadata) {
+      if ("subjects" in zenodoMetadata && zenodoMetadata.subjects.length > 0) {
         metadata.subjects = [];
         zenodoMetadata.subjects.forEach((subject) => {
           metadata.subjects.push({
@@ -248,9 +385,6 @@ export default {
           });
         });
       }
-
-      metadata.version = zenodoMetadata.version;
-      metadata.language = zenodoMetadata.language;
 
       console.log(metadata);
 
@@ -366,7 +500,7 @@ export default {
             this.workflow.destination.zenodo.bucket,
             path.join(folderPath, file)
           );
-          this.percentage = ((index + 1) / contents.length) * 80 + 20;
+          this.percentage = ((index + 1) / contents.length) * 75 + 25;
           this.percentage = Math.round(this.percentage);
         }
 
@@ -382,6 +516,23 @@ export default {
     async createCodeMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createCitationFile() {
+      console.log(JSON.stringify(this.workflow.type));
+      console.log(JSON.stringify(this.dataset.data));
+      const response = await axios
+        .post(`${this.$server_url}/metadata/citation/create`, {
           data_types: JSON.stringify(this.workflow.type),
           data_object: JSON.stringify(this.dataset.data),
         })
@@ -447,6 +598,25 @@ export default {
 
       await this.sleep(300);
 
+      if (this.codePresent) {
+        response = await this.createCitationFile();
+        // console.log(response);
+
+        if (response === "ERROR") {
+          this.alertMessage =
+            "There was an error with creating the citation.cff file";
+          return "FAIL";
+        } else {
+          this.statusMessage =
+            "Created the citation.cff file in the target folder";
+        }
+      }
+
+      this.percentage = 20;
+      this.indeterminate = false;
+
+      await this.sleep(300);
+
       response = await this.addMetadaToZenodoDeposition();
 
       if (response === "ERROR") {
@@ -459,7 +629,7 @@ export default {
           "Metadata successfully added to the Zenodo deposition";
       }
 
-      this.percentage = 20;
+      this.percentage = 25;
       this.indeterminate = false;
 
       this.workflow.destination.zenodo.status.metadataAdded = true;
@@ -546,11 +716,11 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+    this.datasetStore.setCurrentStep(6);
 
-    const tokenObject = await this.tokens.getToken("zenodoToken");
+    const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    // console.log(this.zenodoToken);
+    console.log(this.zenodoToken);
 
     this.runZenodoUpload();
   },

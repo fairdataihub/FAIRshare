@@ -390,19 +390,18 @@
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class="mx-3"
         >
-          <el-button type="danger" plain>
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
-          </el-button>
+          </button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center mx-3"
+        <button
+          class="flex flex-row items-center mx-3 primary-button"
           @click="checkZenodoAccessToken"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>
@@ -412,8 +411,8 @@
 import { ElLoading } from "element-plus";
 import dayjs from "dayjs";
 
-import { useDatasetsStore } from "../../store/datasets";
-import languagesJson from "../../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import languagesJson from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadataReview",
@@ -605,7 +604,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(4);
+    this.datasetStore.setCurrentStep(5);
 
     this.loading.close();
   },

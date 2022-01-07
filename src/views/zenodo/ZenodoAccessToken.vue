@@ -5,8 +5,7 @@
         Zenodo connection details
       </span>
       <span class="text-left">
-        Let's see if we already have your Zenodo login details. We will use this
-        to upload and edit your dataset on your Zenodo account.
+        We will use this to upload and edit your dataset on your Zenodo account.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -14,7 +13,7 @@
       <div v-if="ready">
         <p v-if="validTokenAvailable" class="my-10 text-center w-full">
           Looks like we already have your Zenodo login details. Click on the
-          continue button below.
+          'Start upload' button below.
         </p>
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col justify-center items-center py-10">
@@ -23,41 +22,30 @@
             button below to connect to your Zenodo account.
           </p>
 
-          <ZenodoTokenConnectionVue
-            :callback="showConnection"
-          ></ZenodoTokenConnectionVue>
-
-          <!-- <el-input
-            v-model="zenodoAccessToken"
-            placeholder="Zenodo Access Token"
-            class="mb-10"
-          /> -->
+          <ConnectZenodo :statusChangeFunction="showConnection"></ConnectZenodo>
         </div>
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div
-        class="w-full flex flex-row justify-center py-2 space-x-4"
-        v-if="validTokenAvailable"
-      >
+      <div class="w-full flex flex-row justify-center py-2 space-x-4">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class=""
         >
-          <el-button type="danger" plain>
+          <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
-          </el-button>
+          </button>
         </router-link>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="primary-button"
           :disabled="disableContinue"
           @click="uploadToZenodo"
+          v-if="validTokenAvailable"
         >
           Start upload
           <el-icon> <d-arrow-right /> </el-icon>
-        </el-button>
+        </button>
       </div>
     </div>
   </div>
@@ -66,15 +54,16 @@
 <script>
 // import axios from "axios";
 
-import LoadingFoldingCube from "../../components/spinners/LoadingFoldingCube.vue";
-import ZenodoTokenConnectionVue from "../../components/serviceIntegration/ZenodoTokenConnection.vue";
+import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
+// import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection";
+import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
-import { useDatasetsStore } from "../../store/datasets";
-import { useTokenStore } from "../../store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
-  components: { LoadingFoldingCube, ZenodoTokenConnectionVue },
+  components: { LoadingFoldingCube, ConnectZenodo },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -147,9 +136,12 @@ export default {
         }
       }
     },
-    async showConnection() {
-      this.validTokenAvailable = true;
-      this.uploadToZenodo();
+    async showConnection(status) {
+      console.log(status);
+      if (status === "connected") {
+        this.validTokenAvailable = true;
+      }
+      // this.uploadToZenodo();
     },
   },
   async mounted() {
@@ -158,11 +150,9 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+    this.datasetStore.setCurrentStep(6);
 
-    const validZenodoConnection = await this.tokens.getZenodoTokenConnected();
-
-    // console.log(validZenodoConnection);
+    const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 
     if (validZenodoConnection) {
       this.validTokenAvailable = true;
@@ -171,19 +161,6 @@ export default {
       this.validTokenAvailable = false;
       this.ready = true;
     }
-
-    // const zenodoTokenObject = await this.tokens.getToken("zenodo");
-    // const zenodoToken = zenodoTokenObject.token;
-    // console.log(zenodoTokenObject);
-    // if (zenodoToken === "NO_TOKEN_FOUND") {
-    //   this.errorMessage =
-    //     "No Zenodo access token found. Please enter a valid Zenodo access token.";
-    //   this.validTokenAvailable = false;
-    //   this.ready = true;
-    // } else {
-    //   await this.checkToken(zenodoToken);
-    //   this.ready = true;
-    // }
   },
 };
 </script>

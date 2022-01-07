@@ -21,15 +21,22 @@
         @submit.prevent
       >
         <el-collapse v-model="activeNames">
-          <el-collapse-item class="text-lg" name="basicInformation">
+          <el-collapse-item
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+            name="basicInformation"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Basic Information</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  Basic Information
+                </p>
                 <span class="pr-2 text-gray-400"> required </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item
                 label="Publication Date"
                 :required="true"
@@ -43,7 +50,7 @@
                     value-format="YYYY-MM-DD"
                   >
                   </el-date-picker>
-                  <p class="text-xs pt-2 text-gray-500">
+                  <p class="text-xs pt-1 text-gray-500">
                     In case your upload was already published elsewhere, please
                     use the date of first publication.
                   </p>
@@ -162,7 +169,7 @@
                     type="text"
                     placeholder="1.0.4"
                   ></el-input>
-                  <p class="text-xs pt-2 text-gray-500">
+                  <p class="text-xs pt-1 text-gray-500">
                     Optional. Mostly relevant for software and dataset uploads.
                     Any string will be accepted, but semantically-versioned tag
                     is recommended. <br />
@@ -189,7 +196,7 @@
                   >
                   </el-option>
                 </el-select>
-                <p class="text-xs pt-2 text-gray-500">
+                <p class="text-xs pt-1 text-gray-500">
                   Optional. Primary language of the record. Start by typing the
                   language's common name in English, or its ISO 639 code (two or
                   three-letter code).
@@ -265,21 +272,26 @@
                     v-model="zenodoMetadataForm.additionalNotes"
                     type="textarea"
                   ></el-input>
-                  <p class="text-xs pt-2 text-gray-500">Optional.</p>
+                  <p class="text-xs pt-1 text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="license">
+          <el-collapse-item
+            name="license"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>License</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">License</p>
                 <span class="pr-2 text-gray-400"> required </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item label="Access right" :required="true">
                 <el-radio-group
                   v-model="zenodoMetadataForm.license.accessRight"
@@ -307,7 +319,7 @@
                     Closed Access
                   </el-radio>
                 </el-radio-group>
-                <p class="text-xs pt-2 text-gray-500">
+                <p class="text-xs pt-1 text-gray-500">
                   Required. Open access uploads have considerably higher
                   visibility on Zenodo.
                 </p>
@@ -317,6 +329,7 @@
                 <el-select
                   v-model="zenodoMetadataForm.license.licenseName"
                   filterable
+                  disabled
                   placeholder="Select a license"
                   class="w-full"
                 >
@@ -361,21 +374,27 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="relatedIdentifiers">
+          <el-collapse-item
+            name="relatedIdentifiers"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Related/alternate identifiers</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  Related/alternate identifiers
+                </p>
                 <span class="pr-2 text-gray-400"> recommended </span>
               </div>
             </template>
 
-            <p class="text-xs mb-4">
-              Specify identifiers of related publications and datasets.
-              Supported identifiers include: DOI and URLs.
-              <br />
-            </p>
-
-            <div>
+            <div class="p-4">
+              <p class="text-xs mb-4">
+                Specify identifiers of related publications and datasets.
+                Supported identifiers include: DOI and URLs.
+                <br />
+              </p>
               <el-form-item
                 label="Related identifiers"
                 :error="relatedIdentifiersErrorMessage"
@@ -476,15 +495,22 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="contributors">
+          <el-collapse-item
+            name="contributors"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Contributors</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  Contributors
+                </p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item
                 label="Contributors"
                 :required="false"
@@ -580,15 +606,22 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="references">
+          <el-collapse-item
+            name="references"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>References</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  References
+                </p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item label="References">
                 <draggable
                   tag="div"
@@ -645,15 +678,20 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="journal">
+          <el-collapse-item
+            name="journal"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Journal</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">Journal</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item label="Journal title">
                 <div class="flex flex-col">
                   <el-input
@@ -693,15 +731,22 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="conference">
+          <el-collapse-item
+            name="conference"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Conference</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  Conference
+                </p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item label="Conference title">
                 <div class="flex flex-col">
                   <el-input
@@ -782,16 +827,23 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="bookReportChapter">
+          <el-collapse-item
+            name="bookReportChapter"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Book/Report/Chapter</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">
+                  Book/Report/Chapter
+                </p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <p class="text-xs mb-4">For parts of books and reports. <br /></p>
-            <div>
+            <div class="p-4">
+              <p class="text-xs mb-4">For parts of books and reports. <br /></p>
               <el-form-item label="Publisher">
                 <div class="flex flex-col">
                   <el-input
@@ -845,15 +897,20 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="thesis">
+          <el-collapse-item
+            name="thesis"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Thesis</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">Thesis</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <div>
+            <div class="p-4">
               <el-form-item label="Awarding university">
                 <div class="flex flex-col">
                   <el-input
@@ -937,21 +994,26 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="subjects">
+          <el-collapse-item
+            name="subjects"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
-              <div class="w-full flex flex-row justify-between font-inter">
-                <p>Subjects</p>
+              <div
+                class="w-full flex flex-row justify-between items-center font-inter"
+              >
+                <p class="text-sm text-blue-500 font-semibold px-4">Subjects</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
 
-            <p class="text-xs mb-4">
-              Specify subjects from a taxonomy or controlled vocabulary. Each
-              term must be uniquely identified (e.g. a URL). For free form text,
-              use the keywords field in basic information section.
-              <br />
-            </p>
-            <div>
+            <div class="p-4">
+              <p class="text-xs mb-4">
+                Specify subjects from a taxonomy or controlled vocabulary. Each
+                term must be uniquely identified (e.g. a URL). For free form
+                text, use the keywords field in basic information section.
+                <br />
+              </p>
               <el-form-item
                 label="Subjects"
                 :error="subjectsErrorMessage"
@@ -1021,19 +1083,17 @@
       </el-form>
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
-        <el-button type="danger" plain @click="navigateBack">
+        <button class="primary-plain-button" @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
-        </el-button>
+        </button>
 
-        <el-button
-          type="primary"
-          class="flex flex-row items-center"
+        <button
+          class="primary-button"
           @click="addZenodoMetadata"
           :disabled="checkInvalidStatus"
         >
-          Continue
-          <el-icon><d-arrow-right /></el-icon>
-        </el-button>
+          Continue <el-icon> <d-arrow-right /> </el-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -1048,11 +1108,11 @@ import doiRegex from "doi-regex";
 import { ElMessageBox, ElMessage } from "element-plus";
 import _ from "lodash";
 
-import { useDatasetsStore } from "../../store/datasets";
-import licensesJSON from "../../assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "../../assets/supplementalFiles/contributorTypes.json";
-import zenodoMetadataOptions from "../../assets/supplementalFiles/zenodoMetadataOptions.json";
-import languagesJSON from "../../assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
+import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "ZenodoMetadata",
@@ -1300,6 +1360,10 @@ export default {
           this.zenodoMetadataForm.keywords = generalForm.keywords;
         }
 
+        if ("license" in generalForm) {
+          this.zenodoMetadataForm.license.licenseName = generalForm.license;
+        }
+
         if ("authors" in generalForm) {
           let authors = generalForm.authors;
           let newAuthors = [];
@@ -1507,7 +1571,7 @@ export default {
     "zenodoMetadataForm.license": {
       handler(val) {
         const value = val.licensename;
-        if (value === "") {
+        if (value === "" || val === null) {
           // this.titleErrorMessage =
           ("Please provide a valid and descriptive title.");
           this.$refs.zmForm.validate();
@@ -1571,13 +1635,22 @@ export default {
                 validIdentifier = true;
               }
 
-              if (!validIdentifier) {
-                try {
-                  new URL(relatedIdentifier.identifier);
-                  validIdentifier = true;
-                } catch (_) {
-                  validIdentifier = false;
-                }
+              // if (!validIdentifier) {
+              //   try {
+              //     new URL(relatedIdentifier.identifier);
+              //     validIdentifier = true;
+              //   } catch (_) {
+              //     validIdentifier = false;
+              //   }
+              // }
+
+              const regexp =
+                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+
+              if (regexp.test(relatedIdentifier.identifier)) {
+                validIdentifier = true;
+              } else {
+                validIdentifier = false;
               }
 
               if (!validIdentifier) {
@@ -1613,10 +1686,19 @@ export default {
             } else {
               let validIdentifier = false;
 
-              try {
-                new URL(subject.identifier);
+              // try {
+              //   new URL(subject.identifier);
+              //   validIdentifier = true;
+              // } catch (_) {
+              //   validIdentifier = false;
+              // }
+
+              const regexp =
+                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+
+              if (regexp.test(subject.identifier)) {
                 validIdentifier = true;
-              } catch (_) {
+              } else {
                 validIdentifier = false;
               }
 
@@ -1658,7 +1740,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(4);
+    this.datasetStore.setCurrentStep(5);
 
     if (this.workflow.expandOptions.length === 0) {
       this.activeNames = ["basicInformation", "license"];
@@ -1695,6 +1777,9 @@ export default {
         this.zenodoMetadataForm.thesis
       );
 
+      const generalForm = this.dataset.data.general.questions;
+      this.zenodoMetadataForm.license.licenseName = generalForm.license;
+
       this.addIds(this.zenodoMetadataForm.authors);
       this.addIds(this.zenodoMetadataForm.keywords);
       this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
@@ -1720,7 +1805,7 @@ export default {
 // CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .handle {
   cursor: move;
 }

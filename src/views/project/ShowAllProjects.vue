@@ -27,11 +27,11 @@
               Projects currently in progress
             </el-divider>
 
-            <div class="divide-y divide-gray-200 px-4">
+            <div class="px-10 w-full">
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="project"
+                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -42,7 +42,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-4">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -59,11 +59,11 @@
               Fully published projects
             </el-divider>
 
-            <div class="divide-y divide-gray-200 px-4">
+            <div class="px-10 w-full">
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="flex flex-row justify-between items-center w-full p-3 hover:bg-gray-100 transition-all cursor-pointer"
+                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -74,7 +74,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-4">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -92,7 +92,7 @@
         <div class="flex flex-row justify-between mb-5">
           <router-link to="/datasets/new">
             <div
-              class="flex flex-row items-center w-max text-purple-800 cursor-pointer hover-underline-animation my-3"
+              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -104,27 +104,14 @@
             class="flex flex-row space-x-4 px-2"
             v-if="selectedDataset !== ''"
           >
-            <!-- <el-button type="info" plain @click="editProject" class="">
-              <el-icon><setting /></el-icon> Project settings
-            </el-button> -->
-            <!-- <el-button
-              type="primary"
-              plain
-              class="flex flex-row items-center"
-              @click="startCuratingProject"
-            >
-              Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
-            </el-button> -->
-            <button class="primary-plain-button" @click="editProject">
+            <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting /></el-icon> Project settings
             </button>
-            <button
-              class="secondary-plain-button"
-              @click="startCuratingProject"
-            >
+            <button class="primary-button" @click="startCuratingProject">
               Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
+              <el-icon class="icon-animate">
+                <d-arrow-right />
+              </el-icon>
             </button>
           </div>
         </div>
@@ -137,7 +124,7 @@
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
-              class="h-20 w-10/12 text-gray-700"
+              class="h-20 w-10/12 text-blue-500"
             />
             <span class="font-medium text-large">
               Start a new data curation project
@@ -152,7 +139,7 @@
 <script>
 import { Icon } from "@iconify/vue";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "ShowAllProjects",
@@ -193,11 +180,15 @@ export default {
 
       await this.datasetStore.getDataset(datasetID);
 
-      routerPath = `/datasets/${datasetID}`;
+      routerPath = `/datasets/${datasetID}/landing`;
+      // routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
-      // routerPath = `/datasets/${datasetID}/workflow1/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
 

@@ -1,14 +1,8 @@
 <template>
   <div class="buttonContainer">
-    <el-button
-      plain
-      :type="status[1]"
-      class="button"
-      @click="openDialog('zenodoToken')"
-      >{{ status[0] }}</el-button
-    >
     <AppDialog
-      v-model="dialogVisable"
+      v-if="dialogVisible"
+      v-model="dialogVisible"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
       :callback="getInputs"
@@ -17,35 +11,40 @@
 </template>
 
 <script>
-import { useTokenStore } from "../../store/access";
-import { ref } from "vue";
-import { ElNotification } from "element-plus";
-import { ElLoading } from "element-plus";
-import { ElMessageBox } from "element-plus";
-import AppDialog from "../dialogs/AppDialog";
+import { useTokenStore } from "@/store/access";
+
+import AppDialog from "@/components/dialogs/AppDialog";
+
+import { ElNotification, ElLoading } from "element-plus";
+
 export default {
   name: "ZenodoTokenConnection",
+
   components: { AppDialog },
+
   props: {
+    onStatusChange: { type: Function, required: false, default: () => {} },
     callback: { type: Function },
   },
-  setup() {
-    const status = ref(["Connect token", ""]);
-    const dialogVisable = ref(false);
-    const dialogHeaders = ref(null);
-    const dialogNumInput = ref(null);
-    return {
-      status,
-      dialogVisable,
-      dialogHeaders,
-      dialogNumInput,
-    };
-  },
+
   data() {
     return {
       manager: useTokenStore(),
+      dialogVisible: false,
+      dialogHeaders: null,
+      dialogNumInput: null,
     };
   },
+
+  computed: {
+    connectedToZenodoByToken() {
+      return (
+        "zenodo" in this.manager.accessTokens &&
+        this.manager.accessTokens.zenodo.type == "token"
+      );
+    },
+  },
+
   methods: {
     createLoading() {
       const loading = ElLoading.service({
@@ -54,23 +53,11 @@ export default {
       });
       return loading;
     },
-    openDialog(s) {
-      // Show the dialog to get the token
-      // verifyToken(token)     // this function should be defined in the store
-      // Add token to store
-      // set githubConnected in store to true
-      //when its ready the ouath items can also be added to here
-      this.manager.getZenodoTokenConnected().then((res) => {
-        if (!res) {
-          // console.log("!!");
-          this.useAPIkey();
-        } else {
-          this.APIkeyWarning(s);
-        }
-      });
+    openDialog() {
+      this.useAPIkey();
     },
     async getInputs(response) {
-      this.dialogVisable = false;
+      this.dialogVisible = false;
       if (response[0] == "OK") {
         await this.processZenodo(response[1]);
       } else {
@@ -80,45 +67,40 @@ export default {
         //   position: "bottom-right",
         //   duration: 2000,
         // });
-        // this.callback();
+        this.callback();
       }
     },
-
     async processZenodo(userInput) {
-      let key = "zenodoToken";
+      let key = "zenodo";
       let value = userInput[0];
       let spinner = this.createLoading();
       let errorFound = false;
-      if (await this.manager.checkZenodoToken(value)) {
+      if (await this.manager.verifyZenodoToken(value)) {
         let tokenObject = {};
+        let name = userInput[1];
         try {
           tokenObject.token = value;
+          tokenObject.name = name;
+          tokenObject.type = "token";
           await this.manager.saveToken(key, tokenObject);
         } catch (e) {
           // console.log(e);
           errorFound = true;
         }
-        let name = userInput[1];
-        let newTokenObject = {};
-        newTokenObject.name = name;
-        newTokenObject.token = value;
-        // console.log("save token: ", newTokenObject);
-        await this.manager.saveToken(key, newTokenObject);
-        //this.manager.confirmZenodoTokenConnected();
-        this.updateStatus();
         if (!errorFound) {
           ElNotification({
             type: "success",
-            message: "Saved successfully",
+            message: "Connected to Zenodo successfully",
             position: "bottom-right",
             duration: 2000,
           });
           this.callback();
+          this.onStatusChange("connected");
         }
       } else {
         ElNotification({
           type: "error",
-          message: "Cannot verify the token provided",
+          message: "Could not verify the token provided",
           position: "bottom-right",
           duration: 2000,
         });
@@ -129,80 +111,17 @@ export default {
 
     useAPIkey() {
       this.dialogNumInput = 2;
-      this.dialogHeaders = ["Zenodo access token", "Token nick name"];
-      this.dialogVisable = true;
-    },
-
-    APIkeyWarning(key) {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken(key);
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-          this.callback();
-        });
-    },
-
-    updateStatus() {
-      this.manager.getZenodoTokenConnected().then((res) => {
-        // console.log("current: ", res);
-        if (!res) {
-          this.status = ["Connect token", ""];
-        } else {
-          this.status = ["Disconnect token", "danger"];
-        }
-      });
-    },
-
-    async deleteToken(key) {
-      let errorFound = false;
-      try {
-        await this.manager.deleteToken(key);
-      } catch (e) {
-        errorFound = true;
-      }
-      if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
-          position: "bottom-right",
-          duration: 2000,
-        });
-        //this.manager.confirmZenodoTokenDisconnected();
-        this.callback();
-      }
-      this.updateStatus();
+      this.dialogHeaders = [
+        "Zenodo access token",
+        "Token nick name of your choice",
+      ];
+      this.dialogVisible = true;
     },
   },
+
   async mounted() {
     await this.manager.loadTokens();
-    await this.manager.loadStatus();
-    this.updateStatus();
+    this.openDialog();
   },
 };
 </script>
-
-<style scoped>
-.el-button {
-  padding: 0px;
-  min-height: 0px;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  padding-left: 1vw;
-  padding-right: 1vw;
-}
-</style>

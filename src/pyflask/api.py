@@ -17,7 +17,7 @@ from zenodo import (
     publishZenodoDeposition,
     deleteZenodoDeposition,
 )
-from metadata import createMetadata
+from metadata import createMetadata, createCitationCFF
 from utilities import foldersPresent, zipFolder, deleteFile
 
 API_VERSION = "0.0.1"
@@ -84,7 +84,7 @@ class HelloWorld(Resource):
 metadata = api.namespace("metadata", description="Metadata operations")
 
 
-@metadata.route("/create", endpoint="createMetadata")
+@metadata.route("/create", endpoint="CreateMetadata")
 class CreateMetadata(Resource):
     @metadata.doc(
         responses={200: "Success"},
@@ -108,6 +108,32 @@ class CreateMetadata(Resource):
         data = json.loads(args["data_object"])
 
         return createMetadata(data_types, data)
+
+
+@metadata.route("/citation/create", endpoint="CreateCitationCFF")
+class CreateCitationCFF(Resource):
+    @metadata.doc(
+        responses={200: "Success"},
+        params={
+            "data_types": "Types of data.",
+            "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+        },
+    )
+    def post(self):
+        """Create the citation cff file"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument("data_types", type=str, help="Types of data ")
+        parser.add_argument(
+            "data_object", type=str, help="Complete data object to create metadata"
+        )
+
+        args = parser.parse_args()
+
+        data_types = json.loads(args["data_types"])
+        data = json.loads(args["data_object"])
+
+        return createCitationCFF(data_types, data)
 
 
 ###############################################################################

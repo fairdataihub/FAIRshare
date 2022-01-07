@@ -34,6 +34,7 @@
               class="primary-plain-button"
               @click="navigateToCurate(`${key}`)"
               :disabled="workflow.datasetPublished"
+              ref="continueButton"
             >
               Curate {{ combineDataTypes(workflow.type) }}
               <el-icon><arrow-right-bold /></el-icon>
@@ -49,7 +50,7 @@
 <script>
 // import { Icon } from "@iconify/vue";
 
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "ShowAllWorkflows",
@@ -90,12 +91,12 @@ export default {
         if (this.dataset.workflows[workflowID].datasetUploaded) {
           routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
         } else {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+          routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
         }
       } else {
-        routerPath = `/datasets/${this.datasetID}/${workflowID}/selectFolder`;
+        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
       }
-
+      console.log(routerPath);
       this.$router.push({ path: routerPath });
     },
   },
@@ -105,6 +106,8 @@ export default {
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
     }
+
+    this.navigateToCurate("workflow1");
   },
 };
 </script>
