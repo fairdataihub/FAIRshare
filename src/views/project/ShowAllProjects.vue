@@ -92,7 +92,7 @@
         <div class="flex flex-row justify-between mb-5">
           <router-link to="/datasets/new">
             <div
-              class="flex flex-row items-center w-max primary-600 cursor-pointer hover-underline-animation my-3"
+              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
             >
               <span class="font-medium">
                 Or start a new data curation project
