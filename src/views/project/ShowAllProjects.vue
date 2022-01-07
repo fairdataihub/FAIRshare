@@ -124,7 +124,7 @@
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
-              class="h-20 w-10/12 text-gray-700"
+              class="h-20 w-10/12 text-blue-500"
             />
             <span class="font-medium text-large">
               Start a new data curation project

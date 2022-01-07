@@ -1,7 +1,8 @@
 <template>
   <el-dialog
-    width="400px"
+    width="450px"
     destroy-on-close
+    title="Enter token information"
     :before-close="beforeCloseRootLevel"
   >
     <div class="dialog-Container">
@@ -32,20 +33,27 @@
             />
           </el-form-item>
         </div>
+        <div
+          class="flex flex-row items-center w-max text-primary-500 cursor-pointer hover-underline-animation my-3"
+          @click="openWebsite(this.headers[0])"
+        >
+          <span class="font-medium">
+            How to generate a {{ this.headers[0].split(" ")[0] }} personal
+            access token?
+          </span>
+          <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+        </div>
         <el-form-item>
-          <div class="bottom">
-            <el-button
-              class="button"
-              size="small"
+          <div class="bottom gap-[5px]">
+            <button
+              class="danger-plain-button h-8"
               @click="closeDialog('Cancelled')"
-              >Cancel</el-button
             >
-            <el-button
-              class="button"
-              size="small"
-              @click="confirmInput('formRef')"
-              >OK</el-button
-            >
+              Cancel
+            </button>
+            <button class="primary-button h-8" @click="confirmInput('formRef')">
+              OK
+            </button>
           </div>
         </el-form-item>
       </el-form>
@@ -55,7 +63,9 @@
 
 <script>
 import { ref } from "vue";
+import { Icon } from "@iconify/vue";
 export default {
+  components: { Icon },
   props: {
     numInput: { type: Number },
     headers: { type: Array },
@@ -73,6 +83,19 @@ export default {
     };
   },
   methods: {
+    openWebsite(header) {
+      if (header == "GitHub access token") {
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+        );
+      } else if (header == "Zenodo access token") {
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          "https://developers.zenodo.org/"
+        );
+      }
+    },
     async closeDialog(status) {
       await this.callback([status, Object.values(this.userInputs)]);
       this.clearInput();

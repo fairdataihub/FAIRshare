@@ -1,18 +1,8 @@
 <template>
-  <div class="buttonContainer">
-    <!-- <el-button
-      plain
-      class="button"
-      @click="openDialog()"
-      :type="buttonStatus.buttonStyle"
-      >{{ buttonStatus.buttonText }}</el-button
-    > -->
-    <button :class="buttonStatus.buttonStyle" @click="openDialog()">
-      {{ buttonStatus.buttonText }}
-    </button>
+  <div>
     <AppDialog
-      v-if="dialogVisable"
-      v-model="dialogVisable"
+      v-if="dialogVisible"
+      v-model="dialogVisible"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
       :callback="getInputs"
@@ -21,47 +11,32 @@
 </template>
 
 <script>
-import { useTokenStore } from "../../store/access";
-import { ref } from "vue";
-import { ElNotification } from "element-plus";
-import { ElLoading } from "element-plus";
-import { ElMessageBox } from "element-plus";
-import AppDialog from "../dialogs/AppDialog";
+import { useTokenStore } from "@/store/access";
+
+import AppDialog from "@/components/dialogs/AppDialog";
+
+import { ElNotification, ElLoading } from "element-plus";
+
 export default {
   name: "GithubTokenConnection",
+
   components: { AppDialog },
-  setup() {
-    const status = ref(["Connect github token", ""]);
-    const dialogVisable = ref(false);
-    const dialogHeaders = ref(null);
-    const dialogNumInput = ref(null);
-    return {
-      status,
-      dialogVisable,
-      dialogHeaders,
-      dialogNumInput,
-    };
+
+  props: {
+    callback: { type: Function },
   },
+
   data() {
     return {
       manager: useTokenStore(),
+      status: ["Connect GitHub token", ""],
+      dialogVisible: false,
+      dialogHeaders: null,
+      dialogNumInput: null,
     };
   },
+
   computed: {
-    buttonStatus() {
-      let githubObject = {
-        buttonText: "Connect github token",
-        buttonStyle: "primary-plain-button",
-      };
-      if (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
-      ) {
-        githubObject.buttonText = "Disconnect github token";
-        githubObject.buttonStyle = "danger-plain-button";
-      }
-      return githubObject;
-    },
     connectedToGithubByToken() {
       return (
         "github" in this.manager.accessTokens &&
@@ -69,6 +44,7 @@ export default {
       );
     },
   },
+
   methods: {
     createLoading() {
       const loading = ElLoading.service({
@@ -78,17 +54,10 @@ export default {
       return loading;
     },
     openDialog() {
-      if (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
-      ) {
-        this.APIkeyWarning();
-      } else {
-        this.useAPIkey();
-      }
+      this.useAPIkey();
     },
     async getInputs(response) {
-      this.dialogVisable = false;
+      this.dialogVisible = false;
       if (response[0] == "OK") {
         await this.processGithub(response[1]);
       } else {
@@ -98,9 +67,9 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
     },
-
     async processGithub(userInput) {
       let key = "github";
       let value = userInput[0];
@@ -124,6 +93,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
+          this.callback();
         }
       } else {
         ElNotification({
@@ -132,58 +102,20 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
       spinner.close();
     },
-
     useAPIkey() {
       this.dialogNumInput = 1;
-      this.dialogHeaders = ["Github access token"];
-      this.dialogVisable = true;
-    },
-
-    APIkeyWarning() {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken("github");
-        })
-        .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        });
-    },
-
-    async deleteToken(key) {
-      let errorFound = false;
-      try {
-        await this.manager.deleteToken(key);
-      } catch (e) {
-        errorFound = true;
-      }
-      if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
+      this.dialogHeaders = ["GitHub access token"];
+      this.dialogVisible = true;
     },
   },
+
   async mounted() {
     await this.manager.loadTokens();
+    this.openDialog();
   },
 };
 </script>
