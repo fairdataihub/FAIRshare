@@ -144,13 +144,13 @@ export default {
       let zenodoObject = {
         status: "Not Connected",
         name: "",
-        action: "Connect",
+        action: "Connect to Zenodo",
         buttonStyle: "primary-plain-button",
       };
       if ("zenodo" in this.manager.accessTokens) {
         zenodoObject.status = "Connected";
         zenodoObject.name = this.manager.accessTokens.zenodo.name;
-        zenodoObject.action = "Disconnect";
+        zenodoObject.action = "Disconnect from Zenodo";
         zenodoObject.buttonStyle = "danger-plain-button";
       }
       return zenodoObject;

@@ -502,7 +502,7 @@
                     placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
                   ></el-input>
                   <form-help-content
-                    popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, Github, CodePlex, institutional GitLab instance, etc.)"
+                    popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, GitHub, CodePlex, institutional GitLab instance, etc.)"
                   ></form-help-content>
                 </div>
               </el-form-item>
@@ -532,7 +532,7 @@
                     placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
                   ></el-input>
                   <form-help-content
-                    popoverContent="Link to issue tracker (Jira, Github issues, etc.)"
+                    popoverContent="Link to issue tracker (Jira, GitHub issues, etc.)"
                   ></form-help-content>
                 </div>
               </el-form-item>

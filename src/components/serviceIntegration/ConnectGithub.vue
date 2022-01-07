@@ -133,13 +133,13 @@ export default {
       let githubObject = {
         status: "Not Connected",
         name: "",
-        action: "Connect",
+        action: "Connect to GitHub",
         buttonStyle: "primary-plain-button",
       };
       if ("github" in this.manager.accessTokens) {
         githubObject.status = "Connected";
         githubObject.name = this.manager.accessTokens.github.name;
-        githubObject.action = "Disconnect";
+        githubObject.action = "Disconnect from GitHub";
         githubObject.buttonStyle = "danger-plain-button";
       }
       return githubObject;
