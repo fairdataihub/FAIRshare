@@ -23,7 +23,7 @@ export default {
     callback: { type: Function },
   },
   setup() {
-    const status = ref(["Connect github token", ""]);
+    const status = ref(["Connect GitHub token", ""]);
     const dialogVisable = ref(false);
     const dialogHeaders = ref(null);
     const dialogNumInput = ref(null);
@@ -112,7 +112,7 @@ export default {
 
     useAPIkey() {
       this.dialogNumInput = 1;
-      this.dialogHeaders = ["Github access token"];
+      this.dialogHeaders = ["GitHub access token"];
       this.dialogVisable = true;
     },
   },

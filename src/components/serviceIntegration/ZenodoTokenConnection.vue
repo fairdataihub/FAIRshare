@@ -111,7 +111,7 @@ export default {
 
     useAPIkey() {
       this.dialogNumInput = 2;
-      this.dialogHeaders = ["Zenodo access token", "Token nick name"];
+      this.dialogHeaders = ["Zenodo access token", "Token nick name of your choice"];
       this.dialogVisable = true;
     },
   },

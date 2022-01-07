@@ -2,6 +2,7 @@
   <el-dialog
     width="400px"
     destroy-on-close
+    title="Enter token information"
     :before-close="beforeCloseRootLevel"
   >
     <div class="dialog-Container">
@@ -33,18 +34,16 @@
           </el-form-item>
         </div>
         <el-form-item>
-          <div class="bottom">
-            <el-button
-              class="button"
-              size="small"
+          <div class="bottom gap-[5px]">
+            <button
+              class="danger-plain-button h-8"
               @click="closeDialog('Cancelled')"
-              >Cancel</el-button
+              >Cancel</button
             >
-            <el-button
-              class="button"
-              size="small"
+            <button
+              class="primary-button h-8"
               @click="confirmInput('formRef')"
-              >OK</el-button
+              >OK</button
             >
           </div>
         </el-form-item>

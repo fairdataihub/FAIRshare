@@ -8,13 +8,14 @@
     </button>
     <el-dialog
       width="600px"
+      title= "Select an option to connect to GitHub"
       destroy-on-close
       v-model="dialogVisable"
     >
       <div class="dialog-Container">
         <div class="inputField">
-            <button class="primary-plain-button" @click="showGithubTokenConnect">Connect github token</button>
-            <button class="primary-plain-button" @click="showGithubOAuthConnect">Connect github account</button>
+            <button class="primary-plain-button" @click="showGithubTokenConnect">Connect with token</button>
+            <button class="primary-plain-button" @click="showGithubOAuthConnect">Connect with username</button>
         </div>
       </div>
     </el-dialog>

@@ -275,9 +275,9 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   margin: 0 !important;
 }
 
-.el-dialog__header {
+/* .el-dialog__header {
   padding: 0 !important;
-}
+} */
 
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;

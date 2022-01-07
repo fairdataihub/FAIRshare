@@ -49,7 +49,7 @@
           </div>
           <div class="centering-container center">
             <p>
-              Connect with your github account by using an access token or
+              Connect with your GitHub account by using an access token or
               OAuth. Please see more details at
               <span
                 class="text-url"
@@ -59,7 +59,7 @@
                   )
                 "
               >
-                github access token documentation
+                GitHub access token documentation
               </span>
             </p>
           </div>
