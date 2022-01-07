@@ -130,7 +130,7 @@ export default {
   methods: {
     async openLicenseDetails() {
       this.spinnerGlobal = await this.createLoading();
-      
+
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
 
