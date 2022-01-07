@@ -20,7 +20,12 @@
     >
       {{ zenodoDetails.action }}
     </button>
-    <el-dialog width="600px" destroy-on-close v-model="dialogVisable" title="Select an option to connect to Zenodo">
+    <el-dialog
+      width="600px"
+      destroy-on-close
+      v-model="dialogVisable"
+      title="Select an option to connect to Zenodo"
+    >
       <div class="dialog-Container">
         <div class="inputField">
           <button class="primary-plain-button" @click="showZenodoTokenConnect">
@@ -35,11 +40,11 @@
             <template #reference>
               <div>
                 <el-button
-                class="primary-plain-button"
-                @click="showZenodoOAuthConnect"
-                disabled
-                >Connect with username</el-button
-              >
+                  class="primary-plain-button"
+                  @click="showZenodoOAuthConnect"
+                  disabled
+                  >Connect with username</el-button
+                >
               </div>
             </template>
           </el-popover>

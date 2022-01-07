@@ -38,13 +38,12 @@
             <button
               class="danger-plain-button h-8"
               @click="closeDialog('Cancelled')"
-              >Cancel</button
             >
-            <button
-              class="primary-button h-8"
-              @click="confirmInput('formRef')"
-              >OK</button
-            >
+              Cancel
+            </button>
+            <button class="primary-button h-8" @click="confirmInput('formRef')">
+              OK
+            </button>
           </div>
         </el-form-item>
       </el-form>
