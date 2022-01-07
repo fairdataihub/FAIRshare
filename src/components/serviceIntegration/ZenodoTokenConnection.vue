@@ -24,7 +24,7 @@ export default {
 
   props: {
     onStatusChange: { type: Function, required: false, default: () => {} },
-    callback: {type: Function}
+    callback: { type: Function },
   },
 
   data() {

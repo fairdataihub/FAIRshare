@@ -51,7 +51,10 @@
             >
               Cancel
             </button>
-            <button class="primary-button h-8 w-32" @click="confirmInput('formRef')">
+            <button
+              class="primary-button h-8 w-32"
+              @click="confirmInput('formRef')"
+            >
               OK
             </button>
           </div>
