@@ -282,7 +282,7 @@ def createCitationFromCode(code_data, general_data, folder_path):
 
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:
-        documents = yaml.dump(citationObject, file)
+        yaml.dump(citationObject, file)
 
     def line_prepender(filename, line):
         with open(filename, "r+") as f:
