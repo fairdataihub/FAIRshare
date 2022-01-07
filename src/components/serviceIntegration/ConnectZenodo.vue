@@ -25,13 +25,13 @@
           >
             <template #reference>
               <div>
-                <button
+                <el-button
                   class="primary-plain-button"
                   @click="showZenodoOAuthConnect"
                   disabled
                 >
                   Connect with username
-                </button>
+                </el-button>
               </div>
             </template>
           </el-popover>

@@ -24,6 +24,7 @@ export default {
 
   props: {
     onStatusChange: { type: Function, required: false, default: () => {} },
+    callback: {type: Function}
   },
 
   data() {
@@ -66,6 +67,7 @@ export default {
         //   position: "bottom-right",
         //   duration: 2000,
         // });
+        this.callback();
       }
     },
     async processZenodo(userInput) {
@@ -92,7 +94,7 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
-
+          this.callback();
           this.onStatusChange("connected");
         }
       } else {
@@ -102,6 +104,7 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
+        this.callback();
       }
       spinner.close();
     },
