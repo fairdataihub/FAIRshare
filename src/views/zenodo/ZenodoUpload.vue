@@ -500,7 +500,7 @@ export default {
             this.workflow.destination.zenodo.bucket,
             path.join(folderPath, file)
           );
-          this.percentage = ((index + 1) / contents.length) * 80 + 20;
+          this.percentage = ((index + 1) / contents.length) * 75 + 25;
           this.percentage = Math.round(this.percentage);
         }
 
@@ -516,6 +516,23 @@ export default {
     async createCodeMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createCitationFile() {
+      console.log(JSON.stringify(this.workflow.type));
+      console.log(JSON.stringify(this.dataset.data));
+      const response = await axios
+        .post(`${this.$server_url}/metadata/citation/create`, {
           data_types: JSON.stringify(this.workflow.type),
           data_object: JSON.stringify(this.dataset.data),
         })
@@ -581,6 +598,25 @@ export default {
 
       await this.sleep(300);
 
+      if (this.codePresent) {
+        response = await this.createCitationFile();
+        // console.log(response);
+
+        if (response === "ERROR") {
+          this.alertMessage =
+            "There was an error with creating the citation.cff file";
+          return "FAIL";
+        } else {
+          this.statusMessage =
+            "Created the citation.cff file in the target folder";
+        }
+      }
+
+      this.percentage = 20;
+      this.indeterminate = false;
+
+      await this.sleep(300);
+
       response = await this.addMetadaToZenodoDeposition();
 
       if (response === "ERROR") {
@@ -593,7 +629,7 @@ export default {
           "Metadata successfully added to the Zenodo deposition";
       }
 
-      this.percentage = 20;
+      this.percentage = 25;
       this.indeterminate = false;
 
       this.workflow.destination.zenodo.status.metadataAdded = true;

@@ -2,7 +2,7 @@
   <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Let's publish your work to Zenodo
+        Publish your work to Zenodo
       </span>
       <span class="text-left">
         All your data has been uploaded to Zenodo. It's now time to publish your
@@ -18,12 +18,17 @@
           (DOI) will be registered immediately after publishing. You will still
           be able to update the record's metadata later.
         </p>
-        <button
-          class="blob transition-all primary-button"
-          @click="publishDeposition"
-        >
-          Publish <el-icon><star /></el-icon>
-        </button>
+        <div class="flex space-x-4">
+          <button class="primary-plain-button" @click="openDraftDataset">
+            View draft
+          </button>
+          <button
+            class="blob transition-all primary-button"
+            @click="publishDeposition"
+          >
+            Publish <el-icon><star /></el-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -124,6 +129,14 @@ export default {
       }
 
       loading.close();
+    },
+    async openDraftDataset() {
+      const depositionID = this.workflow.destination.zenodo.deposition_id;
+
+      window.ipcRenderer.send(
+        "open-link-in-browser",
+        `${process.env.VUE_APP_ZENODO_URL}deposit/${depositionID}`
+      );
     },
   },
   async mounted() {

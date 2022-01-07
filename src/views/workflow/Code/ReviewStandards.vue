@@ -4,29 +4,59 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Are standard development practices being followed?
+        Verify if you have followed standard/best research software development
+        practices
       </span>
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="divide-y-2 divide-gray-100">
-        <div
-          v-for="question in questions"
-          :key="question"
-          class="flex flex-col py-3"
-        >
-          <span>
-            {{ question.question }}
-          </span>
-          <div class="pb-3 pt-2">
-            <el-radio v-model="question.model" label="1" size="large">
+      <div class="flex flex-col space-y-4">
+        <!-- template start -->
+        <div class="border-2 border-slate-100 p-4 rounded-lg">
+          <p>Is the data being curated in accordance with the standards?</p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="py-2 px-3">Some explanation text here.</div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question1" label="Yes" size="large">
               Yes
             </el-radio>
-            <el-radio v-model="question.model" label="2" size="large">
+            <el-radio v-model="questions.question1" label="No" size="large">
               No
             </el-radio>
           </div>
         </div>
+        <div class="border-2 border-slate-100 p-4 rounded-lg">
+          <p>Is the data being curated in accordance with the standards?</p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="py-2 px-3">Some explanation text here.</div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question2" label="Yes" size="large">
+              Yes
+            </el-radio>
+            <el-radio v-model="questions.question2" label="No" size="large">
+              No
+            </el-radio>
+          </div>
+        </div>
+        <!-- template end -->
       </div>
 
       <div class="w-full flex flex-row justify-center py-2 space-x-4">
@@ -39,7 +69,12 @@
           </button>
         </router-link>
 
-        <button class="primary-button" @click="startCuration" id="continue">
+        <button
+          class="primary-button"
+          @click="startCuration"
+          :disabled="disableContinue"
+          id="continue"
+        >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -51,6 +86,8 @@
 <script>
 import { useDatasetsStore } from "@/store/datasets";
 
+import { ElMessageBox } from "element-plus";
+
 export default {
   name: "CodeReviewStandards",
   data() {
@@ -60,25 +97,68 @@ export default {
       workflowID: this.$route.params.workflowID,
       dataset: {},
       workflow: {},
-      questions: [
-        {
-          question:
-            "Is the data being curated in accordance with the standards?",
-          model: "",
-        },
-        {
-          question:
-            "Is the data being curated in accordance with the standards?",
-          model: "",
-        },
-      ],
+      activeNames: [],
+      questions: {
+        question1: "",
+        question2: "",
+      },
     };
   },
+  computed: {
+    disableContinue() {
+      //disable continue button if no questions answered
+      let disabled = false;
+
+      for (const question in this.questions) {
+        if (this.questions[question] === "") {
+          disabled = true;
+        }
+      }
+
+      return disabled;
+    },
+  },
   methods: {
-    startCuration() {
-      this.$router.push(
-        `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-      );
+    async startCuration() {
+      let showWarning = false;
+
+      for (const question in this.questions) {
+        if (this.questions[question] === "No") {
+          showWarning = true;
+        }
+      }
+
+      if (showWarning) {
+        ElMessageBox.confirm(
+          "For your research software to be fully FAIR, we expect you to answer 'Yes' to all the questions. We suggest to review again where you answered 'No' and modyfying your data files if necessary before contuining.",
+          "Warning",
+          {
+            confirmButtonText: "Continue anyway",
+            cancelButtonText: "I want to go back and review",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            this.dataset.data.Code.standards = this.questions;
+
+            this.datasetStore.updateCurrentDataset(this.dataset);
+            this.datasetStore.syncDatasets();
+
+            this.$router.push(
+              `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
+            );
+          })
+          .catch(() => {});
+      } else {
+        this.dataset.data.Code.standards = this.questions;
+
+        this.datasetStore.updateCurrentDataset(this.dataset);
+        this.datasetStore.syncDatasets();
+
+        this.$router.push(
+          `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
+        );
+      }
     },
   },
   async mounted() {
@@ -89,6 +169,10 @@ export default {
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(2);
+
+    if ("standards" in this.dataset.data.Code) {
+      this.questions = this.dataset.data.Code.standards;
+    }
   },
 };
 </script>

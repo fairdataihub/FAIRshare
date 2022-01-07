@@ -4,7 +4,8 @@
   >
     <div class="flex flex-col h-full w-full">
       <span class="text-lg font-medium text-left">
-        Let's select an appropriate license for your data
+        Select a license that defines the desired conditions for using your
+        software
       </span>
 
       <el-divider> </el-divider>
@@ -12,13 +13,22 @@
       <div>
         <el-form
           :model="licenseForm"
-          label-width="160px"
           label-position="top"
           size="large"
           ref="licenseForm"
           @submit.prevent
+          hide-required-asterisk
         >
-          <el-form-item label="License">
+          <el-form-item label="License" required prop="license">
+            <template #label>
+              <div class="flex">
+                <span> License </span>
+                <span class="text-red-500 px-1"> * </span>
+                <form-help-content
+                  popoverContent="<p class='text-sm'> Required. Selected license applies to all of your files <br /> If you want to upload some of your files under different licenses, please do so in separate uploads. <br /> If you cannot find the license you're looking for, include a relevant LICENSE file in your record and choose one of the <span class='italic'> Other </span> licenses available <span class='italic'> (Other (Open), Other (Attribution) </span>, etc.). <br /> The supported licenses in the list are harvested from <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://opendefinition.org`)' class='text-url'> opendefinition.org </a> and <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://spdx.org`)' class='text-url' > spdx.org </a>.</p>"
+                ></form-help-content>
+              </div>
+            </template>
             <el-select
               v-model="licenseForm.license"
               filterable
@@ -34,13 +44,13 @@
               </el-option>
             </el-select>
 
-            <p
-              class="text-sm pt-2 text-gray-500 cursor-pointer hover:text-gray-800"
+            <button
+              class="secondary-plain-button my-4 px-2 py-1 h-[30px]"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
-              Show license details.
-            </p>
+              Show license details
+            </button>
 
             <el-drawer
               v-model="showLicenseDetails"
@@ -133,8 +143,11 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
+        console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
+          this.dataset.data.general.questions.license =
+            this.licenseForm.license;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();
@@ -153,7 +166,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(2);
+    this.datasetStore.setCurrentStep(4);
 
     if (
       "Code" in this.dataset.data &&

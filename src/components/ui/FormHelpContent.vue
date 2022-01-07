@@ -6,7 +6,6 @@
       placement="bottom"
       :width="`full`"
       trigger="hover"
-      :content="popoverContent"
       class="cursor-help text-gray-500 hover:text-black"
     >
       <template #reference>
@@ -17,6 +16,7 @@
           <question-filled />
         </el-icon>
       </template>
+      <p v-html="popoverContent"></p>
     </el-popover>
   </div>
 </template>

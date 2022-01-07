@@ -22,7 +22,7 @@
       >
         <el-collapse v-model="activeNames">
           <el-collapse-item
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
             name="basicInformation"
           >
             <template #title>
@@ -280,7 +280,7 @@
 
           <el-collapse-item
             name="license"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -329,6 +329,7 @@
                 <el-select
                   v-model="zenodoMetadataForm.license.licenseName"
                   filterable
+                  disabled
                   placeholder="Select a license"
                   class="w-full"
                 >
@@ -375,7 +376,7 @@
 
           <el-collapse-item
             name="relatedIdentifiers"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -496,7 +497,7 @@
 
           <el-collapse-item
             name="contributors"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -607,7 +608,7 @@
 
           <el-collapse-item
             name="references"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -679,7 +680,7 @@
 
           <el-collapse-item
             name="journal"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -732,7 +733,7 @@
 
           <el-collapse-item
             name="conference"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -828,7 +829,7 @@
 
           <el-collapse-item
             name="bookReportChapter"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -896,7 +897,10 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item name="thesis" class="border-2 border-gray-100 my-1">
+          <el-collapse-item
+            name="thesis"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
+          >
             <template #title>
               <div
                 class="w-full flex flex-row justify-between items-center font-inter"
@@ -992,7 +996,7 @@
 
           <el-collapse-item
             name="subjects"
-            class="border-2 border-gray-100 my-1"
+            class="border-2 border-gray-100 my-1 zenodo-collapse-item"
           >
             <template #title>
               <div
@@ -1773,6 +1777,9 @@ export default {
         this.zenodoMetadataForm.thesis
       );
 
+      const generalForm = this.dataset.data.general.questions;
+      this.zenodoMetadataForm.license.licenseName = generalForm.license;
+
       this.addIds(this.zenodoMetadataForm.authors);
       this.addIds(this.zenodoMetadataForm.keywords);
       this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
@@ -1798,7 +1805,7 @@ export default {
 // CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .handle {
   cursor: move;
 }

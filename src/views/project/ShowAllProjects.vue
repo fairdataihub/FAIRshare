@@ -104,24 +104,14 @@
             class="flex flex-row space-x-4 px-2"
             v-if="selectedDataset !== ''"
           >
-            <!-- <el-button type="info" plain @click="editProject" class="">
-              <el-icon><setting /></el-icon> Project settings
-            </el-button> -->
-            <!-- <el-button
-              type="primary"
-              plain
-              class="flex flex-row items-center"
-              @click="startCuratingProject"
-            >
-              Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
-            </el-button> -->
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting /></el-icon> Project settings
             </button>
             <button class="primary-button" @click="startCuratingProject">
               Continue working on this project
-              <el-icon> <d-arrow-right /> </el-icon>
+              <el-icon class="icon-animate">
+                <d-arrow-right />
+              </el-icon>
             </button>
           </div>
         </div>
@@ -196,9 +186,10 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
-      // routerPath = `/datasets/${datasetID}/workflow1/createMetadata`;
-      routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
 
       this.$router.push({ path: routerPath });

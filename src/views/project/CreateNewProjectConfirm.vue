@@ -5,14 +5,11 @@
     <div class="flex flex-col h-full w-full" id="scroll">
       <span class="font-medium text-left"> FAIRifying </span>
 
-      <span> Let's make your research software FAIR. </span>
+      <span> Let's make your research software FAIR </span>
 
       <line-divider> </line-divider>
 
-      <p class="py-2">
-        In order to do this, SODA will automatically try to group up similar
-        data into their own datasets.
-      </p>
+      <p class="py-2"></p>
       <!-- <p class="py-2">
         FAIRShare will help you make you research software by guiding you
         step-by-step through the following process:
@@ -58,7 +55,8 @@ export default {
         const key = `workflow${index + 1}`;
         that.dataset.workflows[key] = {};
         that.dataset.workflows[key].type = [type];
-        that.dataset.workflows[key].folderSelected = false;
+        that.dataset.workflows[key].sourceSelected = false;
+        that.dataset.workflows[key].source = {};
         that.dataset.workflows[key].destinationSelected = false;
         that.dataset.workflows[key].datasetUploaded = false;
         that.dataset.workflows[key].datasetPublished = false;

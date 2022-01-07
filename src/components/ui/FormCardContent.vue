@@ -83,7 +83,7 @@ export default {
       return this.currentStepId === 1;
     },
     nextText() {
-      return this.lastStep ? "Next" : "Continue";
+      return this.lastStep ? "Continue" : "Next";
     },
     prevText() {
       if (this.currentStepId === 1) {
