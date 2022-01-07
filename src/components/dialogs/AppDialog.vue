@@ -34,7 +34,7 @@
           </el-form-item>
         </div>
         <div
-          class="flex flex-row items-center w-max primary-500 cursor-pointer hover-underline-animation my-3"
+          class="flex flex-row items-center w-max text-primary-500 cursor-pointer hover-underline-animation my-3"
           @click="openWebsite(this.headers[0])"
         >
           <span class="font-medium">
@@ -46,13 +46,13 @@
         <el-form-item>
           <div class="bottom gap-[5px]">
             <button
-              class="danger-plain-button h-8 w-32"
+              class="danger-plain-button h-8 w-28"
               @click="closeDialog('Cancelled')"
             >
               Cancel
             </button>
             <button
-              class="primary-button h-8 w-32"
+              class="primary-button h-8 w-28"
               @click="confirmInput('formRef')"
             >
               OK

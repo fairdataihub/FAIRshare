@@ -14,10 +14,10 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button class="primary-plain-button" @click="showGithubTokenConnect">
+          <button class="primary-plain-button w-56" @click="showGithubTokenConnect">
             Connect with token
           </button>
-          <button class="primary-plain-button" @click="showGithubOAuthConnect">
+          <button class="primary-plain-button w-56" @click="showGithubOAuthConnect">
             Connect with username
           </button>
         </div>

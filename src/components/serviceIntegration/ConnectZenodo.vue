@@ -14,7 +14,7 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button class="primary-plain-button" @click="showZenodoTokenConnect">
+          <button class="primary-plain-button w-56" @click="showZenodoTokenConnect">
             Connect with token
           </button>
           <el-popover
@@ -25,13 +25,13 @@
           >
             <template #reference>
               <div>
-                <el-button
-                  class="primary-plain-button"
+                <button
+                  class="primary-plain-button w-56"
                   @click="showZenodoOAuthConnect"
-                  disabled
+                  disabled = "disabled"
                 >
                   Connect with username
-                </el-button>
+                </button>
               </div>
             </template>
           </el-popover>
