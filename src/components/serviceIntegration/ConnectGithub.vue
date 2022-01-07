@@ -19,8 +19,16 @@
         </div>
       </div>
     </el-dialog>
-    <GithubTokenConnection v-if="showTokenConnect" v-model="showTokenConnect" :callback = "hideGithubTokenConnect"></GithubTokenConnection>
-    <GithubOAuthConnection v-if="showOAuthConnect" v-model="showOAuthConnect" :callback = "hideGithubOAuthConnect"></GithubOAuthConnection>
+    <GithubTokenConnection
+      v-if="showTokenConnect"
+      v-model="showTokenConnect"
+      :callback="hideGithubTokenConnect"
+    ></GithubTokenConnection>
+    <GithubOAuthConnection
+      v-if="showOAuthConnect"
+      v-model="showOAuthConnect"
+      :callback="hideGithubOAuthConnect"
+    ></GithubOAuthConnection>
   </div>
 </template>
 
@@ -53,19 +61,19 @@ export default {
     };
   },
   methods: {
-    hideGithubTokenConnect(){
-      this.showTokenConnect = false
+    hideGithubTokenConnect() {
+      this.showTokenConnect = false;
     },
-    hideGithubOAuthConnect(){
-      this.showOAuthConnect = false
+    hideGithubOAuthConnect() {
+      this.showOAuthConnect = false;
     },
-    showGithubTokenConnect(){
-      this.showTokenConnect = true
-      this.dialogVisable = false
+    showGithubTokenConnect() {
+      this.showTokenConnect = true;
+      this.dialogVisable = false;
     },
-    showGithubOAuthConnect(){
-      this.showOAuthConnect = true
-      this.dialogVisable = false
+    showGithubOAuthConnect() {
+      this.showOAuthConnect = true;
+      this.dialogVisable = false;
     },
     interactWithService(serviceName) {
       if (serviceName == "github") {
@@ -104,7 +112,7 @@ export default {
         await this.manager.deleteToken(key);
       } catch (e) {
         errorFound = true;
-        console.log(e)
+        console.log(e);
       }
       if (!errorFound) {
         ElNotification({
