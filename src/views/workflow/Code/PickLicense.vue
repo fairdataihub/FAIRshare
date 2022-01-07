@@ -34,6 +34,7 @@
               filterable
               placeholder="Select a license"
               class="w-full"
+              @change="openLicenseDetails"
             >
               <el-option
                 v-for="item in licenseOptions"
@@ -91,7 +92,7 @@
 import { useDatasetsStore } from "@/store/datasets";
 
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
-
+import { ElLoading } from "element-plus";
 export default {
   name: "CodePickLicense",
   data() {
@@ -123,15 +124,18 @@ export default {
       showLicenseDetails: false,
       loadingLicenseDetails: false,
       licenseOptions: licensesJSON.licenses,
+      spinnerGlobal: null,
     };
   },
   methods: {
     async openLicenseDetails() {
+      this.spinnerGlobal = await this.createLoading();
+      
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
 
       //get license object
-      const licenseObject = this.licenseOptions.find(
+      const licenseObject = await this.licenseOptions.find(
         (license) => license.licenseId === licenseId
       );
 
@@ -140,6 +144,14 @@ export default {
 
       this.showLicenseDetails = true;
       this.loadingLicenseDetails = true;
+      await this.spinnerGlobal.close();
+    },
+    createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "loading...",
+      });
+      return loading;
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
