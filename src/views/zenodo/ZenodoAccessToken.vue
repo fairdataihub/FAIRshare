@@ -23,15 +23,7 @@
             button below to connect to your Zenodo account.
           </p>
 
-          <ZenodoTokenConnectionVue
-            :callbackFunction="showConnection"
-          ></ZenodoTokenConnectionVue>
-
-          <!-- <el-input
-            v-model="zenodoAccessToken"
-            placeholder="Zenodo Access Token"
-            class="mb-10"
-          /> -->
+          <ConnectZenodo :statusChangeFunction="showConnection"></ConnectZenodo>
         </div>
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
@@ -63,15 +55,16 @@
 <script>
 // import axios from "axios";
 
-import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube.vue";
-import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection.vue";
+import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
+// import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection";
+import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "ZenodoAccessToken",
-  components: { LoadingFoldingCube, ZenodoTokenConnectionVue },
+  components: { LoadingFoldingCube, ConnectZenodo },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -144,8 +137,11 @@ export default {
         }
       }
     },
-    async showConnection() {
-      this.validTokenAvailable = true;
+    async showConnection(status) {
+      console.log(status);
+      if (status === "connected") {
+        this.validTokenAvailable = true;
+      }
       // this.uploadToZenodo();
     },
   },
@@ -159,8 +155,6 @@ export default {
 
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 
-    // console.log(validZenodoConnection);
-
     if (validZenodoConnection) {
       this.validTokenAvailable = true;
       this.ready = true;
@@ -168,19 +162,6 @@ export default {
       this.validTokenAvailable = false;
       this.ready = true;
     }
-
-    // const zenodoTokenObject = await this.tokens.getToken("zenodo");
-    // const zenodoToken = zenodoTokenObject.token;
-    // console.log(zenodoTokenObject);
-    // if (zenodoToken === "NO_TOKEN_FOUND") {
-    //   this.errorMessage =
-    //     "No Zenodo access token found. Please enter a valid Zenodo access token.";
-    //   this.validTokenAvailable = false;
-    //   this.ready = true;
-    // } else {
-    //   await this.checkToken(zenodoToken);
-    //   this.ready = true;
-    // }
   },
 };
 </script>

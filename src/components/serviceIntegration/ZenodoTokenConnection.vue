@@ -1,8 +1,8 @@
 <template>
   <div class="buttonContainer">
     <AppDialog
-      v-if="dialogVisable"
-      v-model="dialogVisable"
+      v-if="dialogVisible"
+      v-model="dialogVisible"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
       :callback="getInputs"
@@ -11,32 +11,30 @@
 </template>
 
 <script>
-import { useTokenStore } from "../../store/access";
-import { ref } from "vue";
-import { ElNotification } from "element-plus";
-import { ElLoading } from "element-plus";
-import AppDialog from "../dialogs/AppDialog";
+import { useTokenStore } from "@/store/access";
+
+import AppDialog from "@/components/dialogs/AppDialog";
+
+import { ElNotification, ElLoading } from "element-plus";
+
 export default {
   name: "ZenodoTokenConnection",
+
   components: { AppDialog },
+
   props: {
-    callback: { type: Function },
+    onStatusChange: { type: Function, required: false, default: () => {} },
   },
-  setup() {
-    const dialogVisable = ref(false);
-    const dialogHeaders = ref(null);
-    const dialogNumInput = ref(null);
-    return {
-      dialogVisable,
-      dialogHeaders,
-      dialogNumInput,
-    };
-  },
+
   data() {
     return {
       manager: useTokenStore(),
+      dialogVisible: false,
+      dialogHeaders: null,
+      dialogNumInput: null,
     };
   },
+
   computed: {
     connectedToZenodoByToken() {
       return (
@@ -45,6 +43,7 @@ export default {
       );
     },
   },
+
   methods: {
     createLoading() {
       const loading = ElLoading.service({
@@ -57,20 +56,18 @@ export default {
       this.useAPIkey();
     },
     async getInputs(response) {
-      this.dialogVisable = false;
+      this.dialogVisible = false;
       if (response[0] == "OK") {
         await this.processZenodo(response[1]);
       } else {
-        ElNotification({
-          type: "info",
-          message: "Input canceled",
-          position: "bottom-right",
-          duration: 2000,
-        });
-        this.callback();
+        // ElNotification({
+        //   type: "info",
+        //   message: "Input canceled",
+        //   position: "bottom-right",
+        //   duration: 2000,
+        // });
       }
     },
-
     async processZenodo(userInput) {
       let key = "zenodo";
       let value = userInput[0];
@@ -95,7 +92,8 @@ export default {
             position: "bottom-right",
             duration: 2000,
           });
-          this.callback();
+
+          this.onStatusChange("connected");
         }
       } else {
         ElNotification({
@@ -104,7 +102,6 @@ export default {
           position: "bottom-right",
           duration: 2000,
         });
-        this.callback();
       }
       spinner.close();
     },
@@ -115,9 +112,10 @@ export default {
         "Zenodo access token",
         "Token nick name of your choice",
       ];
-      this.dialogVisable = true;
+      this.dialogVisible = true;
     },
   },
+
   async mounted() {
     await this.manager.loadTokens();
     this.openDialog();

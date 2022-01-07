@@ -1,8 +1,8 @@
 <template>
   <div>
     <AppDialog
-      v-if="dialogVisable"
-      v-model="dialogVisable"
+      v-if="dialogVisible"
+      v-model="dialogVisible"
       :numInput="dialogNumInput"
       :headers="dialogHeaders"
       :callback="getInputs"
@@ -11,34 +11,31 @@
 </template>
 
 <script>
-import { useTokenStore } from "../../store/access";
-import { ref } from "vue";
-import { ElNotification } from "element-plus";
-import { ElLoading } from "element-plus";
-import AppDialog from "../dialogs/AppDialog";
+import { useTokenStore } from "@/store/access";
+
+import AppDialog from "@/components/dialogs/AppDialog";
+
+import { ElNotification, ElLoading } from "element-plus";
+
 export default {
   name: "GithubTokenConnection",
+
   components: { AppDialog },
+
   props: {
     callback: { type: Function },
   },
-  setup() {
-    const status = ref(["Connect GitHub token", ""]);
-    const dialogVisable = ref(false);
-    const dialogHeaders = ref(null);
-    const dialogNumInput = ref(null);
-    return {
-      status,
-      dialogVisable,
-      dialogHeaders,
-      dialogNumInput,
-    };
-  },
+
   data() {
     return {
       manager: useTokenStore(),
+      status: ["Connect GitHub token", ""],
+      dialogVisible: false,
+      dialogHeaders: null,
+      dialogNumInput: null,
     };
   },
+
   computed: {
     connectedToGithubByToken() {
       return (
@@ -47,6 +44,7 @@ export default {
       );
     },
   },
+
   methods: {
     createLoading() {
       const loading = ElLoading.service({
@@ -59,7 +57,7 @@ export default {
       this.useAPIkey();
     },
     async getInputs(response) {
-      this.dialogVisable = false;
+      this.dialogVisible = false;
       if (response[0] == "OK") {
         await this.processGithub(response[1]);
       } else {
@@ -72,7 +70,6 @@ export default {
         this.callback();
       }
     },
-
     async processGithub(userInput) {
       let key = "github";
       let value = userInput[0];
@@ -109,13 +106,13 @@ export default {
       }
       spinner.close();
     },
-
     useAPIkey() {
       this.dialogNumInput = 1;
       this.dialogHeaders = ["GitHub access token"];
-      this.dialogVisable = true;
+      this.dialogVisible = true;
     },
   },
+
   async mounted() {
     await this.manager.loadTokens();
     this.openDialog();

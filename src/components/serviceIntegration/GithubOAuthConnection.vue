@@ -4,25 +4,19 @@
 
 <script>
 import { useTokenStore } from "../../store/access";
-import { ref } from "vue";
-import { ElNotification } from "element-plus";
-import { ElLoading } from "element-plus";
+
+import { ElNotification, ElLoading } from "element-plus";
+
 export default {
   name: "GithubOAuthConnection",
   props: {
     callback: { type: Function },
   },
-  setup() {
-    const backgroundHasResponse = ref(false);
-    const spinnerGlobal = ref(null);
-    return {
-      backgroundHasResponse,
-      spinnerGlobal,
-    };
-  },
   data() {
     return {
       manager: useTokenStore(),
+      backgroundHasResponse: false,
+      spinnerGlobal: null,
     };
   },
   computed: {

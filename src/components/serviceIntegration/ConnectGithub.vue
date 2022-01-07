@@ -10,7 +10,7 @@
       width="600px"
       title="Select an option to connect to GitHub"
       destroy-on-close
-      v-model="dialogVisable"
+      v-model="dialogVisible"
     >
       <div class="dialog-Container">
         <div class="inputField">
@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      dialogVisable: false,
+      dialogVisible: false,
 
       showTokenConnect: false,
       showOAuthConnect: false,
@@ -73,18 +73,18 @@ export default {
     },
     showGithubTokenConnect() {
       this.showTokenConnect = true;
-      this.dialogVisable = false;
+      this.dialogVisible = false;
     },
     showGithubOAuthConnect() {
       this.showOAuthConnect = true;
-      this.dialogVisable = false;
+      this.dialogVisible = false;
     },
     interactWithService(serviceName) {
       if (serviceName == "github") {
         if ("github" in this.manager.accessTokens) {
           this.APIkeyWarning("github");
         } else {
-          this.dialogVisable = true;
+          this.dialogVisible = true;
         }
       }
     },

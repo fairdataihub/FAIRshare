@@ -142,7 +142,6 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import { useTokenStore } from "@/store/access";
 import { useDatasetsStore } from "@/store/datasets";
 
@@ -151,29 +150,28 @@ import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
 export default {
   name: "ManageAccount",
+
   components: {
     ConnectGithub,
     ConnectZenodo,
   },
-  setup() {
-    const manager = useTokenStore();
-    return {
-      manager,
-    };
-  },
+
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      manager: useTokenStore(),
       buttonList: [],
-      dialogVisable: false,
+      dialogVisible: false,
       dialogNumInput: 0,
     };
   },
+
   methods: {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
+
   computed: {
     zenodoDetails() {
       let zenodoObject = {
@@ -212,6 +210,7 @@ export default {
       return "github" in this.manager.accessTokens;
     },
   },
+
   async mounted() {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");

@@ -1,18 +1,4 @@
 <template>
-  <!-- <div>
-    <button
-      :class="zenodoDetails.buttonStyle"
-      @click="interactWithService('zenodo')"
-    >
-      {{ zenodoDetails.action }}
-    </button>
-    <ButtonInputDialog
-      v-model="dialogVisable"
-      :numInput="dialogNumInput"
-      :buttons="this.buttonList"
-      :callback="closeButtonDialog"
-    ></ButtonInputDialog>
-  </div> -->
   <div>
     <button
       :class="zenodoDetails.buttonStyle"
@@ -23,7 +9,7 @@
     <el-dialog
       width="600px"
       destroy-on-close
-      v-model="dialogVisable"
+      v-model="dialogVisible"
       title="Select an option to connect to Zenodo"
     >
       <div class="dialog-Container">
@@ -39,12 +25,13 @@
           >
             <template #reference>
               <div>
-                <el-button
+                <button
                   class="primary-plain-button"
                   @click="showZenodoOAuthConnect"
                   disabled
-                  >Connect with username</el-button
                 >
+                  Connect with username
+                </button>
               </div>
             </template>
           </el-popover>
@@ -55,33 +42,35 @@
       v-if="showTokenConnect"
       v-model="showTokenConnect"
       :callback="hideZenodoTokenConnect"
+      :onStatusChange="statusChangeFunction"
     ></ZenodoTokenConnection>
     <!-- <ZenodoOAuthConnection v-if="showOAuthConnect" v-model="showOAuthConnect" :callback = "hideZenodoOAuthConnect"></ZenodoOAuthConnection> -->
   </div>
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
-import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
+
 import { useTokenStore } from "@/store/access";
+
 import { ElNotification, ElMessageBox } from "element-plus";
+
 export default {
   name: "ConnectZenodo",
   components: {
     ZenodoTokenConnection: ZenodoTokenConnection,
-    ButtonInputDialog,
   },
-  setup() {
-    const manager = useTokenStore();
-    return {
-      manager,
-    };
+  props: {
+    statusChangeFunction: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
   },
   data() {
     return {
-      dialogVisable: false,
-
+      manager: useTokenStore(),
+      dialogVisible: false,
       showTokenConnect: false,
       showOAuthConnect: false,
     };
@@ -95,18 +84,18 @@ export default {
     },
     showZenodoTokenConnect() {
       this.showTokenConnect = true;
-      this.dialogVisable = false;
+      this.dialogVisible = false;
     },
     showZenodoOAuthConnect() {
       this.showOAuthConnect = true;
-      this.dialogVisable = false;
+      this.dialogVisible = false;
     },
     interactWithService(serviceName) {
       if (serviceName == "zenodo") {
         if ("zenodo" in this.manager.accessTokens) {
           this.APIkeyWarning("zenodo");
         } else {
-          this.dialogVisable = true;
+          this.dialogVisible = true;
         }
       }
     },
@@ -124,18 +113,19 @@ export default {
           this.deleteToken(key);
         })
         .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
+          // ElNotification({
+          //   type: "info",
+          //   message: "Delete canceled",
+          //   position: "bottom-right",
+          //   duration: 2000,
+          // });
         });
     },
     async deleteToken(key) {
       let errorFound = false;
       try {
         await this.manager.deleteToken(key);
+        this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
       }
