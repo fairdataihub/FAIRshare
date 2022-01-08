@@ -78,7 +78,7 @@ export default {
     },
   },
   async mounted() {
-    // when the empty div was mounted, call the connection function immediately 
+    // when the empty div was mounted, call the connection function immediately
     await this.manager.loadTokens();
     this.connectOAuth();
   },

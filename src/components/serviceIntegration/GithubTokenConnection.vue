@@ -16,7 +16,7 @@ import AppDialog from "@/components/dialogs/AppDialog";
 import { ElNotification, ElLoading } from "element-plus";
 
 export default {
-  // empty component, only has a hidden dialog for accepting and process user-inputs 
+  // empty component, only has a hidden dialog for accepting and process user-inputs
   name: "GithubTokenConnection",
   components: { AppDialog },
   props: {

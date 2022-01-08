@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card-container">
         <div class="image-container">
           <img src="../../assets/github.jpeg" class="image" />

@@ -25,10 +25,7 @@
           >
             <template #reference>
               <div>
-                <el-button
-                  @click="showZenodoOAuthConnect"
-                  disabled
-                >
+                <el-button @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </el-button>
               </div>
@@ -53,7 +50,7 @@ import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
 
 export default {
-  // output component: return a button which can open a dialog that contains two buttons  
+  // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectZenodo",
   components: {
     ZenodoTokenConnection: ZenodoTokenConnection,
