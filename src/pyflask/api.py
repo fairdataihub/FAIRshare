@@ -514,8 +514,6 @@ class CreateFile(Resource):
         return createFile(folder_path, file_name, file_content, content_type)
 
 
-# KEY
-
 # 5000 is the flask default port.
 # Using 7632 since it spells SODA lol.
 # Remove `debug=True` when creating the standalone pyinstaller file
