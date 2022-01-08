@@ -545,6 +545,24 @@ export default {
         });
       return response;
     },
+    async createLicenseFile() {
+      const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+      const response = await axios
+        .post(`${this.$server_url}/utilities/createfile`, {
+          folder_path: folderPath,
+          file_name: "LICENSE",
+          file_content: this.workflow.licenseText,
+          content_type: "text",
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     async uploadWorkflow() {
       let response = "";
       response = await this.createZenodoDeposition();
@@ -616,6 +634,18 @@ export default {
       this.indeterminate = false;
 
       await this.sleep(300);
+
+      if (this.workflow.generateLicense) {
+        response = await this.createLicenseFile();
+
+        if (response === "ERROR") {
+          this.alertMessage =
+            "There was an error with creating the LICENSE file";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Created the LICENSE file in the target folder";
+        }
+      }
 
       response = await this.addMetadaToZenodoDeposition();
 
@@ -698,6 +728,7 @@ export default {
       } else {
         this.workflow.datasetUploaded = true;
         this.workflow.datasetPublished = false;
+        this.workflow.generateLicense = false;
 
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
