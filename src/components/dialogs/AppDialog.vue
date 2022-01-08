@@ -6,19 +6,6 @@
     :before-close="beforeCloseRootLevel"
   >
     <div class="dialog-Container">
-      <!-- <div class="inputField" v-for="i in this.numInput" :key="i">
-        <div class="inputBar-Header">{{ this.headers[i - 1] }}</div>
-        <el-input class="inputBar" size="large" v-model="userInputs[i - 1]" />
-      </div>
-
-      <div class="bottom">
-        <el-button class="button" size="small" @click="closeDialog('Cancelled')"
-          >Cancel</el-button
-        >
-        <el-button class="button" size="small" @click="confirmInput"
-          >OK</el-button
-        >
-      </div> -->
       <el-form ref="formRef" :model="userInputs" label-position="top">
         <div class="inputField" v-for="i in this.numInput" :key="i">
           <el-form-item
@@ -72,6 +59,7 @@ export default {
     callback: { type: Function },
   },
   setup(props) {
+    // user inputs. in the order of from top to the bottom
     const userInputs = ref({});
     for (let i = 0; i < props.numInput; i++) {
       let key = props.headers[i];
@@ -96,20 +84,21 @@ export default {
         );
       }
     },
+    // return inputs as an array (values only, in the order of from top to the bottom)
     async closeDialog(status) {
       await this.callback([status, Object.values(this.userInputs)]);
       this.clearInput();
     },
-
+    // validate and cleaning
     async confirmInput(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log("user inputs: ", this.userInputs);
+          console.log(">>>>")
           this.closeDialog("OK");
         }
       });
     },
-
+    // close by clicking "x"
     async beforeCloseRootLevel() {
       this.closeDialog("Cancelled");
     },

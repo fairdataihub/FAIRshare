@@ -12,18 +12,16 @@
 
 <script>
 import { useTokenStore } from "@/store/access";
-
 import AppDialog from "@/components/dialogs/AppDialog";
-
 import { ElNotification, ElLoading } from "element-plus";
 
 export default {
+  // empty component, only has a hidden dialog for accepting and process user-inputs 
   name: "ZenodoTokenConnection",
-
   components: { AppDialog },
-
   props: {
     onStatusChange: { type: Function, required: false, default: () => {} },
+    // callback function for cleaning
     callback: { type: Function },
   },
 
@@ -37,6 +35,7 @@ export default {
   },
 
   computed: {
+    // connection status
     connectedToZenodoByToken() {
       return (
         "zenodo" in this.manager.accessTokens &&
@@ -46,6 +45,7 @@ export default {
   },
 
   methods: {
+    // spinner
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -56,6 +56,7 @@ export default {
     openDialog() {
       this.useAPIkey();
     },
+    // receive results from user-inputs
     async getInputs(response) {
       this.dialogVisible = false;
       if (response[0] == "OK") {
@@ -70,6 +71,7 @@ export default {
         this.callback();
       }
     },
+    // check token, save token and return notification
     async processZenodo(userInput) {
       let key = "zenodo";
       let value = userInput[0];
@@ -108,7 +110,7 @@ export default {
       }
       spinner.close();
     },
-
+    // call a dialog for accepting user-inputs
     useAPIkey() {
       this.dialogNumInput = 2;
       this.dialogHeaders = [
@@ -118,7 +120,7 @@ export default {
       this.dialogVisible = true;
     },
   },
-
+  // call a dialog immediately when teh empty div was mounted
   async mounted() {
     await this.manager.loadTokens();
     this.openDialog();

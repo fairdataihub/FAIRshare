@@ -4,10 +4,10 @@
 
 <script>
 import { useTokenStore } from "../../store/access";
-
 import { ElNotification, ElLoading } from "element-plus";
 
 export default {
+  // empty component, only has functionalities
   name: "GithubOAuthConnection",
   props: {
     callback: { type: Function },
@@ -19,29 +19,8 @@ export default {
       spinnerGlobal: null,
     };
   },
-  computed: {
-    buttonStatus() {
-      let githubObject = {
-        buttonText: "Connect github account",
-        buttonStyle: "primary-plain-button",
-      };
-      if (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "OAuth"
-      ) {
-        githubObject.buttonText = "Disconnect github account";
-        githubObject.buttonStyle = "danger-plain-button";
-      }
-      return githubObject;
-    },
-    connectedToGithubByOAuth() {
-      return (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "OAuth"
-      );
-    },
-  },
   methods: {
+    // connect with backend to call a window for getting the github username/password
     async connectOAuth() {
       this.spinnerGlobal = this.createLoading();
       window.ipcRenderer.send("OAuth-Github", "test");
@@ -67,7 +46,6 @@ export default {
           } catch (e) {
             errorFound = true;
           }
-          await this.manager.saveToken("github", tokenObject);
           this.backgroundHasResponse = true;
           if (!errorFound) {
             ElNotification({
@@ -90,7 +68,7 @@ export default {
         this.spinnerGlobal.close();
       });
     },
-
+    // spinner function
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -100,7 +78,7 @@ export default {
     },
   },
   async mounted() {
-    //await this.manager.loadTokens();
+    // when the empty div was mounted, call the connection function immediately 
     await this.manager.loadTokens();
     this.connectOAuth();
   },

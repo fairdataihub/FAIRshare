@@ -5,72 +5,6 @@
     <div class="flex flex-col h-full w-full items-center">
       <div class="card-container">
         <div class="image-container">
-          <img src="../../assets/github.jpeg" class="image" />
-        </div>
-        <div class="card-container-content">
-          <div class="card-container-status">
-            <div class="centering-container">
-              <span
-                class="dot"
-                :class="{
-                  'bg-green-600': connectedToGithub,
-                  'bg-gray-600': !connectedToGithub,
-                }"
-              ></span>
-            </div>
-
-            <div class="centering-container">
-              <div
-                class="mr-2"
-                :class="{
-                  'text-green-600': connectedToGithub,
-                  'text-gray-600': !connectedToGithub,
-                }"
-              >
-                {{ githubDetails.status }}
-              </div>
-            </div>
-
-            <div
-              class="centering-container tag-container"
-              v-if="connectedToGithub"
-            >
-              <el-tag
-                type="success"
-                effect="plain"
-                class="text-green-600 border-green-400"
-              >
-                <el-icon> <user-filled /> </el-icon>
-                <span class="px-2">
-                  {{ githubDetails.name }}
-                </span>
-              </el-tag>
-            </div>
-          </div>
-          <div class="centering-container center">
-            <p>
-              Connect with your GitHub account by using an access token or
-              OAuth. Please see more details at
-              <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-                  )
-                "
-              >
-                GitHub access token documentation
-              </span>
-            </p>
-          </div>
-          <div class="centering-container bottom">
-            <ConnectGithub></ConnectGithub>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-container">
-        <div class="image-container">
           <img
             src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
             class="image"
@@ -137,6 +71,72 @@
           </div>
         </div>
       </div>
+      
+      <div class="card-container">
+        <div class="image-container">
+          <img src="../../assets/github.jpeg" class="image" />
+        </div>
+        <div class="card-container-content">
+          <div class="card-container-status">
+            <div class="centering-container">
+              <span
+                class="dot"
+                :class="{
+                  'bg-green-600': connectedToGithub,
+                  'bg-gray-600': !connectedToGithub,
+                }"
+              ></span>
+            </div>
+
+            <div class="centering-container">
+              <div
+                class="mr-2"
+                :class="{
+                  'text-green-600': connectedToGithub,
+                  'text-gray-600': !connectedToGithub,
+                }"
+              >
+                {{ githubDetails.status }}
+              </div>
+            </div>
+
+            <div
+              class="centering-container tag-container"
+              v-if="connectedToGithub"
+            >
+              <el-tag
+                type="success"
+                effect="plain"
+                class="text-green-600 border-green-400"
+              >
+                <el-icon> <user-filled /> </el-icon>
+                <span class="px-2">
+                  {{ githubDetails.name }}
+                </span>
+              </el-tag>
+            </div>
+          </div>
+          <div class="centering-container center">
+            <p>
+              Connect with your GitHub account by using an access token or
+              OAuth. Please see more details at
+              <span
+                class="text-url"
+                @click="
+                  openWebsite(
+                    'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                  )
+                "
+              >
+                GitHub access token documentation
+              </span>
+            </p>
+          </div>
+          <div class="centering-container bottom">
+            <ConnectGithub></ConnectGithub>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -173,6 +173,7 @@ export default {
   },
 
   computed: {
+    // zenodo status
     zenodoDetails() {
       let zenodoObject = {
         status: "Not Connected",
@@ -191,6 +192,7 @@ export default {
     connectedToZenodo() {
       return "zenodo" in this.manager.accessTokens;
     },
+    // github status
     githubDetails() {
       let githubObject = {
         status: "Not Connected",
