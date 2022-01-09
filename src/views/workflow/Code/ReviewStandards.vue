@@ -13,7 +13,10 @@
       <div class="flex flex-col space-y-4">
         <!-- template start -->
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Have you followed applicable high-level best practices for research software?</p>
+          <p>
+            Have you followed applicable high-level best practices for research
+            software?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -35,7 +38,10 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Have you followed applicable language-specific standards and best practices?</p>
+          <p>
+            Have you followed applicable language-specific standards and best
+            practices?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -57,7 +63,10 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Have you followed applicable domain-specific standards and best practices?</p>
+          <p>
+            Have you followed applicable domain-specific standards and best
+            practices?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -79,7 +88,10 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Is your software documentation following applicable standards and best practices?</p>
+          <p>
+            Is your software documentation following applicable standards and
+            best practices?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -101,7 +113,10 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Have you ensured that your code does not include any information violating HIPAA?</p>
+          <p>
+            Have you ensured that your code does not include any information
+            violating HIPAA?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
