@@ -137,7 +137,7 @@ export const useTokenStore = defineStore({
           },
         })
         .then((response) => {
-          console.log(response)
+          console.log(response);
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
@@ -164,25 +164,43 @@ export const useTokenStore = defineStore({
           },
         })
         .then((response) => {
-          return { scope: response.headers['x-oauth-scopes'] };
+          return { scope: response.headers["x-oauth-scopes"] };
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           return "Error Found";
         });
     },
 
     async verifyGithubTokenScope(token) {
-      const scope = ["admin:enterprise", "admin:gpg_key", "admin:org", "admin:org_hook", "admin:public_key", "admin:repo_hook", "delete:packages", "delete_repo", "gist", "notifications", "repo", "user", "workflow", "write:discussion", "write:packages"]
-      const response = await this.verifyGithubTokenScopeByTokenConnection(token);
-      if(response != "Error Found"){
-        if (scope.every(item => response.scope.includes(item))) {
+      const scope = [
+        "admin:enterprise",
+        "admin:gpg_key",
+        "admin:org",
+        "admin:org_hook",
+        "admin:public_key",
+        "admin:repo_hook",
+        "delete:packages",
+        "delete_repo",
+        "gist",
+        "notifications",
+        "repo",
+        "user",
+        "workflow",
+        "write:discussion",
+        "write:packages",
+      ];
+      const response = await this.verifyGithubTokenScopeByTokenConnection(
+        token
+      );
+      if (response != "Error Found") {
+        if (scope.every((item) => response.scope.includes(item))) {
           return true;
         } else {
           return false;
         }
       } else {
-        return false
+        return false;
       }
     },
 

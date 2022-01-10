@@ -57,7 +57,10 @@
               :title="licenseTitle"
               direction="rtl"
             >
-              <div v-loading="loading" :class="loading? 'w-full h-full':'w-[0px] h-[0px]'"></div>
+              <div
+                v-loading="loading"
+                :class="loading ? 'w-full h-full' : 'w-[0px] h-[0px]'"
+              ></div>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
@@ -128,8 +131,8 @@ export default {
     };
   },
   methods: {
-    finishLoading(){
-      this.loadingLicenseDetails = false; 
+    finishLoading() {
+      this.loadingLicenseDetails = false;
       this.loading = false;
     },
     async openLicenseDetails() {
