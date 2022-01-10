@@ -77,7 +77,9 @@ export default {
       let value = userInput[0];
       let spinner = this.createLoading();
       let errorFound = false;
-      if (await this.manager.verifyGithubToken(value)) {
+      const tokenValid = await this.manager.verifyGithubToken(value);
+      const scopeValid = await this.manager.verifyGithubTokenScope(value);
+      if (tokenValid && scopeValid) {
         let tokenObject = {};
         let name = await this.manager.getGithubUser(value);
         try {
@@ -97,6 +99,14 @@ export default {
           });
           this.callback();
         }
+      } else if (tokenValid && !scopeValid) {
+        ElNotification({
+          type: "warning",
+          message: "More permissions are required",
+          position: "bottom-right",
+          duration: 2000,
+        });
+        this.callback();
       } else {
         ElNotification({
           type: "error",

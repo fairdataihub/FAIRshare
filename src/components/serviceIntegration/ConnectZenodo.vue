@@ -1,6 +1,7 @@
 <template>
   <div>
     <button
+      class="w-48"
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
     >
@@ -14,7 +15,7 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button class="primary-plain-button" @click="showZenodoTokenConnect">
+          <button class="primary-plain-button w-52" @click="showZenodoTokenConnect">
             Connect with token
           </button>
           <el-popover
@@ -25,7 +26,7 @@
           >
             <template #reference>
               <div>
-                <el-button @click="showZenodoOAuthConnect" disabled>
+                <el-button class="w-52" @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </el-button>
               </div>
