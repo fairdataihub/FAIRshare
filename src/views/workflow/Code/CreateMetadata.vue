@@ -475,7 +475,7 @@
                   <el-input
                     v-model="codeForm.funding.organization"
                     type="text"
-                    placeholder="University of Michigan"
+                    placeholder="University of California, San Francisco"
                   ></el-input>
                   <form-help-content
                     popoverContent="The organization funding this software (comma separate if multiple)"
