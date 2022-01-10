@@ -13,7 +13,10 @@
       <div class="flex flex-col space-y-4">
         <!-- template start -->
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Is the data being curated in accordance with the standards?</p>
+          <p class="pb-2">
+            Have you followed applicable high-level best practices for research
+            software?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -35,7 +38,10 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>Is the data being curated in accordance with the standards?</p>
+          <p class="pb-2">
+            Have you followed applicable language-specific standards and best
+            practices?
+          </p>
 
           <el-collapse v-model="activeNames" class="border-none">
             <el-collapse-item class="test-header code-collapse-item">
@@ -52,6 +58,81 @@
               Yes
             </el-radio>
             <el-radio v-model="questions.question2" label="No" size="large">
+              No
+            </el-radio>
+          </div>
+        </div>
+        <div class="border-2 border-slate-100 p-4 rounded-lg">
+          <p class="pb-2">
+            Have you followed applicable domain-specific standards and best
+            practices?
+          </p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="py-2 px-3">Some explanation text here.</div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question3" label="Yes" size="large">
+              Yes
+            </el-radio>
+            <el-radio v-model="questions.question3" label="No" size="large">
+              No
+            </el-radio>
+          </div>
+        </div>
+        <div class="border-2 border-slate-100 p-4 rounded-lg">
+          <p class="pb-2">
+            Is your software documentation following applicable standards and
+            best practices?
+          </p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="py-2 px-3">Some explanation text here.</div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question4" label="Yes" size="large">
+              Yes
+            </el-radio>
+            <el-radio v-model="questions.question4" label="No" size="large">
+              No
+            </el-radio>
+          </div>
+        </div>
+        <div class="border-2 border-slate-100 p-4 rounded-lg">
+          <p class="pb-2">
+            Have you ensured that your code does not include any information
+            violating HIPAA?
+          </p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="py-2 px-3">Some explanation text here.</div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question5" label="Yes" size="large">
+              Yes
+            </el-radio>
+            <el-radio v-model="questions.question5" label="No" size="large">
               No
             </el-radio>
           </div>
@@ -101,6 +182,9 @@ export default {
       questions: {
         question1: "",
         question2: "",
+        question3: "",
+        question4: "",
+        question5: "",
       },
     };
   },

@@ -35,7 +35,7 @@
                   disabled
                 >
                   Connect with username
-                </el-button>
+                </button>
               </div>
             </template>
           </el-popover>

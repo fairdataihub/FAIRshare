@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import shutil
+import requests
 
 
 def foldersPresent(folder_path):
@@ -42,6 +43,31 @@ def deleteFile(file_path):
     try:
         if os.path.exists(file_path):
             os.remove(file_path)
+
+        return "SUCCESS"
+    except Exception as e:
+        raise e
+
+
+def requestJSON(url):
+    try:
+        payload = {}
+        headers = {}
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        return response.json()
+    except Exception as e:
+        raise e
+
+
+def createFile(folder_path, file_name, file_content, content_type):
+    try:
+        file_path = os.path.join(folder_path, file_name)
+
+        if content_type == "text":
+            with open(file_path, "w") as file:
+                file.write(file_content)
 
         return "SUCCESS"
     except Exception as e:

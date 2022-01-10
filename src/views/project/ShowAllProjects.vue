@@ -200,10 +200,10 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
-    let test = await this.datasetStore.getAllDatasets();
+    let allDatasets = await this.datasetStore.getAllDatasets();
 
     // make a local copy of the datasets object
-    const datasets = JSON.parse(JSON.stringify(test));
+    const datasets = JSON.parse(JSON.stringify(allDatasets));
 
     // filter datasets in progress
     let datasetsInProgressIDs = [];

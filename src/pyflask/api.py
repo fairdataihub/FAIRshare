@@ -18,7 +18,7 @@ from zenodo import (
     deleteZenodoDeposition,
 )
 from metadata import createMetadata, createCitationCFF
-from utilities import foldersPresent, zipFolder, deleteFile
+from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile
 
 API_VERSION = "0.0.1"
 
@@ -73,7 +73,9 @@ class HelloWorld(Resource):
     @api.response(400, "Validation Error")
     def get(self):
         """Returns a simple 'Server Active' message"""
+
         response = "Server active!"
+
         return response
 
 
@@ -437,7 +439,80 @@ class DeleteFile(Resource):
         return deleteFile(file_path)
 
 
-# KEY
+@utilities.route("/requestjson", endpoint="RequestJSON")
+class RequestJSON(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "url": "url to request from the web.",
+        },
+    )
+    def post(self):
+        """request a json file from the web"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "url",
+            type=str,
+            required=True,
+            help="url that needs a CORS proxy",
+        )
+
+        args = parser.parse_args()
+
+        url = args["url"]
+        return requestJSON(url)
+
+
+@utilities.route("/createfile", endpoint="CreateFile")
+class CreateFile(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "folder path to generate files in",
+            "file_name": "name of the file to generate",
+            "file_content": "content of the file. Will be string",
+            "content_type": "content type to determine what it is written with",
+        },
+    )
+    def post(self):
+        """create a file in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to generate files in",
+        )
+        parser.add_argument(
+            "file_name",
+            type=str,
+            required=True,
+            help="name of the file to generate",
+        )
+        parser.add_argument(
+            "file_content",
+            type=str,
+            required=True,
+            help="content of the file",
+        )
+        parser.add_argument(
+            "content_type",
+            type=str,
+            required=True,
+            help="content type to determine what it is written with",
+        )
+
+        args = parser.parse_args()
+
+        folder_path = args["folder_path"]
+        file_name = args["file_name"]
+        file_content = args["file_content"]
+        content_type = args["content_type"]
+
+        return createFile(folder_path, file_name, file_content, content_type)
+
 
 # 5000 is the flask default port.
 # Using 7632 since it spells SODA lol.

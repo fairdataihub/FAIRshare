@@ -18,7 +18,7 @@
         :model="codeForm"
         label-width="160px"
         label-position="top"
-        size="small"
+        size="large"
         ref="cmForm"
         @submit.prevent
         class="py-4"
@@ -475,7 +475,7 @@
                   <el-input
                     v-model="codeForm.funding.organization"
                     type="text"
-                    placeholder="University of Michigan"
+                    placeholder="University of California, San Francisco"
                   ></el-input>
                   <form-help-content
                     popoverContent="The organization funding this software (comma separate if multiple)"
