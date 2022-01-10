@@ -18,7 +18,7 @@
         :model="codeForm"
         label-width="160px"
         label-position="top"
-        size="small"
+        size="large"
         ref="cmForm"
         @submit.prevent
         class="py-4"
