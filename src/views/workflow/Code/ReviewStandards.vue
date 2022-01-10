@@ -13,7 +13,7 @@
       <div class="flex flex-col space-y-4">
         <!-- template start -->
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>
+          <p class="pb-2">
             Have you followed applicable high-level best practices for research
             software?
           </p>
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>
+          <p class="pb-2">
             Have you followed applicable language-specific standards and best
             practices?
           </p>
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>
+          <p class="pb-2">
             Have you followed applicable domain-specific standards and best
             practices?
           </p>
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>
+          <p class="pb-2">
             Is your software documentation following applicable standards and
             best practices?
           </p>
@@ -113,7 +113,7 @@
           </div>
         </div>
         <div class="border-2 border-slate-100 p-4 rounded-lg">
-          <p>
+          <p class="pb-2">
             Have you ensured that your code does not include any information
             violating HIPAA?
           </p>
@@ -182,6 +182,9 @@ export default {
       questions: {
         question1: "",
         question2: "",
+        question3: "",
+        question4: "",
+        question5: "",
       },
     };
   },
