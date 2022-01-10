@@ -1,6 +1,7 @@
 <template>
   <div>
     <button
+      class="w-48"
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
     >
@@ -15,7 +16,7 @@
       <div class="dialog-Container">
         <div class="inputField">
           <button
-            class="primary-plain-button w-56"
+            class="primary-plain-button w-52"
             @click="showZenodoTokenConnect"
           >
             Connect with token
@@ -28,11 +29,7 @@
           >
             <template #reference>
               <div>
-                <button
-                  class="primary-plain-button"
-                  @click="showZenodoOAuthConnect"
-                  disabled="disabled"
-                >
+                <button class="w-52" @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </button>
               </div>

@@ -8,7 +8,14 @@
     >
       <template #reference>
         <div>
-          <el-button @click="interactWithService('github')" disabled>
+          <!-- <button class="w-48" @click="interactWithService('github')" :class="githubDetails.buttonStyle">
+            {{ githubDetails.action }}
+          </button> -->
+          <el-button
+            class="w-48"
+            @click="interactWithService('github')"
+            disabled
+          >
             {{ githubDetails.action }}
           </el-button>
         </div>
@@ -23,13 +30,13 @@
       <div class="dialog-Container">
         <div class="inputField">
           <button
-            class="primary-plain-button w-56"
+            class="primary-plain-button w-52"
             @click="showGithubTokenConnect"
           >
             Connect with token
           </button>
           <button
-            class="primary-plain-button w-56"
+            class="primary-plain-button w-52"
             @click="showGithubOAuthConnect"
           >
             Connect with username

@@ -59,11 +59,15 @@
               :title="licenseTitle"
               direction="rtl"
             >
+              <div
+                v-loading="loading"
+                :class="loading ? 'w-full h-full' : 'w-[0px] h-[0px]'"
+              ></div>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
                 class="w-full h-full"
-                :load="(loadingLicenseDetails = false)"
+                @load="finishLoading"
               ></iframe>
             </el-drawer>
           </el-form-item>
@@ -144,6 +148,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       datasetStore: useDatasetsStore(),
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
@@ -201,6 +206,10 @@ export default {
     },
   },
   methods: {
+    finishLoading() {
+      this.loadingLicenseDetails = false;
+      this.loading = false;
+    },
     async openLicenseDetails() {
       this.spinnerGlobal = await this.createLoading();
 
