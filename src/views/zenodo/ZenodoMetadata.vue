@@ -1308,6 +1308,12 @@ export default {
         });
     },
     addZenodoMetadata(_evt, shouldNavigateBack = false) {
+      console.log(this.zenodoMetadataForm.publicationDate);
+      if (this.zenodoMetadataForm.publicationDate === "") {
+        ElMessage.error("Please add a publication date.");
+        return;
+      }
+
       if (this.zenodoMetadataForm.license.licenseName === "") {
         ElMessage.error("Please select a license.");
         return;
@@ -1344,9 +1350,11 @@ export default {
 
         let date = new Date();
 
-        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${
+        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(
           date.getMonth() + 1
-        }-${date.getDate()}`;
+        )
+          .toString()
+          .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
         if ("name" in generalForm) {
           this.zenodoMetadataForm.title = generalForm.name;
