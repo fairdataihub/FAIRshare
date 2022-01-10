@@ -34,6 +34,7 @@
               filterable
               placeholder="Select a license"
               class="w-full"
+              @change="licenseChange"
             >
               <el-option
                 v-for="item in licenseOptions"
@@ -44,27 +45,56 @@
               </el-option>
             </el-select>
 
-            <button
-              class="secondary-plain-button my-4 px-2 py-1 h-[30px]"
+            <div
+              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
-              Show license details
-            </button>
+              <span class="text-base font-medium"> Show license details </span>
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+            </div>
 
             <el-drawer
               v-model="showLicenseDetails"
               :title="licenseTitle"
               direction="rtl"
             >
+              <div
+                v-loading="loading"
+                :class="loading ? 'w-full h-full' : 'w-[0px] h-[0px]'"
+              ></div>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
                 class="w-full h-full"
-                :load="(loadingLicenseDetails = false)"
+                @load="finishLoading"
               ></iframe>
             </el-drawer>
           </el-form-item>
+
+          <div v-if="licenseChanged">
+            <p class="text-base">
+              Do you want to create and add a license terms file into your
+              dataset?
+            </p>
+
+            <div class="pb-3">
+              <el-radio-group v-model="saveLicense" @change="showLicenseEditor">
+                <el-radio label="Yes" size="large"> Yes </el-radio>
+                <el-radio label="No" size="large"> No </el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+
+          <div v-if="displayLicenseEditor">
+            <p class="py-2">Edit if required and continue</p>
+            <el-input
+              v-model="draftLicense"
+              autosize
+              type="textarea"
+              placeholder="Please input"
+            />
+          </div>
         </el-form>
       </div>
 
@@ -78,7 +108,22 @@
           </button>
         </router-link>
 
-        <button class="primary-button" @click="startCuration" id="continue">
+        <button
+          v-if="displayLicenseEditor"
+          class="primary-button"
+          @click="generateContinue"
+        >
+          Generate license and Continue
+          <el-icon> <d-arrow-right /> </el-icon>
+        </button>
+
+        <button
+          v-else
+          class="primary-button"
+          @click="startCuration"
+          id="continue"
+          :disabled="licenseDisabled"
+        >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -92,10 +137,18 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
+import { Icon } from "@iconify/vue";
+import { ElLoading } from "element-plus";
+import axios from "axios";
+
 export default {
   name: "CodePickLicense",
+  components: {
+    Icon,
+  },
   data() {
     return {
+      loading: true,
       datasetStore: useDatasetsStore(),
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
@@ -123,15 +176,48 @@ export default {
       showLicenseDetails: false,
       loadingLicenseDetails: false,
       licenseOptions: licensesJSON.licenses,
+      spinnerGlobal: null,
+      licenseChanged: false,
+      originalLicense: "",
+      saveLicense: "",
+      displayLicenseEditor: false,
+      draftLicense: "",
     };
   },
+  computed: {
+    licenseDisabled() {
+      let disabled = false;
+
+      if (this.licenseForm.license === "") {
+        return true;
+      }
+
+      if (this.licenseChanged) {
+        disabled = true;
+      }
+
+      if (disabled && this.saveLicense === "") {
+        return true;
+      } else if (disabled && this.saveLicense === "No") {
+        return false;
+      }
+
+      return disabled;
+    },
+  },
   methods: {
+    finishLoading() {
+      this.loadingLicenseDetails = false;
+      this.loading = false;
+    },
     async openLicenseDetails() {
+      this.spinnerGlobal = await this.createLoading();
+
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
 
       //get license object
-      const licenseObject = this.licenseOptions.find(
+      const licenseObject = await this.licenseOptions.find(
         (license) => license.licenseId === licenseId
       );
 
@@ -140,6 +226,70 @@ export default {
 
       this.showLicenseDetails = true;
       this.loadingLicenseDetails = true;
+      await this.spinnerGlobal.close();
+    },
+    createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "loading...",
+      });
+      return loading;
+    },
+    licenseChange(val) {
+      if (this.originalLicense !== val) {
+        this.licenseChanged = true;
+        this.displayLicenseEditor = false;
+        this.saveLicense = "";
+        this.draftLicense = "";
+      } else {
+        this.licenseChanged = false;
+      }
+    },
+    async showLicenseEditor() {
+      if (this.saveLicense === "Yes") {
+        const licenseId = this.licenseForm.license;
+
+        // get license object
+        const licenseObject = this.licenseOptions.find(
+          (license) => license.licenseId === licenseId
+        );
+
+        const licensejson = licenseObject.detailsUrl;
+
+        const response = await axios
+          .post(`${this.$server_url}/utilities/requestjson`, {
+            url: licensejson,
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        console.log(response);
+        this.draftLicense = response.licenseText;
+
+        this.displayLicenseEditor = true;
+      } else {
+        this.displayLicenseEditor = false;
+      }
+    },
+    generateContinue() {
+      this.dataset.data.Code.questions.license = this.licenseForm.license;
+      this.dataset.data.general.questions.license = this.licenseForm.license;
+
+      // turn this to false after license is generated at the end of the workflow
+      this.workflow.generateLicense = true;
+      this.workflow.licenseText = this.draftLicense;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      this.$router.push(
+        `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
+      );
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
@@ -174,8 +324,10 @@ export default {
       "license" in this.dataset.data.Code.questions
     ) {
       this.licenseForm.license = this.dataset.data.Code.questions.license;
+      this.originalLicense = this.licenseForm.license;
     } else {
       this.licenseForm.license = "";
+      this.originalLicense = "";
     }
   },
 };

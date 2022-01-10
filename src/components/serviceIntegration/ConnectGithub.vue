@@ -1,11 +1,26 @@
 <template>
   <div>
-    <button
-      :class="githubDetails.buttonStyle"
-      @click="interactWithService('github')"
+    <el-popover
+      placement="bottom"
+      :hide-after="0"
+      trigger="hover"
+      content="Coming soon..."
     >
-      {{ githubDetails.action }}
-    </button>
+      <template #reference>
+        <div>
+          <!-- <button class="w-48" @click="interactWithService('github')" :class="githubDetails.buttonStyle">
+            {{ githubDetails.action }}
+          </button> -->
+          <el-button
+            class="w-48"
+            @click="interactWithService('github')"
+            disabled
+          >
+            {{ githubDetails.action }}
+          </el-button>
+        </div>
+      </template>
+    </el-popover>
     <el-dialog
       width="600px"
       title="Select an option to connect to GitHub"
@@ -14,10 +29,16 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button class="primary-plain-button" @click="showGithubTokenConnect">
+          <button
+            class="primary-plain-button w-52"
+            @click="showGithubTokenConnect"
+          >
             Connect with token
           </button>
-          <button class="primary-plain-button" @click="showGithubOAuthConnect">
+          <button
+            class="primary-plain-button w-52"
+            @click="showGithubOAuthConnect"
+          >
             Connect with username
           </button>
         </div>
@@ -37,18 +58,16 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
 import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
-import ButtonInputDialog from "@/components/dialogs/ButtonInputDialog";
 import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
 export default {
+  // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectGithub",
   components: {
     GithubTokenConnection: GithubTokenConnection,
     GithubOAuthConnection: GithubOAuthConnection,
-    ButtonInputDialog,
   },
   setup() {
     const manager = useTokenStore();
@@ -65,12 +84,14 @@ export default {
     };
   },
   methods: {
+    // callbacks for cleaning
     hideGithubTokenConnect() {
       this.showTokenConnect = false;
     },
     hideGithubOAuthConnect() {
       this.showOAuthConnect = false;
     },
+    // call child components
     showGithubTokenConnect() {
       this.showTokenConnect = true;
       this.dialogVisible = false;
@@ -79,6 +100,7 @@ export default {
       this.showOAuthConnect = true;
       this.dialogVisible = false;
     },
+    // delete key or add key
     interactWithService(serviceName) {
       if (serviceName == "github") {
         if ("github" in this.manager.accessTokens) {
@@ -88,6 +110,7 @@ export default {
         }
       }
     },
+    // delete key and give notification
     APIkeyWarning(key) {
       ElMessageBox.confirm(
         "Disconnecting will delete the access token stored. Continue?",
@@ -129,6 +152,7 @@ export default {
     },
   },
   computed: {
+    // github status for the button
     githubDetails() {
       let githubObject = {
         status: "Not Connected",

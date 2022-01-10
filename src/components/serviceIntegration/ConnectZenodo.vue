@@ -1,6 +1,7 @@
 <template>
   <div>
     <button
+      class="w-48"
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
     >
@@ -14,7 +15,10 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button class="primary-plain-button" @click="showZenodoTokenConnect">
+          <button
+            class="primary-plain-button w-52"
+            @click="showZenodoTokenConnect"
+          >
             Connect with token
           </button>
           <el-popover
@@ -25,11 +29,7 @@
           >
             <template #reference>
               <div>
-                <button
-                  class="primary-plain-button"
-                  @click="showZenodoOAuthConnect"
-                  disabled
-                >
+                <button class="w-52" @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </button>
               </div>
@@ -50,12 +50,11 @@
 
 <script>
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
-
 import { useTokenStore } from "@/store/access";
-
 import { ElNotification, ElMessageBox } from "element-plus";
 
 export default {
+  // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectZenodo",
   components: {
     ZenodoTokenConnection: ZenodoTokenConnection,
@@ -76,12 +75,14 @@ export default {
     };
   },
   methods: {
+    // callbacks for cleaning
     hideZenodoTokenConnect() {
       this.showTokenConnect = false;
     },
     hideZenodoOAuthConnect() {
       this.showOAuthConnect = false;
     },
+    // call child components
     showZenodoTokenConnect() {
       this.showTokenConnect = true;
       this.dialogVisible = false;
@@ -90,6 +91,7 @@ export default {
       this.showOAuthConnect = true;
       this.dialogVisible = false;
     },
+    // delete key or add key
     interactWithService(serviceName) {
       if (serviceName == "zenodo") {
         if ("zenodo" in this.manager.accessTokens) {
@@ -99,6 +101,7 @@ export default {
         }
       }
     },
+    // delete key and give notification
     APIkeyWarning(key) {
       ElMessageBox.confirm(
         "Disconnecting will delete the access token stored. Continue?",
@@ -140,6 +143,7 @@ export default {
     },
   },
   computed: {
+    // zneodo status
     zenodoDetails() {
       let zenodoObject = {
         status: "Not Connected",
