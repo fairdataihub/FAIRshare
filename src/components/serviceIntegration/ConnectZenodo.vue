@@ -29,11 +29,7 @@
           >
             <template #reference>
               <div>
-                <el-button
-                  class="w-52"
-                  @click="showZenodoOAuthConnect"
-                  disabled
-                >
+                <button class="w-52" @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </button>
               </div>
