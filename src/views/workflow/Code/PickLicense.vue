@@ -83,7 +83,7 @@
           </div>
 
           <div v-if="displayLicenseEditor">
-            <p class="">Edit if required and continue</p>
+            <p class="py-2">Edit if required and continue</p>
             <el-input
               v-model="draftLicense"
               autosize
