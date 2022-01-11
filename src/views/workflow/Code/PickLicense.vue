@@ -88,11 +88,12 @@
 
           <div v-if="displayLicenseEditor">
             <p class="py-2">Edit if required and continue</p>
-            <el-input
-              v-model="draftLicense"
-              autosize
-              type="textarea"
-              placeholder="Please input"
+
+            <QuillEditor
+              theme="snow"
+              :content="draftLicense"
+              toolbar="essential"
+              contentType="text"
             />
           </div>
         </el-form>
@@ -141,10 +142,14 @@ import { Icon } from "@iconify/vue";
 import { ElLoading } from "element-plus";
 import axios from "axios";
 
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
+
 export default {
   name: "CodePickLicense",
   components: {
     Icon,
+    QuillEditor,
   },
   data() {
     return {

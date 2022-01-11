@@ -31,6 +31,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.0",
     "@element-plus/icons-vue": "^0.2.4",
+    "@vueup/vue-quill": "^1.0.0-beta.7",
     "axios": "^0.21.2",
     "axios-retry": "^3.2.0",
     "core-js": "^3.6.5",
