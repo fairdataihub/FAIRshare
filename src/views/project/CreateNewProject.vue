@@ -165,7 +165,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document class="h-12 w-12 my-2"></document>
+                      <document-icon class="h-12 w-12 my-2" />
                       <span class="text-sm">Document</span>
                     </div>
                   </el-checkbox>

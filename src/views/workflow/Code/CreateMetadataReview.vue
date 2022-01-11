@@ -18,7 +18,7 @@
         >
           <template #extra>
             <el-button type="primary" @click="editInformation(['general'])">
-              <el-icon><edit /></el-icon> Edit basic information
+              <el-icon><edit-icon /></el-icon> Edit basic information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -96,7 +96,7 @@
         <el-descriptions class="margin-top" title="Code" size="small" border>
           <template #extra>
             <el-button type="primary" @click="editInformation(['code'])">
-              <el-icon><edit /></el-icon> Edit code metadata
+              <el-icon><edit-icon /></el-icon> Edit code metadata
             </el-button>
           </template>
 

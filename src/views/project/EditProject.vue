@@ -107,7 +107,7 @@
           <br />
 
           <button class="danger-button py-0" @click="deleteDataset">
-            <el-icon><delete /></el-icon> Delete project
+            <el-icon><delete-icon /></el-icon> Delete project
           </button>
         </el-form-item>
       </el-form>

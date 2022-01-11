@@ -1,7 +1,6 @@
 <template>
   <div>
     <button
-      class="w-48"
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
     >
@@ -50,6 +49,7 @@
 
 <script>
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
+
 import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
 

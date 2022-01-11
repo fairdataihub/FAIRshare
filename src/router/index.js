@@ -30,10 +30,9 @@ import ManageAccount from "../views/manage/ManageAccount.vue";
 
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
-import About from "../views/about.vue";
 
 const routes = [
-  { path: "/", redirect: "/datasets" },
+  { path: "/", redirect: "/home" },
   { path: "/home", component: HomePage },
   { path: "/datasets", component: ShowAllProjects, name: "ShowAllProjects" },
   {
@@ -108,7 +107,6 @@ const routes = [
   },
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
   { path: "/manageAccount", component: ManageAccount },
-  { path: "/about", component: About },
 ];
 
 export const router = createRouter({

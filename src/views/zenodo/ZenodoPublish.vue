@@ -26,7 +26,7 @@
             class="blob transition-all primary-button"
             @click="publishDeposition"
           >
-            Publish <el-icon><star /></el-icon>
+            Publish <el-icon><star-icon /></el-icon>
           </button>
         </div>
       </div>

@@ -18,7 +18,7 @@
           :class="{ 'selected-repo': repoID === 'My computer' }"
           @click="selectRepo('My computer')"
         >
-          <monitor class="h-24 w-16"></monitor>
+          <monitor-icon class="h-24 w-16" />
           <span class="text-lg mx-5"> My computer </span>
         </div>
 

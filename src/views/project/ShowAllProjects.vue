@@ -105,7 +105,7 @@
             v-if="selectedDataset !== ''"
           >
             <button class="secondary-plain-button" @click="editProject">
-              <el-icon><setting /></el-icon> Project settings
+              <el-icon><setting-icon /></el-icon> Project settings
             </button>
             <button class="primary-button" @click="startCuratingProject">
               Continue working on this project

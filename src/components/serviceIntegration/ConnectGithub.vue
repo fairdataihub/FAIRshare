@@ -11,11 +11,7 @@
           <!-- <button class="w-48" @click="interactWithService('github')" :class="githubDetails.buttonStyle">
             {{ githubDetails.action }}
           </button> -->
-          <el-button
-            class="w-48"
-            @click="interactWithService('github')"
-            disabled
-          >
+          <el-button @click="interactWithService('github')" disabled>
             {{ githubDetails.action }}
           </el-button>
         </div>
@@ -60,8 +56,10 @@
 <script>
 import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
 import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
+
 import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
+
 export default {
   // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectGithub",

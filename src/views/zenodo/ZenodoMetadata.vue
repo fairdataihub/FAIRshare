@@ -147,7 +147,7 @@
                 :error="descriptionErrorMessage"
                 :required="true"
               >
-                <Popper
+                <VuePopper
                   :hover="true"
                   offsetDistance="0"
                   content="Use a description that is easily identifiable. This will
@@ -159,7 +159,7 @@
                     v-model="zenodoMetadataForm.description"
                     type="textarea"
                   ></el-input>
-                </Popper>
+                </VuePopper>
               </el-form-item>
 
               <el-form-item label="Version" :error="versionErrorMessage">
@@ -299,7 +299,7 @@
                 >
                   <el-radio label="open">
                     <el-icon>
-                      <unlock />
+                      <unlock-icon />
                     </el-icon>
                     Open Access
                   </el-radio>
@@ -308,13 +308,13 @@
                   </el-radio>
                   <el-radio label="restricted" disabled>
                     <el-icon>
-                      <key />
+                      <key-icon />
                     </el-icon>
                     Restricted Access
                   </el-radio>
                   <el-radio label="closed" disabled>
                     <el-icon>
-                      <lock />
+                      <lock-icon />
                     </el-icon>
                     Closed Access
                   </el-radio>

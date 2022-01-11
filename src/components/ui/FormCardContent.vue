@@ -27,7 +27,7 @@
         size="medium"
         :disabled="checkInvalidStatus"
       >
-        <el-icon v-if="!firstStep"><back /></el-icon>
+        <el-icon v-if="!firstStep"><back-icon /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
       </button>
       <!-- :plain="!lastStep" -->
@@ -38,7 +38,7 @@
       >
         {{ nextText }}
         <el-icon v-if="lastStep"><d-arrow-right /></el-icon>
-        <el-icon v-else><right /></el-icon>
+        <el-icon v-else><right-icon /></el-icon>
       </button>
     </div>
   </div>
