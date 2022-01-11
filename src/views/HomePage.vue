@@ -5,12 +5,12 @@
     <div class="flex flex-col h-full w-full items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="w-full flex justify-center items-center py-5">
-          <h1 class="font-bold text-5xl xl:text-6xl text-primary-600">
+          <h1 class="font-bold text-5xl xl:text-6xl text-slate-800">
             SODA for COVID-19 Research
           </h1>
         </div>
         <div class="w-full flex justify-center items-center py-3 mb-10">
-          <h2 class="font-medium text-3xl xl:text-4xl text-primary-500">
+          <h2 class="font-medium text-3xl xl:text-4xl text-slate-700">
             Make your COVID-19 related data, and beyond, FAIR
           </h2>
         </div>
@@ -24,7 +24,7 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>
@@ -36,7 +36,7 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>
@@ -48,7 +48,7 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>

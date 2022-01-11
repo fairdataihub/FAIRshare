@@ -82,9 +82,9 @@ async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1150,
-    height: 800,
+    height: 850,
     minWidth: 1150,
-    minHeight: 800,
+    minHeight: 850,
     show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
