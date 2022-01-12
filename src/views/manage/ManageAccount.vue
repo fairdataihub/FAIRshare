@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-lg p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full items-center">
+    <div class="flex flex-col items-center w-full h-full">
       <div class="card-container">
         <div class="image-container">
           <img

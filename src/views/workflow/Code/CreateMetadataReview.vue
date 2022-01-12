@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
-    <div class="flex flex-col h-full w-full">
+  <div class="flex flex-col items-center justify-center w-full h-full p-3 px-5">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left"> Review metadata </span>
       <span class="text-left">
         Let's go through all your submitted metadata and verify that everything
@@ -226,7 +226,7 @@
         </el-descriptions>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex flex-row justify-center w-full py-2 space-x-4">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
           class=""

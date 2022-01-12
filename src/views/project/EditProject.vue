@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-screen w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="flex flex-col items-center justify-center w-full h-screen max-w-screen-xl p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full">
-      <el-page-header @back="goBack" class="text-lg hidden">
+    <div class="flex flex-col w-full h-full">
+      <el-page-header @back="goBack" class="hidden text-lg">
         <template #content>
           <p>
             Project settings -
@@ -27,7 +27,7 @@
         :model="datasetForm"
         label-width="150px"
         @submit.prevent
-        class="border-2 border-slate-100 p-4 rounded-lg"
+        class="p-4 border-2 rounded-lg border-slate-100"
         :rules="rules"
       >
         <el-form-item label="Dataset name" prop="datasetName">
@@ -49,7 +49,7 @@
               ></el-input>
             </template>
 
-            <span class="break-normal text-left text-sm">
+            <span class="text-sm text-left break-normal">
               Use a description that is easily identifiable. This will be shown
               in the dataset selection screen and is not part of your submitted
               metadata.
@@ -106,12 +106,12 @@
 
           <br />
 
-          <button class="danger-button py-0" @click="deleteDataset">
+          <button class="py-0 danger-button" @click="deleteDataset">
             <el-icon><delete-icon /></el-icon> Delete project
           </button>
         </el-form-item>
       </el-form>
-      <div class="py-4 flex flex-row justify-center space-x-4">
+      <div class="flex flex-row justify-center py-4 space-x-4">
         <button class="danger-plain-button" @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
         </button>
@@ -119,7 +119,7 @@
           Save changes <el-icon><circle-check-filled /></el-icon>
         </button>
       </div>
-      <div class="py-2 flex flex-row justify-center space-x-4 hidden">
+      <div class="flex flex-row justify-center hidden py-2 space-x-4">
         <button class="primary-plain-button">
           Test button <el-icon><circle-check-filled /></el-icon>
         </button>

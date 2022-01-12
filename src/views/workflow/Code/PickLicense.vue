@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Select a license that defines the desired conditions for using your
         software
@@ -23,7 +23,7 @@
             <template #label>
               <div class="flex">
                 <span> License </span>
-                <span class="text-red-500 px-1"> * </span>
+                <span class="px-1 text-red-500"> * </span>
                 <form-help-content
                   popoverContent="<p class='text-sm'> Required. Selected license applies to all of your files <br /> If you want to upload some of your files under different licenses, please do so in separate uploads. <br /> If you cannot find the license you're looking for, include a relevant LICENSE file in your record and choose one of the <span class='italic'> Other </span> licenses available <span class='italic'> (Other (Open), Other (Attribution) </span>, etc.). <br /> The supported licenses in the list are harvested from <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://opendefinition.org`)' class='text-url'> opendefinition.org </a> and <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://spdx.org`)' class='text-url' > spdx.org </a>.</p>"
                 ></form-help-content>
@@ -46,12 +46,12 @@
             </el-select>
 
             <div
-              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+              class="flex flex-row items-center my-3 cursor-pointer w-max text-primary-600 hover-underline-animation"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
               <span class="text-base font-medium"> Show license details </span>
-              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+              <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
             </div>
 
             <el-drawer
@@ -99,7 +99,7 @@
         </el-form>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex flex-row justify-center w-full py-2 space-x-4">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""

@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
-    <div class="flex flex-col h-full w-full">
+  <div class="flex flex-col items-center justify-center w-full h-full p-3 pr-5">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Zenodo metadata review
       </span>
@@ -387,7 +387,7 @@
         </el-descriptions>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2">
+      <div class="flex flex-row justify-center w-full py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class="mx-3"

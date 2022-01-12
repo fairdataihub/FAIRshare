@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Provide information about your research sofware
       </span>
@@ -114,7 +114,7 @@
                 </el-select>
 
                 <p
-                  class="text-sm pt-2 text-gray-500 cursor-pointer hover:text-gray-800"
+                  class="pt-2 text-sm text-gray-500 cursor-pointer hover:text-gray-800"
                   v-if="codeForm.license != ''"
                   @click="openLicenseDetails"
                 >
@@ -160,7 +160,7 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row mb-2 justify-between transition-all"
+                      class="flex flex-row justify-between mb-2 transition-all"
                     >
                       <div class="flex flex-row justify-between w-11/12">
                         <el-input
@@ -191,7 +191,7 @@
                             type="text"
                             placeholder="E-mail address"
                           ></el-input>
-                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                          <span class="mt-1 ml-2 text-xs text-gray-400">
                             Optional
                           </span>
                         </div>
@@ -202,21 +202,21 @@
                             type="text"
                             placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                           ></el-input>
-                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                          <span class="mt-1 ml-2 text-xs text-gray-400">
                             Optional
                           </span>
                         </div>
                       </div>
                       <div
-                        class="flex flex-row justify-evenly items-start py-2 w-1/12"
+                        class="flex flex-row items-start w-1/12 py-2 justify-evenly"
                       >
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -236,7 +236,7 @@
                 </draggable>
               </el-form-item>
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max mb-6 text-sm"
+                class="flex items-center mb-6 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
                 @click="addAuthor"
               >
                 <Icon icon="carbon:add" />
@@ -260,7 +260,7 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row mb-2 justify-between transition-all"
+                      class="flex flex-row justify-between mb-2 transition-all"
                     >
                       <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
                         <el-select
@@ -279,7 +279,7 @@
                       </div>
 
                       <div class="flex flex-row justify-between w-11/12">
-                        <div class="mr-2 w-1/5">
+                        <div class="w-1/5 mr-2">
                           <el-input
                             v-model="element.givenName"
                             type="text"
@@ -287,7 +287,7 @@
                           ></el-input>
                         </div>
 
-                        <div class="mx-2 w-1/5">
+                        <div class="w-1/5 mx-2">
                           <el-input
                             v-model="element.familyName"
                             type="text"
@@ -295,7 +295,7 @@
                           ></el-input>
                         </div>
 
-                        <div class="mx-2 w-1/5">
+                        <div class="w-1/5 mx-2">
                           <el-input
                             v-model="element.affiliation"
                             type="text"
@@ -303,38 +303,38 @@
                           ></el-input>
                         </div>
 
-                        <div class="mx-2 w-1/5 flex flex-col">
+                        <div class="flex flex-col w-1/5 mx-2">
                           <el-input
                             v-model="element.email"
                             type="text"
                             placeholder="E-mail address"
                           ></el-input>
-                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                          <span class="mt-1 ml-2 text-xs text-gray-400">
                             Optional
                           </span>
                         </div>
 
-                        <div class="mx-2 w-1/5 flex flex-col">
+                        <div class="flex flex-col w-1/5 mx-2">
                           <el-input
                             v-model="element.orcid"
                             type="text"
                             placeholder="ORCID (e.g. 0000-0002-1825-0097)"
                           ></el-input>
-                          <span class="text-xs text-gray-400 mt-1 ml-2">
+                          <span class="mt-1 ml-2 text-xs text-gray-400">
                             Optional
                           </span>
                         </div>
                       </div>
                       <div
-                        class="flex flex-row justify-evenly items-start py-2 w-1/12"
+                        class="flex flex-row items-start w-1/12 py-2 justify-evenly"
                       >
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -355,7 +355,7 @@
               </el-form-item>
 
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max text-sm"
+                class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
                 @click="addContributor"
               >
                 <Icon icon="carbon:add" />
@@ -408,7 +408,7 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row mb-2 justify-between transition-all"
+                      class="flex flex-row justify-between mb-2 transition-all"
                     >
                       <div class="flex flex-row justify-between w-11/12">
                         <el-input
@@ -420,14 +420,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row justify-evenly w-1/12">
+                      <div class="flex flex-row w-1/12 justify-evenly">
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -447,7 +447,7 @@
                 </draggable>
               </el-form-item>
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max pb-3 text-sm"
+                class="flex items-center pb-3 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
                 @click="addKeyword"
               >
                 <Icon icon="carbon:add" />
@@ -549,7 +549,7 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row mb-2 justify-between transition-all"
+                      class="flex flex-row justify-between mb-2 transition-all"
                     >
                       <div class="flex flex-row justify-between w-11/12">
                         <el-input
@@ -559,14 +559,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row justify-evenly w-1/12">
+                      <div class="flex flex-row w-1/12 justify-evenly">
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -586,7 +586,7 @@
                 </draggable>
               </el-form-item>
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max text-sm"
+                class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
                 @click="addRelatedLink"
               >
                 <Icon icon="carbon:add" />
@@ -689,7 +689,7 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row mb-2 justify-between transition-all"
+                      class="flex flex-row justify-between mb-2 transition-all"
                     >
                       <div class="flex flex-row justify-between w-11/12">
                         <el-input
@@ -699,14 +699,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row justify-evenly w-1/12">
+                      <div class="flex flex-row w-1/12 justify-evenly">
                         <div
-                          class="flex justify-center items-center handle text-gray-400 hover:text-gray-700"
+                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex justify-center items-center text-gray-600 hover:text-gray-800 cursor-pointer"
+                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -728,7 +728,7 @@
                 </draggable>
               </el-form-item>
               <div
-                class="flex items-center cursor-pointer text-gray-500 hover:text-black w-max text-sm"
+                class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
                 @click="addOtherSoftwareRequirements"
               >
                 <Icon icon="carbon:add" />
@@ -849,7 +849,7 @@
                   ></form-help-content>
                 </div>
 
-                <p class="text-xs pt-2 text-gray-500">
+                <p class="pt-2 text-xs text-gray-500">
                   {{ developmentStatus }}
                 </p>
               </el-form-item>

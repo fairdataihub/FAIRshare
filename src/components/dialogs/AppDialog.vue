@@ -21,14 +21,14 @@
           </el-form-item>
         </div>
         <div
-          class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+          class="flex flex-row items-center my-3 cursor-pointer w-max text-primary-600 hover-underline-animation"
           @click="openWebsite(this.headers[0])"
         >
           <span class="font-medium">
             How to generate a {{ this.headers[0].split(" ")[0] }} personal
             access token?
           </span>
-          <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+          <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
         </div>
         <el-form-item>
           <div class="bottom gap-[5px]">

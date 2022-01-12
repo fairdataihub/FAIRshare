@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="flex flex-col min-h-screen h-full mr-3 debug-screens bg-gray-50 relative w-full max-w-xs pb-10 pt-2"
+    class="relative flex flex-col w-full h-full max-w-xs min-h-screen pt-2 pb-10 mr-3 debug-screens bg-gray-50"
     :class="{
       'w-72': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -10,14 +10,14 @@
     style="transition: width 0.3s"
   >
     <div class="flex flex-col w-full text-gray-700">
-      <div class="p-2 flex flex-row justify-center relative">
+      <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
           class="w-28"
           src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
         />
         <div
-          class="absolute top-0 right-2 cursor-pointer p-1 transition-all transform scale-100 hover:scale-110 flex justify-center items-center group"
+          class="absolute top-0 flex items-center justify-center p-1 transition-all transform scale-100 cursor-pointer right-2 hover:scale-110 group"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"
         >
@@ -48,7 +48,7 @@
       </nav>
     </div>
     <div class="absolute bottom-0 right-3">
-      <span class="text-gray-400 text-xs">{{ environment }}</span>
+      <span class="text-xs text-gray-400">{{ environment }}</span>
     </div>
   </div>
 </template>

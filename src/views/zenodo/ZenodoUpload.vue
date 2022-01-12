@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
-    <div class="flex flex-col h-full w-full">
+  <div class="flex flex-col items-center justify-center w-full h-full p-3 pr-5">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Uploading your data to Zenodo
       </span>
@@ -27,7 +27,7 @@
           show-icon
         >
         </el-alert>
-        <div class="flex flex-row justify-start items-center py-3" v-else>
+        <div class="flex flex-row items-center justify-start py-3" v-else>
           <LoadingCubeGrid
             class="w-5 h-5"
             v-if="percentage !== 100"
@@ -37,14 +37,14 @@
             <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
           </p>
         </div>
-        <div class="pl-2 pt-2" v-if="errorMessage != ''">
+        <div class="pt-2 pl-2" v-if="errorMessage != ''">
           <p style="white-space: pre-line">
             {{ errorMessage }}
           </p>
         </div>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2" v-if="showAlert">
+      <div class="flex flex-row justify-center w-full py-2" v-if="showAlert">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
           class="mx-6"

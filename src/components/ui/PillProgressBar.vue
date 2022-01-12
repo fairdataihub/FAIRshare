@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch gap-2 w-9/12 max-w-screen-md mx-auto">
+  <div class="flex items-stretch w-9/12 max-w-screen-md gap-2 mx-auto">
     <div
       v-for="step in totalSteps"
       :key="step"
@@ -9,7 +9,7 @@
       @click="setCurrentStep(step)"
     >
       <span
-        class="absolute hidden text-center pt-3 text-xs text-gray-400 w-full px-2"
+        class="absolute hidden w-full px-2 pt-3 text-xs text-center text-gray-400"
       >
         {{ titles[step - 1] }}
       </span>

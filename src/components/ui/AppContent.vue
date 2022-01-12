@@ -1,12 +1,12 @@
 <template>
   <div
     id="main-frame"
-    class="h-screen w-full flex flex-row justify-center overflow-y-auto"
+    class="flex flex-row justify-center w-full h-screen overflow-y-auto"
   >
-    <div class="flex flex-col w-full items-center justify-center">
-      <WorkflowProgressBar class="pt-2 max-w-screen-xl" />
+    <div class="flex flex-col items-center justify-center w-full">
+      <WorkflowProgressBar class="max-w-screen-xl pt-2" />
 
-      <div class="h-full w-full overflow-y-auto flex justify-center">
+      <div class="flex justify-center w-full h-full overflow-y-auto">
         <slot></slot>
       </div>
     </div>

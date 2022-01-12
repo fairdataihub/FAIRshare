@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-lg p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col w-full h-full">
       <span class="font-medium"> Start a new data curation project </span>
       <span> Fill out some general details about your dataset here. </span>
 
@@ -34,7 +34,7 @@
               ></el-input>
             </template>
 
-            <span class="break-normal text-left text-sm">
+            <span class="text-sm text-left break-normal">
               Use a description that is easily identifiable. This will be shown
               in the dataset selection screen and is not part of your submitted
               metadata.
@@ -67,13 +67,13 @@
                     label="Research software"
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="bx:bx-code-block" class="h-12 w-12 my-2" />
+                      <Icon icon="bx:bx-code-block" class="w-12 h-12 my-2" />
                       <span class="text-sm">Research</span>
                       <span class="text-sm">software</span>
                     </div>
                   </el-checkbox>
                 </template>
-                <span class="break-normal text-left text-sm">
+                <span class="text-sm text-left break-normal">
                   Computational code, scripts, models, notebooks, code
                   libraries, etc.
                 </span>
@@ -94,7 +94,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="mdi:virus-outline" class="h-12 w-12 my-2" />
+                      <Icon icon="mdi:virus-outline" class="w-12 h-12 my-2" />
                       <span class="text-sm">Immunology</span>
                     </div>
                   </el-checkbox>
@@ -118,7 +118,7 @@
                     <div class="flex flex-col items-center">
                       <Icon
                         icon="healthicons:virus-patient-outline"
-                        class="h-12 w-12 my-2"
+                        class="w-12 h-12 my-2"
                       />
                       <span class="text-sm">Epidemiology</span>
                     </div>
@@ -143,7 +143,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="uil:dna" class="h-12 w-12 my-2" />
+                      <Icon icon="uil:dna" class="w-12 h-12 my-2" />
                       <span class="text-sm">Genomic</span>
                     </div>
                   </el-checkbox>
@@ -165,7 +165,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document-icon class="h-12 w-12 my-2" />
+                      <document-icon class="w-12 h-12 my-2" />
                       <span class="text-sm">Document</span>
                     </div>
                   </el-checkbox>
@@ -187,7 +187,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <video-play class="h-12 w-12 my-2"></video-play>
+                      <video-play class="w-12 h-12 my-2"></video-play>
                       <span class="text-sm">Media</span>
                     </div>
                   </el-checkbox>
@@ -197,7 +197,7 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-4 flex flex-row justify-center space-x-4">
+        <div class="flex flex-row justify-center py-4 space-x-4">
           <button class="danger-plain-button" @click="cancelNewDataset">
             <el-icon><circle-close-filled /></el-icon> Cancel
           </button>

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-full w-full flex flex-row justify-center items-center p-3"
+    class="flex flex-row items-center justify-center w-full h-full p-3"
     v-loading="loading"
   >
-    <div class="h-full flex flex-col justify-center items-center">
+    <div class="flex flex-col items-center justify-center h-full">
       <span class="text-center">
         Based on your dataset requirements, we suggest uploading your data to
         one of these repositories.
@@ -12,9 +12,9 @@
         Please click one of the following options:
       </span>
 
-      <div class="grid grid-cols-3 my-8 gap-8">
+      <div class="grid grid-cols-3 gap-8 my-8">
         <div>
-          <div class="flex flex-col justify-center items-center">
+          <div class="flex flex-col items-center justify-center">
             <div
               class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
               :class="{ 'selected-repo': repoID === 'zenodo' }"
@@ -23,17 +23,17 @@
               <img
                 src="https://api.iconify.design/simple-icons/zenodo.svg"
                 alt=""
-                class="h-16 w-16 mb-3"
+                class="w-16 h-16 mb-3"
               />
-              <span class="text-lg mx-5"> Zenodo </span>
+              <span class="mx-5 text-lg"> Zenodo </span>
             </div>
             <div
-              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-5"
+              class="flex flex-row items-center my-5 cursor-pointer w-max text-primary-600 hover-underline-animation"
               v-if="repoID === 'zenodo'"
               @click="openWebsite('https://zenodo.org')"
             >
               <span class="font-medium"> Learn more... </span>
-              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+              <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
                     alt=""
                     class="h-16 mb-3 opacity-50"
                   />
-                  <span class="text-lg mx-5"> Figshare </span>
+                  <span class="mx-5 text-lg"> Figshare </span>
                 </div>
               </div>
             </template>
@@ -81,7 +81,7 @@
                     alt=""
                     class="h-16 mb-3 opacity-50"
                   />
-                  <span class="text-lg mx-5 w-full text-center">
+                  <span class="w-full mx-5 text-lg text-center">
                     Software Heritage
                   </span>
                 </div>
@@ -97,17 +97,17 @@
         <div
           v-for="repo of repositories"
           :key="repo.id"
-          class="flex flex-col justify-between items-center bg-gray-200 p-4 my-5 shadow-md rounded-lg hover:bg-gray-300 hover:shadow-lg transition-all cursor-pointer h-30 w-30"
+          class="flex flex-col items-center justify-between p-4 my-5 transition-all bg-gray-200 rounded-lg shadow-md cursor-pointer hover:bg-gray-300 hover:shadow-lg h-30 w-30"
           :class="{ 'selected-repo': repoID === repo.id }"
           @click="selectRepo($event, repo.id)"
         >
           <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
-          <span class="text-lg mx-5"> {{ repo.name }} </span>
+          <span class="mx-5 text-lg"> {{ repo.name }} </span>
         </div>
       </div> -->
 
       <div
-        class="absolute bottom-0 w-max-content flex flex-row justify-center py-6 space-x-4"
+        class="absolute bottom-0 flex flex-row justify-center py-6 space-x-4 w-max-content"
       >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"

@@ -1,24 +1,24 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-lg p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full items-center justify-evenly">
+    <div class="flex flex-col items-center w-full h-full justify-evenly">
       <div class="pointer-events-none">
-        <div class="w-full flex justify-center items-center py-5">
-          <h1 class="font-bold text-5xl xl:text-6xl text-slate-800">
+        <div class="flex items-center justify-center w-full py-5">
+          <h1 class="text-5xl font-bold xl:text-6xl text-slate-800">
             SODA for COVID-19 Research
           </h1>
         </div>
-        <div class="w-full flex justify-center items-center py-3 mb-10">
-          <h2 class="font-medium text-3xl xl:text-4xl text-slate-700">
+        <div class="flex items-center justify-center w-full py-3 mb-10">
+          <h2 class="text-3xl font-medium xl:text-4xl text-slate-700">
             Make your COVID-19 related data, and beyond, FAIR
           </h2>
         </div>
       </div>
 
-      <div class="w-full flex justify-evenly py-5 space-x-14">
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
+      <div class="flex w-full py-5 justify-evenly space-x-14">
+        <div class="flex flex-col justify-center w-1/3 item-center">
+          <div class="flex justify-center w-full py-3 item-center">
             <img
               src="../assets/1.svg"
               class="w-full h-auto pointer-events-none"
@@ -29,8 +29,8 @@
             text text text text text text
           </p>
         </div>
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
+        <div class="flex flex-col justify-center w-1/3 item-center">
+          <div class="flex justify-center w-full py-3 item-center">
             <img
               src="../assets/1.svg"
               class="w-full h-auto pointer-events-none"
@@ -41,8 +41,8 @@
             text text text text text text
           </p>
         </div>
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
+        <div class="flex flex-col justify-center w-1/3 item-center">
+          <div class="flex justify-center w-full py-3 item-center">
             <img
               src="../assets/1.svg"
               class="w-full h-auto pointer-events-none"
@@ -55,10 +55,10 @@
         </div>
       </div>
 
-      <div class="flex flex-col justify-center items-center w-full py-3">
-        <div class="flex justify-center space-x-4 py-3">
+      <div class="flex flex-col items-center justify-center w-full py-3">
+        <div class="flex justify-center py-3 space-x-4">
           <button
-            class="secondary-plain-button text-base"
+            class="text-base secondary-plain-button"
             @click="
               openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
             "
@@ -68,7 +68,7 @@
           </button>
 
           <button
-            class="primary-plain-button text-base"
+            class="text-base primary-plain-button"
             @click="startCuratingProject"
           >
             Getting started
@@ -77,7 +77,7 @@
         </div>
 
         <div
-          class="flex flex-row items-center text-primary-600 cursor-pointer hover-underline-animation pt-3 py-1"
+          class="flex flex-row items-center py-1 pt-3 cursor-pointer text-primary-600 hover-underline-animation"
         >
           <span
             class="font-medium"
@@ -87,7 +87,7 @@
           </span>
           <Icon
             icon="grommet-icons:form-next-link"
-            class="ml-2 h-5 w-5 icon-animate"
+            class="w-5 h-5 ml-2 icon-animate"
           />
         </div>
       </div>

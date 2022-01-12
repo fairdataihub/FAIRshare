@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
-    <div class="flex flex-col h-full w-full">
+  <div class="flex flex-col items-center justify-center w-full h-full p-3 pr-5">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Publish your work to Zenodo
       </span>
@@ -11,8 +11,8 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex flex-col justify-center items-center h-full px-10">
-        <p class="text-center pb-5">
+      <div class="flex flex-col items-center justify-center h-full px-10">
+        <p class="pb-5 text-center">
           Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
           (DOI) will be registered immediately after publishing. You will still
@@ -23,7 +23,7 @@
             View draft
           </button>
           <button
-            class="blob transition-all primary-button"
+            class="transition-all blob primary-button"
             @click="publishDeposition"
           >
             Publish <el-icon><star-icon /></el-icon>
