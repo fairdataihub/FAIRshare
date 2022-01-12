@@ -65,7 +65,7 @@ export default {
     },
   },
   mounted() {
-    console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
+    // console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
 
     console.log(process.env.NODE_ENV);
 
