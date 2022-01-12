@@ -202,6 +202,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .primary-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
+  }
+
   .primary-button {
     @apply flex flex-row justify-center items-center;
     @apply px-5 py-2 rounded;

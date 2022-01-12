@@ -8,12 +8,13 @@
     >
       <template #reference>
         <div>
-          <!-- <button class="w-48" @click="interactWithService('github')" :class="githubDetails.buttonStyle">
+          <button
+            @click="interactWithService('github')"
+            :class="githubDetails.buttonStyle"
+            disabled
+          >
             {{ githubDetails.action }}
-          </button> -->
-          <el-button @click="interactWithService('github')" disabled>
-            {{ githubDetails.action }}
-          </el-button>
+          </button>
         </div>
       </template>
     </el-popover>

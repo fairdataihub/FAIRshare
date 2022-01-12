@@ -235,8 +235,11 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
 //import { useTokenStore } from "./store/access";
 import axios from "axios";
 const nodeUrl = require("url");
-const CLIENT_ID = "3282f35bdcceeb2cc9f8";
-const CLIENT_SECRET = "c603c25b557624f5b07cad52c0da798ee7ca4300";
+const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
+const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
+
+console.log("CLIENT_ID", CLIENT_ID);
+console.log("CLIENT_SECRET", CLIENT_SECRET);
 
 function retrieveCode(url) {
   return new Promise(function (resolve, reject) {
