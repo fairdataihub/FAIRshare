@@ -499,7 +499,8 @@ export default {
 
         for (const [index, file] of contents.entries()) {
           // skip file if it is a commonly ignored file
-          if (file in ignoreFilesJSON.commonFilesToIgnore) {
+
+          if (ignoreFilesJSON.commonFilesToIgnore.includes(file)) {
             this.percentage = ((index + 1) / contents.length) * 75 + 25;
             this.percentage = Math.round(this.percentage);
             continue;

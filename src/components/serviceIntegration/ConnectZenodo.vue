@@ -28,7 +28,11 @@
           >
             <template #reference>
               <div>
-                <button class="w-52" @click="showZenodoOAuthConnect" disabled>
+                <button
+                  class="primary-plain-button"
+                  @click="showZenodoOAuthConnect"
+                  disabled
+                >
                   Connect with username
                 </button>
               </div>
