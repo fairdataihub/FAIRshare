@@ -1,18 +1,21 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
+    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
   >
-    <div class="flex flex-col h-full w-full items-center">
-      <div
-        class="w-full flex justify-center items-center text-5xl xl:text-6xl py-5"
-      >
-        SODA for COVID-19 Research
+    <div class="flex flex-col h-full w-full items-center justify-evenly">
+      <div class="pointer-events-none">
+        <div class="w-full flex justify-center items-center py-5">
+          <h1 class="font-bold text-5xl xl:text-6xl text-slate-800">
+            SODA for COVID-19 Research
+          </h1>
+        </div>
+        <div class="w-full flex justify-center items-center py-3 mb-10">
+          <h2 class="font-medium text-3xl xl:text-4xl text-slate-700">
+            Make your COVID-19 related data, and beyond, FAIR
+          </h2>
+        </div>
       </div>
-      <div
-        class="w-full flex justify-center items-center text-2xl xl:text-4xl py-3 mb-10"
-      >
-        Make your COVID-19 related data, and beyond, FAIR
-      </div>
+
       <div class="w-full flex justify-evenly py-5 space-x-14">
         <div class="flex flex-col w-1/3 item-center justify-center">
           <div class="w-full flex item-center justify-center py-3">
@@ -21,7 +24,7 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>
@@ -33,7 +36,7 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>
@@ -45,12 +48,13 @@
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p>
+          <p class="text-slate-700">
             Example text text text text text text text text text text text text
             text text text text text text
           </p>
         </div>
       </div>
+
       <div class="flex flex-col justify-center items-center w-full py-3">
         <div class="flex justify-center space-x-4 py-3">
           <button
@@ -59,19 +63,21 @@
               openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
             "
           >
-            See documentation
+            <el-icon><notebook-icon /></el-icon>
+            Read the documentation
           </button>
+
           <button
             class="primary-plain-button text-base"
             @click="startCuratingProject"
           >
             Getting started
-            <el-icon> <d-arrow-right /> </el-icon>
+            <el-icon class="icon-animate"> <d-arrow-right /> </el-icon>
           </button>
         </div>
 
         <div
-          class="flex flex-row items-center text-primary-600 cursor-pointer hover-underline-animation py-3"
+          class="flex flex-row items-center text-primary-600 cursor-pointer hover-underline-animation pt-3 py-1"
         >
           <span
             class="font-medium"
@@ -79,7 +85,10 @@
           >
             Learn more about FAIR
           </span>
-          <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+          <Icon
+            icon="grommet-icons:form-next-link"
+            class="ml-2 h-5 w-5 icon-animate"
+          />
         </div>
       </div>
     </div>

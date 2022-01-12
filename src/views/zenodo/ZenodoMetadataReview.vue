@@ -25,7 +25,7 @@
               @click="editInformation(['basicInformation', 'license'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit basic information
+              <el-icon><edit-icon /></el-icon> Edit basic information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -105,7 +105,8 @@
               @click="editInformation(['relatedIdentifiers'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit related/alternate identifiers
+              <el-icon><edit-icon /></el-icon> Edit related/alternate
+              identifiers
             </el-button>
           </template>
           <el-descriptions-item>
@@ -143,7 +144,7 @@
               @click="editInformation(['contributors'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit contributors
+              <el-icon><edit-icon /></el-icon> Edit contributors
             </el-button>
           </template>
           <el-descriptions-item>
@@ -182,7 +183,7 @@
               @click="editInformation(['references'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit references
+              <el-icon><edit-icon /></el-icon> Edit references
             </el-button>
           </template>
           <el-descriptions-item>
@@ -208,7 +209,7 @@
               @click="editInformation(['journal'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit journal information
+              <el-icon><edit-icon /></el-icon> Edit journal information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -291,7 +292,8 @@
               @click="editInformation(['bookReportChapter'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit book/report/chapter information
+              <el-icon><edit-icon /></el-icon> Edit book/report/chapter
+              information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -325,7 +327,7 @@
               @click="editInformation(['thesis'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit thesis information
+              <el-icon><edit-icon /></el-icon> Edit thesis information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -367,7 +369,7 @@
               @click="editInformation(['subjects'])"
               class="ml-2"
             >
-              <el-icon><edit /></el-icon> Edit subjects
+              <el-icon><edit-icon /></el-icon> Edit subjects
             </el-button>
           </template>
           <el-descriptions-item>

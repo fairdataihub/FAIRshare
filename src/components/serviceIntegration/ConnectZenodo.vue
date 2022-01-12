@@ -1,7 +1,6 @@
 <template>
   <div>
     <button
-      class="w-48"
       :class="zenodoDetails.buttonStyle"
       @click="interactWithService('zenodo')"
     >
@@ -29,7 +28,11 @@
           >
             <template #reference>
               <div>
-                <button class="w-52" @click="showZenodoOAuthConnect" disabled>
+                <button
+                  class="primary-plain-button"
+                  @click="showZenodoOAuthConnect"
+                  disabled
+                >
                   Connect with username
                 </button>
               </div>
@@ -50,6 +53,7 @@
 
 <script>
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
+
 import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
 

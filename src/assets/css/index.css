@@ -202,6 +202,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .primary-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
+  }
+
   .primary-button {
     @apply flex flex-row justify-center items-center;
     @apply px-5 py-2 rounded;
@@ -329,10 +333,6 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   margin: 0 !important;
 }
 
-/* .el-dialog__header {
-  padding: 0 !important;
-} */
-
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;
 }
@@ -342,6 +342,10 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 }
 .code-collapse-item div .el-collapse-item__header {
   @apply border-b-0;
+}
+
+.createNewProjectFormItemContainer .el-form-item__error {
+  @apply w-full flex justify-center pt-3;
 }
 
 /* ------------------------------------------
@@ -385,8 +389,4 @@ Transition styles for <transition />
 .lightfadeleft-leave-to {
   opacity: 0;
   transform: translateY(-20px);
-}
-
-.createNewProjectFormItemContainer .el-form-item__error {
-  @apply w-full flex justify-center pt-2;
 }

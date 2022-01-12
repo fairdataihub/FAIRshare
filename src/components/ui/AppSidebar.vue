@@ -36,7 +36,7 @@
           <el-icon><data-line /></el-icon> Curate & Share
         </router-link>
         <router-link to="/manageAccount" class="sideBarMenuItem">
-          <el-icon><user /></el-icon> Manage Accounts
+          <el-icon><user-icon /></el-icon> Manage Accounts
         </router-link>
         <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link

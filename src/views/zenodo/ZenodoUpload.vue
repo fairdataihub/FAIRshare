@@ -79,6 +79,8 @@ import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
+import ignoreFilesJSON from "@/assets/supplementalFiles/ignoreFilesList.json";
+
 export default {
   name: "ZenodoUpload",
   components: { LoadingCubeGrid, LoadingEllipsis },
@@ -496,6 +498,14 @@ export default {
         const contents = fs.readdirSync(folderPath);
 
         for (const [index, file] of contents.entries()) {
+          // skip file if it is a commonly ignored file
+
+          if (ignoreFilesJSON.commonFilesToIgnore.includes(file)) {
+            this.percentage = ((index + 1) / contents.length) * 75 + 25;
+            this.percentage = Math.round(this.percentage);
+            continue;
+          }
+
           await this.uploadToZenodo(
             this.workflow.destination.zenodo.bucket,
             path.join(folderPath, file)

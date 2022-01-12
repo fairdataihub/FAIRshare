@@ -165,7 +165,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document class="h-12 w-12 my-2"></document>
+                      <document-icon class="h-12 w-12 my-2" />
                       <span class="text-sm">Document</span>
                     </div>
                   </el-checkbox>
@@ -197,7 +197,7 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-2 flex flex-row justify-center space-x-4">
+        <div class="py-4 flex flex-row justify-center space-x-4">
           <button class="danger-plain-button" @click="cancelNewDataset">
             <el-icon><circle-close-filled /></el-icon> Cancel
           </button>
@@ -373,7 +373,7 @@ export default {
   @apply gap-8 pt-4 flex flex-col box-border items-center justify-center;
 }
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-40 h-40;
+  @apply transition-all flex justify-center items-center w-40 h-40 shadow-md;
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
@@ -382,9 +382,5 @@ export default {
 
 .single-check-box:not(.is-disabled):hover {
   @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
-}
-
-.createNewProjectFormItemContainer .el-form-item__error {
-  @apply w-full flex justify-center;
 }
 </style>

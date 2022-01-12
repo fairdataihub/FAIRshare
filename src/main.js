@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createApp } from "vue";
 import App from "./App.vue";
 import { router } from "./router";
@@ -22,7 +21,7 @@ app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
 // register components globally
 app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
-app.component("Popper", Popper);
+app.component("VuePopper", Popper);
 app.component("form-help-content", FormHelpContent);
 
 // import and register icons globally
@@ -33,14 +32,21 @@ import {
   CircleCloseFilled,
   DArrowLeft,
   DArrowRight,
+  DataAnalysis,
   DataLine,
   Delete,
+  Document,
   Edit,
+  Histogram,
   HomeFilled,
   InfoFilled,
   Key,
   Lock,
+  Notebook,
+  Monitor,
+  PictureFilled,
   QuestionFilled,
+  Reading,
   RemoveFilled,
   Right,
   Setting,
@@ -48,43 +54,38 @@ import {
   Unlock,
   User,
   UserFilled,
-  DataAnalysis,
-  Histogram,
-  Monitor,
-  PictureFilled,
-  Reading,
   VideoPlay,
-  Document,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
-app.component("back", Back);
+app.component("back-icon", Back);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
 app.component("d-arrow-left", DArrowLeft);
 app.component("d-arrow-right", DArrowRight);
+app.component("data-analysis", DataAnalysis);
 app.component("data-line", DataLine);
-app.component("delete", Delete);
-app.component("edit", Edit);
+app.component("delete-icon", Delete);
+app.component("document-icon", Document);
+app.component("edit-icon", Edit);
+app.component("histogram-icon", Histogram);
 app.component("home-filled", HomeFilled);
 app.component("info-filled", InfoFilled);
-app.component("key", Key);
-app.component("lock", Lock);
-app.component("question-filled", QuestionFilled);
-app.component("remove-filled", RemoveFilled);
-app.component("right", Right);
-app.component("setting", Setting);
-app.component("star", Star);
-app.component("unlock", Unlock);
-app.component("user", User);
-app.component("user-filled", UserFilled);
-app.component("data-analysis", DataAnalysis);
-app.component("histogram", Histogram);
-app.component("monitor", Monitor);
+app.component("key-icon", Key);
+app.component("lock-icon", Lock);
+app.component("monitor-icon", Monitor);
+app.component("notebook-icon", Notebook);
 app.component("picture-filled", PictureFilled);
-app.component("reading", Reading);
+app.component("question-filled", QuestionFilled);
+app.component("reading-icon", Reading);
+app.component("remove-filled", RemoveFilled);
+app.component("right-icon", Right);
+app.component("setting-icon", Setting);
+app.component("star-icon", Star);
+app.component("unlock-icon", Unlock);
+app.component("user-icon", User);
+app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
-app.component("document", Document);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router
