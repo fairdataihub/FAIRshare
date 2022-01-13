@@ -11,13 +11,14 @@
         </div>
         <div class="flex items-center justify-center w-full py-3 mb-1">
           <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
-            Make your COVID-19 research data, and beyond, Findable, Accessible, Interoperable, and Reusable (FAIR)
+            Make your COVID-19 research data, and beyond, Findable, Accessible,
+            Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
 
       <div class="flex w-full py-3 justify-evenly space-x-14">
-        <div class="flex flex-col justify-center  item-center">
+        <div class="flex flex-col justify-center item-center">
           <div class="flex justify-center w-full py-3 item-center">
             <img
               src="../assets/overview.svg"
