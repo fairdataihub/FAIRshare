@@ -13,8 +13,8 @@
       <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
-          class="w-28"
-          src="https://www.freepnglogos.com/uploads/shape/shape-vector-red-abstract-png-vector-psd-and-clipart-with-13.png"
+          class="m-4 w-28"
+          src="../../assets/brand/logo.png"
         />
         <div
           class="absolute top-0 flex items-center justify-center p-1 transition-all transform scale-100 cursor-pointer right-2 hover:scale-110 group"

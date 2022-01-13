@@ -82,8 +82,8 @@ html {
   left: 0;
   transform: rotate(0deg);
   @apply transition-all;
-  @apply group-hover:text-primary-400;
-  @apply bg-zinc-800 group-hover:bg-primary-400;
+  @apply group-hover:text-primary-500;
+  @apply bg-zinc-800 group-hover:bg-primary-500;
 }
 
 #menu-hamburger span:nth-child(1) {

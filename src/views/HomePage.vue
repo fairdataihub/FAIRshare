@@ -22,10 +22,7 @@
       <div class="flex w-full py-3 justify-evenly space-x-14">
         <div class="flex flex-col justify-center item-center">
           <div class="flex justify-center w-full py-3 item-center">
-            <img
-              src="../assets/overview.svg"
-              class="w-11/12 h-auto pointer-events-none"
-            />
+            <img src="../assets/overview.svg" class="w-11/12 h-auto" />
           </div>
         </div>
       </div>
