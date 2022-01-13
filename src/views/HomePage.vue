@@ -9,10 +9,12 @@
             SODA for COVID-19 Research
           </h1>
         </div>
-        <div class="flex items-center justify-center w-full py-3 mb-1">
+        <div class="flex flex-col items-center justify-center w-full py-3 mb-1">
           <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
-            Make your COVID-19 research data, and beyond, Findable, Accessible,
-            Interoperable, and Reusable (FAIR)
+            Make your COVID-19 research data, and beyond,
+          </h2>
+          <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
+            Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
@@ -22,7 +24,7 @@
           <div class="flex justify-center w-full py-3 item-center">
             <img
               src="../assets/overview.svg"
-              class="w-full h-auto pointer-events-none"
+              class="w-11/12 h-auto pointer-events-none"
             />
           </div>
         </div>
