@@ -5,53 +5,25 @@
     <div class="flex flex-col items-center w-full h-full justify-evenly">
       <div class="pointer-events-none">
         <div class="flex items-center justify-center w-full py-5">
-          <h1 class="text-5xl font-bold xl:text-6xl text-slate-800">
+          <h1 class="text-3xl font-bold xl:text-4xl text-slate-800">
             SODA for COVID-19 Research
           </h1>
         </div>
-        <div class="flex items-center justify-center w-full py-3 mb-10">
-          <h2 class="text-3xl font-medium xl:text-4xl text-slate-700">
-            Make your COVID-19 related data, and beyond, FAIR
+        <div class="flex items-center justify-center w-full py-3 mb-1">
+          <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
+            Make your COVID-19 research data, and beyond, Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
 
-      <div class="flex w-full py-5 justify-evenly space-x-14">
-        <div class="flex flex-col justify-center w-1/3 item-center">
+      <div class="flex w-full py-3 justify-evenly space-x-14">
+        <div class="flex flex-col justify-center  item-center">
           <div class="flex justify-center w-full py-3 item-center">
             <img
-              src="../assets/1.svg"
+              src="../assets/overview.svg"
               class="w-full h-auto pointer-events-none"
             />
           </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
-        </div>
-        <div class="flex flex-col justify-center w-1/3 item-center">
-          <div class="flex justify-center w-full py-3 item-center">
-            <img
-              src="../assets/1.svg"
-              class="w-full h-auto pointer-events-none"
-            />
-          </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
-        </div>
-        <div class="flex flex-col justify-center w-1/3 item-center">
-          <div class="flex justify-center w-full py-3 item-center">
-            <img
-              src="../assets/1.svg"
-              class="w-full h-auto pointer-events-none"
-            />
-          </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
         </div>
       </div>
 
