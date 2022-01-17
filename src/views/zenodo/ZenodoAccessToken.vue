@@ -183,7 +183,7 @@ export default {
       errorMessage: "",
       zenodoAccessToken: "",
       ready: false,
-      showFiles: true,
+      showFiles: "1",
       lisenceData: [{ Name: "Lisence", Value: "", id: 0 }],
       tableData: [],
     };
