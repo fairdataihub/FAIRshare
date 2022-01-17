@@ -1,6 +1,15 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-lg p-3 pr-5"
+    class="
+      flex flex-col
+      items-center
+      justify-center
+      w-full
+      h-full
+      max-w-screen-lg
+      p-3
+      pr-5
+    "
   >
     <div class="flex flex-col items-center w-full h-full">
       <div class="card-container">
@@ -221,7 +230,6 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("github");
     this.datasetStore.setCurrentStep(2);
-
     await this.manager.loadTokens();
   },
 };
