@@ -14,13 +14,7 @@
         >
           <template #title>
             <div
-              class="
-                flex flex-row
-                items-center
-                justify-between
-                w-full
-                font-inter
-              "
+              class="flex flex-row items-center justify-between w-full font-inter"
             >
               <p class="px-4 text-sm font-semibold text-blue-500">
                 codemeta.json
@@ -47,13 +41,7 @@
         >
           <template #title>
             <div
-              class="
-                flex flex-row
-                items-center
-                justify-between
-                w-full
-                font-inter
-              "
+              class="flex flex-row items-center justify-between w-full font-inter"
             >
               <p class="px-4 text-sm font-semibold text-blue-500">
                 citation.cff
@@ -80,13 +68,7 @@
         >
           <template #title>
             <div
-              class="
-                flex flex-row
-                items-center
-                justify-between
-                w-full
-                font-inter
-              "
+              class="flex flex-row items-center justify-between w-full font-inter"
             >
               <p class="px-4 text-sm font-semibold text-blue-500">
                 LICENSE file
@@ -338,7 +320,11 @@ export default {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
     this.lisenceData["Value"] = this.workflow.licenseText;
-    this.tableData = this.jsonToTableDataRecursive(this.dataset.data, 1, "ROOT");
+    this.tableData = this.jsonToTableDataRecursive(
+      this.dataset.data,
+      1,
+      "ROOT"
+    );
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(6);
