@@ -28,7 +28,6 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
-
 import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";

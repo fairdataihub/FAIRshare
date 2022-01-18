@@ -56,7 +56,7 @@ import {
   UserFilled,
   VideoPlay,
   ChatDotRound,
-  Collection
+  Collection,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -89,7 +89,7 @@ app.component("user-icon", User);
 app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
 app.component("chat-dot-round", ChatDotRound);
-app.component("collection-icon", Collection)
+app.component("collection-icon", Collection);
 // additional vue libraries to be used in the app
 app.use(router); // vue router
 app.use(createPinia()); // pinia
