@@ -28,6 +28,11 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
+
+import AppSettings from "../views/settings/AppSettings.vue";
+import AppDocumentation from "../views/documentation/AppDocumentation.vue";
+import ContactUs from "../views/contact/ContactUs.vue";
+
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
 
@@ -107,6 +112,9 @@ const routes = [
   },
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
   { path: "/manageAccount", component: ManageAccount },
+  { path: "/appSettings", component: AppSettings },
+  { path: "/appDocumentation", component: AppDocumentation },
+  { path: "/contactUs", component: ContactUs },
 ];
 
 export const router = createRouter({

@@ -38,6 +38,15 @@
         <router-link to="/manageAccount" class="sideBarMenuItem">
           <el-icon><user-icon /></el-icon> Manage Accounts
         </router-link>
+        <router-link to="/appSettings" class="sideBarMenuItem">
+          <el-icon><setting-icon /></el-icon> Settings
+        </router-link>
+        <router-link to="/appDocumentation" class="sideBarMenuItem">
+          <el-icon><collection-icon /></el-icon> Documentation
+        </router-link>
+        <router-link to="/ContactUs" class="sideBarMenuItem">
+          <el-icon><chat-dot-round /></el-icon> Contact Us
+        </router-link>
         <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
         <router-link
           to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
