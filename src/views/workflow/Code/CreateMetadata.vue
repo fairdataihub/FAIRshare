@@ -33,6 +33,999 @@
             />
           </div>
           <div class="py-2">
+            <div v-if="currentStep == 1">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Basic Information
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item label="Software name" required>
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.name"
+                        placeholder="My Software"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="The name of the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Software description/abstract" required>
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.description"
+                        type="textarea"
+                        placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="A brief description of the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Creation date">
+                    <div class="flex flex-row items-center">
+                      <el-date-picker
+                        v-model="codeForm.creationDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the software was first created"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="First release date">
+                    <div class="flex flex-row items-center">
+                      <el-date-picker
+                        v-model="codeForm.firstReleaseDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the software was first released"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="primary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Back
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 2">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Authors and Contributors
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item
+                    label="Authors"
+                    :error="authorsErrorMessage"
+                    required
+                  >
+                    <draggable
+                      tag="div"
+                      :list="codeForm.authors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="flex flex-row justify-between mb-2 transition-all"
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.givenName"
+                              type="text"
+                              placeholder="Given name"
+                            ></el-input>
+
+                            <div class="mx-2"></div>
+
+                            <el-input
+                              v-model="element.familyName"
+                              type="text"
+                              placeholder="Family name"
+                            ></el-input>
+
+                            <div class="mx-2"></div>
+
+                            <el-input
+                              v-model="element.affiliation"
+                              type="text"
+                              placeholder="Affiliation"
+                            ></el-input>
+
+                            <div class="flex flex-col w-full mx-2">
+                              <el-input
+                                v-model="element.email"
+                                type="text"
+                                placeholder="E-mail address"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+
+                            <div class="flex flex-col w-full mx-2">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            class="flex flex-row items-start w-1/12 py-2 justify-evenly"
+                          >
+                            <div
+                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteAuthor(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex items-center mb-6 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    @click="addAuthor"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span class="text-primary-600 hover:text-primary-500">
+                      Add an author
+                    </span>
+                    <form-help-content
+                      popoverContent="Add a developer of the software"
+                    ></form-help-content>
+                  </div>
+
+                  <el-form-item
+                    label="Contributors"
+                    :error="contributorsErrorMessage"
+                  >
+                    <draggable
+                      tag="div"
+                      :list="codeForm.contributors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="flex flex-row justify-between mb-2 transition-all"
+                        >
+                          <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                            <el-select
+                              v-model="element.contributorType"
+                              filterable
+                              placeholder="Select a contributor type"
+                            >
+                              <el-option
+                                v-for="item in contributorTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              >
+                              </el-option>
+                            </el-select>
+                          </div>
+
+                          <div class="flex flex-row justify-between w-11/12">
+                            <div class="w-1/5 mr-2">
+                              <el-input
+                                v-model="element.givenName"
+                                type="text"
+                                placeholder="Given name"
+                              ></el-input>
+                            </div>
+
+                            <div class="w-1/5 mx-2">
+                              <el-input
+                                v-model="element.familyName"
+                                type="text"
+                                placeholder="Family name"
+                              ></el-input>
+                            </div>
+
+                            <div class="w-1/5 mx-2">
+                              <el-input
+                                v-model="element.affiliation"
+                                type="text"
+                                placeholder="Affiliation"
+                              ></el-input>
+                            </div>
+
+                            <div class="flex flex-col w-1/5 mx-2">
+                              <el-input
+                                v-model="element.email"
+                                type="text"
+                                placeholder="E-mail address"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+
+                            <div class="flex flex-col w-1/5 mx-2">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            class="flex flex-row items-start w-1/12 py-2 justify-evenly"
+                          >
+                            <div
+                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteContributor(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    @click="addContributor"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span class="text-primary-600 hover:text-primary-500">
+                      Add a contributor
+                    </span>
+                    <form-help-content
+                      popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
+                    ></form-help-content>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 3">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Discoverability
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item label="Application category">
+                    <div class="flex flex-row items-center">
+                      <el-select
+                        v-model="codeForm.applicationCategory"
+                        filterable
+                        allow-create
+                        placeholder="Select an application category"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in applicationCategoryOptions"
+                          :key="item"
+                          :label="item"
+                          :value="item"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="Type of application, e.g. scientific, business, etc."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Keywords" required>
+                    <draggable
+                      tag="div"
+                      :list="codeForm.keywords"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="flex flex-row justify-between mb-2 transition-all"
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.keyword"
+                              type="text"
+                              placeholder="orbit"
+                              v-on:keyup.enter="addKeyword"
+                              :ref="element.id"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row w-1/12 justify-evenly">
+                            <div
+                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteKeyword(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+                  <div
+                    class="flex items-center pb-3 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    @click="addKeyword"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add a keyword </span>
+                    <form-help-content
+                      popoverContent="Keywords relevant to your software"
+                    ></form-help-content>
+                  </div>
+
+                  <el-form-item label="Funding code">
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.funding.code"
+                        type="text"
+                        placeholder="PRA_2018_73"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Code of the grant funding this software (comma separate if multiple)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Funding organization">
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.funding.organization"
+                        type="text"
+                        placeholder="University of California, San Francisco"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="The organization funding this software (comma separate if multiple)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 4">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Development tools
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item
+                    label="Code repository"
+                    :error="codeRepositoryErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.codeRepository"
+                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, GitHub, CodePlex, institutional GitLab instance, etc.)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Continuous integration"
+                    :error="continuousIntegrationErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.continuousIntegration"
+                        placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Issue Tracker"
+                    :error="issueTrackerErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.issueTracker"
+                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to issue tracker (Jira, GitHub issues, etc.)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Related links"
+                    :error="relatedLinksErrorMessage"
+                  >
+                    <draggable
+                      tag="div"
+                      :list="codeForm.relatedLinks"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="flex flex-row justify-between mb-2 transition-all"
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.link"
+                              type="text"
+                              placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row w-1/12 justify-evenly">
+                            <div
+                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteRelatedLink(element.id)"
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+                  <div
+                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    @click="addRelatedLink"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add a related link </span>
+                    <form-help-content
+                      popoverContent="Link to documents, software, tools, etc. related to your software"
+                    ></form-help-content>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 5">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Run-time environment
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item label="Programming Language" required>
+                    <div class="flex flex-row items-center">
+                      <el-select
+                        v-model="codeForm.programmingLanguage"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="C#, Java, Python 3"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in programmingLanguageOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All programming languages used in this software. Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Runtime platform">
+                    <div class="flex flex-row items-center">
+                      <el-select
+                        v-model="codeForm.runtimePlatform"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder=".Net, Java"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in runtimePlatformOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All runtime platforms used in this software. Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Operating system">
+                    <div class="flex flex-row items-center">
+                      <el-select
+                        v-model="codeForm.operatingSystem"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="Linux, Windows"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in operatingSystemOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All operating systems this software can run on.  Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Other software requirements">
+                    <draggable
+                      tag="div"
+                      :list="codeForm.otherSoftwareRequirements"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="flex flex-row justify-between mb-2 transition-all"
+                        >
+                          <div class="flex flex-row justify-between w-11/12">
+                            <el-input
+                              v-model="element.link"
+                              type="text"
+                              placeholder="Python 3.4 or https://github.com/pst/requests"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex flex-row w-1/12 justify-evenly">
+                            <div
+                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteOtherSoftwareRequirements(element.id)
+                                "
+                              >
+                                <template #reference>
+                                  <Icon icon="bx:bx-x" />
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    @click="addOtherSoftwareRequirements"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add an additional software requirement </span>
+                    <form-help-content
+                      popoverContent="Required software to run/compile/use this software."
+                    ></form-help-content>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 6">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Current version of the software
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item
+                    label="Current version"
+                    :error="versionErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.currentVersion"
+                        placeholder="1.5.6"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Version number of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Current version release date">
+                    <div class="flex flex-row items-center">
+                      <el-date-picker
+                        v-model="codeForm.currentVersionReleaseDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the current version was released"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Current version download URL"
+                    :error="currentVersionDownloadLinkErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.currentVersionDownloadLink"
+                        type="url"
+                        placeholder="https://www.python.org/downloads/release/python-3100/"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="URL to download the current version of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Current version release notes">
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.currentVersionReleaseNotes"
+                        type="textarea"
+                        placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Release notes for the current version of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Next
+                  <el-icon><right-icon /></el-icon>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="currentStep == 7">
+              <div
+                class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              >
+                <div class="w-full px-4 py-2 bg-gray-100">
+                  <span
+                    class="text-lg font-semibold pointer-events-none text-primary-600"
+                  >
+                    Current version of the software
+                  </span>
+                </div>
+                <div class="p-4">
+                  <el-form-item label="Reference publication">
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.referencePublication"
+                        type="text"
+                        placeholder="https://doi.org/10.100/xyz123"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the scholarly publication that describes the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Development status">
+                    <div class="flex flex-row items-center">
+                      <el-select
+                        v-model="codeForm.developmentStatus"
+                        filterable
+                        placeholder=""
+                      >
+                        <el-option
+                          v-for="item in repoStatusOptions"
+                          :key="item.value"
+                          :label="item.display_name"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
+                      ></form-help-content>
+                    </div>
+
+                    <p class="pt-2 text-xs text-gray-500">
+                      {{ developmentStatus }}
+                    </p>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Is part of"
+                    :error="isPartOfErrorMessage"
+                  >
+                    <div class="flex flex-row items-center">
+                      <el-input
+                        v-model="codeForm.isPartOf"
+                        type="url"
+                        placeholder="https://thebiggerframework.org"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the project this software is part of"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </div>
+              </div>
+              <div
+                class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              >
+                <button
+                  @click="prevFormStep"
+                  class="secondary-plain-button"
+                  size="medium"
+                  :disabled="checkInvalidStatus"
+                >
+                  <el-icon><back-icon /></el-icon>
+                  Previous
+                </button>
+                <!-- :plain="!lastStep" -->
+                <button
+                  class="primary-button"
+                  @click="nextFormStep"
+                  :disabled="checkInvalidStatus"
+                >
+                  Continue
+                  <el-icon><d-arrow-right /></el-icon>
+                </button>
+              </div>
+            </div>
+
             <FormCardContent
               :stepId="1"
               :currentStepId="currentStep"
@@ -95,48 +1088,6 @@
                   ></form-help-content>
                 </div>
               </el-form-item>
-
-              <!-- 
-                <el-form-item label="License">
-                <el-select
-                  v-model="codeForm.license"
-                  filterable
-                  placeholder="Select a license"
-                  class="w-full"
-                >
-                  <el-option
-                    v-for="item in licenseOptions"
-                    :key="item.licenseId"
-                    :label="item.name"
-                    :value="item.licenseId"
-                  >
-                  </el-option>
-                </el-select>
-
-                <p
-                  class="pt-2 text-sm text-gray-500 cursor-pointer hover:text-gray-800"
-                  v-if="codeForm.license != ''"
-                  @click="openLicenseDetails"
-                >
-                  Show license details.
-                </p>
-
-                <el-drawer
-                  v-model="showLicenseDetails"
-                  :title="licenseTitle"
-                  direction="rtl"
-                >
-                  <LoadingPulseCircle v-if="loadingLicenseDetails">
-                  </LoadingPulseCircle>
-                  <iframe
-                    sandbox
-                    :src="licenseHtmlUrl"
-                    class="w-full h-full"
-                    :load="(loadingLicenseDetails = false)"
-                  ></iframe>
-                </el-drawer>
-              </el-form-item> 
-              -->
             </FormCardContent>
 
             <FormCardContent
@@ -933,6 +1884,47 @@ export default {
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
+      step1Form: {
+        name: "",
+        description: "",
+        creationDate: "",
+        firstReleaseDate: "",
+      },
+      step2Form: {
+        authors: [],
+        contributors: [],
+      },
+      step3Form: {
+        applicationCategory: "",
+        keywords: [],
+        funding: {
+          code: "",
+          organization: "",
+        },
+      },
+      step4Form: {
+        codeRepository: "",
+        continuousIntegration: "",
+        issueTracker: "",
+        relatedLinks: [],
+      },
+      step5Form: {
+        programmingLanguage: [],
+        runtimePlatform: [],
+        operatingSystem: [],
+        otherSoftwareRequirements: [],
+      },
+      step6Form: {
+        currentVersion: "",
+        currentVersionReleaseDate: "",
+        currentVersionDownloadLink: "",
+        currentVersionReleaseNotes: "",
+      },
+      step7Form: {
+        referencePublication: "",
+        developmentStatus: "",
+        isPartOf: "",
+      },
       codeForm: {
         name: "",
         description: "",
@@ -1561,20 +2553,6 @@ export default {
 
       this.$router.push({ path: routerPath });
     },
-    // hideLoading() {
-    //   const that = this;
-
-    //   this.interval = setInterval(function () {
-    //     var element = document.getElementById("existElement");
-
-    //     if (typeof element != "undefined" && element != null) {
-    //       that.loading.close();
-    //       clearInterval(that.interval);
-    //     } else {
-    //       // console.log("waiting for loading");
-    //     }
-    //   }, 10);
-    // },
     navigateBack() {
       let newChanges = false;
 
@@ -1608,15 +2586,6 @@ export default {
         });
       }
     },
-  },
-  beforeMount() {
-    // this.hideLoading();
-    // this.loading = ElLoading.service({
-    //   lock: true,
-    //   text: "Loading",
-    //   fullscreen: true,
-    //   background: "rgba(0, 0, 0, 0.7)",
-    // });
   },
   mounted() {
     this.$nextTick(async function () {
@@ -1661,20 +2630,6 @@ export default {
           this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
         }
       }
-
-      // if (this.codePresent) {
-      //   if (
-      //     this.dataset.data.Code.questions &&
-      //     Object.keys(this.dataset.data.Code.questions).length !== 0
-      //   ) {
-      //     this.codeForm = this.dataset.data.Code.questions;
-
-      //     this.addIds(this.codeForm.relatedLinks);
-      //     this.addIds(this.codeForm.otherSoftwareRequirements);
-
-      //     this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
-      //   }
-      // }
     });
   },
 };
