@@ -32,7 +32,7 @@ import ManageAccount from "../views/manage/ManageAccount.vue";
 import HomePage from "../views/HomePage.vue";
 
 const routes = [
-  { path: "/", redirect: "/home" },
+  { path: "/", component: HomePage },
   { path: "/home", component: HomePage },
   { path: "/datasets", component: ShowAllProjects, name: "ShowAllProjects" },
   {

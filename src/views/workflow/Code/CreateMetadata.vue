@@ -1115,6 +1115,8 @@ import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElMessageBox, ElMessage } from "element-plus";
 import Vue3Lottie from "vue3-lottie";
+import validator from "validator";
+
 // import semver from "semver";
 // import _ from "lodash";
 
@@ -1128,9 +1130,6 @@ import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 export default {
   name: "CodeCreateMetadata",
   components: {
@@ -1138,7 +1137,6 @@ export default {
     Icon,
     PillProgressBar,
     Vue3Lottie,
-    // FormCardContent,
   },
   data() {
     return {
@@ -1239,16 +1237,6 @@ export default {
   watch: {
     "step2Form.authors": {
       handler(val) {
-        // if (val.length === 0) {
-        //   this.authorsErrorMessage = "Please provide at least one author.";
-        //   this.invalidStatus.authors = true;
-        //   this.$refs.cmForm.validate();
-        //   return;
-        // } else {
-        //   this.authorsErrorMessage = ""; //clear error message
-        //   this.invalidStatus.authors = false;
-        // }
-
         if (val.length > 0) {
           for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
@@ -1291,7 +1279,9 @@ export default {
 
               // validate email
               if (author.email !== "") {
-                if (!emailRegex.test(author.email)) {
+                const validIdentifier = validator.isEmail(author.email);
+
+                if (!validIdentifier) {
                   this.authorsErrorMessage = "Email is not valid";
                   this.$refs.s2Form.validate();
                   this.invalidStatus.authors = true;
@@ -1355,7 +1345,9 @@ export default {
 
             // validate email
             if (contributor.email !== "") {
-              if (!emailRegex.test(contributor.email)) {
+              const validIdentifier = validator.isEmail(contributor.email);
+
+              if (!validIdentifier) {
                 this.contributorsErrorMessage = "Email is not valid";
                 this.$refs.s2Form.validate();
                 this.invalidStatus.contributors = true;
@@ -1385,33 +1377,10 @@ export default {
       },
       deep: true,
     },
-    // "step6Form.currentVersion": {
-    //   handler(val) {
-    //     if (val != "" && semver.valid(val) === null) {
-    //       this.versionErrorMessage = "Please provide a valid version number.";
-    //       this.$refs.cmForm.validate();
-    //       this.invalidStatus.version = true;
-    //       return;
-    //     } else {
-    //       this.versionErrorMessage = "";
-    //       this.invalidStatus.version = false;
-    //     }
-    //   },
-    //   deep: true,
-    // },
     "step7Form.isPartOf": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.isPartOfErrorMessage = "Please provide a valid URL";
@@ -1432,16 +1401,7 @@ export default {
     "step4Form.codeRepository": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.codeRepositoryErrorMessage = "Please provide a valid URL";
@@ -1462,16 +1422,7 @@ export default {
     "step4Form.continuousIntegration": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.continuousIntegrationErrorMessage =
@@ -1493,16 +1444,7 @@ export default {
     "step4Form.issueTracker": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.issueTrackerErrorMessage = "Please provide a valid URL";
@@ -1523,16 +1465,7 @@ export default {
     "step6Form.currentVersionDownloadLink": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.currentVersionDownloadLinkErrorMessage =
@@ -1556,16 +1489,7 @@ export default {
         if (val.length > 0) {
           for (let relatedLink of val) {
             if (relatedLink.link !== "") {
-              let validIdentifier = false;
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(relatedLink.link)) {
-                validIdentifier = true;
-              } else {
-                validIdentifier = false;
-              }
+              const validIdentifier = validator.isURL(val);
 
               if (!validIdentifier) {
                 this.relatedLinksErrorMessage = "Please provide a valid URL";

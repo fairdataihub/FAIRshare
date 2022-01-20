@@ -1106,6 +1106,7 @@ import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
 import doiRegex from "doi-regex";
 import { ElMessageBox, ElMessage } from "element-plus";
+import validator from "validator";
 import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -1629,7 +1630,6 @@ export default {
           this.invalidStatus.relatedIdentifiers = false;
         } else {
           for (let relatedIdentifier of val) {
-            // console.log(relatedIdentifier.identifier);
             if (relatedIdentifier.identifier === "") {
               this.relatedIdentifiersErrorMessage =
                 "Please provide a related identifier.";
@@ -1643,19 +1643,10 @@ export default {
                 validIdentifier = true;
               }
 
-              // if (!validIdentifier) {
-              //   try {
-              //     new URL(relatedIdentifier.identifier);
-              //     validIdentifier = true;
-              //   } catch (_) {
-              //     validIdentifier = false;
-              //   }
-              // }
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(relatedIdentifier.identifier)) {
+              if (
+                !validIdentifier &&
+                validator.isURL(relatedIdentifier.identifier)
+              ) {
                 validIdentifier = true;
               } else {
                 validIdentifier = false;
@@ -1692,23 +1683,7 @@ export default {
               this.invalidStatus.subjects = true;
               break;
             } else {
-              let validIdentifier = false;
-
-              // try {
-              //   new URL(subject.identifier);
-              //   validIdentifier = true;
-              // } catch (_) {
-              //   validIdentifier = false;
-              // }
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(subject.identifier)) {
-                validIdentifier = true;
-              } else {
-                validIdentifier = false;
-              }
+              const validIdentifier = validator.isURL(val);
 
               if (!validIdentifier) {
                 this.subjectsErrorMessage =
