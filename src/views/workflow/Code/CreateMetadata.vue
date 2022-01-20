@@ -38,6 +38,7 @@
               <div class="p-4">
                 <el-form
                   :model="step1Form"
+                  :rules="step1FormRules"
                   label-width="160px"
                   label-position="top"
                   size="large"
@@ -45,7 +46,7 @@
                   @submit.prevent
                   class="py-4"
                 >
-                  <el-form-item label="Software name" required>
+                  <el-form-item label="Software name" prop="name">
                     <div class="flex flex-row items-center">
                       <el-input
                         v-model="step1Form.name"
@@ -57,7 +58,10 @@
                     </div>
                   </el-form-item>
 
-                  <el-form-item label="Software description/abstract" required>
+                  <el-form-item
+                    label="Software description/abstract"
+                    prop="description"
+                  >
                     <div class="flex flex-row items-center">
                       <el-input
                         v-model="step1Form.description"
@@ -117,7 +121,7 @@
               <!-- :plain="!lastStep" -->
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep2FromStep1"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -385,7 +389,7 @@
               <!-- :plain="!lastStep" -->
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep3FromStep2"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -540,7 +544,7 @@
               <!-- :plain="!lastStep" -->
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep4FromStep3"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -692,7 +696,7 @@
               <!-- :plain="!lastStep" -->
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep5FromStep4"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -870,10 +874,10 @@
                 <el-icon><back-icon /></el-icon>
                 Previous
               </button>
-              <!-- :plain="!lastStep" -->
+
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep6FromStep5"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -979,7 +983,7 @@
               <!-- :plain="!lastStep" -->
               <button
                 class="primary-button"
-                @click="nextFormStep"
+                @click="navigateToStep7FromStep6"
                 :disabled="checkInvalidStatus"
               >
                 Next
@@ -1098,7 +1102,7 @@
 import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
 // import semver from "semver";
 // import _ from "lodash";
 
@@ -1106,9 +1110,7 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 // import FormCardContent from "@/components/ui/FormCardContent.vue";
-// import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
 
-// import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
@@ -1123,7 +1125,6 @@ export default {
     Icon,
     PillProgressBar,
     // FormCardContent,
-    // LoadingPulseCircle,
   },
   data() {
     return {
@@ -1140,13 +1141,10 @@ export default {
       ],
 
       dataset: {},
-      // loadingLicenseDetails: false,
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      activeNames: ["general", "code"],
       loading: false,
       interval: null,
-      // licenseOptions: licensesJSON.licenses,
       contributorTypes: contributorTypesJSON.contributorTypes,
       programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
@@ -1158,6 +1156,22 @@ export default {
         description: "",
         creationDate: "",
         firstReleaseDate: "",
+      },
+      step1FormRules: {
+        name: [
+          {
+            required: true,
+            message: "Please enter the name of the software",
+            trigger: "blur",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "Please enter a description",
+            trigger: "blur",
+          },
+        ],
       },
       step2Form: {
         authors: [],
@@ -1194,37 +1208,6 @@ export default {
         developmentStatus: "",
         isPartOf: "",
       },
-      // codeForm: {
-      //   name: "",
-      //   description: "",
-      //   keywords: [],
-      //   funding: {
-      //     code: "",
-      //     organization: "",
-      //   },
-      //   referencePublication: "",
-      //   authors: [],
-      //   contributors: [],
-      //   creationDate: "",
-      //   firstReleaseDate: "",
-      //   // license: "",
-      //   uniqueIdentifier: "",
-      //   applicationCategory: "",
-      //   codeRepository: "",
-      //   continuousIntegration: "",
-      //   issueTracker: "",
-      //   relatedLinks: [],
-      //   programmingLanguage: [],
-      //   runtimePlatform: [],
-      //   operatingSystem: [],
-      //   otherSoftwareRequirements: [],
-      //   currentVersion: "",
-      //   currentVersionReleaseDate: "",
-      //   currentVersionDownloadLink: "",
-      //   currentVersionReleaseNotes: "",
-      //   developmentStatus: "",
-      //   isPartOf: "",
-      // },
       authorsErrorMessage: "",
       contributorsErrorMessage: "",
       isPartOfErrorMessage: "",
@@ -1235,9 +1218,6 @@ export default {
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
       invalidStatus: {},
-      // showLicenseDetails: false,
-      // licenseTitle: "",
-      // licenseHtmlUrl: "",
       originalObject: {},
     };
   },
@@ -1637,6 +1617,15 @@ export default {
       this.currentStep = step;
     },
     async prevFormStep() {
+      ElNotification.closeAll();
+      ElNotification({
+        title: "Saving...",
+        message: "Saving your current entries",
+        position: "bottom-right",
+        type: "info",
+        duration: 500,
+      });
+
       if (this.currentStep - 1 > 0) {
         this.currentStep--;
       } else {
@@ -1654,13 +1643,67 @@ export default {
         this.currentStep++;
       }
     },
-    onDragStart() {
-      // change cursor to grabbing
-      // this.$refs.cmForm.style.cursor = "grabbing";
+    navigateToStep2FromStep1() {
+      this.$refs["s1Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(2);
+        }
+      });
     },
-    onDragEnd() {
-      // change cursor to grabbing
-      // this.$refs.cmForm.style.cursor = "grab";
+    navigateToStep3FromStep2() {
+      if (this.step2Form.authors.length <= 0) {
+        ElMessage.error("Please add at least one author.");
+        return;
+      }
+
+      this.$refs["s2Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(3);
+        }
+      });
+    },
+    navigateToStep4FromStep3() {
+      if (this.step3Form.keywords.length <= 0) {
+        ElMessage.error("Please add at least one keyword.");
+        return;
+      }
+
+      this.$refs["s3Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(4);
+        }
+      });
+    },
+    navigateToStep5FromStep4() {
+      this.$refs["s4Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(5);
+        }
+      });
+    },
+    navigateToStep6FromStep5() {
+      if (this.step5Form.programmingLanguage.length <= 0) {
+        ElMessage.error("Please add at least one programming language.");
+        return;
+      }
+      this.$refs["s5Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(6);
+        }
+      });
+    },
+    navigateToStep7FromStep6() {
+      this.$refs["s6Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(7);
+        }
+      });
     },
     addIds(array) {
       array.forEach((element) => {
@@ -1759,7 +1802,16 @@ export default {
         return element[key] !== "";
       });
     },
-    navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+    async saveCurrentEntries() {
+      ElNotification.closeAll();
+      ElNotification({
+        title: "Saving...",
+        message: "Saving your current entries",
+        position: "bottom-right",
+        type: "info",
+        duration: 500,
+      });
+
       this.dataset.data.general.questions.name = this.step1Form.name;
       this.dataset.data.general.questions.description =
         this.step1Form.description;
@@ -1828,8 +1880,11 @@ export default {
         this.dataset.data.Code.questions = codeForm;
       }
 
-      this.datasetStore.updateCurrentDataset(this.dataset);
-      this.datasetStore.syncDatasets();
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+    },
+    async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+      await this.saveCurrentEntries();
 
       if (shouldNavigateBack) {
         this.$router.push({
@@ -1837,8 +1892,6 @@ export default {
         });
         return;
       }
-
-      this.workflow.expandOptions = [];
 
       const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
 
@@ -1887,16 +1940,6 @@ export default {
       this.datasetStore.showProgressBar();
       this.datasetStore.setProgressBarType("zenodo");
       this.datasetStore.setCurrentStep(3);
-
-      if (!("expandOptions" in this.workflow)) {
-        this.workflow.expandOptions = ["general"];
-      }
-
-      if (this.workflow.expandOptions.length === 0) {
-        this.activeNames = ["general"];
-      } else {
-        this.activeNames = this.workflow.expandOptions;
-      }
 
       if (this.codePresent) {
         if (
