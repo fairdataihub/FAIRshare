@@ -1092,6 +1092,10 @@
               </button>
             </div>
           </div>
+
+          <div>
+            <Vue3Lottie :animationData="SaveLottieJSON" :width="100" :height="100"  /> 
+          </div>
         </div>
       </div>
     </div>
@@ -1103,17 +1107,19 @@ import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
+import Vue3Lottie from "vue3-lottie";
 // import semver from "semver";
 // import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
-// import FormCardContent from "@/components/ui/FormCardContent.vue";
 
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
+
+import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -1123,7 +1129,7 @@ export default {
   components: {
     draggable,
     Icon,
-    PillProgressBar,
+    PillProgressBar, Vue3Lottie
     // FormCardContent,
   },
   data() {
@@ -1139,7 +1145,7 @@ export default {
         "Current version of the software",
         "Additional Info",
       ],
-
+SaveLottieJSON,
       dataset: {},
       workflowID: this.$route.params.workflowID,
       workflow: {},
