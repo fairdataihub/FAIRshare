@@ -1094,7 +1094,11 @@
           </div>
 
           <div>
-            <Vue3Lottie :animationData="SaveLottieJSON" :width="100" :height="100"  /> 
+            <Vue3Lottie
+              :animationData="SaveLottieJSON"
+              :width="100"
+              :height="100"
+            />
           </div>
         </div>
       </div>
@@ -1129,7 +1133,8 @@ export default {
   components: {
     draggable,
     Icon,
-    PillProgressBar, Vue3Lottie
+    PillProgressBar,
+    Vue3Lottie,
     // FormCardContent,
   },
   data() {
@@ -1145,7 +1150,7 @@ export default {
         "Current version of the software",
         "Additional Info",
       ],
-SaveLottieJSON,
+      SaveLottieJSON,
       dataset: {},
       workflowID: this.$route.params.workflowID,
       workflow: {},
