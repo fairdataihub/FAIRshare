@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 px-5"
+    class="relative flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 px-5"
   >
     <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
@@ -1092,17 +1092,20 @@
               </button>
             </div>
           </div>
-
-          <div>
-            <Vue3Lottie
-              :animationData="SaveLottieJSON"
-              :width="100"
-              :height="100"
-            />
-          </div>
         </div>
       </div>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-1 right-2" v-if="showSaving">
+        <Vue3Lottie
+          :animationData="SaveLottieJSON"
+          :width="75"
+          :height="75"
+          :loop="1"
+          @onComplete="hideSavingIcon"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -1110,7 +1113,7 @@
 import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import Vue3Lottie from "vue3-lottie";
 // import semver from "semver";
 // import _ from "lodash";
@@ -1230,6 +1233,7 @@ export default {
       codeRepositoryErrorMessage: "",
       invalidStatus: {},
       originalObject: {},
+      showSaving: false,
     };
   },
   watch: {
@@ -1627,15 +1631,15 @@ export default {
     setCurrentStep(step) {
       this.currentStep = step;
     },
+    showSavingIcon() {
+      this.showSaving = false;
+      this.showSaving = true;
+    },
+    hideSavingIcon() {
+      this.showSaving = false;
+    },
     async prevFormStep() {
-      ElNotification.closeAll();
-      ElNotification({
-        title: "Saving...",
-        message: "Saving your current entries",
-        position: "bottom-right",
-        type: "info",
-        duration: 500,
-      });
+      this.showSavingIcon();
 
       if (this.currentStep - 1 > 0) {
         this.currentStep--;
@@ -1814,14 +1818,7 @@ export default {
       });
     },
     async saveCurrentEntries() {
-      ElNotification.closeAll();
-      ElNotification({
-        title: "Saving...",
-        message: "Saving your current entries",
-        position: "bottom-right",
-        type: "info",
-        duration: 500,
-      });
+      this.showSavingIcon();
 
       this.dataset.data.general.questions.name = this.step1Form.name;
       this.dataset.data.general.questions.description =
