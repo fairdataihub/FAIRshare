@@ -125,7 +125,11 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools();
+    if (!process.env.IS_TEST) {
+      //uncomment this before build
+      mainWindow.webContents.openDevTools();
+    }
+    // mainWindow.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
@@ -139,7 +143,7 @@ async function createWindow() {
 
 // Close the webserver process on app exit
 const exitPyProc = (main_pid) => {
-  console.log("killling python process...");
+  console.log("killing python process...");
   if ((process.platform == "darwin") | (process.platform == "linux")) {
     pyProc.kill();
     return new Promise(function (resolve) {

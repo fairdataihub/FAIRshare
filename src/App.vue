@@ -155,6 +155,11 @@ export default {
     });
 
     console.log(this.appPath);
+    console.log(this.$route);
+
+    this.$router.push({
+      path: "/",
+    });
   },
 };
 </script>
