@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="relative flex flex-col w-full h-full max-w-xs min-h-screen pt-2 pb-10 mr-3 debug-screens bg-gray-50"
+    class="relative flex flex-col w-full h-screen max-w-xs min-h-screen pt-2 pb-5 mr-3 debug-screens bg-gray-50"
     :class="{
       'w-72': sideBarOpen,
       'w-12': !sideBarOpen,
@@ -9,7 +9,7 @@
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full text-gray-700">
+    <div class="flex flex-col w-full h-full text-gray-700">
       <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
@@ -28,36 +28,36 @@
           </div>
         </div>
       </div>
-      <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
-        <router-link to="/home" class="sideBarMenuItem">
-          <el-icon><home-filled /></el-icon> Overview
-        </router-link>
-        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
-          <el-icon><data-line /></el-icon> Curate & Share
-        </router-link>
-        <router-link to="/manageAccount" class="sideBarMenuItem">
-          <el-icon><user-icon /></el-icon> Manage Accounts
-        </router-link>
-        <router-link to="/appSettings" class="sideBarMenuItem">
-          <el-icon><setting-icon /></el-icon> Settings
-        </router-link>
-        <router-link to="/appDocumentation" class="sideBarMenuItem">
-          <el-icon><collection-icon /></el-icon> Documentation
-        </router-link>
-        <router-link to="/ContactUs" class="sideBarMenuItem">
-          <el-icon><chat-dot-round /></el-icon> Contact Us
-        </router-link>
-        <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
-        <router-link
-          to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
-          class="sideBarMenuItem"
-        >
-          Confirm
-        </router-link> -->
+      <nav
+        class="flex flex-col justify-between flex-grow h-full px-4 pb-0"
+        v-show="sideBarOpen"
+      >
+        <div>
+          <router-link to="/home" class="sideBarMenuItem">
+            <el-icon><home-filled /></el-icon> Overview
+          </router-link>
+          <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
+            <el-icon><data-line /></el-icon> Curate & Share
+          </router-link>
+        </div>
+        <div>
+          <router-link to="/manageAccount" class="sideBarMenuItem">
+            <el-icon><user-icon /></el-icon> Manage Accounts
+          </router-link>
+          <router-link to="/appSettings" class="sideBarMenuItem">
+            <el-icon><setting-icon /></el-icon> Settings
+          </router-link>
+          <router-link to="/appDocumentation" class="sideBarMenuItem">
+            <el-icon><collection-icon /></el-icon> Documentation
+          </router-link>
+          <router-link to="/ContactUs" class="sideBarMenuItem">
+            <el-icon><chat-dot-round /></el-icon> Contact Us
+          </router-link>
+          <div class="absolute bottom-0 hidden right-3">
+            <span class="text-xs text-gray-400">{{ environment }}</span>
+          </div>
+        </div>
       </nav>
-    </div>
-    <div class="absolute bottom-0 right-3">
-      <span class="text-xs text-gray-400">{{ environment }}</span>
     </div>
   </div>
 </template>
