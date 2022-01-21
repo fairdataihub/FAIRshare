@@ -87,7 +87,7 @@ app.component("unlock-icon", Unlock);
 app.component("user-icon", User);
 app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
-app.component("folder-icon", Folder)
+app.component("folder-icon", Folder);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router

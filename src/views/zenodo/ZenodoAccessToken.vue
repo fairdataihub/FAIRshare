@@ -14,9 +14,16 @@
         <template #default="{ node }">
           <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
           <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-          <span :class="(node.label == 'codemeta.json' ||
-          node.label == 'citation.cff' ||
-          node.label == 'LICENSE file')? 'text-green-400':''">{{ node.label }}</span>
+          <span
+            :class="
+              node.label == 'codemeta.json' ||
+              node.label == 'citation.cff' ||
+              node.label == 'LICENSE file'
+                ? 'text-green-400'
+                : ''
+            "
+            >{{ node.label }}</span
+          >
           <!-- <Icon icon="akar-icons:eye" v-if="node.isLeaf" class = "w-4 h-4 pl-[3px]"/> -->
         </template>
       </el-tree>
@@ -28,34 +35,34 @@
         :before-close="handleCloseDrawer"
         :lock-scroll="false"
       >
-        <el-scrollbar
-          style="height: calc(100vh - 45px)"
-        >
-        <div v-if="PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile">
-          <el-table
-            :data="tableData"
-            style="width: 100%"
-            row-key="id"
-            border
-            default-expand-all
+        <el-scrollbar style="height: calc(100vh - 45px)">
+          <div
+            v-if="PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile"
           >
-            <el-table-column prop="Name" label="Name" />
-            <el-table-column prop="Value" label="Value" />
-          </el-table>
-        </div>
+            <el-table
+              :data="tableData"
+              style="width: 100%"
+              row-key="id"
+              border
+              default-expand-all
+            >
+              <el-table-column prop="Name" label="Name" />
+              <el-table-column prop="Value" label="Value" />
+            </el-table>
+          </div>
 
-        <div v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile">
-          <el-table
-            :data="lisenceData"
-            style="width: 100%"
-            row-key="id"
-            border
-            default-expand-all
-          >
-            <el-table-column prop="Name" label="Name" />
-            <el-table-column prop="Value" label="Value" />
-          </el-table>
-        </div>
+          <div v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile">
+            <el-table
+              :data="lisenceData"
+              style="width: 100%"
+              row-key="id"
+              border
+              default-expand-all
+            >
+              <el-table-column prop="Name" label="Name" />
+              <el-table-column prop="Value" label="Value" />
+            </el-table>
+          </div>
         </el-scrollbar>
       </el-drawer>
       <div class="h-4"></div>
@@ -226,7 +233,7 @@ export default {
         });
         return results;
       }
-      let root = { label: dir, children: dfs(dir), fullPath:dir, isDir:true};
+      let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
       root.children.push({
         label: "codemeta.json",
         isDir: false,
