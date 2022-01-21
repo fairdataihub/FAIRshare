@@ -111,8 +111,8 @@ const routes = [
   },
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
   { path: "/manageAccount", component: ManageAccount },
-  { path: "/appSettings", component: AppSettings },
-  { path: "/appDocumentation", component: AppDocumentation },
+  { path: "/settings", component: AppSettings },
+  { path: "/documentation", component: AppDocumentation },
   { path: "/contactUs", component: ContactUs },
 ];
 

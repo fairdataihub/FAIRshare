@@ -49,15 +49,15 @@
             <el-icon><user-icon /></el-icon>
             <span v-show="sideBarOpen"> Manage Accounts </span>
           </router-link>
-          <router-link to="/appSettings" class="sideBarMenuItem">
+          <router-link to="/settings" class="sideBarMenuItem">
             <el-icon><setting-icon /></el-icon>
             <span v-show="sideBarOpen"> Settings </span>
           </router-link>
-          <router-link to="/appDocumentation" class="sideBarMenuItem">
+          <router-link to="/documentation" class="sideBarMenuItem">
             <el-icon><collection-icon /></el-icon>
             <span v-show="sideBarOpen"> Documentation </span>
           </router-link>
-          <router-link to="/ContactUs" class="sideBarMenuItem">
+          <router-link to="/contactUs" class="sideBarMenuItem">
             <el-icon><chat-dot-round /></el-icon>
             <span v-show="sideBarOpen"> Contact Us </span>
           </router-link>
