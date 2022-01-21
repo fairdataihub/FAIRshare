@@ -6,90 +6,59 @@
       <span class="mb-2">
         Here are the files we are going to send to zenodo
       </span>
-
-      <el-collapse v-model="showFiles">
-        <el-collapse-item
-          class="my-1 border-2 border-gray-100 zenodo-collapse-item"
-          name="codemetajson"
+      <el-tree
+        :data="fileData"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+      >
+        <template #default="{ node }">
+          <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+          <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+          <span :class="(node.label == 'codemeta.json' ||
+          node.label == 'citation.cff' ||
+          node.label == 'LICENSE file')? 'text-green-400':''">{{ node.label }}</span>
+          <!-- <Icon icon="akar-icons:eye" v-if="node.isLeaf" class = "w-4 h-4 pl-[3px]"/> -->
+        </template>
+      </el-tree>
+      <el-drawer
+        v-model="showFileDetails"
+        :title="fileTitle"
+        direction="rtl"
+        size="60%"
+        :before-close="handleCloseDrawer"
+        :lock-scroll="false"
+      >
+        <el-scrollbar
+          style="height: calc(100vh - 45px)"
         >
-          <template #title>
-            <div
-              class="flex flex-row items-center justify-between w-full font-inter"
-            >
-              <p class="px-4 text-sm font-semibold text-blue-500">
-                codemeta.json
-              </p>
-            </div>
-          </template>
-          <div class="p-4">
-            <el-table
-              :data="tableData"
-              style="width: 100%"
-              row-key="id"
-              border
-              default-expand-all
-            >
-              <el-table-column prop="Name" label="Name" />
-              <el-table-column prop="Value" label="Value" />
-            </el-table>
-          </div>
-        </el-collapse-item>
+        <div v-if="PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile">
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            row-key="id"
+            border
+            default-expand-all
+          >
+            <el-table-column prop="Name" label="Name" />
+            <el-table-column prop="Value" label="Value" />
+          </el-table>
+        </div>
 
-        <el-collapse-item
-          class="my-1 border-2 border-gray-100 zenodo-collapse-item"
-          name="citationcff"
-        >
-          <template #title>
-            <div
-              class="flex flex-row items-center justify-between w-full font-inter"
-            >
-              <p class="px-4 text-sm font-semibold text-blue-500">
-                citation.cff
-              </p>
-            </div>
-          </template>
-          <div class="p-4">
-            <el-table
-              :data="tableData"
-              style="width: 100%"
-              row-key="id"
-              border
-              default-expand-all
-            >
-              <el-table-column prop="Name" label="Name" />
-              <el-table-column prop="Value" label="Value" />
-            </el-table>
-          </div>
-        </el-collapse-item>
-
-        <el-collapse-item
-          class="my-1 border-2 border-gray-100 zenodo-collapse-item"
-          name="LICENSEfile"
-        >
-          <template #title>
-            <div
-              class="flex flex-row items-center justify-between w-full font-inter"
-            >
-              <p class="px-4 text-sm font-semibold text-blue-500">
-                LICENSE file
-              </p>
-            </div>
-          </template>
-          <div class="p-4">
-            <el-table
-              :data="lisenceData"
-              style="width: 100%"
-              row-key="id"
-              border
-              default-expand-all
-            >
-              <el-table-column prop="Name" label="Name" />
-              <el-table-column prop="Value" label="Value" />
-            </el-table>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-
+        <div v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile">
+          <el-table
+            :data="lisenceData"
+            style="width: 100%"
+            row-key="id"
+            border
+            default-expand-all
+          >
+            <el-table-column prop="Name" label="Name" />
+            <el-table-column prop="Value" label="Value" />
+          </el-table>
+        </div>
+        </el-scrollbar>
+      </el-drawer>
+      <div class="h-4"></div>
       <span class="text-lg font-medium text-left">
         Zenodo connection details
       </span>
@@ -146,7 +115,6 @@
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
 // import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
-
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
@@ -168,8 +136,18 @@ export default {
       showFiles: "1",
       lisenceData: [{ Name: "Lisence", Value: "", id: 0 }],
       tableData: [],
+      fileData: [],
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
+      showFileDetails: false,
+      fileTitle: "",
+      PreviewNewlyCreatedFile: false,
+      PreviewNewlyCreatedLicenseFile: false,
     };
   },
+  //el-tree-node__content
   computed: {
     disableContinue() {
       if (this.validTokenAvailable) {
@@ -196,6 +174,77 @@ export default {
     //       return { data: error.response.data, status: error.response.status };
     //     });
     // },
+    handleCloseDrawer() {
+      this.showFileDetails = false;
+      this.fileTitle = "";
+      this.fileUrl = "";
+
+      this.PreviewNewlyCreatedFile = false;
+      this.PreviewNewlyCreatedLicenseFile = false;
+    },
+    handleOpenDrawer(title) {
+      this.showFileDetails = true;
+      this.fileTitle = title;
+    },
+    handleNodeClick(data) {
+      if (!data.isDir) {
+        if (
+          data.label == "codemeta.json" ||
+          data.label == "citation.cff" ||
+          data.label == "LICENSE file"
+        ) {
+          this.PreviewNewlyCreatedFile = true;
+        }
+
+        if (data.label == "LICENSE file") {
+          this.PreviewNewlyCreatedLicenseFile = true;
+        }
+
+        let title = data.label;
+        this.handleOpenDrawer(title);
+      }
+    },
+    getAllFilesFromFolder(dir) {
+      let filesystem = require("fs");
+      function dfs(dir) {
+        let results = [];
+        filesystem.readdirSync(dir).forEach(function (file) {
+          let newObj = {};
+          let filefullname = dir + "/" + file;
+          let stat = filesystem.statSync(filefullname);
+          if (stat && stat.isDirectory()) {
+            newObj.label = file;
+            newObj.isDir = true;
+            newObj.children = dfs(filefullname);
+            newObj.fullPath = filefullname;
+          } else {
+            newObj.label = file;
+            newObj.isDir = false;
+            newObj.fullPath = filefullname;
+          }
+          results.push(newObj);
+        });
+        return results;
+      }
+      let root = { label: dir, children: dfs(dir), fullPath:dir, isDir:true};
+      root.children.push({
+        label: "codemeta.json",
+        isDir: false,
+        fullPath: dir + "/" + "codemeta.json",
+      });
+      root.children.push({
+        label: "citation.cff",
+        isDir: false,
+        fullPath: dir + "/" + "citation.cff",
+      });
+      root.children.push({
+        label: "LICENSE file",
+        isDir: false,
+        fullPath: dir + "/" + "LICENSE file",
+      });
+      this.fileData.push(root);
+    },
+
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
       // console.log("obj: ", jsonObject)
       if (
@@ -320,6 +369,7 @@ export default {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
     this.lisenceData["Value"] = this.workflow.licenseText;
+    this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
     this.tableData = this.jsonToTableDataRecursive(
       this.dataset.data,
       1,
