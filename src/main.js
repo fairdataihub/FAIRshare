@@ -28,6 +28,7 @@ app.component("form-help-content", FormHelpContent);
 import {
   ArrowRightBold,
   Back,
+  Checked,
   CircleCheckFilled,
   CircleCloseFilled,
   DArrowLeft,
@@ -60,6 +61,7 @@ import {
 
 app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
+app.component("checked-icon", Checked);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
 app.component("d-arrow-left", DArrowLeft);

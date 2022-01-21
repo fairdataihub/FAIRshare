@@ -4,7 +4,7 @@ import os
 import yaml
 
 
-def createCodeMetadata(code_data, general_data, folder_path):
+def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     metadata = {
         "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
         "@type": "SoftwareSourceCode",
@@ -179,26 +179,30 @@ def createCodeMetadata(code_data, general_data, folder_path):
 
                 metadata["contributor"].append(new_contributor)
 
+    # return the code metadata object if virtual is set to true
+    if virtual_file:
+        return json.dumps(metadata)
+
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
         f.write(json.dumps(metadata))
     return True
 
 
-def createMetadata(data_types, data):
+def createMetadata(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCodeMetadata(code_data, general_data, folder_path)
+            createCodeMetadata(code_data, general_data, folder_path, virtual_file)
 
         return "SUCCESS"
     except Exception as e:
         raise e
 
 
-def createCitationFromCode(code_data, general_data, folder_path):
+def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
     citationObject = {}
 
@@ -280,6 +284,10 @@ def createCitationFromCode(code_data, general_data, folder_path):
         if code_data["currentVersionReleaseDate"] != "":
             citationObject["date-released"] = code_data["currentVersionReleaseDate"]
 
+    # return the citation.cff object if virtual is set to true
+    if virtual_file:
+        return json.dumps(metadata)
+
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:
         yaml.dump(citationObject, file)
@@ -303,13 +311,13 @@ def createCitationFromCode(code_data, general_data, folder_path):
     return True
 
 
-def createCitationCFF(data_types, data):
+def createCitationCFF(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCitationFromCode(code_data, general_data, folder_path)
+            createCitationFromCode(code_data, general_data, folder_path, virtual_file)
 
         return "SUCCESS"
     except Exception as e:

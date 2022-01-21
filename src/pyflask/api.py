@@ -93,6 +93,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -103,13 +104,17 @@ class CreateMetadata(Resource):
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
         )
+        parser.add_argument(
+            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+        )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createMetadata(data_types, data)
+        return createMetadata(data_types, data, virtual_file)
 
 
 @metadata.route("/citation/create", endpoint="CreateCitationCFF")
@@ -119,6 +124,7 @@ class CreateCitationCFF(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -129,13 +135,17 @@ class CreateCitationCFF(Resource):
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
         )
+        parser.add_argument(
+            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+        )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createCitationCFF(data_types, data)
+        return createCitationCFF(data_types, data, virtual_file)
 
 
 ###############################################################################

@@ -1,71 +1,8 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full h-full p-3 pr-5">
+  <div
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
+  >
     <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left"> File Preview </span>
-
-      <span class="mb-2">
-        Here are the files we are going to send to zenodo
-      </span>
-      <el-tree
-        :data="fileData"
-        :props="defaultProps"
-        @node-click="handleNodeClick"
-      >
-        <template #default="{ node }">
-          <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
-          <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-          <span
-            :class="
-              node.label == 'codemeta.json' ||
-              node.label == 'citation.cff' ||
-              node.label == 'LICENSE file'
-                ? 'text-green-400'
-                : ''
-            "
-            >{{ node.label }}</span
-          >
-          <!-- <Icon icon="akar-icons:eye" v-if="node.isLeaf" class = "w-4 h-4 pl-[3px]"/> -->
-        </template>
-      </el-tree>
-      <el-drawer
-        v-model="showFileDetails"
-        :title="fileTitle"
-        direction="rtl"
-        size="60%"
-        :before-close="handleCloseDrawer"
-        :lock-scroll="false"
-      >
-        <el-scrollbar style="height: calc(100vh - 45px)">
-          <div
-            v-if="PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile"
-          >
-            <el-table
-              :data="tableData"
-              style="width: 100%"
-              row-key="id"
-              border
-              default-expand-all
-            >
-              <el-table-column prop="Name" label="Name" />
-              <el-table-column prop="Value" label="Value" />
-            </el-table>
-          </div>
-
-          <div v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile">
-            <el-table
-              :data="lisenceData"
-              style="width: 100%"
-              row-key="id"
-              border
-              default-expand-all
-            >
-              <el-table-column prop="Name" label="Name" />
-              <el-table-column prop="Value" label="Value" />
-            </el-table>
-          </div>
-        </el-scrollbar>
-      </el-drawer>
-      <div class="h-4"></div>
       <span class="text-lg font-medium text-left">
         Zenodo connection details
       </span>
@@ -103,6 +40,15 @@
         </router-link>
 
         <button
+          class="secondary-plain-button"
+          @click="showFilePreview"
+          v-if="validTokenAvailable"
+        >
+          <el-icon><checked-icon /></el-icon>
+          View files ready for upload
+        </button>
+
+        <button
           class="primary-button"
           :disabled="disableContinue"
           @click="uploadToZenodo"
@@ -112,16 +58,87 @@
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
       </div>
+      <transition appear mode="out-in" name="fade">
+        <div v-if="showFilePreviewSection" class="py-5">
+          <line-divider />
+          <p class="my-5 text=lg">
+            A list of all the file that we are going to upload to Zenodo is
+            shown below. You can click on any of them to view the content or
+            open in your file browser.
+          </p>
+          <el-tree
+            :data="fileData"
+            :props="defaultProps"
+            @node-click="handleNodeClick"
+          >
+            <template #default="{ node }">
+              <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+              <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+              <span
+                :class="
+                  node.label == 'codemeta.json' ||
+                  node.label == 'citation.cff' ||
+                  node.label == 'LICENSE'
+                    ? 'text-secondary-500'
+                    : ''
+                "
+                >{{ node.label }}</span
+              >
+            </template>
+          </el-tree>
+          <el-drawer
+            v-model="showFileDetails"
+            :title="fileTitle"
+            direction="rtl"
+            size="60%"
+            :before-close="handleCloseDrawer"
+            :lock-scroll="false"
+          >
+            <el-scrollbar style="height: calc(100vh - 45px)">
+              <div
+                v-if="
+                  PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile
+                "
+              >
+                <el-table
+                  :data="tableData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column prop="Value" label="Value" />
+                </el-table>
+              </div>
+
+              <div
+                v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile"
+              >
+                <el-table
+                  :data="lisenceData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column prop="Value" label="Value" />
+                </el-table>
+              </div>
+            </el-scrollbar>
+          </el-drawer>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
-// import axios from "axios";
-
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
-// import ZenodoTokenConnectionVue from "@/components/serviceIntegration/ZenodoTokenConnection";
+
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
@@ -150,6 +167,7 @@ export default {
       },
       showFileDetails: false,
       fileTitle: "",
+      showFilePreviewSection: true,
       PreviewNewlyCreatedFile: false,
       PreviewNewlyCreatedLicenseFile: false,
     };
@@ -167,20 +185,9 @@ export default {
     },
   },
   methods: {
-    // async getDepositions(token) {
-    //   return await axios
-    //     .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
-    //       params: {
-    //         access_token: token,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       return { data: response.data, status: response.status };
-    //     })
-    //     .catch((error) => {
-    //       return { data: error.response.data, status: error.response.status };
-    //     });
-    // },
+    showFilePreview() {
+      this.showFilePreviewSection = !this.showFilePreviewSection;
+    },
     handleCloseDrawer() {
       this.showFileDetails = false;
       this.fileTitle = "";
@@ -198,12 +205,12 @@ export default {
         if (
           data.label == "codemeta.json" ||
           data.label == "citation.cff" ||
-          data.label == "LICENSE file"
+          data.label == "LICENSE"
         ) {
           this.PreviewNewlyCreatedFile = true;
         }
 
-        if (data.label == "LICENSE file") {
+        if (data.label == "LICENSE") {
           this.PreviewNewlyCreatedLicenseFile = true;
         }
 
@@ -245,9 +252,9 @@ export default {
         fullPath: dir + "/" + "citation.cff",
       });
       root.children.push({
-        label: "LICENSE file",
+        label: "LICENSE",
         isDir: false,
-        fullPath: dir + "/" + "LICENSE file",
+        fullPath: dir + "/" + "LICENSE",
       });
       this.fileData.push(root);
     },
