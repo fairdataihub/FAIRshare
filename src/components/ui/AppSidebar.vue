@@ -1,23 +1,25 @@
 <template>
   <!-- component -->
   <div
-    class="relative flex flex-col w-full h-full max-w-xs min-h-screen pt-2 pb-10 mr-3 debug-screens bg-gray-50"
+    class="relative flex flex-col w-full h-screen max-w-xs min-h-screen pt-2 pb-5 mr-3 debug-screens bg-gray-50"
     :class="{
       'w-72': sideBarOpen,
-      'w-12': !sideBarOpen,
+      'w-[85px]': !sideBarOpen,
       'debug-screens': environment !== 'production',
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full text-gray-700">
+    <div class="flex flex-col w-full h-full text-gray-700">
       <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
           class="m-4 w-28"
           src="../../assets/brand/logo.png"
         />
+
         <div
           class="absolute top-0 flex items-center justify-center p-1 transition-all transform scale-100 cursor-pointer right-2 hover:scale-110 group"
+          :class="{ 'right-6': !sideBarOpen }"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"
         >
@@ -28,27 +30,42 @@
           </div>
         </div>
       </div>
-      <nav class="flex-grow px-4 pb-0 overflow-y-auto" v-show="sideBarOpen">
-        <router-link to="/home" class="sideBarMenuItem">
-          <el-icon><home-filled /></el-icon> Overview
-        </router-link>
-        <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
-          <el-icon><data-line /></el-icon> Curate & Share
-        </router-link>
-        <router-link to="/manageAccount" class="sideBarMenuItem">
-          <el-icon><user-icon /></el-icon> Manage Accounts
-        </router-link>
-        <!-- <router-link to="/about" class="sideBarMenuItem"> About </router-link>
-        <router-link
-          to="/datasets/0387b979-4b45-46bb-bb27-84aaf32c4cdb/workflow1/zenodo/metadata"
-          class="sideBarMenuItem"
-        >
-          Confirm
-        </router-link> -->
+      <nav
+        class="flex flex-col justify-between flex-grow h-full px-4"
+        :class="{ 'pt-10': !sideBarOpen }"
+      >
+        <div>
+          <router-link to="/home" class="sideBarMenuItem">
+            <el-icon><home-filled /></el-icon>
+            <span v-show="sideBarOpen"> Overview </span>
+          </router-link>
+          <router-link to="/datasets" :class="[`sideBarMenuItem`, isDataset()]">
+            <el-icon><data-line /></el-icon>
+            <span v-show="sideBarOpen"> Curate & Share </span>
+          </router-link>
+        </div>
+        <div>
+          <router-link to="/manageAccount" class="sideBarMenuItem">
+            <el-icon><user-icon /></el-icon>
+            <span v-show="sideBarOpen"> Manage Accounts </span>
+          </router-link>
+          <router-link to="/settings" class="sideBarMenuItem">
+            <el-icon><setting-icon /></el-icon>
+            <span v-show="sideBarOpen"> Settings </span>
+          </router-link>
+          <router-link to="/documentation" class="sideBarMenuItem">
+            <el-icon><collection-icon /></el-icon>
+            <span v-show="sideBarOpen"> Documentation </span>
+          </router-link>
+          <router-link to="/contactUs" class="sideBarMenuItem">
+            <el-icon><chat-dot-round /></el-icon>
+            <span v-show="sideBarOpen"> Contact Us </span>
+          </router-link>
+          <div class="absolute bottom-0 hidden right-3">
+            <span class="text-xs text-gray-400">{{ environment }}</span>
+          </div>
+        </div>
       </nav>
-    </div>
-    <div class="absolute bottom-0 right-3">
-      <span class="text-xs text-gray-400">{{ environment }}</span>
     </div>
   </div>
 </template>

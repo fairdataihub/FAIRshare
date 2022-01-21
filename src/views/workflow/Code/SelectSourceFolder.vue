@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
+    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col w-full h-full">
       <span class="text-lg font-medium text-left">
         Provide the location of the files you want to include in your research
         software dataset
@@ -18,8 +18,8 @@
           :class="{ 'selected-repo': repoID === 'My computer' }"
           @click="selectRepo('My computer')"
         >
-          <monitor-icon class="h-24 w-16" />
-          <span class="text-lg mx-5"> My computer </span>
+          <monitor-icon class="w-16 h-24" />
+          <span class="mx-5 text-lg"> My computer </span>
         </div>
 
         <el-popover placement="bottom" trigger="hover" content="Coming soon...">
@@ -29,11 +29,11 @@
                 class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
               >
                 <img
-                  src="../../../assets/github.jpeg"
+                  src="../../../assets/images/github.jpeg"
                   alt=""
-                  class="h-24 w-full opacity-50"
+                  class="w-full h-24 opacity-50"
                 />
-                <span class="text-lg mx-5"> On Github </span>
+                <span class="mx-5 text-lg"> On Github </span>
               </div>
             </div>
           </template>
@@ -49,7 +49,7 @@
         <el-input
           v-model="folderPath"
           placeholder="Click here to select a folder"
-          class="my-3 w-full"
+          class="w-full my-3"
           @click="selectFolderPath"
         />
       </div>

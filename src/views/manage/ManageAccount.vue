@@ -74,7 +74,7 @@
 
       <div class="card-container">
         <div class="image-container">
-          <img src="../../assets/github.jpeg" class="image" />
+          <img src="../../assets/images/github.jpeg" class="image" />
         </div>
         <div class="card-container-content">
           <div class="card-container-status">

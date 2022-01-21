@@ -2,7 +2,7 @@
   <div
     class="flex flex-col items-center justify-center w-full h-screen max-w-screen-xl p-3 px-5"
   >
-    <div class="flex flex-col w-full h-full">
+    <div class="flex flex-col w-full h-full py-5">
       <el-page-header @back="goBack" class="hidden text-lg">
         <template #content>
           <p>
@@ -14,11 +14,11 @@
         </template>
       </el-page-header>
 
-      <span class="font-medium text-left"> Project settings </span>
+      <!-- <span class="font-medium text-left"> Project settings </span>
 
       <span class="pt-1">
         Update your project name, description and other settings.
-      </span>
+      </span> -->
 
       <el-divider> </el-divider>
 
