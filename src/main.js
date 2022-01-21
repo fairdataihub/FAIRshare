@@ -28,8 +28,10 @@ app.component("form-help-content", FormHelpContent);
 import {
   ArrowRightBold,
   Back,
+  ChatDotRound,
   CircleCheckFilled,
   CircleCloseFilled,
+  Collection,
   DArrowLeft,
   DArrowRight,
   DataAnalysis,
@@ -55,14 +57,14 @@ import {
   User,
   UserFilled,
   VideoPlay,
-  ChatDotRound,
-  Collection,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
+app.component("chat-dot-round", ChatDotRound);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
+app.component("collection-icon", Collection);
 app.component("d-arrow-left", DArrowLeft);
 app.component("d-arrow-right", DArrowRight);
 app.component("data-analysis", DataAnalysis);
@@ -88,8 +90,7 @@ app.component("unlock-icon", Unlock);
 app.component("user-icon", User);
 app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
-app.component("chat-dot-round", ChatDotRound);
-app.component("collection-icon", Collection);
+
 // additional vue libraries to be used in the app
 app.use(router); // vue router
 app.use(createPinia()); // pinia
