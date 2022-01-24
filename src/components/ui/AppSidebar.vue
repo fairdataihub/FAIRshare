@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="relative flex flex-col w-full h-screen max-w-xs min-h-screen pt-2 pb-5 mr-3 debug-screens bg-gray-50"
+    class="debug-screens relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
     :class="{
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
@@ -9,7 +9,7 @@
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex flex-col w-full h-full text-gray-700">
+    <div class="flex h-full w-full flex-col text-gray-700">
       <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
@@ -18,7 +18,7 @@
         />
 
         <div
-          class="absolute top-0 flex items-center justify-center p-1 transition-all transform scale-100 cursor-pointer right-2 hover:scale-110 group"
+          class="group absolute top-0 right-2 flex scale-100 transform cursor-pointer items-center justify-center p-1 transition-all hover:scale-110"
           :class="{ 'right-6': !sideBarOpen }"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"
@@ -31,7 +31,7 @@
         </div>
       </div>
       <nav
-        class="flex flex-col justify-between flex-grow h-full px-4"
+        class="flex h-full flex-grow flex-col justify-between px-4"
         :class="{ 'pt-10': !sideBarOpen }"
       >
         <div>
@@ -61,7 +61,7 @@
             <el-icon><chat-dot-round /></el-icon>
             <span v-show="sideBarOpen"> Contact Us </span>
           </router-link>
-          <div class="absolute bottom-0 hidden right-3">
+          <div class="absolute bottom-0 right-3 hidden">
             <span class="text-xs text-gray-400">{{ environment }}</span>
           </div>
         </div>

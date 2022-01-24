@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-row items-center justify-center w-full h-screen">
-    <div ref="" class="flex flex-row items-center h-full p-3">
-      <div class="flex flex-col h-full overflow-y-auto">
-        <span class="font-medium text-left"> Start the curation process </span>
+  <div class="flex h-screen w-full flex-row items-center justify-center">
+    <div ref="" class="flex h-full flex-row items-center p-3">
+      <div class="flex h-full flex-col overflow-y-auto">
+        <span class="text-left font-medium"> Start the curation process </span>
 
         <span class="">
           When you are ready, click on the curation buttons below to fill out
@@ -16,12 +16,12 @@
           v-for="(workflow, key) in dataset.workflows"
           :key="key"
         >
-          <div class="px-4 py-2 bg-gray-300">
+          <div class="bg-gray-300 px-4 py-2">
             <span class="text-lg">
               {{ combineDataTypes(workflow.type) }}
             </span>
           </div>
-          <div class="flex items-center justify-start px-4 py-2 bg-gray-200">
+          <div class="flex items-center justify-start bg-gray-200 px-4 py-2">
             <!-- <el-button
               type="primary"
               @click="navigateToCurate(`${key}`)"

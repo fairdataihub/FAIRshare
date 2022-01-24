@@ -1,11 +1,11 @@
 <template>
   <div v-if="currentStepId == stepId" :key="stepId">
     <div
-      class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+      class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
     >
-      <div class="w-full px-4 py-2 bg-gray-100">
+      <div class="w-full bg-gray-100 px-4 py-2">
         <span
-          class="text-lg font-semibold pointer-events-none text-primary-600"
+          class="text-primary-600 pointer-events-none text-lg font-semibold"
         >
           {{ stepTitle }}
         </span>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div
-      class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+      class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
     >
       <button
         @click="prevStep"

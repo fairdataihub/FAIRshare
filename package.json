@@ -81,6 +81,7 @@
     "gulp-rename": "^2.0.0",
     "postcss": "^8.4.5",
     "prettier": "^2.3.2",
+    "prettier-plugin-tailwindcss": "^0.1.1",
     "tailwindcss": "^3.0.7",
     "tailwindcss-debug-screens": "^2.1.0",
     "vue-cli-plugin-electron-builder": "~2.1.1"

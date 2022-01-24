@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 px-5"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
-    <div class="flex flex-col w-full h-full">
-      <span class="font-medium text-left"> FAIRifying </span>
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left font-medium"> FAIRifying </span>
 
       <span> Let's make your research software FAIR </span>
 
@@ -90,7 +90,7 @@
         </el-timeline-item>
       </el-timeline>
 
-      <div class="flex flex-row justify-center w-full py-6" id="button-area">
+      <div class="flex w-full flex-row justify-center py-6" id="button-area">
         <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>

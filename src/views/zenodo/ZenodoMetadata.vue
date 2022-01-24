@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left"> Zenodo Metadata </span>
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium"> Zenodo Metadata </span>
 
       <span class="mb-2">
         Before we send this data over, Zenodo requires some additional
@@ -22,12 +22,12 @@
       >
         <el-collapse v-model="activeNames">
           <el-collapse-item
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
             name="basicInformation"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Basic Information
@@ -80,9 +80,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.name"
                           type="text"
@@ -95,7 +95,7 @@
                           placeholder="Affiliation"
                         ></el-input>
                         <div class="mx-2"></div>
-                        <div class="flex flex-col w-full">
+                        <div class="flex w-full flex-col">
                           <el-input
                             v-model="element.orcid"
                             type="text"
@@ -107,14 +107,14 @@
                         </div>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-start justify-center py-2 text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-start justify-center py-2 text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -134,7 +134,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addAuthor()"
                 >
                   <Icon icon="carbon:add" />
@@ -153,7 +153,7 @@
                   content="Use a description that is easily identifiable. This will
                         be shown in the dataset selection screen and is not part
                         of your submitted metadata."
-                  class="w-full mx-0"
+                  class="mx-0 w-full"
                 >
                   <el-input
                     v-model="zenodoMetadataForm.description"
@@ -221,9 +221,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.keyword"
                           type="text"
@@ -231,14 +231,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -258,7 +258,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addKeyword()"
                 >
                   <Icon icon="carbon:add" />
@@ -280,11 +280,11 @@
 
           <el-collapse-item
             name="license"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">License</p>
                 <span class="pr-2 text-gray-400"> required </span>
@@ -376,11 +376,11 @@
 
           <el-collapse-item
             name="relatedIdentifiers"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Related/alternate identifiers
@@ -407,17 +407,17 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
-                        <div class="w-6/12 mx-2">
+                      <div class="flex w-11/12 flex-row justify-between">
+                        <div class="mx-2 w-6/12">
                           <el-input
                             v-model="element.identifier"
                             type="text"
                             placeholder="e.g. 10.1234/foobar.56789"
                           ></el-input>
                         </div>
-                        <div class="flex flex-row w-6/12 mx-2 justify-evenly">
+                        <div class="mx-2 flex w-6/12 flex-row justify-evenly">
                           <el-select
                             v-model="element.relationship"
                             filterable
@@ -431,7 +431,7 @@
                             >
                             </el-option>
                           </el-select>
-                          <div class="block mx-2"></div>
+                          <div class="mx-2 block"></div>
                           <div class="flex flex-col">
                             <el-select
                               v-model="element.resourceType"
@@ -458,14 +458,14 @@
                           </div>
                         </div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-start justify-center py-2 text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-start justify-center py-2 text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -485,7 +485,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addRelatedIdentifier()"
                 >
                   <Icon icon="carbon:add" />
@@ -497,11 +497,11 @@
 
           <el-collapse-item
             name="contributors"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Contributors
@@ -524,9 +524,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <div class="w-3/12">
                           <el-input
                             v-model="element.name"
@@ -534,15 +534,15 @@
                             placeholder="Family Name, Given Name"
                           ></el-input>
                         </div>
-                        <div class="w-3/12 mx-2">
+                        <div class="mx-2 w-3/12">
                           <el-input
                             v-model="element.affiliation"
                             type="text"
                             placeholder="Affiliation"
                           ></el-input>
                         </div>
-                        <div class="w-3/12 mx-2">
-                          <div class="flex flex-col w-full">
+                        <div class="mx-2 w-3/12">
+                          <div class="flex w-full flex-col">
                             <el-input
                               v-model="element.orcid"
                               type="text"
@@ -569,14 +569,14 @@
                           </el-select>
                         </div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-start justify-center py-2 text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-start justify-center py-2 text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -596,7 +596,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addContributor()"
                 >
                   <Icon icon="carbon:add" />
@@ -608,11 +608,11 @@
 
           <el-collapse-item
             name="references"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   References
@@ -631,9 +631,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.reference"
                           type="text"
@@ -641,14 +641,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -668,7 +668,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addReference()"
                 >
                   <Icon icon="carbon:add" />
@@ -680,11 +680,11 @@
 
           <el-collapse-item
             name="journal"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Journal</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -733,11 +733,11 @@
 
           <el-collapse-item
             name="conference"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Conference
@@ -829,11 +829,11 @@
 
           <el-collapse-item
             name="bookReportChapter"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Book/Report/Chapter
@@ -899,11 +899,11 @@
 
           <el-collapse-item
             name="thesis"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Thesis</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -930,9 +930,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.name"
                           type="text"
@@ -945,7 +945,7 @@
                           placeholder="Affiliation"
                         ></el-input>
                         <div class="mx-2"></div>
-                        <div class="flex flex-col w-full">
+                        <div class="flex w-full flex-col">
                           <el-input
                             v-model="element.orcid"
                             type="text"
@@ -957,14 +957,14 @@
                         </div>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-start justify-center py-2 text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-start justify-center py-2 text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -984,7 +984,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addSupervisor()"
                 >
                   <Icon icon="carbon:add" />
@@ -996,11 +996,11 @@
 
           <el-collapse-item
             name="subjects"
-            class="my-1 border-2 border-gray-100 zenodo-collapse-item"
+            class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
               <div
-                class="flex flex-row items-center justify-between w-full font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Subjects</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -1027,9 +1027,9 @@
                 >
                   <template #item="{ element }">
                     <div
-                      class="flex flex-row justify-between mb-2 transition-all"
+                      class="mb-2 flex flex-row justify-between transition-all"
                     >
-                      <div class="flex flex-row justify-between w-11/12">
+                      <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.term"
                           type="text"
@@ -1043,14 +1043,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex flex-row w-1/12 justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly">
                         <div
-                          class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -1070,7 +1070,7 @@
                 </draggable>
 
                 <div
-                  class="flex items-center text-gray-500 cursor-pointer hover:text-black w-max"
+                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
                   @click="addSubject()"
                 >
                   <Icon icon="carbon:add" />
@@ -1082,7 +1082,7 @@
         </el-collapse>
       </el-form>
 
-      <div class="flex flex-row justify-center w-full py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <button class="primary-plain-button" @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
         </button>

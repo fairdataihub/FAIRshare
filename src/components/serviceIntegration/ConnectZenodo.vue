@@ -168,7 +168,7 @@ export default {
 </script>
 <style scoped>
 .dialog-Container {
-  @apply flex flex-col justify-center items-center gap-3 h-32;
+  @apply flex h-32 flex-col items-center justify-center gap-3;
 }
 .inputField {
   @apply flex gap-6;

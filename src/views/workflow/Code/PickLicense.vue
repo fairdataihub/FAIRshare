@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Select a license that defines the desired conditions for using your
         software
       </span>
@@ -46,12 +46,12 @@
             </el-select>
 
             <div
-              class="flex flex-row items-center my-3 cursor-pointer w-max text-primary-600 hover-underline-animation"
+              class="text-primary-600 hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
               <span class="text-base font-medium"> Show license details </span>
-              <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
 
             <el-drawer
@@ -61,12 +61,12 @@
             >
               <div
                 v-loading="loading"
-                :class="loading ? 'w-full h-full' : 'w-[0px] h-[0px]'"
+                :class="loading ? 'h-full w-full' : 'h-[0px] w-[0px]'"
               ></div>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
-                class="w-full h-full"
+                class="h-full w-full"
                 @load="finishLoading"
               ></iframe>
             </el-drawer>
@@ -99,7 +99,7 @@
         </el-form>
       </div>
 
-      <div class="flex flex-row justify-center w-full py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""

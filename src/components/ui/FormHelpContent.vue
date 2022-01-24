@@ -6,11 +6,11 @@
       placement="bottom"
       :width="`full`"
       trigger="hover"
-      class="text-gray-500 cursor-help hover:text-black"
+      class="cursor-help text-gray-500 hover:text-black"
     >
       <template #reference>
         <el-icon
-          class="px-2 text-lg text-gray-500 hover:text-black cursor-help"
+          class="cursor-help px-2 text-lg text-gray-500 hover:text-black"
           size="18"
         >
           <question-filled />

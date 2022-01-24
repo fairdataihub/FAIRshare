@@ -1,36 +1,36 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-lg p-3 pr-5"
+    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col items-center w-full h-full justify-evenly">
+    <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
-        <div class="flex items-center justify-center w-full py-5">
-          <h1 class="text-3xl font-bold xl:text-4xl text-slate-800">
+        <div class="flex w-full items-center justify-center py-5">
+          <h1 class="text-3xl font-bold text-slate-800 xl:text-4xl">
             SODA for COVID-19 Research
           </h1>
         </div>
-        <div class="flex flex-col items-center justify-center w-full py-3 mb-1">
-          <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
+        <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
             Make your COVID-19 research data, and beyond,
           </h2>
-          <h2 class="text-2xl font-medium xl:text-3xl text-slate-700">
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
             Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
 
-      <div class="flex w-full py-3 justify-evenly space-x-14">
-        <div class="flex flex-col justify-center item-center">
-          <div class="flex justify-center w-full py-3 item-center">
-            <img src="../assets/images/overview.svg" class="w-11/12 h-auto" />
+      <div class="flex w-full justify-evenly space-x-14 py-3">
+        <div class="item-center flex flex-col justify-center">
+          <div class="item-center flex w-full justify-center py-3">
+            <img src="../assets/images/overview.svg" class="h-auto w-11/12" />
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col items-center justify-center w-full py-3">
-        <div class="flex justify-center py-3 space-x-4">
+      <div class="flex w-full flex-col items-center justify-center py-3">
+        <div class="flex justify-center space-x-4 py-3">
           <button
-            class="text-base secondary-plain-button"
+            class="secondary-plain-button text-base"
             @click="
               openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
             "
@@ -40,7 +40,7 @@
           </button>
 
           <button
-            class="text-base primary-plain-button"
+            class="primary-plain-button text-base"
             @click="startCuratingProject"
           >
             Getting started
@@ -49,7 +49,7 @@
         </div>
 
         <div
-          class="flex flex-row items-center py-1 pt-3 cursor-pointer text-primary-600 hover-underline-animation"
+          class="text-primary-600 hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3"
         >
           <span
             class="font-medium"
@@ -59,7 +59,7 @@
           </span>
           <Icon
             icon="grommet-icons:form-next-link"
-            class="w-5 h-5 ml-2 icon-animate"
+            class="icon-animate ml-2 h-5 w-5"
           />
         </div>
       </div>

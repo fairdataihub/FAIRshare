@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Verify if you have followed standard/best research software development
         practices
       </span>
@@ -12,7 +12,7 @@
 
       <div class="flex flex-col space-y-4">
         <!-- template start -->
-        <div class="p-4 border-2 rounded-lg border-slate-100">
+        <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Have you followed applicable high-level best practices for research
             software?
@@ -37,7 +37,7 @@
             </el-radio>
           </div>
         </div>
-        <div class="p-4 border-2 rounded-lg border-slate-100">
+        <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Have you followed applicable language-specific standards and best
             practices?
@@ -62,7 +62,7 @@
             </el-radio>
           </div>
         </div>
-        <div class="p-4 border-2 rounded-lg border-slate-100">
+        <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Have you followed applicable domain-specific standards and best
             practices?
@@ -87,7 +87,7 @@
             </el-radio>
           </div>
         </div>
-        <div class="p-4 border-2 rounded-lg border-slate-100">
+        <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Is your software documentation following applicable standards and
             best practices?
@@ -112,7 +112,7 @@
             </el-radio>
           </div>
         </div>
-        <div class="p-4 border-2 rounded-lg border-slate-100">
+        <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Have you ensured that your code does not include any information
             violating HIPAA?
@@ -140,7 +140,7 @@
         <!-- template end -->
       </div>
 
-      <div class="flex flex-row justify-center w-full py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
           class=""

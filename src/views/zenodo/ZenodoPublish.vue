@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full h-full p-3 pr-5">
-    <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left">
+  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Publish your work to Zenodo
       </span>
       <span class="text-left">
@@ -11,7 +11,7 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex flex-col items-center justify-center h-full px-10">
+      <div class="flex h-full flex-col items-center justify-center px-10">
         <p class="pb-5 text-center">
           Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
@@ -23,7 +23,7 @@
             View draft
           </button>
           <button
-            class="transition-all blob primary-button"
+            class="blob primary-button transition-all"
             @click="publishDeposition"
           >
             Publish <el-icon><star-icon /></el-icon>

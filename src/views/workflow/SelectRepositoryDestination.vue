@@ -1,39 +1,39 @@
 <template>
   <div
-    class="flex flex-row items-center justify-center w-full h-full p-3"
+    class="flex h-full w-full flex-row items-center justify-center p-3"
     v-loading="loading"
   >
-    <div class="flex flex-col items-center justify-center h-full">
+    <div class="flex h-full flex-col items-center justify-center">
       <span class="text-center">
         Based on your dataset requirements, we suggest uploading your data to
         one of these repositories.
       </span>
-      <span class="text-sm text-center">
+      <span class="text-center text-sm">
         Please click one of the following options:
       </span>
 
-      <div class="grid grid-cols-3 gap-8 my-8">
+      <div class="my-8 grid grid-cols-3 gap-8">
         <div>
           <div class="flex flex-col items-center justify-center">
             <div
-              class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
+              class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
               :class="{ 'selected-repo': repoID === 'zenodo' }"
               @click="selectRepo($event, 'zenodo')"
             >
               <img
                 src="https://api.iconify.design/simple-icons/zenodo.svg"
                 alt=""
-                class="w-16 h-16 mb-3"
+                class="mb-3 h-16 w-16"
               />
               <span class="mx-5 text-lg"> Zenodo </span>
             </div>
             <div
-              class="flex flex-row items-center my-5 cursor-pointer w-max text-primary-600 hover-underline-animation"
+              class="text-primary-600 hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center"
               v-if="repoID === 'zenodo'"
               @click="openWebsite('https://zenodo.org')"
             >
               <span class="font-medium"> Learn more... </span>
-              <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </div>
         </div>
@@ -47,14 +47,14 @@
             <template #reference>
               <div>
                 <div
-                  class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
+                  class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all"
                   :class="{ 'selected-repo': repoID === 'figshare' }"
                   @click="selectRepo($event, 'figshare')"
                 >
                   <img
                     src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
                     alt=""
-                    class="h-16 mb-3 opacity-50"
+                    class="mb-3 h-16 opacity-50"
                   />
                   <span class="mx-5 text-lg"> Figshare </span>
                 </div>
@@ -72,16 +72,16 @@
             <template #reference>
               <div>
                 <div
-                  class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg hover:shadow-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
+                  class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all hover:shadow-lg"
                   :class="{ 'selected-repo': repoID === 'softwareheritage' }"
                   @click="selectRepo($event, 'softwareheritage')"
                 >
                   <img
                     src="https://www.softwareheritage.org/wp-content/uploads/2015/08/swh-logo.png"
                     alt=""
-                    class="h-16 mb-3 opacity-50"
+                    class="mb-3 h-16 opacity-50"
                   />
-                  <span class="w-full mx-5 text-lg text-center">
+                  <span class="mx-5 w-full text-center text-lg">
                     Software Heritage
                   </span>
                 </div>
@@ -107,7 +107,7 @@
       </div> -->
 
       <div
-        class="absolute bottom-0 flex flex-row justify-center py-6 space-x-4 w-max-content"
+        class="w-max-content absolute bottom-0 flex flex-row justify-center space-x-4 py-6"
       >
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
@@ -229,10 +229,10 @@ export default {
 
 <style scoped>
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-48 h-48;
+  @apply flex h-48 w-48 items-center justify-center transition-all;
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-lg transition-all;
 }
 </style>
