@@ -96,11 +96,7 @@
             :lock-scroll="false"
           >
             <el-scrollbar style="height: calc(100vh - 45px)">
-              <div
-                v-if="
-                  PreviewNewlyCreatedMetadataFile
-                "
-              >
+              <div v-if="PreviewNewlyCreatedMetadataFile">
                 <el-table
                   :data="tableData"
                   style="width: 100%"
@@ -113,11 +109,7 @@
                 </el-table>
               </div>
 
-              <div
-                v-if="
-                  PreviewNewlyCreatedCitationFile
-                "
-              >
+              <div v-if="PreviewNewlyCreatedCitationFile">
                 <el-table
                   :data="citationData"
                   style="width: 100%"
@@ -130,9 +122,7 @@
                 </el-table>
               </div>
 
-              <div
-                v-if="PreviewNewlyCreatedLicenseFile"
-              >
+              <div v-if="PreviewNewlyCreatedLicenseFile">
                 <el-table
                   :data="licenseData"
                   style="width: 100%"
@@ -156,7 +146,7 @@
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
 import axios from "axios";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
-import path from 'path';
+import path from "path";
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 import { ElLoading } from "element-plus";
@@ -176,7 +166,7 @@ export default {
       zenodoAccessToken: "",
       ready: false,
       showFiles: "1",
-      licenseData: [{"license content":""}],
+      licenseData: [{ "license content": "" }],
       tableData: [],
       citationData: [],
       fileData: [],
@@ -189,7 +179,7 @@ export default {
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
-      drawerModel: true
+      drawerModel: true,
     };
   },
   //el-tree-node__content
@@ -204,13 +194,17 @@ export default {
       return true;
     },
 
-    anyfilePreview(){
-      if(this.PreviewNewlyCreatedMetadataFile || this.PreviewNewlyCreatedLicenseFile || this.PreviewNewlyCreatedCitationFile){
-        return true
+    anyfilePreview() {
+      if (
+        this.PreviewNewlyCreatedMetadataFile ||
+        this.PreviewNewlyCreatedLicenseFile ||
+        this.PreviewNewlyCreatedCitationFile
+      ) {
+        return true;
       } else {
-        return false
+        return false;
       }
-    }
+    },
   },
   methods: {
     createLoading() {
@@ -228,7 +222,7 @@ export default {
           virtual_file: true,
         })
         .then((response) => {
-          return JSON.parse(response.data)
+          return JSON.parse(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -244,7 +238,7 @@ export default {
           virtual_file: true,
         })
         .then((response) => {
-          return JSON.parse(response.data)
+          return JSON.parse(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -273,7 +267,7 @@ export default {
     async openFileExplorer(path) {
       const response = await axios
         .post(`${this.$server_url}/utilities/openFileExplorer`, {
-          folder_path: path
+          folder_path: path,
         })
         .then((response) => {
           return response.data;
@@ -302,10 +296,10 @@ export default {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label == "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        }else if (data.label == "citation.cff") {
+        } else if (data.label == "citation.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
-        } else if (!data.isDir){
-          await this.openFileExplorer(data.fullPath)
+        } else if (!data.isDir) {
+          await this.openFileExplorer(data.fullPath);
         }
 
         let title = data.label;
@@ -463,23 +457,19 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     let spinner = this.createLoading();
-    this.tableData = await this.createCodeMetadataFile()
-    this.citationData = await this.createCitationFile()
+    this.tableData = await this.createCodeMetadataFile();
+    this.citationData = await this.createCitationFile();
     this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
-    this.tableData = this.jsonToTableDataRecursive(
-      this.tableData,
-      1,
-      "ROOT"
-    );
+    this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
 
     this.citationData = this.jsonToTableDataRecursive(
       this.citationData,
       1,
       "ROOT"
     );
-    if(this.workflow.licenseText){
-      await this.createLicenseFile()
-      this.licenseData[0]["license content"] = this.workflow.licenseText
+    if (this.workflow.licenseText) {
+      await this.createLicenseFile();
+      this.licenseData[0]["license content"] = this.workflow.licenseText;
     }
     spinner.close();
 
