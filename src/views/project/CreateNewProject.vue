@@ -377,10 +377,10 @@ export default {
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-  @apply border-secondary-500 shadow-secondary-500/50 shadow-md;
+  @apply border-secondary-500 shadow-md shadow-secondary-500/50;
 }
 
 .single-check-box:not(.is-disabled):hover {
-  @apply border-secondary-500 shadow-secondary-500/50 shadow-lg;
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
 }
 </style>

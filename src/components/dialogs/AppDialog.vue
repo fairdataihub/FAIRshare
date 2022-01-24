@@ -21,7 +21,7 @@
           </el-form-item>
         </div>
         <div
-          class="text-primary-600 hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center"
+          class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
           @click="openWebsite(this.headers[0])"
         >
           <span class="font-medium">

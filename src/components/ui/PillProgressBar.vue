@@ -3,7 +3,7 @@
     <div
       v-for="step in totalSteps"
       :key="step"
-      class="text-secondary-500 hover:bg-secondary-400 group relative h-[7px] w-full cursor-pointer rounded transition-all"
+      class="group relative h-[7px] w-full cursor-pointer rounded text-secondary-500 transition-all hover:bg-secondary-400"
       style="border: 1px solid"
       :class="{ 'bg-secondary-500 ': step <= currentStep }"
       @click="setCurrentStep(step)"
