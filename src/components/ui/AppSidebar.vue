@@ -8,6 +8,7 @@
       'debug-screens': environment !== 'production',
     }"
     style="transition: width 0.3s"
+    v-if="datasetStore.showSidebar"
   >
     <div class="flex h-full w-full flex-col text-gray-700">
       <div class="relative flex flex-row justify-center p-2">
@@ -71,12 +72,19 @@
 </template>
 
 <script>
+import { useDatasetsStore } from "../../store/datasets";
+
 export default {
   name: "AppSidebar",
   components: {},
   props: ["environment"],
   data() {
-    return { dropdownOpen: false, sideBarOpen: true, process: process };
+    return {
+      dropdownOpen: false,
+      sideBarOpen: true,
+      process: process,
+      datasetStore: useDatasetsStore(),
+    };
   },
   methods: {
     isDataset: function () {

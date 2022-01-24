@@ -47,6 +47,10 @@ export default {
   methods: {
     async loadStores() {
       try {
+        // show Sidebar
+
+        await this.unpublishedDatasets.showSidebar();
+
         // Load all the projects
         await this.unpublishedDatasets.loadDatasets();
 

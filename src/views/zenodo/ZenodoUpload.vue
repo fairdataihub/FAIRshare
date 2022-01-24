@@ -716,10 +716,14 @@ export default {
       return "NO_DEPOSITION_FOUND";
     },
     async runZenodoUpload() {
+      this.datasetStore.hideSidebar();
+
       this.statusMessage = "Preparing backend services...";
       await this.sleep(300);
 
       let response = await this.uploadWorkflow();
+
+      this.datasetStore.showSidebar();
 
       if (response === "FAIL") {
         this.indeterminate = true;
