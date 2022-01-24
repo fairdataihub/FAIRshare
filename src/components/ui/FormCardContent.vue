@@ -5,7 +5,7 @@
     >
       <div class="w-full bg-gray-100 px-4 py-2">
         <span
-          class="text-primary-600 pointer-events-none text-lg font-semibold"
+          class="pointer-events-none text-lg font-semibold text-primary-600"
         >
           {{ stepTitle }}
         </span>
