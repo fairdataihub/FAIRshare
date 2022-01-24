@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center p-3 px-5">
-    <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left"> Review metadata </span>
+  <div class="flex h-full w-full flex-col items-center justify-center p-3 px-5">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium"> Review metadata </span>
       <span class="text-left">
         Let's go through all your submitted metadata and verify that everything
         looks good.
@@ -33,7 +33,7 @@
             <template #label> Authors </template>
 
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li v-for="author in generalMetadata.authors" :key="author.id">
                   Name: {{ author.familyName }}, {{ author.givenName }}
                   <ul class="ml-6">
@@ -61,7 +61,7 @@
           <el-descriptions-item>
             <template #label> Contributors </template>
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li
                   v-for="contributor in generalMetadata.contributors"
                   :key="contributor.id"
@@ -226,7 +226,7 @@
         </el-descriptions>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/createMetadata`"
           class=""
@@ -237,7 +237,7 @@
         </router-link>
 
         <button
-          class="flex flex-row items-center primary-button"
+          class="primary-button flex flex-row items-center"
           @click="selectDestination"
         >
           Continue

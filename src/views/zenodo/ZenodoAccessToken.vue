@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
-    <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left">
+  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Zenodo connection details
       </span>
       <span class="text-left">
@@ -11,12 +11,12 @@
       <el-divider class="my-4"> </el-divider>
 
       <div v-if="ready">
-        <p v-if="validTokenAvailable" class="my-10 text-center w-full">
+        <p v-if="validTokenAvailable" class="my-10 w-full text-center">
           Looks like we already have your Zenodo login details. Click on the
           'Start upload' button below.
         </p>
         <!-- show error message if token is not valid -->
-        <div v-else class="flex flex-col justify-center items-center py-10">
+        <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
             We couldn't find your Zenodo login details. Please click on the
             button below to connect to your Zenodo account.
@@ -27,7 +27,7 @@
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class=""

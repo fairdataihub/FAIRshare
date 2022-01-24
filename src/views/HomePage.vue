@@ -1,61 +1,33 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
+    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full items-center justify-evenly">
+    <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
-        <div class="w-full flex justify-center items-center py-5">
-          <h1 class="font-bold text-5xl xl:text-6xl text-slate-800">
+        <div class="flex w-full items-center justify-center py-5">
+          <h1 class="text-3xl font-bold text-slate-800 xl:text-4xl">
             SODA for COVID-19 Research
           </h1>
         </div>
-        <div class="w-full flex justify-center items-center py-3 mb-10">
-          <h2 class="font-medium text-3xl xl:text-4xl text-slate-700">
-            Make your COVID-19 related data, and beyond, FAIR
+        <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
+            Make your COVID-19 research data, and beyond,
+          </h2>
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
+            Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
 
-      <div class="w-full flex justify-evenly py-5 space-x-14">
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
-            <img
-              src="../assets/1.svg"
-              class="w-full h-auto pointer-events-none"
-            />
+      <div class="flex w-full justify-evenly space-x-14 py-3">
+        <div class="item-center flex flex-col justify-center">
+          <div class="item-center flex w-full justify-center py-3">
+            <img src="../assets/images/overview.svg" class="h-auto w-11/12" />
           </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
-        </div>
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
-            <img
-              src="../assets/1.svg"
-              class="w-full h-auto pointer-events-none"
-            />
-          </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
-        </div>
-        <div class="flex flex-col w-1/3 item-center justify-center">
-          <div class="w-full flex item-center justify-center py-3">
-            <img
-              src="../assets/1.svg"
-              class="w-full h-auto pointer-events-none"
-            />
-          </div>
-          <p class="text-slate-700">
-            Example text text text text text text text text text text text text
-            text text text text text text
-          </p>
         </div>
       </div>
 
-      <div class="flex flex-col justify-center items-center w-full py-3">
+      <div class="flex w-full flex-col items-center justify-center py-3">
         <div class="flex justify-center space-x-4 py-3">
           <button
             class="secondary-plain-button text-base"
@@ -77,7 +49,7 @@
         </div>
 
         <div
-          class="flex flex-row items-center text-primary-600 cursor-pointer hover-underline-animation pt-3 py-1"
+          class="hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3 text-primary-600"
         >
           <span
             class="font-medium"
@@ -87,7 +59,7 @@
           </span>
           <Icon
             icon="grommet-icons:form-next-link"
-            class="ml-2 h-5 w-5 icon-animate"
+            class="icon-animate ml-2 h-5 w-5"
           />
         </div>
       </div>

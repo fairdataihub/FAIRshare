@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-lg"
+    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full">
+    <div class="flex h-full w-full flex-col">
       <span class="font-medium"> Start a new data curation project </span>
       <span> Fill out some general details about your dataset here. </span>
 
@@ -67,7 +67,7 @@
                     label="Research software"
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="bx:bx-code-block" class="h-12 w-12 my-2" />
+                      <Icon icon="bx:bx-code-block" class="my-2 h-12 w-12" />
                       <span class="text-sm">Research</span>
                       <span class="text-sm">software</span>
                     </div>
@@ -94,7 +94,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="mdi:virus-outline" class="h-12 w-12 my-2" />
+                      <Icon icon="mdi:virus-outline" class="my-2 h-12 w-12" />
                       <span class="text-sm">Immunology</span>
                     </div>
                   </el-checkbox>
@@ -118,7 +118,7 @@
                     <div class="flex flex-col items-center">
                       <Icon
                         icon="healthicons:virus-patient-outline"
-                        class="h-12 w-12 my-2"
+                        class="my-2 h-12 w-12"
                       />
                       <span class="text-sm">Epidemiology</span>
                     </div>
@@ -143,7 +143,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon icon="uil:dna" class="h-12 w-12 my-2" />
+                      <Icon icon="uil:dna" class="my-2 h-12 w-12" />
                       <span class="text-sm">Genomic</span>
                     </div>
                   </el-checkbox>
@@ -165,7 +165,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document-icon class="h-12 w-12 my-2" />
+                      <document-icon class="my-2 h-12 w-12" />
                       <span class="text-sm">Document</span>
                     </div>
                   </el-checkbox>
@@ -187,7 +187,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <video-play class="h-12 w-12 my-2"></video-play>
+                      <video-play class="my-2 h-12 w-12"></video-play>
                       <span class="text-sm">Media</span>
                     </div>
                   </el-checkbox>
@@ -197,7 +197,7 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <div class="py-4 flex flex-row justify-center space-x-4">
+        <div class="flex flex-row justify-center space-x-4 py-4">
           <button class="danger-plain-button" @click="cancelNewDataset">
             <el-icon><circle-close-filled /></el-icon> Cancel
           </button>
@@ -370,10 +370,10 @@ export default {
 </script>
 <style scoped>
 .checkbox-group {
-  @apply gap-8 pt-4 flex flex-col box-border items-center justify-center;
+  @apply box-border flex flex-col items-center justify-center gap-8 pt-4;
 }
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-40 h-40 shadow-md;
+  @apply flex h-40 w-40 items-center justify-center shadow-md transition-all;
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {

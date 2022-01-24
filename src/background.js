@@ -85,6 +85,7 @@ async function createWindow() {
     height: 850,
     minWidth: 1150,
     minHeight: 850,
+    icon: __dirname + "/assets/menu-icon/soda_icon.png",
     show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

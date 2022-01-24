@@ -13,12 +13,12 @@ module.exports = {
         files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
         win: {
           target: "nsis",
-          icon: "./src/assets/app-icons/windowsAppIcon.ico",
+          icon: "./src/assets/app-icons/Icon.ico",
           extraResources: [{ from: "./src/pyflaskdist/api.exe" }],
         },
         mac: {
           target: ["dmg", "zip"],
-          icon: "./src/assets/app-icons/macAppIcon.icns",
+          icon: "./src/assets/app-icons/Icon.png",
           extraResources: [{ from: "./src/pyflaskdist/api" }],
           darkModeSupport: false,
           hardenedRuntime: true,
@@ -28,13 +28,13 @@ module.exports = {
         },
         linux: {
           target: "AppImage",
-          icon: "./src/assets/app-icons/linuxAppIcon.png",
+          icon: "./src/assets/app-icons/Icon.png",
         },
         nsis: {
           createDesktopShortcut: "always",
           oneClick: true,
           deleteAppDataOnUninstall: true,
-          installerIcon: "./src/assets/app-icons/windowsAppIcon.ico",
+          installerIcon: "./src/assets/app-icons/Icon.ico",
         },
         publish: {
           provider: "github",

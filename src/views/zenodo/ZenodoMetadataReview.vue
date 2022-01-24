@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center pr-5 p-3">
-    <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left">
+  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Zenodo metadata review
       </span>
       <span class="text-left">
@@ -40,7 +40,7 @@
             <template #label> Authors </template>
 
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li v-for="author in zenodoMetadata.authors" :key="author.id">
                   Name: {{ author.name }}
                   <ul class="ml-6">
@@ -113,7 +113,7 @@
             <template #label> Related/alternate identifiers </template>
 
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li
                   v-for="element in zenodoMetadata.relatedIdentifiers"
                   :key="element.id"
@@ -151,7 +151,7 @@
             <template #label> Contributors </template>
 
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li
                   v-for="contributor in zenodoMetadata.contributors"
                   :key="contributor.id"
@@ -338,7 +338,7 @@
             <template #label> Supervisors </template>
 
             <div>
-              <ul class="list-disc list-inside">
+              <ul class="list-inside list-disc">
                 <li
                   v-for="supervisor in zenodoMetadata.thesis.supervisors"
                   :key="supervisor.id"
@@ -387,7 +387,7 @@
         </el-descriptions>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2">
+      <div class="flex w-full flex-row justify-center py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class="mx-3"
@@ -398,7 +398,7 @@
         </router-link>
 
         <button
-          class="flex flex-row items-center mx-3 primary-button"
+          class="primary-button mx-3 flex flex-row items-center"
           @click="checkZenodoAccessToken"
         >
           Continue

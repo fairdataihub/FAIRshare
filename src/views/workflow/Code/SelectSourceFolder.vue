@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Provide the location of the files you want to include in your research
         software dataset
       </span>
@@ -12,35 +12,35 @@
       <span class="mb-2">
         Where are your research software files located?
       </span>
-      <div class="flex item-center justify-center gap-8 pr-[90px] pt-8">
+      <div class="item-center flex justify-center gap-8 pr-[90px] pt-8">
         <div
-          class="flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] single-check-box"
+          class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
           :class="{ 'selected-repo': repoID === 'My computer' }"
           @click="selectRepo('My computer')"
         >
           <monitor-icon class="h-24 w-16" />
-          <span class="text-lg mx-5"> My computer </span>
+          <span class="mx-5 text-lg"> My computer </span>
         </div>
 
         <el-popover placement="bottom" trigger="hover" content="Coming soon...">
           <template #reference>
             <div>
               <div
-                class="disabled-card flex flex-col justify-evenly items-center p-4 shadow-md rounded-lg transition-all cursor-pointer h-[200px] w-[200px] pointer-events-none text-stone-400 single-check-box"
+                class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all"
               >
                 <img
-                  src="../../../assets/github.jpeg"
+                  src="../../../assets/images/github.jpeg"
                   alt=""
                   class="h-24 w-full opacity-50"
                 />
-                <span class="text-lg mx-5"> On Github </span>
+                <span class="mx-5 text-lg"> On Github </span>
               </div>
             </div>
           </template>
         </el-popover>
       </div>
 
-      <div class="flex flex-col w-full pt-20" v-if="repoID === 'My computer'">
+      <div class="flex w-full flex-col pt-20" v-if="repoID === 'My computer'">
         <span class="mb-2">
           Please select the folder where your
           {{ combineDataTypes }} files are stored.
@@ -55,7 +55,7 @@
       </div>
 
       <div
-        class="w-full flex flex-row justify-center py-2 space-x-4 pt-8 pr-[61px]"
+        class="flex w-full flex-row justify-center space-x-4 py-2 pt-8 pr-[61px]"
         v-if="repoID != ''"
       >
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
@@ -198,7 +198,7 @@ export default {
 </script>
 <style scoped>
 .single-check-box {
-  @apply transition-all flex justify-center items-center w-48 h-48;
+  @apply flex h-48 w-48 items-center justify-center transition-all;
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {

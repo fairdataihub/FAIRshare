@@ -28,8 +28,10 @@ app.component("form-help-content", FormHelpContent);
 import {
   ArrowRightBold,
   Back,
+  ChatDotRound,
   CircleCheckFilled,
   CircleCloseFilled,
+  Collection,
   DArrowLeft,
   DArrowRight,
   DataAnalysis,
@@ -59,8 +61,10 @@ import {
 
 app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
+app.component("chat-dot-round", ChatDotRound);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
+app.component("collection-icon", Collection);
 app.component("d-arrow-left", DArrowLeft);
 app.component("d-arrow-right", DArrowRight);
 app.component("data-analysis", DataAnalysis);

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-xl"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full">
-      <span class="text-lg font-medium text-left">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Select a license that defines the desired conditions for using your
         software
       </span>
@@ -23,7 +23,7 @@
             <template #label>
               <div class="flex">
                 <span> License </span>
-                <span class="text-red-500 px-1"> * </span>
+                <span class="px-1 text-red-500"> * </span>
                 <form-help-content
                   popoverContent="<p class='text-sm'> Required. Selected license applies to all of your files <br /> If you want to upload some of your files under different licenses, please do so in separate uploads. <br /> If you cannot find the license you're looking for, include a relevant LICENSE file in your record and choose one of the <span class='italic'> Other </span> licenses available <span class='italic'> (Other (Open), Other (Attribution) </span>, etc.). <br /> The supported licenses in the list are harvested from <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://opendefinition.org`)' class='text-url'> opendefinition.org </a> and <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://spdx.org`)' class='text-url' > spdx.org </a>.</p>"
                 ></form-help-content>
@@ -46,7 +46,7 @@
             </el-select>
 
             <div
-              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
@@ -61,12 +61,12 @@
             >
               <div
                 v-loading="loading"
-                :class="loading ? 'w-full h-full' : 'w-[0px] h-[0px]'"
+                :class="loading ? 'h-full w-full' : 'h-[0px] w-[0px]'"
               ></div>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
-                class="w-full h-full"
+                class="h-full w-full"
                 @load="finishLoading"
               ></iframe>
             </el-drawer>
@@ -99,7 +99,7 @@
         </el-form>
       </div>
 
-      <div class="w-full flex flex-row justify-center py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
           class=""

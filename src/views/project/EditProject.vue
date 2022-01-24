@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-screen w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="flex h-screen w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full">
-      <el-page-header @back="goBack" class="text-lg hidden">
+    <div class="flex h-full w-full flex-col py-5">
+      <el-page-header @back="goBack" class="hidden text-lg">
         <template #content>
           <p>
             Project settings -
@@ -14,11 +14,11 @@
         </template>
       </el-page-header>
 
-      <span class="font-medium text-left"> Project settings </span>
+      <!-- <span class="font-medium text-left"> Project settings </span>
 
       <span class="pt-1">
         Update your project name, description and other settings.
-      </span>
+      </span> -->
 
       <el-divider> </el-divider>
 
@@ -27,7 +27,7 @@
         :model="datasetForm"
         label-width="150px"
         @submit.prevent
-        class="border-2 border-slate-100 p-4 rounded-lg"
+        class="rounded-lg border-2 border-slate-100 p-4"
         :rules="rules"
       >
         <el-form-item label="Dataset name" prop="datasetName">
@@ -111,7 +111,7 @@
           </button>
         </el-form-item>
       </el-form>
-      <div class="py-4 flex flex-row justify-center space-x-4">
+      <div class="flex flex-row justify-center space-x-4 py-4">
         <button class="danger-plain-button" @click="goBack">
           <el-icon><circle-close-filled /></el-icon> Cancel
         </button>
@@ -119,7 +119,7 @@
           Save changes <el-icon><circle-check-filled /></el-icon>
         </button>
       </div>
-      <div class="py-2 flex flex-row justify-center space-x-4 hidden">
+      <div class="flex hidden flex-row justify-center space-x-4 py-2">
         <button class="primary-plain-button">
           Test button <el-icon><circle-check-filled /></el-icon>
         </button>

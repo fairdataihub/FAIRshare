@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center p-3 px-5 max-w-screen-xl"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
-    <div class="flex flex-col h-full w-full" id="scroll">
-      <span class="font-medium text-left"> FAIRifying </span>
+    <div class="flex h-full w-full flex-col" id="scroll">
+      <span class="text-left font-medium"> FAIRifying </span>
 
       <span> Let's make your research software FAIR </span>
 
@@ -15,7 +15,7 @@
         step-by-step through the following process:
       </p> -->
 
-      <div class="w-full flex flex-row justify-center py-6" id="button-area">
+      <div class="flex w-full flex-row justify-center py-6" id="button-area">
         <router-link to="/datasets" class="hidden">
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>

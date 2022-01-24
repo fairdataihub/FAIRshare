@@ -1,14 +1,14 @@
 <template>
   <div
-    class="h-full w-full flex flex-row items-center"
+    class="flex h-full w-full flex-row items-center"
     :class="{ 'justify-center': datasetStore.datasetCount === 0 }"
   >
     <div
-      class="px-3 h-full flex flex-row items-center"
+      class="flex h-full flex-row items-center px-3"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
       <div
-        class="h-full w-full flex flex-col"
+        class="flex h-full w-full flex-col"
         v-if="datasetStore.datasetCount > 0"
       >
         <!-- <div class="flex flex-col h-full"> -->
@@ -21,17 +21,17 @@
 
         <!-- <el-divider> </el-divider> -->
 
-        <div class="flex-grow h-full overflow-y-auto">
+        <div class="h-full flex-grow overflow-y-auto">
           <div>
             <el-divider content-position="left">
               Projects currently in progress
             </el-divider>
 
-            <div class="px-10 w-full">
+            <div class="w-full px-10">
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -47,7 +47,7 @@
                     </p>
                   </div>
                 </div>
-                <div class="items-center ml-2 hidden">
+                <div class="ml-2 hidden items-center">
                   <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
                 </div>
               </div>
@@ -59,11 +59,11 @@
               Fully published projects
             </el-divider>
 
-            <div class="px-10 w-full">
+            <div class="w-full px-10">
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="project my-4 shadow-md rounded-lg px-6 py-4 border border-zinc-200 hover:border-transparent transition-all"
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -79,7 +79,7 @@
                     </p>
                   </div>
                 </div>
-                <div class="items-center ml-2 hidden">
+                <div class="ml-2 hidden items-center">
                   <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
                 </div>
               </div>
@@ -89,10 +89,10 @@
 
         <el-divider> </el-divider>
 
-        <div class="flex flex-row justify-between mb-5">
+        <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="flex flex-row items-center w-max text-primary-600 cursor-pointer hover-underline-animation my-3"
+              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -117,16 +117,16 @@
         </div>
         <!-- </div> -->
       </div>
-      <div class="flex flex-row justify-center items-center p-10" v-else>
+      <div class="flex flex-row items-center justify-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="flex flex-col justify-center items-center border-2 border-dashed hover:border-solid w-max p-10 rounded-lg hover:bg-gray-100 transition-all cursor-pointer"
+            class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
               class="h-20 w-10/12 text-blue-500"
             />
-            <span class="font-medium text-large">
+            <span class="text-large font-medium">
               Start a new data curation project
             </span>
           </div>

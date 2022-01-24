@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-full w-full flex flex-col justify-center items-center pr-5 p-3 max-w-screen-lg"
+    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col h-full w-full items-center">
+    <div class="flex h-full w-full flex-col items-center">
       <div class="card-container">
         <div class="image-container">
           <img
@@ -41,7 +41,7 @@
               <el-tag
                 type="success"
                 effect="plain"
-                class="text-green-600 border-green-400"
+                class="border-green-400 text-green-600"
               >
                 <el-icon> <user-filled /> </el-icon>
                 <span class="px-2">
@@ -74,7 +74,7 @@
 
       <div class="card-container">
         <div class="image-container">
-          <img src="../../assets/github.jpeg" class="image" />
+          <img src="../../assets/images/github.jpeg" class="image" />
         </div>
         <div class="card-container-content">
           <div class="card-container-status">
@@ -107,7 +107,7 @@
               <el-tag
                 type="success"
                 effect="plain"
-                class="text-green-600 border-green-400"
+                class="border-green-400 text-green-600"
               >
                 <el-icon> <user-filled /> </el-icon>
                 <span class="px-2">
@@ -229,28 +229,28 @@ export default {
 
 <style scoped>
 .card-container {
-  @apply flex flex-row py-3 my-5 shadow-lg w-4/5 h-[220px] transition-all border border-gray-200 rounded-md;
+  @apply my-5 flex h-[220px] w-4/5 flex-row rounded-md border border-gray-200 py-3 shadow-lg transition-all;
 }
 .image-container {
-  @apply h-full w-4/12 flex justify-center items-center;
+  @apply flex h-full w-4/12 items-center justify-center;
 }
 .card-container-content {
-  @apply flex flex-col w-8/12 px-2 h-full;
+  @apply flex h-full w-8/12 flex-col px-2;
 }
 .dot {
-  @apply h-[12px] w-[12px] rounded-full mr-2;
+  @apply mr-2 h-[12px] w-[12px] rounded-full;
 }
 .card-container-status {
-  @apply flex flex-row justify-start items-center h-1/5;
+  @apply flex h-1/5 flex-row items-center justify-start;
 }
 .centering-container {
-  @apply flex justify-center items-center h-2/5;
+  @apply flex h-2/5 items-center justify-center;
 }
 .center {
   @apply py-3 pr-3;
 }
 .bottom {
-  @apply justify-end items-end pr-5 pb-3;
+  @apply items-end justify-end pr-5 pb-3;
 }
 .tag-container {
   @apply ml-2;
