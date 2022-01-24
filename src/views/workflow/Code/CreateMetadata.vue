@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 px-5"
+    class="relative flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -26,11 +26,11 @@
         <div class="py-2">
           <div v-if="currentStep == 1">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Basic Information
                 </span>
@@ -107,7 +107,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -132,11 +132,11 @@
 
           <div v-if="currentStep == 2">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Authors and Contributors
                 </span>
@@ -164,9 +164,9 @@
                     >
                       <template #item="{ element }">
                         <div
-                          class="flex flex-row justify-between mb-2 transition-all"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
-                          <div class="flex flex-row justify-between w-11/12">
+                          <div class="flex w-11/12 flex-row justify-between">
                             <el-input
                               v-model="element.givenName"
                               type="text"
@@ -189,7 +189,7 @@
                               placeholder="Affiliation"
                             ></el-input>
 
-                            <div class="flex flex-col w-full mx-2">
+                            <div class="mx-2 flex w-full flex-col">
                               <el-input
                                 v-model="element.email"
                                 type="text"
@@ -200,7 +200,7 @@
                               </span>
                             </div>
 
-                            <div class="flex flex-col w-full mx-2">
+                            <div class="mx-2 flex w-full flex-col">
                               <el-input
                                 v-model="element.orcid"
                                 type="text"
@@ -212,15 +212,15 @@
                             </div>
                           </div>
                           <div
-                            class="flex flex-row items-start w-1/12 py-2 justify-evenly"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
                           >
                             <div
-                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                             >
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -241,7 +241,7 @@
                   </el-form-item>
 
                   <div
-                    class="flex items-center mb-6 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
                     @click="addAuthor"
                   >
                     <Icon icon="carbon:add" />
@@ -265,7 +265,7 @@
                     >
                       <template #item="{ element }">
                         <div
-                          class="flex flex-row justify-between mb-2 transition-all"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
                           <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
                             <el-select
@@ -283,8 +283,8 @@
                             </el-select>
                           </div>
 
-                          <div class="flex flex-row justify-between w-11/12">
-                            <div class="w-1/5 mr-2">
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <div class="mr-2 w-1/5">
                               <el-input
                                 v-model="element.givenName"
                                 type="text"
@@ -292,7 +292,7 @@
                               ></el-input>
                             </div>
 
-                            <div class="w-1/5 mx-2">
+                            <div class="mx-2 w-1/5">
                               <el-input
                                 v-model="element.familyName"
                                 type="text"
@@ -300,7 +300,7 @@
                               ></el-input>
                             </div>
 
-                            <div class="w-1/5 mx-2">
+                            <div class="mx-2 w-1/5">
                               <el-input
                                 v-model="element.affiliation"
                                 type="text"
@@ -308,7 +308,7 @@
                               ></el-input>
                             </div>
 
-                            <div class="flex flex-col w-1/5 mx-2">
+                            <div class="mx-2 flex w-1/5 flex-col">
                               <el-input
                                 v-model="element.email"
                                 type="text"
@@ -319,7 +319,7 @@
                               </span>
                             </div>
 
-                            <div class="flex flex-col w-1/5 mx-2">
+                            <div class="mx-2 flex w-1/5 flex-col">
                               <el-input
                                 v-model="element.orcid"
                                 type="text"
@@ -331,15 +331,15 @@
                             </div>
                           </div>
                           <div
-                            class="flex flex-row items-start w-1/12 py-2 justify-evenly"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
                           >
                             <div
-                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                             >
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -360,7 +360,7 @@
                   </el-form-item>
 
                   <div
-                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
                     @click="addContributor"
                   >
                     <Icon icon="carbon:add" />
@@ -375,7 +375,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -400,11 +400,11 @@
 
           <div v-if="currentStep == 3">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Discoverability
                 </span>
@@ -451,9 +451,9 @@
                     >
                       <template #item="{ element }">
                         <div
-                          class="flex flex-row justify-between mb-2 transition-all"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
-                          <div class="flex flex-row justify-between w-11/12">
+                          <div class="flex w-11/12 flex-row justify-between">
                             <el-input
                               v-model="element.keyword"
                               type="text"
@@ -463,14 +463,14 @@
                             ></el-input>
                             <div class="mx-2"></div>
                           </div>
-                          <div class="flex flex-row w-1/12 justify-evenly">
+                          <div class="flex w-1/12 flex-row justify-evenly">
                             <div
-                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                             >
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -491,7 +491,7 @@
                   </el-form-item>
 
                   <div
-                    class="flex items-center pb-3 text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
                     @click="addKeyword"
                   >
                     <Icon icon="carbon:add" />
@@ -530,7 +530,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -555,11 +555,11 @@
 
           <div v-if="currentStep == 4">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Development tools
                 </span>
@@ -631,9 +631,9 @@
                     >
                       <template #item="{ element }">
                         <div
-                          class="flex flex-row justify-between mb-2 transition-all"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
-                          <div class="flex flex-row justify-between w-11/12">
+                          <div class="flex w-11/12 flex-row justify-between">
                             <el-input
                               v-model="element.link"
                               type="text"
@@ -641,14 +641,14 @@
                             ></el-input>
                             <div class="mx-2"></div>
                           </div>
-                          <div class="flex flex-row w-1/12 justify-evenly">
+                          <div class="flex w-1/12 flex-row justify-evenly">
                             <div
-                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                             >
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -669,7 +669,7 @@
                   </el-form-item>
 
                   <div
-                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
                     @click="addRelatedLink"
                   >
                     <Icon icon="carbon:add" />
@@ -682,7 +682,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -707,11 +707,11 @@
 
           <div v-if="currentStep == 5">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Run-time environment
                 </span>
@@ -810,9 +810,9 @@
                     >
                       <template #item="{ element }">
                         <div
-                          class="flex flex-row justify-between mb-2 transition-all"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
-                          <div class="flex flex-row justify-between w-11/12">
+                          <div class="flex w-11/12 flex-row justify-between">
                             <el-input
                               v-model="element.link"
                               type="text"
@@ -820,14 +820,14 @@
                             ></el-input>
                             <div class="mx-2"></div>
                           </div>
-                          <div class="flex flex-row w-1/12 justify-evenly">
+                          <div class="flex w-1/12 flex-row justify-evenly">
                             <div
-                              class="flex items-center justify-center text-gray-400 handle hover:text-gray-700"
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                             >
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex items-center justify-center text-gray-600 cursor-pointer hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -850,7 +850,7 @@
                   </el-form-item>
 
                   <div
-                    class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-black w-max"
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
                     @click="addOtherSoftwareRequirements"
                   >
                     <Icon icon="carbon:add" />
@@ -863,7 +863,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -888,11 +888,11 @@
 
           <div v-if="currentStep == 6">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Current version of the software
                 </span>
@@ -969,7 +969,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
@@ -994,11 +994,11 @@
 
           <div v-if="currentStep == 7">
             <div
-              class="mb-4 border-2 rounded-lg shadow-md form-card-content border-slate-100"
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <div class="w-full px-4 py-2 bg-gray-100">
+              <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-lg font-semibold pointer-events-none text-primary-600"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Current version of the software
                 </span>
@@ -1070,7 +1070,7 @@
               </div>
             </div>
             <div
-              class="flex justify-center w-full px-5 space-x-4 form-navigation-buttons"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
             >
               <button
                 @click="prevFormStep"
