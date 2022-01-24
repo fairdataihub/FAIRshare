@@ -22,6 +22,14 @@ gulp.task("clean-css", function () {
   return del(["src/assets/css/index.css"]);
 });
 
+gulp.task("clean-pre-python-build", function () {
+  return del(["src/pyflaskdist", "./api.spec", "./build"]);
+});
+
+gulp.task("clean-pre-electron-build", function () {
+  return del(["./dist_electron"]);
+});
+
 gulp.task("copy-python", function () {
   return gulp
     .src(["./src/pyflask/**/*"])
