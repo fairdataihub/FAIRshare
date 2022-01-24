@@ -195,7 +195,9 @@ def createMetadata(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCodeMetadata(code_data, general_data, folder_path, virtual_file)
+            result = createCodeMetadata(code_data, general_data, folder_path, virtual_file)
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:
@@ -286,7 +288,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
 
     # return the citation.cff object if virtual is set to true
     if virtual_file:
-        return json.dumps(metadata)
+        return json.dumps(citationObject)
 
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:
@@ -317,7 +319,9 @@ def createCitationCFF(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCitationFromCode(code_data, general_data, folder_path, virtual_file)
+            result = createCitationFromCode(code_data, general_data, folder_path, virtual_file)
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:

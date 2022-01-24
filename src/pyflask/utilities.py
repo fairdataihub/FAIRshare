@@ -72,3 +72,12 @@ def createFile(folder_path, file_name, file_content, content_type):
         return "SUCCESS"
     except Exception as e:
         raise e
+
+def openFileExplorer(folder_path):
+    try:
+        import subprocess
+        ret = subprocess.Popen(f'explorer /select,{folder_path}')
+        print(folder_path)
+        return "SUCCESS"
+    except Exception as e:
+        raise e

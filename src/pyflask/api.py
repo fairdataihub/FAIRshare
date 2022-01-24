@@ -18,7 +18,7 @@ from zenodo import (
     deleteZenodoDeposition,
 )
 from metadata import createMetadata, createCitationCFF
-from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile
+from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile, openFileExplorer
 
 API_VERSION = "0.0.1"
 
@@ -522,6 +522,29 @@ class CreateFile(Resource):
         content_type = args["content_type"]
 
         return createFile(folder_path, file_name, file_content, content_type)
+
+@utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
+class RequestJSON(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "open file at path",
+        },
+    )
+    def post(self):
+        """create a file in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="file path to open file explorer at",
+        )
+        args = parser.parse_args()
+        folder_path = args["folder_path"]
+
+        return openFileExplorer(folder_path)
 
 
 # 5000 is the flask default port.

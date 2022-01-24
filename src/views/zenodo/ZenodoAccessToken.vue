@@ -87,7 +87,8 @@
             </template>
           </el-tree>
           <el-drawer
-            v-model="showFileDetails"
+            v-if="anyfilePreview"
+            v-model="drawerModel"
             :title="fileTitle"
             direction="rtl"
             size="60%"
@@ -97,7 +98,7 @@
             <el-scrollbar style="height: calc(100vh - 45px)">
               <div
                 v-if="
-                  PreviewNewlyCreatedFile && !PreviewNewlyCreatedLicenseFile
+                  PreviewNewlyCreatedMetadataFile
                 "
               >
                 <el-table
@@ -113,10 +114,27 @@
               </div>
 
               <div
-                v-if="PreviewNewlyCreatedFile && PreviewNewlyCreatedLicenseFile"
+                v-if="
+                  PreviewNewlyCreatedCitationFile
+                "
               >
                 <el-table
-                  :data="lisenceData"
+                  :data="citationData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column prop="Value" label="Value" />
+                </el-table>
+              </div>
+
+              <div
+                v-if="PreviewNewlyCreatedLicenseFile"
+              >
+                <el-table
+                  :data="licenseData"
                   style="width: 100%"
                   row-key="id"
                   border
@@ -136,12 +154,12 @@
 
 <script>
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
-
+import axios from "axios";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
-
+import path from 'path';
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
-
+import { ElLoading } from "element-plus";
 export default {
   name: "ZenodoAccessToken",
   components: { LoadingFoldingCube, ConnectZenodo },
@@ -158,18 +176,20 @@ export default {
       zenodoAccessToken: "",
       ready: false,
       showFiles: "1",
-      lisenceData: [{ Name: "Lisence", Value: "", id: 0 }],
+      licenseData: [{"license content":""}],
       tableData: [],
+      citationData: [],
       fileData: [],
       defaultProps: {
         children: "children",
         label: "label",
       },
-      showFileDetails: false,
       fileTitle: "",
       showFilePreviewSection: true,
-      PreviewNewlyCreatedFile: false,
       PreviewNewlyCreatedLicenseFile: false,
+      PreviewNewlyCreatedMetadataFile: false,
+      PreviewNewlyCreatedCitationFile: false,
+      drawerModel: true
     };
   },
   //el-tree-node__content
@@ -183,35 +203,109 @@ export default {
       }
       return true;
     },
+
+    anyfilePreview(){
+      if(this.PreviewNewlyCreatedMetadataFile || this.PreviewNewlyCreatedLicenseFile || this.PreviewNewlyCreatedCitationFile){
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
+    createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Reading data...",
+      });
+      return loading;
+    },
+    async createCodeMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: true,
+        })
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createCitationFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/citation/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: true,
+        })
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createLicenseFile() {
+      const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+      const response = await axios
+        .post(`${this.$server_url}/utilities/createfile`, {
+          folder_path: folderPath,
+          file_name: "LICENSE",
+          file_content: this.workflow.licenseText,
+          content_type: "text",
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async openFileExplorer(path) {
+      const response = await axios
+        .post(`${this.$server_url}/utilities/openFileExplorer`, {
+          folder_path: path
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     showFilePreview() {
       this.showFilePreviewSection = !this.showFilePreviewSection;
     },
     handleCloseDrawer() {
-      this.showFileDetails = false;
       this.fileTitle = "";
-      this.fileUrl = "";
-
-      this.PreviewNewlyCreatedFile = false;
       this.PreviewNewlyCreatedLicenseFile = false;
+      this.PreviewNewlyCreatedMetadataFile = false;
+      this.PreviewNewlyCreatedCitationFile = false;
     },
-    handleOpenDrawer(title) {
-      this.showFileDetails = true;
+    async handleOpenDrawer(title) {
       this.fileTitle = title;
     },
-    handleNodeClick(data) {
+    async handleNodeClick(data) {
       if (!data.isDir) {
-        if (
-          data.label == "codemeta.json" ||
-          data.label == "citation.cff" ||
-          data.label == "LICENSE"
-        ) {
-          this.PreviewNewlyCreatedFile = true;
-        }
-
         if (data.label == "LICENSE") {
           this.PreviewNewlyCreatedLicenseFile = true;
+        } else if (data.label == "codemeta.json") {
+          this.PreviewNewlyCreatedMetadataFile = true;
+        }else if (data.label == "citation.cff") {
+          this.PreviewNewlyCreatedCitationFile = true;
+        } else if (!data.isDir){
+          await this.openFileExplorer(data.fullPath)
         }
 
         let title = data.label;
@@ -224,7 +318,7 @@ export default {
         let results = [];
         filesystem.readdirSync(dir).forEach(function (file) {
           let newObj = {};
-          let filefullname = dir + "/" + file;
+          let filefullname = path.join(dir, file);
           let stat = filesystem.statSync(filefullname);
           if (stat && stat.isDirectory()) {
             newObj.label = file;
@@ -241,21 +335,6 @@ export default {
         return results;
       }
       let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
-      root.children.push({
-        label: "codemeta.json",
-        isDir: false,
-        fullPath: dir + "/" + "codemeta.json",
-      });
-      root.children.push({
-        label: "citation.cff",
-        isDir: false,
-        fullPath: dir + "/" + "citation.cff",
-      });
-      root.children.push({
-        label: "LICENSE",
-        isDir: false,
-        fullPath: dir + "/" + "LICENSE",
-      });
       this.fileData.push(root);
     },
 
@@ -382,13 +461,28 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
-    this.lisenceData["Value"] = this.workflow.licenseText;
+
+    let spinner = this.createLoading();
+    this.tableData = await this.createCodeMetadataFile()
+    this.citationData = await this.createCitationFile()
     this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
     this.tableData = this.jsonToTableDataRecursive(
-      this.dataset.data,
+      this.tableData,
       1,
       "ROOT"
     );
+
+    this.citationData = this.jsonToTableDataRecursive(
+      this.citationData,
+      1,
+      "ROOT"
+    );
+    if(this.workflow.licenseText){
+      await this.createLicenseFile()
+      this.licenseData[0]["license content"] = this.workflow.licenseText
+    }
+    spinner.close();
+
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(6);
