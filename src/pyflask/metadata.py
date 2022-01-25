@@ -133,21 +133,25 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 new_author["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_author["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_author["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_author["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_author["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = {}
-                    new_author["affiliation"]["@type"] = "Organization"
-                    new_author["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = {}
+                        new_author["affiliation"]["@type"] = "Organization"
+                        new_author["affiliation"]["name"] = item["affiliation"]
 
                 metadata["author"].append(new_author)
 
@@ -161,21 +165,25 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 new_contributor["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_contributor["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_contributor["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_contributor["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_contributor["email"] = item["email"]
+                    if item["email"] != "":
+                        new_contributor["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_contributor["affiliation"] = {}
-                    new_contributor["affiliation"]["@type"] = "Organization"
-                    new_contributor["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_contributor["affiliation"] = {}
+                        new_contributor["affiliation"]["@type"] = "Organization"
+                        new_contributor["affiliation"]["name"] = item["affiliation"]
 
                 metadata["contributor"].append(new_contributor)
 
@@ -195,7 +203,9 @@ def createMetadata(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            result = createCodeMetadata(code_data, general_data, folder_path, virtual_file)
+            result = createCodeMetadata(
+                code_data, general_data, folder_path, virtual_file
+            )
             if virtual_file:
                 return result
 
@@ -223,7 +233,8 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
                 new_author = {}
 
                 if "orcid" in item:
-                    new_author["orcid"] = item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["orcid"] = item["orcid"]
 
                 if "givenName" in item:
                     new_author["given-names"] = item["givenName"]
@@ -232,10 +243,12 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
                     new_author["family-names"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = item["affiliation"]
 
                 citationObject["authors"].append(new_author)
 
@@ -319,7 +332,9 @@ def createCitationCFF(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            result = createCitationFromCode(code_data, general_data, folder_path, virtual_file)
+            result = createCitationFromCode(
+                code_data, general_data, folder_path, virtual_file
+            )
             if virtual_file:
                 return result
 

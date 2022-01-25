@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-full max-w-screen-xl p-3 pr-5"
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
-    <div class="flex flex-col w-full h-full">
-      <span class="text-lg font-medium text-left">
+    <div class="flex h-full w-full flex-col">
+      <span class="text-left text-lg font-medium">
         Zenodo connection details
       </span>
       <span class="text-left">
@@ -13,7 +13,7 @@
       <el-divider class="my-4"> </el-divider>
 
       <div v-if="ready">
-        <p v-if="validTokenAvailable" class="w-full my-10 text-center">
+        <p v-if="validTokenAvailable" class="my-10 w-full text-center">
           Looks like we already have your Zenodo login details. Click on the
           'Start upload' button below.
         </p>
@@ -29,7 +29,7 @@
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div class="flex flex-row justify-center w-full py-2 space-x-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class=""
@@ -61,9 +61,9 @@
       <transition appear mode="out-in" name="fade">
         <div v-if="showFilePreviewSection" class="py-5">
           <line-divider />
-          <p class="my-5 text=lg">
-            A list of all the file that we are going to upload to Zenodo is
-            shown below. You can click on any of them to view the content or
+          <p class="text=lg my-5">
+            A list of all the files that we are going to upload to Zenodo is
+            shown below. You can click on any of them to view their contents or
             open in your file browser.
           </p>
           <el-tree
@@ -86,6 +86,7 @@
               >
             </template>
           </el-tree>
+
           <el-drawer
             v-if="anyfilePreview"
             v-model="drawerModel"
@@ -96,7 +97,7 @@
             :lock-scroll="false"
           >
             <el-scrollbar style="height: calc(100vh - 45px)">
-              <div v-if="PreviewNewlyCreatedMetadataFile">
+              <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
                 <el-table
                   :data="tableData"
                   style="width: 100%"
@@ -109,7 +110,7 @@
                 </el-table>
               </div>
 
-              <div v-if="PreviewNewlyCreatedCitationFile">
+              <div v-if="PreviewNewlyCreatedCitationFile" class="pb-20">
                 <el-table
                   :data="citationData"
                   style="width: 100%"
@@ -118,12 +119,16 @@
                   default-expand-all
                 >
                   <el-table-column prop="Name" label="Name" />
-                  <el-table-column prop="Value" label="Value" />
+                  <el-table-column
+                    prop="Value"
+                    label="Value"
+                    class="break-normal"
+                  />
                 </el-table>
               </div>
 
-              <div v-if="PreviewNewlyCreatedLicenseFile">
-                <el-table
+              <div v-if="PreviewNewlyCreatedLicenseFile" class="">
+                <!-- <el-table
                   :data="licenseData"
                   style="width: 100%"
                   row-key="id"
@@ -132,7 +137,10 @@
                 >
                   <el-table-column prop="Name" label="Name" />
                   <el-table-column prop="Value" label="Value" />
-                </el-table>
+                </el-table> -->
+                <div class="whitespace-pre-line pb-20 text-sm">
+                  {{ licenseData }}
+                </div>
               </div>
             </el-scrollbar>
           </el-drawer>
@@ -144,12 +152,15 @@
 
 <script>
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
-import axios from "axios";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
-import path from "path";
+
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
+
+import path from "path";
+import axios from "axios";
 import { ElLoading } from "element-plus";
+
 export default {
   name: "ZenodoAccessToken",
   components: { LoadingFoldingCube, ConnectZenodo },
@@ -166,7 +177,7 @@ export default {
       zenodoAccessToken: "",
       ready: false,
       showFiles: "1",
-      licenseData: [{ "license content": "" }],
+      licenseData: "",
       tableData: [],
       citationData: [],
       fileData: [],
@@ -175,11 +186,12 @@ export default {
         label: "label",
       },
       fileTitle: "",
-      showFilePreviewSection: true,
+      showFilePreviewSection: false,
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
       drawerModel: true,
+      showLoading: false,
     };
   },
   //el-tree-node__content
@@ -265,14 +277,22 @@ export default {
       return response;
     },
     async openFileExplorer(path) {
+      this.showLoading = ElLoading.service({
+        lock: true,
+        text: "Loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       const response = await axios
         .post(`${this.$server_url}/utilities/openFileExplorer`, {
           folder_path: path,
         })
         .then((response) => {
+          this.showLoading.close();
           return response.data;
         })
         .catch((error) => {
+          this.showLoading.close();
+
           console.error(error);
           return "ERROR";
         });
@@ -378,20 +398,36 @@ export default {
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(i);
           let newName = "";
-          if (i == 0) {
-            newName = String(i + 1) + "st" + " in " + parentName;
-          } else if (i == 1) {
-            newName = String(i + 1) + "nd" + " in " + parentName;
-          } else if (i == 2) {
-            newName = String(i + 1) + "rd" + " in " + parentName;
-          } else {
-            newName = String(i + 1) + "th" + " in " + parentName;
+
+          let customName = "";
+
+          switch (parentName) {
+            case "keywords":
+              customName = "keyword";
+              break;
+            default:
+              customName = parentName;
+              break;
           }
+
+          const readableIndex = i + 1;
+
+          if (readableIndex % 10 == 1 && readableIndex % 100 != 11) {
+            newName = String(i + 1) + "st " + customName;
+          } else if (readableIndex % 10 == 2 && readableIndex % 100 != 12) {
+            newName = String(i + 1) + "nd " + customName;
+          } else if (readableIndex % 10 == 3 && readableIndex % 100 != 13) {
+            newName = String(i + 1) + "rd " + customName;
+          } else {
+            newName = String(i + 1) + "th " + customName;
+          }
+
           let value = this.jsonToTableDataRecursive(
             jsonObject[i],
             newId,
             newName
           );
+
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = newName;
@@ -403,6 +439,7 @@ export default {
             newObj.Value = value;
             newObj.children = [];
           }
+
           result.push(newObj);
         }
         return result;
@@ -467,9 +504,10 @@ export default {
       1,
       "ROOT"
     );
+    console.log(this.workflow.licenseText);
     if (this.workflow.licenseText) {
-      await this.createLicenseFile();
-      this.licenseData[0]["license content"] = this.workflow.licenseText;
+      // await this.createLicenseFile();
+      this.licenseData = this.workflow.licenseText;
     }
     spinner.close();
 
@@ -489,5 +527,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped></style>

@@ -46,18 +46,18 @@ html {
 }
 
 .sideBarMenuItem {
-  @apply flex flex-row justify-start items-center;
-  @apply px-4 py-3 mt-2 rounded-lg transition-all;
-  @apply font-semibold text-sm font-inter;
+  @apply flex flex-row items-center justify-start;
+  @apply mt-2 rounded-lg px-4 py-3 transition-all;
+  @apply font-inter text-sm font-semibold;
   @apply text-black hover:text-white;
   @apply hover:bg-primary-400;
   @apply focus:outline-none active:outline-none;
 }
 
 .sideBarMenuItem.router-link-active {
-  @apply flex flex-row justify-start items-center;
-  @apply px-4 py-3 mt-2 rounded-lg transition-all;
-  @apply font-semibold text-sm font-inter;
+  @apply flex flex-row items-center justify-start;
+  @apply mt-2 rounded-lg px-4 py-3 transition-all;
+  @apply font-inter text-sm font-semibold;
   @apply text-white;
   @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-500;
   @apply focus:outline-none active:outline-none;
@@ -83,7 +83,7 @@ html {
   transform: rotate(0deg);
   @apply transition-all;
   @apply group-hover:text-primary-500;
-  @apply bg-zinc-800 group-hover:bg-primary-500;
+  @apply group-hover:bg-primary-500 bg-zinc-800;
 }
 
 #menu-hamburger span:nth-child(1) {
@@ -169,7 +169,7 @@ html {
 }
 
 .selected-repo {
-  @apply border border-secondary-500 shadow-md shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-md;
 }
 
 .handle:hover {
@@ -180,19 +180,19 @@ html {
 
 @layer components {
   .project {
-    @apply flex flex-row justify-between items-center;
+    @apply flex flex-row items-center justify-between;
     @apply w-full p-3;
     @apply hover:bg-primary-100;
-    @apply transition-all cursor-pointer;
+    @apply cursor-pointer transition-all;
   }
 
   .primary-plain-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
-    @apply text-gray-900  hover:text-primary-600;
-    @apply border border-primary-300;
+    @apply hover:text-primary-600  text-gray-900;
+    @apply border-primary-300 border;
     @apply hover:bg-primary-100;
     @apply transition-all;
   }
@@ -207,12 +207,12 @@ html {
   }
 
   .primary-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-white;
-    @apply border border-primary-500;
+    @apply border-primary-500 border;
     @apply bg-primary-600 hover:bg-primary-500;
     @apply transition-all;
   }
@@ -223,12 +223,12 @@ html {
   }
 
   .secondary-plain-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
-    @apply text-gray-900  hover:text-secondary-600;
-    @apply border border-secondary-500;
+    @apply hover:text-secondary-600  text-gray-900;
+    @apply border-secondary-500 border;
     @apply hover:bg-secondary-100;
     @apply transition-all;
   }
@@ -239,12 +239,12 @@ html {
   }
 
   .secondary-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-black;
-    @apply border border-secondary-500;
+    @apply border-secondary-500 border;
     @apply bg-secondary-200 hover:bg-secondary-300;
     @apply transition-all;
   }
@@ -255,8 +255,8 @@ html {
   }
 
   .danger-plain-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-black hover:text-red-700;
@@ -271,8 +271,8 @@ html {
   }
 
   .danger-button {
-    @apply flex flex-row justify-center items-center;
-    @apply px-5 py-2 rounded;
+    @apply flex flex-row items-center justify-center;
+    @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-red-700;
@@ -303,7 +303,7 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 }
 
 .el-button span {
-  @apply flex flex-row justify-center items-center;
+  @apply flex flex-row items-center justify-center;
 }
 
 .el-icon {
@@ -333,6 +333,10 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   margin: 0 !important;
 }
 
+.el-table__cell .cell {
+  @apply break-normal;
+}
+
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;
 }
@@ -345,7 +349,7 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 }
 
 .createNewProjectFormItemContainer .el-form-item__error {
-  @apply w-full flex justify-center pt-3;
+  @apply flex w-full justify-center pt-3;
 }
 
 /* ------------------------------------------
@@ -359,12 +363,12 @@ Transition styles for <transition />
 
 .sideBarFade-enter-to,
 .sideBarFade-leave {
-  @apply opacity-100 scale-100;
+  @apply scale-100 opacity-100;
 }
 
 .sideBarFade-enter,
 .sideBarFade-leave-to {
-  @apply opacity-0 scale-95;
+  @apply scale-95 opacity-0;
 }
 
 .fade-enter-active,

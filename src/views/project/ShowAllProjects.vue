@@ -1,14 +1,14 @@
 <template>
   <div
-    class="flex flex-row items-center w-full h-full"
+    class="flex h-full w-full flex-row items-center"
     :class="{ 'justify-center': datasetStore.datasetCount === 0 }"
   >
     <div
-      class="flex flex-row items-center h-full px-3"
+      class="flex h-full flex-row items-center px-3"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
       <div
-        class="flex flex-col w-full h-full"
+        class="flex h-full w-full flex-col"
         v-if="datasetStore.datasetCount > 0"
       >
         <!-- <div class="flex flex-col h-full"> -->
@@ -21,7 +21,7 @@
 
         <!-- <el-divider> </el-divider> -->
 
-        <div class="flex-grow h-full overflow-y-auto">
+        <div class="h-full flex-grow overflow-y-auto">
           <div>
             <el-divider content-position="left">
               Projects currently in progress
@@ -31,7 +31,7 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="px-6 py-4 my-4 transition-all border rounded-lg shadow-md project border-zinc-200 hover:border-transparent"
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -39,16 +39,16 @@
                 <div class="flex flex-row items-center">
                   <img :src="dataset.image" alt="" class="w-20" />
                   <div class="flex flex-col px-4">
-                    <span class="font-medium text-md">
+                    <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-3">
+                    <p class="line-clamp-3 text-sm">
                       {{ dataset.description }}
                     </p>
                   </div>
                 </div>
-                <div class="items-center hidden ml-2">
-                  <Icon icon="ic:round-navigate-next" class="w-8 h-8" />
+                <div class="ml-2 hidden items-center">
+                  <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
                 </div>
               </div>
             </div>
@@ -63,7 +63,7 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="px-6 py-4 my-4 transition-all border rounded-lg shadow-md project border-zinc-200 hover:border-transparent"
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -71,16 +71,16 @@
                 <div class="flex flex-row items-center">
                   <img :src="dataset.image" alt="" class="w-20" />
                   <div class="flex flex-col px-4">
-                    <span class="font-medium text-md">
+                    <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-3">
+                    <p class="line-clamp-3 text-sm">
                       {{ dataset.description }}
                     </p>
                   </div>
                 </div>
-                <div class="items-center hidden ml-2">
-                  <Icon icon="ic:round-navigate-next" class="w-8 h-8" />
+                <div class="ml-2 hidden items-center">
+                  <Icon icon="ic:round-navigate-next" class="h-8 w-8" />
                 </div>
               </div>
             </div>
@@ -89,19 +89,19 @@
 
         <el-divider> </el-divider>
 
-        <div class="flex flex-row justify-between mb-5">
+        <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="flex flex-row items-center my-3 cursor-pointer w-max text-primary-600 hover-underline-animation"
+              class="text-primary-600 hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center"
             >
               <span class="font-medium">
                 Or start a new data curation project
               </span>
-              <Icon icon="grommet-icons:form-next-link" class="w-5 h-5 ml-2" />
+              <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
           <div
-            class="flex flex-row px-2 space-x-4"
+            class="flex flex-row space-x-4 px-2"
             v-if="selectedDataset !== ''"
           >
             <button class="secondary-plain-button" @click="editProject">
@@ -120,13 +120,13 @@
       <div class="flex flex-row items-center justify-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="flex flex-col items-center justify-center p-10 transition-all border-2 border-dashed rounded-lg cursor-pointer hover:border-solid w-max hover:bg-gray-100"
+            class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
-              class="w-10/12 h-20 text-blue-500"
+              class="h-20 w-10/12 text-blue-500"
             />
-            <span class="font-medium text-large">
+            <span class="text-large font-medium">
               Start a new data curation project
             </span>
           </div>
