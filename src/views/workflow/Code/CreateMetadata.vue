@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -136,7 +136,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -404,7 +404,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -559,7 +559,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -711,7 +711,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -892,7 +892,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -998,7 +998,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1872,6 +1872,8 @@ export default {
       this.datasetStore.showProgressBar();
       this.datasetStore.setProgressBarType("zenodo");
       this.datasetStore.setCurrentStep(3);
+
+      this.workflow.currentRoute = this.$route.path;
 
       if (this.codePresent) {
         if (

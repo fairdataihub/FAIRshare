@@ -46,7 +46,7 @@
             </el-select>
 
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
@@ -322,6 +322,8 @@ export default {
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(4);
+
+    this.workflow.currentRoute = this.$route.path;
 
     if (
       "Code" in this.dataset.data &&

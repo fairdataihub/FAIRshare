@@ -254,6 +254,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(2);
 
+    this.workflow.currentRoute = this.$route.path;
+
     if ("standards" in this.dataset.data.Code) {
       this.questions = this.dataset.data.Code.standards;
     }

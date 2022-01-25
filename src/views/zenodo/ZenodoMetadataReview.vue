@@ -608,6 +608,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
+    this.workflow.currentRoute = this.$route.path;
+
     this.loading.close();
   },
 };

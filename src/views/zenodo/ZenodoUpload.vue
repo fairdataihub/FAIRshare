@@ -46,7 +46,7 @@
 
       <div class="flex w-full flex-row justify-center py-2" v-if="showAlert">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/review`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
           class="mx-6"
         >
           <button class="primary-plain-button">Back</button>
@@ -753,6 +753,8 @@ export default {
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(6);
+
+    this.workflow.currentRoute = this.$route.path;
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;

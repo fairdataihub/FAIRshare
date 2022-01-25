@@ -515,6 +515,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(6);
 
+    this.workflow.currentRoute = this.$route.path;
+
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
 
     if (validZenodoConnection) {

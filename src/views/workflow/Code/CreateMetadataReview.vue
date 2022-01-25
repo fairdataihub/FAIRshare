@@ -358,6 +358,8 @@ export default {
 
     this.workflow = this.dataset.workflows[this.workflowID];
 
+    this.workflow.currentRoute = this.$route.path;
+
     this.generalMetadata = this.dataset.data.general.questions;
 
     if (this.codePresent) {

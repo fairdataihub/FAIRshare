@@ -28,7 +28,7 @@
               <span class="mx-5 text-lg"> Zenodo </span>
             </div>
             <div
-              class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-5 flex w-max cursor-pointer flex-row items-center"
               v-if="repoID === 'zenodo'"
               @click="openWebsite('https://zenodo.org')"
             >
@@ -216,6 +216,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
+    this.workflow.currentRoute = this.$route.path;
+
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;
     }
@@ -233,6 +235,6 @@ export default {
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-lg transition-all;
 }
 </style>

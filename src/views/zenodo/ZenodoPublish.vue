@@ -147,6 +147,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(7);
 
+    this.workflow.currentRoute = this.$route.path;
+
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
     // console.log(this.zenodoToken);
