@@ -42,7 +42,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="line-clamp-3 text-sm">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -74,7 +74,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="line-clamp-3 text-sm">
+                    <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -92,7 +92,7 @@
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="text-primary-600 hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center"
+              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
             >
               <span class="font-medium">
                 Or start a new data curation project
