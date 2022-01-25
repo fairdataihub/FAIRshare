@@ -18,7 +18,14 @@ from zenodo import (
     deleteZenodoDeposition,
 )
 from metadata import createMetadata, createCitationCFF
-from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile, openFileExplorer
+from utilities import (
+    foldersPresent,
+    zipFolder,
+    deleteFile,
+    requestJSON,
+    createFile,
+    openFileExplorer,
+)
 
 API_VERSION = "0.0.1"
 
@@ -522,6 +529,7 @@ class CreateFile(Resource):
         content_type = args["content_type"]
 
         return createFile(folder_path, file_name, file_content, content_type)
+
 
 @utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
 class RequestJSON(Resource):
