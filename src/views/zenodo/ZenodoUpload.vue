@@ -53,21 +53,12 @@
         </router-link>
 
         <button class="primary-button" @click="retryUpload">Retry</button>
-
-        <!-- <el-button
-          type="primary"
-          class="flex flex-row items-center"
-          @click="retryUpload"
-        >
-          Retry
-        </el-button> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
 import axios from "axios";
 import dayjs from "dayjs";
 import path from "path";
@@ -528,6 +519,7 @@ export default {
         .post(`${this.$server_url}/metadata/create`, {
           data_types: JSON.stringify(this.workflow.type),
           data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
         })
         .then((response) => {
           return response.data;
@@ -539,12 +531,11 @@ export default {
       return response;
     },
     async createCitationFile() {
-      console.log(JSON.stringify(this.workflow.type));
-      console.log(JSON.stringify(this.dataset.data));
       const response = await axios
         .post(`${this.$server_url}/metadata/citation/create`, {
           data_types: JSON.stringify(this.workflow.type),
           data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
         })
         .then((response) => {
           return response.data;
@@ -740,7 +731,7 @@ export default {
 
         return;
       } else {
-        this.workflow.datasetUploaded = true;
+        this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
         this.workflow.generateLicense = false;
 

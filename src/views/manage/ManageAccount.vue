@@ -221,7 +221,6 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("github");
     this.datasetStore.setCurrentStep(2);
-
     await this.manager.loadTokens();
   },
 };

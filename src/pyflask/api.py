@@ -18,7 +18,7 @@ from zenodo import (
     deleteZenodoDeposition,
 )
 from metadata import createMetadata, createCitationCFF
-from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile
+from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile, openFileExplorer
 
 API_VERSION = "0.0.1"
 
@@ -93,6 +93,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -103,13 +104,17 @@ class CreateMetadata(Resource):
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
         )
+        parser.add_argument(
+            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+        )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createMetadata(data_types, data)
+        return createMetadata(data_types, data, virtual_file)
 
 
 @metadata.route("/citation/create", endpoint="CreateCitationCFF")
@@ -119,6 +124,7 @@ class CreateCitationCFF(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -129,13 +135,17 @@ class CreateCitationCFF(Resource):
         parser.add_argument(
             "data_object", type=str, help="Complete data object to create metadata"
         )
+        parser.add_argument(
+            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+        )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createCitationCFF(data_types, data)
+        return createCitationCFF(data_types, data, virtual_file)
 
 
 ###############################################################################
@@ -512,6 +522,29 @@ class CreateFile(Resource):
         content_type = args["content_type"]
 
         return createFile(folder_path, file_name, file_content, content_type)
+
+@utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
+class RequestJSON(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "open file at path",
+        },
+    )
+    def post(self):
+        """create a file in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="file path to open file explorer at",
+        )
+        args = parser.parse_args()
+        folder_path = args["folder_path"]
+
+        return openFileExplorer(folder_path)
 
 
 # 5000 is the flask default port.

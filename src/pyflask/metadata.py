@@ -4,7 +4,7 @@ import os
 import yaml
 
 
-def createCodeMetadata(code_data, general_data, folder_path):
+def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     metadata = {
         "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
         "@type": "SoftwareSourceCode",
@@ -133,21 +133,25 @@ def createCodeMetadata(code_data, general_data, folder_path):
                 new_author["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_author["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_author["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_author["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_author["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = {}
-                    new_author["affiliation"]["@type"] = "Organization"
-                    new_author["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = {}
+                        new_author["affiliation"]["@type"] = "Organization"
+                        new_author["affiliation"]["name"] = item["affiliation"]
 
                 metadata["author"].append(new_author)
 
@@ -161,23 +165,31 @@ def createCodeMetadata(code_data, general_data, folder_path):
                 new_contributor["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_contributor["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_contributor["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_contributor["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_contributor["email"] = item["email"]
+                    if item["email"] != "":
+                        new_contributor["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_contributor["affiliation"] = {}
-                    new_contributor["affiliation"]["@type"] = "Organization"
-                    new_contributor["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_contributor["affiliation"] = {}
+                        new_contributor["affiliation"]["@type"] = "Organization"
+                        new_contributor["affiliation"]["name"] = item["affiliation"]
 
                 metadata["contributor"].append(new_contributor)
+
+    # return the code metadata object if virtual is set to true
+    if virtual_file:
+        return json.dumps(metadata)
 
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
@@ -185,20 +197,24 @@ def createCodeMetadata(code_data, general_data, folder_path):
     return True
 
 
-def createMetadata(data_types, data):
+def createMetadata(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCodeMetadata(code_data, general_data, folder_path)
+            result = createCodeMetadata(
+                code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:
         raise e
 
 
-def createCitationFromCode(code_data, general_data, folder_path):
+def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
     citationObject = {}
 
@@ -217,7 +233,8 @@ def createCitationFromCode(code_data, general_data, folder_path):
                 new_author = {}
 
                 if "orcid" in item:
-                    new_author["orcid"] = item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["orcid"] = item["orcid"]
 
                 if "givenName" in item:
                     new_author["given-names"] = item["givenName"]
@@ -226,10 +243,12 @@ def createCitationFromCode(code_data, general_data, folder_path):
                     new_author["family-names"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = item["affiliation"]
 
                 citationObject["authors"].append(new_author)
 
@@ -280,6 +299,10 @@ def createCitationFromCode(code_data, general_data, folder_path):
         if code_data["currentVersionReleaseDate"] != "":
             citationObject["date-released"] = code_data["currentVersionReleaseDate"]
 
+    # return the citation.cff object if virtual is set to true
+    if virtual_file:
+        return json.dumps(citationObject)
+
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:
         yaml.dump(citationObject, file)
@@ -303,13 +326,17 @@ def createCitationFromCode(code_data, general_data, folder_path):
     return True
 
 
-def createCitationCFF(data_types, data):
+def createCitationCFF(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = data["Code"]["folderPath"]
-            createCitationFromCode(code_data, general_data, folder_path)
+            result = createCitationFromCode(
+                code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:
