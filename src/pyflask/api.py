@@ -532,11 +532,11 @@ class CreateFile(Resource):
 
 
 @utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
-class RequestJSON(Resource):
+class OpenFileExplorer(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={
-            "folder_path": "open file at path",
+            "file_path": "file path to open the explorer window at",
         },
     )
     def post(self):
@@ -544,15 +544,15 @@ class RequestJSON(Resource):
         parser = reqparse.RequestParser()
 
         parser.add_argument(
-            "folder_path",
+            "file_path",
             type=str,
             required=True,
             help="file path to open file explorer at",
         )
         args = parser.parse_args()
-        folder_path = args["folder_path"]
+        file_path = args["file_path"]
 
-        return openFileExplorer(folder_path)
+        return openFileExplorer(file_path)
 
 
 # 5000 is the flask default port.

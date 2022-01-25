@@ -2,6 +2,8 @@ from __future__ import print_function
 import os
 import shutil
 import requests
+import platform
+import subprocess
 
 
 def foldersPresent(folder_path):
@@ -74,12 +76,15 @@ def createFile(folder_path, file_name, file_content, content_type):
         raise e
 
 
-def openFileExplorer(folder_path):
+def openFileExplorer(file_path):
     try:
-        import subprocess
+        if platform.system() == "Windows":
+            subprocess.Popen(r"explorer /select," + str(file_path))
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", file_path])
+        else:
+            subprocess.Popen(["xdg-open", file_path])
 
-        ret = subprocess.Popen(f"explorer /select,{folder_path}")
-        print(folder_path)
         return "SUCCESS"
     except Exception as e:
         raise e

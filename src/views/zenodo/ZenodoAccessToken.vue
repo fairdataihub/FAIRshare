@@ -284,7 +284,7 @@ export default {
       });
       const response = await axios
         .post(`${this.$server_url}/utilities/openFileExplorer`, {
-          folder_path: path,
+          file_path: path,
         })
         .then((response) => {
           this.showLoading.close();
