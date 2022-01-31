@@ -301,7 +301,8 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
     .get("https://github.com/login/oauth/authorize", {
       params: {
         client_id: CLIENT_ID,
-        scope: "repo admin:repo_hook admin:org admin:public_key admin:org_hook gist notifications user delete_repo write:discussion write:packages read:packages delete:packages admin:gpg_key codespace workflow",
+        scope:
+          "repo admin:repo_hook admin:org admin:public_key admin:org_hook gist notifications user delete_repo write:discussion write:packages read:packages delete:packages admin:gpg_key codespace workflow",
       },
     })
     .then(async (responseCode) => {
