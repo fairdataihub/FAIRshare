@@ -12,35 +12,33 @@
       <span class="mb-2">
         Where are your research software files located?
       </span>
-      <div class="item-center flex justify-center gap-8 pr-[90px] pt-8">
+      <div class="item-center flex justify-center gap-8 pt-8">
         <div
           class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-          :class="{ 'selected-repo': repoID === 'My computer' }"
-          @click="selectRepo('My computer')"
+          :class="{ 'selected-location': locationID === 'local' }"
+          @click="selectSourceLocation('local')"
         >
           <monitor-icon class="h-24 w-16" />
           <span class="mx-5 text-lg"> My computer </span>
         </div>
 
-        <el-popover placement="bottom" trigger="hover" content="Coming soon...">
-          <template #reference>
-            <div>
-              <div
-                class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all"
-              >
-                <img
-                  src="../../../assets/images/github.jpeg"
-                  alt=""
-                  class="h-24 w-full opacity-50"
-                />
-                <span class="mx-5 text-lg"> On Github </span>
-              </div>
-            </div>
-          </template>
-        </el-popover>
+        <div>
+          <div
+            class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+            :class="{ 'selected-location': locationID === 'github' }"
+            @click="selectSourceLocation('github')"
+          >
+            <img
+              src="../../../assets/images/github.jpeg"
+              alt=""
+              class="h-24 w-full"
+            />
+            <span class="mx-5 text-lg"> On Github </span>
+          </div>
+        </div>
       </div>
 
-      <div class="flex w-full flex-col pt-20" v-if="repoID === 'My computer'">
+      <div class="flex w-full flex-col pt-20" v-if="locationID === 'local'">
         <span class="mb-2">
           Please select the folder where your
           {{ combineDataTypes }} files are stored.
@@ -54,10 +52,13 @@
         />
       </div>
 
-      <div
-        class="flex w-full flex-row justify-center space-x-4 py-2 pt-8 pr-[61px]"
-        v-if="repoID != ''"
-      >
+      <div class="flex w-full flex-col pt-20" v-if="locationID === 'github'">
+        <h3 class="text-center">
+          Continue to select the repository you want to use.
+        </h3>
+      </div>
+
+      <div class="flex w-full flex-row justify-center space-x-4 py-2 pt-8">
         <router-link :to="`/datasets/${datasetID}/landing`" class="">
           <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
@@ -69,6 +70,7 @@
           :disabled="emptyInput"
           @click="startCuration"
           id="continue"
+          v-if="locationID != ''"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
@@ -85,6 +87,7 @@ import { useDatasetsStore } from "@/store/datasets";
 
 export default {
   name: "CodeSelectSourceFolder",
+  components: {},
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -94,7 +97,7 @@ export default {
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      repoID: "",
+      locationID: "",
     };
   },
   computed: {
@@ -130,8 +133,8 @@ export default {
     },
   },
   methods: {
-    selectRepo(repoID) {
-      this.repoID = repoID;
+    selectSourceLocation(locationID) {
+      this.locationID = locationID;
     },
     selectFolderPath() {
       if (!this.folderDialogOpen) {
@@ -149,29 +152,36 @@ export default {
     startCuration() {
       const dataTypes = this.workflow.type;
 
-      let that = this;
-      // At this moment, add the same folder path to all the data types provided
-      // subject to change when we separate the data types folder locations.
-      dataTypes.forEach((type, _index) => {
-        that.dataset.data[type].folderPath = that.folderPath;
-      });
+      if (this.locationID === "local") {
+        // At this moment, add the same folder path to all the data types provided
+        // subject to change when we separate the data types folder locations.
+        dataTypes.forEach((type, _index) => {
+          this.dataset.data[type].folderPath = this.folderPath;
+        });
+      }
 
       this.workflow.sourceSelected = true;
 
       if ("source" in this.workflow) {
-        this.workflow.source.type = this.repoID;
+        this.workflow.source.type = this.locationID;
       } else {
         this.workflow.source = {
-          type: this.repoID,
+          type: this.locationID,
         };
       }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push({
-        path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
-      });
+      if (this.locationID === "github") {
+        this.$router.push(
+          `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`
+        );
+      } else {
+        this.$router.push({
+          path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
+        });
+      }
     },
   },
   async mounted() {
@@ -187,7 +197,7 @@ export default {
 
     // split this up when separate
     if (this.workflow.sourceSelected) {
-      this.repoID = this.workflow.source.type;
+      this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
@@ -204,6 +214,6 @@ export default {
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-lg transition-all;
 }
 </style>

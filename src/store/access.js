@@ -63,19 +63,23 @@ export const useTokenStore = defineStore({
       }
       return Object.keys(this.accessTokens);
     },
+
     // save an encrypted version of the token in the store also save it to the file.
     async saveToken(key, tokenObject) {
       tokenObject.token = await encrypt(tokenObject.token);
       this.accessTokens[key] = tokenObject;
       await this.syncTokens();
     },
+
     async writeDatasetsToFile() {
       fs.ensureFileSync(TOKEN_STORE_PATH);
       fs.writeJsonSync(TOKEN_STORE_PATH, this.accessTokens);
     },
+
     async syncTokens() {
       this.writeDatasetsToFile();
     },
+
     async getToken(key) {
       if (key in this.accessTokens) {
         const tokenObject = Object.assign({}, this.accessTokens[key]);
@@ -85,10 +89,12 @@ export const useTokenStore = defineStore({
         return "NO_TOKEN_FOUND";
       }
     },
+
     async deleteToken(key) {
       delete this.accessTokens[key];
       await this.syncTokens();
     },
+
     async verifyZenodoTokenByDepositions(token) {
       return await axios
         .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
@@ -205,7 +211,7 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubConnection() {
-      const tokenObject = this.getToken("github");
+      const tokenObject = await this.getToken("github");
 
       if (tokenObject === "NO_TOKEN_FOUND") {
         return false;
