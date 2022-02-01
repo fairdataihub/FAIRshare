@@ -1,23 +1,22 @@
 <template>
   <div>
-    <el-popover
+    <!-- <el-popover
       placement="bottom"
       :hide-after="0"
       trigger="hover"
       content="Coming soon..."
     >
-      <template #reference>
-        <div>
-          <button
-            @click="interactWithService('github')"
-            :class="githubDetails.buttonStyle"
-            disabled
-          >
-            {{ githubDetails.action }}
-          </button>
-        </div>
-      </template>
-    </el-popover>
+      <template #reference> -->
+    <div>
+      <button
+        @click="interactWithService('github')"
+        :class="githubDetails.buttonStyle"
+      >
+        {{ githubDetails.action }}
+      </button>
+    </div>
+    <!-- </template>
+    </el-popover> -->
     <el-dialog
       width="600px"
       title="Select an option to connect to GitHub"
