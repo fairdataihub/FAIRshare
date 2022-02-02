@@ -44,11 +44,13 @@
       v-if="showTokenConnect"
       v-model="showTokenConnect"
       :callback="hideGithubTokenConnect"
+      :onStatusChange="statusChangeFunction"
     ></GithubTokenConnection>
     <GithubOAuthConnection
       v-if="showOAuthConnect"
       v-model="showOAuthConnect"
       :callback="hideGithubOAuthConnect"
+      :onStatusChange="statusChangeFunction"
     ></GithubOAuthConnection>
   </div>
 </template>
@@ -67,6 +69,13 @@ export default {
     GithubTokenConnection: GithubTokenConnection,
     GithubOAuthConnection: GithubOAuthConnection,
   },
+  props: {
+    statusChangeFunction: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+  },
   setup() {
     const manager = useTokenStore();
     return {
@@ -76,7 +85,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-
       showTokenConnect: false,
       showOAuthConnect: false,
     };
@@ -123,18 +131,19 @@ export default {
           this.deleteToken(key);
         })
         .catch(() => {
-          ElNotification({
-            type: "info",
-            message: "Delete canceled",
-            position: "bottom-right",
-            duration: 2000,
-          });
+          // ElNotification({
+          //   type: "info",
+          //   message: "Delete canceled",
+          //   position: "bottom-right",
+          //   duration: 2000,
+          // });
         });
     },
     async deleteToken(key) {
       let errorFound = false;
       try {
         await this.manager.deleteToken(key);
+        this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
         console.log(e);

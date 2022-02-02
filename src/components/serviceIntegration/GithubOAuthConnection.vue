@@ -11,6 +11,7 @@ export default {
   // empty component, only has functionalities
   name: "GithubOAuthConnection",
   props: {
+    onStatusChange: { type: Function, required: false, default: () => {} },
     callback: { type: Function },
   },
   data() {
@@ -56,6 +57,7 @@ export default {
               duration: 2000,
             });
             this.callback();
+            this.onStatusChange("connected");
           }
         } else {
           ElNotification({

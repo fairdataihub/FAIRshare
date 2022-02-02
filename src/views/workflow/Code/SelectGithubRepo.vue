@@ -4,19 +4,41 @@
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Github connection details
+        Pick the Github repository you want to use
       </span>
       <span class="text-left">
-        We will use this to upload and edit your dataset on your Github account.
+        Lets select the github repository that you want to make FAIR.
       </span>
 
       <el-divider class="my-4"> </el-divider>
 
       <div v-if="ready">
-        <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-          Looks like we already have your Github login details. Click on the
-          'Start upload' button below.
-        </p>
+        <div v-if="validTokenAvailable">
+          <p class="my-5 w-full text-center">
+            Pick the Github repository you want to use.
+          </p>
+
+          <div class="py-5">
+            <el-select-v2
+              v-model="selectedRepo"
+              filterable
+              :options="githubRepos"
+              placeholder="Please select"
+              popper-class="github-repo-select"
+              class="some-random-class w-full"
+            >
+              <template #default="{ item }">
+                <el-tag
+                  class="min-w-[60px] text-center"
+                  :type="item.visibility === 'public' ? '' : 'warning'"
+                  size="small"
+                  >{{ item.visibility }}</el-tag
+                >
+                <span class="mx-2">{{ item.label }}</span>
+              </template>
+            </el-select-v2>
+          </div>
+        </div>
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
@@ -31,7 +53,7 @@
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Github/metadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
           class=""
         >
           <button class="primary-plain-button">
@@ -40,21 +62,12 @@
         </router-link>
 
         <button
-          class="secondary-plain-button"
-          @click="showFilePreview"
-          v-if="validTokenAvailable"
-        >
-          <el-icon><checked-icon /></el-icon>
-          View files ready for upload
-        </button>
-
-        <button
           class="primary-button"
           :disabled="disableContinue"
-          @click="uploadToGithub"
+          @click="continueToNextStep"
           v-if="validTokenAvailable"
         >
-          Start upload
+          Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
       </div>
@@ -68,6 +81,8 @@ import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
+
+import axios from "axios";
 
 import { ElLoading } from "element-plus";
 
@@ -85,16 +100,15 @@ export default {
       validTokenAvailable: false,
       errorMessage: "",
       GithubAccessToken: "",
+      githubRepos: [],
+      selectedRepo: "",
       ready: false,
     };
   },
   //el-tree-node__content
   computed: {
     disableContinue() {
-      if (this.validTokenAvailable) {
-        return false;
-      }
-      if (!this.validTokenAvailable && this.GithubAccessToken !== "") {
+      if (this.selectedRepo !== "") {
         return false;
       }
       return true;
@@ -127,18 +141,63 @@ export default {
         return false;
       }
     },
-    async uploadToGithub() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Github/upload`;
+    async continueToNextStep() {
+      const repoObject = this.githubRepos.find((repo) => {
+        return repo.full_name === this.selectedRepo;
+      });
+
+      if ("github" in this.workflow) {
+        this.workflow.github.repo = this.selectedRepo;
+        this.workflow.github.fullObject = repoObject;
+      } else {
+        this.workflow.github = {
+          repo: this.selectedRepo,
+          fullObject: repoObject,
+        };
+      }
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/reviewStandards`;
       if (this.validTokenAvailable) {
         this.$router.push({ path: routerPath });
-      } else {
-        const GithubToken = this.GithubAccessToken;
-        const res = await this.checkToken(GithubToken);
-
-        if (res) {
-          this.$router.push({ path: routerPath });
-        }
       }
+    },
+    async getUserRepos() {
+      const response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user/repos`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+            per_page: 100,
+          },
+          headers: {
+            Authorization: `Bearer ${this.GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response === "ERROR") {
+        this.errorMessage = "Something went wrong. Please try again.";
+        this.validTokenAvailable = false;
+      } else {
+        response.forEach((repo) => {
+          this.githubRepos.push({
+            value: repo.full_name,
+            label: repo.full_name,
+            visibility: repo.visibility,
+            originalObject: repo,
+          });
+        });
+      }
+
+      // console.log(response);
     },
     async showConnection(status) {
       console.log(status);
@@ -167,6 +226,15 @@ export default {
     if (validGithubConnection) {
       this.validTokenAvailable = true;
       this.ready = true;
+
+      const tokenObject = await this.tokens.getToken("github");
+      this.GithubAccessToken = tokenObject.token;
+
+      await this.getUserRepos();
+
+      if ("github" in this.workflow) {
+        this.selectedRepo = this.workflow.github.repo;
+      }
     } else {
       this.validTokenAvailable = false;
       this.ready = true;
