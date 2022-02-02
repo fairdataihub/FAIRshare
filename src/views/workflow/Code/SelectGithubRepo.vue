@@ -118,7 +118,7 @@ export default {
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading data...",
+        text: "Loading repositories...",
       });
       return loading;
     },
@@ -213,8 +213,6 @@ export default {
 
     let spinner = this.createLoading();
 
-    spinner.close();
-
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
@@ -235,9 +233,13 @@ export default {
       if ("github" in this.workflow) {
         this.selectedRepo = this.workflow.github.repo;
       }
+
+      spinner.close();
     } else {
       this.validTokenAvailable = false;
       this.ready = true;
+
+      spinner.close();
     }
   },
 };
