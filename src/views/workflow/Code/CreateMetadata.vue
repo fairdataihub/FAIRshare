@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -136,7 +136,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -404,7 +404,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -559,7 +559,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -711,7 +711,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -892,7 +892,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -998,7 +998,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1113,14 +1113,16 @@
 import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
 import Vue3Lottie from "vue3-lottie";
 import validator from "validator";
+import axios from "axios";
+import _ from "lodash";
 
 // import semver from "semver";
-// import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
@@ -1141,6 +1143,7 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       currentStep: 1,
       pillTitles: [
         "Basic info",
@@ -1239,9 +1242,9 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let author of val) {
-            if (author.name === "" || author.affiliation === "") {
+            if (author.givenName === "" || author.affiliation === "") {
               this.authorsErrorMessage =
-                "Name and Affiliation for each author is mandatory";
+                "First name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
               this.$refs.s2Form.validate();
               break;
@@ -1304,7 +1307,10 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
-            if (contributor.name === "" || contributor.affiliation === "") {
+            if (
+              contributor.givenName === "" ||
+              contributor.affiliation === ""
+            ) {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.invalidStatus.contributors = true;
@@ -1489,7 +1495,7 @@ export default {
         if (val.length > 0) {
           for (let relatedLink of val) {
             if (relatedLink.link !== "") {
-              const validIdentifier = validator.isURL(val);
+              const validIdentifier = validator.isURL(relatedLink.link);
 
               if (!validIdentifier) {
                 this.relatedLinksErrorMessage = "Please provide a valid URL";
@@ -1667,7 +1673,7 @@ export default {
       const uuid = uuidv4();
       this.step3Form.keywords.push({
         keyword: "",
-        id: uuid,
+        id: uuidv4(),
       });
       this.focusOnElementRef(uuid);
     },
@@ -1862,6 +1868,216 @@ export default {
         });
       }
     },
+    async prefillGithubAuthors() {
+      console.info("Prefilling authors from github");
+
+      ElNotification({
+        title: "Info",
+        message: "Requesting authors",
+        position: "bottom-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/contributors`,
+          {
+            params: {
+              accept: "application/vnd.github.v3+json",
+            },
+            headers: {
+              Authorization: `Bearer  ${GithubAccessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      let contributors = [];
+
+      if (response != "ERROR") {
+        response.forEach((repo) => {
+          contributors.push(repo.login);
+        });
+      }
+
+      let authors = [];
+
+      for (const contributor of contributors) {
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            const authorObject = {};
+
+            if (response.data.name != null) {
+              authorObject.name = response.data.name;
+            }
+
+            if (response.data.email != null) {
+              authorObject.email = response.data.email;
+            }
+
+            if (response.data.company != null) {
+              authorObject.company = response.data.company;
+            }
+
+            if (!_.isEmpty(authorObject)) {
+              authors.push(authorObject);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      authors.forEach((author) => {
+        const authorObject = {
+          givenName: author.name,
+          familyName: "",
+          affiliation: author.company,
+          email: author.email,
+          orcid: "",
+          id: uuidv4(),
+        };
+
+        this.step2Form.authors.push(authorObject);
+
+        ElNotification({
+          title: "Success",
+          message: "Retrieved authors",
+          position: "bottom-right",
+          type: "success",
+        });
+      });
+    },
+    async prefillGithubMisc() {
+      console.info("Prefilling other items from github repo");
+
+      ElNotification({
+        title: "Info",
+        message: "Requesting repo info",
+        position: "bottom-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response != "ERROR") {
+        if (response.html_url != null) {
+          this.step4Form.codeRepository = response.html_url;
+          this.step4Form.issueTracker = `${response.html_url}/issues`;
+        }
+
+        if (response.homepage != null) {
+          this.step4Form.relatedLinks.push({
+            link: response.homepage,
+            id: uuidv4(),
+          });
+        }
+
+        if (response.topics != null && response.topics.length > 0) {
+          response.topics.forEach((topic) => {
+            this.step3Form.keywords.push({
+              keyword: topic,
+              id: uuidv4(),
+            });
+          });
+        }
+
+        if (response.description != null) {
+          this.step1Form.description = response.description;
+        }
+
+        if ("license" in response && response.license != null) {
+          if (
+            "spdx_id" in response.license &&
+            (response.license.spdx_id != null || response.license.spdx_id != "")
+          ) {
+            this.dataset.data.Code.questions.license = response.license.spdx_id;
+          }
+        }
+
+        const lanuagesResponse = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (lanuagesResponse != "ERROR") {
+          const languages = Object.keys(lanuagesResponse);
+          if (languages.length > 0) {
+            this.step5Form.programmingLanguage = languages;
+          }
+        }
+
+        ElNotification({
+          title: "Success",
+          message: "Repo info retrieved",
+          position: "bottom-right",
+          type: "success",
+        });
+      }
+    },
   },
   mounted() {
     this.$nextTick(async function () {
@@ -1932,6 +2148,13 @@ export default {
           this.step1Form.name = this.dataset.name;
           this.step1Form.description = this.dataset.description;
           // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+
+          if ("source" in this.workflow) {
+            if (this.workflow.source.type === "github") {
+              await this.prefillGithubAuthors();
+              await this.prefillGithubMisc();
+            }
+          }
         }
       }
     });

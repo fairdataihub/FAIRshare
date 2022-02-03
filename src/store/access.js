@@ -137,7 +137,7 @@ export const useTokenStore = defineStore({
 
     async verifyGithubTokenByTokenConnection(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -164,7 +164,7 @@ export const useTokenStore = defineStore({
 
     async verifyGithubTokenScopeByTokenConnection(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -226,7 +226,7 @@ export const useTokenStore = defineStore({
 
     async getGithubUser(token) {
       let response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user`, {
           headers: {
             Authorization: `token ${token}`,
           },
