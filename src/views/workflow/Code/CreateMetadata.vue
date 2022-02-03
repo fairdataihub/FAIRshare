@@ -1964,13 +1964,13 @@ export default {
         };
 
         this.step2Form.authors.push(authorObject);
+      });
 
-        ElNotification({
-          title: "Success",
-          message: "Retrieved authors",
-          position: "bottom-right",
-          type: "success",
-        });
+      ElNotification({
+        title: "Success",
+        message: "Retrieved authors",
+        position: "bottom-right",
+        type: "success",
       });
     },
     async prefillGithubMisc() {
@@ -2034,14 +2034,15 @@ export default {
           this.step1Form.description = response.description;
         }
 
-        if ("license" in response && response.license != null) {
-          if (
-            "spdx_id" in response.license &&
-            (response.license.spdx_id != null || response.license.spdx_id != "")
-          ) {
-            this.dataset.data.Code.questions.license = response.license.spdx_id;
-          }
-        }
+        // add this directly in pick license
+        // if ("license" in response && response.license != null) {
+        //   if (
+        //     "spdx_id" in response.license &&
+        //     (response.license.spdx_id != null || response.license.spdx_id != "")
+        //   ) {
+        //     this.dataset.data.Code.questions.license = response.license.spdx_id;
+        //   }
+        // }
 
         const lanuagesResponse = await axios
           .get(
