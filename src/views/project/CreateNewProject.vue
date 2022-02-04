@@ -266,8 +266,8 @@ export default {
           let dataset = {
             id: datasetID,
             image: datasetImage,
-            name: this.datasetForm.datasetName,
-            description: this.datasetForm.datasetDescription,
+            name: this.datasetForm.datasetName.trim(),
+            description: this.datasetForm.datasetDescription.trim(),
             dataType: this.datasetForm.dataType,
             data: {},
             workflowConfirmed: false,
@@ -377,10 +377,10 @@ export default {
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-  @apply border-secondary-500 shadow-md shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-md;
 }
 
 .single-check-box:not(.is-disabled):hover {
-  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-lg;
 }
 </style>

@@ -6194,6 +6194,11 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
+humanparser@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/humanparser/-/humanparser-2.6.0.tgz#716ab4e24700ac27374577135e19edae79c8fc6f"
+  integrity sha512-zl7UM7dY/KKe4wlJ6h5fDumzVOCt5SVzPBtMf46r+eyAcjs2ucjGk/lFNT2dy+ZgTh8/hsZMwN2Wjb2Kjfgkgw==
+
 iconv-corefoundation@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/iconv-corefoundation/-/iconv-corefoundation-1.1.7.tgz#31065e6ab2c9272154c8b0821151e2c88f1b002a"

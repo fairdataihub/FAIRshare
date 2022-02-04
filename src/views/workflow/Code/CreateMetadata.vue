@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -113,17 +113,12 @@
                 @click="prevFormStep"
                 class="primary-plain-button"
                 size="medium"
-                :disabled="checkInvalidStatus"
               >
                 <el-icon><back-icon /></el-icon>
                 Back
               </button>
               <!-- :plain="!lastStep" -->
-              <button
-                class="primary-button"
-                @click="navigateToStep2FromStep1"
-                :disabled="checkInvalidStatus"
-              >
+              <button class="primary-button" @click="navigateToStep2FromStep1">
                 Next
                 <el-icon><right-icon /></el-icon>
               </button>
@@ -136,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -404,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -559,7 +554,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -711,7 +706,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -892,7 +887,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -998,7 +993,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1118,6 +1113,7 @@ import Vue3Lottie from "vue3-lottie";
 import validator from "validator";
 import axios from "axios";
 import _ from "lodash";
+import humanparser from "humanparser";
 
 // import semver from "semver";
 
@@ -1242,11 +1238,17 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let author of val) {
-            if (author.givenName === "" || author.affiliation === "") {
+            if (
+              author.givenName === "" ||
+              author.affiliation === "" ||
+              author.affiliation === undefined
+            ) {
               this.authorsErrorMessage =
                 "First name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
-              this.$refs.s2Form.validate();
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
               break;
             } else {
               this.authorsErrorMessage = "";
@@ -1275,7 +1277,9 @@ export default {
               } else {
                 // console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
-                this.$refs.s2Form.validate();
+                if (this.$refs["s2Form"]) {
+                  this.$refs["s2Form"].validate();
+                }
                 this.invalidStatus.authors = true;
                 break;
               }
@@ -1286,7 +1290,9 @@ export default {
 
                 if (!validIdentifier) {
                   this.authorsErrorMessage = "Email is not valid";
-                  this.$refs.s2Form.validate();
+                  if (this.$refs["s2Form"]) {
+                    this.$refs["s2Form"].validate();
+                  }
                   this.invalidStatus.authors = true;
                   break;
                 } else {
@@ -1933,7 +1939,17 @@ export default {
             const authorObject = {};
 
             if (response.data.name != null) {
-              authorObject.name = response.data.name;
+              const parsedNames = humanparser.parseName(response.data.name);
+              if ("lastName" in parsedNames) {
+                authorObject.familyName = parsedNames.lastName;
+              } else {
+                authorObject.familyName = "";
+              }
+              if ("firstName" in parsedNames) {
+                authorObject.givenName = parsedNames.firstName;
+              } else {
+                authorObject.givenName = response.data.name;
+              }
             }
 
             if (response.data.email != null) {
@@ -1955,8 +1971,8 @@ export default {
 
       authors.forEach((author) => {
         const authorObject = {
-          givenName: author.name,
-          familyName: "",
+          givenName: author.givenName,
+          familyName: author.familyName,
           affiliation: author.company,
           email: author.email,
           orcid: "",
@@ -2033,16 +2049,6 @@ export default {
         if (response.description != null) {
           this.step1Form.description = response.description;
         }
-
-        // add this directly in pick license
-        // if ("license" in response && response.license != null) {
-        //   if (
-        //     "spdx_id" in response.license &&
-        //     (response.license.spdx_id != null || response.license.spdx_id != "")
-        //   ) {
-        //     this.dataset.data.Code.questions.license = response.license.spdx_id;
-        //   }
-        // }
 
         const lanuagesResponse = await axios
           .get(

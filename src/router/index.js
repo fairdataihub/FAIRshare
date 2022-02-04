@@ -25,6 +25,7 @@ import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
 import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
+import ZenodoGithubConnection from "../views/zenodo/ZenodoGithubConnection.vue";
 
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
@@ -99,6 +100,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/accessToken",
     component: ZenodoAccessToken,
     name: "ZenodoAccessToken",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/zenodo/githubConnection",
+    component: ZenodoGithubConnection,
+    name: "ZenodoGithubConnection",
   },
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/upload",

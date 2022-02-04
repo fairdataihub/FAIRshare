@@ -46,7 +46,7 @@
             </el-select>
 
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
@@ -135,6 +135,7 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
@@ -155,6 +156,7 @@ export default {
     return {
       loading: true,
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       dataset: {},
@@ -216,7 +218,7 @@ export default {
       this.loading = false;
     },
     async openLicenseDetails() {
-      this.spinnerGlobal = await this.createLoading();
+      this.spinnerGlobal = await this.createLoading("loading...");
 
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
@@ -233,10 +235,10 @@ export default {
       this.loadingLicenseDetails = true;
       await this.spinnerGlobal.close();
     },
-    createLoading() {
+    createLoading(loadingText) {
       const loading = ElLoading.service({
         lock: true,
-        text: "loading...",
+        text: loadingText,
       });
       return loading;
     },
@@ -313,6 +315,54 @@ export default {
         }
       });
     },
+    async prefillGithubLicense() {
+      console.info("Prefilling other items from github repo");
+
+      let loadingState = await this.createLoading();
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response !== "ERROR") {
+        if ("license" in response && response.license != null) {
+          if (
+            "spdx_id" in response.license &&
+            (response.license.spdx_id != null || response.license.spdx_id != "")
+          ) {
+            this.originalLicense =
+              this.licenseForm.license =
+              this.dataset.data.Code.questions.license =
+                response.license.spdx_id;
+            // this.licenseForm.license = this.dataset.data.Code.questions.license;
+            // this.originalLicense = this.licenseForm.license;
+          }
+        }
+      }
+
+      loadingState.close();
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -333,8 +383,18 @@ export default {
       this.licenseForm.license = this.dataset.data.Code.questions.license;
       this.originalLicense = this.licenseForm.license;
     } else {
-      this.licenseForm.license = "";
-      this.originalLicense = "";
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          await this.prefillGithubLicense();
+        }
+        if (this.workflow.source.type === "local") {
+          this.licenseForm.license = "";
+          this.originalLicense = "";
+        }
+      } else {
+        this.licenseForm.license = "";
+        this.originalLicense = "";
+      }
     }
   },
 };

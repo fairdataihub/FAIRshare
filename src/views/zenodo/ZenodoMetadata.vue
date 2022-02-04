@@ -27,7 +27,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Basic Information
@@ -284,7 +284,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">License</p>
                 <span class="pr-2 text-gray-400"> required </span>
@@ -380,7 +380,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Related/alternate identifiers
@@ -501,7 +501,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Contributors
@@ -612,7 +612,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   References
@@ -684,7 +684,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Journal</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -737,7 +737,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Conference
@@ -833,7 +833,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Book/Report/Chapter
@@ -903,7 +903,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Thesis</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -1000,7 +1000,7 @@
           >
             <template #title>
               <div
-                class="flex w-full flex-row items-center justify-between font-inter"
+                class="font-inter flex w-full flex-row items-center justify-between"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Subjects</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -1096,6 +1096,17 @@
         </button>
       </div>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-1 right-2" v-show="savingSpinner">
+        <Vue3Lottie
+          :animationData="SpinnerMulticolorJSON"
+          :width="60"
+          :height="60"
+          :loop="2"
+          @onComplete="savingSpinner = false"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -1107,6 +1118,7 @@ import semver from "semver";
 import doiRegex from "doi-regex";
 import { ElMessageBox, ElMessage } from "element-plus";
 import validator from "validator";
+import Vue3Lottie from "vue3-lottie";
 import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -1115,11 +1127,14 @@ import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.js
 import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
 import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
+import SpinnerMulticolorJSON from "@/assets/lotties/spinnerMulticolor.json";
+
 export default {
   name: "ZenodoMetadata",
   components: {
     draggable,
     Icon,
+    Vue3Lottie,
   },
   data() {
     return {
@@ -1128,6 +1143,8 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       loading: true,
+      SpinnerMulticolorJSON,
+      savingSpinner: true,
       activeNames: [],
       drag: true,
       licenseOptions: licensesJSON.licenses,
@@ -1336,7 +1353,20 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      let routerPath = "";
+
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/githubConnection`;
+        }
+        if (this.workflow.source.type === "local") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+        }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      }
+
+      // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
       this.$router.push({ path: routerPath });
 
       //validate first
@@ -1377,8 +1407,16 @@ export default {
           let authors = generalForm.authors;
           let newAuthors = [];
           authors.forEach((author) => {
+            let authorName = "";
+
+            if (author.familyName) {
+              authorName = author.familyName + ", " + author.givenName;
+            } else {
+              authorName = author.givenName;
+            }
+
             let newAuthor = {
-              name: author.familyName + ", " + author.givenName,
+              name: authorName,
               affiliation: author.affiliation,
               orcid: author.orcid,
               id: uuidv4(),
