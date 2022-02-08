@@ -754,7 +754,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(6);
 
-    this.workflow.currentRoute = this.$route.path;
+    // not saving this page since it will start a random upload when saving progress
+    // this.workflow.currentRoute = this.$route.path;
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
