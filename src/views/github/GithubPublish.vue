@@ -12,7 +12,7 @@
       <el-divider class="my-4"> </el-divider>
 
       <div class="flex h-full flex-col items-center justify-center px-10">
-        <p class="text-secondary-600 pb-5 text-center">
+        <p class="pb-5 text-center text-secondary-600">
           Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
           (DOI) will be registered immediately after publishing. You will still
