@@ -221,12 +221,16 @@ export default {
 
     const validGithubConnection = await this.tokens.verifyGithubConnection();
 
+    console.log(validGithubConnection);
+
     if (validGithubConnection) {
       this.validTokenAvailable = true;
       this.ready = true;
 
       const tokenObject = await this.tokens.getToken("github");
       this.GithubAccessToken = tokenObject.token;
+
+      console.log(this.GithubAccessToken);
 
       await this.getUserRepos();
 

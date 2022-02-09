@@ -437,8 +437,6 @@ export default {
       this.statusMessage = `Uploading ${fileName} to GitHub`;
       await this.sleep(100);
 
-      console.log(filePath, fileName, repoName, this.githubToken);
-
       const response = await axios
         .post(`${this.$server_url}/github/upload`, {
           access_token: this.githubToken,
@@ -613,8 +611,8 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
-        // this.$router.push({ path: routerPath });
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
+        this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

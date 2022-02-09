@@ -1,7 +1,6 @@
 from dotenv import dotenv_values
 
 ZENODO_SERVER_URL = "https://zenodo.org/api/"
-GITHUB_SERVER_URL = "https://api.github.com"
 
 envcfg = dotenv_values(".env.local")  # take environment variables from .env.local
 

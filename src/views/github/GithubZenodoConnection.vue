@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -290,6 +290,8 @@ export default {
     if (GithubZenodoConnectionToken) {
       const response = await this.checkIfZenodoHookIsPresent();
 
+      spinner.close();
+
       if (response) {
         this.validZenodoHookTokenFound = true;
       } else {
@@ -327,6 +329,9 @@ export default {
       let interval = setInterval(async () => {
         const response = await this.checkIfZenodoHookIsPresent();
         console.log(response);
+
+        spinner.close();
+
         if (response) {
           if (response.length > 0) {
             for (const webhook of response) {
@@ -365,8 +370,6 @@ export default {
     }
 
     this.workflow.currentRoute = this.$route.path;
-
-    spinner.close();
   },
 };
 </script>

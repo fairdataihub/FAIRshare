@@ -1,8 +1,6 @@
 from __future__ import print_function
-import config
 import requests
 import json
-import os
 import base64
 
 
@@ -37,7 +35,7 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
 
         fileSHA = getFileSHA(file_name, repo_name, access_token)
 
-        if fileSHA == False:
+        if fileSHA is False:
             payload = json.dumps(
                 {
                     "message": f"Added {file_name}",

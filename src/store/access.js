@@ -136,10 +136,15 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubTokenByTokenConnection(token) {
+      console.log(
+        "verifyGithubTokenByTokenConnection",
+        token,
+        `${process.env.VUE_APP_GITHUB_SERVER_URL}//rate_limit`
+      );
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}//rate_limit`, {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {

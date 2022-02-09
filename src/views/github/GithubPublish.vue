@@ -5,22 +5,25 @@
         Publish your work to Zenodo
       </span>
       <span class="text-left">
-        All your data has been uploaded to Zenodo. It's now time to publish your
-        work.
+        All your metadata files have been uploaded to GitHub. It's now time to
+        publish your work to Zenodo.
       </span>
 
       <el-divider class="my-4"> </el-divider>
 
       <div class="flex h-full flex-col items-center justify-center px-10">
-        <p class="pb-5 text-center">
+        <p class="text-secondary-600 pb-5 text-center">
           Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
           (DOI) will be registered immediately after publishing. You will still
           be able to update the record's metadata later.
         </p>
         <div class="flex space-x-4">
-          <button class="primary-plain-button" @click="openDraftDataset">
-            View draft
+          <button class="primary-plain-button" @click="openCommitList">
+            View commits
+          </button>
+          <button class="primary-plain-button" @click="openDraftRelease">
+            View draft release
           </button>
           <button
             class="blob primary-button transition-all"
@@ -130,13 +133,17 @@ export default {
 
       loading.close();
     },
-    async openDraftDataset() {
-      const depositionID = this.workflow.destination.zenodo.deposition_id;
+    async openCommitList() {
+      const repoName = this.workflow.github.repo;
+      const githubURL = `https://github.com/${repoName}/commits`;
 
-      window.ipcRenderer.send(
-        "open-link-in-browser",
-        `${process.env.VUE_APP_ZENODO_URL}deposit/${depositionID}`
-      );
+      window.ipcRenderer.send("open-link-in-browser", githubURL);
+    },
+    async openDraftRelease() {
+      const repoName = this.workflow.github.repo;
+      const githubURL = `https://github.com/${repoName}/releases`;
+
+      window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
   },
   async mounted() {
