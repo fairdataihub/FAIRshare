@@ -25,7 +25,10 @@ import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
 import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
+
+// github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubUpload from "../views/github/GithubUpload.vue";
 
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
@@ -102,11 +105,6 @@ const routes = [
     name: "ZenodoAccessToken",
   },
   {
-    path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
-    component: GithubZenodoConnection,
-    name: "GithubZenodoConnection",
-  },
-  {
     path: "/datasets/:datasetID/:workflowID/zenodo/upload",
     component: ZenodoUpload,
     name: "ZenodoUpload",
@@ -115,6 +113,16 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
     name: "ZenodoPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
+    component: GithubZenodoConnection,
+    name: "GithubZenodoConnection",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/upload",
+    component: GithubUpload,
+    name: "GithubUpload",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",

@@ -49,7 +49,8 @@ export default {
       try {
         // show Sidebar
 
-        await this.unpublishedDatasets.showSidebar();
+        // await this.unpublishedDatasets.showSidebar();
+        // await this.unpublishedDatasets.hideSidebar();
 
         // Load all the projects
         await this.unpublishedDatasets.loadDatasets();

@@ -110,7 +110,6 @@
 
         <button
           class="primary-button"
-          :disabled="disableContinue"
           @click="uploadToZenodo"
           v-if="validZenodoHookTokenFound"
         >
@@ -157,23 +156,15 @@ export default {
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading data...",
+        text: "Reading Github repository...",
       });
       return loading;
     },
 
     async uploadToZenodo() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/upload`;
-      if (this.validZenodoHookTokenFound) {
-        this.$router.push({ path: routerPath });
-      } else {
-        const zenodoToken = this.zenodoAccessToken;
-        const res = await this.checkToken(zenodoToken);
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
 
-        if (res) {
-          this.$router.push({ path: routerPath });
-        }
-      }
+      this.$router.push({ path: routerPath });
     },
 
     openWebsite() {
@@ -298,7 +289,7 @@ export default {
 
     if (GithubZenodoConnectionToken) {
       const response = await this.checkIfZenodoHookIsPresent();
-      console.log(response);
+
       if (response) {
         this.validZenodoHookTokenFound = true;
       } else {

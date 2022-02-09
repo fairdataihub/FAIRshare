@@ -191,6 +191,10 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     if virtual_file:
         return json.dumps(metadata)
 
+    # If the folder doesn't exist (for some weird reason), create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
         f.write(json.dumps(metadata))
@@ -302,6 +306,10 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # return the citation.cff object if virtual is set to true
     if virtual_file:
         return json.dumps(citationObject)
+
+    # If the folder doesn't exist (for some weird reason), create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:

@@ -17,6 +17,7 @@ from zenodo import (
     publishZenodoDeposition,
     deleteZenodoDeposition,
 )
+from github import uploadFileToGithub
 from metadata import createMetadata, createCitationCFF
 from utilities import (
     foldersPresent,
@@ -372,6 +373,64 @@ class zenodoDelete(Resource):
 
 
 ###############################################################################
+# GitHub API endpoints
+###############################################################################
+
+
+github = api.namespace("github", description="GitHub operations")
+
+
+@github.route("/upload", endpoint="uploadToGithub")
+class uploadToGithub(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token to upload files",
+            "repo_name": "name of the repository to upload to",
+            "file_name": "file name of file to upload",
+            "file_path": "file path of file to upload",
+        },
+    )
+    def post(self):
+        """Upload a file into a zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file path of file to upload. file_path needs to be of type str",
+        )
+        parser.add_argument(
+            "file_name",
+            type=str,
+            required=True,
+            help="file_name is required. file_name needs to be of type str",
+        )
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "repo_name",
+            type=str,
+            required=True,
+            help="repo_name is required. repo_name needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        file_name = args["file_name"]
+        file_path = args["file_path"]
+        repo_name = args["repo_name"]
+
+        return uploadFileToGithub(access_token, file_name, file_path, repo_name)
+
+
+###############################################################################
 # Utilities
 ###############################################################################
 
@@ -486,8 +545,8 @@ class CreateFile(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={
-            "folder_path": "folder path to generate files in",
             "file_name": "name of the file to generate",
+            "folder_path": "folder path to generate files in",
             "file_content": "content of the file. Will be string",
             "content_type": "content type to determine what it is written with",
         },
@@ -527,6 +586,15 @@ class CreateFile(Resource):
         file_name = args["file_name"]
         file_content = args["file_content"]
         content_type = args["content_type"]
+
+        if content_type == "text":
+            # No need to do anything
+            pass
+
+        if content_type == "json":
+            # This might not be necessary but adding
+            # this in case there are some weird json inconsistencies.
+            file_content = json.loads(file_content)
 
         return createFile(folder_path, file_name, file_content, content_type)
 
