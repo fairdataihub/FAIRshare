@@ -30,6 +30,7 @@ src/pyflask/__pycache__
 build
 src/pyflaskdist
 api.spec
+*.ipynb
 .env
 .env.production
 src/assets/css/tailwind.css
