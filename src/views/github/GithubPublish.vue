@@ -1,5 +1,7 @@
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+  <div
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+  >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
         Publish your work to Zenodo
@@ -11,19 +13,134 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex h-full flex-col items-center justify-center px-10">
-        <p class="pb-5 text-center text-secondary-600">
-          Once the record is published you will no longer be able to change the
+      <div class="flex h-full flex-col items-center justify-start">
+        <p class="pb-5 font-medium">
+          To publish the dataset to Zenodo all you need to do is publish a new
+          release.
+          <!-- Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
           (DOI) will be registered immediately after publishing. You will still
-          be able to update the record's metadata later.
+          be able to update the record's metadata later. -->
         </p>
-        <div class="flex space-x-4">
+
+        <div
+          class="flex items-center justify-center space-x-4"
+          v-if="showReleasePrompt"
+        >
+          <p class="text-center">Do you want us to create a release for you?</p>
+          <button class="danger-plain-button" @click="declineRelease">
+            No, I'll do it myself
+          </button>
+          <button class="primary-button" @click="approveRelease">
+            Yes, Create a release
+          </button>
+        </div>
+
+        <div class="" v-if="showDeclinedInstructions">
+          <p class="text-center">
+            If you would like to use Fair Share to complete this step you can
+            always come back to this page and create to create releases.
+          </p>
+        </div>
+
+        <div
+          class="flex w-full flex-col space-x-4 py-5"
+          v-if="showApprovedInstructions"
+        >
+          <div>
+            <el-form
+              ref="releaseForm"
+              :model="releaseForm"
+              label-width="170px"
+              @submit.prevent
+              :rules="rules"
+              class="rounded-lg border-2 border-slate-100 p-4"
+            >
+              <el-form-item label="Tag name" prop="tagName">
+                <div class="flex flex-row items-center">
+                  <el-input
+                    v-model="releaseForm.tagName"
+                    placeholder="v1.0.0 or v0.2.0-alpha or v5.9-beta.3"
+                  ></el-input>
+                  <form-help-content
+                    popoverContent="It's common practice to prefix your version names with the letter 'v'. If the tag isn't meant for production use, add a pre-release version after the version name."
+                  />
+                </div>
+              </el-form-item>
+
+              <el-form-item label="Release title" prop="name">
+                <el-input v-model="releaseForm.name"></el-input>
+              </el-form-item>
+
+              <el-form-item label="Is this ">
+                <el-switch v-model="releaseForm.prerelease"></el-switch>
+              </el-form-item>
+
+              <el-form-item label="Release description">
+                <el-popover
+                  ref="popover"
+                  placement="bottom"
+                  :width="300"
+                  trigger="manual"
+                >
+                  <template #reference>
+                    <el-input
+                      v-model="releaseForm.body"
+                      type="textarea"
+                    ></el-input>
+                  </template>
+
+                  <span class="break-normal text-left text-sm">
+                    Use a description that is easily identifiable. This will be
+                    shown in the dataset selection screen and is not part of
+                    your submitted metadata.
+                  </span>
+                </el-popover>
+              </el-form-item>
+
+              <!-- <div class="flex flex-row justify-center space-x-4 py-4">
+          <button class="danger-plain-button" @click="cancelNewDataset">
+            <el-icon><circle-close-filled /></el-icon> Cancel
+          </button>
+
+          <button class="primary-button" @click="submitForm('datasetForm')">
+            Create new project <el-icon><d-arrow-right /></el-icon>
+          </button>
+        </div> -->
+            </el-form>
+          </div>
+
+          <div class="flex items-center justify-center py-5">
+            <p>
+              Do you want to create a
+              <span class="font-semibold">published</span> or a
+              <span class="font-semibold">draft</span> release?
+            </p>
+            <form-help-content popoverContent="Helpful text here" />
+          </div>
+
+          <div class="flex items-center justify-center space-x-4">
+            <button
+              class="secondary-plain-button"
+              @click="createRelease('publish')"
+            >
+              Create a published release
+            </button>
+            <button
+              class="primary-plain-button"
+              @click="createRelease('draft')"
+            >
+              Create a draft release
+            </button>
+          </div>
+        </div>
+
+        <div class="flex hidden space-x-4">
           <button class="primary-plain-button" @click="openCommitList">
             View commits
           </button>
           <button class="primary-plain-button" @click="openDraftRelease">
-            View draft release
+            View all releases
           </button>
           <button
             class="blob primary-button transition-all"
@@ -39,7 +156,7 @@
 
 <script>
 // import axios from "axios";
-import { ElMessageBox, ElLoading } from "element-plus";
+// import { ElMessageBox, ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -55,7 +172,33 @@ export default {
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      zenodoToken: "",
+      githubToken: "",
+      showReleasePrompt: false,
+      showDeclinedInstructions: false,
+      showApprovedInstructions: true,
+      releaseForm: {
+        tagName: "",
+        name: "",
+        body: "",
+        prerelease: false,
+        generateReleaseNotes: false,
+      },
+      rules: {
+        tagName: [
+          {
+            required: true,
+            message: "Please provide a tag name",
+            trigger: "blur",
+          },
+        ],
+        name: [
+          {
+            required: true,
+            message: "Please provide a name for the release",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   computed: {},
@@ -63,76 +206,7 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    async publishDeposition() {
-      // const depositionID = this.workflow.destination.zenodo.deposition_id;
 
-      // const response = await axios
-      //   .post(`${this.$server_url}/zenodo/publish`, {
-      //     access_token: this.zenodoToken,
-      //     deposition_id: depositionID,
-      //   })
-      //   .then((response) => {
-      //     return response.data;
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     return "ERROR";
-      //   });
-
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-
-      await this.sleep(3000);
-
-      const response = {
-        id: "5750415",
-      };
-
-      if (response === "ERROR") {
-        this.workflow.datasetPublished = false;
-
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
-
-        this.statusMessage =
-          "There was an error when adding metadata to the deposition";
-        return "FAIL";
-      } else {
-        this.datasetStore.showProgressBar();
-        this.datasetStore.setProgressBarType("zenodo");
-        this.datasetStore.setCurrentStep(7);
-
-        this.workflow.datasetPublished = true;
-
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
-
-        ElMessageBox.alert(
-          "Your dataset was published to Zenodo. Click 'OK' to view this record on Zenodo.",
-          "Published to Zenodo",
-          {
-            confirmButtonText: "OK",
-            callback: (action) => {
-              if (action === "confirm") {
-                console.log(`Opening ${response.id}`);
-
-                window.ipcRenderer.send(
-                  "open-link-in-browser",
-                  `https://sandbox.zenodo.org/record/${response.id}`
-                );
-
-                this.$router.push({ path: `/datasets/${this.datasetID}` });
-              }
-            },
-          }
-        );
-      }
-
-      loading.close();
-    },
     async openCommitList() {
       const repoName = this.workflow.github.repo;
       const githubURL = `https://github.com/${repoName}/commits`;
@@ -145,6 +219,17 @@ export default {
 
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
+    declineRelease() {
+      this.showReleasePrompt = false;
+      this.showDeclinedInstructions = true;
+    },
+    approveRelease() {
+      this.showReleasePrompt = false;
+      this.showApprovedInstructions = true;
+    },
+    createRelease(releaseType) {
+      console.log("createRelease", releaseType);
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -156,8 +241,10 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
-    const tokenObject = await this.tokens.getToken("zenodo");
-    this.zenodoToken = tokenObject.token;
+    const tokenObject = await this.tokens.getToken("github");
+    this.githubToken = tokenObject.token;
+
+    //change this to look more like the github ui
     // console.log(this.zenodoToken);
   },
 };

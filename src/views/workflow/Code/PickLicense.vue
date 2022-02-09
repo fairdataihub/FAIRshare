@@ -46,7 +46,7 @@
             </el-select>
 
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
@@ -375,12 +375,15 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
+    console.log(this.dataset.data.general.questions);
+
     if (
-      "Code" in this.dataset.data &&
-      "questions" in this.dataset.data.Code &&
-      "license" in this.dataset.data.Code.questions
+      "general" in this.dataset.data &&
+      "questions" in this.dataset.data.general &&
+      "license" in this.dataset.data.general.questions
     ) {
-      this.licenseForm.license = this.dataset.data.Code.questions.license;
+      console.log(this.dataset.data.general.questions.license);
+      this.licenseForm.license = this.dataset.data.general.questions.license;
       this.originalLicense = this.licenseForm.license;
     } else {
       if ("source" in this.workflow) {

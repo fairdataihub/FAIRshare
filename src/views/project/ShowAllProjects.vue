@@ -42,7 +42,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-3">
+                    <p class="line-clamp-3 text-sm">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -74,7 +74,7 @@
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
-                    <p class="text-sm line-clamp-3">
+                    <p class="line-clamp-3 text-sm">
                       {{ dataset.description }}
                     </p>
                   </div>
@@ -92,7 +92,7 @@
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -191,6 +191,7 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
+      routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
 
       this.$router.push({ path: routerPath });
     },
