@@ -29,6 +29,7 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
+import GithubPublish from "../views/github/GithubPublish.vue";
 
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
@@ -123,6 +124,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/upload",
     component: GithubUpload,
     name: "GithubUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/publish",
+    component: GithubPublish,
+    name: "GithubPublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",
