@@ -97,7 +97,7 @@ export const useTokenStore = defineStore({
 
     async verifyZenodoTokenByDepositions(token) {
       return await axios
-        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}/deposit/depositions`, {
           params: {
             access_token: token,
           },
