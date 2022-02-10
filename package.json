@@ -31,6 +31,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.0",
     "@element-plus/icons-vue": "^0.2.4",
+    "@kangc/v-md-editor": "^2.3.13",
     "@vueup/vue-quill": "^1.0.0-beta.7",
     "axios": "^0.21.2",
     "axios-retry": "^3.2.0",
@@ -45,7 +46,9 @@
     "fs-extra": "^10.0.0",
     "gsap": "^3.9.1",
     "humanparser": "^2.6.0",
+    "katex": "^0.15.2",
     "lodash": "^4.17.21",
+    "marked": "^4.0.12",
     "mousetrap": "^1.6.5",
     "pinia": "^2.0.0-rc.10",
     "ps-tree": "^1.2.0",
