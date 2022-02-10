@@ -25,7 +25,9 @@ def foldersPresent(folder_path):
 def zipFolder(folder_path):
     try:
         home_path = os.path.expanduser("~")
-        soda_folder_path = os.path.join(home_path, ".sodaforcovid19research", "dataset")
+        soda_folder_path = os.path.join(
+            home_path, ".sodaforcovid19research", "dataset"
+        )  # noqa: E501
 
         if not os.path.exists(soda_folder_path):
             os.makedirs(soda_folder_path)

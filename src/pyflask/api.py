@@ -32,11 +32,14 @@ API_VERSION = "0.0.1"
 
 
 app = Flask(__name__)
-app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # full if you want to see all the details
+# full if you want to see all the details
+app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 CORS(app)
 
 # configure root logger
-LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".sodaforcovid19research", "logs")
+LOG_FOLDER = os.path.join(
+    os.path.expanduser("~"), ".sodaforcovid19research", "logs"
+)  # noqa: E501
 LOG_FILENAME = "api.log"
 LOG_PATH = os.path.join(LOG_FOLDER, LOG_FILENAME)
 
@@ -50,7 +53,7 @@ handler = logging.handlers.RotatingFileHandler(
 
 # create logging formatter
 logFormatter = logging.Formatter(
-    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",
+    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",  # noqa: E501
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 handler.setFormatter(logFormatter)
@@ -110,10 +113,14 @@ class CreateMetadata(Resource):
 
         parser.add_argument("data_types", type=str, help="Types of data ")
         parser.add_argument(
-            "data_object", type=str, help="Complete data object to create metadata"
+            "data_object",
+            type=str,
+            help="Complete data object to create metadata",  # noqa: E501
         )
         parser.add_argument(
-            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+            "virtual_file",
+            type=bool,
+            help="Parameter to generate a virtual file",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -141,10 +148,14 @@ class CreateCitationCFF(Resource):
 
         parser.add_argument("data_types", type=str, help="Types of data ")
         parser.add_argument(
-            "data_object", type=str, help="Complete data object to create metadata"
+            "data_object",
+            type=str,
+            help="Complete data object to create metadata",  # noqa: E501
         )
         parser.add_argument(
-            "virtual_file", type=bool, help="Parameter to generate a virtual file"
+            "virtual_file",
+            type=bool,
+            help="Parameter to generate a virtual file",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -174,7 +185,9 @@ class zenodoURL(Resource):
 class zenodoGetAll(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
-        params={"access_token": "Zenodo access token required with every request."},
+        params={
+            "access_token": "Zenodo access token required with every request."
+        },  # noqa: E501
     )
     def get(self):
         """Get a list of all the Zenodo depositions"""
@@ -184,7 +197,7 @@ class zenodoGetAll(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -198,8 +211,14 @@ class zenodoGetAll(Resource):
 @zenodo.route("/new", endpoint="zenodoCreateNew")
 class zenodoCreateNew(Resource):
     @zenodo.doc(
-        responses={200: "Success", 401: "Authentication error", 400: "Bad request"},
-        params={"access_token": "Zenodo access token required with every request."},
+        responses={
+            200: "Success",
+            401: "Authentication error",
+            400: "Bad request",
+        },  # noqa: E501
+        params={
+            "access_token": "Zenodo access token required with every request."
+        },  # noqa: E501
     )
     def post(self):
         """Create a new empty Zenodo deposition"""
@@ -209,7 +228,7 @@ class zenodoCreateNew(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -238,7 +257,7 @@ class zenodoUploadFile(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "bucket_url",
@@ -259,7 +278,9 @@ class zenodoUploadFile(Resource):
         bucket_url = args["bucket_url"]
         file_path = args["file_path"]
 
-        return uploadFileToZenodoDeposition(access_token, bucket_url, file_path)
+        return uploadFileToZenodoDeposition(
+            access_token, bucket_url, file_path
+        )  # noqa: E501
 
 
 @zenodo.route("/metadata", endpoint="zenodoAddMetadata")
@@ -280,13 +301,13 @@ class zenodoAddMetadata(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "metadata",
@@ -301,7 +322,9 @@ class zenodoAddMetadata(Resource):
         deposition_id = args["deposition_id"]
         metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
+        return addMetadataToZenodoDeposition(
+            access_token, deposition_id, metadata
+        )  # noqa: E501
 
 
 @zenodo.route("/publish", endpoint="zenodoPublish")
@@ -321,13 +344,13 @@ class zenodoPublish(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -355,13 +378,13 @@ class zenodoDelete(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -399,7 +422,7 @@ class uploadToGithub(Resource):
             "file_path",
             type=str,
             required=True,
-            help="file path of file to upload. file_path needs to be of type str",
+            help="file path of file to upload. file_path needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "file_name",
@@ -411,7 +434,7 @@ class uploadToGithub(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "repo_name",
@@ -427,7 +450,9 @@ class uploadToGithub(Resource):
         file_path = args["file_path"]
         repo_name = args["repo_name"]
 
-        return uploadFileToGithub(access_token, file_name, file_path, repo_name)
+        return uploadFileToGithub(
+            access_token, file_name, file_path, repo_name
+        )  # noqa: E501
 
 
 ###############################################################################
@@ -435,7 +460,9 @@ class uploadToGithub(Resource):
 ###############################################################################
 
 
-utilities = api.namespace("utilities", description="utilities for random tasks")
+utilities = api.namespace(
+    "utilities", description="utilities for random tasks"
+)  # noqa: E501
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -548,7 +575,7 @@ class CreateFile(Resource):
             "file_name": "name of the file to generate",
             "folder_path": "folder path to generate files in",
             "file_content": "content of the file. Will be string",
-            "content_type": "content type to determine what it is written with",
+            "content_type": "content type to determine what it is written with",  # noqa: E501
         },
     )
     def post(self):
