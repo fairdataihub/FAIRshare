@@ -199,7 +199,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="text-secondary-500 font-medium">
+            <span class="font-medium text-secondary-500">
               This will automatically push your release to Zenodo.
             </span>
           </p>
