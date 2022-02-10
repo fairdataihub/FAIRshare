@@ -139,10 +139,10 @@ export const useTokenStore = defineStore({
       console.log(
         "verifyGithubTokenByTokenConnection",
         token,
-        `${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`
+        `${process.env.VUE_APP_GITHUB_SERVER_URL}rate_limit`
       );
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}rate_limit`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -169,7 +169,7 @@ export const useTokenStore = defineStore({
 
     async verifyGithubTokenScopeByTokenConnection(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -231,7 +231,7 @@ export const useTokenStore = defineStore({
 
     async getGithubUser(token) {
       let response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -254,5 +254,38 @@ export const useTokenStore = defineStore({
       this.verifyZenodoConnection();
       this.verifyGithubConnection();
     },
+
+    // github operations
+    async githubAPI_listCurrentRepoBranches(token, repo, owner) { // return both repo names and repo full names
+      let response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}repos/`+ owner + `/` + repo + `/branches`,{
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+        return response.data
+    },
+
+    async githubAPI_getTreeFromRepo(token, repo, owner, branch){
+      let response = await axios
+      .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}repos/`+ owner + `/` + repo + `/git/trees/` + branch+`?recursive=1`,{
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      })
+      .then((response) => {
+        return { data: response.data, status: response.status };
+      })
+      .catch((error) => {
+        return { data: error.response.data, status: error.response.status };
+      });
+      return response.data
+    }
   },
 });

@@ -1,6 +1,16 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+    class="
+      flex
+      h-full
+      w-full
+      max-w-screen-xl
+      flex-col
+      items-center
+      justify-center
+      p-3
+      pr-5
+    "
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -26,6 +36,7 @@
               placeholder="Please select"
               popper-class="github-repo-select"
               class="some-random-class w-full"
+              @change="handleSelected"
             >
               <template #default="{ item }">
                 <el-tag
@@ -50,6 +61,21 @@
         </div>
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
+
+      <div v-if="selectedRepo" class="py-5">
+        <line-divider />
+        <p class="text=lg my-5">
+          A list of all the files in the selected repository. Branch:
+          {{ this.currentBranch }}
+        </p>
+        <el-tree :data="fileData" :props="defaultProps">
+          <template #default="{ node }">
+            <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+            <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+            <span>{{ node.label }}</span>
+          </template>
+        </el-tree>
+      </div>
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
@@ -103,6 +129,15 @@ export default {
       githubRepos: [],
       selectedRepo: "",
       ready: false,
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
+      fileData: [],
+      ownerDictionary: {},
+      nameDictionary: {},
+      branchDictionary: {},
+      tree: [],
     };
   },
   //el-tree-node__content
@@ -113,8 +148,52 @@ export default {
       }
       return true;
     },
+    currentBranch() {
+      if (
+        this.selectedRepo !== "" &&
+        this.branchDictionary[this.selectedRepo]
+      ) {
+        return this.branchDictionary[this.selectedRepo].name;
+      }
+      return null;
+    },
   },
   methods: {
+    async handleSelected(selected) {
+      console.log(this.ownerDictionary[selected]);
+      let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
+        this.GithubAccessToken,
+        this.nameDictionary[selected],
+        this.ownerDictionary[selected]
+      );
+      this.branchDictionary[selected] = branches[0];
+      let tree = await this.tokens.githubAPI_getTreeFromRepo(
+        this.GithubAccessToken,
+        this.nameDictionary[selected],
+        this.ownerDictionary[selected],
+        branches[0].name
+      );
+      for(let i = 0; i < tree.tree.length; i++){
+        this.tree.push(tree.tree[i]["path"])
+      }
+      this.fileData = await this.parseTree()
+    },
+    async parseTree() {
+      let paths = this.tree
+      let result = [];
+      let level = { result };
+      paths.forEach((path) => {
+        path.split("/").reduce((r, label) => {
+          if (!r[label]) {
+            r[label] = { result: [] };
+            r.result.push({ label, children: r[label].result });
+          }
+
+          return r[label];
+        }, level);
+      });
+      return result
+    },
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -166,7 +245,7 @@ export default {
     },
     async getUserRepos() {
       const response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user/repos`, {
           params: {
             accept: "application/vnd.github.v3+json",
             per_page: 100,
@@ -194,6 +273,8 @@ export default {
             visibility: repo.visibility,
             originalObject: repo,
           });
+          this.ownerDictionary[repo.full_name] = repo.owner.login;
+          this.nameDictionary[repo.full_name] = repo.name;
         });
       }
 
