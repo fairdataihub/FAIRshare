@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      flex
-      h-full
-      w-full
-      max-w-screen-xl
-      flex-col
-      items-center
-      justify-center
-      p-3
-      pr-5
-    "
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -173,13 +163,13 @@ export default {
         this.ownerDictionary[selected],
         branches[0].name
       );
-      for(let i = 0; i < tree.tree.length; i++){
-        this.tree.push(tree.tree[i]["path"])
+      for (let i = 0; i < tree.tree.length; i++) {
+        this.tree.push(tree.tree[i]["path"]);
       }
-      this.fileData = await this.parseTree()
+      this.fileData = await this.parseTree();
     },
     async parseTree() {
-      let paths = this.tree
+      let paths = this.tree;
       let result = [];
       let level = { result };
       paths.forEach((path) => {
@@ -192,7 +182,7 @@ export default {
           return r[label];
         }, level);
       });
-      return result
+      return result;
     },
     createLoading() {
       const loading = ElLoading.service({

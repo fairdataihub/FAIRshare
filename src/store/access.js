@@ -256,36 +256,53 @@ export const useTokenStore = defineStore({
     },
 
     // github operations
-    async githubAPI_listCurrentRepoBranches(token, repo, owner) { // return both repo names and repo full names
+    async githubAPI_listCurrentRepoBranches(token, repo, owner) {
+      // return both repo names and repo full names
       let response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}repos/`+ owner + `/` + repo + `/branches`,{
-          headers: {
-            Authorization: `token ${token}`,
-          },
-        })
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}repos/` +
+            owner +
+            `/` +
+            repo +
+            `/branches`,
+          {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
+        )
         .then((response) => {
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
           return { data: error.response.data, status: error.response.status };
         });
-        return response.data
+      return response.data;
     },
 
-    async githubAPI_getTreeFromRepo(token, repo, owner, branch){
+    async githubAPI_getTreeFromRepo(token, repo, owner, branch) {
       let response = await axios
-      .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}repos/`+ owner + `/` + repo + `/git/trees/` + branch+`?recursive=1`,{
-        headers: {
-          Authorization: `token ${token}`,
-        },
-      })
-      .then((response) => {
-        return { data: response.data, status: response.status };
-      })
-      .catch((error) => {
-        return { data: error.response.data, status: error.response.status };
-      });
-      return response.data
-    }
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}repos/` +
+            owner +
+            `/` +
+            repo +
+            `/git/trees/` +
+            branch +
+            `?recursive=1`,
+          {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+      return response.data;
+    },
   },
 });
