@@ -26,7 +26,7 @@ def createNewZenodoDeposition(access_token):
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
         r = requests.post(
-            config.ZENODO_SERVER_URL + "deposit/depositions",
+            config.ZENODO_SERVER_URL + "/deposit/depositions",
             params=params,
             json={},
             headers=headers,
@@ -67,7 +67,7 @@ def addMetadataToZenodoDeposition(access_token, deposition_id, metadata):
         params = {"access_token": access_token}
         data = json.dumps(metadata)
         r = requests.put(
-            config.ZENODO_SERVER_URL + "deposit/depositions/%s" % deposition_id,
+            config.ZENODO_SERVER_URL + "/deposit/depositions/%s" % deposition_id,
             params=params,
             data=data,
             headers=headers,
@@ -83,7 +83,7 @@ def publishZenodoDeposition(access_token, deposition_id):
         params = {"access_token": access_token}
         r = requests.post(
             config.ZENODO_SERVER_URL
-            + "deposit/depositions/%s/actions/publish" % deposition_id,
+            + "/deposit/depositions/%s/actions/publish" % deposition_id,
             params=params,
             headers=headers,
         )
@@ -97,7 +97,7 @@ def deleteZenodoDeposition(access_token, deposition_id):
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
         r = requests.delete(
-            config.ZENODO_SERVER_URL + "deposit/depositions/%s" % deposition_id,
+            config.ZENODO_SERVER_URL + "/deposit/depositions/%s" % deposition_id,
             params=params,
             headers=headers,
         )

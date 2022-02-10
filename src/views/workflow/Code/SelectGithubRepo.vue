@@ -235,7 +235,7 @@ export default {
     },
     async getUserRepos() {
       const response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user/repos`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
           params: {
             accept: "application/vnd.github.v3+json",
             per_page: 100,

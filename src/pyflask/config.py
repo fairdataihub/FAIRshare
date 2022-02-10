@@ -1,6 +1,6 @@
 from dotenv import dotenv_values
 
-ZENODO_SERVER_URL = "https://zenodo.org/api/"
+ZENODO_SERVER_URL = "https://zenodo.org/api"
 
 envcfg = dotenv_values(".env.local")  # take environment variables from .env.local
 

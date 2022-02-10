@@ -97,7 +97,7 @@ export const useTokenStore = defineStore({
 
     async verifyZenodoTokenByDepositions(token) {
       return await axios
-        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}/deposit/depositions`, {
           params: {
             access_token: token,
           },
@@ -139,10 +139,10 @@ export const useTokenStore = defineStore({
       console.log(
         "verifyGithubTokenByTokenConnection",
         token,
-        `${process.env.VUE_APP_GITHUB_SERVER_URL}rate_limit`
+        `${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`
       );
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}rate_limit`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -231,7 +231,7 @@ export const useTokenStore = defineStore({
 
     async getGithubUser(token) {
       let response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -260,7 +260,7 @@ export const useTokenStore = defineStore({
       // return both repo names and repo full names
       let response = await axios
         .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}repos/` +
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
             owner +
             `/` +
             repo +
@@ -283,7 +283,7 @@ export const useTokenStore = defineStore({
     async githubAPI_getTreeFromRepo(token, repo, owner, branch) {
       let response = await axios
         .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}repos/` +
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
             owner +
             `/` +
             repo +

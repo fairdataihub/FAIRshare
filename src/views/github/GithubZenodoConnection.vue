@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -208,7 +208,7 @@ export default {
             webhook.events.includes("release") &&
             "url" in webhook.config &&
             webhook.config.url.includes(
-              `${process.env.VUE_APP_ZENODO_SERVER_URL}hooks/receivers/github/events/?access_token=`
+              `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=`
             )
           ) {
             return response;
@@ -341,7 +341,7 @@ export default {
                 webhook.events.includes("release") &&
                 "url" in webhook.config &&
                 webhook.config.url.includes(
-                  `${process.env.VUE_APP_ZENODO_SERVER_URL}hooks/receivers/github/events/?access_token=`
+                  `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=`
                 )
               ) {
                 const webhookConfigURL = webhook.config.url;
