@@ -100,7 +100,7 @@
         </router-link>
 
         <button
-          class="secondary-plain-button hidden"
+          class="secondary-plain-button"
           @click="showFilePreview"
           v-if="validZenodoHookTokenFound"
         >
@@ -117,6 +117,93 @@
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
       </div>
+      <transition appear mode="out-in" name="fade">
+        <div v-if="showFilePreviewSection" class="py-5">
+          <line-divider />
+          <p class="text=lg my-5">
+            We will be adding some files to your GitHub repository. A preview of
+            what it will look like after is shown below.
+          </p>
+          <el-tree
+            :data="fileData"
+            :props="defaultProps"
+            @node-click="handleNodeClick"
+          >
+            <template #default="{ node }">
+              <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+              <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+              <span
+                :class="
+                  node.label == 'codemeta.json' ||
+                  node.label == 'citation.cff' ||
+                  node.label == 'LICENSE'
+                    ? 'text-secondary-500'
+                    : ''
+                "
+                >{{ node.label }}</span
+              >
+            </template>
+          </el-tree>
+
+          <el-drawer
+            v-if="anyfilePreview"
+            v-model="drawerModel"
+            :title="fileTitle"
+            direction="rtl"
+            size="60%"
+            :before-close="handleCloseDrawer"
+            :lock-scroll="false"
+          >
+            <el-scrollbar style="height: calc(100vh - 45px)">
+              <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
+                <el-table
+                  :data="tableData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column prop="Value" label="Value" />
+                </el-table>
+              </div>
+
+              <div v-if="PreviewNewlyCreatedCitationFile" class="pb-20">
+                <el-table
+                  :data="citationData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column
+                    prop="Value"
+                    label="Value"
+                    class="break-normal"
+                  />
+                </el-table>
+              </div>
+
+              <div v-if="PreviewNewlyCreatedLicenseFile" class="">
+                <!-- <el-table
+                  :data="licenseData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column prop="Value" label="Value" />
+                </el-table> -->
+                <div class="whitespace-pre-line pb-20 text-sm">
+                  {{ licenseData }}
+                </div>
+              </div>
+            </el-scrollbar>
+          </el-drawer>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -146,6 +233,7 @@ export default {
       workflow: {},
       validZenodoHookTokenFound: false,
       errorMessage: "",
+      showFilePreviewSection: "",
       zenodoAccessToken: "",
       selectedRepo: "",
       rippleLottieJSON,
@@ -170,6 +258,10 @@ export default {
     openWebsite() {
       const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
       window.ipcRenderer.send("open-link-in-browser", url);
+    },
+
+    showFilePreview() {
+      this.showFilePreviewSection = !this.showFilePreviewSection;
     },
 
     async checkIfZenodoHookIsPresent() {
