@@ -66,6 +66,12 @@
                 :allow-create="true"
                 no-data-text="No matching tags found"
                 no-match-text="No matching tags found"
+                @change="selectEvent('change')"
+                @visible-change="selectEvent('visible')"
+                @remove-tag="selectEvent('remove')"
+                @clear="selectEvent('clear')"
+                @blur="selectEvent('blur')"
+                @focus="selectEvent('focus')"
               >
                 <el-option
                   v-for="item in retrievedTags"
@@ -308,6 +314,9 @@ export default {
   methods: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
+    },
+    selectEvent(type) {
+      console.log(type, this.selectedTag);
     },
     createLoading() {
       const loading = ElLoading.service({
