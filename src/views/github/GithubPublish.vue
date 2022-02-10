@@ -22,7 +22,7 @@
         v-if="!showFinalInstructions"
       >
         <div
-          class="flex items-center justify-center space-x-4"
+          class="flex items-center justify-center space-x-4 pb-20"
           v-if="showReleasePrompt"
         >
           <p class="text-center">Do you want us to create a release for you?</p>
@@ -150,7 +150,7 @@
                       v-model="prerelease"
                       class="ml-2"
                       active-color="#2563eb"
-                      inactive-color="#fed7aa"
+                      inactive-color="#fdba74"
                     />
                   </el-tooltip>
                 </div>
@@ -199,7 +199,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="font-medium text-secondary-500">
+            <span class="text-secondary-500 font-medium">
               This will automatically push your release to Zenodo.
             </span>
           </p>
@@ -253,14 +253,13 @@
 import axios from "axios";
 import { ElLoading, ElNotification } from "element-plus";
 import { Icon } from "@iconify/vue";
-import Vue3Lottie from "vue3-lottie";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 export default {
   name: "GithubPublish",
-  components: { Icon, Vue3Lottie },
+  components: { Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -600,8 +599,6 @@ export default {
       if (response !== "ERROR") {
         this.selectedBranch = response.default_branch;
       }
-
-      console.log(response);
 
       return;
     },

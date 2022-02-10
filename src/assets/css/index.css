@@ -223,6 +223,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .primary-button:disabled:hover {
+    @apply bg-primary-600 text-white;
+  }
+
   .secondary-plain-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
@@ -237,6 +241,10 @@ html {
   .secondary-plain-button:disabled {
     @apply opacity-50;
     @apply cursor-not-allowed;
+  }
+
+  .secondary-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
   }
 
   .secondary-button {
@@ -255,6 +263,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .secondary-button:disabled:hover {
+    @apply bg-secondary-400 text-white;
+  }
+
   .danger-plain-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
@@ -271,6 +283,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .danger-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
+  }
+
   .danger-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
@@ -285,6 +301,10 @@ html {
   .danger-button:disabled {
     @apply opacity-50;
     @apply cursor-not-allowed;
+  }
+
+  .danger-button:disabled:hover {
+    @apply bg-red-50 text-red-700;
   }
 }
 

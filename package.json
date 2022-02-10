@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@electron/remote": "^2.0.0",
-    "@element-plus/icons-vue": "^0.2.4",
+    "@element-plus/icons-vue": "^0.2.7",
     "@kangc/v-md-editor": "^2.3.13",
     "@vueup/vue-quill": "^1.0.0-beta.7",
     "axios": "^0.21.2",
@@ -42,7 +42,7 @@
     "electron-data-holder": "^1.0.1",
     "electron-log": "^4.4.1",
     "electron-updater": "^4.3.9",
-    "element-plus": "^1.2.0-beta.3",
+    "element-plus": "^2.0.1",
     "fs-extra": "^10.0.0",
     "gsap": "^3.9.1",
     "humanparser": "^2.6.0",

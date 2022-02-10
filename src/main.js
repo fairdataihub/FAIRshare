@@ -4,8 +4,10 @@ import { router } from "./router";
 import ElementPlus from "element-plus";
 import { createPinia } from "pinia";
 import Popper from "vue3-popper";
-
+import Vue3Lottie from "vue3-lottie";
 import VMdEditor from "@kangc/v-md-editor";
+
+// plugins for the markdown editor
 import githubTheme from "@kangc/v-md-editor/lib/theme/github.js";
 import createKatexPlugin from "@kangc/v-md-editor/lib/plugins/katex/npm";
 import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index";
@@ -16,6 +18,7 @@ import "./assets/css/utilities-theme.css";
 import "./assets/css/index.css";
 import "element-plus/dist/index.css";
 
+// css for the markdown editor
 import "katex/dist/katex.min.css";
 import "@kangc/v-md-editor/lib/style/base-editor.css";
 import "@kangc/v-md-editor/lib/theme/style/github.css";
@@ -25,11 +28,12 @@ import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
+// config for the markdown editor
 VMdEditor.use(githubTheme, {});
 VMdEditor.use(createKatexPlugin());
 VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createAlignPlugin());
-VMdEditor.lang.use("en-US", enUS);
+VMdEditor.lang.use("en-US", enUS); // set language to english
 
 let app = createApp(App);
 
@@ -57,9 +61,10 @@ import {
   DataAnalysis,
   DataLine,
   Delete,
+  DeleteFilled,
   Document,
   Edit,
-  // EditPen,
+  EditPen,
   Flag,
   Fold,
   Histogram,
@@ -98,9 +103,10 @@ app.component("d-arrow-right", DArrowRight);
 app.component("data-analysis", DataAnalysis);
 app.component("data-line", DataLine);
 app.component("delete-icon", Delete);
+app.component("delete-filled", DeleteFilled);
 app.component("document-icon", Document);
 app.component("edit-icon", Edit);
-// app.component("edit-pen", EditPen);
+app.component("edit-pen", EditPen);
 app.component("flag-icon", Flag);
 app.component("fold-icon", Fold);
 app.component("histogram-icon", Histogram);
@@ -129,7 +135,8 @@ app.component("folder-icon", Folder);
 app.use(router); // vue router
 app.use(createPinia()); // pinia
 app.use(ElementPlus); // element plus
-app.use(VMdEditor);
+app.use(VMdEditor); // markdown editor
+app.use(Vue3Lottie); // lottie animations
 
 // Mount application to the root element
 app.mount("#app");

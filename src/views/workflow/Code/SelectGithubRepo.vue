@@ -24,8 +24,8 @@
               filterable
               :options="githubRepos"
               placeholder="Please select"
-              popper-class="github-repo-select"
-              class="some-random-class w-full"
+              size="large"
+              class="w-full"
             >
               <template #default="{ item }">
                 <el-tag

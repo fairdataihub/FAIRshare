@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -47,7 +47,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Software name" prop="name">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step1Form.name"
                         placeholder="My Software"
@@ -62,7 +62,7 @@
                     label="Software description/abstract"
                     prop="description"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step1Form.description"
                         type="textarea"
@@ -75,7 +75,7 @@
                   </el-form-item>
 
                   <el-form-item label="Creation date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step1Form.creationDate"
                         type="date"
@@ -90,7 +90,7 @@
                   </el-form-item>
 
                   <el-form-item label="First release date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step1Form.firstReleaseDate"
                         type="date"
@@ -107,7 +107,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -207,7 +207,7 @@
                             </div>
                           </div>
                           <div
-                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
                           >
                             <div
                               class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
@@ -215,17 +215,17 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
-                                title="Are you sure you want to remove this?"
-                                icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
+                                icon-color="red"
+                                title="Are you sure you want to remove this?"
                                 @confirm="deleteAuthor(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -326,7 +326,7 @@
                             </div>
                           </div>
                           <div
-                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
                           >
                             <div
                               class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
@@ -334,7 +334,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -344,7 +344,7 @@
                                 @confirm="deleteContributor(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -370,7 +370,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -415,7 +415,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Application category">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step3Form.applicationCategory"
                         filterable
@@ -443,10 +443,11 @@
                       :list="step3Form.keywords"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
-                          class="mb-2 flex flex-row justify-between transition-all"
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
                         >
                           <div class="flex w-11/12 flex-row justify-between">
                             <el-input
@@ -465,7 +466,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -475,7 +476,7 @@
                                 @confirm="deleteKeyword(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -497,7 +498,7 @@
                   </div>
 
                   <el-form-item label="Funding code">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step3Form.funding.code"
                         type="text"
@@ -510,7 +511,7 @@
                   </el-form-item>
 
                   <el-form-item label="Funding organization">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step3Form.funding.organization"
                         type="text"
@@ -525,7 +526,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -554,7 +555,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -573,7 +574,7 @@
                     label="Code repository"
                     :error="codeRepositoryErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.codeRepository"
                         placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
@@ -588,7 +589,7 @@
                     label="Continuous integration"
                     :error="continuousIntegrationErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.continuousIntegration"
                         placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
@@ -603,7 +604,7 @@
                     label="Issue Tracker"
                     :error="issueTrackerErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.issueTracker"
                         placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
@@ -623,6 +624,7 @@
                       :list="step4Form.relatedLinks"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
@@ -643,7 +645,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -653,7 +655,7 @@
                                 @confirm="deleteRelatedLink(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -677,7 +679,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -706,7 +708,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -722,7 +724,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Programming Language" required>
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.programmingLanguage"
                         multiple
@@ -730,6 +732,7 @@
                         allow-create
                         default-first-option
                         placeholder="C#, Java, Python 3"
+                        tag-type="info"
                         class="w-full"
                       >
                         <el-option
@@ -747,7 +750,7 @@
                   </el-form-item>
 
                   <el-form-item label="Runtime platform">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.runtimePlatform"
                         multiple
@@ -772,7 +775,7 @@
                   </el-form-item>
 
                   <el-form-item label="Operating system">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.operatingSystem"
                         multiple
@@ -802,10 +805,11 @@
                       :list="step5Form.otherSoftwareRequirements"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
-                          class="mb-2 flex flex-row justify-between transition-all"
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
                         >
                           <div class="flex w-11/12 flex-row justify-between">
                             <el-input
@@ -822,7 +826,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -834,7 +838,7 @@
                                 "
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -858,7 +862,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -887,7 +891,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -906,7 +910,7 @@
                     label="Current version"
                     :error="versionErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersion"
                         placeholder="1.5.6"
@@ -918,7 +922,7 @@
                   </el-form-item>
 
                   <el-form-item label="Current version release date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step6Form.currentVersionReleaseDate"
                         type="date"
@@ -936,7 +940,7 @@
                     label="Current version download URL"
                     :error="currentVersionDownloadLinkErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersionDownloadLink"
                         type="url"
@@ -949,7 +953,7 @@
                   </el-form-item>
 
                   <el-form-item label="Current version release notes">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersionReleaseNotes"
                         type="textarea"
@@ -964,7 +968,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -993,7 +997,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1009,7 +1013,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Reference publication">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step7Form.referencePublication"
                         type="text"
@@ -1022,11 +1026,12 @@
                   </el-form-item>
 
                   <el-form-item label="Development status">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step7Form.developmentStatus"
                         filterable
                         placeholder=""
+                        class="w-full"
                       >
                         <el-option
                           v-for="item in repoStatusOptions"
@@ -1050,7 +1055,7 @@
                     label="Is part of"
                     :error="isPartOfErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step7Form.isPartOf"
                         type="url"
@@ -1065,7 +1070,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -1109,7 +1114,7 @@ import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
-import Vue3Lottie from "vue3-lottie";
+
 import validator from "validator";
 import axios from "axios";
 import _ from "lodash";
@@ -1134,7 +1139,6 @@ export default {
     draggable,
     Icon,
     PillProgressBar,
-    Vue3Lottie,
   },
   data() {
     return {
