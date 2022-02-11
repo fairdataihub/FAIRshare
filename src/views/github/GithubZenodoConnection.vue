@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -297,14 +297,14 @@ export default {
       const GithubAccessToken = tokenObject.token;
       let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
         GithubAccessToken,
-        "SODA-for-COVID-19-Research",
-        "fairdataihub"
+        this.selectedRepo.split("/")[1],
+        this.selectedRepo.split("/")[0]
       );
       this.currentBranch = branches[0].name;
       let tree = await this.tokens.githubAPI_getTreeFromRepo(
         GithubAccessToken,
-        "SODA-for-COVID-19-Research",
-        "fairdataihub",
+        this.selectedRepo.split("/")[1],
+        this.selectedRepo.split("/")[0],
         branches[0].name
       );
       for (let i = 0; i < tree.tree.length; i++) {
