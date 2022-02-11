@@ -1,6 +1,16 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+    class="
+      flex
+      h-full
+      w-full
+      max-w-screen-xl
+      flex-col
+      items-center
+      justify-center
+      p-3
+      pr-5
+    "
   >
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">
@@ -237,10 +247,90 @@ export default {
       zenodoAccessToken: "",
       selectedRepo: "",
       rippleLottieJSON,
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
+      fileData: [],
+      tree: [],
+      fileTitle: "",
+      PreviewNewlyCreatedLicenseFile: false,
+      PreviewNewlyCreatedMetadataFile: false,
+      PreviewNewlyCreatedCitationFile: false,
+      licenseData: "",
+      tableData: [],
+      citationData: [],
+      currentBranch:"",
+      fullNameDictionary:{}
     };
   },
   computed: {},
   methods: {
+    openGithubWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
+    async handleNodeClick(data) {
+      if(data.label == "LICENSE" || data.label == "codemeta.json" || data.label == "citation.cff"){
+          if (data.label == "LICENSE") {
+            this.PreviewNewlyCreatedLicenseFile = true;
+          } else if (data.label == "codemeta.json") {
+            this.PreviewNewlyCreatedMetadataFile = true;
+          } else if (data.label == "citation.cff") {
+            this.PreviewNewlyCreatedCitationFile = true;
+          }
+          let title = data.label;
+          this.handleOpenDrawer(title);
+        } else {
+          this.openGithubWebsite("https://github.com/fairdataihub/SODA-for-COVID-19-Research/tree/"+this.currentBranch+"/"+this.fullNameDictionary[data.label])
+        }
+    },
+    async handleOpenDrawer(title) {
+      this.fileTitle = title;
+    },
+    handleCloseDrawer() {
+      this.fileTitle = "";
+      this.PreviewNewlyCreatedLicenseFile = false;
+      this.PreviewNewlyCreatedMetadataFile = false;
+      this.PreviewNewlyCreatedCitationFile = false;
+    },
+    async read_sodaForCovid19Repo() {
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+      let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
+        GithubAccessToken,
+        "SODA-for-COVID-19-Research",
+        "fairdataihub"
+      );
+      this.currentBranch = branches[0].name
+      let tree = await this.tokens.githubAPI_getTreeFromRepo(
+        GithubAccessToken,
+        "SODA-for-COVID-19-Research",
+        "fairdataihub",
+        branches[0].name
+      );
+      for (let i = 0; i < tree.tree.length; i++) {
+        this.tree.push(tree.tree[i]["path"]);
+      }
+      this.fileData = await this.parseTree();
+    },
+    async parseTree() {
+      let paths = this.tree;
+      let result = [];
+      let level = { result };
+      paths.forEach((path) => {
+        this.fullNameDictionary[path.split("/").pop()] = path
+      })
+      paths.forEach((path) => {
+        path.split("/").reduce((r, label) => {
+          if (!r[label]) {
+            r[label] = { result: [] };
+            r.result.push({ label, children: r[label].result });
+          }
+          return r[label];
+        }, level);
+      });
+      return result;
+    },
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -386,6 +476,7 @@ export default {
 
       if (response) {
         this.validZenodoHookTokenFound = true;
+        await this.read_sodaForCovid19Repo();
       } else {
         ElNotification({
           title: "Info",

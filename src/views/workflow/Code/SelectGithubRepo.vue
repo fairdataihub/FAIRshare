@@ -1,6 +1,16 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+    class="
+      flex
+      h-full
+      w-full
+      max-w-screen-xl
+      flex-col
+      items-center
+      justify-center
+      p-3
+      pr-5
+    "
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -58,7 +68,11 @@
           A list of all the files in the selected repository. Branch:
           {{ this.currentBranch }}
         </p>
-        <el-tree :data="fileData" :props="defaultProps">
+        <el-tree
+          :data="fileData"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        >
           <template #default="{ node }">
             <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
             <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
@@ -128,6 +142,7 @@ export default {
       nameDictionary: {},
       branchDictionary: {},
       tree: [],
+      fullNameDictionary: {},
     };
   },
   //el-tree-node__content
@@ -149,8 +164,23 @@ export default {
     },
   },
   methods: {
+    openGithubWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
+    async handleNodeClick(data) {
+      this.openGithubWebsite(
+        "https://github.com/" +
+          this.selectedRepo +
+          "/tree/" +
+          this.currentBranch +
+          "/" +
+          this.fullNameDictionary[data.label]
+      );
+    },
+    async handleOpenDrawer(title) {
+      this.fileTitle = title;
+    },
     async handleSelected(selected) {
-      console.log(this.ownerDictionary[selected]);
       let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
         this.GithubAccessToken,
         this.nameDictionary[selected],
@@ -172,6 +202,9 @@ export default {
       let paths = this.tree;
       let result = [];
       let level = { result };
+      paths.forEach((path) => {
+        this.fullNameDictionary[path.split("/").pop()] = path;
+      });
       paths.forEach((path) => {
         path.split("/").reduce((r, label) => {
           if (!r[label]) {
