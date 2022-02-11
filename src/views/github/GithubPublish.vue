@@ -52,40 +52,47 @@
           class="flex w-full flex-col space-x-4 pb-5"
           v-if="showApprovedInstructions"
         >
-          <div class="px-2">
-            <div class="flex flex-col py-1">
-              <p class="px-2 text-[15px] font-semibold text-zinc-600">
+          <div class="w-full px-2">
+            <div class="flex w-full flex-row items-center py-1">
+              <p class="w-[200px] px-2 text-[15px] font-semibold text-zinc-600">
                 Create a tag <span class="text-red-600">*</span>
               </p>
-              <el-select
-                v-model="selectedTag"
-                class="m-2"
-                placeholder="v4.5.8 or v4.5.8-beta or v4.5.8-rc1"
-                size="large"
-                :filterable="true"
-                :allow-create="true"
-                no-data-text="No matching tags found"
-                no-match-text="No matching tags found"
-                @change="selectEvent('change')"
-                @visible-change="selectEvent('visible')"
-                @remove-tag="selectEvent('remove')"
-                @clear="selectEvent('clear')"
-                @blur="selectEvent('blur')"
-                @focus="selectEvent('focus')"
-              >
-                <el-option
-                  v-for="item in retrievedTags"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                  :disabled="item.disabled"
+
+              <div class="grow">
+                <el-dropdown
+                  ref="dropdown1"
+                  trigger="click"
+                  size="large"
+                  max-height="350px"
                 >
-                </el-option>
-              </el-select>
+                  <el-input
+                    v-model="selectedTag"
+                    size="large"
+                    placeholder="v4.5.8 or v4.5.8-beta "
+                    clearable
+                    class="flex px-2"
+                  />
+                  <template #dropdown>
+                    <div class="w-full px-5 pt-3">
+                      <p class="text-sm">Your previous tags are shown below</p>
+                    </div>
+                    <el-dropdown-menu class="w-full">
+                      <el-dropdown-item
+                        v-for="(item, index) in retrievedTags"
+                        :key="item.value"
+                        :disabled="item.disabled"
+                        :divided="index === 0"
+                      >
+                        {{ item.label }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
             </div>
 
-            <div class="flex flex-col py-1">
-              <p class="px-2 text-[15px] font-semibold text-zinc-600">
+            <div class="flex flex-row items-center py-1">
+              <p class="w-[200px] px-2 text-[15px] font-semibold text-zinc-600">
                 Choose a target branch <span class="text-red-600">*</span>
               </p>
               <el-select
@@ -105,20 +112,23 @@
               </el-select>
             </div>
 
-            <div class="flex flex-col py-1">
-              <p class="px-2 pb-2 text-[15px] font-semibold text-zinc-600">
+            <div class="flex flex-row items-center py-1">
+              <p class="w-[200px] px-2 text-[15px] font-semibold text-zinc-600">
                 Release title <span class="text-red-600">*</span>
               </p>
-              <el-input
-                v-model="releaseTitle"
-                size="large"
-                placeholder="Please input"
-                clearable
-                class="px-2"
-              />
+
+              <div class="grow">
+                <el-input
+                  v-model="releaseTitle"
+                  size="large"
+                  placeholder="Please input"
+                  clearable
+                  class="px-2"
+                />
+              </div>
             </div>
 
-            <div class="flex flex-col py-3">
+            <div class="my-2 flex flex-col py-3">
               <div class="flex items-end justify-between px-2 pb-2">
                 <p class="text-[15px] font-semibold text-zinc-600">
                   Release description <span class="text-red-600">*</span>
@@ -317,6 +327,9 @@ export default {
     },
     selectEvent(type) {
       console.log(type, this.selectedTag);
+    },
+    openDropdown() {
+      this.$refs.dropdown1.handleOpen();
     },
     createLoading() {
       const loading = ElLoading.service({
@@ -626,8 +639,9 @@ export default {
     const tokenObject = await this.tokens.getToken("github");
     this.githubToken = tokenObject.token;
 
-    // this.repoName = this.workflow.github.repo;
-    this.repoName = "fairdataihub/Custom-Hook";
+    this.repoName = this.workflow.github.repo;
+    // this.repoName = "fairdataihub/Custom-Hook";
+    // this.repoName = "fairdataihub/SODA-for-SPARC";
 
     await this.prefillGithubEntries();
 
