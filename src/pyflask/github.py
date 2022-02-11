@@ -4,26 +4,25 @@ import json
 import base64
 
 
-def getFileSHA(file_name, repo_name, access_token):
-    url = f"https://api.github.com/repos/{repo_name}/contents/{file_name}"
-
-    payload = {}
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    response = requests.request("GET", url, headers=headers, data=payload)
-
-    if response.status_code != 200:
-        return False
-
-    fileSHA = response.json()["sha"]
-
-    if fileSHA == "":
-        return False
-
-    return fileSHA
-
-
 def uploadFileToGithub(access_token, file_name, file_path, repo_name):
+    def getFileSHA(file_name, repo_name, access_token):
+        url = f"https://api.github.com/repos/{repo_name}/contents/{file_name}"
+
+        payload = {}
+        headers = {"Authorization": f"Bearer {access_token}"}
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code != 200:
+            return False
+
+        fileSHA = response.json()["sha"]
+
+        if fileSHA == "":
+            return False
+
+        return fileSHA
+
     try:
         baseFileContent = open(file_path, "r").read()
 
@@ -68,5 +67,32 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
             return response.json()
         else:
             return "FAILURE"
+    except Exception as e:
+        raise e
+
+
+def getUserRepositories(access_token):
+    def getGithubRepos(page):
+        url = f"https://api.github.com/user/repos?per_page=100&page={page}"
+
+        payload = {}
+        headers = {"Authorization": f"Bearer {access_token}"}
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        return response.json()
+
+    page = 1
+    fullRepoList = []
+
+    try:
+        while True:
+            reposPage = getGithubRepos(page)
+            fullRepoList.extend(reposPage)
+            page += 1
+            if len(reposPage) < 100:
+                break
+
+        return fullRepoList
     except Exception as e:
         raise e

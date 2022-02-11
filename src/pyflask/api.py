@@ -17,7 +17,7 @@ from zenodo import (
     publishZenodoDeposition,
     deleteZenodoDeposition,
 )
-from github import uploadFileToGithub
+from github import uploadFileToGithub, getUserRepositories
 from metadata import createMetadata, createCitationCFF
 from utilities import (
     foldersPresent,
@@ -392,7 +392,7 @@ class uploadToGithub(Resource):
         },
     )
     def post(self):
-        """Upload a file into a zenodo deposition"""
+        """Upload a file into a GitHub repository"""
         parser = reqparse.RequestParser()
 
         parser.add_argument(
@@ -428,6 +428,32 @@ class uploadToGithub(Resource):
         repo_name = args["repo_name"]
 
         return uploadFileToGithub(access_token, file_name, file_path, repo_name)
+
+
+@github.route("/user/repos", endpoint="GetAllRepos")
+class GetAllRepos(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+        },
+    )
+    def get(self):
+        """Get all repositories for a user"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+
+        return getUserRepositories(access_token)
 
 
 ###############################################################################

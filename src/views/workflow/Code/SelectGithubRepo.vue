@@ -122,25 +122,6 @@ export default {
       });
       return loading;
     },
-    async checkToken(token) {
-      console.log(token);
-      const response = await this.tokens.getDepositions(token);
-
-      if (response.status === 200) {
-        this.validTokenAvailable = true;
-        this.tokens.saveToken("Github", token);
-        return true;
-      } else if (response.status === 401) {
-        this.errorMessage =
-          "Invalid Github access token. Please enter a valid Github access token.";
-        this.validTokenAvailable = false;
-        return false;
-      } else {
-        this.errorMessage = "Something went wrong. Please try again.";
-        this.validTokenAvailable = false;
-        return false;
-      }
-    },
     async continueToNextStep() {
       const repoObject = this.githubRepos.find((repo) => {
         return repo.full_name === this.selectedRepo;
