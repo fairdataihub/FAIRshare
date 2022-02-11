@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      flex
-      h-full
-      w-full
-      max-w-screen-xl
-      flex-col
-      items-center
-      justify-center
-      p-3
-      pr-5
-    "
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">

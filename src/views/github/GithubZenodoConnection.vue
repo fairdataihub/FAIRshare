@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      flex
-      h-full
-      w-full
-      max-w-screen-xl
-      flex-col
-      items-center
-      justify-center
-      p-3
-      pr-5
-    "
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">
@@ -260,8 +250,8 @@ export default {
       licenseData: "",
       tableData: [],
       citationData: [],
-      currentBranch:"",
-      fullNameDictionary:{}
+      currentBranch: "",
+      fullNameDictionary: {},
     };
   },
   computed: {},
@@ -270,19 +260,28 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
     async handleNodeClick(data) {
-      if(data.label == "LICENSE" || data.label == "codemeta.json" || data.label == "citation.cff"){
-          if (data.label == "LICENSE") {
-            this.PreviewNewlyCreatedLicenseFile = true;
-          } else if (data.label == "codemeta.json") {
-            this.PreviewNewlyCreatedMetadataFile = true;
-          } else if (data.label == "citation.cff") {
-            this.PreviewNewlyCreatedCitationFile = true;
-          }
-          let title = data.label;
-          this.handleOpenDrawer(title);
-        } else {
-          this.openGithubWebsite("https://github.com/fairdataihub/SODA-for-COVID-19-Research/tree/"+this.currentBranch+"/"+this.fullNameDictionary[data.label])
+      if (
+        data.label == "LICENSE" ||
+        data.label == "codemeta.json" ||
+        data.label == "citation.cff"
+      ) {
+        if (data.label == "LICENSE") {
+          this.PreviewNewlyCreatedLicenseFile = true;
+        } else if (data.label == "codemeta.json") {
+          this.PreviewNewlyCreatedMetadataFile = true;
+        } else if (data.label == "citation.cff") {
+          this.PreviewNewlyCreatedCitationFile = true;
         }
+        let title = data.label;
+        this.handleOpenDrawer(title);
+      } else {
+        this.openGithubWebsite(
+          "https://github.com/fairdataihub/SODA-for-COVID-19-Research/tree/" +
+            this.currentBranch +
+            "/" +
+            this.fullNameDictionary[data.label]
+        );
+      }
     },
     async handleOpenDrawer(title) {
       this.fileTitle = title;
@@ -301,7 +300,7 @@ export default {
         "SODA-for-COVID-19-Research",
         "fairdataihub"
       );
-      this.currentBranch = branches[0].name
+      this.currentBranch = branches[0].name;
       let tree = await this.tokens.githubAPI_getTreeFromRepo(
         GithubAccessToken,
         "SODA-for-COVID-19-Research",
@@ -318,8 +317,8 @@ export default {
       let result = [];
       let level = { result };
       paths.forEach((path) => {
-        this.fullNameDictionary[path.split("/").pop()] = path
-      })
+        this.fullNameDictionary[path.split("/").pop()] = path;
+      });
       paths.forEach((path) => {
         path.split("/").reduce((r, label) => {
           if (!r[label]) {
