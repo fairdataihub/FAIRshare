@@ -103,7 +103,7 @@ def getUserRepositories(access_token):
 
 def getRepoContributors(access_token, owner, repo):
     def getContributors(page):
-        url = f"https://api.github.com/repos/{owner}/{repo}/contributors?per_page=100&page={page}"
+        url = f"https://api.github.com/repos/{owner}/{repo}/contributors?per_page=100&page={page}"  # noqa E501
 
         payload = {}
         headers = {
@@ -218,7 +218,7 @@ def getRepoContentTree(access_token, owner, repo):
 
             return outputList
 
-        url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=true"
+        url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=true"  # noqa E501
 
         payload = {}
         headers = {
