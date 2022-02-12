@@ -416,13 +416,13 @@ export default {
         this.handleOpenDrawer(title);
       } else {
         this.openGithubWebsite(
-        "https://github.com/" +
-          this.selectedRepo +
-          "/tree/" +
-          this.currentBranch +
-          "/" +
-          this.fullNameDictionary[data.label]
-      );
+          "https://github.com/" +
+            this.selectedRepo +
+            "/tree/" +
+            this.currentBranch +
+            "/" +
+            this.fullNameDictionary[data.label]
+        );
       }
     },
     async handleOpenDrawer(title) {
@@ -461,13 +461,13 @@ export default {
       }
     },
     async read_sodaForCovid19Repo() {
-      let selected = this.selectedRepo
+      let selected = this.selectedRepo;
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
       let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
         GithubAccessToken,
         this.nameDictionary[selected],
-        this.ownerDictionary[selected],
+        this.ownerDictionary[selected]
       );
       this.branchDictionary[selected] = branches[0];
       let tree = await this.tokens.githubAPI_getTreeFromRepo(
@@ -497,9 +497,9 @@ export default {
           return r[label];
         }, level);
       });
-      result.push({"label":"codemeta.json", children:[]})
-      result.push({"label":"citation.cff", children:[]})
-      result.push({"label":"LICENSE", children:[]})
+      result.push({ label: "codemeta.json", children: [] });
+      result.push({ label: "citation.cff", children: [] });
+      result.push({ label: "LICENSE", children: [] });
       return result;
     },
     createLoading() {
@@ -639,7 +639,7 @@ export default {
     const tokenObject = await this.tokens.getToken("github");
     const GithubZenodoConnectionToken = tokenObject.zenodoHookToken;
     // const GithubZenodoConnectionToken = false;
-    
+
     if (GithubZenodoConnectionToken) {
       const response = await this.checkIfZenodoHookIsPresent();
 

@@ -202,7 +202,7 @@ export default {
           return r[label];
         }, level);
       });
-      console.log(result)
+      console.log(result);
       return result;
     },
     createLoading() {
