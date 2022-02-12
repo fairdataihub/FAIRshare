@@ -76,7 +76,10 @@ def getUserRepositories(access_token):
         url = f"https://api.github.com/user/repos?per_page=100&page={page}"
 
         payload = {}
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
 
         response = requests.request("GET", url, headers=headers, data=payload)
 
@@ -96,3 +99,169 @@ def getUserRepositories(access_token):
         return fullRepoList
     except Exception as e:
         raise e
+
+
+def getRepoContributors(access_token, owner, repo):
+    def getContributors(page):
+        url = f"https://api.github.com/repos/{owner}/{repo}/contributors?per_page=100&page={page}"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        return response.json()
+
+    page = 1
+    fullContributorList = []
+
+    try:
+        while True:
+            contributorsPage = getContributors(page)
+            fullContributorList.extend(contributorsPage)
+            page += 1
+            if len(contributorsPage) < 100:
+                break
+
+        return fullContributorList
+    except Exception as e:
+        raise e
+
+
+def getRepoContentTree(access_token, owner, repo):
+    def getRepoTree(branch):
+        def createContentTree(inputTreeArray):
+            def addFolderToTree(fullTree, item):
+                fullPath = item["path"]
+                splitPaths = fullPath.split("/")
+
+                if len(splitPaths) == 1:
+                    if fullPath not in fullTree:
+                        fullTree[fullPath] = {
+                            "sha": item["sha"],
+                            "url": item["url"],
+                            "children": {},
+                        }
+                else:
+                    tree = fullTree
+                    for path in splitPaths:
+                        if path not in tree:
+                            tree[path] = {
+                                "sha": item["sha"],
+                                "url": item["url"],
+                                "children": {},
+                            }
+                        else:
+                            tree = tree[path]["children"]
+                return
+
+            def addFileToTree(fullTree, item):
+                fullPath = item["path"]
+                splitPaths = fullPath.split("/")
+
+                if len(splitPaths) == 1:
+                    if fullPath not in fullTree:
+                        fullTree[fullPath] = {
+                            "sha": item["sha"],
+                            "url": item["url"],
+                            "size": item["size"],
+                        }
+                else:
+                    tree = fullTree
+                    for path in splitPaths:
+                        if path not in tree:
+                            tree[path] = {
+                                "sha": item["sha"],
+                                "url": item["url"],
+                                "size": item["size"],
+                            }
+                        else:
+                            tree = tree[path]["children"]
+                return
+
+            contentTree = {}
+
+            for item in inputTreeArray:
+                if item["type"] == "tree":
+                    addFolderToTree(contentTree, item)
+                elif item["type"] == "blob":
+                    addFileToTree(contentTree, item)
+
+            return contentTree
+
+        def convertContentTree(contentTree):
+            outputList = []
+            for item in contentTree:
+                if "children" in contentTree[item]:
+                    outputList.append(
+                        {
+                            "label": item,
+                            "sha": contentTree[item]["sha"],
+                            "url": contentTree[item]["url"],
+                            "children": convertContentTree(
+                                contentTree[item]["children"]
+                            ),
+                        }
+                    )
+                else:
+                    outputList.append(
+                        {
+                            "label": item,
+                            "sha": contentTree[item]["sha"],
+                            "url": contentTree[item]["url"],
+                            "size": contentTree[item]["size"],
+                        }
+                    )
+
+            return outputList
+
+        url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=true"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        res = response.json()
+
+        if res["truncated"] is False:
+            contentTree = createContentTree(res["tree"])
+            convertedContentTree = convertContentTree(contentTree)
+            return convertedContentTree
+        else:
+            # get simplified tree
+            # THIS ONE NEEDS TO CHANGE
+            contentTree = createContentTree(res["tree"])
+            convertedContentTree = convertContentTree(contentTree)
+            return convertedContentTree
+
+    def getDefaultBranch():
+        url = f"https://api.github.com/repos/{owner}/{repo}"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        res = response.json()
+        if "default_branch" in res:
+            return res["default_branch"]
+        else:
+            return "master"
+
+    defaultBranch = getDefaultBranch()
+
+    # print(defaultBranch)
+    # defaultBranch = "main"
+
+    contentTree = getRepoTree(defaultBranch)
+    return contentTree

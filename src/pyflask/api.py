@@ -17,7 +17,12 @@ from zenodo import (
     publishZenodoDeposition,
     deleteZenodoDeposition,
 )
-from github import uploadFileToGithub, getUserRepositories
+from github import (
+    uploadFileToGithub,
+    getUserRepositories,
+    getRepoContributors,
+    getRepoContentTree,
+)
 from metadata import createMetadata, createCitationCFF
 from utilities import (
     foldersPresent,
@@ -454,6 +459,90 @@ class GetAllRepos(Resource):
         access_token = args["access_token"]
 
         return getUserRepositories(access_token)
+
+
+@github.route("/repo/contributors", endpoint="GetAllContributorsForRepo")
+class GetAllContributorsForRepo(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get all contributors for a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoContributors(access_token, owner, repo)
+
+
+@github.route("/repo/tree", endpoint="getRepoContentsTree")
+class getRepoContentsTree(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get repository contents as a tree"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoContentTree(access_token, owner, repo)
 
 
 ###############################################################################
