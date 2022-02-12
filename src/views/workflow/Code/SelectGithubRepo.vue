@@ -167,9 +167,6 @@ export default {
           this.fullNameDictionary[data.label]
       );
     },
-    async handleOpenDrawer(title) {
-      this.fileTitle = title;
-    },
     async handleSelected(selected) {
       let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
         this.GithubAccessToken,
@@ -205,6 +202,7 @@ export default {
           return r[label];
         }, level);
       });
+      console.log(result)
       return result;
     },
     createLoading() {
