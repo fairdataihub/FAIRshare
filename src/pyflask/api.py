@@ -76,7 +76,7 @@ api = Api(
 class ApiVersion(Resource):
     def get(self):
         """Returns the semver version number of the current API"""
-        api.logger.warning("TEST")
+        api.logger.info(f"API_VERSION: {API_VERSION}")
         return API_VERSION
 
 

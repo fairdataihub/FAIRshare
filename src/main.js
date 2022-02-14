@@ -65,6 +65,7 @@ import {
   Document,
   Edit,
   EditPen,
+  Files,
   Flag,
   Fold,
   Histogram,
@@ -82,6 +83,7 @@ import {
   Right,
   Setting,
   Star,
+  Ticket,
   Unlock,
   UploadFilled,
   User,
@@ -107,6 +109,7 @@ app.component("delete-filled", DeleteFilled);
 app.component("document-icon", Document);
 app.component("edit-icon", Edit);
 app.component("edit-pen", EditPen);
+app.component("files-icon", Files);
 app.component("flag-icon", Flag);
 app.component("fold-icon", Fold);
 app.component("histogram-icon", Histogram);
@@ -124,6 +127,7 @@ app.component("remove-filled", RemoveFilled);
 app.component("right-icon", Right);
 app.component("setting-icon", Setting);
 app.component("star-icon", Star);
+app.component("ticket-icon", Ticket);
 app.component("unlock-icon", Unlock);
 app.component("upload-filled", UploadFilled);
 app.component("user-icon", User);

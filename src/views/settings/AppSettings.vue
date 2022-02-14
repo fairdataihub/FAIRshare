@@ -13,8 +13,12 @@
         <el-tab-pane label="General" name="general" c>
           <div class="flex flex-col space-y-4 px-3">
             <div class="rounded-lg border-2 border-slate-100 p-4">
-              <h2 class="py-2 text-lg font-semibold text-slate-600">Backup</h2>
-              <p>Some explanation text for the setting</p>
+              <h2 class="py-2 text-lg font-semibold text-slate-600">
+                Configuration Folder
+              </h2>
+              <div class="flex flex-col">
+                <p>Some explanation text for the setting</p>
+              </div>
             </div>
             <div class="rounded-lg border-2 border-slate-100 p-4">
               <h2 class="py-2 text-lg font-semibold text-slate-600">
