@@ -15,7 +15,7 @@
             <!-- settings panel -->
             <div class="rounded-lg border-2 border-slate-100 p-4">
               <h2 class="py-2 text-lg font-semibold text-slate-600">
-                Beta versions
+                Allow beta versions?
               </h2>
               <div class="flex flex-col items-start">
                 <p class="mb-2 text-sm">
@@ -25,7 +25,15 @@
                   features ahead of time.
                 </p>
                 <div class="flex items-center">
-                  <el-icon><circle-close-filled /></el-icon>
+                  <div
+                    class="flex items-center transition-all"
+                    :class="{
+                      'text-secondary-500': !betaRelease,
+                      'text-secondary-200': betaRelease,
+                    }"
+                  >
+                    <el-icon> <circle-close-filled /> </el-icon>
+                  </div>
                   <el-tooltip
                     :content="betaRelease ? 'Enabled' : 'Disabled'"
                     placement="bottom"
@@ -37,7 +45,15 @@
                       inactive-color="#fdba74"
                     />
                   </el-tooltip>
-                  <el-icon><circle-check-filled /></el-icon>
+                  <div
+                    class="flex items-center transition-all"
+                    :class="{
+                      'text-primary-200': !betaRelease,
+                      'text-primary-500': betaRelease,
+                    }"
+                  >
+                    <el-icon> <circle-check-filled /> </el-icon>
+                  </div>
                 </div>
               </div>
             </div>
