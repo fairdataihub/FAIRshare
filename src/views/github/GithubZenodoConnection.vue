@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="text-secondary-600 mx-2 font-normal">
+            <h3 class="mx-2 font-normal text-secondary-600">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -191,7 +191,7 @@
 
               <div v-if="PreviewNewlyCreatedLicenseFile" class="">
                 <div
-                  class="prose prose-slate prose-base pb-20"
+                  class="prose prose-base prose-slate pb-20"
                   v-html="compiledLicense"
                 ></div>
               </div>

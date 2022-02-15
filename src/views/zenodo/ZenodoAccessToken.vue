@@ -129,7 +129,7 @@
 
               <div v-if="PreviewNewlyCreatedLicenseFile" class="">
                 <div
-                  class="prose prose-slate prose-base pb-20"
+                  class="prose prose-base prose-slate pb-20"
                   v-html="compiledLicense"
                 ></div>
               </div>
