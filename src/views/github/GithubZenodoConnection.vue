@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -140,7 +140,7 @@
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'citation.cff' ||
-                  node.label == 'LICENSE'
+                  (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
                     : ''
                 "
@@ -750,7 +750,7 @@ export default {
       1,
       "ROOT"
     );
-    if (this.workflow.licenseText) {
+    if (this.workflow.generateLicense) {
       // await this.createLicenseFile();
       this.licenseData = this.workflow.licenseText;
     }
