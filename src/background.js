@@ -111,6 +111,7 @@ async function createWindow() {
   });
   splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
 
+  ////// splash screen end
   mainWindow.once("ready-to-show", () => {
     setTimeout(function () {
       splash.close();
@@ -118,7 +119,32 @@ async function createWindow() {
     }, 500);
   });
 
-  ////// splash screen end
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    console.log("Intercepting new browser tab/window", url);
+
+    return {
+      action: "allow",
+      overrideBrowserWindowOptions: {
+        frame: true,
+        fullscreenable: true,
+        backgroundColor: "white",
+        webPreferences: {
+          allowRunningInsecureContent: false,
+          contextIsolation: true,
+          devTools: false,
+          disableDialogs: true,
+          enableRemoteModule: false,
+          experimentalFeatures: false,
+          nodeIntegration: false,
+          nodeIntegrationInWorker: false,
+          nodeIntegrationInSubFrames: false,
+          plugins: false,
+          sandbox: true,
+          webSecurity: true,
+        },
+      },
+    };
+  });
 
   enableWebContents(mainWindow.webContents);
 

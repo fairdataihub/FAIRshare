@@ -128,7 +128,7 @@
                   )
                 "
               >
-                GitHub access token documentation
+                GitHub access token documentation.
               </span>
             </p>
           </div>

@@ -217,16 +217,14 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import axios from "axios";
-import Vue3Lottie from "vue3-lottie";
+
 import { ElLoading, ElNotification } from "element-plus";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
 
 export default {
   name: "GithubZenodoConnection",
-  components: {
-    Vue3Lottie,
-  },
+  components: {},
   data() {
     return {
       datasetStore: useDatasetsStore(),

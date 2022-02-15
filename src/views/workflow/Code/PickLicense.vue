@@ -86,15 +86,21 @@
             </div>
           </div>
 
-          <div v-if="displayLicenseEditor">
+          <div v-if="displayLicenseEditor" class="pb-5">
             <p class="py-2">Edit if required and continue</p>
 
-            <QuillEditor
+            <!-- <QuillEditor
               theme="snow"
               :content="draftLicense"
               toolbar="essential"
               contentType="text"
-            />
+            /> -->
+            <v-md-editor
+              v-model="draftLicense"
+              height="400px"
+              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link"
+              right-toolbar="sync-scroll preview fullscreen"
+            ></v-md-editor>
           </div>
         </el-form>
       </div>
@@ -140,17 +146,17 @@ import { useTokenStore } from "@/store/access.js";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElLoading } from "element-plus";
+import { ElLoading, ElMessage } from "element-plus";
 import axios from "axios";
 
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
+// import { QuillEditor } from "@vueup/vue-quill";
+// import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
 export default {
   name: "CodePickLicense",
   components: {
     Icon,
-    QuillEditor,
+    // QuillEditor,
   },
   data() {
     return {
@@ -284,6 +290,14 @@ export default {
       }
     },
     generateContinue() {
+      if (this.draftLicense.trim() == "") {
+        ElMessage({
+          message: "Your license text cannot be empty",
+          type: "error",
+        });
+        return;
+      }
+
       this.dataset.data.Code.questions.license = this.licenseForm.license;
       this.dataset.data.general.questions.license = this.licenseForm.license;
 

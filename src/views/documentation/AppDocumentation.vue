@@ -7,7 +7,31 @@
 
       <line-divider></line-divider>
 
-      Add documentation link and animations here.
+      <h2>
+        We have created a documentation page for each component or feature in
+        FAIRShare. You can find the documentation site by clicking on the button
+        below:
+      </h2>
+
+      <div class="flex h-full w-full flex-col items-center justify-start">
+        <div>
+          <Vue3Lottie
+            animationLink="https://assets1.lottiefiles.com/packages/lf20_16bo07fy.json"
+            :width="300"
+            :height="300"
+          />
+        </div>
+        <div>
+          <button
+            class="primary-plain-button"
+            @click="
+              openURL('https://soda-for-covid-19-research-docs.vercel.app/')
+            "
+          >
+            View the Documentation <el-icon><notebook-icon /></el-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +43,11 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    openURL(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
+  },
   computed: {},
   async mounted() {},
 };
