@@ -128,19 +128,10 @@
               </div>
 
               <div v-if="PreviewNewlyCreatedLicenseFile" class="">
-                <!-- <el-table
-                  :data="licenseData"
-                  style="width: 100%"
-                  row-key="id"
-                  border
-                  default-expand-all
-                >
-                  <el-table-column prop="Name" label="Name" />
-                  <el-table-column prop="Value" label="Value" />
-                </el-table> -->
-                <div class="whitespace-pre-line pb-20 text-sm">
-                  {{ licenseData }}
-                </div>
+                <div
+                  class="prose prose-slate prose-base pb-20"
+                  v-html="compiledLicense"
+                ></div>
               </div>
             </el-scrollbar>
           </el-drawer>
@@ -160,6 +151,7 @@ import { useTokenStore } from "@/store/access.js";
 import path from "path";
 import axios from "axios";
 import { ElLoading } from "element-plus";
+import { marked } from "marked";
 
 export default {
   name: "ZenodoAccessToken",
@@ -216,6 +208,10 @@ export default {
       } else {
         return false;
       }
+    },
+
+    compiledLicense() {
+      return marked(this.licenseData);
     },
   },
   methods: {
@@ -308,6 +304,11 @@ export default {
       this.PreviewNewlyCreatedCitationFile = false;
     },
     async handleOpenDrawer(title) {
+      if (title == "LICENSE") {
+        title +=
+          " (This preview may not be completely representative of the final license)";
+      }
+
       this.fileTitle = title;
     },
     async handleNodeClick(data) {

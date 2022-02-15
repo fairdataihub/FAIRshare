@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -190,19 +190,10 @@
               </div>
 
               <div v-if="PreviewNewlyCreatedLicenseFile" class="">
-                <!-- <el-table
-                  :data="licenseData"
-                  style="width: 100%"
-                  row-key="id"
-                  border
-                  default-expand-all
-                >
-                  <el-table-column prop="Name" label="Name" />
-                  <el-table-column prop="Value" label="Value" />
-                </el-table> -->
-                <div class="whitespace-pre-line pb-20 text-sm">
-                  {{ licenseData }}
-                </div>
+                <div
+                  class="prose prose-slate prose-base pb-20"
+                  v-html="compiledLicense"
+                ></div>
               </div>
             </el-scrollbar>
           </el-drawer>
@@ -216,8 +207,8 @@
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
+import { marked } from "marked";
 import axios from "axios";
-
 import { ElLoading, ElNotification } from "element-plus";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
@@ -280,6 +271,9 @@ export default {
       } else {
         return false;
       }
+    },
+    compiledLicense() {
+      return marked(this.licenseData);
     },
   },
   methods: {
@@ -420,7 +414,7 @@ export default {
         data.label == "codemeta.json" ||
         data.label == "citation.cff"
       ) {
-        if (data.label == "LICENSE") {
+        if (data.label == "LICENSE" && this.workflow.generateLicense) {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label == "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
@@ -441,6 +435,11 @@ export default {
       }
     },
     async handleOpenDrawer(title) {
+      if (title == "LICENSE") {
+        title +=
+          " (This preview may not be completely representative of the final license)";
+      }
+
       this.fileTitle = title;
     },
     handleCloseDrawer() {
