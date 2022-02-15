@@ -466,7 +466,6 @@ export default {
           console.log(error);
           return "ERROR";
         });
-      console.log("res: ", response, GithubAccessToken)
       if (response != "ERROR") {
         response.forEach((repo) => {
           this.ownerDictionary[repo.full_name] = repo.owner.login;
@@ -475,7 +474,6 @@ export default {
       }
     },
     async read_sodaForCovid19Repo() {
-      console.log("???", this.nameDictionary, this.ownerDictionary)
       let selected = this.selectedRepo;
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
@@ -655,8 +653,7 @@ export default {
     // const GithubZenodoConnectionToken = false;
 
     if (GithubZenodoConnectionToken) {
-      //const response = await this.checkIfZenodoHookIsPresent();
-      const response = true
+      const response = await this.checkIfZenodoHookIsPresent();
       spinner.close();
 
       if (response) {
@@ -694,8 +691,7 @@ export default {
       }
     } else {
       let interval = setInterval(async () => {
-        //const response = await this.checkIfZenodoHookIsPresent();
-        const response = true
+        const response = await this.checkIfZenodoHookIsPresent();
         console.log(response);
 
         spinner.close();
