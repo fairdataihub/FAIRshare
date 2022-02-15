@@ -15,7 +15,8 @@
       <div v-if="ready">
         <div v-if="validTokenAvailable">
           <p class="my-5 w-full text-center">
-            Pick the Github repository you want to use.
+            Pick the Github repository you want to use. <br />
+            FAIRshare only supports public Github repositories.
           </p>
 
           <div class="py-5">
@@ -210,7 +211,9 @@ export default {
 
     async handleNodeClick(data) {
       const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
+      if (data.isLeaf) {
+        window.ipcRenderer.send("open-link-in-browser", githubURL);
+      }
     },
 
     async continueToNextStep() {
@@ -239,13 +242,9 @@ export default {
 
     async getUserRepos() {
       const response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
+        .get(`${this.$server_url}/github/user/repos`, {
           params: {
-            accept: "application/vnd.github.v3+json",
-            per_page: 100,
-          },
-          headers: {
-            Authorization: `Bearer ${this.GithubAccessToken}`,
+            access_token: this.GithubAccessToken,
           },
         })
         .then((response) => {
@@ -261,24 +260,24 @@ export default {
         this.validTokenAvailable = false;
       } else {
         response.forEach((repo) => {
+          const selectionDisabled =
+            repo.visibility === "private" ? true : false;
           this.githubRepos.push({
             value: repo.full_name,
             label: repo.full_name,
             visibility: repo.visibility,
             originalObject: repo,
             default_branch: repo.default_branch,
+            disabled: selectionDisabled,
           });
         });
       }
-
-      // console.log(response);
     },
     async showConnection(status) {
       console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
       }
-      // this.uploadToGithub(); console.log(this.workflow.licenseText)
     },
   },
   async mounted() {

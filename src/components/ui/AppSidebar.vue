@@ -18,7 +18,7 @@
         <img
           v-if="sideBarOpen"
           class="m-4 w-28"
-          src="../../assets/brand/logo.png"
+          src="../../assets/brand/logo.svg"
         />
 
         <div
