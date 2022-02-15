@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -555,7 +555,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -708,7 +708,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -891,7 +891,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -997,7 +997,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1897,17 +1897,13 @@ export default {
       let response = "";
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/contributors`,
-          {
-            params: {
-              accept: "application/vnd.github.v3+json",
-            },
-            headers: {
-              Authorization: `Bearer  ${GithubAccessToken}`,
-            },
-          }
-        )
+        .get(`${this.$server_url}/github/repo/contributors`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: selectedRepo.split("/")[0],
+            repo: selectedRepo.split("/")[1],
+          },
+        })
         .then((response) => {
           return response.data;
         })
@@ -1919,8 +1915,8 @@ export default {
       let contributors = [];
 
       if (response != "ERROR") {
-        response.forEach((repo) => {
-          contributors.push(repo.login);
+        response.forEach((contributor) => {
+          contributors.push(contributor.login);
         });
       }
 
