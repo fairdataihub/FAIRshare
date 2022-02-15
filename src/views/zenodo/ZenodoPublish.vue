@@ -135,7 +135,7 @@ export default {
 
       window.ipcRenderer.send(
         "open-link-in-browser",
-        `${process.env.VUE_APP_ZENODO_URL}deposit/${depositionID}`
+        `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
       );
     },
   },
