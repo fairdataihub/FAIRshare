@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      flex
-      h-full
-      w-full
-      max-w-screen-xl
-      flex-col
-      items-center
-      justify-center
-      p-3
-      pr-5
-    "
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">
@@ -269,7 +259,7 @@ export default {
       nameDictionary: {},
       branchDictionary: {},
       drawerModel: true,
-      loadingTree:false
+      loadingTree: false,
     };
   },
   computed: {
@@ -551,7 +541,7 @@ export default {
       this.loadingTree = true;
       await this.buildDictionary();
       await this.read_sodaForCovid19Repo();
-      this.finishLoading()
+      this.finishLoading();
     },
     finishLoading() {
       this.loadingTree = false;
