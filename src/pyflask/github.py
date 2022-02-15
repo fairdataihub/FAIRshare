@@ -201,6 +201,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
+                            "isLeaf": False,
                             "children": convertContentTree(
                                 contentTree[item]["children"]
                             ),
@@ -213,6 +214,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
                             "size": contentTree[item]["size"],
+                            "isLeaf": True,
                         }
                     )
 
@@ -264,4 +266,4 @@ def getRepoContentTree(access_token, owner, repo):
     # defaultBranch = "main"
 
     contentTree = getRepoTree(defaultBranch)
-    return contentTree
+    return json.dumps(contentTree)

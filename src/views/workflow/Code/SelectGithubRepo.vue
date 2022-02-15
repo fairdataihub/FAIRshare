@@ -25,7 +25,7 @@
               :options="githubRepos"
               placeholder="Please select"
               popper-class="github-repo-select"
-              @change="handleSelected"
+              @change="showGithubRepoContents('change')"
               size="large"
               class="w-full"
             >
@@ -53,7 +53,37 @@
       </div>
       <LoadingFoldingCube v-else></LoadingFoldingCube>
 
-      <div v-if="selectedRepo" class="py-5">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
+        <router-link
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
+          class=""
+        >
+          <button class="primary-plain-button">
+            <el-icon><d-arrow-left /></el-icon> Back
+          </button>
+        </router-link>
+
+        <button
+          class="secondary-plain-button"
+          @click="showGithubRepoContents('click')"
+          v-if="selectedRepo !== ''"
+        >
+          <el-icon><checked-icon /></el-icon>
+          View files in repository
+        </button>
+
+        <button
+          class="primary-button"
+          :disabled="disableContinue"
+          @click="continueToNextStep"
+          v-if="validTokenAvailable"
+        >
+          Continue
+          <el-icon> <d-arrow-right /> </el-icon>
+        </button>
+      </div>
+
+      <div v-if="showFilePreview" class="py-5">
         <line-divider />
         <p class="text=lg my-5">
           A list of all the files in the selected repository. Branch:
@@ -70,27 +100,6 @@
             <span>{{ node.label }}</span>
           </template>
         </el-tree>
-      </div>
-
-      <div class="flex w-full flex-row justify-center space-x-4 py-2">
-        <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
-          class=""
-        >
-          <button class="primary-plain-button">
-            <el-icon><d-arrow-left /></el-icon> Back
-          </button>
-        </router-link>
-
-        <button
-          class="primary-button"
-          :disabled="disableContinue"
-          @click="continueToNextStep"
-          v-if="validTokenAvailable"
-        >
-          Continue
-          <el-icon> <d-arrow-right /> </el-icon>
-        </button>
       </div>
     </div>
   </div>
@@ -123,6 +132,7 @@ export default {
       GithubAccessToken: "",
       githubRepos: [],
       selectedRepo: "",
+      showFilePreview: false,
       ready: false,
       defaultProps: {
         children: "children",
@@ -169,6 +179,48 @@ export default {
     openGithubWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
+    async showGithubRepoContents(type) {
+      if (type === "click") {
+        this.showFilePreview = !this.showFilePreview;
+      }
+
+      if (this.showFilePreview) {
+        let spinner = this.createLoading();
+        const response = await this.getGithubRepoContents();
+
+        if (response !== "ERROR") {
+          this.fileData = JSON.parse(response);
+        } else {
+          this.$message({
+            message: "Could not get the contents of the repository",
+            type: "error",
+          });
+        }
+        spinner.close();
+      }
+    },
+    async getGithubRepoContents() {
+      const fullRepoName = this.selectedRepo.split("/");
+
+      const response = await axios
+        .get(`${this.$server_url}/github/repo/tree`, {
+          params: {
+            access_token: this.GithubAccessToken,
+            owner: fullRepoName[0],
+            repo: fullRepoName[1],
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      return response;
+    },
+
     async handleNodeClick(data) {
       this.openGithubWebsite(
         "https://github.com/" +
