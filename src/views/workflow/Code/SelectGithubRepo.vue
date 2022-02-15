@@ -28,7 +28,6 @@
               @change="handleSelected"
               size="large"
               class="w-full"
-
             >
               <template #default="{ item }">
                 <el-tag
