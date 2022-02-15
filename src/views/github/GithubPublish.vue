@@ -215,7 +215,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="font-medium text-secondary-500">
+            <span class="text-secondary-500 font-medium">
               This will automatically push your release to Zenodo.
             </span>
           </p>
@@ -371,7 +371,7 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
     async viewZenodoRelease() {
-      const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}deposit`;
+      const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
       window.ipcRenderer.send("open-link-in-browser", zenodoURL);
     },
     declineRelease() {
