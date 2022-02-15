@@ -63,7 +63,7 @@
         </div>
 
         <div
-          class="hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3 text-primary-600"
+          class="hover-underline-animation text-primary-600 flex cursor-pointer flex-row items-center py-1 pt-3"
         >
           <span
             class="font-medium"
@@ -109,6 +109,10 @@ export default {
       this.$router.push({ path: routerPath });
     },
   },
-  mounted() {},
+  mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+  },
 };
 </script>

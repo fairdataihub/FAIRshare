@@ -218,9 +218,6 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
-    this.datasetStore.hideProgressBar();
-    this.datasetStore.setProgressBarType("github");
-    this.datasetStore.setCurrentStep(2);
     await this.manager.loadTokens();
   },
 };

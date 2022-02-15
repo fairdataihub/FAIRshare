@@ -44,11 +44,15 @@
 </template>
 
 <script>
+import { useDatasetsStore } from "@/store/datasets";
+
 export default {
   name: "ContactUs",
   components: {},
   data() {
-    return {};
+    return {
+      datasetStore: useDatasetsStore(),
+    };
   },
   methods: {
     openURL(url) {
@@ -56,7 +60,11 @@ export default {
     },
   },
   computed: {},
-  async mounted() {},
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+  },
 };
 </script>
 

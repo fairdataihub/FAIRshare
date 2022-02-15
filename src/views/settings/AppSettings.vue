@@ -117,11 +117,14 @@ import { app } from "@electron/remote";
 import axios from "axios";
 import path from "path";
 
+import { useDatasetsStore } from "@/store/datasets";
+
 export default {
   name: "AppSettings",
   components: {},
   data() {
     return {
+      datasetStore: useDatasetsStore(),
       activeName: "general",
       loadingSpinner: false,
       betaRelease: false,
@@ -164,7 +167,11 @@ export default {
     },
   },
   computed: {},
-  async mounted() {},
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+  },
 };
 </script>
 
