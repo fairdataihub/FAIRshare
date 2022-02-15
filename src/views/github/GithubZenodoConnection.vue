@@ -254,6 +254,7 @@ export default {
       ownerDictionary: {},
       nameDictionary: {},
       branchDictionary: {},
+      drawerModel: true,
     };
   },
   computed: {
@@ -265,6 +266,17 @@ export default {
         return this.branchDictionary[this.selectedRepo].name;
       }
       return null;
+    },
+    anyfilePreview() {
+      if (
+        this.PreviewNewlyCreatedMetadataFile ||
+        this.PreviewNewlyCreatedLicenseFile ||
+        this.PreviewNewlyCreatedCitationFile
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {
@@ -375,7 +387,7 @@ export default {
           return JSON.parse(response.data);
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
           return "ERROR";
         });
       return response;
@@ -435,6 +447,8 @@ export default {
       this.PreviewNewlyCreatedCitationFile = false;
     },
     async buildDictionary() {
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
       const response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
           params: {
@@ -442,17 +456,17 @@ export default {
             per_page: 100,
           },
           headers: {
-            Authorization: `Bearer ${this.GithubAccessToken}`,
+            Authorization: `Bearer ${GithubAccessToken}`,
           },
         })
         .then((response) => {
           return response.data;
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
           return "ERROR";
         });
-
+      console.log("res: ", response, GithubAccessToken)
       if (response != "ERROR") {
         response.forEach((repo) => {
           this.ownerDictionary[repo.full_name] = repo.owner.login;
@@ -461,6 +475,7 @@ export default {
       }
     },
     async read_sodaForCovid19Repo() {
+      console.log("???", this.nameDictionary, this.ownerDictionary)
       let selected = this.selectedRepo;
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
@@ -497,9 +512,6 @@ export default {
           return r[label];
         }, level);
       });
-      result.push({ label: "codemeta.json", children: [] });
-      result.push({ label: "citation.cff", children: [] });
-      result.push({ label: "LICENSE", children: [] });
       return result;
     },
     createLoading() {
@@ -521,8 +533,10 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
 
-    showFilePreview() {
+    async showFilePreview() {
       this.showFilePreviewSection = !this.showFilePreviewSection;
+      await this.buildDictionary();
+      await this.read_sodaForCovid19Repo();
     },
 
     async checkIfZenodoHookIsPresent() {
@@ -641,13 +655,12 @@ export default {
     // const GithubZenodoConnectionToken = false;
 
     if (GithubZenodoConnectionToken) {
-      const response = await this.checkIfZenodoHookIsPresent();
-
+      //const response = await this.checkIfZenodoHookIsPresent();
+      const response = true
       spinner.close();
 
       if (response) {
         this.validZenodoHookTokenFound = true;
-        await this.read_sodaForCovid19Repo();
       } else {
         ElNotification({
           title: "Info",
@@ -681,7 +694,8 @@ export default {
       }
     } else {
       let interval = setInterval(async () => {
-        const response = await this.checkIfZenodoHookIsPresent();
+        //const response = await this.checkIfZenodoHookIsPresent();
+        const response = true
         console.log(response);
 
         spinner.close();
@@ -726,13 +740,11 @@ export default {
     this.tableData = await this.createCodeMetadataFile();
     this.citationData = await this.createCitationFile();
     this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
-
     this.citationData = this.jsonToTableDataRecursive(
       this.citationData,
       1,
       "ROOT"
     );
-    console.log(this.workflow.licenseText);
     if (this.workflow.licenseText) {
       // await this.createLicenseFile();
       this.licenseData = this.workflow.licenseText;

@@ -220,7 +220,9 @@ def createMetadata(data_types, data, virtual_file):
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
-            folder_path = data["Code"]["folderPath"]
+            folder_path = ""
+            if "folderPath" in data["Code"]:
+                folder_path = data["Code"]["folderPath"]
             result = createCodeMetadata(
                 code_data, general_data, folder_path, virtual_file
             )
@@ -359,7 +361,9 @@ def createCitationCFF(data_types, data, virtual_file):
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
-            folder_path = data["Code"]["folderPath"]
+            folder_path = ""
+            if "folderPath" in data["Code"]:
+                folder_path = data["Code"]["folderPath"]
             result = createCitationFromCode(
                 code_data, general_data, folder_path, virtual_file
             )

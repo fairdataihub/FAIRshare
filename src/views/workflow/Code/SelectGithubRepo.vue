@@ -152,6 +152,17 @@ export default {
       }
       return null;
     },
+    anyfilePreview() {
+      if (
+        this.PreviewNewlyCreatedMetadataFile ||
+        this.PreviewNewlyCreatedLicenseFile ||
+        this.PreviewNewlyCreatedCitationFile
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     openGithubWebsite(url) {
