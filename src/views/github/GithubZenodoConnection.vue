@@ -1,6 +1,16 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+    class="
+      flex
+      h-full
+      w-full
+      max-w-screen-xl
+      flex-col
+      items-center
+      justify-center
+      p-3
+      pr-5
+    "
   >
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">
@@ -124,6 +134,10 @@
             We will be adding some files to your GitHub repository. A preview of
             what it will look like after is shown below.
           </p>
+          <div
+            v-loading="loadingTree"
+            :class="loadingTree ? 'h-full w-full' : 'h-[0px] w-[0px]'"
+          ></div>
           <el-tree
             :data="fileData"
             :props="defaultProps"
@@ -255,6 +269,7 @@ export default {
       nameDictionary: {},
       branchDictionary: {},
       drawerModel: true,
+      loadingTree:false
     };
   },
   computed: {
@@ -533,10 +548,14 @@ export default {
 
     async showFilePreview() {
       this.showFilePreviewSection = !this.showFilePreviewSection;
+      this.loadingTree = true;
       await this.buildDictionary();
       await this.read_sodaForCovid19Repo();
+      this.finishLoading()
     },
-
+    finishLoading() {
+      this.loadingTree = false;
+    },
     async checkIfZenodoHookIsPresent() {
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
