@@ -86,8 +86,9 @@
       <div v-if="showFilePreview" class="py-5">
         <line-divider />
         <p class="text=lg my-5">
-          A list of all the files in the selected repository. Branch:
-          {{ this.currentBranch }}
+          A list of all the files and folders in the selected repository are
+          shown below. Current branch is <b>{{ currentBranch }}</b
+          >.
         </p>
         <el-tree
           :data="fileData"
@@ -132,6 +133,7 @@ export default {
       GithubAccessToken: "",
       githubRepos: [],
       selectedRepo: "",
+      currentBranch: "",
       showFilePreview: false,
       ready: false,
       defaultProps: {
@@ -139,14 +141,8 @@ export default {
         label: "label",
       },
       fileData: [],
-      ownerDictionary: {},
-      nameDictionary: {},
-      branchDictionary: {},
-      tree: [],
-      fullNameDictionary: {},
     };
   },
-  //el-tree-node__content
   computed: {
     disableContinue() {
       if (this.selectedRepo !== "") {
@@ -154,31 +150,16 @@ export default {
       }
       return true;
     },
-    currentBranch() {
-      if (
-        this.selectedRepo !== "" &&
-        this.branchDictionary[this.selectedRepo]
-      ) {
-        return this.branchDictionary[this.selectedRepo].name;
-      }
-      return null;
-    },
-    anyfilePreview() {
-      if (
-        this.PreviewNewlyCreatedMetadataFile ||
-        this.PreviewNewlyCreatedLicenseFile ||
-        this.PreviewNewlyCreatedCitationFile
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
   },
   methods: {
-    openGithubWebsite(url) {
-      window.ipcRenderer.send("open-link-in-browser", url);
+    createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Loading repositories...",
+      });
+      return loading;
     },
+
     async showGithubRepoContents(type) {
       if (type === "click") {
         this.showFilePreview = !this.showFilePreview;
@@ -199,8 +180,14 @@ export default {
         spinner.close();
       }
     },
+
     async getGithubRepoContents() {
-      const fullRepoName = this.selectedRepo.split("/");
+      const repoObject = this.githubRepos.find(
+        (repo) => repo.value === this.selectedRepo
+      );
+
+      const fullRepoName = repoObject.label.split("/");
+      this.currentBranch = repoObject.default_branch;
 
       const response = await axios
         .get(`${this.$server_url}/github/repo/tree`, {
@@ -222,60 +209,10 @@ export default {
     },
 
     async handleNodeClick(data) {
-      this.openGithubWebsite(
-        "https://github.com/" +
-          this.selectedRepo +
-          "/tree/" +
-          this.currentBranch +
-          "/" +
-          this.fullNameDictionary[data.label]
-      );
+      const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
+      window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
-    async handleSelected(selected) {
-      let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
-        this.GithubAccessToken,
-        this.nameDictionary[selected],
-        this.ownerDictionary[selected]
-      );
-      this.branchDictionary[selected] = branches[0];
-      let tree = await this.tokens.githubAPI_getTreeFromRepo(
-        this.GithubAccessToken,
-        this.nameDictionary[selected],
-        this.ownerDictionary[selected],
-        branches[0].name
-      );
-      for (let i = 0; i < tree.tree.length; i++) {
-        this.tree.push(tree.tree[i]["path"]);
-      }
-      this.fileData = await this.parseTree();
-    },
-    async parseTree() {
-      let paths = this.tree;
-      let result = [];
-      let level = { result };
-      paths.forEach((path) => {
-        this.fullNameDictionary[path.split("/").pop()] = path;
-      });
-      paths.forEach((path) => {
-        path.split("/").reduce((r, label) => {
-          if (!r[label]) {
-            r[label] = { result: [] };
-            r.result.push({ label, children: r[label].result });
-          }
 
-          return r[label];
-        }, level);
-      });
-      console.log(result);
-      return result;
-    },
-    createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Loading repositories...",
-      });
-      return loading;
-    },
     async continueToNextStep() {
       const repoObject = this.githubRepos.find((repo) => {
         return repo.full_name === this.selectedRepo;
@@ -299,6 +236,7 @@ export default {
         this.$router.push({ path: routerPath });
       }
     },
+
     async getUserRepos() {
       const response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
@@ -328,9 +266,8 @@ export default {
             label: repo.full_name,
             visibility: repo.visibility,
             originalObject: repo,
+            default_branch: repo.default_branch,
           });
-          this.ownerDictionary[repo.full_name] = repo.owner.login;
-          this.nameDictionary[repo.full_name] = repo.name;
         });
       }
 
@@ -358,16 +295,12 @@ export default {
 
     const validGithubConnection = await this.tokens.verifyGithubConnection();
 
-    console.log(validGithubConnection);
-
     if (validGithubConnection) {
       this.validTokenAvailable = true;
       this.ready = true;
 
       const tokenObject = await this.tokens.getToken("github");
       this.GithubAccessToken = tokenObject.token;
-
-      console.log(this.GithubAccessToken);
 
       await this.getUserRepos();
 

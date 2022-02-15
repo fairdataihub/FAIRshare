@@ -143,6 +143,7 @@ def getRepoContentTree(access_token, owner, repo):
                         fullTree[fullPath] = {
                             "sha": item["sha"],
                             "url": item["url"],
+                            "path": item["path"],
                             "children": {},
                         }
                 else:
@@ -152,6 +153,7 @@ def getRepoContentTree(access_token, owner, repo):
                             tree[path] = {
                                 "sha": item["sha"],
                                 "url": item["url"],
+                                "path": item["path"],
                                 "children": {},
                             }
                         else:
@@ -168,6 +170,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "sha": item["sha"],
                             "url": item["url"],
                             "size": item["size"],
+                            "path": item["path"],
                         }
                 else:
                     tree = fullTree
@@ -177,6 +180,7 @@ def getRepoContentTree(access_token, owner, repo):
                                 "sha": item["sha"],
                                 "url": item["url"],
                                 "size": item["size"],
+                                "path": item["path"],
                             }
                         else:
                             tree = tree[path]["children"]
@@ -201,6 +205,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
+                            "path": contentTree[item]["path"],
                             "isLeaf": False,
                             "children": convertContentTree(
                                 contentTree[item]["children"]
@@ -214,6 +219,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
                             "size": contentTree[item]["size"],
+                            "path": contentTree[item]["path"],
                             "isLeaf": True,
                         }
                     )
