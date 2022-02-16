@@ -131,6 +131,36 @@ def getRepoContributors(access_token, owner, repo):
         raise e
 
 
+def getRepoReleases(access_token, owner, repo):
+    def getReleases(page):
+        url = f"https://api.github.com/repos/{owner}/{repo}/releases?per_page=100&page={page}"  # noqa E501
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        return response.json()
+
+    page = 1
+    fullReleasesList = []
+
+    try:
+        while True:
+            releasesPage = getReleases(page)
+            fullReleasesList.extend(releasesPage)
+            page += 1
+            if len(releasesPage) < 100:
+                break
+
+        return fullReleasesList
+    except Exception as e:
+        raise e
+
+
 def getRepoContentTree(access_token, owner, repo):
     def getRepoTree(branch):
         def createContentTree(inputTreeArray):
@@ -273,9 +303,6 @@ def getRepoContentTree(access_token, owner, repo):
             return "master"
 
     defaultBranch = getDefaultBranch()
-
-    # print(defaultBranch)
-    # defaultBranch = "main"
 
     contentTree = getRepoTree(defaultBranch)
     return json.dumps(contentTree)

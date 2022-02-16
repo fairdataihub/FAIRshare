@@ -22,6 +22,7 @@ from github import (
     getUserRepositories,
     getRepoContributors,
     getRepoContentTree,
+    getRepoReleases,
 )
 from metadata import createMetadata, createCitationCFF
 from utilities import (
@@ -476,7 +477,7 @@ class GetAllRepos(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
         )
 
         args = parser.parse_args()
@@ -504,7 +505,7 @@ class GetAllContributorsForRepo(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
         )
         parser.add_argument(
             "owner",
@@ -528,6 +529,48 @@ class GetAllContributorsForRepo(Resource):
         return getRepoContributors(access_token, owner, repo)
 
 
+@github.route("/repo/releases", endpoint="GetAllReleasesForRepo")
+class GetAllReleasesForRepo(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get all releases for a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoReleases(access_token, owner, repo)
+
+
 @github.route("/repo/tree", endpoint="getRepoContentsTree")
 class getRepoContentsTree(Resource):
     @github.doc(
@@ -546,7 +589,7 @@ class getRepoContentsTree(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
         )
         parser.add_argument(
             "owner",

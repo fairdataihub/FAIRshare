@@ -1106,6 +1106,15 @@
         />
       </div>
     </transition>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="80"
+          :height="80"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -1233,6 +1242,7 @@ export default {
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
+      showSpinner: false,
     };
   },
   watch: {
@@ -1880,7 +1890,7 @@ export default {
       ElNotification({
         title: "Info",
         message: "Requesting authors",
-        position: "bottom-right",
+        position: "top-right",
         type: "info",
       });
 
@@ -1981,7 +1991,7 @@ export default {
       ElNotification({
         title: "Success",
         message: "Retrieved authors",
-        position: "bottom-right",
+        position: "top-right",
         type: "success",
       });
     },
@@ -1989,7 +1999,7 @@ export default {
       ElNotification({
         title: "Info",
         message: "Requesting repo info",
-        position: "bottom-right",
+        position: "top-right",
         type: "info",
       });
 
@@ -2050,6 +2060,35 @@ export default {
           this.step1Form.description = response.description;
         }
 
+        const splitRepoNameOwner = selectedRepo.split("/");
+
+        const releaseList = await axios
+          .get(`${this.$server_url}/github/repo/releases`, {
+            params: {
+              access_token: GithubAccessToken,
+              owner: splitRepoNameOwner[0],
+              repo: splitRepoNameOwner[1],
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (releaseList !== "ERROR") {
+          if (releaseList.length > 0) {
+            const release = releaseList.slice(-1).pop();
+            console.log(release);
+
+            if ("created_at" in release) {
+              this.step1Form.firstReleaseDate = release.created_at;
+            }
+          }
+        }
+
         const lanuagesResponse = await axios
           .get(
             `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
@@ -2080,7 +2119,7 @@ export default {
         ElNotification({
           title: "Success",
           message: "Repo info retrieved",
-          position: "bottom-right",
+          position: "top-right",
           type: "success",
         });
       }
@@ -2158,8 +2197,10 @@ export default {
 
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
+              this.showSpinner = true;
               await this.prefillGithubAuthors();
               await this.prefillGithubMisc();
+              this.showSpinner = false;
             }
           }
         }
