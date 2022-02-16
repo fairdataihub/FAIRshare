@@ -632,7 +632,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("github");
     this.githubToken = tokenObject.token;
-    console.log(this.githubToken);
 
     const tempFolderPath = path.join(
       app.getPath("home"),

@@ -640,7 +640,7 @@ class DeleteFile(Resource):
             "file_path": "file path to delete.",
         },
     )
-    def post(self):
+    def delete(self):
         """Deletes a file"""
         parser = reqparse.RequestParser()
 
@@ -665,7 +665,7 @@ class RequestJSON(Resource):
             "url": "url to request from the web.",
         },
     )
-    def post(self):
+    def get(self):
         """request a json file from the web"""
         parser = reqparse.RequestParser()
 

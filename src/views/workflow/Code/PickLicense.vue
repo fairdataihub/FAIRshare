@@ -46,7 +46,7 @@
             </el-select>
 
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
@@ -270,8 +270,10 @@ export default {
         const licensejson = licenseObject.detailsUrl;
 
         const response = await axios
-          .post(`${this.$server_url}/utilities/requestjson`, {
-            url: licensejson,
+          .get(`${this.$server_url}/utilities/requestjson`, {
+            params: {
+              url: licensejson,
+            },
           })
           .then((response) => {
             return response.data;
@@ -330,8 +332,6 @@ export default {
       });
     },
     async prefillGithubLicense() {
-      console.info("Prefilling other items from github repo");
-
       let loadingState = await this.createLoading();
 
       // get a list of contributors for the repo

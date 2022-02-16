@@ -215,7 +215,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="font-medium text-secondary-500">
+            <span class="text-secondary-500 font-medium">
               This will automatically push your release to Zenodo.
             </span>
           </p>
@@ -334,7 +334,7 @@ export default {
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading Github repository...",
+        text: "Reading GitHub repository...",
       });
       return loading;
     },

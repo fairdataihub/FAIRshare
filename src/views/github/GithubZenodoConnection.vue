@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -51,7 +51,7 @@
             </p>
             <ul class="ml-2 list-inside list-disc">
               <li>
-                Login to Zenodo and go to the Github connections in your profile
+                Login to Zenodo and go to the GitHub connections in your profile
                 settings. Alternatively, you can also click the button below to
                 take you to the appropriate page.
               </li>
@@ -61,12 +61,12 @@
                   class="secondary-plain-button my-1"
                   @click="openWebsite"
                 >
-                  Connect Github to Zenodo
+                  Connect GitHub to Zenodo
                 </button>
               </div>
 
               <li>
-                Authenticate with Github and wait for your list of repositories
+                Authenticate with GitHub and wait for your list of repositories
                 to show up.
               </li>
 
@@ -290,7 +290,8 @@ export default {
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading Github repository...",
+        text: "Reading GitHub repository...",
+        background: "rgba(255, 255, 255, 0.97)",
       });
       return loading;
     },
@@ -922,7 +923,6 @@ export default {
 
     if (GithubZenodoConnectionToken) {
       const response = await this.checkIfZenodoHookIsPresent();
-      spinner.close();
 
       if (response) {
         this.validZenodoHookTokenFound = true;
@@ -957,6 +957,7 @@ export default {
           });
         }
       }
+      spinner.close();
     } else {
       let interval = setInterval(async () => {
         const response = await this.checkIfZenodoHookIsPresent();
@@ -980,7 +981,6 @@ export default {
                 const webhookConfigURLArray =
                   webhookConfigURL.split("access_token=");
                 const webhookConfigURLToken = webhookConfigURLArray[1];
-                console.log(webhookConfigURLToken);
 
                 if (webhookConfigURLToken) {
                   const newTokenObject = JSON.parse(

@@ -33,7 +33,7 @@
               alt=""
               class="h-24 w-full"
             />
-            <span class="mx-5 text-lg"> On Github </span>
+            <span class="mx-5 text-lg"> On GitHub </span>
           </div>
         </div>
       </div>
@@ -226,6 +226,6 @@ export default {
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-lg transition-all;
 }
 </style>

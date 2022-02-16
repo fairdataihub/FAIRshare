@@ -4,10 +4,10 @@
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Pick the Github repository you want to use
+        Pick the GitHub repository you want to use
       </span>
       <span class="text-left">
-        Lets select the github repository that you want to make FAIR.
+        Lets select the GitHub repository that you want to make FAIR.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -15,8 +15,8 @@
       <div v-if="ready">
         <div v-if="validTokenAvailable">
           <p class="my-5 w-full text-center">
-            Pick the Github repository you want to use. <br />
-            FAIRshare only supports public Github repositories.
+            Pick the GitHub repository you want to use. <br />
+            FAIRshare only supports public GitHub repositories.
           </p>
 
           <div class="py-5">
@@ -45,8 +45,8 @@
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
-            We couldn't find your Github login details. Please click on the
-            button below to connect to your Github account.
+            We couldn't find your GitHub login details. Please click on the
+            button below to connect to your GitHub account.
           </p>
 
           <ConnectGithub :statusChangeFunction="showConnection"></ConnectGithub>

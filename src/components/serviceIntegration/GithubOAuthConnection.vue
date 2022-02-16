@@ -22,7 +22,7 @@ export default {
     };
   },
   methods: {
-    // connect with backend to call a window for getting the github username/password
+    // connect with backend to call a window for getting the GitHub username/password
     async connectOAuth() {
       this.spinnerGlobal = this.createLoading();
       window.ipcRenderer.send("OAuth-Github", "test");
