@@ -261,10 +261,10 @@ export const useTokenStore = defineStore({
       let response = await axios
         .get(
           `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
-          owner +
-          `/` +
-          repo +
-          `/branches`,
+            owner +
+            `/` +
+            repo +
+            `/branches`,
           {
             headers: {
               Authorization: `token ${token}`,
@@ -284,12 +284,12 @@ export const useTokenStore = defineStore({
       let response = await axios
         .get(
           `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
-          owner +
-          `/` +
-          repo +
-          `/git/trees/` +
-          branch +
-          `?recursive=1`,
+            owner +
+            `/` +
+            repo +
+            `/git/trees/` +
+            branch +
+            `?recursive=1`,
           {
             headers: {
               Authorization: `token ${token}`,
@@ -310,7 +310,7 @@ export const useTokenStore = defineStore({
           params: {
             accept: "application/vnd.github.v3+json",
             per_page: 10,
-            page: k
+            page: k,
           },
           headers: {
             Authorization: `token ${token}`,
@@ -327,17 +327,17 @@ export const useTokenStore = defineStore({
     async githubAPI_getAllRepo(token) {
       if (await this.verifyGithubToken(token)) {
         let k = 1;
-        let result = [""]
-        let allResult = []
+        let result = [""];
+        let allResult = [];
         while (result.length != 0) {
-          result = await this.githubAPI_getRepoAtPageK(token, k)
-          allResult = allResult.concat(result)
-          k += 1
+          result = await this.githubAPI_getRepoAtPageK(token, k);
+          allResult = allResult.concat(result);
+          k += 1;
         }
-        return allResult
+        return allResult;
       } else {
-        console.error("token is invalid")
-        return []
+        console.error("token is invalid");
+        return [];
       }
     },
   },
