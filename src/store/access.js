@@ -298,5 +298,41 @@ export const useTokenStore = defineStore({
         });
       return response.data;
     },
+    async githubAPI_getRepoAtPageK(token, k) {
+      let response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+            per_page: 10,
+            page: k,
+          },
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+      return response.data;
+    },
+    async githubAPI_getAllRepo(token) {
+      if (await this.verifyGithubToken(token)) {
+        let k = 1;
+        let result = [""];
+        let allResult = [];
+        while (result.length != 0) {
+          result = await this.githubAPI_getRepoAtPageK(token, k);
+          allResult = allResult.concat(result);
+          k += 1;
+        }
+        return allResult;
+      } else {
+        console.error("token is invalid");
+        return [];
+      }
+    },
   },
 });
