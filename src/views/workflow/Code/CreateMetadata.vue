@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -555,7 +555,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -708,7 +708,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -891,7 +891,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -997,7 +997,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1111,16 +1111,14 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
 
+import draggable from "vuedraggable";
 import validator from "validator";
 import axios from "axios";
 import _ from "lodash";
 import humanparser from "humanparser";
-
-// import semver from "semver";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -2041,6 +2039,12 @@ export default {
             });
           });
         }
+
+        if ("created_at" in response) {
+          this.step1Form.creationDate = response.created_at;
+        }
+
+        this.step6Form.currentVersionReleaseDate = new Date().toISOString();
 
         if (response.description != null) {
           this.step1Form.description = response.description;
