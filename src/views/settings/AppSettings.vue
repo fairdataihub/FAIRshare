@@ -9,8 +9,12 @@
 
       <line-divider></line-divider>
 
-      <el-tabs v-model="activeName" class="w-11/12 py-5" tab-position="right">
-        <el-tab-pane label="General" name="general" c>
+      <el-tabs
+        v-model="activeName"
+        class="settings-tabs w-11/12 py-5"
+        tab-position="right"
+      >
+        <el-tab-pane label="General" name="general">
           <div class="flex flex-col space-y-4 px-3">
             <!-- settings panel -->
             <div class="rounded-lg border-2 border-slate-100 p-4">
@@ -111,6 +115,7 @@
           animationLink="https://assets7.lottiefiles.com/packages/lf20_WXXDFD.json"
           :width="100"
           :height="100"
+          :loop="1"
         />
       </div>
     </transition>
