@@ -144,6 +144,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "sha": item["sha"],
                             "url": item["url"],
                             "path": item["path"],
+                            "type": "tree",
                             "children": {},
                         }
                 else:
@@ -154,6 +155,7 @@ def getRepoContentTree(access_token, owner, repo):
                                 "sha": item["sha"],
                                 "url": item["url"],
                                 "path": item["path"],
+                                "type": "tree",
                                 "children": {},
                             }
                         else:
@@ -171,6 +173,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "url": item["url"],
                             "size": item["size"],
                             "path": item["path"],
+                            "type": "blob",
                         }
                 else:
                     tree = fullTree
@@ -181,6 +184,7 @@ def getRepoContentTree(access_token, owner, repo):
                                 "url": item["url"],
                                 "size": item["size"],
                                 "path": item["path"],
+                                "type": "blob",
                             }
                         else:
                             tree = tree[path]["children"]
@@ -206,6 +210,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
                             "path": contentTree[item]["path"],
+                            "type": contentTree[item]["type"],
                             "isLeaf": False,
                             "children": convertContentTree(
                                 contentTree[item]["children"]
@@ -220,6 +225,7 @@ def getRepoContentTree(access_token, owner, repo):
                             "url": contentTree[item]["url"],
                             "size": contentTree[item]["size"],
                             "path": contentTree[item]["path"],
+                            "type": contentTree[item]["type"],
                             "isLeaf": True,
                         }
                     )

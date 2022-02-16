@@ -601,9 +601,7 @@ export default {
         .get(
           `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}`,
           {
-            params: {
-              per_page: 100,
-            },
+            params: {},
             headers: {
               Accept: "application/vnd.github.v3+json",
               Authorization: `Bearer ${this.githubToken}`,

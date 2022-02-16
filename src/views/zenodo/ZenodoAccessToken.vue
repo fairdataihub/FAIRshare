@@ -313,7 +313,7 @@ export default {
     },
     async handleNodeClick(data) {
       if (!data.isDir) {
-        if (data.label == "LICENSE") {
+        if (data.label == "LICENSE" && this.workflow.generateLicense) {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label == "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
@@ -505,8 +505,8 @@ export default {
       1,
       "ROOT"
     );
-    console.log(this.workflow.licenseText);
-    if (this.workflow.licenseText) {
+
+    if (this.workflow.generateLicense) {
       // await this.createLicenseFile();
       this.licenseData = this.workflow.licenseText;
     }

@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -124,10 +124,7 @@
             We will be adding some files to your GitHub repository. A preview of
             what it will look like after is shown below.
           </p>
-          <div
-            v-loading="loadingTree"
-            :class="loadingTree ? 'h-full w-full' : 'h-[0px] w-[0px]'"
-          ></div>
+
           <el-tree
             :data="fileData"
             :props="defaultProps"
@@ -140,6 +137,7 @@
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'citation.cff' ||
+                  node.label == 'zenodo.json' ||
                   (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
                     : ''
@@ -150,7 +148,6 @@
           </el-tree>
 
           <el-drawer
-            v-if="anyfilePreview"
             v-model="drawerModel"
             :title="fileTitle"
             direction="rtl"
@@ -189,6 +186,23 @@
                 </el-table>
               </div>
 
+              <div v-if="PreviewNewlyCreatedZenodoFile" class="pb-20">
+                <el-table
+                  :data="zenodoData"
+                  style="width: 100%"
+                  row-key="id"
+                  border
+                  default-expand-all
+                >
+                  <el-table-column prop="Name" label="Name" />
+                  <el-table-column
+                    prop="Value"
+                    label="Value"
+                    class="break-normal"
+                  />
+                </el-table>
+              </div>
+
               <div v-if="PreviewNewlyCreatedLicenseFile" class="">
                 <div
                   class="prose prose-base prose-slate pb-20"
@@ -200,6 +214,15 @@
         </div>
       </transition>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="80"
+          :height="80"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -208,7 +231,9 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import { marked } from "marked";
+import DOMPurify from "dompurify";
 import axios from "axios";
+import dayjs from "dayjs";
 import { ElLoading, ElNotification } from "element-plus";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
@@ -224,11 +249,13 @@ export default {
       folderPath: "",
       workflowID: this.$route.params.workflowID,
       workflow: {},
+      GithubAccessToken: "",
       validZenodoHookTokenFound: false,
       errorMessage: "",
       showFilePreviewSection: "",
       zenodoAccessToken: "",
       selectedRepo: "",
+      currentBranch: "",
       rippleLottieJSON,
       defaultProps: {
         children: "children",
@@ -240,45 +267,40 @@ export default {
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
+      PreviewNewlyCreatedZenodoFile: false,
       licenseData: "",
       tableData: [],
+      zenodoData: [],
       citationData: [],
       fullNameDictionary: {},
       ownerDictionary: {},
       nameDictionary: {},
       branchDictionary: {},
-      drawerModel: true,
-      loadingTree: false,
+      drawerModel: false,
+      showSpinner: false,
     };
   },
   computed: {
-    currentBranch() {
-      if (
-        this.selectedRepo !== "" &&
-        this.branchDictionary[this.selectedRepo]
-      ) {
-        return this.branchDictionary[this.selectedRepo].name;
-      }
-      return null;
-    },
-    anyfilePreview() {
-      if (
-        this.PreviewNewlyCreatedMetadataFile ||
-        this.PreviewNewlyCreatedLicenseFile ||
-        this.PreviewNewlyCreatedCitationFile
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     compiledLicense() {
-      return marked(this.licenseData);
+      const markdownToHTML = marked(this.licenseData);
+      return DOMPurify.sanitize(markdownToHTML);
     },
   },
   methods: {
+    createLoading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Reading Github repository...",
+      });
+      return loading;
+    },
+
+    openWebsite() {
+      const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
+
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
-      // console.log("obj: ", jsonObject)
       if (
         jsonObject &&
         typeof jsonObject === "object" &&
@@ -289,7 +311,6 @@ export default {
         let result = [];
         let count = 1;
         for (let property in jsonObject) {
-          //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
           let value = this.jsonToTableDataRecursive(
@@ -297,7 +318,7 @@ export default {
             newId,
             property
           );
-          // console.log(property, value)
+
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = property;
@@ -330,6 +351,7 @@ export default {
             case "keywords":
               customName = "keyword";
               break;
+
             default:
               customName = parentName;
               break;
@@ -373,6 +395,7 @@ export default {
         return jsonObject;
       }
     },
+
     async createCodeMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
@@ -389,6 +412,7 @@ export default {
         });
       return response;
     },
+
     async createCitationFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/citation/create`, {
@@ -405,35 +429,288 @@ export default {
         });
       return response;
     },
-    openGithubWebsite(url) {
-      window.ipcRenderer.send("open-link-in-browser", url);
+
+    async createZenodoJsonFile() {
+      const zenodoMetadata = this.workflow.destination.zenodo.questions;
+      let metadata = {};
+
+      metadata.upload_type = "software";
+
+      if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
+        metadata.title = zenodoMetadata.title;
+      }
+      if (
+        "publicationDate" in zenodoMetadata &&
+        zenodoMetadata.publicationDate != ""
+      ) {
+        metadata.publication_date = zenodoMetadata.publicationDate;
+      }
+
+      if ("authors" in zenodoMetadata) {
+        metadata.creators = [];
+        zenodoMetadata.authors.forEach((author) => {
+          const creatorObject = {};
+
+          creatorObject.name = author.name;
+          creatorObject.affiliation = author.affiliation;
+
+          if (author.orcid !== "") {
+            creatorObject.orcid = author.orcid;
+          }
+
+          metadata.creators.push(creatorObject);
+        });
+      }
+
+      if ("description" in zenodoMetadata && zenodoMetadata.description != "") {
+        metadata.description = zenodoMetadata.description;
+      }
+      if ("license" in zenodoMetadata) {
+        if ("accessRight" in zenodoMetadata.license) {
+          metadata.access_right = zenodoMetadata.license.accessRight;
+        }
+        if ("licenseName" in zenodoMetadata.license) {
+          metadata.license = zenodoMetadata.license.licenseName;
+        }
+      }
+
+      if ("keywords" in zenodoMetadata) {
+        if (zenodoMetadata.keywords.length > 0) {
+          metadata.keywords = [];
+          zenodoMetadata.keywords.forEach((keyword) => {
+            metadata.keywords.push(keyword.keyword);
+          });
+        }
+      }
+
+      if ("version" in zenodoMetadata && zenodoMetadata.version !== "") {
+        metadata.version = zenodoMetadata.version;
+      }
+
+      if ("language" in zenodoMetadata && zenodoMetadata.language !== "") {
+        metadata.language = zenodoMetadata.language;
+      }
+
+      if (
+        "additionalNotes" in zenodoMetadata &&
+        zenodoMetadata.additionalNotes != ""
+      ) {
+        metadata.notes = zenodoMetadata.additionalNotes;
+      }
+
+      if ("relatedIdentifiers" in zenodoMetadata) {
+        if (zenodoMetadata.relatedIdentifiers.length > 0) {
+          metadata.related_identifiers = [];
+          zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
+            metadata.related_identifiers.push({
+              relation: relatedIdentifier.relationship,
+              identifier: relatedIdentifier.identifier,
+              resource_type: relatedIdentifier.resourceType,
+            });
+          });
+        }
+      }
+
+      if ("contributors" in zenodoMetadata) {
+        if (zenodoMetadata.contributors.length > 0) {
+          metadata.contributors = [];
+          zenodoMetadata.contributors.forEach((contributor) => {
+            const contributorObject = {};
+
+            contributorObject.name = contributor.name;
+            contributorObject.affiliation = contributor.affiliation;
+            contributorObject.type = contributor.contributorType;
+
+            if (contributor.orcid !== "") {
+              contributorObject.orcid = contributor.orcid;
+            }
+
+            metadata.contributors.push(contributorObject);
+          });
+        }
+      }
+
+      if ("references" in zenodoMetadata) {
+        if (zenodoMetadata.references.length > 0) {
+          metadata.references = [];
+          zenodoMetadata.references.forEach((reference) => {
+            metadata.references.push(reference.reference);
+          });
+        }
+      }
+
+      if ("journal" in zenodoMetadata) {
+        if (
+          "title" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.title !== ""
+        ) {
+          metadata.journal_title = zenodoMetadata.journal.title;
+        }
+        if (
+          "volume" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.volume !== ""
+        ) {
+          metadata.journal_volume = zenodoMetadata.journal.volume;
+        }
+        if (
+          "issue" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.issue !== ""
+        ) {
+          metadata.journal_issue = zenodoMetadata.journal.issue;
+        }
+        if (
+          "pages" in zenodoMetadata.journal &&
+          zenodoMetadata.journal.pages !== ""
+        ) {
+          metadata.journal_pages = zenodoMetadata.journal.pages;
+        }
+      }
+
+      if ("conference" in zenodoMetadata) {
+        if (
+          "title" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.title !== ""
+        ) {
+          metadata.conference_title = zenodoMetadata.conference.title;
+        }
+        if (
+          "acronym" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.acronym !== ""
+        ) {
+          metadata.conference_acronym = zenodoMetadata.conference.acronym;
+        }
+
+        if ("dates" in zenodoMetadata.conference) {
+          if (zenodoMetadata.conference.dates.length === 2) {
+            metadata.conference_dates =
+              dayjs(zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
+              " - " +
+              dayjs(zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY");
+          }
+        }
+
+        if (
+          "place" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.place !== ""
+        ) {
+          metadata.conference_place = zenodoMetadata.conference.place;
+        }
+        if (
+          "url" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.url !== ""
+        ) {
+          metadata.conference_url = zenodoMetadata.conference.url;
+        }
+        if (
+          "session" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.session !== ""
+        ) {
+          metadata.conference_session = zenodoMetadata.conference.session;
+        }
+        if (
+          "part" in zenodoMetadata.conference &&
+          zenodoMetadata.conference.part !== ""
+        ) {
+          metadata.conference_session_part = zenodoMetadata.conference.part;
+        }
+      }
+
+      if ("bookReportChapter" in zenodoMetadata) {
+        if (
+          "publisher" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.publisher !== ""
+        ) {
+          metadata.imprint_publisher =
+            zenodoMetadata.bookReportChapter.publisher;
+        }
+        if (
+          "isbn" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.isbn !== ""
+        ) {
+          metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
+        }
+        if (
+          "place" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.place !== ""
+        ) {
+          metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
+        }
+        if (
+          "title" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.title !== ""
+        ) {
+          metadata.partof_title = zenodoMetadata.bookReportChapter.title;
+        }
+        if (
+          "pages" in zenodoMetadata.bookReportChapter &&
+          zenodoMetadata.bookReportChapter.pages !== ""
+        ) {
+          metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
+        }
+      }
+
+      if ("thesis" in zenodoMetadata) {
+        if (
+          "awardingUniversity" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.awardingUniversity !== ""
+        ) {
+          metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
+        }
+
+        if (
+          "thesis_supervisors" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.thesis_supervisors.length > 0
+        ) {
+          metadata.thesis_supervisors = [];
+          zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
+            metadata.thesis_supervisors.push({
+              name: supervisor.name,
+              affiliation: supervisor.affiliation,
+              orcid: supervisor.orcid,
+            });
+          });
+        }
+      }
+
+      if ("subjects" in zenodoMetadata && zenodoMetadata.subjects.length > 0) {
+        metadata.subjects = [];
+        zenodoMetadata.subjects.forEach((subject) => {
+          metadata.subjects.push({
+            term: subject.term,
+            identifier: subject.identifier,
+            scheme: "url",
+          });
+        });
+      }
+
+      return metadata;
     },
+
     async handleNodeClick(data) {
       if (
-        data.label == "LICENSE" ||
-        data.label == "codemeta.json" ||
-        data.label == "citation.cff"
+        (data.label === "LICENSE" && this.workflow.generateLicense) ||
+        data.label === "codemeta.json" ||
+        data.label === "citation.cff" ||
+        data.label === "zenodo.json"
       ) {
-        if (data.label == "LICENSE" && this.workflow.generateLicense) {
+        this.drawerModel = true;
+        if (data.label === "LICENSE" && this.workflow.generateLicense) {
           this.PreviewNewlyCreatedLicenseFile = true;
-        } else if (data.label == "codemeta.json") {
+        } else if (data.label === "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        } else if (data.label == "citation.cff") {
+        } else if (data.label === "citation.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
+        } else if (data.label === "zenodo.json") {
+          this.PreviewNewlyCreatedZenodoFile = true;
         }
         let title = data.label;
         this.handleOpenDrawer(title);
       } else {
-        this.openGithubWebsite(
-          "https://github.com/" +
-            this.selectedRepo +
-            "/tree/" +
-            this.currentBranch +
-            "/" +
-            this.fullNameDictionary[data.label]
-        );
+        const githubURL = `https://github.com/${this.selectedRepo}/${data.type}/${this.currentBranch}/${data.label}`;
+        window.ipcRenderer.send("open-link-in-browser", githubURL);
       }
     },
+
     async handleOpenDrawer(title) {
       if (title == "LICENSE") {
         title +=
@@ -442,84 +719,14 @@ export default {
 
       this.fileTitle = title;
     },
+
     handleCloseDrawer() {
       this.fileTitle = "";
       this.PreviewNewlyCreatedLicenseFile = false;
       this.PreviewNewlyCreatedMetadataFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
-    },
-    async buildDictionary() {
-      const tokenObject = await this.tokens.getToken("github");
-      const GithubAccessToken = tokenObject.token;
-      const response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
-          params: {
-            accept: "application/vnd.github.v3+json",
-            per_page: 100,
-          },
-          headers: {
-            Authorization: `Bearer ${GithubAccessToken}`,
-          },
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          return "ERROR";
-        });
-      if (response != "ERROR") {
-        response.forEach((repo) => {
-          this.ownerDictionary[repo.full_name] = repo.owner.login;
-          this.nameDictionary[repo.full_name] = repo.name;
-        });
-      }
-    },
-    async read_sodaForCovid19Repo() {
-      let selected = this.selectedRepo;
-      const tokenObject = await this.tokens.getToken("github");
-      const GithubAccessToken = tokenObject.token;
-      let branches = await this.tokens.githubAPI_listCurrentRepoBranches(
-        GithubAccessToken,
-        this.nameDictionary[selected],
-        this.ownerDictionary[selected]
-      );
-      this.branchDictionary[selected] = branches[0];
-      let tree = await this.tokens.githubAPI_getTreeFromRepo(
-        GithubAccessToken,
-        this.nameDictionary[selected],
-        this.ownerDictionary[selected],
-        branches[0].name
-      );
-      for (let i = 0; i < tree.tree.length; i++) {
-        this.tree.push(tree.tree[i]["path"]);
-      }
-      this.fileData = await this.parseTree();
-    },
-    async parseTree() {
-      let paths = this.tree;
-      let result = [];
-      let level = { result };
-      paths.forEach((path) => {
-        this.fullNameDictionary[path.split("/").pop()] = path;
-      });
-      paths.forEach((path) => {
-        path.split("/").reduce((r, label) => {
-          if (!r[label]) {
-            r[label] = { result: [] };
-            r.result.push({ label, children: r[label].result });
-          }
-          return r[label];
-        }, level);
-      });
-      return result;
-    },
-    createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Reading Github repository...",
-      });
-      return loading;
+      this.PreviewNewlyCreatedZenodoFile = false;
+      this.drawerModel = false;
     },
 
     async uploadToZenodo() {
@@ -528,21 +735,75 @@ export default {
       this.$router.push({ path: routerPath });
     },
 
-    openWebsite() {
-      const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
-      window.ipcRenderer.send("open-link-in-browser", url);
+    async showGithubRepoContents() {
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      let response = "";
+
+      const fullRepoName = this.selectedRepo.split("/");
+
+      response = await axios
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.selectedRepo}`,
+          {
+            params: {},
+            headers: {
+              Accept: "application/vnd.github.v3+json",
+              Authorization: `Bearer ${GithubAccessToken}`,
+            },
+          }
+        )
+        .then((res) => {
+          return res.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response !== "ERROR") {
+        this.currentBranch = response.default_branch;
+      }
+
+      response = await axios
+        .get(`${this.$server_url}/github/repo/tree`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: fullRepoName[0],
+            repo: fullRepoName[1],
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response !== "ERROR") {
+        this.fileData = JSON.parse(response);
+      } else {
+        this.$message({
+          message: "Could not get the contents of the repository",
+          type: "error",
+        });
+      }
     },
 
     async showFilePreview() {
       this.showFilePreviewSection = !this.showFilePreviewSection;
-      this.loadingTree = true;
-      await this.buildDictionary();
-      await this.read_sodaForCovid19Repo();
-      this.finishLoading();
+
+      if (this.showFilePreviewSection) {
+        this.fileData = [];
+        this.showSpinner = true;
+
+        await this.showGithubRepoContents();
+        this.showSpinner = false;
+      }
     },
-    finishLoading() {
-      this.loadingTree = false;
-    },
+
     async checkIfZenodoHookIsPresent() {
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
@@ -655,6 +916,7 @@ export default {
     this.datasetStore.setCurrentStep(6);
 
     const tokenObject = await this.tokens.getToken("github");
+    this.GithubAccessToken = tokenObject.token;
     const GithubZenodoConnectionToken = tokenObject.zenodoHookToken;
     // const GithubZenodoConnectionToken = false;
 
@@ -738,20 +1000,24 @@ export default {
         }
       }, 5000);
     }
-    let spinner2 = this.createLoading();
+
     this.tableData = await this.createCodeMetadataFile();
-    this.citationData = await this.createCitationFile();
     this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
+
+    this.citationData = await this.createCitationFile();
     this.citationData = this.jsonToTableDataRecursive(
       this.citationData,
       1,
       "ROOT"
     );
+
+    this.zenodoData = await this.createZenodoJsonFile();
+    this.zenodoData = this.jsonToTableDataRecursive(this.zenodoData, 1, "ROOT");
+
     if (this.workflow.generateLicense) {
-      // await this.createLicenseFile();
       this.licenseData = this.workflow.licenseText;
     }
-    spinner2.close();
+
     this.workflow.currentRoute = this.$route.path;
   },
 };
