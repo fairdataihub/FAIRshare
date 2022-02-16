@@ -178,23 +178,7 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubTokenScope(token) {
-      const scope = [
-        "admin:enterprise",
-        "admin:gpg_key",
-        "admin:org",
-        "admin:org_hook",
-        "admin:public_key",
-        "admin:repo_hook",
-        "delete:packages",
-        "delete_repo",
-        "gist",
-        "notifications",
-        "repo",
-        "user",
-        "workflow",
-        "write:discussion",
-        "write:packages",
-      ];
+      const scope = ["admin:org_hook", "admin:repo_hook", "repo", "user"];
       const response = await this.verifyGithubTokenScopeByTokenConnection(
         token
       );
