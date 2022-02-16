@@ -92,6 +92,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      // nodeIntegration: false,
+      // contextIsolation: true,
       enableRemoteModule: true,
       preload: path.join(__dirname, "preload.js"),
     },
@@ -268,9 +270,6 @@ import axios from "axios";
 const nodeUrl = require("url");
 const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
-
-console.log("CLIENT_ID", CLIENT_ID);
-console.log("CLIENT_SECRET", CLIENT_SECRET);
 
 function retrieveCode(url) {
   return new Promise(function (resolve, reject) {

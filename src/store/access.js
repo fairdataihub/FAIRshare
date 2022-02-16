@@ -136,11 +136,6 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubTokenByTokenConnection(token) {
-      console.log(
-        "verifyGithubTokenByTokenConnection",
-        token,
-        `${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`
-      );
       return await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`, {
           headers: {
@@ -148,7 +143,6 @@ export const useTokenStore = defineStore({
           },
         })
         .then((response) => {
-          console.log(response);
           return { data: response.data, status: response.status };
         })
         .catch((error) => {

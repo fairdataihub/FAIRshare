@@ -104,6 +104,15 @@
         </el-tree>
       </div>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="80"
+          :height="80"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -142,6 +151,7 @@ export default {
         label: "label",
       },
       fileData: [],
+      showSpinner: false,
     };
   },
   computed: {
@@ -167,8 +177,9 @@ export default {
       }
 
       if (this.showFilePreview) {
-        let spinner = this.createLoading();
+        this.showSpinner = true;
         const response = await this.getGithubRepoContents();
+        this.showSpinner = false;
 
         if (response !== "ERROR") {
           this.fileData = JSON.parse(response);
@@ -178,7 +189,6 @@ export default {
             type: "error",
           });
         }
-        spinner.close();
       }
     },
 
