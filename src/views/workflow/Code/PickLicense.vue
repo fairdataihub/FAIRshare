@@ -86,15 +86,21 @@
             </div>
           </div>
 
-          <div v-if="displayLicenseEditor">
+          <div v-if="displayLicenseEditor" class="pb-5">
             <p class="py-2">Edit if required and continue</p>
 
-            <QuillEditor
+            <!-- <QuillEditor
               theme="snow"
               :content="draftLicense"
               toolbar="essential"
               contentType="text"
-            />
+            /> -->
+            <v-md-editor
+              v-model="draftLicense"
+              height="400px"
+              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link"
+              right-toolbar="sync-scroll preview fullscreen"
+            ></v-md-editor>
           </div>
         </el-form>
       </div>
@@ -135,26 +141,28 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElLoading } from "element-plus";
+import { ElLoading, ElMessage } from "element-plus";
 import axios from "axios";
 
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
+// import { QuillEditor } from "@vueup/vue-quill";
+// import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
 export default {
   name: "CodePickLicense",
   components: {
     Icon,
-    QuillEditor,
+    // QuillEditor,
   },
   data() {
     return {
       loading: true,
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       dataset: {},
@@ -216,7 +224,7 @@ export default {
       this.loading = false;
     },
     async openLicenseDetails() {
-      this.spinnerGlobal = await this.createLoading();
+      this.spinnerGlobal = await this.createLoading("loading...");
 
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
@@ -233,10 +241,10 @@ export default {
       this.loadingLicenseDetails = true;
       await this.spinnerGlobal.close();
     },
-    createLoading() {
+    createLoading(loadingText) {
       const loading = ElLoading.service({
         lock: true,
-        text: "loading...",
+        text: loadingText,
       });
       return loading;
     },
@@ -262,8 +270,10 @@ export default {
         const licensejson = licenseObject.detailsUrl;
 
         const response = await axios
-          .post(`${this.$server_url}/utilities/requestjson`, {
-            url: licensejson,
+          .get(`${this.$server_url}/utilities/requestjson`, {
+            params: {
+              url: licensejson,
+            },
           })
           .then((response) => {
             return response.data;
@@ -282,6 +292,14 @@ export default {
       }
     },
     generateContinue() {
+      if (this.draftLicense.trim() == "") {
+        ElMessage({
+          message: "Your license text cannot be empty",
+          type: "error",
+        });
+        return;
+      }
+
       this.dataset.data.Code.questions.license = this.licenseForm.license;
       this.dataset.data.general.questions.license = this.licenseForm.license;
 
@@ -313,6 +331,52 @@ export default {
         }
       });
     },
+    async prefillGithubLicense() {
+      let loadingState = await this.createLoading();
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response !== "ERROR") {
+        if ("license" in response && response.license != null) {
+          if (
+            "spdx_id" in response.license &&
+            (response.license.spdx_id != null || response.license.spdx_id != "")
+          ) {
+            this.originalLicense =
+              this.licenseForm.license =
+              this.dataset.data.Code.questions.license =
+                response.license.spdx_id;
+            // this.licenseForm.license = this.dataset.data.Code.questions.license;
+            // this.originalLicense = this.licenseForm.license;
+          }
+        }
+      }
+
+      loadingState.close();
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -325,16 +389,29 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
+    console.log(this.dataset.data.general.questions);
+
     if (
-      "Code" in this.dataset.data &&
-      "questions" in this.dataset.data.Code &&
-      "license" in this.dataset.data.Code.questions
+      "general" in this.dataset.data &&
+      "questions" in this.dataset.data.general &&
+      "license" in this.dataset.data.general.questions
     ) {
-      this.licenseForm.license = this.dataset.data.Code.questions.license;
+      console.log(this.dataset.data.general.questions.license);
+      this.licenseForm.license = this.dataset.data.general.questions.license;
       this.originalLicense = this.licenseForm.license;
     } else {
-      this.licenseForm.license = "";
-      this.originalLicense = "";
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          await this.prefillGithubLicense();
+        }
+        if (this.workflow.source.type === "local") {
+          this.licenseForm.license = "";
+          this.originalLicense = "";
+        }
+      } else {
+        this.licenseForm.license = "";
+        this.originalLicense = "";
+      }
     }
   },
 };

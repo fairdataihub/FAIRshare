@@ -23,28 +23,6 @@ html {
   @apply h-screen w-screen;
 }
 
-/* ===== Scrollbar CSS ===== */
-/* Firefox */
-* {
-  scrollbar-width: auto;
-  scrollbar-color: #919191 #ffffff;
-}
-
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 11px;
-}
-
-*::-webkit-scrollbar-track {
-  background: #ffffff;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #919191;
-  border-radius: 15px;
-  border: 3px solid #ffffff;
-}
-
 .sideBarMenuItem {
   @apply flex flex-row items-center justify-start;
   @apply mt-2 rounded-lg px-4 py-3 transition-all;
@@ -59,7 +37,7 @@ html {
   @apply mt-2 rounded-lg px-4 py-3 transition-all;
   @apply font-inter text-sm font-semibold;
   @apply text-white;
-  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-500;
+  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-600;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -168,7 +146,8 @@ html {
   @apply border-transparent bg-primary-200 hover:bg-primary-200;
 }
 
-.selected-repo {
+.selected-repo,
+.selected-location {
   @apply border border-secondary-500 shadow-md shadow-secondary-500/50;
 }
 
@@ -222,6 +201,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .primary-button:disabled:hover {
+    @apply bg-primary-600 text-white;
+  }
+
   .secondary-plain-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
@@ -238,20 +221,28 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .secondary-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
+  }
+
   .secondary-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
-    @apply text-black;
+    @apply text-white;
     @apply border border-secondary-500;
-    @apply bg-secondary-200 hover:bg-secondary-300;
+    @apply bg-secondary-400 hover:bg-secondary-500;
     @apply transition-all;
   }
 
   .secondary-button:disabled {
     @apply opacity-50;
     @apply cursor-not-allowed;
+  }
+
+  .secondary-button:disabled:hover {
+    @apply bg-secondary-400 text-white;
   }
 
   .danger-plain-button {
@@ -270,6 +261,10 @@ html {
     @apply cursor-not-allowed;
   }
 
+  .danger-plain-button:disabled:hover {
+    @apply bg-white text-gray-900;
+  }
+
   .danger-button {
     @apply flex flex-row items-center justify-center;
     @apply rounded px-5 py-2;
@@ -284,6 +279,10 @@ html {
   .danger-button:disabled {
     @apply opacity-50;
     @apply cursor-not-allowed;
+  }
+
+  .danger-button:disabled:hover {
+    @apply bg-red-50 text-red-700;
   }
 }
 
@@ -334,15 +333,27 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 }
 
 .el-table__cell .cell {
-  @apply break-normal;
+  @apply !break-normal;
 }
 
 .el-select-group > .el-select-dropdown__item {
   margin-left: 5px;
 }
 
+.el-notification__title {
+  @apply text-left;
+}
+
+.el-notification__content > p {
+  @apply text-left;
+}
+
 .el-message-box__btns {
   @apply flex flex-row items-center justify-center space-x-2;
+}
+
+.settings-tabs > .el-tabs__content {
+  @apply h-full !overflow-y-auto;
 }
 
 .zenodo-collapse-item div .el-collapse-item__header {
@@ -354,6 +365,60 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 
 .createNewProjectFormItemContainer .el-form-item__error {
   @apply flex w-full justify-center pt-3;
+}
+
+.v-md-editor__tooltip {
+  @apply flex items-center justify-center font-inter;
+}
+
+.v-md-editor__toolbar-item {
+  @apply hover:!bg-secondary-100;
+}
+
+.v-md-editor__toolbar-item:hover {
+  @apply hover:!text-secondary-600;
+}
+
+.v-md-editor__toolbar-right {
+  margin-right: 10px !important;
+}
+
+.v-md-editor__preview-wrapper {
+  @apply bg-neutral-100/50;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* ------------------------------------------
+Custom styles for all the scrollbars
+--------------------------------------------- */
+
+*::-webkit-scrollbar {
+  width: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #919191;
+  border-radius: 15px;
+  border: 3px solid #ffffff;
+}
+
+.settings-tabs > .el-tabs__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.settings-tabs > .el-tabs__content::-webkit-scrollbar-track {
+  background: #ffffff;
+  width: 9px;
+}
+
+.settings-tabs > .el-tabs__content::-webkit-scrollbar-thumb {
+  @apply bg-slate-300;
+  border-radius: 15px;
+  border: 3px solid #ffffff;
 }
 
 /* ------------------------------------------

@@ -2,11 +2,10 @@
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Uploading your data to Zenodo
+        Uploading your metadata files to GitHub
       </span>
       <span class="text-left">
-        This one is on us. SODA is creating a Zenodo record for you and
-        uploading all your files with the relevant metadata.
+        This one is on us. We're working hard to get your files up to GitHub.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -59,6 +58,7 @@
 </template>
 
 <script>
+import { app } from "@electron/remote";
 import axios from "axios";
 import dayjs from "dayjs";
 import path from "path";
@@ -70,23 +70,21 @@ import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
-import ignoreFilesJSON from "@/assets/supplementalFiles/ignoreFilesList.json";
-
 export default {
-  name: "ZenodoUpload",
+  name: "GithubUpload",
   components: { LoadingCubeGrid, LoadingEllipsis },
   data() {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
       dataset: {},
-      folderPath: "",
+      tempFolderPath: "",
       workflowID: this.$route.params.workflowID,
       workflow: {},
       percentage: 0,
       indeterminate: true,
       progressStatus: "",
-      zenodoToken: "",
+      githubToken: "",
       statusMessage: "some status message here",
       errorMessage: "",
       showAlert: false,
@@ -106,13 +104,13 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    async createZenodoDeposition() {
-      this.statusMessage = "Creating an empty dataset on Zenodo";
-      await this.sleep(300);
-      // return "ERROR";
-      return axios
-        .post(`${this.$server_url}/zenodo/new`, {
-          access_token: this.zenodoToken,
+
+    async createCodeMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
         })
         .then((response) => {
           return response.data;
@@ -121,16 +119,48 @@ export default {
           console.error(error);
           return "ERROR";
         });
+      return response;
     },
-    async addMetadaToZenodoDeposition() {
-      this.statusMessage = "Adding metadata to Zenodo";
-      await this.sleep(300);
+    async createCitationFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/citation/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createLicenseFile() {
+      const folderPath = this.dataset.data.Code.folderPath;
 
+      const response = await axios
+        .post(`${this.$server_url}/utilities/createfile`, {
+          folder_path: folderPath,
+          file_name: "LICENSE",
+          file_content: this.workflow.licenseText,
+          content_type: "text",
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createZenodoJSON() {
       const zenodoMetadata = this.workflow.destination.zenodo.questions;
       let metadata = {};
 
       metadata.upload_type = "software";
-      metadata.prereserve_doi = true;
 
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
         metadata.title = zenodoMetadata.title;
@@ -379,181 +409,16 @@ export default {
         });
       }
 
-      console.log(metadata);
+      const metadataObject = JSON.stringify(metadata);
 
-      const metadataObject = JSON.stringify({
-        metadata: metadata,
-      });
+      const folderPath = this.dataset.data.Code.folderPath;
 
-      return axios
-        .post(`${this.$server_url}/zenodo/metadata`, {
-          access_token: this.zenodoToken,
-          deposition_id: this.workflow.destination.zenodo.deposition_id,
-          metadata: metadataObject,
-        })
-        .then((response) => {
-          console.log(response);
-          if ("status" in response.data && response.data.status != 200) {
-            if ("errors" in response.data) {
-              response.data.errors.forEach((error) => {
-                this.errorMessage += `${error.field} - ${error.message} \n`;
-              });
-            }
-            this.alertTitle = "Metadata error";
-            this.alertMessage =
-              "Could not add your metadata to the dataset. Please try again.";
-            return "ERROR";
-          } else {
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-    },
-    async uploadToZenodo(bucket_url, file_path) {
-      this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
-      await this.sleep(100);
-
-      await axios
-        .post(`${this.$server_url}/zenodo/upload`, {
-          access_token: this.zenodoToken,
-          bucket_url: bucket_url,
-          file_path: file_path,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      this.statusMessage = `Uploaded ${path.basename(
-        file_path
-      )} to Zenodo successfully`;
-      await this.sleep(300);
-      return;
-    },
-    async checkForFoldersAndUpload() {
-      this.statusMessage = "Checking folder path";
-      await this.sleep(300);
-
-      const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-      // console.log(folderPath);
-
-      const response = await axios
-        .post(`${this.$server_url}/utilities/checkforfolders`, {
-          folder_path: folderPath,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response) {
-        this.statusMessage =
-          "Found sub folders. Creating a zip of the requested folder";
-        await this.sleep(300);
-
-        const zippedPath = await axios
-          .post(`${this.$server_url}/utilities/zipfolder`, {
-            folder_path: folderPath,
-          })
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-
-        // console.log(zippedPath);
-
-        this.statusMessage =
-          "Created a zipped folder successfully. Getting ready to upload to Zenodo";
-        await this.sleep(300);
-
-        await this.uploadToZenodo(
-          this.workflow.destination.zenodo.bucket,
-          zippedPath
-        );
-      } else {
-        this.statusMessage = "Getting ready to upload to Zenodo";
-        await this.sleep(300);
-
-        const contents = fs.readdirSync(folderPath);
-
-        for (const [index, file] of contents.entries()) {
-          // skip file if it is a commonly ignored file
-
-          if (ignoreFilesJSON.commonFilesToIgnore.includes(file)) {
-            this.percentage = ((index + 1) / contents.length) * 75 + 25;
-            this.percentage = Math.round(this.percentage);
-            continue;
-          }
-
-          await this.uploadToZenodo(
-            this.workflow.destination.zenodo.bucket,
-            path.join(folderPath, file)
-          );
-          this.percentage = ((index + 1) / contents.length) * 75 + 25;
-          this.percentage = Math.round(this.percentage);
-        }
-
-        this.statusMessage = "Uploaded all files to Zenodo successfully";
-        await this.sleep(300);
-      }
-
-      this.percentage = 100;
-      this.indeterminate = false;
-
-      return "SUCCESS";
-    },
-    async createCodeMetadataFile() {
-      const response = await axios
-        .post(`${this.$server_url}/metadata/create`, {
-          data_types: JSON.stringify(this.workflow.type),
-          data_object: JSON.stringify(this.dataset.data),
-          virtual_file: false,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-      return response;
-    },
-    async createCitationFile() {
-      const response = await axios
-        .post(`${this.$server_url}/metadata/citation/create`, {
-          data_types: JSON.stringify(this.workflow.type),
-          data_object: JSON.stringify(this.dataset.data),
-          virtual_file: false,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-      return response;
-    },
-    async createLicenseFile() {
-      const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
       const response = await axios
         .post(`${this.$server_url}/utilities/createfile`, {
           folder_path: folderPath,
-          file_name: "LICENSE",
-          file_content: this.workflow.licenseText,
-          content_type: "text",
+          file_name: ".zenodo.json",
+          file_content: metadataObject,
+          content_type: "json",
         })
         .then((response) => {
           return response.data;
@@ -562,57 +427,84 @@ export default {
           console.error(error);
           return "ERROR";
         });
+
       return response;
     },
-    async uploadWorkflow() {
-      let response = "";
-      response = await this.createZenodoDeposition();
+
+    async uploadToGithub(filePath, fileName, repoName) {
+      this.statusMessage = `Uploading ${fileName} to GitHub`;
+      await this.sleep(100);
+
+      const response = await axios
+        .post(`${this.$server_url}/github/upload`, {
+          access_token: this.githubToken,
+          file_path: filePath,
+          file_name: fileName,
+          repo_name: repoName,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
 
       if (response === "ERROR") {
-        this.alertMessage = "There was an error creating the deposition";
-        return "FAIL";
+        this.alertMessage = `Error uploading ${fileName} to GitHub`;
+        await this.sleep(300);
+        this.statusMessage = "";
       } else {
-        this.statusMessage = "Empty deposition created on Zenodo";
+        this.statusMessage = `${fileName} uploaded to GitHub`;
+        await this.sleep(300);
+        this.alertMessage = "";
       }
 
-      this.percentage = 10;
-      this.indeterminate = false;
+      return response;
+    },
 
+    async uploadMetadataFiles() {
+      const folderPath = this.dataset.data.Code.folderPath;
+      const repoName = this.workflow.github.repo;
+
+      this.statusMessage =
+        "Getting ready to upload metadata files to GitHub...";
       await this.sleep(300);
 
-      this.workflow.destination.zenodo.status.depositionCreated = true;
+      const contents = fs.readdirSync(folderPath);
 
-      this.workflow.destination.zenodo.bucket = response.links.bucket;
-      this.workflow.destination.zenodo.deposition_id = response.id;
-      this.workflow.destination.zenodo.originalDeposition = response;
-      this.workflow.destination.zenodo.deposition = response;
+      for (const [index, file] of contents.entries()) {
+        const filePath = path.join(folderPath, file);
 
-      await this.datasetStore.updateCurrentDataset(this.dataset);
-      await this.datasetStore.syncDatasets();
+        const response = await this.uploadToGithub(filePath, file, repoName);
 
-      await this.sleep(300);
+        if (response === "ERROR") {
+          return response;
+        }
 
-      if (this.codePresent && "metadata" in response) {
-        this.dataset.data.Code.questions.uniqueIdentifier =
-          response.metadata.prereserve_doi.doi;
+        this.percentage = ((index + 1) / contents.length) * 75 + 25;
+        this.percentage = Math.round(this.percentage);
+      }
 
+      return "SUCCESS";
+    },
+
+    async uploadWorkflow() {
+      let response = "";
+
+      if (this.codePresent) {
         response = await this.createCodeMetadataFile();
-        // console.log(response);
 
         if (response === "ERROR") {
           this.alertMessage =
             "There was an error with creating the code metadata file";
           return "FAIL";
         } else {
-          this.statusMessage =
-            "Created the codemeta.json file in the target folder";
-
-          await this.datasetStore.updateCurrentDataset(this.dataset);
-          await this.datasetStore.syncDatasets();
+          this.statusMessage = "Created a temporary codemeta.json file";
         }
       }
 
-      this.percentage = 15;
+      this.percentage = 5;
       this.indeterminate = false;
 
       await this.sleep(300);
@@ -626,12 +518,11 @@ export default {
             "There was an error with creating the citation.cff file";
           return "FAIL";
         } else {
-          this.statusMessage =
-            "Created the citation.cff file in the target folder";
+          this.statusMessage = "Created a temporary citation.cff file";
         }
       }
 
-      this.percentage = 20;
+      this.percentage = 10;
       this.indeterminate = false;
 
       await this.sleep(300);
@@ -644,84 +535,64 @@ export default {
             "There was an error with creating the LICENSE file";
           return "FAIL";
         } else {
-          this.statusMessage = "Created the LICENSE file in the target folder";
+          this.statusMessage = "Created a temporary LICENSE file";
         }
       }
 
-      response = await this.addMetadaToZenodoDeposition();
+      this.percentage = 15;
+      this.indeterminate = false;
+
+      await this.sleep(300);
+
+      response = await this.createZenodoJSON();
 
       if (response === "ERROR") {
         this.alertMessage =
-          "There was an error when adding metadata to the deposition";
+          "There was an error with creating the .zenodo.json file";
         return "FAIL";
       } else {
-        console.log(response);
-        this.statusMessage =
-          "Metadata successfully added to the Zenodo deposition";
+        // console.log(response);
+        this.statusMessage = "Created a temporary .zenodo.json file";
       }
 
-      this.percentage = 25;
+      this.percentage = 20;
       this.indeterminate = false;
 
       this.workflow.destination.zenodo.status.metadataAdded = true;
 
       await this.sleep(300);
 
-      response = await this.checkForFoldersAndUpload();
+      response = await this.uploadMetadataFiles();
 
       if (response === "ERROR") {
         this.alertMessage =
-          "There was an error with uploading files to the Zenodo deposition";
+          "There was an error with uploading files to the GitHub repository";
         return "FAIL";
       } else {
-        this.statusMessage = "Uploaded all files to Zenodo successfully.";
+        this.statusMessage = "Uploaded all files to GitHub successfully.";
       }
 
       this.workflow.destination.zenodo.status.filesUploaded = true;
 
       return "SUCCESS";
     },
-    async deleteDraftZenodoDeposition() {
-      if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(
-          this.zenodoToken,
-          this.workflow.destination.zenodo.deposition_id
-        );
-        const response = await axios
-          .delete(`${this.$server_url}/zenodo/delete`, {
-            data: {
-              access_token: this.zenodoToken,
-              deposition_id: this.workflow.destination.zenodo.deposition_id,
-            },
-          })
-          .then((response) => {
-            console.log(response.data);
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-        return response.data;
-      }
-      return "NO_DEPOSITION_FOUND";
-    },
-    async runZenodoUpload() {
-      this.datasetStore.hideSidebar();
+
+    async runGithubUpload() {
+      await this.datasetStore.hideSidebar();
 
       this.statusMessage = "Preparing backend services...";
       await this.sleep(300);
 
       let response = await this.uploadWorkflow();
 
-      this.datasetStore.showSidebar();
+      await this.datasetStore.showSidebar();
+
+      this.dataset.data.Code.folderPath = "";
 
       if (response === "FAIL") {
         this.indeterminate = true;
         this.progressStatus = "exception";
         this.showAlert = true;
-
-        this.deleteDraftZenodoDeposition();
 
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
@@ -738,12 +609,12 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
         this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {
-      this.runZenodoUpload();
+      this.runGithubUpload();
     },
   },
   async mounted() {
@@ -757,11 +628,29 @@ export default {
     // not saving this page since it will start a random upload when saving progress
     // this.workflow.currentRoute = this.$route.path;
 
-    const tokenObject = await this.tokens.getToken("zenodo");
-    this.zenodoToken = tokenObject.token;
-    console.log(this.zenodoToken);
+    const tokenObject = await this.tokens.getToken("github");
+    this.githubToken = tokenObject.token;
 
-    this.runZenodoUpload();
+    const tempFolderPath = path.join(
+      app.getPath("home"),
+      ".sodaforcovid19research",
+      "temp"
+    );
+
+    // delete the temp folder if it exists
+    // starting from a clean slate
+    if (fs.existsSync(tempFolderPath)) {
+      fs.rmdirSync(tempFolderPath, { recursive: true, force: true });
+    }
+
+    // recreate the temp folder
+    if (!fs.existsSync(tempFolderPath)) {
+      fs.mkdirSync(tempFolderPath);
+    }
+
+    this.dataset.data.Code.folderPath = tempFolderPath;
+
+    this.runGithubUpload();
   },
 };
 </script>

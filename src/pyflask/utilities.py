@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import json
 import shutil
 import requests
 import platform
@@ -24,7 +25,9 @@ def foldersPresent(folder_path):
 def zipFolder(folder_path):
     try:
         home_path = os.path.expanduser("~")
-        soda_folder_path = os.path.join(home_path, ".sodaforcovid19research", "dataset")
+        soda_folder_path = os.path.join(
+            home_path, ".sodaforcovid19research", "dataset"
+        )  # noqa: E501
 
         if not os.path.exists(soda_folder_path):
             os.makedirs(soda_folder_path)
@@ -70,6 +73,10 @@ def createFile(folder_path, file_name, file_content, content_type):
         if content_type == "text":
             with open(file_path, "w") as file:
                 file.write(file_content)
+
+        if content_type == "json":
+            with open(os.path.join(folder_path, file_name), "w") as f:
+                f.write(json.dumps(file_content))
 
         return "SUCCESS"
     except Exception as e:

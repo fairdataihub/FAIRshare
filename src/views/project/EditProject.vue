@@ -31,7 +31,7 @@
         :rules="rules"
       >
         <el-form-item label="Dataset name" prop="datasetName">
-          <el-input v-model="datasetForm.datasetName"></el-input>
+          <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
 
         <el-form-item label="Dataset description">
@@ -45,6 +45,7 @@
               <el-input
                 v-model="datasetForm.datasetDescription"
                 type="textarea"
+                size="large"
                 autosize
               ></el-input>
             </template>
@@ -99,16 +100,17 @@
           </el-form-item> -->
 
         <el-form-item label="Delete project">
-          <span>
-            Once you delete a project, there is no going back. Please be
-            certain.
-          </span>
-
-          <br />
-
-          <button class="danger-button py-0" @click="deleteDataset">
-            <el-icon><delete-icon /></el-icon> Delete project
-          </button>
+          <div class="flex w-full flex-col">
+            <p>
+              Once you delete a project, there is no going back. Please be
+              certain.
+            </p>
+            <div>
+              <button class="danger-button py-0" @click="deleteDataset">
+                <el-icon><delete-icon /></el-icon> Delete project
+              </button>
+            </div>
+          </div>
         </el-form-item>
       </el-form>
       <div class="flex flex-row justify-center space-x-4 py-4">

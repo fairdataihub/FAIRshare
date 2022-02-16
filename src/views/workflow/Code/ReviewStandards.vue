@@ -141,14 +141,9 @@
       </div>
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2">
-        <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`"
-          class=""
-        >
-          <button class="primary-plain-button">
-            <el-icon><d-arrow-left /></el-icon> Back
-          </button>
-        </router-link>
+        <button class="primary-plain-button" @click="goBack">
+          <el-icon><d-arrow-left /></el-icon> Back
+        </button>
 
         <button
           class="primary-button"
@@ -203,6 +198,19 @@ export default {
     },
   },
   methods: {
+    async goBack() {
+      let routerPath = "";
+
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "local") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        } else if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`;
+        }
+      }
+
+      this.$router.push(routerPath);
+    },
     async startCuration() {
       let showWarning = false;
 

@@ -22,6 +22,7 @@ export default {
   name: "GithubTokenConnection",
   components: { AppDialog },
   props: {
+    onStatusChange: { type: Function, required: false, default: () => {} },
     // callback function for cleaning
     callback: { type: Function },
   },
@@ -117,6 +118,7 @@ export default {
           duration: 2000,
         });
         this.callback();
+        this.onStatusChange("connected");
       }
       spinner.close();
     },

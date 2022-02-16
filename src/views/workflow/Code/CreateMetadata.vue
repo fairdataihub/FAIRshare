@@ -47,7 +47,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Software name" prop="name">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step1Form.name"
                         placeholder="My Software"
@@ -62,7 +62,7 @@
                     label="Software description/abstract"
                     prop="description"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step1Form.description"
                         type="textarea"
@@ -75,7 +75,7 @@
                   </el-form-item>
 
                   <el-form-item label="Creation date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step1Form.creationDate"
                         type="date"
@@ -90,7 +90,7 @@
                   </el-form-item>
 
                   <el-form-item label="First release date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step1Form.firstReleaseDate"
                         type="date"
@@ -107,23 +107,18 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
                 class="primary-plain-button"
                 size="medium"
-                :disabled="checkInvalidStatus"
               >
                 <el-icon><back-icon /></el-icon>
                 Back
               </button>
               <!-- :plain="!lastStep" -->
-              <button
-                class="primary-button"
-                @click="navigateToStep2FromStep1"
-                :disabled="checkInvalidStatus"
-              >
+              <button class="primary-button" @click="navigateToStep2FromStep1">
                 Next
                 <el-icon><right-icon /></el-icon>
               </button>
@@ -212,7 +207,7 @@
                             </div>
                           </div>
                           <div
-                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
                           >
                             <div
                               class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
@@ -220,17 +215,17 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
-                                title="Are you sure you want to remove this?"
-                                icon-color="red"
                                 confirm-button-text="Yes"
                                 cancel-button-text="No"
+                                icon-color="red"
+                                title="Are you sure you want to remove this?"
                                 @confirm="deleteAuthor(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -331,7 +326,7 @@
                             </div>
                           </div>
                           <div
-                            class="flex w-1/12 flex-row items-start justify-evenly py-2"
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
                           >
                             <div
                               class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
@@ -339,7 +334,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -349,7 +344,7 @@
                                 @confirm="deleteContributor(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -375,7 +370,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -420,7 +415,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Application category">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step3Form.applicationCategory"
                         filterable
@@ -448,10 +443,11 @@
                       :list="step3Form.keywords"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
-                          class="mb-2 flex flex-row justify-between transition-all"
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
                         >
                           <div class="flex w-11/12 flex-row justify-between">
                             <el-input
@@ -470,7 +466,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -480,7 +476,7 @@
                                 @confirm="deleteKeyword(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -502,7 +498,7 @@
                   </div>
 
                   <el-form-item label="Funding code">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step3Form.funding.code"
                         type="text"
@@ -515,7 +511,7 @@
                   </el-form-item>
 
                   <el-form-item label="Funding organization">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step3Form.funding.organization"
                         type="text"
@@ -530,7 +526,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -578,7 +574,7 @@
                     label="Code repository"
                     :error="codeRepositoryErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.codeRepository"
                         placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
@@ -593,7 +589,7 @@
                     label="Continuous integration"
                     :error="continuousIntegrationErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.continuousIntegration"
                         placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
@@ -608,7 +604,7 @@
                     label="Issue Tracker"
                     :error="issueTrackerErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.issueTracker"
                         placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
@@ -628,6 +624,7 @@
                       :list="step4Form.relatedLinks"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
@@ -648,7 +645,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -658,7 +655,7 @@
                                 @confirm="deleteRelatedLink(element.id)"
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -682,7 +679,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -727,7 +724,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Programming Language" required>
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.programmingLanguage"
                         multiple
@@ -735,6 +732,7 @@
                         allow-create
                         default-first-option
                         placeholder="C#, Java, Python 3"
+                        tag-type="info"
                         class="w-full"
                       >
                         <el-option
@@ -752,7 +750,7 @@
                   </el-form-item>
 
                   <el-form-item label="Runtime platform">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.runtimePlatform"
                         multiple
@@ -777,7 +775,7 @@
                   </el-form-item>
 
                   <el-form-item label="Operating system">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step5Form.operatingSystem"
                         multiple
@@ -807,10 +805,11 @@
                       :list="step5Form.otherSoftwareRequirements"
                       item-key="id"
                       handle=".handle"
+                      class="w-full"
                     >
                       <template #item="{ element }">
                         <div
-                          class="mb-2 flex flex-row justify-between transition-all"
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
                         >
                           <div class="flex w-11/12 flex-row justify-between">
                             <el-input
@@ -827,7 +826,7 @@
                               <Icon icon="ic:outline-drag-indicator" />
                             </div>
                             <div
-                              class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
                             >
                               <el-popconfirm
                                 title="Are you sure you want to remove this?"
@@ -839,7 +838,7 @@
                                 "
                               >
                                 <template #reference>
-                                  <Icon icon="bx:bx-x" />
+                                  <el-icon><delete-filled /></el-icon>
                                 </template>
                               </el-popconfirm>
                             </div>
@@ -863,7 +862,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -911,7 +910,7 @@
                     label="Current version"
                     :error="versionErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersion"
                         placeholder="1.5.6"
@@ -923,7 +922,7 @@
                   </el-form-item>
 
                   <el-form-item label="Current version release date">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-date-picker
                         v-model="step6Form.currentVersionReleaseDate"
                         type="date"
@@ -941,7 +940,7 @@
                     label="Current version download URL"
                     :error="currentVersionDownloadLinkErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersionDownloadLink"
                         type="url"
@@ -954,7 +953,7 @@
                   </el-form-item>
 
                   <el-form-item label="Current version release notes">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step6Form.currentVersionReleaseNotes"
                         type="textarea"
@@ -969,7 +968,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -1014,7 +1013,7 @@
                   class="py-4"
                 >
                   <el-form-item label="Reference publication">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step7Form.referencePublication"
                         type="text"
@@ -1027,11 +1026,12 @@
                   </el-form-item>
 
                   <el-form-item label="Development status">
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-select
                         v-model="step7Form.developmentStatus"
                         filterable
                         placeholder=""
+                        class="w-full"
                       >
                         <el-option
                           v-for="item in repoStatusOptions"
@@ -1055,7 +1055,7 @@
                     label="Is part of"
                     :error="isPartOfErrorMessage"
                   >
-                    <div class="flex flex-row items-center">
+                    <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step7Form.isPartOf"
                         type="url"
@@ -1070,7 +1070,7 @@
               </div>
             </div>
             <div
-              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
               <button
                 @click="prevFormStep"
@@ -1106,21 +1106,31 @@
         />
       </div>
     </transition>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="80"
+          :height="80"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
-import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElMessageBox, ElMessage } from "element-plus";
-import Vue3Lottie from "vue3-lottie";
-import validator from "validator";
+import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
 
-// import semver from "semver";
-// import _ from "lodash";
+import draggable from "vuedraggable";
+import validator from "validator";
+import axios from "axios";
+import _ from "lodash";
+import humanparser from "humanparser";
 
 import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
@@ -1136,11 +1146,11 @@ export default {
     draggable,
     Icon,
     PillProgressBar,
-    Vue3Lottie,
   },
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       currentStep: 1,
       pillTitles: [
         "Basic info",
@@ -1232,6 +1242,7 @@ export default {
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
+      showSpinner: false,
     };
   },
   watch: {
@@ -1239,11 +1250,17 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let author of val) {
-            if (author.name === "" || author.affiliation === "") {
+            if (
+              author.givenName === "" ||
+              author.affiliation === "" ||
+              author.affiliation === undefined
+            ) {
               this.authorsErrorMessage =
-                "Name and Affiliation for each author is mandatory";
+                "First name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
-              this.$refs.s2Form.validate();
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
               break;
             } else {
               this.authorsErrorMessage = "";
@@ -1272,7 +1289,9 @@ export default {
               } else {
                 // console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
-                this.$refs.s2Form.validate();
+                if (this.$refs["s2Form"]) {
+                  this.$refs["s2Form"].validate();
+                }
                 this.invalidStatus.authors = true;
                 break;
               }
@@ -1283,7 +1302,9 @@ export default {
 
                 if (!validIdentifier) {
                   this.authorsErrorMessage = "Email is not valid";
-                  this.$refs.s2Form.validate();
+                  if (this.$refs["s2Form"]) {
+                    this.$refs["s2Form"].validate();
+                  }
                   this.invalidStatus.authors = true;
                   break;
                 } else {
@@ -1304,7 +1325,10 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
-            if (contributor.name === "" || contributor.affiliation === "") {
+            if (
+              contributor.givenName === "" ||
+              contributor.affiliation === ""
+            ) {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.invalidStatus.contributors = true;
@@ -1489,7 +1513,7 @@ export default {
         if (val.length > 0) {
           for (let relatedLink of val) {
             if (relatedLink.link !== "") {
-              const validIdentifier = validator.isURL(val);
+              const validIdentifier = validator.isURL(relatedLink.link);
 
               if (!validIdentifier) {
                 this.relatedLinksErrorMessage = "Please provide a valid URL";
@@ -1667,7 +1691,7 @@ export default {
       const uuid = uuidv4();
       this.step3Form.keywords.push({
         keyword: "",
-        id: uuid,
+        id: uuidv4(),
       });
       this.focusOnElementRef(uuid);
     },
@@ -1862,6 +1886,243 @@ export default {
         });
       }
     },
+    async prefillGithubAuthors() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting authors",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${this.$server_url}/github/repo/contributors`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: selectedRepo.split("/")[0],
+            repo: selectedRepo.split("/")[1],
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      let contributors = [];
+
+      if (response != "ERROR") {
+        response.forEach((contributor) => {
+          contributors.push(contributor.login);
+        });
+      }
+
+      let authors = [];
+
+      for (const contributor of contributors) {
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            const authorObject = {};
+
+            if (response.data.name != null) {
+              const parsedNames = humanparser.parseName(response.data.name);
+              if ("lastName" in parsedNames) {
+                authorObject.familyName = parsedNames.lastName;
+              } else {
+                authorObject.familyName = "";
+              }
+              if ("firstName" in parsedNames) {
+                authorObject.givenName = parsedNames.firstName;
+              } else {
+                authorObject.givenName = response.data.name;
+              }
+            }
+
+            if (response.data.email != null) {
+              authorObject.email = response.data.email;
+            }
+
+            if (response.data.company != null) {
+              authorObject.company = response.data.company;
+            }
+
+            if (!_.isEmpty(authorObject)) {
+              authors.push(authorObject);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      authors.forEach((author) => {
+        const authorObject = {
+          givenName: author.givenName,
+          familyName: author.familyName,
+          affiliation: author.company,
+          email: author.email,
+          orcid: "",
+          id: uuidv4(),
+        };
+
+        this.step2Form.authors.push(authorObject);
+      });
+
+      ElNotification({
+        title: "Success",
+        message: "Retrieved authors",
+        position: "top-right",
+        type: "success",
+      });
+    },
+    async prefillGithubMisc() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting repo info",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response != "ERROR") {
+        if (response.html_url != null) {
+          this.step4Form.codeRepository = response.html_url;
+          this.step4Form.issueTracker = `${response.html_url}/issues`;
+        }
+
+        if (response.homepage != null) {
+          this.step4Form.relatedLinks.push({
+            link: response.homepage,
+            id: uuidv4(),
+          });
+        }
+
+        if (response.topics != null && response.topics.length > 0) {
+          response.topics.forEach((topic) => {
+            this.step3Form.keywords.push({
+              keyword: topic,
+              id: uuidv4(),
+            });
+          });
+        }
+
+        if ("created_at" in response) {
+          this.step1Form.creationDate = response.created_at;
+        }
+
+        this.step6Form.currentVersionReleaseDate = new Date().toISOString();
+
+        if (response.description != null) {
+          this.step1Form.description = response.description;
+        }
+
+        const splitRepoNameOwner = selectedRepo.split("/");
+
+        const releaseList = await axios
+          .get(`${this.$server_url}/github/repo/releases`, {
+            params: {
+              access_token: GithubAccessToken,
+              owner: splitRepoNameOwner[0],
+              repo: splitRepoNameOwner[1],
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (releaseList !== "ERROR") {
+          if (releaseList.length > 0) {
+            const release = releaseList.slice(-1).pop();
+
+            if ("created_at" in release) {
+              this.step1Form.firstReleaseDate = release.created_at;
+            }
+          }
+        }
+
+        const lanuagesResponse = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (lanuagesResponse != "ERROR") {
+          const languages = Object.keys(lanuagesResponse);
+          if (languages.length > 0) {
+            this.step5Form.programmingLanguage = languages;
+          }
+        }
+
+        ElNotification({
+          title: "Success",
+          message: "Repo info retrieved",
+          position: "top-right",
+          type: "success",
+        });
+      }
+    },
   },
   mounted() {
     this.$nextTick(async function () {
@@ -1932,6 +2193,15 @@ export default {
           this.step1Form.name = this.dataset.name;
           this.step1Form.description = this.dataset.description;
           // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+
+          if ("source" in this.workflow) {
+            if (this.workflow.source.type === "github") {
+              this.showSpinner = true;
+              await this.prefillGithubAuthors();
+              await this.prefillGithubMisc();
+              this.showSpinner = false;
+            }
+          }
         }
       }
     });

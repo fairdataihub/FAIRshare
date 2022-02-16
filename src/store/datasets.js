@@ -63,7 +63,7 @@ export const useDatasetsStore = defineStore({
       currentStep: 0,
     },
     loading: false,
-    showSidebar: true,
+    sidebarVisible: true,
   }),
   getters: {
     datasetCount: function () {
@@ -152,11 +152,13 @@ export const useDatasetsStore = defineStore({
     setCurrentStep(step) {
       this.progressBar.currentStep = step - 1;
     },
-    showSidebar() {
-      this.showSidebar = true;
+    async showSidebar() {
+      console.log("Showing Sidebar");
+      this.sidebarVisible = true;
     },
-    hideSidebar() {
-      this.showSidebar = false;
+    async hideSidebar() {
+      console.log("Hiding Sidebar");
+      this.sidebarVisible = false;
     },
   },
 });
