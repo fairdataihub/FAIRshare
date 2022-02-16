@@ -14,15 +14,15 @@
           <div class="flex flex-col space-y-4 px-3">
             <!-- settings panel -->
             <div class="rounded-lg border-2 border-slate-100 p-4">
-              <h2 class="py-2 text-lg font-semibold text-slate-600">
+              <h2 class="mb-2 text-lg font-semibold text-neutral-700">
                 Allow beta versions?
               </h2>
               <div class="flex flex-col items-start">
                 <p class="mb-2 text-sm">
-                  Do you want to allow FAIRShare to download beta versions of
-                  the application? Beta versions are not yet stable and may
-                  contain bugs but you will be able to preview the latest
-                  features ahead of time.
+                  Do you want to allow FAIRShare to download and update to beta
+                  versions of the application? Beta versions may not yet be
+                  stable and may contain bugs but you will be able to preview
+                  and test the latest features ahead of time.
                 </p>
                 <div class="flex items-center">
                   <div
@@ -43,6 +43,7 @@
                       class="mx-1"
                       active-color="#2563eb"
                       inactive-color="#fdba74"
+                      @change="changeUpdateChannel"
                     />
                   </el-tooltip>
                   <div
@@ -55,6 +56,10 @@
                     <el-icon> <circle-check-filled /> </el-icon>
                   </div>
                 </div>
+                <p class="mt-2 text-xs text-neutral-500">
+                  Modifying this value will allow you to update to beta versions
+                  the next time you start the app.
+                </p>
               </div>
             </div>
           </div>
@@ -118,6 +123,7 @@ import axios from "axios";
 import path from "path";
 
 import { useDatasetsStore } from "@/store/datasets";
+import { useConfigStore } from "@/store/config";
 
 export default {
   name: "AppSettings",
@@ -125,12 +131,25 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      configStore: useConfigStore(),
       activeName: "general",
       loadingSpinner: false,
+      config: {},
       betaRelease: false,
     };
   },
   methods: {
+    async changeUpdateChannel(enabled) {
+      if (enabled) {
+        this.config.releaseChannel = "beta";
+      } else {
+        this.config.releaseChannel = "latest";
+      }
+      await this.configStore.addConfig(
+        "releaseChannel",
+        this.config.releaseChannel
+      );
+    },
     openFileExplorer(type) {
       this.loadingSpinner = true;
 
@@ -171,6 +190,20 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+
+    let loading = this.$loading({
+      lock: true,
+      text: "Loading settings...",
+      spinner: "el-icon-loading",
+    });
+
+    this.config = await this.configStore.getConfig();
+
+    loading.close();
+
+    if ("releaseChannel" in this.config) {
+      this.betaRelease = this.config.releaseChannel === "beta";
+    }
   },
 };
 </script>

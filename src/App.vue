@@ -26,6 +26,7 @@ import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
+import { useConfigStore } from "./store/config.js";
 
 const MIN_API_VERSION = "0.0.1";
 
@@ -38,7 +39,8 @@ export default {
   data() {
     return {
       appPath: app.getAppPath(),
-      unpublishedDatasets: useDatasetsStore(),
+      allDatasets: useDatasetsStore(),
+      config: useConfigStore(),
       tokens: useTokenStore(),
       loading: "",
       environment: "",
@@ -47,16 +49,14 @@ export default {
   methods: {
     async loadStores() {
       try {
-        // show Sidebar
-
-        // await this.unpublishedDatasets.showSidebar();
-        // await this.unpublishedDatasets.hideSidebar();
-
         // Load all the projects
-        await this.unpublishedDatasets.loadDatasets();
+        await this.allDatasets.loadDatasets();
 
         // Load all the access tokens
         await this.tokens.loadTokens();
+
+        // Load app config
+        await this.config.loadConfig();
 
         // Run all the integrations checks
         this.tokens.verifyAllConnections();

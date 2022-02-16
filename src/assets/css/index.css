@@ -59,7 +59,7 @@ html {
   @apply mt-2 rounded-lg px-4 py-3 transition-all;
   @apply font-inter text-sm font-semibold;
   @apply text-white;
-  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-500;
+  @apply bg-primary-600 hover:bg-primary-500 focus:bg-primary-600;
   @apply focus:outline-none active:outline-none;
 }
 
@@ -83,7 +83,7 @@ html {
   transform: rotate(0deg);
   @apply transition-all;
   @apply group-hover:text-primary-500;
-  @apply bg-zinc-800 group-hover:bg-primary-500;
+  @apply group-hover:bg-primary-500 bg-zinc-800;
 }
 
 #menu-hamburger span:nth-child(1) {
@@ -165,12 +165,12 @@ html {
 }
 
 .selected-project {
-  @apply border-transparent bg-primary-200 hover:bg-primary-200;
+  @apply bg-primary-200 hover:bg-primary-200 border-transparent;
 }
 
 .selected-repo,
 .selected-location {
-  @apply border border-secondary-500 shadow-md shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-md;
 }
 
 .handle:hover {
@@ -192,8 +192,8 @@ html {
     @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
-    @apply text-gray-900  hover:text-primary-600;
-    @apply border border-primary-300;
+    @apply hover:text-primary-600  text-gray-900;
+    @apply border-primary-300 border;
     @apply hover:bg-primary-100;
     @apply transition-all;
   }
@@ -213,7 +213,7 @@ html {
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-white;
-    @apply border border-primary-500;
+    @apply border-primary-500 border;
     @apply bg-primary-600 hover:bg-primary-500;
     @apply transition-all;
   }
@@ -232,8 +232,8 @@ html {
     @apply rounded px-5 py-2;
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
-    @apply text-gray-900  hover:text-secondary-600;
-    @apply border border-secondary-500;
+    @apply hover:text-secondary-600  text-gray-900;
+    @apply border-secondary-500 border;
     @apply hover:bg-secondary-100;
     @apply transition-all;
   }
@@ -253,7 +253,7 @@ html {
     @apply min-w-[130px];
     @apply text-[14px] font-medium;
     @apply text-white;
-    @apply border border-secondary-500;
+    @apply border-secondary-500 border;
     @apply bg-secondary-400 hover:bg-secondary-500;
     @apply transition-all;
   }
@@ -386,7 +386,7 @@ Trying to keep this minimal since we want to use much of the predefined styles a
 }
 
 .v-md-editor__tooltip {
-  @apply flex items-center justify-center font-inter;
+  @apply font-inter flex items-center justify-center;
 }
 
 .v-md-editor__toolbar-item {

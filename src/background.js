@@ -6,13 +6,48 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
+const fs = require("fs-extra");
+const path = require("path");
 const log = require("electron-log");
+
 log.info("starting log");
+
+const USER_PATH = app.getPath("home");
+const CONFIG_STORE_PATH = path.join(
+  USER_PATH,
+  ".sodaforcovid19research",
+  "config.json"
+);
+
+const getReleaseChannel = () => {
+  const exists = fs.pathExistsSync(CONFIG_STORE_PATH);
+
+  if (!exists) {
+    return "latest";
+  } else {
+    try {
+      let config = fs.readJsonSync(CONFIG_STORE_PATH);
+      if ("releaseChannel" in config) {
+        if (config.releaseChannel == "beta") {
+          return "beta";
+        } else {
+          return "latest";
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      return "latest";
+    }
+  }
+};
+
+const updateChannel = getReleaseChannel();
+
+autoUpdater.channel = updateChannel;
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "info";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const path = require("path");
 
 require("@electron/remote/main").initialize();
 // require("@electron/remote/main").enable(webContents);
