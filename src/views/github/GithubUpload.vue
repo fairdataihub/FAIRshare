@@ -416,7 +416,7 @@ export default {
       const response = await axios
         .post(`${this.$server_url}/utilities/createfile`, {
           folder_path: folderPath,
-          file_name: "zenodo.json",
+          file_name: ".zenodo.json",
           file_content: metadataObject,
           content_type: "json",
         })
@@ -548,11 +548,11 @@ export default {
 
       if (response === "ERROR") {
         this.alertMessage =
-          "There was an error with creating the zenodo.json file";
+          "There was an error with creating the .zenodo.json file";
         return "FAIL";
       } else {
         // console.log(response);
-        this.statusMessage = "Created a temporary zenodo.json file";
+        this.statusMessage = "Created a temporary .zenodo.json file";
       }
 
       this.percentage = 20;
