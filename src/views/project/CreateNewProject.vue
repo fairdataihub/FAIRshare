@@ -266,8 +266,8 @@ export default {
           let dataset = {
             id: datasetID,
             image: datasetImage,
-            name: this.datasetForm.datasetName,
-            description: this.datasetForm.datasetDescription,
+            name: this.datasetForm.datasetName.trim(),
+            description: this.datasetForm.datasetDescription.trim(),
             dataType: this.datasetForm.dataType,
             data: {},
             workflowConfirmed: false,

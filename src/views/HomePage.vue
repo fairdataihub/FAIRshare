@@ -46,6 +46,20 @@
             Getting started
             <el-icon class="icon-animate"> <d-arrow-right /> </el-icon>
           </button>
+
+          <button
+            class="danger-plain-button hidden text-base"
+            @click="datasetStore.hideSidebar"
+          >
+            Hide sidebar
+          </button>
+
+          <button
+            class="danger-button hidden text-base"
+            @click="datasetStore.showSidebar"
+          >
+            Show sidebar
+          </button>
         </div>
 
         <div
@@ -70,13 +84,17 @@
 <script>
 import { Icon } from "@iconify/vue";
 
+import { useDatasetsStore } from "@/store/datasets";
+
 export default {
   name: "HomePage",
   components: {
     Icon,
   },
   data() {
-    return {};
+    return {
+      datasetStore: useDatasetsStore(),
+    };
   },
   methods: {
     openWebsite(url) {
@@ -91,6 +109,10 @@ export default {
       this.$router.push({ path: routerPath });
     },
   },
-  mounted() {},
+  mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+  },
 };
 </script>

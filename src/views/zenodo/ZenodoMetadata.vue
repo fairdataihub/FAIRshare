@@ -16,7 +16,7 @@
         :rules="rulesForZenodoMetadataForm"
         label-width="150px"
         label-position="right"
-        size="small"
+        size="large"
         ref="zmForm"
         @submit.prevent
       >
@@ -77,6 +77,7 @@
                   :list="zenodoMetadataForm.authors"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -107,14 +108,14 @@
                         </div>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -124,7 +125,11 @@
                             @confirm="deleteAuthor(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -163,7 +168,7 @@
               </el-form-item>
 
               <el-form-item label="Version" :error="versionErrorMessage">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.version"
                     type="text"
@@ -183,33 +188,36 @@
               </el-form-item>
 
               <el-form-item label="Language">
-                <el-select
-                  v-model="zenodoMetadataForm.language"
-                  filterable
-                  placeholder="e.g.: 'eng', 'fr' or 'Polish'"
-                >
-                  <el-option
-                    v-for="item in languageOptions"
-                    :key="item.alpha3"
-                    :label="`${item.name} - ${item.alpha3}`"
-                    :value="item.alpha3"
+                <div class="w-full">
+                  <el-select
+                    v-model="zenodoMetadataForm.language"
+                    filterable
+                    placeholder="e.g.: 'eng', 'fr' or 'Polish'"
+                    class="w-full"
                   >
-                  </el-option>
-                </el-select>
-                <p class="pt-1 text-xs text-gray-500">
-                  Optional. Primary language of the record. Start by typing the
-                  language's common name in English, or its ISO 639 code (two or
-                  three-letter code).
-                  <br />
-                  See
-                  <a
-                    href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
-                    target="_blank"
-                  >
-                    ISO 639 language codes list
-                  </a>
-                  for more information.
-                </p>
+                    <el-option
+                      v-for="item in languageOptions"
+                      :key="item.alpha3"
+                      :label="`${item.name} - ${item.alpha3}`"
+                      :value="item.alpha3"
+                    >
+                    </el-option>
+                  </el-select>
+                  <p class="pt-1 text-xs text-gray-500">
+                    Optional. Primary language of the record. Start by typing
+                    the language's common name in English, or its ISO 639 code
+                    (two or three-letter code).
+                    <br />
+                    See
+                    <a
+                      href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
+                      target="_blank"
+                    >
+                      ISO 639 language codes list
+                    </a>
+                    for more information.
+                  </p>
+                </div>
               </el-form-item>
 
               <el-form-item label="Keywords">
@@ -218,6 +226,7 @@
                   :list="zenodoMetadataForm.keywords"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -238,7 +247,7 @@
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                          class="flex items-center justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -248,7 +257,11 @@
                             @confirm="deleteKeyword(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -267,7 +280,7 @@
               </el-form-item>
 
               <el-form-item label="Additional Notes">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.additionalNotes"
                     type="textarea"
@@ -293,36 +306,39 @@
 
             <div class="p-4">
               <el-form-item label="Access right" :required="true">
-                <el-radio-group
-                  v-model="zenodoMetadataForm.license.accessRight"
-                  class="flex flex-col"
-                >
-                  <el-radio label="open">
-                    <el-icon>
-                      <unlock-icon />
-                    </el-icon>
-                    Open Access
-                  </el-radio>
-                  <el-radio label="embargoed" disabled>
-                    <el-icon> <remove-filled /> </el-icon> Embargoed Access
-                  </el-radio>
-                  <el-radio label="restricted" disabled>
-                    <el-icon>
-                      <key-icon />
-                    </el-icon>
-                    Restricted Access
-                  </el-radio>
-                  <el-radio label="closed" disabled>
-                    <el-icon>
-                      <lock-icon />
-                    </el-icon>
-                    Closed Access
-                  </el-radio>
-                </el-radio-group>
-                <p class="pt-1 text-xs text-gray-500">
-                  Required. Open access uploads have considerably higher
-                  visibility on Zenodo.
-                </p>
+                <div class="flex flex-col">
+                  <el-radio-group
+                    v-model="zenodoMetadataForm.license.accessRight"
+                  >
+                    <div class="flex flex-col">
+                      <el-radio label="open">
+                        <el-icon>
+                          <unlock-icon />
+                        </el-icon>
+                        Open Access
+                      </el-radio>
+                      <el-radio label="embargoed" disabled>
+                        <el-icon> <remove-filled /> </el-icon> Embargoed Access
+                      </el-radio>
+                      <el-radio label="restricted" disabled>
+                        <el-icon>
+                          <key-icon />
+                        </el-icon>
+                        Restricted Access
+                      </el-radio>
+                      <el-radio label="closed" disabled>
+                        <el-icon>
+                          <lock-icon />
+                        </el-icon>
+                        Closed Access
+                      </el-radio>
+                    </div>
+                  </el-radio-group>
+                  <p class="pt-1 text-xs text-gray-500">
+                    Required. Open access uploads have considerably higher
+                    visibility on Zenodo.
+                  </p>
+                </div>
               </el-form-item>
 
               <el-form-item label="License" prop="license">
@@ -404,6 +420,7 @@
                   :list="zenodoMetadataForm.relatedIdentifiers"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -458,14 +475,14 @@
                           </div>
                         </div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -475,7 +492,11 @@
                             @confirm="deleteRelatedIdentifier(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -521,6 +542,7 @@
                   :list="zenodoMetadataForm.contributors"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -569,14 +591,14 @@
                           </el-select>
                         </div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -586,7 +608,11 @@
                             @confirm="deleteContributor(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -628,6 +654,7 @@
                   :list="zenodoMetadataForm.references"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -641,14 +668,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -658,7 +685,11 @@
                             @confirm="deleteReference(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -693,7 +724,7 @@
 
             <div class="p-4">
               <el-form-item label="Journal title">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.journal.title"
                     type="text"
@@ -702,7 +733,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Volume">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.journal.volume"
                     type="text"
@@ -711,7 +742,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Issue">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.journal.issue"
                     type="text"
@@ -720,7 +751,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Pages">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.journal.pages"
                     type="text"
@@ -748,7 +779,7 @@
 
             <div class="p-4">
               <el-form-item label="Conference title">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.title"
                     type="text"
@@ -757,7 +788,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Acronym">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.acronym"
                     type="text"
@@ -766,14 +797,14 @@
                 </div>
               </el-form-item>
               <el-form-item label="Dates">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-date-picker
                     v-model="zenodoMetadataForm.conference.dates"
                     type="daterange"
                     range-separator="-"
                     start-placeholder="Start date"
                     end-placeholder="End date"
-                    size="medium"
+                    size="large"
                     value-format="YYYY-MM-DD"
                   >
                   </el-date-picker>
@@ -781,7 +812,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Place">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.place"
                     type="text"
@@ -791,7 +822,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Website">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.website"
                     type="text"
@@ -801,7 +832,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Session">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.session"
                     type="text"
@@ -813,7 +844,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Part">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.conference.part"
                     type="text"
@@ -843,9 +874,9 @@
             </template>
 
             <div class="p-4">
-              <p class="mb-4 text-xs">For parts of books and reports. <br /></p>
+              <p class="mb-4 text-sm">For parts of books and reports. <br /></p>
               <el-form-item label="Publisher">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.bookReportChapter.publisher"
                     type="text"
@@ -854,7 +885,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Place">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.bookReportChapter.place"
                     type="text"
@@ -864,7 +895,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="ISBN">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.bookReportChapter.isbn"
                     type="text"
@@ -874,7 +905,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Book title">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.bookReportChapter.title"
                     type="text"
@@ -886,7 +917,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="Pages">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.bookReportChapter.pages"
                     type="text"
@@ -912,7 +943,7 @@
 
             <div class="p-4">
               <el-form-item label="Awarding university">
-                <div class="flex flex-col">
+                <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.thesis.awardingUniversity"
                     type="text"
@@ -927,6 +958,7 @@
                   :list="zenodoMetadataForm.thesis.supervisors"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -957,14 +989,14 @@
                         </div>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-start justify-center py-2 text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-start justify-center py-2 text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -974,7 +1006,11 @@
                             @confirm="deleteSupervisor(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -1024,6 +1060,7 @@
                   :list="zenodoMetadataForm.subjects"
                   item-key="id"
                   handle=".handle"
+                  class="w-full"
                 >
                   <template #item="{ element }">
                     <div
@@ -1043,14 +1080,14 @@
                         ></el-input>
                         <div class="mx-2"></div>
                       </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
+                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
                         <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
                         <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
+                          class="flex items-start justify-center text-gray-500 transition-all"
                         >
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
@@ -1060,7 +1097,11 @@
                             @confirm="deleteSubject(element.id)"
                           >
                             <template #reference>
-                              <Icon icon="bx:bx-x" />
+                              <el-icon
+                                class="cursor-pointer hover:text-gray-800"
+                              >
+                                <delete-filled />
+                              </el-icon>
                             </template>
                           </el-popconfirm>
                         </div>
@@ -1082,7 +1123,7 @@
         </el-collapse>
       </el-form>
 
-      <div class="flex w-full flex-row justify-center space-x-4 py-2">
+      <div class="flex w-full flex-row justify-center space-x-4 py-4">
         <button class="primary-plain-button" @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
         </button>
@@ -1096,6 +1137,17 @@
         </button>
       </div>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-1 right-2" v-show="savingSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="60"
+          :height="60"
+          :loop="1"
+          @onComplete="savingSpinner = false"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -1106,6 +1158,8 @@ import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
 import doiRegex from "doi-regex";
 import { ElMessageBox, ElMessage } from "element-plus";
+import validator from "validator";
+
 import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -1127,6 +1181,7 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       loading: true,
+      savingSpinner: true,
       activeNames: [],
       drag: true,
       licenseOptions: licensesJSON.licenses,
@@ -1335,7 +1390,20 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      let routerPath = "";
+
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/zenodoConnection`;
+        }
+        if (this.workflow.source.type === "local") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+        }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      }
+
+      // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
       this.$router.push({ path: routerPath });
 
       //validate first
@@ -1376,8 +1444,16 @@ export default {
           let authors = generalForm.authors;
           let newAuthors = [];
           authors.forEach((author) => {
+            let authorName = "";
+
+            if (author.familyName) {
+              authorName = author.familyName + ", " + author.givenName;
+            } else {
+              authorName = author.givenName;
+            }
+
             let newAuthor = {
-              name: author.familyName + ", " + author.givenName,
+              name: authorName,
               affiliation: author.affiliation,
               orcid: author.orcid,
               id: uuidv4(),
@@ -1629,7 +1705,6 @@ export default {
           this.invalidStatus.relatedIdentifiers = false;
         } else {
           for (let relatedIdentifier of val) {
-            // console.log(relatedIdentifier.identifier);
             if (relatedIdentifier.identifier === "") {
               this.relatedIdentifiersErrorMessage =
                 "Please provide a related identifier.";
@@ -1643,19 +1718,10 @@ export default {
                 validIdentifier = true;
               }
 
-              // if (!validIdentifier) {
-              //   try {
-              //     new URL(relatedIdentifier.identifier);
-              //     validIdentifier = true;
-              //   } catch (_) {
-              //     validIdentifier = false;
-              //   }
-              // }
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(relatedIdentifier.identifier)) {
+              if (
+                !validIdentifier &&
+                validator.isURL(relatedIdentifier.identifier)
+              ) {
                 validIdentifier = true;
               } else {
                 validIdentifier = false;
@@ -1692,23 +1758,7 @@ export default {
               this.invalidStatus.subjects = true;
               break;
             } else {
-              let validIdentifier = false;
-
-              // try {
-              //   new URL(subject.identifier);
-              //   validIdentifier = true;
-              // } catch (_) {
-              //   validIdentifier = false;
-              // }
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(subject.identifier)) {
-                validIdentifier = true;
-              } else {
-                validIdentifier = false;
-              }
+              const validIdentifier = validator.isURL(val);
 
               if (!validIdentifier) {
                 this.subjectsErrorMessage =
@@ -1749,6 +1799,8 @@ export default {
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
+
+    this.workflow.currentRoute = this.$route.path;
 
     if (this.workflow.expandOptions.length === 0) {
       this.activeNames = ["basicInformation", "license"];

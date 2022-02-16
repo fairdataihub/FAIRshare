@@ -17,6 +17,7 @@
     ".env.test.local",
     ".env.production.local",
     ".env.local",
+    ".env.production",
     ".cache",
     ".parcel-cache",
     ".next",

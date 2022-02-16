@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
+    class="relative flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -14,887 +14,1131 @@
         codemeta.json and CITATION.cff file in your dataset.
       </span>
 
-      <el-form
-        :model="codeForm"
-        label-width="160px"
-        label-position="top"
-        size="large"
-        ref="cmForm"
-        @submit.prevent
-        class="py-4"
-      >
-        <div v-if="showWizard">
-          <div class="py-3">
-            <pill-progress-bar
-              :totalSteps="7"
-              :currentStep="currentStep"
-              @updateCurrentStep="setCurrentStep"
-              :titles="pillTitles"
-            />
+      <div>
+        <div class="py-3">
+          <pill-progress-bar
+            :totalSteps="7"
+            :currentStep="currentStep"
+            @updateCurrentStep="setCurrentStep"
+            :titles="pillTitles"
+          />
+        </div>
+        <div class="py-2">
+          <div v-if="currentStep == 1">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                >
+                  Basic Information
+                </span>
+              </div>
+              <div class="p-4">
+                <el-form
+                  :model="step1Form"
+                  :rules="step1FormRules"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s1Form"
+                  @submit.prevent
+                  class="py-4"
+                >
+                  <el-form-item label="Software name" prop="name">
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step1Form.name"
+                        placeholder="My Software"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="The name of the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Software description/abstract"
+                    prop="description"
+                  >
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step1Form.description"
+                        type="textarea"
+                        placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="A brief description of the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Creation date">
+                    <div class="flex w-full flex-row items-center">
+                      <el-date-picker
+                        v-model="step1Form.creationDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the software was first created"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="First release date">
+                    <div class="flex w-full flex-row items-center">
+                      <el-date-picker
+                        v-model="step1Form.firstReleaseDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the software was first released"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="primary-plain-button"
+                size="medium"
+              >
+                <el-icon><back-icon /></el-icon>
+                Back
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button class="primary-button" @click="navigateToStep2FromStep1">
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
           </div>
-          <div class="py-2">
-            <FormCardContent
-              :stepId="1"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Basic Information"
+
+          <div v-if="currentStep == 2">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
             >
-              <el-form-item label="Software name" required>
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.name"
-                    placeholder="My Software"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="The name of the software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Software description/abstract" required>
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.description"
-                    type="textarea"
-                    placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="A brief description of the software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Creation date">
-                <div class="flex flex-row items-center">
-                  <el-date-picker
-                    v-model="codeForm.creationDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                  <form-help-content
-                    popoverContent="The date on which the software was first created"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="First release date">
-                <div class="flex flex-row items-center">
-                  <el-date-picker
-                    v-model="codeForm.firstReleaseDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                  <form-help-content
-                    popoverContent="The date on which the software was first released"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <!-- 
-                <el-form-item label="License">
-                <el-select
-                  v-model="codeForm.license"
-                  filterable
-                  placeholder="Select a license"
-                  class="w-full"
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
-                  <el-option
-                    v-for="item in licenseOptions"
-                    :key="item.licenseId"
-                    :label="item.name"
-                    :value="item.licenseId"
-                  >
-                  </el-option>
-                </el-select>
-
-                <p
-                  class="pt-2 text-sm text-gray-500 cursor-pointer hover:text-gray-800"
-                  v-if="codeForm.license != ''"
-                  @click="openLicenseDetails"
-                >
-                  Show license details.
-                </p>
-
-                <el-drawer
-                  v-model="showLicenseDetails"
-                  :title="licenseTitle"
-                  direction="rtl"
-                >
-                  <LoadingPulseCircle v-if="loadingLicenseDetails">
-                  </LoadingPulseCircle>
-                  <iframe
-                    sandbox
-                    :src="licenseHtmlUrl"
-                    class="w-full h-full"
-                    :load="(loadingLicenseDetails = false)"
-                  ></iframe>
-                </el-drawer>
-              </el-form-item> 
-              -->
-            </FormCardContent>
-
-            <FormCardContent
-              :stepId="2"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Authors and Contributors"
-            >
-              <el-form-item
-                label="Authors"
-                :error="authorsErrorMessage"
-                required
-              >
-                <draggable
-                  tag="div"
-                  :list="codeForm.authors"
-                  item-key="id"
-                  handle=".handle"
-                >
-                  <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.givenName"
-                          type="text"
-                          placeholder="Given name"
-                        ></el-input>
-
-                        <div class="mx-2"></div>
-
-                        <el-input
-                          v-model="element.familyName"
-                          type="text"
-                          placeholder="Family name"
-                        ></el-input>
-
-                        <div class="mx-2"></div>
-
-                        <el-input
-                          v-model="element.affiliation"
-                          type="text"
-                          placeholder="Affiliation"
-                        ></el-input>
-
-                        <div class="mx-2 flex w-full flex-col">
-                          <el-input
-                            v-model="element.email"
-                            type="text"
-                            placeholder="E-mail address"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
-                        </div>
-
-                        <div class="mx-2 flex w-full flex-col">
-                          <el-input
-                            v-model="element.orcid"
-                            type="text"
-                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
-                        </div>
-                      </div>
-                      <div
-                        class="flex w-1/12 flex-row items-start justify-evenly py-2"
-                      >
-                        <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
-                        >
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteAuthor(element.id)"
-                          >
-                            <template #reference>
-                              <Icon icon="bx:bx-x" />
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-              </el-form-item>
-              <div
-                class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                @click="addAuthor"
-              >
-                <Icon icon="carbon:add" />
-                <span class="text-primary-600 hover:text-primary-500">
-                  Add an author
+                  Authors and Contributors
                 </span>
-                <form-help-content
-                  popoverContent="Add a developer of the software"
-                ></form-help-content>
               </div>
-
-              <el-form-item
-                label="Contributors"
-                :error="contributorsErrorMessage"
-              >
-                <draggable
-                  tag="div"
-                  :list="codeForm.contributors"
-                  item-key="id"
-                  handle=".handle"
+              <div class="p-4">
+                <el-form
+                  :model="step2Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s2Form"
+                  @submit.prevent
+                  class="py-4"
                 >
-                  <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
+                  <el-form-item
+                    label="Authors"
+                    :error="authorsErrorMessage"
+                    required
+                  >
+                    <draggable
+                      tag="div"
+                      :list="step2Form.authors"
+                      item-key="id"
+                      handle=".handle"
                     >
-                      <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
-                        <el-select
-                          v-model="element.contributorType"
-                          filterable
-                          placeholder="Select a contributor type"
-                        >
-                          <el-option
-                            v-for="item in contributorTypes"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          >
-                          </el-option>
-                        </el-select>
-                      </div>
-
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <div class="mr-2 w-1/5">
-                          <el-input
-                            v-model="element.givenName"
-                            type="text"
-                            placeholder="Given name"
-                          ></el-input>
-                        </div>
-
-                        <div class="mx-2 w-1/5">
-                          <el-input
-                            v-model="element.familyName"
-                            type="text"
-                            placeholder="Family name"
-                          ></el-input>
-                        </div>
-
-                        <div class="mx-2 w-1/5">
-                          <el-input
-                            v-model="element.affiliation"
-                            type="text"
-                            placeholder="Affiliation"
-                          ></el-input>
-                        </div>
-
-                        <div class="mx-2 flex w-1/5 flex-col">
-                          <el-input
-                            v-model="element.email"
-                            type="text"
-                            placeholder="E-mail address"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
-                        </div>
-
-                        <div class="mx-2 flex w-1/5 flex-col">
-                          <el-input
-                            v-model="element.orcid"
-                            type="text"
-                            placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
-                        </div>
-                      </div>
-                      <div
-                        class="flex w-1/12 flex-row items-start justify-evenly py-2"
-                      >
+                      <template #item="{ element }">
                         <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                          class="mb-2 flex flex-row justify-between transition-all"
                         >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
-                        >
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteContributor(element.id)"
-                          >
-                            <template #reference>
-                              <Icon icon="bx:bx-x" />
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-              </el-form-item>
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <el-input
+                              v-model="element.givenName"
+                              type="text"
+                              placeholder="Given name"
+                            ></el-input>
 
-              <div
-                class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                @click="addContributor"
+                            <div class="mx-2"></div>
+
+                            <el-input
+                              v-model="element.familyName"
+                              type="text"
+                              placeholder="Family name"
+                            ></el-input>
+
+                            <div class="mx-2"></div>
+
+                            <el-input
+                              v-model="element.affiliation"
+                              type="text"
+                              placeholder="Affiliation"
+                            ></el-input>
+
+                            <div class="mx-2 flex w-full flex-col">
+                              <el-input
+                                v-model="element.email"
+                                type="text"
+                                placeholder="E-mail address"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+
+                            <div class="mx-2 flex w-full flex-col">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
+                          >
+                            <div
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                icon-color="red"
+                                title="Are you sure you want to remove this?"
+                                @confirm="deleteAuthor(element.id)"
+                              >
+                                <template #reference>
+                                  <el-icon><delete-filled /></el-icon>
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                    @click="addAuthor"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span class="text-primary-600 hover:text-primary-500">
+                      Add an author
+                    </span>
+                    <form-help-content
+                      popoverContent="Add a developer of the software"
+                    ></form-help-content>
+                  </div>
+
+                  <el-form-item
+                    label="Contributors"
+                    :error="contributorsErrorMessage"
+                  >
+                    <draggable
+                      tag="div"
+                      :list="step2Form.contributors"
+                      item-key="id"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="mb-2 flex flex-row justify-between transition-all"
+                        >
+                          <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                            <el-select
+                              v-model="element.contributorType"
+                              filterable
+                              placeholder="Select a contributor type"
+                            >
+                              <el-option
+                                v-for="item in contributorTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              >
+                              </el-option>
+                            </el-select>
+                          </div>
+
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <div class="mr-2 w-1/5">
+                              <el-input
+                                v-model="element.givenName"
+                                type="text"
+                                placeholder="Given name"
+                              ></el-input>
+                            </div>
+
+                            <div class="mx-2 w-1/5">
+                              <el-input
+                                v-model="element.familyName"
+                                type="text"
+                                placeholder="Family name"
+                              ></el-input>
+                            </div>
+
+                            <div class="mx-2 w-1/5">
+                              <el-input
+                                v-model="element.affiliation"
+                                type="text"
+                                placeholder="Affiliation"
+                              ></el-input>
+                            </div>
+
+                            <div class="mx-2 flex w-1/5 flex-col">
+                              <el-input
+                                v-model="element.email"
+                                type="text"
+                                placeholder="E-mail address"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+
+                            <div class="mx-2 flex w-1/5 flex-col">
+                              <el-input
+                                v-model="element.orcid"
+                                type="text"
+                                placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                              ></el-input>
+                              <span class="mt-1 ml-2 text-xs text-gray-400">
+                                Optional
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            class="flex w-1/12 flex-row items-start justify-evenly py-4"
+                          >
+                            <div
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteContributor(element.id)"
+                              >
+                                <template #reference>
+                                  <el-icon><delete-filled /></el-icon>
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                    @click="addContributor"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span class="text-primary-600 hover:text-primary-500">
+                      Add a contributor
+                    </span>
+                    <form-help-content
+                      popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
+                    ></form-help-content>
+                  </div>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
               >
-                <Icon icon="carbon:add" />
-                <span class="text-primary-600 hover:text-primary-500">
-                  Add a contributor
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button
+                class="primary-button"
+                @click="navigateToStep3FromStep2"
+                :disabled="checkInvalidStatus"
+              >
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
+          </div>
+
+          <div v-if="currentStep == 3">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                >
+                  Discoverability
                 </span>
-                <form-help-content
-                  popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
-                ></form-help-content>
               </div>
-            </FormCardContent>
-
-            <FormCardContent
-              :stepId="3"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Discoverability"
-            >
-              <el-form-item label="Application category">
-                <div class="flex flex-row items-center">
-                  <el-select
-                    v-model="codeForm.applicationCategory"
-                    filterable
-                    allow-create
-                    placeholder="Select an application category"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in applicationCategoryOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    >
-                    </el-option>
-                  </el-select>
-                  <form-help-content
-                    popoverContent="Type of application, e.g. scientific, business, etc."
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Keywords" required>
-                <draggable
-                  tag="div"
-                  :list="codeForm.keywords"
-                  item-key="id"
-                  handle=".handle"
+              <div class="p-4">
+                <el-form
+                  :model="step3Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s3Form"
+                  @submit.prevent
+                  class="py-4"
                 >
-                  <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.keyword"
-                          type="text"
-                          placeholder="orbit"
-                          v-on:keyup.enter="addKeyword"
-                          :ref="element.id"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
-                        <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                  <el-form-item label="Application category">
+                    <div class="flex w-full flex-row items-center">
+                      <el-select
+                        v-model="step3Form.applicationCategory"
+                        filterable
+                        allow-create
+                        placeholder="Select an application category"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in applicationCategoryOptions"
+                          :key="item"
+                          :label="item"
+                          :value="item"
                         >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
-                        >
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteKeyword(element.id)"
-                          >
-                            <template #reference>
-                              <Icon icon="bx:bx-x" />
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="Type of application, e.g. scientific, business, etc."
+                      ></form-help-content>
                     </div>
-                  </template>
-                </draggable>
-              </el-form-item>
-              <div
-                class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
-                @click="addKeyword"
-              >
-                <Icon icon="carbon:add" />
-                <span> Add a keyword </span>
-                <form-help-content
-                  popoverContent="Keywords relevant to your software"
-                ></form-help-content>
+                  </el-form-item>
+
+                  <el-form-item label="Keywords" required>
+                    <draggable
+                      tag="div"
+                      :list="step3Form.keywords"
+                      item-key="id"
+                      handle=".handle"
+                      class="w-full"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
+                        >
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <el-input
+                              v-model="element.keyword"
+                              type="text"
+                              placeholder="orbit"
+                              v-on:keyup.enter="addKeyword"
+                              :ref="element.id"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex w-1/12 flex-row justify-evenly">
+                            <div
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteKeyword(element.id)"
+                              >
+                                <template #reference>
+                                  <el-icon><delete-filled /></el-icon>
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
+                    @click="addKeyword"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add a keyword </span>
+                    <form-help-content
+                      popoverContent="Keywords relevant to your software"
+                    ></form-help-content>
+                  </div>
+
+                  <el-form-item label="Funding code">
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step3Form.funding.code"
+                        type="text"
+                        placeholder="PRA_2018_73"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Code of the grant funding this software (comma separate if multiple)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Funding organization">
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step3Form.funding.organization"
+                        type="text"
+                        placeholder="University of California, San Francisco"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="The organization funding this software (comma separate if multiple)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </el-form>
               </div>
-
-              <el-form-item label="Funding code">
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.funding.code"
-                    type="text"
-                    placeholder="PRA_2018_73"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Code of the grant funding this software (comma separate if multiple)"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Funding organization">
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.funding.organization"
-                    type="text"
-                    placeholder="University of California, San Francisco"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="The organization funding this software (comma separate if multiple)"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-            </FormCardContent>
-
-            <FormCardContent
-              :stepId="4"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Development tools"
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
             >
-              <el-form-item
-                label="Code repository"
-                :error="codeRepositoryErrorMessage"
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
               >
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.codeRepository"
-                    placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, GitHub, CodePlex, institutional GitLab instance, etc.)"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button
+                class="primary-button"
+                @click="navigateToStep4FromStep3"
+                :disabled="checkInvalidStatus"
+              >
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
+          </div>
 
-              <el-form-item
-                label="Continuous integration"
-                :error="continuousIntegrationErrorMessage"
-              >
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.continuousIntegration"
-                    placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item
-                label="Issue Tracker"
-                :error="issueTrackerErrorMessage"
-              >
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.issueTracker"
-                    placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Link to issue tracker (Jira, GitHub issues, etc.)"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item
-                label="Related links"
-                :error="relatedLinksErrorMessage"
-              >
-                <draggable
-                  tag="div"
-                  :list="codeForm.relatedLinks"
-                  item-key="id"
-                  handle=".handle"
+          <div v-if="currentStep == 4">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
-                  <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.link"
-                          type="text"
-                          placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
-                        <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
-                        >
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteRelatedLink(element.id)"
-                          >
-                            <template #reference>
-                              <Icon icon="bx:bx-x" />
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-              </el-form-item>
-              <div
-                class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                @click="addRelatedLink"
-              >
-                <Icon icon="carbon:add" />
-                <span> Add a related link </span>
-                <form-help-content
-                  popoverContent="Link to documents, software, tools, etc. related to your software"
-                ></form-help-content>
+                  Development tools
+                </span>
               </div>
-            </FormCardContent>
-
-            <FormCardContent
-              :stepId="5"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Run-time environment"
-            >
-              <el-form-item label="Programming Language" required>
-                <div class="flex flex-row items-center">
-                  <el-select
-                    v-model="codeForm.programmingLanguage"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="C#, Java, Python 3"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in programmingLanguageOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                  <form-help-content
-                    popoverContent="All programming languages used in this software. Select from the suggested list or type your own."
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Runtime platform">
-                <div class="flex flex-row items-center">
-                  <el-select
-                    v-model="codeForm.runtimePlatform"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder=".Net, Java"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in runtimePlatformOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                  <form-help-content
-                    popoverContent="All runtime platforms used in this software. Select from the suggested list or type your own."
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Operating system">
-                <div class="flex flex-row items-center">
-                  <el-select
-                    v-model="codeForm.operatingSystem"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="Linux, Windows"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in operatingSystemOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                  <form-help-content
-                    popoverContent="All operating systems this software can run on.  Select from the suggested list or type your own."
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Other software requirements">
-                <draggable
-                  tag="div"
-                  :list="codeForm.otherSoftwareRequirements"
-                  item-key="id"
-                  handle=".handle"
+              <div class="p-4">
+                <el-form
+                  :model="step4Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s4Form"
+                  @submit.prevent
+                  class="py-4"
                 >
-                  <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.link"
-                          type="text"
-                          placeholder="Python 3.4 or https://github.com/pst/requests"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
-                        <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div
-                          class="flex cursor-pointer items-center justify-center text-gray-600 hover:text-gray-800"
-                        >
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="
-                              deleteOtherSoftwareRequirements(element.id)
-                            "
-                          >
-                            <template #reference>
-                              <Icon icon="bx:bx-x" />
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
+                  <el-form-item
+                    label="Code repository"
+                    :error="codeRepositoryErrorMessage"
+                  >
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step4Form.codeRepository"
+                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, GitHub, CodePlex, institutional GitLab instance, etc.)"
+                      ></form-help-content>
                     </div>
-                  </template>
-                </draggable>
-              </el-form-item>
-              <div
-                class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                @click="addOtherSoftwareRequirements"
-              >
-                <Icon icon="carbon:add" />
-                <span> Add an additional software requirement </span>
-                <form-help-content
-                  popoverContent="Required software to run/compile/use this software."
-                ></form-help-content>
-              </div>
-            </FormCardContent>
+                  </el-form-item>
 
-            <FormCardContent
-              :stepId="6"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Current version of the software"
-            >
-              <el-form-item
-                label="Current version"
-                :error="versionErrorMessage"
-              >
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.currentVersion"
-                    placeholder="1.5.6"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Version number of this software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Current version release date">
-                <div class="flex flex-row items-center">
-                  <el-date-picker
-                    v-model="codeForm.currentVersionReleaseDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
+                  <el-form-item
+                    label="Continuous integration"
+                    :error="continuousIntegrationErrorMessage"
                   >
-                  </el-date-picker>
-                  <form-help-content
-                    popoverContent="The date on which the current version was released"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step4Form.continuousIntegration"
+                        placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
 
-              <el-form-item
-                label="Current version download URL"
-                :error="currentVersionDownloadLinkErrorMessage"
-              >
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.currentVersionDownloadLink"
-                    type="url"
-                    placeholder="https://www.python.org/downloads/release/python-3100/"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="URL to download the current version of this software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Current version release notes">
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.currentVersionReleaseNotes"
-                    type="textarea"
-                    placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Release notes for the current version of this software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-            </FormCardContent>
-
-            <FormCardContent
-              :stepId="7"
-              :currentStepId="currentStep"
-              :nextStep="nextFormStep"
-              :prevStep="prevFormStep"
-              :validityCheck="invalidStatus"
-              stepTitle="Additional Information"
-              :lastStep="true"
-            >
-              <el-form-item label="Reference publication">
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.referencePublication"
-                    type="text"
-                    placeholder="https://doi.org/10.100/xyz123"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Link to the scholarly publication that describes the software"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Development status">
-                <div class="flex flex-row items-center">
-                  <el-select
-                    v-model="codeForm.developmentStatus"
-                    filterable
-                    placeholder=""
+                  <el-form-item
+                    label="Issue Tracker"
+                    :error="issueTrackerErrorMessage"
                   >
-                    <el-option
-                      v-for="item in repoStatusOptions"
-                      :key="item.value"
-                      :label="item.display_name"
-                      :value="item.value"
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step4Form.issueTracker"
+                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to issue tracker (Jira, GitHub issues, etc.)"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Related links"
+                    :error="relatedLinksErrorMessage"
+                  >
+                    <draggable
+                      tag="div"
+                      :list="step4Form.relatedLinks"
+                      item-key="id"
+                      handle=".handle"
+                      class="w-full"
                     >
-                    </el-option>
-                  </el-select>
-                  <form-help-content
-                    popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
-                  ></form-help-content>
-                </div>
+                      <template #item="{ element }">
+                        <div
+                          class="mb-2 flex flex-row justify-between transition-all"
+                        >
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <el-input
+                              v-model="element.link"
+                              type="text"
+                              placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex w-1/12 flex-row justify-evenly">
+                            <div
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="deleteRelatedLink(element.id)"
+                              >
+                                <template #reference>
+                                  <el-icon><delete-filled /></el-icon>
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
 
-                <p class="pt-2 text-xs text-gray-500">
-                  {{ developmentStatus }}
-                </p>
-              </el-form-item>
+                  <div
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                    @click="addRelatedLink"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add a related link </span>
+                    <form-help-content
+                      popoverContent="Link to documents, software, tools, etc. related to your software"
+                    ></form-help-content>
+                  </div>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
+              >
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button
+                class="primary-button"
+                @click="navigateToStep5FromStep4"
+                :disabled="checkInvalidStatus"
+              >
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
+          </div>
 
-              <el-form-item label="Is part of" :error="isPartOfErrorMessage">
-                <div class="flex flex-row items-center">
-                  <el-input
-                    v-model="codeForm.isPartOf"
-                    type="url"
-                    placeholder="https://thebiggerframework.org"
-                  ></el-input>
-                  <form-help-content
-                    popoverContent="Link to the project this software is part of"
-                  ></form-help-content>
-                </div>
-              </el-form-item>
-            </FormCardContent>
+          <div v-if="currentStep == 5">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                >
+                  Run-time environment
+                </span>
+              </div>
+              <div class="p-4">
+                <el-form
+                  :model="step5Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s5Form"
+                  @submit.prevent
+                  class="py-4"
+                >
+                  <el-form-item label="Programming Language" required>
+                    <div class="flex w-full flex-row items-center">
+                      <el-select
+                        v-model="step5Form.programmingLanguage"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="C#, Java, Python 3"
+                        tag-type="info"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in programmingLanguageOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All programming languages used in this software. Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Runtime platform">
+                    <div class="flex w-full flex-row items-center">
+                      <el-select
+                        v-model="step5Form.runtimePlatform"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder=".Net, Java"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in runtimePlatformOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All runtime platforms used in this software. Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Operating system">
+                    <div class="flex w-full flex-row items-center">
+                      <el-select
+                        v-model="step5Form.operatingSystem"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="Linux, Windows"
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in operatingSystemOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="All operating systems this software can run on.  Select from the suggested list or type your own."
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Other software requirements">
+                    <draggable
+                      tag="div"
+                      :list="step5Form.otherSoftwareRequirements"
+                      item-key="id"
+                      handle=".handle"
+                      class="w-full"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="mb-2 flex w-full flex-row justify-between transition-all"
+                        >
+                          <div class="flex w-11/12 flex-row justify-between">
+                            <el-input
+                              v-model="element.link"
+                              type="text"
+                              placeholder="Python 3.4 or https://github.com/pst/requests"
+                            ></el-input>
+                            <div class="mx-2"></div>
+                          </div>
+                          <div class="flex w-1/12 flex-row justify-evenly">
+                            <div
+                              class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                            >
+                              <Icon icon="ic:outline-drag-indicator" />
+                            </div>
+                            <div
+                              class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                            >
+                              <el-popconfirm
+                                title="Are you sure you want to remove this?"
+                                icon-color="red"
+                                confirm-button-text="Yes"
+                                cancel-button-text="No"
+                                @confirm="
+                                  deleteOtherSoftwareRequirements(element.id)
+                                "
+                              >
+                                <template #reference>
+                                  <el-icon><delete-filled /></el-icon>
+                                </template>
+                              </el-popconfirm>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </draggable>
+                  </el-form-item>
+
+                  <div
+                    class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                    @click="addOtherSoftwareRequirements"
+                  >
+                    <Icon icon="carbon:add" />
+                    <span> Add an additional software requirement </span>
+                    <form-help-content
+                      popoverContent="Required software to run/compile/use this software."
+                    ></form-help-content>
+                  </div>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
+              >
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+
+              <button
+                class="primary-button"
+                @click="navigateToStep6FromStep5"
+                :disabled="checkInvalidStatus"
+              >
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
+          </div>
+
+          <div v-if="currentStep == 6">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                >
+                  Current version of the software
+                </span>
+              </div>
+              <div class="p-4">
+                <el-form
+                  :model="step6Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s6Form"
+                  @submit.prevent
+                  class="py-4"
+                >
+                  <el-form-item
+                    label="Current version"
+                    :error="versionErrorMessage"
+                  >
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step6Form.currentVersion"
+                        placeholder="1.5.6"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Version number of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Current version release date">
+                    <div class="flex w-full flex-row items-center">
+                      <el-date-picker
+                        v-model="step6Form.currentVersionReleaseDate"
+                        type="date"
+                        placeholder="Pick a day"
+                        value-format="YYYY-MM-DD"
+                      >
+                      </el-date-picker>
+                      <form-help-content
+                        popoverContent="The date on which the current version was released"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Current version download URL"
+                    :error="currentVersionDownloadLinkErrorMessage"
+                  >
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step6Form.currentVersionDownloadLink"
+                        type="url"
+                        placeholder="https://www.python.org/downloads/release/python-3100/"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="URL to download the current version of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Current version release notes">
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step6Form.currentVersionReleaseNotes"
+                        type="textarea"
+                        placeholder="Change log: Added this new feature &#10;Bugfixes: Squashed some bugs"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Release notes for the current version of this software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
+              >
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button
+                class="primary-button"
+                @click="navigateToStep7FromStep6"
+                :disabled="checkInvalidStatus"
+              >
+                Next
+                <el-icon><right-icon /></el-icon>
+              </button>
+            </div>
+          </div>
+
+          <div v-if="currentStep == 7">
+            <div
+              class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+            >
+              <div class="w-full bg-gray-100 px-4 py-2">
+                <span
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                >
+                  Current version of the software
+                </span>
+              </div>
+              <div class="p-4">
+                <el-form
+                  :model="step7Form"
+                  label-width="160px"
+                  label-position="top"
+                  size="large"
+                  ref="s7Form"
+                  @submit.prevent
+                  class="py-4"
+                >
+                  <el-form-item label="Reference publication">
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step7Form.referencePublication"
+                        type="text"
+                        placeholder="https://doi.org/10.100/xyz123"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the scholarly publication that describes the software"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+
+                  <el-form-item label="Development status">
+                    <div class="flex w-full flex-row items-center">
+                      <el-select
+                        v-model="step7Form.developmentStatus"
+                        filterable
+                        placeholder=""
+                        class="w-full"
+                      >
+                        <el-option
+                          v-for="item in repoStatusOptions"
+                          :key="item.value"
+                          :label="item.display_name"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <form-help-content
+                        popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
+                      ></form-help-content>
+                    </div>
+
+                    <p class="pt-2 text-xs text-gray-500">
+                      {{ developmentStatus }}
+                    </p>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Is part of"
+                    :error="isPartOfErrorMessage"
+                  >
+                    <div class="flex w-full flex-row items-center">
+                      <el-input
+                        v-model="step7Form.isPartOf"
+                        type="url"
+                        placeholder="https://thebiggerframework.org"
+                      ></el-input>
+                      <form-help-content
+                        popoverContent="Link to the project this software is part of"
+                      ></form-help-content>
+                    </div>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </div>
+            <div
+              class="form-navigation-buttons flex w-full justify-center space-x-4 px-5 py-4"
+            >
+              <button
+                @click="prevFormStep"
+                class="secondary-plain-button"
+                size="medium"
+                :disabled="checkInvalidStatus"
+              >
+                <el-icon><back-icon /></el-icon>
+                Previous
+              </button>
+              <!-- :plain="!lastStep" -->
+              <button
+                class="primary-button"
+                @click="nextFormStep"
+                :disabled="checkInvalidStatus"
+              >
+                Continue
+                <el-icon><d-arrow-right /></el-icon>
+              </button>
+            </div>
           </div>
         </div>
-      </el-form>
+      </div>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-1 right-2" v-if="showSaving">
+        <Vue3Lottie
+          :animationData="SaveLottieJSON"
+          :width="75"
+          :height="75"
+          :loop="1"
+          @onComplete="hideSavingIcon"
+        />
+      </div>
+    </transition>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="80"
+          :height="80"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
-import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ElMessageBox } from "element-plus";
-// import semver from "semver";
+import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
+
+import draggable from "vuedraggable";
+import validator from "validator";
+import axios from "axios";
 import _ from "lodash";
+import humanparser from "humanparser";
 
 import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
-import FormCardContent from "@/components/ui/FormCardContent.vue";
-// import LoadingPulseCircle from "@/components/spinners/LoadingPulseCircle.vue";
 
-// import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
 export default {
   name: "CodeCreateMetadata",
@@ -902,12 +1146,11 @@ export default {
     draggable,
     Icon,
     PillProgressBar,
-    FormCardContent,
-    // LoadingPulseCircle,
   },
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       currentStep: 1,
       pillTitles: [
         "Basic info",
@@ -918,49 +1161,72 @@ export default {
         "Current version of the software",
         "Additional Info",
       ],
-      showWizard: true,
+      SaveLottieJSON,
       dataset: {},
-      // loadingLicenseDetails: false,
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      activeNames: ["general", "code"],
       loading: false,
       interval: null,
-      // licenseOptions: licensesJSON.licenses,
       contributorTypes: contributorTypesJSON.contributorTypes,
       programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
-      codeForm: {
+      step1Form: {
         name: "",
         description: "",
+        creationDate: "",
+        firstReleaseDate: "",
+      },
+      step1FormRules: {
+        name: [
+          {
+            required: true,
+            message: "Please enter the name of the software",
+            trigger: "blur",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "Please enter a description",
+            trigger: "blur",
+          },
+        ],
+      },
+      step2Form: {
+        authors: [],
+        contributors: [],
+      },
+      step3Form: {
+        applicationCategory: "",
         keywords: [],
         funding: {
           code: "",
           organization: "",
         },
-        referencePublication: "",
-        authors: [],
-        contributors: [],
-        creationDate: "",
-        firstReleaseDate: "",
-        // license: "",
-        uniqueIdentifier: "",
-        applicationCategory: "",
+      },
+      step4Form: {
         codeRepository: "",
         continuousIntegration: "",
         issueTracker: "",
         relatedLinks: [],
+      },
+      step5Form: {
         programmingLanguage: [],
         runtimePlatform: [],
         operatingSystem: [],
         otherSoftwareRequirements: [],
+      },
+      step6Form: {
         currentVersion: "",
         currentVersionReleaseDate: "",
         currentVersionDownloadLink: "",
         currentVersionReleaseNotes: "",
+      },
+      step7Form: {
+        referencePublication: "",
         developmentStatus: "",
         isPartOf: "",
       },
@@ -974,32 +1240,27 @@ export default {
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
       invalidStatus: {},
-      // showLicenseDetails: false,
-      // licenseTitle: "",
-      // licenseHtmlUrl: "",
       originalObject: {},
+      showSaving: false,
+      showSpinner: false,
     };
   },
   watch: {
-    "codeForm.authors": {
+    "step2Form.authors": {
       handler(val) {
-        // if (val.length === 0) {
-        //   this.authorsErrorMessage = "Please provide at least one author.";
-        //   this.invalidStatus.authors = true;
-        //   this.$refs.cmForm.validate();
-        //   return;
-        // } else {
-        //   this.authorsErrorMessage = ""; //clear error message
-        //   this.invalidStatus.authors = false;
-        // }
-
         if (val.length > 0) {
           for (let author of val) {
-            if (author.name === "" || author.affiliation === "") {
+            if (
+              author.givenName === "" ||
+              author.affiliation === "" ||
+              author.affiliation === undefined
+            ) {
               this.authorsErrorMessage =
-                "Name and Affiliation for each author is mandatory";
+                "First name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
-              this.$refs.cmForm.validate();
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
               break;
             } else {
               this.authorsErrorMessage = "";
@@ -1028,16 +1289,22 @@ export default {
               } else {
                 // console.log("invalid orcid");
                 this.authorsErrorMessage = "ORCID is not valid";
-                this.$refs.cmForm.validate();
+                if (this.$refs["s2Form"]) {
+                  this.$refs["s2Form"].validate();
+                }
                 this.invalidStatus.authors = true;
                 break;
               }
 
               // validate email
               if (author.email !== "") {
-                if (!emailRegex.test(author.email)) {
+                const validIdentifier = validator.isEmail(author.email);
+
+                if (!validIdentifier) {
                   this.authorsErrorMessage = "Email is not valid";
-                  this.$refs.cmForm.validate();
+                  if (this.$refs["s2Form"]) {
+                    this.$refs["s2Form"].validate();
+                  }
                   this.invalidStatus.authors = true;
                   break;
                 } else {
@@ -1054,15 +1321,18 @@ export default {
       },
       deep: true,
     },
-    "codeForm.contributors": {
+    "step2Form.contributors": {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
-            if (contributor.name === "" || contributor.affiliation === "") {
+            if (
+              contributor.givenName === "" ||
+              contributor.affiliation === ""
+            ) {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.invalidStatus.contributors = true;
-              this.$refs.cmForm.validate();
+              this.$refs.s2Form.validate();
               break;
             } else {
               this.contributorsErrorMessage = "";
@@ -1091,7 +1361,7 @@ export default {
               } else {
                 // console.log("invalid orcid");
                 this.contributorsErrorMessage = "ORCID is not valid";
-                this.$refs.cmForm.validate();
+                this.$refs.s2Form.validate();
                 this.invalidStatus.contributors = true;
                 break;
               }
@@ -1099,9 +1369,11 @@ export default {
 
             // validate email
             if (contributor.email !== "") {
-              if (!emailRegex.test(contributor.email)) {
+              const validIdentifier = validator.isEmail(contributor.email);
+
+              if (!validIdentifier) {
                 this.contributorsErrorMessage = "Email is not valid";
-                this.$refs.cmForm.validate();
+                this.$refs.s2Form.validate();
                 this.invalidStatus.contributors = true;
                 break;
               } else {
@@ -1115,7 +1387,7 @@ export default {
               this.contributorsErrorMessage =
                 "Please select contributor type for each contributor";
               this.invalidStatus.contributors = true;
-              this.$refs.cmForm.validate();
+              this.$refs.s2Form.validate();
               break;
             } else {
               this.contributorsErrorMessage = "";
@@ -1129,37 +1401,14 @@ export default {
       },
       deep: true,
     },
-    // "codeForm.currentVersion": {
-    //   handler(val) {
-    //     if (val != "" && semver.valid(val) === null) {
-    //       this.versionErrorMessage = "Please provide a valid version number.";
-    //       this.$refs.cmForm.validate();
-    //       this.invalidStatus.version = true;
-    //       return;
-    //     } else {
-    //       this.versionErrorMessage = "";
-    //       this.invalidStatus.version = false;
-    //     }
-    //   },
-    //   deep: true,
-    // },
-    "codeForm.isPartOf": {
+    "step7Form.isPartOf": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.isPartOfErrorMessage = "Please provide a valid URL";
-            this.$refs.cmForm.validate();
+            this.$refs.s7Form.validate();
             this.invalidStatus.isPartOf = true;
             return;
           } else {
@@ -1173,23 +1422,14 @@ export default {
       },
       deep: true,
     },
-    "codeForm.codeRepository": {
+    "step4Form.codeRepository": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.codeRepositoryErrorMessage = "Please provide a valid URL";
-            this.$refs.cmForm.validate();
+            this.$refs.s4Form.validate();
             this.invalidStatus.codeRepository = true;
             return;
           } else {
@@ -1203,24 +1443,15 @@ export default {
       },
       deep: true,
     },
-    "codeForm.continuousIntegration": {
+    "step4Form.continuousIntegration": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.continuousIntegrationErrorMessage =
               "Please provide a valid URL";
-            this.$refs.cmForm.validate();
+            this.$refs.s4Form.validate();
             this.invalidStatus.continuousIntegration = true;
             return;
           } else {
@@ -1234,23 +1465,14 @@ export default {
       },
       deep: true,
     },
-    "codeForm.issueTracker": {
+    "step4Form.issueTracker": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.issueTrackerErrorMessage = "Please provide a valid URL";
-            this.$refs.cmForm.validate();
+            this.$refs.s4Form.validate();
             this.invalidStatus.issueTracker = true;
             return;
           } else {
@@ -1264,24 +1486,15 @@ export default {
       },
       deep: true,
     },
-    "codeForm.currentVersionDownloadLink": {
+    "step6Form.currentVersionDownloadLink": {
       handler(val) {
         if (val != "") {
-          let validIdentifier = false;
-
-          const regexp =
-            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-          if (regexp.test(val)) {
-            validIdentifier = true;
-          } else {
-            validIdentifier = false;
-          }
+          const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
             this.currentVersionDownloadLinkErrorMessage =
               "Please provide a valid URL";
-            this.$refs.cmForm.validate();
+            this.$refs.s6Form.validate();
             this.invalidStatus.currentVersionDownloadLink = true;
             return;
           } else {
@@ -1295,25 +1508,16 @@ export default {
       },
       deep: true,
     },
-    "codeForm.relatedLinks": {
+    "step4Form.relatedLinks": {
       handler(val) {
         if (val.length > 0) {
           for (let relatedLink of val) {
             if (relatedLink.link !== "") {
-              let validIdentifier = false;
-
-              const regexp =
-                /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-
-              if (regexp.test(relatedLink.link)) {
-                validIdentifier = true;
-              } else {
-                validIdentifier = false;
-              }
+              const validIdentifier = validator.isURL(relatedLink.link);
 
               if (!validIdentifier) {
                 this.relatedLinksErrorMessage = "Please provide a valid URL";
-                this.$refs.cmForm.validate();
+                this.$refs.s4Form.validate();
                 this.invalidStatus.relatedLinks = true;
                 break;
               } else {
@@ -1348,10 +1552,10 @@ export default {
       }
 
       if (
-        "developmentStatus" in this.codeForm &&
-        this.codeForm.developmentStatus != ""
+        "developmentStatus" in this.step7Form &&
+        this.step7Form.developmentStatus != ""
       ) {
-        const status = this.codeForm.developmentStatus;
+        const status = this.step7Form.developmentStatus;
         const returnVal = getStatus(status);
 
         return returnVal.description;
@@ -1375,7 +1579,16 @@ export default {
     setCurrentStep(step) {
       this.currentStep = step;
     },
+    showSavingIcon() {
+      this.showSaving = false;
+      this.showSaving = true;
+    },
+    hideSavingIcon() {
+      this.showSaving = false;
+    },
     async prevFormStep() {
+      this.showSavingIcon();
+
       if (this.currentStep - 1 > 0) {
         this.currentStep--;
       } else {
@@ -1393,29 +1606,68 @@ export default {
         this.currentStep++;
       }
     },
-    onDragStart() {
-      // change cursor to grabbing
-      this.$refs.cmForm.style.cursor = "grabbing";
+    navigateToStep2FromStep1() {
+      this.$refs["s1Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(2);
+        }
+      });
     },
-    onDragEnd() {
-      // change cursor to grabbing
-      this.$refs.cmForm.style.cursor = "grab";
+    navigateToStep3FromStep2() {
+      if (this.step2Form.authors.length <= 0) {
+        ElMessage.error("Please add at least one author.");
+        return;
+      }
+
+      this.$refs["s2Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(3);
+        }
+      });
     },
-    // async openLicenseDetails() {
-    //   this.licenseHtmlUrl = "/";
-    //   const licenseId = this.codeForm.license;
+    navigateToStep4FromStep3() {
+      if (this.step3Form.keywords.length <= 0) {
+        ElMessage.error("Please add at least one keyword.");
+        return;
+      }
 
-    //   //get license object
-    //   const licenseObject = this.licenseOptions.find(
-    //     (license) => license.licenseId === licenseId
-    //   );
-
-    //   this.licenseHtmlUrl = licenseObject.reference;
-    //   this.licenseTitle = licenseObject.name;
-
-    //   this.showLicenseDetails = true;
-    //   this.loadingLicenseDetails = true;
-    // },
+      this.$refs["s3Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(4);
+        }
+      });
+    },
+    navigateToStep5FromStep4() {
+      this.$refs["s4Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(5);
+        }
+      });
+    },
+    navigateToStep6FromStep5() {
+      if (this.step5Form.programmingLanguage.length <= 0) {
+        ElMessage.error("Please add at least one programming language.");
+        return;
+      }
+      this.$refs["s5Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(6);
+        }
+      });
+    },
+    navigateToStep7FromStep6() {
+      this.$refs["s6Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(7);
+        }
+      });
+    },
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();
@@ -1437,19 +1689,19 @@ export default {
     },
     addKeyword() {
       const uuid = uuidv4();
-      this.codeForm.keywords.push({
+      this.step3Form.keywords.push({
         keyword: "",
-        id: uuid,
+        id: uuidv4(),
       });
       this.focusOnElementRef(uuid);
     },
     deleteKeyword(id) {
-      this.codeForm.keywords = this.codeForm.keywords.filter((keyword) => {
+      this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
         return keyword.id !== id;
       });
     },
     addAuthor() {
-      this.codeForm.authors.push({
+      this.step2Form.authors.push({
         givenName: "",
         familyName: "",
         affiliation: "",
@@ -1459,12 +1711,12 @@ export default {
       });
     },
     deleteAuthor(id) {
-      this.codeForm.authors = this.codeForm.authors.filter((author) => {
+      this.step2Form.authors = this.step2Form.authors.filter((author) => {
         return author.id !== id;
       });
     },
     addContributor() {
-      this.codeForm.contributors.push({
+      this.step2Form.contributors.push({
         contributorType: "",
         givenName: "",
         familyName: "",
@@ -1475,34 +1727,34 @@ export default {
       });
     },
     deleteContributor(id) {
-      this.codeForm.contributors = this.codeForm.contributors.filter(
+      this.step2Form.contributors = this.step2Form.contributors.filter(
         (contributor) => {
           return contributor.id !== id;
         }
       );
     },
     addRelatedLink() {
-      this.codeForm.relatedLinks.push({
+      this.step4Form.relatedLinks.push({
         link: "",
         id: uuidv4(),
       });
     },
     deleteRelatedLink(id) {
-      this.codeForm.relatedLinks = this.codeForm.relatedLinks.filter(
+      this.step4Form.relatedLinks = this.step4Form.relatedLinks.filter(
         (relatedLink) => {
           return relatedLink.id !== id;
         }
       );
     },
     addOtherSoftwareRequirements() {
-      this.codeForm.otherSoftwareRequirements.push({
+      this.step5Form.otherSoftwareRequirements.push({
         link: "",
         id: uuidv4(),
       });
     },
     deleteOtherSoftwareRequirements(id) {
-      this.codeForm.otherSoftwareRequirements =
-        this.codeForm.otherSoftwareRequirements.filter(
+      this.step5Form.otherSoftwareRequirements =
+        this.step5Form.otherSoftwareRequirements.filter(
           (otherSoftwareRequirement) => {
             return otherSoftwareRequirement.id !== id;
           }
@@ -1513,40 +1765,82 @@ export default {
         return element[key] !== "";
       });
     },
-    navigateToSelectDestination(_evt, shouldNavigateBack = false) {
-      this.dataset.data.general.questions.name = this.codeForm.name;
-      this.dataset.data.general.questions.description =
-        this.codeForm.description;
+    async saveCurrentEntries() {
+      this.showSavingIcon();
 
-      this.codeForm.keywords = this.filterArrayOfObjects(
-        this.codeForm.keywords,
+      this.dataset.data.general.questions.name = this.step1Form.name;
+      this.dataset.data.general.questions.description =
+        this.step1Form.description;
+
+      this.step3Form.keywords = this.filterArrayOfObjects(
+        this.step3Form.keywords,
         "keyword"
       );
-      this.dataset.data.general.questions.keywords = this.codeForm.keywords;
-      this.dataset.data.general.questions.authors = this.codeForm.authors;
-      this.dataset.data.general.questions.contributors =
-        this.codeForm.contributors;
-      this.dataset.data.general.questions.funding = this.codeForm.funding;
-      this.dataset.data.general.questions.referencePublication =
-        this.codeForm.referencePublication;
-      // this.dataset.data.general.questions.license = this.codeForm.license;
 
-      this.codeForm.relatedLinks = this.filterArrayOfObjects(
-        this.codeForm.relatedLinks,
+      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
+      this.dataset.data.general.questions.authors = this.step2Form.authors;
+      this.dataset.data.general.questions.contributors =
+        this.step2Form.contributors;
+      this.dataset.data.general.questions.funding = this.step3Form.funding;
+      this.dataset.data.general.questions.referencePublication =
+        this.step7Form.referencePublication;
+
+      this.step4Form.relatedLinks = this.filterArrayOfObjects(
+        this.step4Form.relatedLinks,
         "link"
       );
 
-      this.codeForm.otherSoftwareRequirements = this.filterArrayOfObjects(
-        this.codeForm.otherSoftwareRequirements,
+      this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
+        this.step5Form.otherSoftwareRequirements,
         "link"
       );
 
       if (this.codePresent) {
-        this.dataset.data.Code.questions = this.codeForm;
+        let codeForm = {};
+
+        codeForm.name = this.step1Form.name;
+        codeForm.description = this.step1Form.description;
+        codeForm.creationDate = this.step1Form.creationDate;
+        codeForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+
+        codeForm.authors = this.step2Form.authors;
+        codeForm.contributors = this.step2Form.contributors;
+
+        codeForm.keywords = this.step3Form.keywords;
+        codeForm.funding = this.step3Form.funding;
+        codeForm.applicationCategory = this.step3Form.applicationCategory;
+
+        codeForm.codeRepository = this.step4Form.codeRepository;
+        codeForm.continuousIntegration = this.step4Form.continuousIntegration;
+        codeForm.issueTracker = this.step4Form.issueTracker;
+        codeForm.relatedLinks = this.step4Form.relatedLinks;
+
+        codeForm.programmingLanguage = this.step5Form.programmingLanguage;
+        codeForm.runtimePlatform = this.step5Form.runtimePlatform;
+        codeForm.operatingSystem = this.step5Form.operatingSystem;
+        codeForm.otherSoftwareRequirements =
+          this.step5Form.otherSoftwareRequirements;
+
+        codeForm.currentVersion = this.step6Form.currentVersion;
+        codeForm.currentVersionReleaseDate =
+          this.step6Form.currentVersionReleaseDate;
+        codeForm.currentVersionDownloadLink =
+          this.step6Form.currentVersionDownloadLink;
+        codeForm.currentVersionReleaseNotes =
+          this.step6Form.currentVersionReleaseNotes;
+
+        codeForm.referencePublication = this.step7Form.referencePublication;
+        codeForm.developmentStatus = this.step7Form.developmentStatus;
+        codeForm.isPartOf = this.step7Form.isPartOf;
+
+        this.dataset.data.Code.questions = codeForm;
       }
 
-      this.datasetStore.updateCurrentDataset(this.dataset);
-      this.datasetStore.syncDatasets();
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+    },
+    async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+      await this.saveCurrentEntries();
 
       if (shouldNavigateBack) {
         this.$router.push({
@@ -1555,32 +1849,16 @@ export default {
         return;
       }
 
-      this.workflow.expandOptions = [];
-
       const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
 
       this.$router.push({ path: routerPath });
     },
-    // hideLoading() {
-    //   const that = this;
-
-    //   this.interval = setInterval(function () {
-    //     var element = document.getElementById("existElement");
-
-    //     if (typeof element != "undefined" && element != null) {
-    //       that.loading.close();
-    //       clearInterval(that.interval);
-    //     } else {
-    //       // console.log("waiting for loading");
-    //     }
-    //   }, 10);
-    // },
     navigateBack() {
       let newChanges = false;
 
-      if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
-        newChanges = true;
-      }
+      // if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
+      //   newChanges = true;
+      // }
 
       if (newChanges) {
         ElMessageBox.confirm(
@@ -1608,15 +1886,243 @@ export default {
         });
       }
     },
-  },
-  beforeMount() {
-    // this.hideLoading();
-    // this.loading = ElLoading.service({
-    //   lock: true,
-    //   text: "Loading",
-    //   fullscreen: true,
-    //   background: "rgba(0, 0, 0, 0.7)",
-    // });
+    async prefillGithubAuthors() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting authors",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${this.$server_url}/github/repo/contributors`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: selectedRepo.split("/")[0],
+            repo: selectedRepo.split("/")[1],
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      let contributors = [];
+
+      if (response != "ERROR") {
+        response.forEach((contributor) => {
+          contributors.push(contributor.login);
+        });
+      }
+
+      let authors = [];
+
+      for (const contributor of contributors) {
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            const authorObject = {};
+
+            if (response.data.name != null) {
+              const parsedNames = humanparser.parseName(response.data.name);
+              if ("lastName" in parsedNames) {
+                authorObject.familyName = parsedNames.lastName;
+              } else {
+                authorObject.familyName = "";
+              }
+              if ("firstName" in parsedNames) {
+                authorObject.givenName = parsedNames.firstName;
+              } else {
+                authorObject.givenName = response.data.name;
+              }
+            }
+
+            if (response.data.email != null) {
+              authorObject.email = response.data.email;
+            }
+
+            if (response.data.company != null) {
+              authorObject.company = response.data.company;
+            }
+
+            if (!_.isEmpty(authorObject)) {
+              authors.push(authorObject);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      authors.forEach((author) => {
+        const authorObject = {
+          givenName: author.givenName,
+          familyName: author.familyName,
+          affiliation: author.company,
+          email: author.email,
+          orcid: "",
+          id: uuidv4(),
+        };
+
+        this.step2Form.authors.push(authorObject);
+      });
+
+      ElNotification({
+        title: "Success",
+        message: "Retrieved authors",
+        position: "top-right",
+        type: "success",
+      });
+    },
+    async prefillGithubMisc() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting repo info",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response != "ERROR") {
+        if (response.html_url != null) {
+          this.step4Form.codeRepository = response.html_url;
+          this.step4Form.issueTracker = `${response.html_url}/issues`;
+        }
+
+        if (response.homepage != null) {
+          this.step4Form.relatedLinks.push({
+            link: response.homepage,
+            id: uuidv4(),
+          });
+        }
+
+        if (response.topics != null && response.topics.length > 0) {
+          response.topics.forEach((topic) => {
+            this.step3Form.keywords.push({
+              keyword: topic,
+              id: uuidv4(),
+            });
+          });
+        }
+
+        if ("created_at" in response) {
+          this.step1Form.creationDate = response.created_at;
+        }
+
+        this.step6Form.currentVersionReleaseDate = new Date().toISOString();
+
+        if (response.description != null) {
+          this.step1Form.description = response.description;
+        }
+
+        const splitRepoNameOwner = selectedRepo.split("/");
+
+        const releaseList = await axios
+          .get(`${this.$server_url}/github/repo/releases`, {
+            params: {
+              access_token: GithubAccessToken,
+              owner: splitRepoNameOwner[0],
+              repo: splitRepoNameOwner[1],
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (releaseList !== "ERROR") {
+          if (releaseList.length > 0) {
+            const release = releaseList.slice(-1).pop();
+
+            if ("created_at" in release) {
+              this.step1Form.firstReleaseDate = release.created_at;
+            }
+          }
+        }
+
+        const lanuagesResponse = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
+            {
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (lanuagesResponse != "ERROR") {
+          const languages = Object.keys(lanuagesResponse);
+          if (languages.length > 0) {
+            this.step5Form.programmingLanguage = languages;
+          }
+        }
+
+        ElNotification({
+          title: "Success",
+          message: "Repo info retrieved",
+          position: "top-right",
+          type: "success",
+        });
+      }
+    },
   },
   mounted() {
     this.$nextTick(async function () {
@@ -1628,53 +2134,76 @@ export default {
       this.datasetStore.setProgressBarType("zenodo");
       this.datasetStore.setCurrentStep(3);
 
-      if (!("expandOptions" in this.workflow)) {
-        this.workflow.expandOptions = ["general"];
-      }
-
-      if (this.workflow.expandOptions.length === 0) {
-        this.activeNames = ["general"];
-      } else {
-        this.activeNames = this.workflow.expandOptions;
-      }
+      this.workflow.currentRoute = this.$route.path;
 
       if (this.codePresent) {
         if (
           this.dataset.data.Code.questions &&
           Object.keys(this.dataset.data.Code.questions).length !== 0
         ) {
-          this.codeForm = this.dataset.data.Code.questions;
+          let codeForm = this.dataset.data.Code.questions;
 
-          this.initializeEmptyObjects(this.codeForm, this.codeForm.funding);
+          this.step1Form.name = codeForm.name;
+          this.step1Form.description = codeForm.description;
+          this.step1Form.creationDate = codeForm.creationDate;
+          this.step1Form.firstReleaseDate = codeForm.firstReleaseDate;
 
-          this.addIds(this.codeForm.keywords);
-          this.addIds(this.codeForm.authors);
-          this.addIds(this.codeForm.contributors);
+          this.step2Form.authors = codeForm.authors;
+          this.step2Form.contributors = codeForm.contributors;
 
-          this.addIds(this.codeForm.relatedLinks);
-          this.addIds(this.codeForm.otherSoftwareRequirements);
+          this.step3Form.keywords = codeForm.keywords;
+          this.step3Form.funding = codeForm.funding;
+          this.step3Form.applicationCategory = codeForm.applicationCategory;
 
-          this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+          this.step4Form.codeRepository = codeForm.codeRepository;
+          this.step4Form.continuousIntegration = codeForm.continuousIntegration;
+          this.step4Form.issueTracker = codeForm.issueTracker;
+          this.step4Form.relatedLinks = codeForm.relatedLinks;
+
+          this.step5Form.programmingLanguage = codeForm.programmingLanguage;
+          this.step5Form.runtimePlatform = codeForm.runtimePlatform;
+          this.step5Form.operatingSystem = codeForm.operatingSystem;
+          this.step5Form.otherSoftwareRequirements =
+            codeForm.otherSoftwareRequirements;
+
+          this.step6Form.currentVersion = codeForm.currentVersion;
+          this.step6Form.currentVersionReleaseDate =
+            codeForm.currentVersionReleaseDate;
+          this.step6Form.currentVersionDownloadLink =
+            codeForm.currentVersionDownloadLink;
+          this.step6Form.currentVersionReleaseNotes =
+            codeForm.currentVersionReleaseNotes;
+
+          this.step7Form.referencePublication = codeForm.referencePublication;
+          this.step7Form.developmentStatus = codeForm.developmentStatus;
+          this.step7Form.isPartOf = codeForm.isPartOf;
+
+          // this.initializeEmptyObjects(this.codeForm, this.codeForm.funding);
+          this.initializeEmptyObjects(this.step3Form, this.step3Form.funding);
+
+          this.addIds(this.step3Form.keywords);
+          this.addIds(this.step2Form.authors);
+          this.addIds(this.step2Form.contributors);
+
+          this.addIds(this.step4Form.relatedLinks);
+          this.addIds(this.step5Form.otherSoftwareRequirements);
+
+          // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
         } else {
-          this.codeForm.name = this.dataset.name;
-          this.codeForm.description = this.dataset.description;
-          this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+          this.step1Form.name = this.dataset.name;
+          this.step1Form.description = this.dataset.description;
+          // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+
+          if ("source" in this.workflow) {
+            if (this.workflow.source.type === "github") {
+              this.showSpinner = true;
+              await this.prefillGithubAuthors();
+              await this.prefillGithubMisc();
+              this.showSpinner = false;
+            }
+          }
         }
       }
-
-      // if (this.codePresent) {
-      //   if (
-      //     this.dataset.data.Code.questions &&
-      //     Object.keys(this.dataset.data.Code.questions).length !== 0
-      //   ) {
-      //     this.codeForm = this.dataset.data.Code.questions;
-
-      //     this.addIds(this.codeForm.relatedLinks);
-      //     this.addIds(this.codeForm.otherSoftwareRequirements);
-
-      //     this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
-      //   }
-      // }
     });
   },
 };

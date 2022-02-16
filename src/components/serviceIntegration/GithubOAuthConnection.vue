@@ -11,6 +11,7 @@ export default {
   // empty component, only has functionalities
   name: "GithubOAuthConnection",
   props: {
+    onStatusChange: { type: Function, required: false, default: () => {} },
     callback: { type: Function },
   },
   data() {
@@ -21,7 +22,7 @@ export default {
     };
   },
   methods: {
-    // connect with backend to call a window for getting the github username/password
+    // connect with backend to call a window for getting the GitHub username/password
     async connectOAuth() {
       this.spinnerGlobal = this.createLoading();
       window.ipcRenderer.send("OAuth-Github", "test");
@@ -56,6 +57,7 @@ export default {
               duration: 2000,
             });
             this.callback();
+            this.onStatusChange("connected");
           }
         } else {
           ElNotification({

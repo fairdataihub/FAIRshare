@@ -26,6 +26,7 @@ import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
+import { useConfigStore } from "./store/config.js";
 
 const MIN_API_VERSION = "0.0.1";
 
@@ -38,7 +39,8 @@ export default {
   data() {
     return {
       appPath: app.getAppPath(),
-      unpublishedDatasets: useDatasetsStore(),
+      allDatasets: useDatasetsStore(),
+      config: useConfigStore(),
       tokens: useTokenStore(),
       loading: "",
       environment: "",
@@ -48,10 +50,13 @@ export default {
     async loadStores() {
       try {
         // Load all the projects
-        await this.unpublishedDatasets.loadDatasets();
+        await this.allDatasets.loadDatasets();
 
         // Load all the access tokens
         await this.tokens.loadTokens();
+
+        // Load app config
+        await this.config.loadConfig();
 
         // Run all the integrations checks
         this.tokens.verifyAllConnections();
@@ -65,10 +70,6 @@ export default {
     },
   },
   mounted() {
-    // console.log("Secret token", process.env.VUE_APP_TEST_TOKEN);
-
-    console.log(process.env.NODE_ENV);
-
     // disable the mouse back and forward buttons
     window.addEventListener("mouseup", (e) => {
       if (e.button === 3 || e.button === 4) {
@@ -121,6 +122,7 @@ export default {
 
               this.loadStores();
             } else {
+              // will need to change this to a more user friendly message
               alert("Invalid API version");
               this.loading.close();
             }
@@ -155,6 +157,10 @@ export default {
     });
 
     console.log(this.appPath);
+
+    this.$router.push({
+      path: "/",
+    });
   },
 };
 </script>

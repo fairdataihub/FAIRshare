@@ -17,18 +17,35 @@ from zenodo import (
     publishZenodoDeposition,
     deleteZenodoDeposition,
 )
+from github import (
+    uploadFileToGithub,
+    getUserRepositories,
+    getRepoContributors,
+    getRepoContentTree,
+    getRepoReleases,
+)
 from metadata import createMetadata, createCitationCFF
-from utilities import foldersPresent, zipFolder, deleteFile, requestJSON, createFile
+from utilities import (
+    foldersPresent,
+    zipFolder,
+    deleteFile,
+    requestJSON,
+    createFile,
+    openFileExplorer,
+)
 
 API_VERSION = "0.0.1"
 
 
 app = Flask(__name__)
-app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # full if you want to see all the details
+# full if you want to see all the details
+app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 CORS(app)
 
 # configure root logger
-LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".sodaforcovid19research", "logs")
+LOG_FOLDER = os.path.join(
+    os.path.expanduser("~"), ".sodaforcovid19research", "logs"
+)  # noqa: E501
 LOG_FILENAME = "api.log"
 LOG_PATH = os.path.join(LOG_FOLDER, LOG_FILENAME)
 
@@ -42,7 +59,7 @@ handler = logging.handlers.RotatingFileHandler(
 
 # create logging formatter
 logFormatter = logging.Formatter(
-    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",
+    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",  # noqa: E501
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 handler.setFormatter(logFormatter)
@@ -63,7 +80,7 @@ api = Api(
 class ApiVersion(Resource):
     def get(self):
         """Returns the semver version number of the current API"""
-        api.logger.warning("TEST")
+        api.logger.info(f"API_VERSION: {API_VERSION}")
         return API_VERSION
 
 
@@ -93,6 +110,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -101,15 +119,23 @@ class CreateMetadata(Resource):
 
         parser.add_argument("data_types", type=str, help="Types of data ")
         parser.add_argument(
-            "data_object", type=str, help="Complete data object to create metadata"
+            "data_object",
+            type=str,
+            help="Complete data object to create metadata",  # noqa: E501
+        )
+        parser.add_argument(
+            "virtual_file",
+            type=bool,
+            help="Parameter to generate a virtual file",  # noqa: E501
         )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createMetadata(data_types, data)
+        return createMetadata(data_types, data, virtual_file)
 
 
 @metadata.route("/citation/create", endpoint="CreateCitationCFF")
@@ -119,6 +145,7 @@ class CreateCitationCFF(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
@@ -127,15 +154,23 @@ class CreateCitationCFF(Resource):
 
         parser.add_argument("data_types", type=str, help="Types of data ")
         parser.add_argument(
-            "data_object", type=str, help="Complete data object to create metadata"
+            "data_object",
+            type=str,
+            help="Complete data object to create metadata",  # noqa: E501
+        )
+        parser.add_argument(
+            "virtual_file",
+            type=bool,
+            help="Parameter to generate a virtual file",  # noqa: E501
         )
 
         args = parser.parse_args()
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
+        virtual_file = args["virtual_file"]
 
-        return createCitationCFF(data_types, data)
+        return createCitationCFF(data_types, data, virtual_file)
 
 
 ###############################################################################
@@ -156,7 +191,9 @@ class zenodoURL(Resource):
 class zenodoGetAll(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
-        params={"access_token": "Zenodo access token required with every request."},
+        params={
+            "access_token": "Zenodo access token required with every request."
+        },  # noqa: E501
     )
     def get(self):
         """Get a list of all the Zenodo depositions"""
@@ -166,7 +203,7 @@ class zenodoGetAll(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -180,8 +217,14 @@ class zenodoGetAll(Resource):
 @zenodo.route("/new", endpoint="zenodoCreateNew")
 class zenodoCreateNew(Resource):
     @zenodo.doc(
-        responses={200: "Success", 401: "Authentication error", 400: "Bad request"},
-        params={"access_token": "Zenodo access token required with every request."},
+        responses={
+            200: "Success",
+            401: "Authentication error",
+            400: "Bad request",
+        },  # noqa: E501
+        params={
+            "access_token": "Zenodo access token required with every request."
+        },  # noqa: E501
     )
     def post(self):
         """Create a new empty Zenodo deposition"""
@@ -191,7 +234,7 @@ class zenodoCreateNew(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -220,7 +263,7 @@ class zenodoUploadFile(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "bucket_url",
@@ -241,7 +284,9 @@ class zenodoUploadFile(Resource):
         bucket_url = args["bucket_url"]
         file_path = args["file_path"]
 
-        return uploadFileToZenodoDeposition(access_token, bucket_url, file_path)
+        return uploadFileToZenodoDeposition(
+            access_token, bucket_url, file_path
+        )  # noqa: E501
 
 
 @zenodo.route("/metadata", endpoint="zenodoAddMetadata")
@@ -262,13 +307,13 @@ class zenodoAddMetadata(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "metadata",
@@ -283,7 +328,9 @@ class zenodoAddMetadata(Resource):
         deposition_id = args["deposition_id"]
         metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
+        return addMetadataToZenodoDeposition(
+            access_token, deposition_id, metadata
+        )  # noqa: E501
 
 
 @zenodo.route("/publish", endpoint="zenodoPublish")
@@ -303,13 +350,13 @@ class zenodoPublish(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -337,13 +384,13 @@ class zenodoDelete(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
         )
 
         args = parser.parse_args()
@@ -355,11 +402,225 @@ class zenodoDelete(Resource):
 
 
 ###############################################################################
+# GitHub API endpoints
+###############################################################################
+
+
+github = api.namespace("github", description="GitHub operations")
+
+
+@github.route("/upload", endpoint="uploadToGithub")
+class uploadToGithub(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token to upload files",
+            "repo_name": "name of the repository to upload to",
+            "file_name": "file name of file to upload",
+            "file_path": "file path of file to upload",
+        },
+    )
+    def post(self):
+        """Upload a file into a GitHub repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file path of file to upload. file_path needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "file_name",
+            type=str,
+            required=True,
+            help="file_name is required. file_name needs to be of type str",
+        )
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "repo_name",
+            type=str,
+            required=True,
+            help="repo_name is required. repo_name needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        file_name = args["file_name"]
+        file_path = args["file_path"]
+        repo_name = args["repo_name"]
+
+        return uploadFileToGithub(
+            access_token, file_name, file_path, repo_name
+        )  # noqa: E501
+
+
+@github.route("/user/repos", endpoint="GetAllRepos")
+class GetAllRepos(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+        },
+    )
+    def get(self):
+        """Get all repositories for a user"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+
+        return getUserRepositories(access_token)
+
+
+@github.route("/repo/contributors", endpoint="GetAllContributorsForRepo")
+class GetAllContributorsForRepo(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get all contributors for a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoContributors(access_token, owner, repo)
+
+
+@github.route("/repo/releases", endpoint="GetAllReleasesForRepo")
+class GetAllReleasesForRepo(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get all releases for a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoReleases(access_token, owner, repo)
+
+
+@github.route("/repo/tree", endpoint="getRepoContentsTree")
+class getRepoContentsTree(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+        },
+    )
+    def get(self):
+        """Get repository contents as a tree"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoContentTree(access_token, owner, repo)
+
+
+###############################################################################
 # Utilities
 ###############################################################################
 
 
-utilities = api.namespace("utilities", description="utilities for random tasks")
+utilities = api.namespace(
+    "utilities", description="utilities for random tasks"
+)  # noqa: E501
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -422,7 +683,7 @@ class DeleteFile(Resource):
             "file_path": "file path to delete.",
         },
     )
-    def post(self):
+    def delete(self):
         """Deletes a file"""
         parser = reqparse.RequestParser()
 
@@ -447,7 +708,7 @@ class RequestJSON(Resource):
             "url": "url to request from the web.",
         },
     )
-    def post(self):
+    def get(self):
         """request a json file from the web"""
         parser = reqparse.RequestParser()
 
@@ -469,10 +730,10 @@ class CreateFile(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={
-            "folder_path": "folder path to generate files in",
             "file_name": "name of the file to generate",
+            "folder_path": "folder path to generate files in",
             "file_content": "content of the file. Will be string",
-            "content_type": "content type to determine what it is written with",
+            "content_type": "content type to determine what it is written with",  # noqa: E501
         },
     )
     def post(self):
@@ -511,7 +772,40 @@ class CreateFile(Resource):
         file_content = args["file_content"]
         content_type = args["content_type"]
 
+        if content_type == "text":
+            # No need to do anything
+            pass
+
+        if content_type == "json":
+            # This might not be necessary but adding
+            # this in case there are some weird json inconsistencies.
+            file_content = json.loads(file_content)
+
         return createFile(folder_path, file_name, file_content, content_type)
+
+
+@utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
+class OpenFileExplorer(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "file_path": "file path to open the explorer window at",
+        },
+    )
+    def post(self):
+        """create a file in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file path to open file explorer at",
+        )
+        args = parser.parse_args()
+        file_path = args["file_path"]
+
+        return openFileExplorer(file_path)
 
 
 # 5000 is the flask default port.

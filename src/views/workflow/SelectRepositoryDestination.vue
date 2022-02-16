@@ -216,6 +216,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(5);
 
+    this.workflow.currentRoute = this.$route.path;
+
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;
     }

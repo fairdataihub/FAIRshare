@@ -6,13 +6,48 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
+const fs = require("fs-extra");
+const path = require("path");
 const log = require("electron-log");
+
 log.info("starting log");
+
+const USER_PATH = app.getPath("home");
+const CONFIG_STORE_PATH = path.join(
+  USER_PATH,
+  ".sodaforcovid19research",
+  "config.json"
+);
+
+const getReleaseChannel = () => {
+  const exists = fs.pathExistsSync(CONFIG_STORE_PATH);
+
+  if (!exists) {
+    return "latest";
+  } else {
+    try {
+      let config = fs.readJsonSync(CONFIG_STORE_PATH);
+      if ("releaseChannel" in config) {
+        if (config.releaseChannel == "beta") {
+          return "beta";
+        } else {
+          return "latest";
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      return "latest";
+    }
+  }
+};
+
+const updateChannel = getReleaseChannel();
+
+autoUpdater.channel = updateChannel;
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "info";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const path = require("path");
 
 require("@electron/remote/main").initialize();
 // require("@electron/remote/main").enable(webContents);
@@ -92,6 +127,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      // nodeIntegration: false,
+      // contextIsolation: true,
       enableRemoteModule: true,
       preload: path.join(__dirname, "preload.js"),
     },
@@ -111,6 +148,7 @@ async function createWindow() {
   });
   splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
 
+  ////// splash screen end
   mainWindow.once("ready-to-show", () => {
     setTimeout(function () {
       splash.close();
@@ -118,14 +156,43 @@ async function createWindow() {
     }, 500);
   });
 
-  ////// splash screen end
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    console.log("Intercepting new browser tab/window", url);
+
+    return {
+      action: "allow",
+      overrideBrowserWindowOptions: {
+        frame: true,
+        fullscreenable: true,
+        backgroundColor: "white",
+        webPreferences: {
+          allowRunningInsecureContent: false,
+          contextIsolation: true,
+          devTools: false,
+          disableDialogs: true,
+          enableRemoteModule: false,
+          experimentalFeatures: false,
+          nodeIntegration: false,
+          nodeIntegrationInWorker: false,
+          nodeIntegrationInSubFrames: false,
+          plugins: false,
+          sandbox: true,
+          webSecurity: true,
+        },
+      },
+    };
+  });
 
   enableWebContents(mainWindow.webContents);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools();
+    if (!process.env.IS_TEST) {
+      //uncomment this before build
+      mainWindow.webContents.openDevTools();
+    }
+    // mainWindow.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
@@ -139,7 +206,7 @@ async function createWindow() {
 
 // Close the webserver process on app exit
 const exitPyProc = (main_pid) => {
-  console.log("killling python process...");
+  console.log("killing python process...");
   if ((process.platform == "darwin") | (process.platform == "linux")) {
     pyProc.kill();
     return new Promise(function (resolve) {
@@ -239,9 +306,6 @@ const nodeUrl = require("url");
 const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
 
-console.log("CLIENT_ID", CLIENT_ID);
-console.log("CLIENT_SECRET", CLIENT_SECRET);
-
 function retrieveCode(url) {
   return new Promise(function (resolve, reject) {
     let authWindow = new BrowserWindow({
@@ -297,6 +361,7 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
     .get("https://github.com/login/oauth/authorize", {
       params: {
         client_id: CLIENT_ID,
+        scope: "repo admin:repo_hook admin:org_hook user",
       },
     })
     .then(async (responseCode) => {

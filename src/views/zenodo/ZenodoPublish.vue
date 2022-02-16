@@ -135,7 +135,7 @@ export default {
 
       window.ipcRenderer.send(
         "open-link-in-browser",
-        `${process.env.VUE_APP_ZENODO_URL}deposit/${depositionID}`
+        `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
       );
     },
   },
@@ -146,6 +146,8 @@ export default {
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(7);
+
+    this.workflow.currentRoute = this.$route.path;
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;

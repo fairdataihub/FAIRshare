@@ -48,9 +48,9 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
-
 import { useDatasetsStore } from "@/store/datasets";
+
+import { ElMessageBox } from "element-plus";
 
 export default {
   name: "ShowAllWorkflows",
@@ -82,22 +82,74 @@ export default {
       }
     },
     navigateToCurate(workflowID) {
-      // this.datasetStore.updateCurrentDataset(this.dataset);
       let routerPath = "";
-      // console.log(this.dataset.workflows);
-      // console.log(this.dataset);
 
-      if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
-        if (this.dataset.workflows[workflowID].datasetUploaded) {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+      if (
+        "datasetUploaded" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].datasetUploaded
+      ) {
+        ElMessageBox.confirm(
+          "It looks like you have already uploaded this dataset to Zenodo but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
+          "You haven't published this dataset yet",
+          {
+            confirmButtonText: "I want to publish",
+            cancelButtonText: "I want to upload my data again",
+            type: "info",
+          }
+        )
+          .then(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+            this.$router.push({ path: routerPath });
+          })
+          .catch(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+            this.$router.push({ path: routerPath });
+          });
+      } else {
+        if ("currentRoute" in this.dataset.workflows[workflowID]) {
+          if (
+            this.dataset.workflows[workflowID].currentRoute != "" &&
+            this.dataset.workflows[workflowID].currentRoute !=
+              `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
+          ) {
+            ElMessageBox.confirm(
+              "It looks like you were working on this workflow before. Would you like to continue where you left off?",
+              "Continue where you left off",
+              {
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                type: "info",
+              }
+            )
+              .then(() => {
+                routerPath = this.dataset.workflows[workflowID].currentRoute;
+                this.$router.push({ path: routerPath });
+              })
+              .catch(() => {
+                routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+                this.$router.push({ path: routerPath });
+              });
+          } else {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+            this.$router.push({ path: routerPath });
+          }
         } else {
           routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+          this.$router.push({ path: routerPath });
         }
-      } else {
-        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
       }
-      console.log(routerPath);
-      this.$router.push({ path: routerPath });
+
+      // if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
+      //   if (this.dataset.workflows[workflowID].datasetUploaded) {
+      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+      //   } else {
+      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+      //   }
+      // } else {
+      //   routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+      // }
+      // console.log(routerPath);
+      // this.$router.push({ path: routerPath });
     },
   },
   async mounted() {

@@ -14,6 +14,7 @@ import CodeCreateMetadata from "../views/workflow/Code/CreateMetadata.vue";
 import CodeCreateMetadataReview from "../views/workflow/Code/CreateMetadataReview.vue";
 import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
 import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
+import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
@@ -24,6 +25,11 @@ import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
 import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
+
+// github related components
+import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubUpload from "../views/github/GithubUpload.vue";
+import GithubPublish from "../views/github/GithubPublish.vue";
 
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
@@ -36,7 +42,7 @@ import ContactUs from "../views/contact/ContactUs.vue";
 import HomePage from "../views/HomePage.vue";
 
 const routes = [
-  { path: "/", redirect: "/home" },
+  { path: "/", component: HomePage },
   { path: "/home", component: HomePage },
   { path: "/datasets", component: ShowAllProjects, name: "ShowAllProjects" },
   {
@@ -59,6 +65,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
     component: CodeSelectSourceFolder,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Code/selectGithubRepo",
+    component: CodeSelectGithubRepo,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/reviewStandards",
@@ -104,6 +114,21 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
     name: "ZenodoPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
+    component: GithubZenodoConnection,
+    name: "GithubZenodoConnection",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/upload",
+    component: GithubUpload,
+    name: "GithubUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/publish",
+    component: GithubPublish,
+    name: "GithubPublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",

@@ -63,19 +63,23 @@ export const useTokenStore = defineStore({
       }
       return Object.keys(this.accessTokens);
     },
+
     // save an encrypted version of the token in the store also save it to the file.
     async saveToken(key, tokenObject) {
       tokenObject.token = await encrypt(tokenObject.token);
       this.accessTokens[key] = tokenObject;
       await this.syncTokens();
     },
+
     async writeDatasetsToFile() {
       fs.ensureFileSync(TOKEN_STORE_PATH);
       fs.writeJsonSync(TOKEN_STORE_PATH, this.accessTokens);
     },
+
     async syncTokens() {
       this.writeDatasetsToFile();
     },
+
     async getToken(key) {
       if (key in this.accessTokens) {
         const tokenObject = Object.assign({}, this.accessTokens[key]);
@@ -85,13 +89,15 @@ export const useTokenStore = defineStore({
         return "NO_TOKEN_FOUND";
       }
     },
+
     async deleteToken(key) {
       delete this.accessTokens[key];
       await this.syncTokens();
     },
+
     async verifyZenodoTokenByDepositions(token) {
       return await axios
-        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}deposit/depositions`, {
+        .get(`${process.env.VUE_APP_ZENODO_SERVER_URL}/deposit/depositions`, {
           params: {
             access_token: token,
           },
@@ -100,7 +106,7 @@ export const useTokenStore = defineStore({
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
-          return { data: error.response.data, status: error.response.status };
+          return { data: error.response, status: error.response.status };
         });
     },
 
@@ -131,13 +137,12 @@ export const useTokenStore = defineStore({
 
     async verifyGithubTokenByTokenConnection(token) {
       return await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`, {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
-          console.log(response);
           return { data: response.data, status: response.status };
         })
         .catch((error) => {
@@ -173,23 +178,7 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubTokenScope(token) {
-      const scope = [
-        "admin:enterprise",
-        "admin:gpg_key",
-        "admin:org",
-        "admin:org_hook",
-        "admin:public_key",
-        "admin:repo_hook",
-        "delete:packages",
-        "delete_repo",
-        "gist",
-        "notifications",
-        "repo",
-        "user",
-        "workflow",
-        "write:discussion",
-        "write:packages",
-      ];
+      const scope = ["admin:org_hook", "admin:repo_hook", "repo", "user"];
       const response = await this.verifyGithubTokenScopeByTokenConnection(
         token
       );
@@ -205,7 +194,7 @@ export const useTokenStore = defineStore({
     },
 
     async verifyGithubConnection() {
-      const tokenObject = this.getToken("github");
+      const tokenObject = await this.getToken("github");
 
       if (tokenObject === "NO_TOKEN_FOUND") {
         return false;
@@ -220,7 +209,7 @@ export const useTokenStore = defineStore({
 
     async getGithubUser(token) {
       let response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}user`, {
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -242,6 +231,92 @@ export const useTokenStore = defineStore({
     async verifyAllConnections() {
       this.verifyZenodoConnection();
       this.verifyGithubConnection();
+    },
+
+    // github operations
+    async githubAPI_listCurrentRepoBranches(token, repo, owner) {
+      // return both repo names and repo full names
+      let response = await axios
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
+            owner +
+            `/` +
+            repo +
+            `/branches`,
+          {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+      return response.data;
+    },
+
+    async githubAPI_getTreeFromRepo(token, repo, owner, branch) {
+      let response = await axios
+        .get(
+          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
+            owner +
+            `/` +
+            repo +
+            `/git/trees/` +
+            branch +
+            `?recursive=1`,
+          {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+      return response.data;
+    },
+    async githubAPI_getRepoAtPageK(token, k) {
+      let response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/user/repos`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+            per_page: 10,
+            page: k,
+          },
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response.data, status: error.response.status };
+        });
+      return response.data;
+    },
+    async githubAPI_getAllRepo(token) {
+      if (await this.verifyGithubToken(token)) {
+        let k = 1;
+        let result = [""];
+        let allResult = [];
+        while (result.length != 0) {
+          result = await this.githubAPI_getRepoAtPageK(token, k);
+          allResult = allResult.concat(result);
+          k += 1;
+        }
+        return allResult;
+      } else {
+        console.error("token is invalid");
+        return [];
+      }
     },
   },
 });

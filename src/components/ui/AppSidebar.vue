@@ -6,15 +6,19 @@
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
       'debug-screens': environment !== 'production',
+      'cursor-not-allowed': !datasetStore.sidebarVisible,
     }"
     style="transition: width 0.3s"
   >
-    <div class="flex h-full w-full flex-col text-gray-700">
+    <div
+      class="flex h-full w-full flex-col text-gray-700"
+      :class="{ 'pointer-events-none': !datasetStore.sidebarVisible }"
+    >
       <div class="relative flex flex-row justify-center p-2">
         <img
           v-if="sideBarOpen"
           class="m-4 w-28"
-          src="../../assets/brand/logo.png"
+          src="../../assets/brand/logo.svg"
         />
 
         <div
@@ -71,12 +75,27 @@
 </template>
 
 <script>
+import { useDatasetsStore } from "../../store/datasets";
+
 export default {
   name: "AppSidebar",
   components: {},
   props: ["environment"],
   data() {
-    return { dropdownOpen: false, sideBarOpen: true, process: process };
+    return {
+      dropdownOpen: false,
+      datasetStore: useDatasetsStore(),
+      process: process,
+      sideBarOpen: true,
+    };
+  },
+  watch: {
+    "datasetStore.sidebarVisible": {
+      handler(val) {
+        this.sideBarOpen = val;
+      },
+      deep: true,
+    },
   },
   methods: {
     isDataset: function () {
@@ -85,6 +104,9 @@ export default {
       }
       return "";
     },
+  },
+  created() {
+    this.sideBarOpen = this.datasetStore.sidebarVisible;
   },
 };
 </script>

@@ -4,14 +4,16 @@ import os
 import yaml
 
 
-def createCodeMetadata(code_data, general_data, folder_path):
+def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     metadata = {
         "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
         "@type": "SoftwareSourceCode",
     }
 
     if "license" in code_data:
-        metadata["license"] = "https://spdx.org/licenses/" + code_data["license"]
+        metadata["license"] = (
+            "https://spdx.org/licenses/" + code_data["license"]
+        )  # noqa: E501
 
     if "codeRepository" in code_data:
         if code_data["codeRepository"] != "":
@@ -80,7 +82,9 @@ def createCodeMetadata(code_data, general_data, folder_path):
 
     if "referencePublication" in general_data:
         if general_data["referencePublication"] != "":
-            metadata["referencePublication"] = general_data["referencePublication"]
+            metadata["referencePublication"] = general_data[
+                "referencePublication"
+            ]  # noqa: E501
 
     if "funding" in general_data:
         if "organization" in general_data["funding"]:
@@ -88,7 +92,9 @@ def createCodeMetadata(code_data, general_data, folder_path):
                 metadata["funding"] = {}
 
                 metadata["funding"]["@type"] = "Organization"
-                metadata["funding"]["@name"] = general_data["funding"]["organization"]
+                metadata["funding"]["@name"] = general_data["funding"][
+                    "organization"
+                ]  # noqa: E501
 
     if "keywords" in general_data:
         if len(general_data["keywords"]) > 0:
@@ -133,21 +139,27 @@ def createCodeMetadata(code_data, general_data, folder_path):
                 new_author["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_author["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["@id"] = (
+                            "https://orcid.org/" + item["orcid"]
+                        )  # noqa: E501
 
                 if "givenName" in item:
                     new_author["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_author["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_author["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = {}
-                    new_author["affiliation"]["@type"] = "Organization"
-                    new_author["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = {}
+                        new_author["affiliation"]["@type"] = "Organization"
+                        new_author["affiliation"]["name"] = item["affiliation"]
 
                 metadata["author"].append(new_author)
 
@@ -161,23 +173,41 @@ def createCodeMetadata(code_data, general_data, folder_path):
                 new_contributor["@type"] = "Person"
 
                 if "orcid" in item:
-                    new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+                    if item["orcid"] != "":
+                        new_contributor["@id"] = (
+                            "https://orcid.org/" + item["orcid"]
+                        )  # noqa: E501
 
                 if "givenName" in item:
                     new_contributor["givenName"] = item["givenName"]
 
                 if "familyName" in item:
-                    new_contributor["familyName"] = item["familyName"]
+                    if item["familyName"] != "":
+                        new_contributor["familyName"] = item["familyName"]
 
                 if "email" in item:
-                    new_contributor["email"] = item["email"]
+                    if item["email"] != "":
+                        new_contributor["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_contributor["affiliation"] = {}
-                    new_contributor["affiliation"]["@type"] = "Organization"
-                    new_contributor["affiliation"]["name"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_contributor["affiliation"] = {}
+                        new_contributor["affiliation"][
+                            "@type"
+                        ] = "Organization"  # noqa: E501
+                        new_contributor["affiliation"]["name"] = item[
+                            "affiliation"
+                        ]  # noqa: E501
 
                 metadata["contributor"].append(new_contributor)
+
+    # return the code metadata object if virtual is set to true
+    if virtual_file:
+        return json.dumps(metadata)
+
+    # If the folder doesn't exist (for some weird reason), create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
@@ -185,20 +215,26 @@ def createCodeMetadata(code_data, general_data, folder_path):
     return True
 
 
-def createMetadata(data_types, data):
+def createMetadata(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
-            folder_path = data["Code"]["folderPath"]
-            createCodeMetadata(code_data, general_data, folder_path)
+            folder_path = ""
+            if "folderPath" in data["Code"]:
+                folder_path = data["Code"]["folderPath"]
+            result = createCodeMetadata(
+                code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:
         raise e
 
 
-def createCitationFromCode(code_data, general_data, folder_path):
+def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
     citationObject = {}
 
@@ -206,7 +242,9 @@ def createCitationFromCode(code_data, general_data, folder_path):
         if general_data["name"] != "":
             citationObject["title"] = general_data["name"]
 
-    citationObject["message"] = "If you use this software, please cite it as below."
+    citationObject[
+        "message"
+    ] = "If you use this software, please cite it as below."  # noqa: E501
     citationObject["type"] = "software"
 
     if "authors" in general_data:
@@ -217,7 +255,8 @@ def createCitationFromCode(code_data, general_data, folder_path):
                 new_author = {}
 
                 if "orcid" in item:
-                    new_author["orcid"] = item["orcid"]
+                    if item["orcid"] != "":
+                        new_author["orcid"] = item["orcid"]
 
                 if "givenName" in item:
                     new_author["given-names"] = item["givenName"]
@@ -226,10 +265,12 @@ def createCitationFromCode(code_data, general_data, folder_path):
                     new_author["family-names"] = item["familyName"]
 
                 if "email" in item:
-                    new_author["email"] = item["email"]
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
 
                 if "affiliation" in item:
-                    new_author["affiliation"] = item["affiliation"]
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = item["affiliation"]
 
                 citationObject["authors"].append(new_author)
 
@@ -240,7 +281,9 @@ def createCitationFromCode(code_data, general_data, folder_path):
             identifier = {}
             identifier["type"] = "doi"
             identifier["value"] = code_data["uniqueIdentifier"]
-            identifier["description"] = "DOI for this software's record on Zenodo"
+            identifier[
+                "description"
+            ] = "DOI for this software's record on Zenodo"  # noqa: E501
 
             citationObject["identifiers"].append(identifier)
 
@@ -278,7 +321,17 @@ def createCitationFromCode(code_data, general_data, folder_path):
 
     if "currentVersionReleaseDate" in code_data:
         if code_data["currentVersionReleaseDate"] != "":
-            citationObject["date-released"] = code_data["currentVersionReleaseDate"]
+            citationObject["date-released"] = code_data[
+                "currentVersionReleaseDate"
+            ]  # noqa: E501
+
+    # return the citation.cff object if virtual is set to true
+    if virtual_file:
+        return json.dumps(citationObject)
+
+    # If the folder doesn't exist (for some weird reason), create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
     # Create the citation.cff file
     with open(os.path.join(folder_path, "citation.cff"), "w") as file:
@@ -303,13 +356,19 @@ def createCitationFromCode(code_data, general_data, folder_path):
     return True
 
 
-def createCitationCFF(data_types, data):
+def createCitationCFF(data_types, data, virtual_file):
     try:
         if "Code" in data_types:
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
-            folder_path = data["Code"]["folderPath"]
-            createCitationFromCode(code_data, general_data, folder_path)
+            folder_path = ""
+            if "folderPath" in data["Code"]:
+                folder_path = data["Code"]["folderPath"]
+            result = createCitationFromCode(
+                code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
 
         return "SUCCESS"
     except Exception as e:
