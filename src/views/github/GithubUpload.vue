@@ -409,9 +409,7 @@ export default {
         });
       }
 
-      const metadataObject = JSON.stringify({
-        metadata: metadata,
-      });
+      const metadataObject = JSON.stringify(metadata);
 
       const folderPath = this.dataset.data.Code.folderPath;
 
