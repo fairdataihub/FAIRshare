@@ -48,6 +48,7 @@
           v-model="folderPath"
           placeholder="Click here to select a folder"
           class="my-3 w-full"
+          size="large"
           @click="selectFolderPath"
         />
       </div>
@@ -226,6 +227,6 @@ export default {
 }
 
 .single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 border shadow-lg transition-all;
 }
 </style>

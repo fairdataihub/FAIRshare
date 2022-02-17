@@ -12,7 +12,9 @@
         v-if="datasetStore.datasetCount > 0"
       >
         <!-- <div class="flex flex-col h-full"> -->
-        <span class="font-medium"> Continue curating your datasets </span>
+        <span class="text-lg font-medium">
+          Continue curating your datasets
+        </span>
 
         <span>
           You have some incomplete projects. Select one to continue working on

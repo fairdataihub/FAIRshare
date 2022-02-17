@@ -2,7 +2,9 @@
   <div class="flex h-screen w-full flex-row items-center justify-center">
     <div ref="" class="flex h-full flex-row items-center p-3">
       <div class="flex h-full flex-col overflow-y-auto">
-        <span class="text-left font-medium"> Start the curation process </span>
+        <span class="text-left text-lg font-medium">
+          Start the curation process
+        </span>
 
         <span class="">
           When you are ready, click on the curation buttons below to fill out

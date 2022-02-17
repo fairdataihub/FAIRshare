@@ -4,9 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        lato: ["Lato"],
         inter: ["Inter"],
-        asap: ["Asap"],
       },
       colors: {
         primary: {
