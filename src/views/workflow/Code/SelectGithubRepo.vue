@@ -178,6 +178,7 @@ export default {
 
       if (this.showFilePreview) {
         this.showSpinner = true;
+        this.fileData = [];
         const response = await this.getGithubRepoContents();
         this.showSpinner = false;
 
