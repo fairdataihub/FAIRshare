@@ -2,51 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: Inter;
-  font-weight: 100;
-  src: url(/src/assets/fonts/Inter/Inter-Thin.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 200;
-  src: url(/src/assets/fonts/Inter/Inter-ExtraLight.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 300;
-  src: url(/src/assets/fonts/Inter/Inter-Light.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 400;
-  src: url(/src/assets/fonts/Inter/Inter-Regular.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 500;
-  src: url(/src/assets/fonts/Inter/Inter-Medium.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 600;
-  src: url(/src/assets/fonts/Inter/Inter-SemiBold.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 700;
-  src: url(/src/assets/fonts/Inter/Inter-Bold.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 800;
-  src: url(/src/assets/fonts/Inter/Inter-ExtraBold.ttf) format("woff2");
-}
-@font-face {
-  font-family: Inter;
-  font-weight: 900;
-  src: url(/src/assets/fonts/Inter/Inter-Black.ttf) format("woff2");
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 body,
 html {
