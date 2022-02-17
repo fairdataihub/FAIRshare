@@ -116,8 +116,9 @@ export default {
               "It looks like you were working on this workflow before. Would you like to continue where you left off?",
               "Continue where you left off",
               {
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, start from the beginning",
+                distinguishCancelAndClose: true,
                 type: "info",
               }
             )
@@ -125,9 +126,11 @@ export default {
                 routerPath = this.dataset.workflows[workflowID].currentRoute;
                 this.$router.push({ path: routerPath });
               })
-              .catch(() => {
-                routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-                this.$router.push({ path: routerPath });
+              .catch((action) => {
+                if (action === "cancel") {
+                  routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+                  this.$router.push({ path: routerPath });
+                }
               });
           } else {
             routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
