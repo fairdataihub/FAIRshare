@@ -203,16 +203,16 @@ export default {
     async duplicateDataset(targetDataset) {
       this.selectedDataset = "";
       let datasetID = uuidv4();
-      let newname = targetDataset.name
+      let newname = targetDataset.name;
       newname = newname.concat("-COPY");
 
       let allDatasets = await this.datasetStore.getAllDatasets();
       const datasets = JSON.parse(JSON.stringify(allDatasets));
-      let exist = false
+      let exist = false;
       for (const key in datasets) {
-        if (datasets[key].name == newname){
-          exist = true
-          break
+        if (datasets[key].name == newname) {
+          exist = true;
+          break;
         }
       }
       if (!exist) {
