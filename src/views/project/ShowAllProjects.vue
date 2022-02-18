@@ -171,7 +171,7 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-
+import { v4 as uuidv4 } from "uuid";
 import { useDatasetsStore } from "@/store/datasets";
 
 export default {
@@ -202,14 +202,21 @@ export default {
     },
     async duplicateDataset(targetDataset) {
       this.selectedDataset = "";
-      let datasetID = targetDataset.id;
-      datasetID = datasetID.concat("-COPY");
+      let datasetID = uuidv4();
+      let newname = targetDataset.name
+      newname = newname.concat("-COPY");
 
       let allDatasets = await this.datasetStore.getAllDatasets();
       const datasets = JSON.parse(JSON.stringify(allDatasets));
-      if (!(datasetID in datasets)) {
+      let exist = false
+      for (const key in datasets) {
+        if (datasets[key].name == newname){
+          exist = true
+          break
+        }
+      }
+      if (!exist) {
         let newDataset = Object.assign({}, targetDataset);
-        let datasetID = newDataset.id;
         let today = new Date();
         let currentDate =
           today.getFullYear() +
@@ -224,8 +231,6 @@ export default {
           ":" +
           today.getSeconds();
         let dateTime = currentDate + " " + currentTime;
-
-        datasetID = datasetID.concat("-COPY");
         newDataset.id = datasetID;
         newDataset.name = newDataset.name.concat("-COPY");
         newDataset.meta.dateCreated = dateTime;
