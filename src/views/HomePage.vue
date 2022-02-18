@@ -31,9 +31,7 @@
         <div class="flex justify-center space-x-4 py-3">
           <button
             class="secondary-plain-button text-base"
-            @click="
-              openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
-            "
+            @click="openWebsite('https://fair-share-docs.vercel.app/')"
           >
             <el-icon><notebook-icon /></el-icon>
             Read the documentation
@@ -63,7 +61,7 @@
         </div>
 
         <div
-          class="hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3 text-primary-600"
+          class="hover-underline-animation text-primary-600 flex cursor-pointer flex-row items-center py-1 pt-3"
         >
           <span
             class="font-medium"

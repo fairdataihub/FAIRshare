@@ -24,9 +24,7 @@
         <div>
           <button
             class="primary-plain-button"
-            @click="
-              openURL('https://soda-for-covid-19-research-docs.vercel.app/')
-            "
+            @click="openURL('https://fair-share-docs.vercel.app/')"
           >
             View the Documentation <el-icon><notebook-icon /></el-icon>
           </button>
