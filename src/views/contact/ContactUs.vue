@@ -8,7 +8,7 @@
       <line-divider></line-divider>
 
       <h2>
-        If you have any issues with FAIRShare, please create an issue on GitHub.
+        If you have any issues with FAIRshare, please create an issue on GitHub.
         For any other questions, please contact us at using the links below.
       </h2>
 
@@ -25,11 +25,11 @@
             class="secondary-plain-button"
             @click="
               openURL(
-                'https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues/new/choose'
+                'https://github.com/fairdataihub/FAIRshare/issues/new/choose'
               )
             "
           >
-            <el-icon><ticket-icon /></el-icon> I have an issue with FAIRShare
+            <el-icon><ticket-icon /></el-icon> I have an issue with FAIRshare
           </button>
           <button
             class="primary-plain-button"

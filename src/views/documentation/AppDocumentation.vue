@@ -9,7 +9,7 @@
 
       <h2>
         We have created a documentation page for each component or feature in
-        FAIRShare. You can find the documentation site by clicking on the button
+        FAIRshare. You can find the documentation site by clicking on the button
         below:
       </h2>
 

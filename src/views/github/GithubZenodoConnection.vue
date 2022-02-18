@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -78,7 +78,7 @@
                 repository to the 'ON' position.
               </li>
 
-              <li>Wait for FairShare to notice the change.</li>
+              <li>Wait for Fairshare to notice the change.</li>
             </ul>
             <p class="mt-2">
               You will only need to do this once. For any future GitHub

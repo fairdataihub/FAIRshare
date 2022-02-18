@@ -39,7 +39,7 @@
           class="flex flex-col items-center justify-center"
         >
           <p class="pb-10 text-center text-lg">
-            No worries. You can always come back to this page and let FAIRShare
+            No worries. You can always come back to this page and let FAIRshare
             create your release for you.
           </p>
           <button class="primary-button" @click="approveRelease">
@@ -215,7 +215,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="font-medium text-secondary-500">
+            <span class="text-secondary-500 font-medium">
               This will automatically push your release to Zenodo.
             </span>
           </p>
@@ -637,7 +637,7 @@ export default {
 
     this.repoName = this.workflow.github.repo;
     // this.repoName = "fairdataihub/Custom-Hook";
-    // this.repoName = "fairdataihub/SODA-for-SPARC";
+    // this.repoName = "fairdataihub/FAIRshare";
 
     await this.prefillGithubEntries();
 

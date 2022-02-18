@@ -6,7 +6,7 @@
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center py-5">
           <h1 class="text-3xl font-bold text-slate-800 xl:text-4xl">
-            SODA for COVID-19 Research
+            FAIRshare
           </h1>
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center py-3">

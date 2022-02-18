@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -555,7 +555,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -577,7 +577,7 @@
                     <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.codeRepository"
-                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                        placeholder="https://github.com/fairdataihub/FAIRshare"
                       ></el-input>
                       <form-help-content
                         popoverContent="Link to the repository where the un-compiled, human readable code and related code is located (SVN, Git, GitHub, CodePlex, institutional GitLab instance, etc.)"
@@ -592,7 +592,7 @@
                     <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.continuousIntegration"
-                        placeholder="https://www.travis-ci.com/fairdataihub/FairShare"
+                        placeholder="https://www.travis-ci.com/fairdataihub/FAIRshare"
                       ></el-input>
                       <form-help-content
                         popoverContent="Link to continuous integration service (Travis, CircleCI, etc.)"
@@ -607,7 +607,7 @@
                     <div class="flex w-full flex-row items-center">
                       <el-input
                         v-model="step4Form.issueTracker"
-                        placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research/issues"
+                        placeholder="https://github.com/fairdataihub/FAIRshare/issues"
                       ></el-input>
                       <form-help-content
                         popoverContent="Link to issue tracker (Jira, GitHub issues, etc.)"
@@ -634,7 +634,7 @@
                             <el-input
                               v-model="element.link"
                               type="text"
-                              placeholder="https://github.com/fairdataihub/SODA-for-COVID-19-Research"
+                              placeholder="https://github.com/fairdataihub/FAIRshare"
                             ></el-input>
                             <div class="mx-2"></div>
                           </div>
@@ -708,7 +708,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -891,7 +891,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -997,9 +997,9 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
-                  Current version of the software
+                  Additional information
                 </span>
               </div>
               <div class="p-4">

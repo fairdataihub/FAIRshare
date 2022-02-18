@@ -7,11 +7,6 @@
 
       <span> Let's make your research software FAIR </span>
 
-      <!-- <p class="py-1">
-        In order to do this, SODA will automatically try to group up similar
-        data into their own datasets.
-      </p> -->
-
       <line-divider> </line-divider>
 
       <p class="py-2 pb-4">

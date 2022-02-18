@@ -70,7 +70,7 @@ app.logger.setLevel(logging.DEBUG)
 api = Api(
     app,
     version=API_VERSION,
-    title="SODA for COVID-19 Research backend api",
+    title="FAIRshare backend api",
     description="The backend api system for the Electron Vue app",
     doc="/docs",
 )

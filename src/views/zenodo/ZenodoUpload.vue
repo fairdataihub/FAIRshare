@@ -5,7 +5,7 @@
         Uploading your data to Zenodo
       </span>
       <span class="text-left">
-        This one is on us. SODA is creating a Zenodo record for you and
+        This one is on us. FAIRshare is creating a Zenodo record for you and
         uploading all your files with the relevant metadata.
       </span>
 
