@@ -262,8 +262,17 @@ export default {
           if (index !== -1) {
             this.datasetForm.dataType[index] = "Code";
           }
-
+          let today = new Date();
+          let currentDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+          let currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+          let dateTime = currentDate+' '+currentTime;
           let dataset = {
+            meta: {
+              dateCreated:dateTime,
+              dateLastModified:"Unknown",
+              location:"Unknown",
+              destination:"Unknown",
+            },
             id: datasetID,
             image: datasetImage,
             name: this.datasetForm.datasetName.trim(),

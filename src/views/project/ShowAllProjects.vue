@@ -33,7 +33,17 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
+                class="
+                  project
+                  my-4
+                  rounded-lg
+                  border border-zinc-200
+                  px-6
+                  py-4
+                  shadow-md
+                  transition-all
+                  hover:border-transparent
+                "
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -47,6 +57,37 @@
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
+                    <div class="h-[2px]"></div>
+                    <div class="flex-col">
+                      <div class="flex items-center justify-left">
+                        <Icon icon="codicon:history" />
+                        <span class="px-2">
+                          date created: {{ dataset.meta.dateCreated }}
+                        </span>
+                      </div>
+                      <div class="flex items-center justify-left">
+                        <Icon icon="codicon:history" />
+                        <span class="px-2">
+                          last modified:
+                          {{ dataset.meta.dateLastModified }}</span
+                        >
+                      </div>
+                      <div class="flex items-center justify-left">
+                        <Icon icon="clarity:upload-cloud-line" />
+                        <span class="px-2">
+                          destination: {{ dataset.meta.destination }}</span
+                        >
+                      </div>
+                      <div class="flex items-center justify-left">
+                        <Icon icon="ep:location" />
+                        <span class="px-2">
+                          location: {{ dataset.meta.location }}</span
+                        >
+                      </div>
+                    </div>
+                    <el-button class="w-20" @click="duplicateDataset(dataset)"
+                      >duplicate</el-button
+                    >
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -65,7 +106,17 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
+                class="
+                  project
+                  my-4
+                  rounded-lg
+                  border border-zinc-200
+                  px-6
+                  py-4
+                  shadow-md
+                  transition-all
+                  hover:border-transparent
+                "
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -94,7 +145,16 @@
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="
+                hover-underline-animation
+                my-3
+                flex
+                w-max
+                cursor-pointer
+                flex-row
+                items-center
+                text-primary-600
+              "
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -122,7 +182,19 @@
       <div class="flex flex-row items-center justify-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
+            class="
+              flex
+              w-max
+              cursor-pointer
+              flex-col
+              items-center
+              justify-center
+              rounded-lg
+              border-2 border-dashed
+              p-10
+              transition-all
+              hover:border-solid hover:bg-gray-100
+            "
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
@@ -157,6 +229,56 @@ export default {
   },
   computed: {},
   methods: {
+    readUntilDash(s) {
+      for (let i = s.length - 1; i >= 0; i--) {
+        if (s[i] == "-") {
+          return i;
+        }
+      }
+      return -1;
+    },
+    getOriginal(s) {
+      let last = this.readUntilDash(s);
+      return s.slice(0, last + 1);
+    },
+    async duplicateDataset(targetDataset) {
+      this.selectedDataset = "";
+      let datasetID = targetDataset.id;
+      datasetID = datasetID.concat("-COPY");
+
+      let allDatasets = await this.datasetStore.getAllDatasets();
+      const datasets = JSON.parse(JSON.stringify(allDatasets));
+      if (!(datasetID in datasets)) {
+        let newDataset = Object.assign({}, targetDataset);
+        let datasetID = newDataset.id;
+        let today = new Date();
+        let currentDate =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        let currentTime =
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds();
+        let dateTime = currentDate + " " + currentTime;
+
+        datasetID = datasetID.concat("-COPY");
+        newDataset.id = datasetID;
+        newDataset.name = newDataset.name.concat("-COPY");
+        newDataset.meta.dateCreated = dateTime;
+        this.datasetStore.addDataset(newDataset, datasetID);
+        await this.updateDataset();
+      } else {
+        console.log("already");
+      }
+    },
+    async updateDataset() {
+      await this.buildDataset();
+    },
     selectDataset(event, datasetID) {
       if (datasetID === this.selectedDataset) {
         this.selectedDataset = "";
@@ -198,62 +320,99 @@ export default {
 
       this.$router.push({ path: routerPath });
     },
+    async buildDataset() {
+      (this.datasetsInProgress = []), (this.datasetsPublished = []);
+      let allDatasets = await this.datasetStore.getAllDatasets();
+
+      // make a local copy of the datasets object
+      const datasets = JSON.parse(JSON.stringify(allDatasets));
+
+      // filter datasets in progress
+      let datasetsInProgressIDs = [];
+
+      for (const key in datasets) {
+        if ("workflows" in datasets[key]) {
+          for (const workflow in datasets[key].workflows) {
+            console.log(
+              "datasets[key].workflows[workflow]",
+              datasets[key].workflows[workflow],
+              datasets[key].data.Code.folderPath
+            );
+            if (!("meta" in datasets[key])) {
+              datasets[key].meta = {
+                dateCreated: "Unknown",
+                dateLastModified: "Unknown",
+                location: "Unknown",
+                destination: "Unknown",
+              };
+            }
+            if (datasets[key].workflows[workflow].destination.name != "") {
+              datasets[key].meta.destination =
+                datasets[key].workflows[workflow].destination.name;
+            }
+            if (
+              "folderPath" in
+                datasets[key].data[datasets[key].workflows[workflow].type[0]] &&
+              datasets[key].data[datasets[key].workflows[workflow].type[0]]
+                .folderPath != ""
+            ) {
+              datasets[key].meta.location =
+                datasets[key].data[
+                  datasets[key].workflows[workflow].type[0]
+                ].folderPath;
+            }
+            if (
+              "folderPath" in datasets[key].data.Code &&
+              datasets[key].data.Code.folderPath != ""
+            ) {
+              datasets[key].meta.location = datasets[key].data.Code.folderPath;
+            }
+            if (!("datasetPublished" in datasets[key].workflows[workflow])) {
+              datasetsInProgressIDs.push(key);
+            } else {
+              if (
+                "datasetPublished" in datasets[key].workflows[workflow] &&
+                !datasets[key].workflows[workflow].datasetPublished
+              ) {
+                datasetsInProgressIDs.push(key);
+              }
+            }
+          }
+        } else {
+          datasetsInProgressIDs.push(key);
+        }
+      }
+
+      // remove duplicates from array
+      datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
+
+      // filter datasets that are in progress based on the IDs
+      for (const datasetID of datasetsInProgressIDs) {
+        this.datasetsInProgress.push(datasets[datasetID]);
+      }
+
+      // get list of all IDs
+      let datasetIDs = [];
+      for (const key in datasets) {
+        datasetIDs.push(key);
+      }
+
+      // get the difference of array of datasetIds
+      let datasetsPublishedIDs = datasetIDs.filter(
+        (datasetID) => !datasetsInProgressIDs.includes(datasetID)
+      );
+
+      // filter datasets that are published based on the IDs
+      for (const datasetID of datasetsPublishedIDs) {
+        this.datasetsPublished.push(datasets[datasetID]);
+      }
+    },
   },
   async mounted() {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
-
-    let allDatasets = await this.datasetStore.getAllDatasets();
-
-    // make a local copy of the datasets object
-    const datasets = JSON.parse(JSON.stringify(allDatasets));
-
-    // filter datasets in progress
-    let datasetsInProgressIDs = [];
-
-    for (const key in datasets) {
-      if ("workflows" in datasets[key]) {
-        for (const workflow in datasets[key].workflows) {
-          if (!("datasetPublished" in datasets[key].workflows[workflow])) {
-            datasetsInProgressIDs.push(key);
-          } else {
-            if (
-              "datasetPublished" in datasets[key].workflows[workflow] &&
-              !datasets[key].workflows[workflow].datasetPublished
-            ) {
-              datasetsInProgressIDs.push(key);
-            }
-          }
-        }
-      } else {
-        datasetsInProgressIDs.push(key);
-      }
-    }
-
-    // remove duplicates from array
-    datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
-
-    // filter datasets that are in progress based on the IDs
-    for (const datasetID of datasetsInProgressIDs) {
-      this.datasetsInProgress.push(datasets[datasetID]);
-    }
-
-    // get list of all IDs
-    let datasetIDs = [];
-    for (const key in datasets) {
-      datasetIDs.push(key);
-    }
-
-    // get the difference of array of datasetIds
-    let datasetsPublishedIDs = datasetIDs.filter(
-      (datasetID) => !datasetsInProgressIDs.includes(datasetID)
-    );
-
-    // filter datasets that are published based on the IDs
-    for (const datasetID of datasetsPublishedIDs) {
-      this.datasetsPublished.push(datasets[datasetID]);
-    }
+    await this.buildDataset();
   },
 };
 </script>
