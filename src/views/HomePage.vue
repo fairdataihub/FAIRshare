@@ -5,7 +5,7 @@
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center py-5">
-          <h1 class="text-3xl font-bold text-slate-800 xl:text-4xl">
+          <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">
             FAIRshare
           </h1>
         </div>
@@ -61,7 +61,7 @@
         </div>
 
         <div
-          class="hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3 text-primary-600"
+          class="hover-underline-animation text-primary-600 flex cursor-pointer flex-row items-center py-1 pt-3"
         >
           <span
             class="font-medium"

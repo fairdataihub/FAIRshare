@@ -28,6 +28,8 @@ import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
+import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
+
 // config for the markdown editor
 VMdEditor.use(githubTheme, {});
 VMdEditor.use(createKatexPlugin());
@@ -39,6 +41,7 @@ let app = createApp(App);
 
 // global variables for use in the app
 app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
+app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 
 // register components globally
 app.component("line-divider", LineDivider);

@@ -1109,7 +1109,7 @@
     <transition name="fade" mode="out-in" appear>
       <div class="fixed bottom-2 right-3" v-show="showSpinner">
         <Vue3Lottie
-          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :animationData="$helix_spinner"
           :width="80"
           :height="80"
         />
