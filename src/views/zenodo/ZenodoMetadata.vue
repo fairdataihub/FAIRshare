@@ -27,7 +27,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Basic Information
@@ -297,7 +297,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">License</p>
                 <span class="pr-2 text-gray-400"> required </span>
@@ -396,7 +396,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Related/alternate identifiers
@@ -522,7 +522,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Contributors
@@ -638,7 +638,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   References
@@ -715,7 +715,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Journal</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -768,7 +768,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Conference
@@ -864,7 +864,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Book/Report/Chapter
@@ -934,7 +934,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Thesis</p>
                 <span class="pr-2 text-gray-400"> optional </span>
@@ -1036,7 +1036,7 @@
           >
             <template #title>
               <div
-                class="font-inter flex w-full flex-row items-center justify-between"
+                class="flex w-full flex-row items-center justify-between font-inter"
               >
                 <p class="px-4 text-sm font-semibold text-blue-500">Subjects</p>
                 <span class="pr-2 text-gray-400"> optional </span>
