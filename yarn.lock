@@ -11997,10 +11997,10 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue3-lottie@^1.4.3-beta:
-  version "1.4.3-beta"
-  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-1.4.3-beta.tgz#d5c3870d253ab80a742bd2b2e2ca0dbe23b29b9b"
-  integrity sha512-mUzPl1RLIsR5Kk+xSRiTOuvDe6R1w2rZOAmwrxxy99n5XFKx9oZhBqktPxbZXW6+J7OwhD7+2LxNXCzjwE55uQ==
+vue3-lottie@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-1.6.0.tgz#553d8089fbc6db2199b7ff1d20d7d65b630830e0"
+  integrity sha512-Bbo6sl3aECMbssVv/BiFTRc+HhD6ZR/iwW1omY1ExOo7LQ/kmWHiBJXVie8xDpiFVaoYWmOsOA9DhgzCKpSx5A==
   dependencies:
     lottie-web "^5.8.1"
     vue-class-component "^8.0.0-0"
