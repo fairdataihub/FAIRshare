@@ -35,7 +35,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import { ElMessageBox, ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -61,20 +61,20 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async publishDeposition() {
-      // const depositionID = this.workflow.destination.zenodo.deposition_id;
+      const depositionID = this.workflow.destination.zenodo.deposition_id;
 
-      // const response = await axios
-      //   .post(`${this.$server_url}/zenodo/publish`, {
-      //     access_token: this.zenodoToken,
-      //     deposition_id: depositionID,
-      //   })
-      //   .then((response) => {
-      //     return response.data;
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     return "ERROR";
-      //   });
+      const response = await axios
+        .post(`${this.$server_url}/zenodo/publish`, {
+          access_token: this.zenodoToken,
+          deposition_id: depositionID,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
 
       const loading = ElLoading.service({
         lock: true,
@@ -84,9 +84,9 @@ export default {
 
       await this.sleep(3000);
 
-      const response = {
-        id: "5750415",
-      };
+      // const response = {
+      //   id: "5750415",
+      // };
 
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
