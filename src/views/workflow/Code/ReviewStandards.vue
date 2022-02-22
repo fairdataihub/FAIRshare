@@ -32,8 +32,7 @@
                     openWebsite('https://doi.org/10.1371/journal.pcbi.1005510')
                   "
                 >
-                  Good enough practices in scientific computing </span
-                >.
+                  Good enough practices in scientific computing</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -77,9 +76,9 @@
                     )
                   "
                 >
-                  Google’s R Style Guide
-                </span>
-                for R programs
+                  Google’s R Style Guide</span
+                >
+                for R programs.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -114,8 +113,8 @@
                     openWebsite('https://doi.org/10.1016/j.cels.2018.03.014')
                   "
                 >
-                  Practical Computational Reproducibility in the Life Sciences </span
-                >,
+                  Practical Computational Reproducibility in the Life
+                  Sciences</span>,
                 <span
                   class="text-url"
                   @click="
@@ -133,8 +132,7 @@
                   "
                 >
                   On best practices in the development of bioinformatics
-                  software </span
-                >.
+                  software</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -170,8 +168,7 @@
                     )
                   "
                 >
-                  Ten simple rules for documenting scientific software </span
-                >.
+                  Ten simple rules for documenting scientific software</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -207,11 +204,10 @@
                     )
                   "
                 >
-                  Department of Health and Human Services
-                </span>
-
+                  Department of Health and Human Services</span
+                >
                 for information on the Health Insurance Portability and
-                Accountability Act (HIPAA) Privacy Rules
+                Accountability Act (HIPAA) Privacy Rules.
               </div>
             </el-collapse-item>
           </el-collapse>
