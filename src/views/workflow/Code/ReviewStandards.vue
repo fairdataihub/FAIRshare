@@ -32,8 +32,7 @@
                     openWebsite('https://doi.org/10.1371/journal.pcbi.1005510')
                   "
                 >
-                  Good enough practices in scientific computing</span
-                >.
+                  Good enough practices in scientific computing</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -115,8 +114,7 @@
                   "
                 >
                   Practical Computational Reproducibility in the Life
-                  Sciences</span
-                >,
+                  Sciences</span>,
                 <span
                   class="text-url"
                   @click="
@@ -134,8 +132,7 @@
                   "
                 >
                   On best practices in the development of bioinformatics
-                  software</span
-                >.
+                  software</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -171,8 +168,7 @@
                     )
                   "
                 >
-                  Ten simple rules for documenting scientific software</span
-                >.
+                  Ten simple rules for documenting scientific software</span>.
               </div>
             </el-collapse-item>
           </el-collapse>
