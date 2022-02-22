@@ -5,10 +5,7 @@
     <div class="flex h-full w-full flex-col items-center">
       <div class="card-container">
         <div class="image-container">
-          <img
-            src="https://about.zenodo.org/static/img/logos/zenodo-black-2500.png"
-            class="image"
-          />
+          <img src="../../assets/images/zenodologo.png" class="image" />
         </div>
         <div class="card-container-content">
           <div class="card-container-status">
@@ -74,7 +71,7 @@
 
       <div class="card-container">
         <div class="image-container">
-          <img src="../../assets/images/github.jpeg" class="image" />
+          <img src="../../assets/images/githublogo.jpeg" class="image" />
         </div>
         <div class="card-container-content">
           <div class="card-container-status">
