@@ -284,6 +284,7 @@ export default {
       console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
+        await this.getUserRepos();
       }
     },
   },
