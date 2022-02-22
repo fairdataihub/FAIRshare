@@ -112,7 +112,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
             metadata["runtimePlatform"] = code_data["runtimePlatform"]
 
     if "operatingSystem" in code_data:
-        if code_data["operatingSystem"] != "":
+        if len(code_data["operatingSystem"]) > 0:
             metadata["operatingSystem"] = code_data["operatingSystem"]
 
     if "otherSoftwareRequirements" in code_data:
