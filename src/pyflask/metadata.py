@@ -104,11 +104,11 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 metadata["keywords"].append(item["keyword"])
 
     if "programmingLanguage" in code_data:
-        if len(general_data["programmingLanguage"]) > 0:
+        if len(code_data["programmingLanguage"]) > 0:
             metadata["programmingLanguage"] = code_data["programmingLanguage"]
 
     if "runtimePlatform" in code_data:
-        if len(general_data["runtimePlatform"]) > 0:
+        if len(code_data["runtimePlatform"]) > 0:
             metadata["runtimePlatform"] = code_data["runtimePlatform"]
 
     if "operatingSystem" in code_data:
