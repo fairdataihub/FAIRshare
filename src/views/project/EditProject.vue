@@ -30,11 +30,11 @@
         class="rounded-lg border-2 border-slate-100 p-4"
         :rules="rules"
       >
-        <el-form-item label="Dataset name" prop="datasetName">
+        <el-form-item label="Project name" prop="datasetName">
           <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
 
-        <el-form-item label="Dataset description">
+        <el-form-item label="Project description">
           <el-popover
             ref="popover"
             placement="bottom"
