@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -137,7 +137,7 @@
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'citation.cff' ||
-                  node.label == 'zenodo.json' ||
+                  node.label == '.zenodo.json' ||
                   (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
                     : ''
@@ -688,7 +688,7 @@ export default {
         (data.label === "LICENSE" && this.workflow.generateLicense) ||
         data.label === "codemeta.json" ||
         data.label === "citation.cff" ||
-        data.label === "zenodo.json"
+        data.label === ".zenodo.json"
       ) {
         this.drawerModel = true;
         if (data.label === "LICENSE" && this.workflow.generateLicense) {
@@ -697,7 +697,7 @@ export default {
           this.PreviewNewlyCreatedMetadataFile = true;
         } else if (data.label === "citation.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
-        } else if (data.label === "zenodo.json") {
+        } else if (data.label === ".zenodo.json") {
           this.PreviewNewlyCreatedZenodoFile = true;
         }
         let title = data.label;
@@ -781,6 +781,45 @@ export default {
 
       if (response !== "ERROR") {
         this.fileData = JSON.parse(response);
+
+        // check if label exists in fileData
+
+        let newObj = {};
+
+        if (!this.fileData.some((el) => el.label === "codemeta.json")) {
+          newObj.label = "codemeta.json";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === "citation.cff")) {
+          newObj = {};
+          newObj.label = "citation.cff";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === ".zenodo.json")) {
+          newObj = {};
+          newObj.label = ".zenodo.json";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === "LICENSE")) {
+          if (this.workflow.generateLicense) {
+            newObj = {};
+            newObj.label = "LICENSE";
+            newObj.isDir = false;
+
+            this.fileData.push(newObj);
+          }
+        }
+
+        console.log(this.fileData);
       } else {
         this.$message({
           message: "Could not get the contents of the repository",

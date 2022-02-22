@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -415,25 +415,46 @@
                   class="py-4"
                 >
                   <el-form-item label="Application category">
-                    <div class="flex w-full flex-row items-center">
-                      <el-select
-                        v-model="step3Form.applicationCategory"
-                        filterable
-                        allow-create
-                        placeholder="Select an application category"
-                        class="w-full"
-                      >
-                        <el-option
-                          v-for="item in applicationCategoryOptions"
-                          :key="item"
-                          :label="item"
-                          :value="item"
+                    <div class="flex w-full flex-col">
+                      <div class="flex w-full flex-row items-center">
+                        <el-select
+                          v-model="step3Form.applicationCategory"
+                          filterable
+                          allow-create
+                          placeholder="Select an application category"
+                          class="w-full"
                         >
-                        </el-option>
-                      </el-select>
-                      <form-help-content
-                        popoverContent="Type of application, e.g. scientific, business, etc."
-                      ></form-help-content>
+                          <el-option
+                            v-for="item in applicationCategoryOptions"
+                            :key="item"
+                            :label="item"
+                            :value="item"
+                          >
+                          </el-option>
+                        </el-select>
+                        <form-help-content
+                          popoverContent="Type of application, e.g. scientific, business, etc."
+                        ></form-help-content>
+                      </div>
+                      <div class="flex w-full flex-row items-center">
+                        <span class="mx-2 text-sm"> Suggestions: </span>
+                        <div class="flex-row">
+                          <el-tag
+                            class="cursor-copy"
+                            size="small"
+                            @click="
+                              step3Form.applicationCategory = 'Scientific'
+                            "
+                            :type="
+                              step3Form.applicationCategory === 'Scientific'
+                                ? 'success'
+                                : 'info'
+                            "
+                          >
+                            Scientific
+                          </el-tag>
+                        </div>
+                      </div>
                     </div>
                   </el-form-item>
 
@@ -555,7 +576,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -708,7 +729,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -891,7 +912,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -997,7 +1018,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Additional information
                 </span>
@@ -1147,7 +1168,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 3,
       pillTitles: [
         "Basic info",
         "Authors and Contributors",

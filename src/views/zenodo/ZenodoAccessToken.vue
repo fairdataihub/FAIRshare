@@ -329,6 +329,7 @@ export default {
     },
     getAllFilesFromFolder(dir) {
       let filesystem = require("fs");
+      let that = this;
       function dfs(dir) {
         let results = [];
         filesystem.readdirSync(dir).forEach(function (file) {
@@ -347,10 +348,39 @@ export default {
           }
           results.push(newObj);
         });
+
+        let newObj = {};
+
+        if (!results.some((el) => el.label === "codemeta.json")) {
+          newObj.label = "codemeta.json";
+          newObj.isDir = false;
+
+          results.push(newObj);
+        }
+
+        if (!results.some((el) => el.label === "citation.cff")) {
+          newObj = {};
+          newObj.label = "citation.cff";
+          newObj.isDir = false;
+
+          results.push(newObj);
+        }
+
+        if (!results.some((el) => el.label === "LICENSE")) {
+          if (that.workflow.generateLicense) {
+            newObj = {};
+            newObj.label = "LICENSE";
+            newObj.isDir = false;
+
+            results.push(newObj);
+          }
+        }
+
         return results;
       }
       let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
       this.fileData.push(root);
+      console.log(this.fileData);
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
