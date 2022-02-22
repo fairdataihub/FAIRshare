@@ -14,8 +14,8 @@
         <!-- template start -->
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable high-level best practices for biomedical research
-            software?
+            Have you followed applicable high-level best practices for
+            biomedical research software?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -23,17 +23,17 @@
               <template #title>
                 <span class="pr-2"> Learn more </span>
               </template>
-              <div class="px-3 py-2"> 
-                  We refer to the following relevant literature on high-level best practices: 
+              <div class="px-3 py-2">
+                We refer to the following relevant literature on high-level best
+                practices:
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://doi.org/10.1371/journal.pcbi.1005510'
-                  )
-                "
-                  >
-                    Good enough practices in scientific computing</span>.
+                  class="text-url"
+                  @click="
+                    openWebsite('https://doi.org/10.1371/journal.pcbi.1005510')
+                  "
+                >
+                  Good enough practices in scientific computing</span
+                >.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -60,27 +60,25 @@
               </template>
 
               <div class="px-3 py-2">
-                These standards depend on the language used in your software. For instance, we refer to the
+                These standards depend on the language used in your software.
+                For instance, we refer to the
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://www.python.org/dev/'
-                  )
-                "
-                  >
-                    Python Developer's Guide
+                  class="text-url"
+                  @click="openWebsite('https://www.python.org/dev/')"
+                >
+                  Python Developer's Guide
                 </span>
-                for Python or 
+                for Python or
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://google.github.io/styleguide/Rguide.html'
-                  )
-                "
-                  >
-                    Google’s R Style Guide</span>
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://google.github.io/styleguide/Rguide.html'
+                    )
+                  "
+                >
+                  Google’s R Style Guide</span
+                >
                 for R programs.
               </div>
             </el-collapse-item>
@@ -108,35 +106,36 @@
               </template>
 
               <div class="px-3 py-2">
-                 We refer to the following relevant literature on best practices for biomedical research software: 
+                We refer to the following relevant literature on best practices
+                for biomedical research software:
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://doi.org/10.1016/j.cels.2018.03.014'
-                  )
-                "
-                  >
-                    Practical Computational Reproducibility in the Life Sciences</span>,
+                  class="text-url"
+                  @click="
+                    openWebsite('https://doi.org/10.1016/j.cels.2018.03.014')
+                  "
+                >
+                  Practical Computational Reproducibility in the Life
+                  Sciences</span
+                >,
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://dx.doi.org/10.12688%2Ff1000research.10750.2'
-                  )
-                "
-                  >
-                    General guidelines for biomedical software development
-                </span>,
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://dx.doi.org/10.12688%2Ff1000research.10750.2'
+                    )
+                  "
+                >
+                  General guidelines for biomedical software development </span
+                >,
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://doi.org/10.3389/fgene.2014.00199'
-                  )
-                "
-                  >
-                    On best practices in the development of bioinformatics software</span>.
+                  class="text-url"
+                  @click="
+                    openWebsite('https://doi.org/10.3389/fgene.2014.00199')
+                  "
+                >
+                  On best practices in the development of bioinformatics
+                  software</span
+                >.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -165,14 +164,15 @@
               <div class="px-3 py-2">
                 We refer to the following literature:
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561'
-                  )
-                "
-                  >
-                    Ten simple rules for documenting scientific software</span>.
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561'
+                    )
+                  "
+                >
+                  Ten simple rules for documenting scientific software</span
+                >.
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -188,8 +188,8 @@
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you ensured that your code and data files do not include any information
-            violating HIPAA?
+            Have you ensured that your code and data files do not include any
+            information violating HIPAA?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -199,17 +199,19 @@
               </template>
 
               <div class="px-3 py-2">
-                We refer to the guidelines of the 
+                We refer to the guidelines of the
                 <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html'
-                  )
-                "
-                  >
-                    Department of Health and Human Services</span>
-                for information on the Health Insurance Portability and Accountability Act (HIPAA) Privacy Rules.
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html'
+                    )
+                  "
+                >
+                  Department of Health and Human Services</span
+                >
+                for information on the Health Insurance Portability and
+                Accountability Act (HIPAA) Privacy Rules.
               </div>
             </el-collapse-item>
           </el-collapse>
