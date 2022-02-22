@@ -286,6 +286,9 @@ export default {
     },
   },
   methods: {
+    async openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
     async goBack() {
       let routerPath = "";
 

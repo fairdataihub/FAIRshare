@@ -42,7 +42,7 @@ import ContactUs from "../views/contact/ContactUs.vue";
 import HomePage from "../views/HomePage.vue";
 
 const routes = [
-  { path: "/", component: HomePage },
+  { path: "/", component: HomePage }, // not used for any purpose yet; use `/home` instead
   { path: "/home", component: HomePage },
   { path: "/datasets", component: ShowAllProjects, name: "ShowAllProjects" },
   {
