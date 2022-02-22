@@ -65,6 +65,10 @@
             <el-icon><chat-dot-round /></el-icon>
             <span v-show="sideBarOpen"> Contact Us </span>
           </router-link>
+          <router-link to="/about" class="sideBarMenuItem !hidden">
+            <el-icon><chat-dot-round /></el-icon>
+            <span v-show="sideBarOpen"> About </span>
+          </router-link>
           <div class="absolute bottom-0 right-3 hidden">
             <span class="text-xs text-gray-400">{{ environment }}</span>
           </div>

@@ -37,6 +37,7 @@ import ManageAccount from "../views/manage/ManageAccount.vue";
 import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";
+import AppAbout from "../views/about/AppAbout.vue";
 
 // not used for any purpose yet
 import HomePage from "../views/HomePage.vue";
@@ -139,6 +140,7 @@ const routes = [
   { path: "/settings", component: AppSettings },
   { path: "/documentation", component: AppDocumentation },
   { path: "/contactUs", component: ContactUs },
+  { path: "/about", component: AppAbout },
 ];
 
 export const router = createRouter({
