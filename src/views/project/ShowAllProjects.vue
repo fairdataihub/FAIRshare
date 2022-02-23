@@ -33,7 +33,17 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
+                class="
+                  project
+                  my-4
+                  rounded-lg
+                  border border-zinc-200
+                  px-6
+                  py-4
+                  shadow-md
+                  transition-all
+                  hover:border-transparent
+                "
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -51,16 +61,23 @@
                     <div class="flex flex-wrap">
                       <div class="justify-left flex items-center">
                         <Icon icon="codicon:history" />
-                        <span class="px-2">
+                        <span class="px-2" v-if="showDetail != dataset.id">
                           date created: {{ dataset.meta.dateCreated }}
+                        </span>
+                        <span class="px-2" v-if="showDetail == dataset.id">
+                          date created: {{ dataset.meta.dateCreatedDetail }}
                         </span>
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="codicon:history" />
-                        <span class="px-2">
+                        <span class="px-2" v-if="showDetail != dataset.id">
                           last modified:
                           {{ dataset.meta.dateLastModified }}</span
                         >
+                        <span class="px-2" v-if="showDetail == dataset.id">
+                          date created:
+                          {{ dataset.meta.dateLastModifiedDetail }}
+                        </span>
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="clarity:upload-cloud-line" />
@@ -74,6 +91,21 @@
                           location: {{ dataset.meta.location }}</span
                         >
                       </div>
+                    </div>
+                    <div class="flex flex-warp">
+                      <el-button @click="PublishNewVersion(dataset)"
+                        >publish a new version</el-button
+                      >
+                      <el-button
+                        v-if="showDetail == ''"
+                        @click="showDetail = dataset.id"
+                        >detail</el-button
+                      >
+                      <el-button
+                        v-if="showDetail != ''"
+                        @click="showDetail = ''"
+                        >hide detail</el-button
+                      >
                     </div>
                   </div>
                 </div>
@@ -93,7 +125,17 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
+                class="
+                  project
+                  my-4
+                  rounded-lg
+                  border border-zinc-200
+                  px-6
+                  py-4
+                  shadow-md
+                  transition-all
+                  hover:border-transparent
+                "
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -110,16 +152,23 @@
                     <div class="flex flex-wrap">
                       <div class="justify-left flex items-center">
                         <Icon icon="codicon:history" />
-                        <span class="px-2">
+                        <span class="px-2" v-if="showDetail != dataset.id">
                           date created: {{ dataset.meta.dateCreated }}
+                        </span>
+                        <span class="px-2" v-if="showDetail == dataset.id">
+                          date created: {{ dataset.meta.dateCreatedDetail }}
                         </span>
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="codicon:history" />
-                        <span class="px-2">
+                        <span class="px-2" v-if="showDetail != dataset.id">
                           last modified:
                           {{ dataset.meta.dateLastModified }}</span
                         >
+                        <span class="px-2" v-if="showDetail == dataset.id">
+                          date created:
+                          {{ dataset.meta.dateLastModifiedDetail }}
+                        </span>
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="clarity:upload-cloud-line" />
@@ -134,9 +183,19 @@
                         >
                       </div>
                     </div>
-                    <el-button class="w-20" @click="PublishNewVersion(dataset)"
-                      >publish a new version</el-button
-                    >
+                    <div class="flex flex-warp">
+                      <el-button @click="PublishNewVersion(dataset)"
+                        >publish a new version</el-button
+                      >
+                      <el-button @click="showDetail = dataset.id"
+                        >detail</el-button
+                      >
+                      <el-button
+                        v-if="showDetail != ''"
+                        @click="showDetail = ''"
+                        >hide detail</el-button
+                      >
+                    </div>
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -152,7 +211,16 @@
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
+              class="
+                hover-underline-animation
+                my-3
+                flex
+                w-max
+                cursor-pointer
+                flex-row
+                items-center
+                text-primary-600
+              "
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -180,7 +248,19 @@
       <div class="flex flex-row items-center justify-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
+            class="
+              flex
+              w-max
+              cursor-pointer
+              flex-col
+              items-center
+              justify-center
+              rounded-lg
+              border-2 border-dashed
+              p-10
+              transition-all
+              hover:border-solid hover:bg-gray-100
+            "
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
@@ -211,6 +291,7 @@ export default {
       selectedDataset: "",
       datasetsInProgress: [],
       datasetsPublished: [],
+      showDetail: "",
     };
   },
   computed: {},
@@ -227,8 +308,8 @@ export default {
       let last = this.readUntilDash(s);
       return s.slice(0, last + 1);
     },
-    PublishNewVersion(dataset){
-      console.log("publish a new version", dataset)
+    PublishNewVersion(dataset) {
+      console.log("publish a new version", dataset);
     },
     async duplicateDataset(targetDataset) {
       this.selectedDataset = "";
@@ -261,7 +342,7 @@ export default {
           ":" +
           today.getSeconds();
         let dateTime = currentDate + " " + currentTime;
-        let now = dayjs().format("MMMM D, YYYY")
+        let now = dayjs().format("MMMM D, YYYY");
         newDataset.id = datasetID;
         newDataset.name = newDataset.name.concat("-COPY");
         newDataset.meta.dateCreated = now;
@@ -337,7 +418,7 @@ export default {
             if (!("meta" in datasets[key])) {
               datasets[key].meta = {
                 dateCreated: "Unknown",
-                dateCreatedDetail:"Unknown",
+                dateCreatedDetail: "Unknown",
                 dateLastModified: "Unknown",
                 dateLastModifiedDetail: "Unknown",
                 location: "Unknown",
