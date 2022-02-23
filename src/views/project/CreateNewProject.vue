@@ -22,7 +22,7 @@
           <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
 
-        <el-form-item label="Project description">
+        <el-form-item label="Project description" prop="datasetDescription">
           <el-popover
             ref="popover"
             placement="bottom"
@@ -33,7 +33,7 @@
               <el-input
                 v-model="datasetForm.datasetDescription"
                 type="textarea"
-                autosize=""
+                :autosize="{ minRows: 3, maxRows: 5 }"
               ></el-input>
             </template>
 
@@ -242,6 +242,13 @@ export default {
             trigger: "blur",
           },
         ],
+        datasetDescription: [
+          {
+            required: true,
+            message: "Please provide a project description",
+            trigger: "blur",
+          },
+        ],
         dataType: [
           {
             type: "array",
@@ -303,7 +310,7 @@ export default {
 
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
-          console.log("error submit!!");
+          console.log("Invalid form entries");
           return false;
         }
       });
@@ -380,10 +387,10 @@ export default {
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-  @apply border-secondary-500 shadow-md shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-md transition-all;
 }
 
 .single-check-box:not(.is-disabled):hover {
-  @apply border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-lg transition-all;
 }
 </style>
