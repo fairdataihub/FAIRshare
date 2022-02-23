@@ -34,13 +34,11 @@ import GithubPublish from "../views/github/GithubPublish.vue";
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
+import HomePage from "../views/home/HomePage.vue";
 import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";
 import AppAbout from "../views/about/AppAbout.vue";
-
-// not used for any purpose yet
-import HomePage from "../views/HomePage.vue";
 
 const routes = [
   { path: "/", component: HomePage }, // not used for any purpose yet; use `/home` instead
