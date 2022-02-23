@@ -276,11 +276,11 @@ export default {
             ":" +
             today.getSeconds();
           let dateTime = currentDate + " " + currentTime;
-          let now = dayjs().format("MMMM D, YYYY")
+          let now = dayjs().format("MMMM D, YYYY");
           let dataset = {
             meta: {
               dateCreated: now,
-              dateCreatedDetail:dateTime,
+              dateCreatedDetail: dateTime,
               dateLastModified: "Unknown",
               dateLastModifiedDetail: "Unknown",
               location: "Unknown",
