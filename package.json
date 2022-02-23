@@ -1,6 +1,6 @@
 {
   "name": "fair-share",
-  "version": "0.0.1",
+  "version": "1.0.0-beta.1",
   "description": "Simplifying data curation for researchers working on COVID-19 research",
   "private": true,
   "keywords": [

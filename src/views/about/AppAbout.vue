@@ -9,8 +9,6 @@
 
       <line-divider></line-divider>
 
-      <h2>Some details about FAIRshare are shown below.</h2>
-
       <div class="flex w-full flex-col items-center justify-start">
         <Vue3Lottie
           animationLink="https://assets5.lottiefiles.com/packages/lf20_q7zl3bxr.json"
@@ -29,7 +27,7 @@
         </el-descriptions>
       </div>
     </div>
-    <div class="flex w-full items-center justify-center pb-3">
+    <div class="flex w-full items-center justify-center pb-2">
       <p class="mr-2">Made with</p>
       <Vue3Lottie
         animationLink="https://assets4.lottiefiles.com/packages/lf20_jiniaoj3.json"
