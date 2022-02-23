@@ -33,17 +33,7 @@
               <div
                 v-for="dataset in datasetsInProgress"
                 :key="dataset"
-                class="
-                  project
-                  my-4
-                  rounded-lg
-                  border border-zinc-200
-                  px-6
-                  py-4
-                  shadow-md
-                  transition-all
-                  hover:border-transparent
-                "
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -92,7 +82,7 @@
                         >
                       </div>
                     </div>
-                    <div class="flex flex-warp">
+                    <div class="flex-warp flex">
                       <el-button @click="PublishNewVersion(dataset)"
                         >publish a new version</el-button
                       >
@@ -125,17 +115,7 @@
               <div
                 v-for="dataset in datasetsPublished"
                 :key="dataset"
-                class="
-                  project
-                  my-4
-                  rounded-lg
-                  border border-zinc-200
-                  px-6
-                  py-4
-                  shadow-md
-                  transition-all
-                  hover:border-transparent
-                "
+                class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
                 @click="selectDataset($event, dataset.id)"
               >
@@ -183,7 +163,7 @@
                         >
                       </div>
                     </div>
-                    <div class="flex flex-warp">
+                    <div class="flex-warp flex">
                       <el-button @click="PublishNewVersion(dataset)"
                         >publish a new version</el-button
                       >
@@ -211,16 +191,7 @@
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
             <div
-              class="
-                hover-underline-animation
-                my-3
-                flex
-                w-max
-                cursor-pointer
-                flex-row
-                items-center
-                text-primary-600
-              "
+              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
             >
               <span class="font-medium">
                 Or start a new data curation project
@@ -248,19 +219,7 @@
       <div class="flex flex-row items-center justify-center p-10" v-else>
         <router-link to="/datasets/new">
           <div
-            class="
-              flex
-              w-max
-              cursor-pointer
-              flex-col
-              items-center
-              justify-center
-              rounded-lg
-              border-2 border-dashed
-              p-10
-              transition-all
-              hover:border-solid hover:bg-gray-100
-            "
+            class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
           >
             <Icon
               icon="fluent:quiz-new-24-regular"
