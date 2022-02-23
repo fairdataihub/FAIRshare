@@ -227,8 +227,8 @@ export default {
       let last = this.readUntilDash(s);
       return s.slice(0, last + 1);
     },
-    PublishNewVersion(dataset){
-      console.log("publish a new version", dataset)
+    PublishNewVersion(dataset) {
+      console.log("publish a new version", dataset);
     },
     async duplicateDataset(targetDataset) {
       this.selectedDataset = "";
@@ -261,7 +261,7 @@ export default {
           ":" +
           today.getSeconds();
         let dateTime = currentDate + " " + currentTime;
-        let now = dayjs().format("MMMM D, YYYY")
+        let now = dayjs().format("MMMM D, YYYY");
         newDataset.id = datasetID;
         newDataset.name = newDataset.name.concat("-COPY");
         newDataset.meta.dateCreated = now;
@@ -337,7 +337,7 @@ export default {
             if (!("meta" in datasets[key])) {
               datasets[key].meta = {
                 dateCreated: "Unknown",
-                dateCreatedDetail:"Unknown",
+                dateCreatedDetail: "Unknown",
                 dateLastModified: "Unknown",
                 dateLastModifiedDetail: "Unknown",
                 location: "Unknown",
