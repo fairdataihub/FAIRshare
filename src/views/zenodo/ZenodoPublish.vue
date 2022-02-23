@@ -47,12 +47,14 @@
           Zenodo.
         </p>
         <div class="flex space-x-4">
-          <button class="primary-plain-button" @click="openDraftDataset">
-            <el-icon><data-line /></el-icon> Go to the homepage
-          </button>
+          <router-link :to="`/datasets`" class="">
+            <button class="primary-plain-button">
+              <el-icon><data-line /></el-icon> Go to the homepage
+            </button>
+          </router-link>
           <button
             class="blob primary-button transition-all"
-            @click="viewDatasetOnZenodo"
+            @click="openDraftDataset"
           >
             View dataset on Zenodo <el-icon><star-icon /></el-icon>
           </button>
@@ -63,7 +65,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -91,20 +93,20 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async publishDeposition() {
-      // const depositionID = this.workflow.destination.zenodo.deposition_id;
+      const depositionID = this.workflow.destination.zenodo.deposition_id;
 
-      // const response = await axios
-      //   .post(`${this.$server_url}/zenodo/publish`, {
-      //     access_token: this.zenodoToken,
-      //     deposition_id: depositionID,
-      //   })
-      //   .then((response) => {
-      //     return response.data;
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     return "ERROR";
-      //   });
+      const response = await axios
+        .post(`${this.$server_url}/zenodo/publish`, {
+          access_token: this.zenodoToken,
+          deposition_id: depositionID,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
 
       const loading = ElLoading.service({
         lock: true,
@@ -114,9 +116,9 @@ export default {
 
       await this.sleep(1000);
 
-      const response = {
-        id: "5750415",
-      };
+      // const response = {
+      //   id: "5750415",
+      // };
 
       this.zenodoDatasetID = response.id;
 
@@ -134,7 +136,7 @@ export default {
         this.datasetStore.setProgressBarType("zenodo");
         this.datasetStore.setCurrentStep(7);
 
-        // this.workflow.datasetPublished = true;
+        this.workflow.datasetPublished = true;
 
         this.published = true;
 

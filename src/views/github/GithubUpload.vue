@@ -602,7 +602,7 @@ export default {
 
         return;
       } else {
-        this.workflow.datasetUploaded = false;
+        this.workflow.datasetUploaded = true;
         this.workflow.datasetPublished = false;
         this.workflow.generateLicense = false;
 
