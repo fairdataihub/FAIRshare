@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Authors and Contributors
                 </span>
@@ -168,7 +168,7 @@
                               placeholder="Given name"
                             ></el-input>
 
-                            <div class="mx-2"></div>
+                            <div class="mx-1"></div>
 
                             <el-input
                               v-model="element.familyName"
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Discoverability
                 </span>
@@ -437,17 +437,19 @@
                         ></form-help-content>
                       </div>
                       <div class="flex w-full flex-row items-center">
-                        <span class="mx-2 text-sm"> Suggestions: </span>
+                        <span class="mx-2 text-sm italic text-zinc-600">
+                          Suggestions:
+                        </span>
                         <div class="flex-row">
                           <el-tag
-                            class="cursor-copy"
+                            class="mx-2 cursor-copy transition-all hover:shadow-md"
                             size="small"
                             @click="
                               step3Form.applicationCategory = 'Scientific'
                             "
                             :type="
                               step3Form.applicationCategory === 'Scientific'
-                                ? 'success'
+                                ? ''
                                 : 'info'
                             "
                           >
@@ -505,11 +507,88 @@
                         </div>
                       </template>
                     </draggable>
+                    <div class="flex w-full flex-row items-center">
+                      <span class="mx-2 text-sm italic text-zinc-600">
+                        Suggestions:
+                      </span>
+                      <div class="flex-row">
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="addKeyword('COVID-19')"
+                          :type="
+                            step3Form.keywords.some(
+                              (el) => el.keyword === 'COVID-19'
+                            )
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          COVID-19
+                        </el-tag>
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="addKeyword('Machine Learning')"
+                          :type="
+                            step3Form.keywords.some(
+                              (el) => el.keyword === 'Machine Learning'
+                            )
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          Machine Learning
+                        </el-tag>
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="addKeyword('Artifical Intelligence')"
+                          :type="
+                            step3Form.keywords.some(
+                              (el) => el.keyword === 'Artifical Intelligence'
+                            )
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          Artifical Intelligence
+                        </el-tag>
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="addKeyword('Infection rate')"
+                          :type="
+                            step3Form.keywords.some(
+                              (el) => el.keyword === 'Infection rate'
+                            )
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          Infection rate
+                        </el-tag>
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="addKeyword('Mortality prediction')"
+                          :type="
+                            step3Form.keywords.some(
+                              (el) => el.keyword === 'Mortality prediction'
+                            )
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          Mortality prediction
+                        </el-tag>
+                      </div>
+                    </div>
                   </el-form-item>
 
                   <div
                     class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
-                    @click="addKeyword"
+                    @click="addKeyword('')"
                   >
                     <Icon icon="carbon:add" />
                     <span> Add a keyword </span>
@@ -541,6 +620,45 @@
                       <form-help-content
                         popoverContent="The organization funding this software (comma separate if multiple)"
                       ></form-help-content>
+                    </div>
+                    <div class="flex w-full flex-row items-center">
+                      <span class="mx-1 text-sm italic text-zinc-600">
+                        Suggestions:
+                      </span>
+                      <div class="flex-row">
+                        <el-tag
+                          class="mx-2 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="
+                            step3Form.funding.organization =
+                              'National Institutes of Health (NIH)'
+                          "
+                          :type="
+                            step3Form.funding.organization ===
+                            'National Institutes of Health (NIH)'
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          National Institutes of Health (NIH)
+                        </el-tag>
+                        <el-tag
+                          class="mx-1 cursor-copy transition-all hover:shadow-md"
+                          size="small"
+                          @click="
+                            step3Form.funding.organization =
+                              'National Science Foundation (NSF)'
+                          "
+                          :type="
+                            step3Form.funding.organization ===
+                            'National Science Foundation (NSF)'
+                              ? ''
+                              : 'info'
+                          "
+                        >
+                          National Science Foundation (NSF)
+                        </el-tag>
+                      </div>
                     </div>
                   </el-form-item>
                 </el-form>
@@ -576,7 +694,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Development tools
                 </span>
@@ -657,7 +775,7 @@
                               type="text"
                               placeholder="https://github.com/fairdataihub/FAIRshare"
                             ></el-input>
-                            <div class="mx-2"></div>
+                            <div class="mx-1"></div>
                           </div>
                           <div class="flex w-1/12 flex-row justify-evenly">
                             <div
@@ -729,7 +847,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Run-time environment
                 </span>
@@ -838,7 +956,7 @@
                               type="text"
                               placeholder="Python 3.4 or https://github.com/pst/requests"
                             ></el-input>
-                            <div class="mx-2"></div>
+                            <div class="mx-1"></div>
                           </div>
                           <div class="flex w-1/12 flex-row justify-evenly">
                             <div
@@ -912,7 +1030,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Current version of the software
                 </span>
@@ -1018,7 +1136,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="pointer-events-none text-lg font-semibold text-primary-600"
+                  class="text-primary-600 pointer-events-none text-lg font-semibold"
                 >
                   Additional information
                 </span>
@@ -1704,10 +1822,15 @@ export default {
         }
       }, 50);
     },
-    addKeyword() {
+    addKeyword(keyword = "") {
+      if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
+        this.$message.warning("Keyword already exists.");
+        return;
+      }
+
       const uuid = uuidv4();
       this.step3Form.keywords.push({
-        keyword: "",
+        keyword: keyword,
         id: uuidv4(),
       });
       this.focusOnElementRef(uuid);
