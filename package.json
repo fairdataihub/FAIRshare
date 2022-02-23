@@ -31,7 +31,7 @@
     "postuninstall": "electron-builder install-app-deps",
     "dev": "vue-cli-service electron:serve"
   },
-  "main": "src/background.js",
+  "main": "background.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git"
