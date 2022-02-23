@@ -135,7 +135,8 @@ export const useDatasetsStore = defineStore({
         let now = dayjs().format("MMMM D, YYYY");
         this.currentDataset = dataset;
         this.currentDataset.meta.dateLastModified = now;
-        this.currentDataset.mate.dateLastModifiedDetail = dateTime;
+        this.currentDataset.meta.dateLastModifiedDetail = dateTime;
+        console.log("????")
       } catch (error) {
         console.log(error);
       }

@@ -75,7 +75,7 @@
                           {{ dataset.meta.dateLastModified }}</span
                         >
                         <span class="px-2" v-if="showDetail == dataset.id">
-                          date created:
+                          last modified:
                           {{ dataset.meta.dateLastModifiedDetail }}
                         </span>
                       </div>
