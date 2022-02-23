@@ -48,7 +48,7 @@
                       {{ dataset.description }}
                     </p>
                     <div class="h-[2px]"></div>
-                    <div class="flex-col">
+                    <div class="flex flex-wrap">
                       <div class="justify-left flex items-center">
                         <Icon icon="codicon:history" />
                         <span class="px-2">
@@ -75,9 +75,6 @@
                         >
                       </div>
                     </div>
-                    <el-button class="w-20" @click="duplicateDataset(dataset)"
-                      >duplicate</el-button
-                    >
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -110,6 +107,36 @@
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
+                    <div class="flex flex-wrap">
+                      <div class="justify-left flex items-center">
+                        <Icon icon="codicon:history" />
+                        <span class="px-2">
+                          date created: {{ dataset.meta.dateCreated }}
+                        </span>
+                      </div>
+                      <div class="justify-left flex items-center">
+                        <Icon icon="codicon:history" />
+                        <span class="px-2">
+                          last modified:
+                          {{ dataset.meta.dateLastModified }}</span
+                        >
+                      </div>
+                      <div class="justify-left flex items-center">
+                        <Icon icon="clarity:upload-cloud-line" />
+                        <span class="px-2">
+                          destination: {{ dataset.meta.destination }}</span
+                        >
+                      </div>
+                      <div class="justify-left flex items-center">
+                        <Icon icon="ep:location" />
+                        <span class="px-2">
+                          location: {{ dataset.meta.location }}</span
+                        >
+                      </div>
+                    </div>
+                    <el-button class="w-20" @click="PublishNewVersion(dataset)"
+                      >publish a new version</el-button
+                    >
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -173,7 +200,7 @@
 import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
 import { useDatasetsStore } from "@/store/datasets";
-
+import dayjs from "dayjs";
 export default {
   name: "ShowAllProjects",
   components: { Icon },
@@ -199,6 +226,9 @@ export default {
     getOriginal(s) {
       let last = this.readUntilDash(s);
       return s.slice(0, last + 1);
+    },
+    PublishNewVersion(dataset){
+      console.log("publish a new version", dataset)
     },
     async duplicateDataset(targetDataset) {
       this.selectedDataset = "";
@@ -231,9 +261,11 @@ export default {
           ":" +
           today.getSeconds();
         let dateTime = currentDate + " " + currentTime;
+        let now = dayjs().format("MMMM D, YYYY")
         newDataset.id = datasetID;
         newDataset.name = newDataset.name.concat("-COPY");
-        newDataset.meta.dateCreated = dateTime;
+        newDataset.meta.dateCreated = now;
+        newDataset.meta.dateCreatedDetail = dateTime;
         this.datasetStore.addDataset(newDataset, datasetID);
         await this.updateDataset();
       } else {
@@ -305,7 +337,9 @@ export default {
             if (!("meta" in datasets[key])) {
               datasets[key].meta = {
                 dateCreated: "Unknown",
+                dateCreatedDetail:"Unknown",
                 dateLastModified: "Unknown",
+                dateLastModifiedDetail: "Unknown",
                 location: "Unknown",
                 destination: "Unknown",
               };

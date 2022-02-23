@@ -1,5 +1,5 @@
 "use strict";
-
+import dayjs from "dayjs";
 import fs from "fs-extra";
 import path from "path";
 import { app } from "@electron/remote";
@@ -118,7 +118,24 @@ export const useDatasetsStore = defineStore({
     },
     async updateCurrentDataset(dataset) {
       try {
+        let today = new Date();
+          let currentDate =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1) +
+            "-" +
+            today.getDate();
+          let currentTime =
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds();
+        let dateTime = currentDate + " " + currentTime;
+        let now = dayjs().format("MMMM D, YYYY")
         this.currentDataset = dataset;
+        this.currentDataset.meta.dateLastModified = now
+        this.currentDataset.mate.dateLastModifiedDetail = dateTime
       } catch (error) {
         console.log(error);
       }

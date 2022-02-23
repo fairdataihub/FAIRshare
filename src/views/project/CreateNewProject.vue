@@ -213,7 +213,7 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
-
+import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { ElNotification } from "element-plus";
 import { Icon } from "@iconify/vue";
@@ -276,10 +276,13 @@ export default {
             ":" +
             today.getSeconds();
           let dateTime = currentDate + " " + currentTime;
+          let now = dayjs().format("MMMM D, YYYY")
           let dataset = {
             meta: {
-              dateCreated: dateTime,
+              dateCreated: now,
+              dateCreatedDetail:dateTime,
               dateLastModified: "Unknown",
+              dateLastModifiedDetail: "Unknown",
               location: "Unknown",
               destination: "Unknown",
             },
