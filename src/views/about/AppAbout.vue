@@ -9,35 +9,42 @@
 
       <line-divider></line-divider>
 
-      <h2>
-        We have created a documentation page for each component or feature in
-        FAIRshare. You can find the documentation site by clicking on the button
-        below:
-      </h2>
+      <h2>Some details about FAIRshare are shown below.</h2>
 
-      <div class="flex h-full w-full flex-col items-center justify-start">
-        <div>
-          <Vue3Lottie
-            animationLink="https://assets1.lottiefiles.com/packages/lf20_16bo07fy.json"
-            :width="300"
-            :height="300"
-          />
-        </div>
-        <div>
-          <button
-            class="primary-plain-button"
-            @click="openURL('https://fair-share-docs.vercel.app/')"
-          >
-            View the Documentation <el-icon><notebook-icon /></el-icon>
-          </button>
-        </div>
+      <div class="flex w-full flex-col items-center justify-start">
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/packages/lf20_q7zl3bxr.json"
+          :width="300"
+          :height="300"
+        />
       </div>
+      <div>
+        <el-descriptions :column="3" size="large" border>
+          <el-descriptions-item v-for="item in about" :key="item">
+            <template #label>
+              <div class="cell-item">{{ item.label }}</div>
+            </template>
+            {{ item.value }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+    </div>
+    <div class="flex w-full items-center justify-center pb-3">
+      <p class="mr-2">Made with</p>
+      <Vue3Lottie
+        animationLink="https://assets4.lottiefiles.com/packages/lf20_jiniaoj3.json"
+        :width="20"
+        :height="20"
+        :speed="0.7"
+      />
+      <p class="ml-2">by FAIR Data Innovations Hub</p>
     </div>
   </div>
 </template>
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
+import { app } from "@electron/remote";
 
 export default {
   name: "AppDocumentation",
@@ -45,6 +52,7 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      about: [],
     };
   },
   methods: {
@@ -57,6 +65,62 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+
+    this.about.push({
+      label: "FAIRshare version",
+      value: app.getVersion(),
+      span: 1,
+    });
+
+    this.about.push({ label: "Locale", value: app.getLocale(), span: 1 });
+
+    this.about.push({
+      label: "Electron",
+      value: process.versions.electron,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "Node.js",
+      value: process.versions.node,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "Chromium",
+      value: process.versions.chrome,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "V8",
+      value: process.versions.v8,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "OS",
+      value: process.platform,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "pid",
+      value: process.pid,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "ppid",
+      value: process.ppid,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "Application path",
+      value: app.getAppPath(),
+      span: 1,
+    });
   },
 };
 </script>

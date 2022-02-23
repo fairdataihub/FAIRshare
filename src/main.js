@@ -81,6 +81,7 @@ import {
   Notebook,
   Monitor,
   PictureFilled,
+  Postcard,
   QuestionFilled,
   Reading,
   RemoveFilled,
@@ -125,6 +126,7 @@ app.component("lock-icon", Lock);
 app.component("monitor-icon", Monitor);
 app.component("notebook-icon", Notebook);
 app.component("picture-filled", PictureFilled);
+app.component("postcard-icon", Postcard);
 app.component("question-filled", QuestionFilled);
 app.component("reading-icon", Reading);
 app.component("remove-filled", RemoveFilled);
