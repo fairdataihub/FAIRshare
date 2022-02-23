@@ -70,7 +70,7 @@
             </div>
 
             <div
-              class="hover-underline-animation text-primary-600 my-3 flex w-max cursor-pointer flex-row items-center"
+              class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
               v-if="licenseForm.license != ''"
               @click="openLicenseDetails"
             >
