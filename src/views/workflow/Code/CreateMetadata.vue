@@ -1286,7 +1286,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 3,
+      currentStep: 1,
       pillTitles: [
         "Basic info",
         "Authors and Contributors",

@@ -53,7 +53,7 @@
                 <el-tag
                   class="mx-2 cursor-copy transition-all hover:shadow-md"
                   size="small"
-                  @click="licenseForm.license = 'MIT'"
+                  @click="pickSuggestedLicense('MIT')"
                   :type="licenseForm.license === 'MIT' ? '' : 'info'"
                 >
                   MIT
@@ -61,7 +61,7 @@
                 <el-tag
                   class="mx-1 cursor-copy transition-all hover:shadow-md"
                   size="small"
-                  @click="licenseForm.license = 'Apache-2.0'"
+                  @click="pickSuggestedLicense('Apache-2.0')"
                   :type="licenseForm.license === 'Apache-2.0' ? '' : 'info'"
                 >
                   Apache-2.0
@@ -271,6 +271,10 @@ export default {
         text: loadingText,
       });
       return loading;
+    },
+    pickSuggestedLicense(license) {
+      this.licenseForm.license = license;
+      this.licenseChange(license);
     },
     licenseChange(val) {
       if (this.originalLicense !== val) {
