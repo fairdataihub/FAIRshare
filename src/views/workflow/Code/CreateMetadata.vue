@@ -30,7 +30,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Basic Information
                 </span>
@@ -131,7 +131,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Authors and Contributors
                 </span>
@@ -399,7 +399,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Discoverability
                 </span>
@@ -694,7 +694,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Development tools
                 </span>
@@ -847,7 +847,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Run-time environment
                 </span>
@@ -1030,7 +1030,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Current version of the software
                 </span>
@@ -1136,7 +1136,7 @@
             >
               <div class="w-full bg-gray-100 px-4 py-2">
                 <span
-                  class="text-primary-600 pointer-events-none text-lg font-semibold"
+                  class="pointer-events-none text-lg font-semibold text-primary-600"
                 >
                   Additional information
                 </span>
