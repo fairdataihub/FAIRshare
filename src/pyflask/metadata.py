@@ -236,7 +236,9 @@ def createMetadata(data_types, data, virtual_file):
 
 def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
-    citationObject = {}
+    citationObject = {
+        "cff-version": "1.2.0",
+    }
 
     if "name" in general_data:
         if general_data["name"] != "":

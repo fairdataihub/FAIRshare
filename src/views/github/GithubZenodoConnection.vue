@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -898,7 +898,7 @@ export default {
       const data = JSON.stringify({
         name: "web",
         config: {
-          url: `https://sandbox.zenodo.org/api/hooks/receivers/github/events/?access_token=${GithubZenodoConnectionToken}`,
+          url: `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=${GithubZenodoConnectionToken}`,
           content_type: "json",
           secret: "secret",
           insecure_ssl: 0,
