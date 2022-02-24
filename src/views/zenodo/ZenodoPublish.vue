@@ -175,7 +175,7 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    console.log(this.zenodoToken);
+    // console.log(this.zenodoToken);
   },
 };
 </script>

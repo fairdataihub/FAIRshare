@@ -280,11 +280,15 @@ export default {
         });
       }
     },
-    async showConnection(status) {
+    async showConnection(status, token = "") {
       console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
-        await this.getUserRepos();
+
+        if (token !== "") {
+          this.GithubAccessToken = token;
+          await this.getUserRepos();
+        }
       }
     },
   },
