@@ -49,88 +49,88 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Icon } from "@iconify/vue";
+  import { ref } from "vue";
+  import { Icon } from "@iconify/vue";
 
-export default {
-  components: { Icon },
-  props: {
-    numInput: { type: Number },
-    headers: { type: Array },
-    callback: { type: Function },
-  },
-  setup(props) {
-    // user inputs. in the order of from top to the bottom
-    const userInputs = ref({});
-    for (let i = 0; i < props.numInput; i++) {
-      let key = props.headers[i];
-      userInputs.value[key] = "";
-    }
-    console.log("user inputs: ", userInputs.value);
-    return {
-      userInputs,
-    };
-  },
-  methods: {
-    openWebsite(header) {
-      if (header == "GitHub access token") {
-        window.ipcRenderer.send(
-          "open-link-in-browser",
-          "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
-        );
-      } else if (header == "Zenodo access token") {
-        window.ipcRenderer.send(
-          "open-link-in-browser",
-          "https://developers.zenodo.org/"
-        );
+  export default {
+    components: { Icon },
+    props: {
+      numInput: { type: Number },
+      headers: { type: Array },
+      callback: { type: Function },
+    },
+    setup(props) {
+      // user inputs. in the order of from top to the bottom
+      const userInputs = ref({});
+      for (let i = 0; i < props.numInput; i++) {
+        let key = props.headers[i];
+        userInputs.value[key] = "";
       }
+      console.log("user inputs: ", userInputs.value);
+      return {
+        userInputs,
+      };
     },
-    // return inputs as an array (values only, in the order of from top to the bottom)
-    async closeDialog(status) {
-      await this.callback([status, Object.values(this.userInputs)]);
-      this.clearInput();
-    },
-    // validate and cleaning
-    async confirmInput(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log(">>>>");
-          this.closeDialog("OK");
+    methods: {
+      openWebsite(header) {
+        if (header == "GitHub access token") {
+          window.ipcRenderer.send(
+            "open-link-in-browser",
+            "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+          );
+        } else if (header == "Zenodo access token") {
+          window.ipcRenderer.send(
+            "open-link-in-browser",
+            "https://developers.zenodo.org/"
+          );
         }
-      });
-    },
-    // close by clicking "x"
-    async beforeCloseRootLevel() {
-      this.closeDialog("Cancelled");
-    },
+      },
+      // return inputs as an array (values only, in the order of from top to the bottom)
+      async closeDialog(status) {
+        await this.callback([status, Object.values(this.userInputs)]);
+        this.clearInput();
+      },
+      // validate and cleaning
+      async confirmInput(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log(">>>>");
+            this.closeDialog("OK");
+          }
+        });
+      },
+      // close by clicking "x"
+      async beforeCloseRootLevel() {
+        this.closeDialog("Cancelled");
+      },
 
-    clearInput() {
-      Object.keys(this.userInputs).forEach((key) => {
-        this.userInputs[key] = "";
-      });
+      clearInput() {
+        Object.keys(this.userInputs).forEach((key) => {
+          this.userInputs[key] = "";
+        });
+      },
     },
-  },
-};
+  };
 </script>
 
 <style scoped>
-.el-button--text {
-  @apply text-base;
-}
+  .el-button--text {
+    @apply text-base;
+  }
 
-.dialog-Container {
-  @apply flex flex-col gap-3;
-}
-.inputField {
-  @apply flex flex-col;
-}
-.inputBar-Header {
-  @apply box-border pl-3 text-base;
-}
-.inputBar {
-  @apply w-full;
-}
-.bottom {
-  @apply box-border flex items-end justify-end pt-3;
-}
+  .dialog-Container {
+    @apply flex flex-col gap-3;
+  }
+  .inputField {
+    @apply flex flex-col;
+  }
+  .inputBar-Header {
+    @apply box-border pl-3 text-base;
+  }
+  .inputBar {
+    @apply w-full;
+  }
+  .bottom {
+    @apply box-border flex items-end justify-end pt-3;
+  }
 </style>

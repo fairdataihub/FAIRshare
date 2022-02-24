@@ -249,125 +249,125 @@
 </template>
 
 <script>
-import { ElLoading } from "element-plus";
-import dayjs from "dayjs";
+  import { ElLoading } from "element-plus";
+  import dayjs from "dayjs";
 
-import { useDatasetsStore } from "@/store/datasets";
-import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
+  import { useDatasetsStore } from "@/store/datasets";
+  import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 
-export default {
-  name: "CodeCreateMetadataReview",
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      dataset: {},
-      workflowID: this.$route.params.workflowID,
-      datasetID: this.$route.params.datasetID,
-      workflow: {},
-      loading: "",
-      generalMetadata: {
-        funding: {},
+  export default {
+    name: "CodeCreateMetadataReview",
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        dataset: {},
+        workflowID: this.$route.params.workflowID,
+        datasetID: this.$route.params.datasetID,
+        workflow: {},
+        loading: "",
+        generalMetadata: {
+          funding: {},
+        },
+        codeMetadata: {},
+        repoStatusOptions: repoStatusJSON.repoStatus,
+      };
+    },
+    computed: {
+      displayDevelopmentStatus() {
+        const that = this;
+
+        function getStatus(status) {
+          return that.repoStatusOptions.find((item) => item.value === status);
+        }
+
+        if (
+          "developmentStatus" in this.codeMetadata &&
+          this.codeMetadata.developmentStatus != ""
+        ) {
+          const status = this.codeMetadata.developmentStatus;
+          const returnVal = getStatus(status);
+          return returnVal.description;
+        } else {
+          return "";
+        }
       },
-      codeMetadata: {},
-      repoStatusOptions: repoStatusJSON.repoStatus,
-    };
-  },
-  computed: {
-    displayDevelopmentStatus() {
-      const that = this;
+      displayCreationDate() {
+        if (
+          "creationDate" in this.codeMetadata &&
+          this.codeMetadata.creationDate != ""
+        ) {
+          const date = this.codeMetadata.codeMetadata;
+          return dayjs(date).format("MMMM D, YYYY");
+        } else {
+          return "";
+        }
+      },
+      displayFirstReleaseDate() {
+        if (
+          "firstReleaseDate" in this.codeMetadata &&
+          this.codeMetadata.firstReleaseDate != ""
+        ) {
+          const date = this.codeMetadata.firstReleaseDate;
+          return dayjs(date).format("MMMM D, YYYY");
+        } else {
+          return "";
+        }
+      },
+      displayCurrentVersionReleaseDate() {
+        if (
+          "currentVersionReleaseDate" in this.codeMetadata &&
+          this.codeMetadata.currentVersionReleaseDate != ""
+        ) {
+          const date = this.codeMetadata.currentVersionReleaseDate;
+          return dayjs(date).format("MMMM D, YYYY");
+        } else {
+          return "";
+        }
+      },
+      codePresent() {
+        if ("type" in this.workflow) {
+          return this.workflow.type.includes("Code");
+        }
+        return false;
+      },
+    },
+    methods: {
+      editInformation(expandOptions) {
+        this.workflow.expandOptions = [...expandOptions];
 
-      function getStatus(status) {
-        return that.repoStatusOptions.find((item) => item.value === status);
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/createMetadata`;
+        this.$router.push({ path: routerPath });
+      },
+      selectDestination() {
+        const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/selectDestination`;
+        this.$router.push({ path: routerPath });
+      },
+    },
+    async mounted() {
+      this.loading = ElLoading.service({
+        lock: true,
+        text: "Loading data from stores...",
+        background: "rgba(255, 255, 255, 0.95)",
+      });
+
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(3);
+
+      this.dataset = await this.datasetStore.getCurrentDataset();
+
+      this.workflow = this.dataset.workflows[this.workflowID];
+
+      this.workflow.currentRoute = this.$route.path;
+
+      this.generalMetadata = this.dataset.data.general.questions;
+
+      if (this.codePresent) {
+        this.codeMetadata = this.dataset.data.Code.questions;
       }
 
-      if (
-        "developmentStatus" in this.codeMetadata &&
-        this.codeMetadata.developmentStatus != ""
-      ) {
-        const status = this.codeMetadata.developmentStatus;
-        const returnVal = getStatus(status);
-        return returnVal.description;
-      } else {
-        return "";
-      }
+      this.loading.close();
     },
-    displayCreationDate() {
-      if (
-        "creationDate" in this.codeMetadata &&
-        this.codeMetadata.creationDate != ""
-      ) {
-        const date = this.codeMetadata.codeMetadata;
-        return dayjs(date).format("MMMM D, YYYY");
-      } else {
-        return "";
-      }
-    },
-    displayFirstReleaseDate() {
-      if (
-        "firstReleaseDate" in this.codeMetadata &&
-        this.codeMetadata.firstReleaseDate != ""
-      ) {
-        const date = this.codeMetadata.firstReleaseDate;
-        return dayjs(date).format("MMMM D, YYYY");
-      } else {
-        return "";
-      }
-    },
-    displayCurrentVersionReleaseDate() {
-      if (
-        "currentVersionReleaseDate" in this.codeMetadata &&
-        this.codeMetadata.currentVersionReleaseDate != ""
-      ) {
-        const date = this.codeMetadata.currentVersionReleaseDate;
-        return dayjs(date).format("MMMM D, YYYY");
-      } else {
-        return "";
-      }
-    },
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
-      }
-      return false;
-    },
-  },
-  methods: {
-    editInformation(expandOptions) {
-      this.workflow.expandOptions = [...expandOptions];
-
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/createMetadata`;
-      this.$router.push({ path: routerPath });
-    },
-    selectDestination() {
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/selectDestination`;
-      this.$router.push({ path: routerPath });
-    },
-  },
-  async mounted() {
-    this.loading = ElLoading.service({
-      lock: true,
-      text: "Loading data from stores...",
-      background: "rgba(255, 255, 255, 0.95)",
-    });
-
-    this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(3);
-
-    this.dataset = await this.datasetStore.getCurrentDataset();
-
-    this.workflow = this.dataset.workflows[this.workflowID];
-
-    this.workflow.currentRoute = this.$route.path;
-
-    this.generalMetadata = this.dataset.data.general.questions;
-
-    if (this.codePresent) {
-      this.codeMetadata = this.dataset.data.Code.questions;
-    }
-
-    this.loading.close();
-  },
-};
-// Add computed to hide properties
+  };
+  // Add computed to hide properties
 </script>

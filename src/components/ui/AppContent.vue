@@ -14,16 +14,16 @@
 </template>
 
 <script>
-import WorkflowProgressBar from "./WorkflowProgressBar.vue";
+  import WorkflowProgressBar from "./WorkflowProgressBar.vue";
 
-export default {
-  name: "AppContent",
-  components: {
-    WorkflowProgressBar,
-  },
-  data() {
-    return {};
-  },
-  mounted() {},
-};
+  export default {
+    name: "AppContent",
+    components: {
+      WorkflowProgressBar,
+    },
+    data() {
+      return {};
+    },
+    mounted() {},
+  };
 </script>

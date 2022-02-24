@@ -82,151 +82,151 @@
 </template>
 
 <script>
-import { dialog } from "@electron/remote";
+  import { dialog } from "@electron/remote";
 
-import { useDatasetsStore } from "@/store/datasets";
+  import { useDatasetsStore } from "@/store/datasets";
 
-export default {
-  name: "CodeSelectSourceFolder",
-  components: {},
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      dataset: {},
-      folderPath: "",
-      folderDialogOpen: false,
-      datasetID: this.$route.params.datasetID,
-      workflowID: this.$route.params.workflowID,
-      workflow: {},
-      locationID: "",
-    };
-  },
-  computed: {
-    emptyInput() {
-      if (this.locationID === "local") {
-        if (this.folderPath.trim() === "") {
-          return true;
-        } else {
+  export default {
+    name: "CodeSelectSourceFolder",
+    components: {},
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        dataset: {},
+        folderPath: "",
+        folderDialogOpen: false,
+        datasetID: this.$route.params.datasetID,
+        workflowID: this.$route.params.workflowID,
+        workflow: {},
+        locationID: "",
+      };
+    },
+    computed: {
+      emptyInput() {
+        if (this.locationID === "local") {
+          if (this.folderPath.trim() === "") {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        if (this.locationID === "github") {
           return false;
         }
-      }
-      if (this.locationID === "github") {
-        return false;
-      }
-      return true;
+        return true;
+      },
+      combineDataTypes() {
+        if ("type" in this.workflow) {
+          const dataTypes = this.workflow.type;
+
+          if (dataTypes.length === 1) {
+            return dataTypes[0];
+          } else if (dataTypes.length === 2) {
+            return `${dataTypes[0]} and ${dataTypes[1]}`;
+          } else if (dataTypes.length > 2) {
+            let returnString = "";
+            dataTypes.forEach((type, index) => {
+              if (index === dataTypes.length - 1) {
+                returnString += `and ${type}`;
+              } else {
+                returnString += `${type}, `;
+              }
+            });
+            return returnString;
+          }
+        }
+
+        return "";
+      },
     },
-    combineDataTypes() {
-      if ("type" in this.workflow) {
+    methods: {
+      selectSourceLocation(locationID) {
+        this.locationID = locationID;
+      },
+      selectFolderPath() {
+        if (!this.folderDialogOpen) {
+          this.folderDialogOpen = true;
+          dialog
+            .showOpenDialog({ properties: ["openDirectory"] })
+            .then((data) => {
+              if (!data.canceled) {
+                this.folderPath = data.filePaths[0];
+              }
+              this.folderDialogOpen = false;
+            });
+        }
+      },
+      startCuration() {
         const dataTypes = this.workflow.type;
 
-        if (dataTypes.length === 1) {
-          return dataTypes[0];
-        } else if (dataTypes.length === 2) {
-          return `${dataTypes[0]} and ${dataTypes[1]}`;
-        } else if (dataTypes.length > 2) {
-          let returnString = "";
-          dataTypes.forEach((type, index) => {
-            if (index === dataTypes.length - 1) {
-              returnString += `and ${type}`;
-            } else {
-              returnString += `${type}, `;
-            }
+        if (this.locationID === "local") {
+          // At this moment, add the same folder path to all the data types provided
+          // subject to change when we separate the data types folder locations.
+          dataTypes.forEach((type, _index) => {
+            this.dataset.data[type].folderPath = this.folderPath;
           });
-          return returnString;
         }
-      }
 
-      return "";
-    },
-  },
-  methods: {
-    selectSourceLocation(locationID) {
-      this.locationID = locationID;
-    },
-    selectFolderPath() {
-      if (!this.folderDialogOpen) {
-        this.folderDialogOpen = true;
-        dialog
-          .showOpenDialog({ properties: ["openDirectory"] })
-          .then((data) => {
-            if (!data.canceled) {
-              this.folderPath = data.filePaths[0];
-            }
-            this.folderDialogOpen = false;
+        if (this.locationID === "github") {
+          if (!("github" in this.workflow)) {
+            this.workflow.github = {};
+          }
+        }
+
+        this.workflow.sourceSelected = true;
+
+        if ("source" in this.workflow) {
+          this.workflow.source.type = this.locationID;
+        } else {
+          this.workflow.source = {
+            type: this.locationID,
+          };
+        }
+
+        this.datasetStore.updateCurrentDataset(this.dataset);
+        this.datasetStore.syncDatasets();
+
+        if (this.locationID === "github") {
+          this.$router.push(
+            `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`
+          );
+        } else {
+          this.$router.push({
+            path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
           });
-      }
-    },
-    startCuration() {
-      const dataTypes = this.workflow.type;
-
-      if (this.locationID === "local") {
-        // At this moment, add the same folder path to all the data types provided
-        // subject to change when we separate the data types folder locations.
-        dataTypes.forEach((type, _index) => {
-          this.dataset.data[type].folderPath = this.folderPath;
-        });
-      }
-
-      if (this.locationID === "github") {
-        if (!("github" in this.workflow)) {
-          this.workflow.github = {};
         }
-      }
-
-      this.workflow.sourceSelected = true;
-
-      if ("source" in this.workflow) {
-        this.workflow.source.type = this.locationID;
-      } else {
-        this.workflow.source = {
-          type: this.locationID,
-        };
-      }
-
-      this.datasetStore.updateCurrentDataset(this.dataset);
-      this.datasetStore.syncDatasets();
-
-      if (this.locationID === "github") {
-        this.$router.push(
-          `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`
-        );
-      } else {
-        this.$router.push({
-          path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
-        });
-      }
+      },
     },
-  },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
-    this.workflow = this.dataset.workflows[this.workflowID];
-    console.log(this.workflow);
+    async mounted() {
+      this.dataset = await this.datasetStore.getCurrentDataset();
+      this.workflow = this.dataset.workflows[this.workflowID];
+      console.log(this.workflow);
 
-    this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
 
-    this.workflow.currentRoute = this.$route.path;
+      this.workflow.currentRoute = this.$route.path;
 
-    // split this up when separate
-    if (this.workflow.sourceSelected) {
-      this.locationID = this.workflow.source.type;
-      this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-    }
-    // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
+      // split this up when separate
+      if (this.workflow.sourceSelected) {
+        this.locationID = this.workflow.source.type;
+        this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
+      }
+      // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
-    // if (this.workflow.folderPath) {
-    //   this.folderPath = this.workflow.folderPath;
-    // }
-  },
-};
+      // if (this.workflow.folderPath) {
+      //   this.folderPath = this.workflow.folderPath;
+      // }
+    },
+  };
 </script>
 <style scoped>
-.single-check-box {
-  @apply flex h-48 w-48 items-center justify-center transition-all;
-}
+  .single-check-box {
+    @apply flex h-48 w-48 items-center justify-center transition-all;
+  }
 
-.single-check-box:not(.disabled-card, .selected-repo):hover {
-  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
-}
+  .single-check-box:not(.disabled-card, .selected-repo):hover {
+    @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+  }
 </style>

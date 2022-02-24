@@ -113,219 +113,219 @@
 </template>
 
 <script>
-import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
-import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
+  import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
+  import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
 
-import { useDatasetsStore } from "@/store/datasets";
-import { useTokenStore } from "@/store/access.js";
+  import { useDatasetsStore } from "@/store/datasets";
+  import { useTokenStore } from "@/store/access.js";
 
-import axios from "axios";
+  import axios from "axios";
 
-import { ElLoading } from "element-plus";
+  import { ElLoading } from "element-plus";
 
-export default {
-  name: "SelectGithubRepo",
-  components: { LoadingFoldingCube, ConnectGithub },
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      tokens: useTokenStore(),
-      dataset: {},
-      folderPath: "",
-      workflowID: this.$route.params.workflowID,
-      workflow: {},
-      validTokenAvailable: false,
-      errorMessage: "",
-      GithubAccessToken: "",
-      githubRepos: [],
-      selectedRepo: "",
-      currentBranch: "",
-      showFilePreview: false,
-      ready: false,
-      defaultProps: {
-        children: "children",
-        label: "label",
+  export default {
+    name: "SelectGithubRepo",
+    components: { LoadingFoldingCube, ConnectGithub },
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        tokens: useTokenStore(),
+        dataset: {},
+        folderPath: "",
+        workflowID: this.$route.params.workflowID,
+        workflow: {},
+        validTokenAvailable: false,
+        errorMessage: "",
+        GithubAccessToken: "",
+        githubRepos: [],
+        selectedRepo: "",
+        currentBranch: "",
+        showFilePreview: false,
+        ready: false,
+        defaultProps: {
+          children: "children",
+          label: "label",
+        },
+        fileData: [],
+        showSpinner: false,
+      };
+    },
+    computed: {
+      disableContinue() {
+        if (this.selectedRepo !== "") {
+          return false;
+        }
+        return true;
       },
-      fileData: [],
-      showSpinner: false,
-    };
-  },
-  computed: {
-    disableContinue() {
-      if (this.selectedRepo !== "") {
-        return false;
-      }
-      return true;
     },
-  },
-  methods: {
-    createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Loading repositories...",
-      });
-      return loading;
-    },
+    methods: {
+      createLoading() {
+        const loading = ElLoading.service({
+          lock: true,
+          text: "Loading repositories...",
+        });
+        return loading;
+      },
 
-    async showGithubRepoContents(type) {
-      if (type === "click") {
-        this.showFilePreview = !this.showFilePreview;
-      }
+      async showGithubRepoContents(type) {
+        if (type === "click") {
+          this.showFilePreview = !this.showFilePreview;
+        }
 
-      if (this.showFilePreview) {
-        this.showSpinner = true;
-        this.fileData = [];
-        const response = await this.getGithubRepoContents();
-        this.showSpinner = false;
+        if (this.showFilePreview) {
+          this.showSpinner = true;
+          this.fileData = [];
+          const response = await this.getGithubRepoContents();
+          this.showSpinner = false;
 
-        if (response !== "ERROR") {
-          this.fileData = JSON.parse(response);
+          if (response !== "ERROR") {
+            this.fileData = JSON.parse(response);
+          } else {
+            this.$message({
+              message: "Could not get the contents of the repository",
+              type: "error",
+            });
+          }
+        }
+      },
+
+      async getGithubRepoContents() {
+        const repoObject = this.githubRepos.find(
+          (repo) => repo.value === this.selectedRepo
+        );
+
+        const fullRepoName = repoObject.label.split("/");
+        this.currentBranch = repoObject.default_branch;
+
+        const response = await axios
+          .get(`${this.$server_url}/github/repo/tree`, {
+            params: {
+              access_token: this.GithubAccessToken,
+              owner: fullRepoName[0],
+              repo: fullRepoName[1],
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        return response;
+      },
+
+      async handleNodeClick(data) {
+        const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
+        if (data.isLeaf) {
+          window.ipcRenderer.send("open-link-in-browser", githubURL);
+        }
+      },
+
+      async continueToNextStep() {
+        const repoObject = this.githubRepos.find((repo) => {
+          return repo.full_name === this.selectedRepo;
+        });
+
+        if ("github" in this.workflow) {
+          this.workflow.github.repo = this.selectedRepo;
+          this.workflow.github.fullObject = repoObject;
         } else {
-          this.$message({
-            message: "Could not get the contents of the repository",
-            type: "error",
+          this.workflow.github = {
+            repo: this.selectedRepo,
+            fullObject: repoObject,
+          };
+        }
+
+        this.datasetStore.updateCurrentDataset(this.dataset);
+        this.datasetStore.syncDatasets();
+
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/reviewStandards`;
+        if (this.validTokenAvailable) {
+          this.$router.push({ path: routerPath });
+        }
+      },
+
+      async getUserRepos() {
+        const response = await axios
+          .get(`${this.$server_url}/github/user/repos`, {
+            params: {
+              access_token: this.GithubAccessToken,
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (response === "ERROR") {
+          this.errorMessage = "Something went wrong. Please try again.";
+          this.validTokenAvailable = false;
+        } else {
+          response.forEach((repo) => {
+            const selectionDisabled =
+              repo.visibility === "private" ? true : false;
+            this.githubRepos.push({
+              value: repo.full_name,
+              label: repo.full_name,
+              visibility: repo.visibility,
+              originalObject: repo,
+              default_branch: repo.default_branch,
+              disabled: selectionDisabled,
+            });
           });
         }
-      }
+      },
+      async showConnection(status, token = "") {
+        console.log(status);
+        if (status === "connected") {
+          this.validTokenAvailable = true;
+
+          if (token !== "") {
+            this.GithubAccessToken = token;
+            await this.getUserRepos();
+          }
+        }
+      },
     },
+    async mounted() {
+      this.dataset = await this.datasetStore.getCurrentDataset();
+      this.workflow = this.dataset.workflows[this.workflowID];
 
-    async getGithubRepoContents() {
-      const repoObject = this.githubRepos.find(
-        (repo) => repo.value === this.selectedRepo
-      );
+      let spinner = this.createLoading();
 
-      const fullRepoName = repoObject.label.split("/");
-      this.currentBranch = repoObject.default_branch;
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
 
-      const response = await axios
-        .get(`${this.$server_url}/github/repo/tree`, {
-          params: {
-            access_token: this.GithubAccessToken,
-            owner: fullRepoName[0],
-            repo: fullRepoName[1],
-          },
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
+      this.workflow.currentRoute = this.$route.path;
 
-      return response;
-    },
+      const validGithubConnection = await this.tokens.verifyGithubConnection();
 
-    async handleNodeClick(data) {
-      const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
-      if (data.isLeaf) {
-        window.ipcRenderer.send("open-link-in-browser", githubURL);
-      }
-    },
-
-    async continueToNextStep() {
-      const repoObject = this.githubRepos.find((repo) => {
-        return repo.full_name === this.selectedRepo;
-      });
-
-      if ("github" in this.workflow) {
-        this.workflow.github.repo = this.selectedRepo;
-        this.workflow.github.fullObject = repoObject;
-      } else {
-        this.workflow.github = {
-          repo: this.selectedRepo,
-          fullObject: repoObject,
-        };
-      }
-
-      this.datasetStore.updateCurrentDataset(this.dataset);
-      this.datasetStore.syncDatasets();
-
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/reviewStandards`;
-      if (this.validTokenAvailable) {
-        this.$router.push({ path: routerPath });
-      }
-    },
-
-    async getUserRepos() {
-      const response = await axios
-        .get(`${this.$server_url}/github/user/repos`, {
-          params: {
-            access_token: this.GithubAccessToken,
-          },
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response === "ERROR") {
-        this.errorMessage = "Something went wrong. Please try again.";
-        this.validTokenAvailable = false;
-      } else {
-        response.forEach((repo) => {
-          const selectionDisabled =
-            repo.visibility === "private" ? true : false;
-          this.githubRepos.push({
-            value: repo.full_name,
-            label: repo.full_name,
-            visibility: repo.visibility,
-            originalObject: repo,
-            default_branch: repo.default_branch,
-            disabled: selectionDisabled,
-          });
-        });
-      }
-    },
-    async showConnection(status, token = "") {
-      console.log(status);
-      if (status === "connected") {
+      if (validGithubConnection) {
         this.validTokenAvailable = true;
+        this.ready = true;
 
-        if (token !== "") {
-          this.GithubAccessToken = token;
-          await this.getUserRepos();
+        const tokenObject = await this.tokens.getToken("github");
+        this.GithubAccessToken = tokenObject.token;
+
+        await this.getUserRepos();
+
+        if ("github" in this.workflow) {
+          this.selectedRepo = this.workflow.github.repo;
         }
+
+        spinner.close();
+      } else {
+        this.validTokenAvailable = false;
+        this.ready = true;
+
+        spinner.close();
       }
     },
-  },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
-    this.workflow = this.dataset.workflows[this.workflowID];
-
-    let spinner = this.createLoading();
-
-    this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
-
-    this.workflow.currentRoute = this.$route.path;
-
-    const validGithubConnection = await this.tokens.verifyGithubConnection();
-
-    if (validGithubConnection) {
-      this.validTokenAvailable = true;
-      this.ready = true;
-
-      const tokenObject = await this.tokens.getToken("github");
-      this.GithubAccessToken = tokenObject.token;
-
-      await this.getUserRepos();
-
-      if ("github" in this.workflow) {
-        this.selectedRepo = this.workflow.github.repo;
-      }
-
-      spinner.close();
-    } else {
-      this.validTokenAvailable = false;
-      this.ready = true;
-
-      spinner.close();
-    }
-  },
-};
+  };
 </script>

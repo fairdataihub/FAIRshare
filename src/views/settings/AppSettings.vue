@@ -123,94 +123,94 @@
 </template>
 
 <script>
-import { app } from "@electron/remote";
-import axios from "axios";
-import path from "path";
+  import { app } from "@electron/remote";
+  import axios from "axios";
+  import path from "path";
 
-import { useDatasetsStore } from "@/store/datasets";
-import { useConfigStore } from "@/store/config";
+  import { useDatasetsStore } from "@/store/datasets";
+  import { useConfigStore } from "@/store/config";
 
-export default {
-  name: "AppSettings",
-  components: {},
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      configStore: useConfigStore(),
-      activeName: "general",
-      loadingSpinner: false,
-      config: {},
-      betaRelease: false,
-    };
-  },
-  methods: {
-    async changeUpdateChannel(enabled) {
-      if (enabled) {
-        this.config.releaseChannel = "beta";
-      } else {
-        this.config.releaseChannel = "latest";
-      }
-      await this.configStore.addConfig(
-        "releaseChannel",
-        this.config.releaseChannel
-      );
+  export default {
+    name: "AppSettings",
+    components: {},
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        configStore: useConfigStore(),
+        activeName: "general",
+        loadingSpinner: false,
+        config: {},
+        betaRelease: false,
+      };
     },
-    openFileExplorer(type) {
-      this.loadingSpinner = true;
-
-      let customPath = "";
-
-      if (type === "configFolder") {
-        customPath = path.join(
-          app.getPath("home"),
-          ".sodaforcovid19research",
-          "accessTokens.json"
+    methods: {
+      async changeUpdateChannel(enabled) {
+        if (enabled) {
+          this.config.releaseChannel = "beta";
+        } else {
+          this.config.releaseChannel = "latest";
+        }
+        await this.configStore.addConfig(
+          "releaseChannel",
+          this.config.releaseChannel
         );
-      } else if (type === "backendLogs") {
-        customPath = path.join(
-          app.getPath("home"),
-          ".sodaforcovid19research",
-          "logs",
-          "api.log"
-        );
-      }
+      },
+      openFileExplorer(type) {
+        this.loadingSpinner = true;
 
-      axios
-        .post(`${this.$server_url}/utilities/openFileExplorer`, {
-          file_path: customPath,
-        })
-        .then((_response) => {
-          this.loadingSpinner = false;
-          return;
-        })
-        .catch((error) => {
-          this.loadingSpinner = false;
-          console.error(error);
-          return "ERROR";
-        });
+        let customPath = "";
+
+        if (type === "configFolder") {
+          customPath = path.join(
+            app.getPath("home"),
+            ".sodaforcovid19research",
+            "accessTokens.json"
+          );
+        } else if (type === "backendLogs") {
+          customPath = path.join(
+            app.getPath("home"),
+            ".sodaforcovid19research",
+            "logs",
+            "api.log"
+          );
+        }
+
+        axios
+          .post(`${this.$server_url}/utilities/openFileExplorer`, {
+            file_path: customPath,
+          })
+          .then((_response) => {
+            this.loadingSpinner = false;
+            return;
+          })
+          .catch((error) => {
+            this.loadingSpinner = false;
+            console.error(error);
+            return "ERROR";
+          });
+      },
     },
-  },
-  computed: {},
-  async mounted() {
-    this.datasetStore.hideProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
+    computed: {},
+    async mounted() {
+      this.datasetStore.hideProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
 
-    let loading = this.$loading({
-      lock: true,
-      text: "Loading settings...",
-      spinner: "el-icon-loading",
-    });
+      let loading = this.$loading({
+        lock: true,
+        text: "Loading settings...",
+        spinner: "el-icon-loading",
+      });
 
-    this.config = await this.configStore.getConfig();
+      this.config = await this.configStore.getConfig();
 
-    loading.close();
+      loading.close();
 
-    if ("releaseChannel" in this.config) {
-      this.betaRelease = this.config.releaseChannel === "beta";
-    }
-  },
-};
+      if ("releaseChannel" in this.config) {
+        this.betaRelease = this.config.releaseChannel === "beta";
+      }
+    },
+  };
 </script>
 
 <style scoped></style>

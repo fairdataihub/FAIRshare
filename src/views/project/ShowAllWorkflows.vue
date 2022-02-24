@@ -50,148 +50,148 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "@/store/datasets";
+  import { useDatasetsStore } from "@/store/datasets";
 
-import { ElMessageBox } from "element-plus";
+  import { ElMessageBox } from "element-plus";
 
-export default {
-  name: "ShowAllWorkflows",
+  export default {
+    name: "ShowAllWorkflows",
 
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      dataset: {},
-      currentOptions: {},
-      datasetID: this.$route.params.datasetID,
-    };
-  },
-  methods: {
-    combineDataTypes(dataTypes) {
-      if (dataTypes.length === 1) {
-        return dataTypes[0];
-      } else if (dataTypes.length === 2) {
-        return `${dataTypes[0]} and ${dataTypes[1]}`;
-      } else if (dataTypes.length > 2) {
-        let returnString = "";
-        dataTypes.forEach((type, index) => {
-          if (index === dataTypes.length - 1) {
-            returnString += `and ${type}`;
-          } else {
-            returnString += `${type}, `;
-          }
-        });
-        return returnString;
-      }
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        dataset: {},
+        currentOptions: {},
+        datasetID: this.$route.params.datasetID,
+      };
     },
-    navigateToCurate(workflowID) {
-      let routerPath = "";
-
-      // add published checks before the upload ones
-
-      if (
-        "datasetUploaded" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].datasetUploaded &&
-        "source" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].source.type === "local"
-      ) {
-        ElMessageBox.confirm(
-          "It looks like you have already uploaded this dataset to Zenodo but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
-          "You haven't published this dataset yet",
-          {
-            confirmButtonText: "I want to publish",
-            cancelButtonText: "I want to upload my data again",
-            type: "info",
-          }
-        )
-          .then(() => {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
-            this.$router.push({ path: routerPath });
-          })
-          .catch(() => {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-            this.$router.push({ path: routerPath });
+    methods: {
+      combineDataTypes(dataTypes) {
+        if (dataTypes.length === 1) {
+          return dataTypes[0];
+        } else if (dataTypes.length === 2) {
+          return `${dataTypes[0]} and ${dataTypes[1]}`;
+        } else if (dataTypes.length > 2) {
+          let returnString = "";
+          dataTypes.forEach((type, index) => {
+            if (index === dataTypes.length - 1) {
+              returnString += `and ${type}`;
+            } else {
+              returnString += `${type}, `;
+            }
           });
-      } else if (
-        "datasetUploaded" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].datasetUploaded &&
-        "source" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].source.type === "github"
-      ) {
-        ElMessageBox.confirm(
-          "It looks like you have already uploaded this dataset to GitHub but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
-          "You haven't published this dataset yet",
-          {
-            confirmButtonText: "I want to publish",
-            cancelButtonText: "I want to upload my data again",
-            type: "info",
-          }
-        )
-          .then(() => {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/github/publish`;
-            this.$router.push({ path: routerPath });
-          })
-          .catch(() => {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-            this.$router.push({ path: routerPath });
-          });
-      } else {
-        if ("currentRoute" in this.dataset.workflows[workflowID]) {
-          if (
-            this.dataset.workflows[workflowID].currentRoute != "" &&
-            this.dataset.workflows[workflowID].currentRoute !=
-              `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
-          ) {
-            ElMessageBox.confirm(
-              "It looks like you were working on this workflow before. Would you like to continue where you left off?",
-              "Continue where you left off",
-              {
-                confirmButtonText: "Yes, continue",
-                cancelButtonText: "No, start from the beginning",
-                distinguishCancelAndClose: true,
-                type: "info",
-              }
-            )
-              .then(() => {
-                routerPath = this.dataset.workflows[workflowID].currentRoute;
-                this.$router.push({ path: routerPath });
-              })
-              .catch((action) => {
-                if (action === "cancel") {
-                  routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-                  this.$router.push({ path: routerPath });
-                }
-              });
-          } else {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-            this.$router.push({ path: routerPath });
-          }
-        } else {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-          this.$router.push({ path: routerPath });
+          return returnString;
         }
+      },
+      navigateToCurate(workflowID) {
+        let routerPath = "";
+
+        // add published checks before the upload ones
+
+        if (
+          "datasetUploaded" in this.dataset.workflows[workflowID] &&
+          this.dataset.workflows[workflowID].datasetUploaded &&
+          "source" in this.dataset.workflows[workflowID] &&
+          this.dataset.workflows[workflowID].source.type === "local"
+        ) {
+          ElMessageBox.confirm(
+            "It looks like you have already uploaded this dataset to Zenodo but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
+            "You haven't published this dataset yet",
+            {
+              confirmButtonText: "I want to publish",
+              cancelButtonText: "I want to upload my data again",
+              type: "info",
+            }
+          )
+            .then(() => {
+              routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+              this.$router.push({ path: routerPath });
+            })
+            .catch(() => {
+              routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+              this.$router.push({ path: routerPath });
+            });
+        } else if (
+          "datasetUploaded" in this.dataset.workflows[workflowID] &&
+          this.dataset.workflows[workflowID].datasetUploaded &&
+          "source" in this.dataset.workflows[workflowID] &&
+          this.dataset.workflows[workflowID].source.type === "github"
+        ) {
+          ElMessageBox.confirm(
+            "It looks like you have already uploaded this dataset to GitHub but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
+            "You haven't published this dataset yet",
+            {
+              confirmButtonText: "I want to publish",
+              cancelButtonText: "I want to upload my data again",
+              type: "info",
+            }
+          )
+            .then(() => {
+              routerPath = `/datasets/${this.datasetID}/${workflowID}/github/publish`;
+              this.$router.push({ path: routerPath });
+            })
+            .catch(() => {
+              routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+              this.$router.push({ path: routerPath });
+            });
+        } else {
+          if ("currentRoute" in this.dataset.workflows[workflowID]) {
+            if (
+              this.dataset.workflows[workflowID].currentRoute != "" &&
+              this.dataset.workflows[workflowID].currentRoute !=
+                `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
+            ) {
+              ElMessageBox.confirm(
+                "It looks like you were working on this workflow before. Would you like to continue where you left off?",
+                "Continue where you left off",
+                {
+                  confirmButtonText: "Yes, continue",
+                  cancelButtonText: "No, start from the beginning",
+                  distinguishCancelAndClose: true,
+                  type: "info",
+                }
+              )
+                .then(() => {
+                  routerPath = this.dataset.workflows[workflowID].currentRoute;
+                  this.$router.push({ path: routerPath });
+                })
+                .catch((action) => {
+                  if (action === "cancel") {
+                    routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+                    this.$router.push({ path: routerPath });
+                  }
+                });
+            } else {
+              routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+              this.$router.push({ path: routerPath });
+            }
+          } else {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+            this.$router.push({ path: routerPath });
+          }
+        }
+
+        // if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
+        //   if (this.dataset.workflows[workflowID].datasetUploaded) {
+        //     routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+        //   } else {
+        //     routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+        //   }
+        // } else {
+        //   routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+        // }
+        // console.log(routerPath);
+        // this.$router.push({ path: routerPath });
+      },
+    },
+    async mounted() {
+      this.dataset = await this.datasetStore.getCurrentDataset();
+
+      if (!this.dataset.workflowConfirmed) {
+        this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
       }
 
-      // if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
-      //   if (this.dataset.workflows[workflowID].datasetUploaded) {
-      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
-      //   } else {
-      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-      //   }
-      // } else {
-      //   routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-      // }
-      // console.log(routerPath);
-      // this.$router.push({ path: routerPath });
+      this.navigateToCurate("workflow1");
     },
-  },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
-
-    if (!this.dataset.workflowConfirmed) {
-      this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
-    }
-
-    this.navigateToCurate("workflow1");
-  },
-};
+  };
 </script>

@@ -23,13 +23,13 @@
 </template>
 
 <script>
-export default {
-  name: "FormHelpContent",
-  props: {
-    popoverContent: {
-      type: String,
-      default: "",
+  export default {
+    name: "FormHelpContent",
+    props: {
+      popoverContent: {
+        type: String,
+        default: "",
+      },
     },
-  },
-};
+  };
 </script>

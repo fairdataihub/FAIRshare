@@ -35,28 +35,28 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "@/store/datasets";
+  import { useDatasetsStore } from "@/store/datasets";
 
-export default {
-  name: "AppDocumentation",
-  components: {},
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-    };
-  },
-  methods: {
-    openURL(url) {
-      window.ipcRenderer.send("open-link-in-browser", url);
+  export default {
+    name: "AppDocumentation",
+    components: {},
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+      };
     },
-  },
-  computed: {},
-  async mounted() {
-    this.datasetStore.hideProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
-  },
-};
+    methods: {
+      openURL(url) {
+        window.ipcRenderer.send("open-link-in-browser", url);
+      },
+    },
+    computed: {},
+    async mounted() {
+      this.datasetStore.hideProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
+    },
+  };
 </script>
 
 <style scoped></style>

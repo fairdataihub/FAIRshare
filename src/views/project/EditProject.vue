@@ -143,126 +143,126 @@
 </template>
 
 <script>
-import { ElMessageBox, ElMessage } from "element-plus";
+  import { ElMessageBox, ElMessage } from "element-plus";
 
-import { useDatasetsStore } from "@/store/datasets";
+  import { useDatasetsStore } from "@/store/datasets";
 
-export default {
-  name: "EditProject",
+  export default {
+    name: "EditProject",
 
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      datasetID: this.$route.params.datasetID,
-      dataset: {},
-      datasetForm: {
-        datasetName: "",
-        datasetDescription: "",
-        // dataType: [],
-      },
-      originalName: "",
-      deleteDisabled: false,
-      rules: {
-        datasetName: [
-          {
-            required: true,
-            message: "Please provide a project name",
-            trigger: "blur",
-          },
-        ],
-        // dataType: [
-        //   {
-        //     type: "array",
-        //     required: true,
-        //     message: "Please select at least one data type",
-        //     trigger: "change",
-        //   },
-        // ],
-      },
-    };
-  },
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dataset.name = this.datasetForm.datasetName;
-          this.originalName = this.datasetForm.datasetName;
-          this.dataset.description = this.datasetForm.datasetDescription;
-
-          this.datasetStore.updateCurrentDataset(this.dataset);
-          this.datasetStore.syncDatasets();
-
-          //   dataset.data.general = {
-          //     questions: {},
-          //   };
-
-          //   for (const type of dataset.dataType) {
-          //     dataset.data[type] = {
-          //       uploaded: false,
-          //       questions: {},
-          //     };
-          //   }
-
-          //   this.datasetStore.addDataset(dataset, datasetID);
-
-          this.$router.push({ name: "ShowAllProjects" });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        datasetID: this.$route.params.datasetID,
+        dataset: {},
+        datasetForm: {
+          datasetName: "",
+          datasetDescription: "",
+          // dataType: [],
+        },
+        originalName: "",
+        deleteDisabled: false,
+        rules: {
+          datasetName: [
+            {
+              required: true,
+              message: "Please provide a project name",
+              trigger: "blur",
+            },
+          ],
+          // dataType: [
+          //   {
+          //     type: "array",
+          //     required: true,
+          //     message: "Please select at least one data type",
+          //     trigger: "change",
+          //   },
+          // ],
+        },
+      };
     },
-    goBack() {
-      this.$router.push({ name: "ShowAllProjects" });
-    },
-    deleteDataset() {
-      ElMessageBox.prompt(
-        `This action cannot be undone. This will permanently delete the project.
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.dataset.name = this.datasetForm.datasetName;
+            this.originalName = this.datasetForm.datasetName;
+            this.dataset.description = this.datasetForm.datasetDescription;
+
+            this.datasetStore.updateCurrentDataset(this.dataset);
+            this.datasetStore.syncDatasets();
+
+            //   dataset.data.general = {
+            //     questions: {},
+            //   };
+
+            //   for (const type of dataset.dataType) {
+            //     dataset.data[type] = {
+            //       uploaded: false,
+            //       questions: {},
+            //     };
+            //   }
+
+            //   this.datasetStore.addDataset(dataset, datasetID);
+
+            this.$router.push({ name: "ShowAllProjects" });
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        });
+      },
+      goBack() {
+        this.$router.push({ name: "ShowAllProjects" });
+      },
+      deleteDataset() {
+        ElMessageBox.prompt(
+          `This action cannot be undone. This will permanently delete the project.
         <br />
         Please type <strong> ${this.originalName} </strong> to confirm.`,
-        "Are you absolutely sure?",
-        {
-          showCancelButton: false,
-          type: "warning",
-          confirmButtonText:
-            "I understand the consequences, delete this project",
-          confirmButtonClass:
-            "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
-          dangerouslyUseHTMLString: true,
-          inputValidator: (value) => {
-            if (value === this.originalName) {
-              return true;
-            }
-            return "Please type the project name correctly";
-          },
-        }
-      )
-        .then(async ({ value }) => {
-          console.log(value);
+          "Are you absolutely sure?",
+          {
+            showCancelButton: false,
+            type: "warning",
+            confirmButtonText:
+              "I understand the consequences, delete this project",
+            confirmButtonClass:
+              "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
+            dangerouslyUseHTMLString: true,
+            inputValidator: (value) => {
+              if (value === this.originalName) {
+                return true;
+              }
+              return "Please type the project name correctly";
+            },
+          }
+        )
+          .then(async ({ value }) => {
+            console.log(value);
 
-          await this.datasetStore.deleteDataset(this.datasetID);
+            await this.datasetStore.deleteDataset(this.datasetID);
 
-          ElMessage({
-            type: "success",
-            message: `Project ${value} deleted.`,
-          });
+            ElMessage({
+              type: "success",
+              message: `Project ${value} deleted.`,
+            });
 
-          this.goBack();
-        })
-        .catch(() => {});
+            this.goBack();
+          })
+          .catch(() => {});
+      },
     },
-  },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
+    async mounted() {
+      this.dataset = await this.datasetStore.getCurrentDataset();
 
-    this.datasetStore.hideProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
+      this.datasetStore.hideProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
 
-    this.datasetForm.datasetName = this.dataset.name;
-    this.originalName = this.dataset.name;
-    this.datasetForm.datasetDescription = this.dataset.description;
-    // this.datasetForm.dataType = this.dataset.dataType;
-  },
-};
+      this.datasetForm.datasetName = this.dataset.name;
+      this.originalName = this.dataset.name;
+      this.datasetForm.datasetDescription = this.dataset.description;
+      // this.datasetForm.dataType = this.dataset.dataType;
+    },
+  };
 </script>
