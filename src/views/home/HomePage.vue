@@ -64,7 +64,7 @@
         </div>
 
         <div
-          class="hover-underline-animation text-primary-600 flex cursor-pointer flex-row items-center py-1 pt-3"
+          class="hover-underline-animation flex cursor-pointer flex-row items-center py-1 pt-3 text-primary-600"
         >
           <span
             class="font-medium"
