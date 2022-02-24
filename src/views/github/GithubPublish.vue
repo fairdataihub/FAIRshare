@@ -215,7 +215,7 @@
             additional files or edit items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
-            <span class="font-medium text-secondary-500">
+            <span class="text-secondary-500 font-medium">
               This will automatically push your release to Zenodo.
             </span>
           </p>
@@ -467,6 +467,11 @@ export default {
           type: "error",
           position: "bottom-right",
         });
+
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
       } else {
         if (releaseType === "publish") {
           this.publishedReleaseURL = response;
@@ -481,6 +486,11 @@ export default {
           type: "success",
           position: "bottom-right",
         });
+
+        this.workflow.datasetPublished = true;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
 
         this.showApprovedInstructions = false;
         this.showFinalInstructions = true;

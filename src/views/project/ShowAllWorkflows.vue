@@ -86,9 +86,13 @@ export default {
     navigateToCurate(workflowID) {
       let routerPath = "";
 
+      // add published checks before the upload ones
+
       if (
         "datasetUploaded" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].datasetUploaded
+        this.dataset.workflows[workflowID].datasetUploaded &&
+        "source" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].source.type === "local"
       ) {
         ElMessageBox.confirm(
           "It looks like you have already uploaded this dataset to Zenodo but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
@@ -101,6 +105,29 @@ export default {
         )
           .then(() => {
             routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
+            this.$router.push({ path: routerPath });
+          })
+          .catch(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+            this.$router.push({ path: routerPath });
+          });
+      } else if (
+        "datasetUploaded" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].datasetUploaded &&
+        "source" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].source.type === "github"
+      ) {
+        ElMessageBox.confirm(
+          "It looks like you have already uploaded this dataset to GitHub but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
+          "You haven't published this dataset yet",
+          {
+            confirmButtonText: "I want to publish",
+            cancelButtonText: "I want to upload my data again",
+            type: "info",
+          }
+        )
+          .then(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/github/publish`;
             this.$router.push({ path: routerPath });
           })
           .catch(() => {
