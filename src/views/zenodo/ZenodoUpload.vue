@@ -623,11 +623,11 @@ export default {
 
         if (response === "ERROR") {
           this.alertMessage =
-            "There was an error with creating the citation.cff file";
+            "There was an error with creating the CITATION.cff file";
           return "FAIL";
         } else {
           this.statusMessage =
-            "Created the citation.cff file in the target folder";
+            "Created the CITATION.cff file in the target folder";
         }
       }
 

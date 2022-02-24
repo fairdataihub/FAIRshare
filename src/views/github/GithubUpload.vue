@@ -515,10 +515,10 @@ export default {
 
         if (response === "ERROR") {
           this.alertMessage =
-            "There was an error with creating the citation.cff file";
+            "There was an error with creating the CITATION.cff file";
           return "FAIL";
         } else {
-          this.statusMessage = "Created a temporary citation.cff file";
+          this.statusMessage = "Created a temporary CITATION.cff file";
         }
       }
 

@@ -77,7 +77,7 @@
               <span
                 :class="
                   node.label == 'codemeta.json' ||
-                  node.label == 'citation.cff' ||
+                  node.label == 'CITATION.cff' ||
                   node.label == 'LICENSE'
                     ? 'text-secondary-500'
                     : ''
@@ -317,7 +317,7 @@ export default {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label == "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        } else if (data.label == "citation.cff") {
+        } else if (data.label == "CITATION.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (!data.isDir) {
           await this.openFileExplorer(data.fullPath);
@@ -358,9 +358,9 @@ export default {
           results.push(newObj);
         }
 
-        if (!results.some((el) => el.label === "citation.cff")) {
+        if (!results.some((el) => el.label === "CITATION.cff")) {
           newObj = {};
-          newObj.label = "citation.cff";
+          newObj.label = "CITATION.cff";
           newObj.isDir = false;
 
           results.push(newObj);

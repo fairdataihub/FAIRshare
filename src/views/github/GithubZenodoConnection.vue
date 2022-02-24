@@ -33,7 +33,7 @@
         <!-- show how to connect to zenodo if no hook is found -->
         <div v-else class="flex w-full flex-col">
           <div class="mb-5 flex items-center justify-center">
-            <h3 class="mx-2 font-normal text-secondary-600">
+            <h3 class="text-secondary-600 mx-2 font-normal">
               We are not seeing any Zenodo connections already setup with
               GitHub.
             </h3>
@@ -136,7 +136,7 @@
               <span
                 :class="
                   node.label == 'codemeta.json' ||
-                  node.label == 'citation.cff' ||
+                  node.label == 'CITATION.cff' ||
                   node.label == '.zenodo.json' ||
                   (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
@@ -687,7 +687,7 @@ export default {
       if (
         (data.label === "LICENSE" && this.workflow.generateLicense) ||
         data.label === "codemeta.json" ||
-        data.label === "citation.cff" ||
+        data.label === "CITATION.cff" ||
         data.label === ".zenodo.json"
       ) {
         this.drawerModel = true;
@@ -695,7 +695,7 @@ export default {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label === "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        } else if (data.label === "citation.cff") {
+        } else if (data.label === "CITATION.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (data.label === ".zenodo.json") {
           this.PreviewNewlyCreatedZenodoFile = true;
@@ -793,9 +793,9 @@ export default {
           this.fileData.push(newObj);
         }
 
-        if (!this.fileData.some((el) => el.label === "citation.cff")) {
+        if (!this.fileData.some((el) => el.label === "CITATION.cff")) {
           newObj = {};
-          newObj.label = "citation.cff";
+          newObj.label = "CITATION.cff";
           newObj.isDir = false;
 
           this.fileData.push(newObj);

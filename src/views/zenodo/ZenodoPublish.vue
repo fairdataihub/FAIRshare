@@ -54,7 +54,7 @@
           </router-link>
           <button
             class="blob primary-button transition-all"
-            @click="openDraftDataset"
+            @click="viewDatasetOnZenodo"
           >
             View dataset on Zenodo <el-icon><star-icon /></el-icon>
           </button>
@@ -95,6 +95,12 @@ export default {
     async publishDeposition() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
 
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Publishing dataset on Zenodo...",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
       const response = await axios
         .post(`${this.$server_url}/zenodo/publish`, {
           access_token: this.zenodoToken,
@@ -108,19 +114,14 @@ export default {
           return "ERROR";
         });
 
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-
-      await this.sleep(1000);
+      // await this.sleep(1000);
 
       // const response = {
       //   id: "5750415",
       // };
 
       this.zenodoDatasetID = response.id;
+      console.log(this.zenodoDatasetID);
 
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
@@ -174,7 +175,7 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    // console.log(this.zenodoToken);
+    console.log(this.zenodoToken);
   },
 };
 </script>
