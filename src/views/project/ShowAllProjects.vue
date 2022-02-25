@@ -77,9 +77,7 @@
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="ic:outline-source" />
-                        <span class="px-2">
-                          {{ dataset.meta.location }}</span
-                        >
+                        <span class="px-2"> {{ dataset.meta.location }}</span>
                       </div>
                     </div>
                     <div class="flex-warp flex">
@@ -158,9 +156,7 @@
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="ic:outline-source" />
-                        <span class="px-2">
-                          {{ dataset.meta.location }}</span
-                        >
+                        <span class="px-2"> {{ dataset.meta.location }}</span>
                       </div>
                     </div>
                     <div class="flex-warp flex">
