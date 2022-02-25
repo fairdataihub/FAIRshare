@@ -276,7 +276,7 @@ export default {
             ":" +
             today.getSeconds();
           let dateTime = currentDate + " " + currentTime;
-          let now = dayjs().format("MMMM D, YYYY");
+          let now = dayjs().format("MMMM D");
           let dataset = {
             meta: {
               dateCreated: now,

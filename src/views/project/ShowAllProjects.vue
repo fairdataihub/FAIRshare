@@ -50,7 +50,7 @@
                     <div class="h-[2px]"></div>
                     <div class="flex flex-wrap">
                       <div class="justify-left flex items-center">
-                        <Icon icon="codicon:history" />
+                        <Icon icon="clarity:date-outline-badged" />
                         <span class="px-2" v-if="showDetail != dataset.id">
                           date created: {{ dataset.meta.dateCreated }}
                         </span>
@@ -59,7 +59,7 @@
                         </span>
                       </div>
                       <div class="justify-left flex items-center">
-                        <Icon icon="codicon:history" />
+                        <Icon icon="healthicons:i-schedule-school-date-time" />
                         <span class="px-2" v-if="showDetail != dataset.id">
                           last modified:
                           {{ dataset.meta.dateLastModified }}</span
@@ -72,13 +72,13 @@
                       <div class="justify-left flex items-center">
                         <Icon icon="clarity:upload-cloud-line" />
                         <span class="px-2">
-                          destination: {{ dataset.meta.destination }}</span
+                          {{ dataset.meta.destination }}</span
                         >
                       </div>
                       <div class="justify-left flex items-center">
-                        <Icon icon="ep:location" />
+                        <Icon icon="ic:outline-source" />
                         <span class="px-2">
-                          location: {{ dataset.meta.location }}</span
+                          {{ dataset.meta.location }}</span
                         >
                       </div>
                     </div>
@@ -131,7 +131,7 @@
                     </p>
                     <div class="flex flex-wrap">
                       <div class="justify-left flex items-center">
-                        <Icon icon="codicon:history" />
+                        <Icon icon="clarity:date-outline-badged" />
                         <span class="px-2" v-if="showDetail != dataset.id">
                           date created: {{ dataset.meta.dateCreated }}
                         </span>
@@ -140,26 +140,26 @@
                         </span>
                       </div>
                       <div class="justify-left flex items-center">
-                        <Icon icon="codicon:history" />
+                        <Icon icon="healthicons:i-schedule-school-date-time" />
                         <span class="px-2" v-if="showDetail != dataset.id">
                           last modified:
                           {{ dataset.meta.dateLastModified }}</span
                         >
                         <span class="px-2" v-if="showDetail == dataset.id">
-                          date created:
+                          last modified:
                           {{ dataset.meta.dateLastModifiedDetail }}
                         </span>
                       </div>
                       <div class="justify-left flex items-center">
                         <Icon icon="clarity:upload-cloud-line" />
                         <span class="px-2">
-                          destination: {{ dataset.meta.destination }}</span
+                          {{ dataset.meta.destination }}</span
                         >
                       </div>
                       <div class="justify-left flex items-center">
-                        <Icon icon="ep:location" />
+                        <Icon icon="ic:outline-source" />
                         <span class="px-2">
-                          location: {{ dataset.meta.location }}</span
+                          {{ dataset.meta.location }}</span
                         >
                       </div>
                     </div>
@@ -301,7 +301,7 @@ export default {
           ":" +
           today.getSeconds();
         let dateTime = currentDate + " " + currentTime;
-        let now = dayjs().format("MMMM D, YYYY");
+        let now = dayjs().format("MMMM D");
         newDataset.id = datasetID;
         newDataset.name = newDataset.name.concat("-COPY");
         newDataset.meta.dateCreated = now;
