@@ -65,141 +65,141 @@
 </template>
 
 <script>
-import axios from "axios";
-import { ElLoading } from "element-plus";
+  import axios from "axios";
+  import { ElLoading } from "element-plus";
 
-import { useDatasetsStore } from "@/store/datasets";
-import { useTokenStore } from "@/store/access.js";
+  import { useDatasetsStore } from "@/store/datasets";
+  import { useTokenStore } from "@/store/access.js";
 
-export default {
-  name: "ZenodoPublish",
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      tokens: useTokenStore(),
-      dataset: {},
-      folderPath: "",
-      datasetID: this.$route.params.datasetID,
-      workflowID: this.$route.params.workflowID,
-      workflow: {},
-      zenodoToken: "",
-      published: false,
-      zenodoDatasetID: "",
-    };
-  },
-  computed: {},
-  methods: {
-    async sleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
+  export default {
+    name: "ZenodoPublish",
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        tokens: useTokenStore(),
+        dataset: {},
+        folderPath: "",
+        datasetID: this.$route.params.datasetID,
+        workflowID: this.$route.params.workflowID,
+        workflow: {},
+        zenodoToken: "",
+        published: false,
+        zenodoDatasetID: "",
+      };
     },
-    async publishDeposition() {
-      const depositionID = this.workflow.destination.zenodo.deposition_id;
+    computed: {},
+    methods: {
+      async sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      },
+      async publishDeposition() {
+        const depositionID = this.workflow.destination.zenodo.deposition_id;
 
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Publishing dataset on Zenodo...",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-
-      const response = await axios
-        .post(`${this.$server_url}/zenodo/publish`, {
-          access_token: this.zenodoToken,
-          deposition_id: depositionID,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
+        const loading = ElLoading.service({
+          lock: true,
+          text: "Publishing dataset on Zenodo...",
+          background: "rgba(0, 0, 0, 0.7)",
         });
 
-      // await this.sleep(1000);
+        const response = await axios
+          .post(`${this.$server_url}/zenodo/publish`, {
+            access_token: this.zenodoToken,
+            deposition_id: depositionID,
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
 
-      // const response = {
-      //   id: "5750415",
-      // };
+        // await this.sleep(1000);
 
-      this.zenodoDatasetID = response.id;
-      console.log(this.zenodoDatasetID);
+        // const response = {
+        //   id: "5750415",
+        // };
 
-      if (response === "ERROR") {
-        this.workflow.datasetPublished = false;
+        this.zenodoDatasetID = response.id;
+        console.log(this.zenodoDatasetID);
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
+        if (response === "ERROR") {
+          this.workflow.datasetPublished = false;
 
-        this.statusMessage =
-          "There was an error when adding metadata to the deposition";
-        return "FAIL";
-      } else {
-        this.datasetStore.showProgressBar();
-        this.datasetStore.setProgressBarType("zenodo");
-        this.datasetStore.setCurrentStep(7);
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
 
-        this.workflow.datasetPublished = true;
+          this.statusMessage =
+            "There was an error when adding metadata to the deposition";
+          return "FAIL";
+        } else {
+          this.datasetStore.showProgressBar();
+          this.datasetStore.setProgressBarType("zenodo");
+          this.datasetStore.setCurrentStep(7);
 
-        this.published = true;
+          this.workflow.datasetPublished = true;
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
-      }
+          this.published = true;
 
-      loading.close();
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        }
+
+        loading.close();
+      },
+      async viewDatasetOnZenodo() {
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          `${process.env.VUE_APP_ZENODO_URL}/record/${this.zenodoDatasetID}`
+        );
+      },
+
+      async openDraftDataset() {
+        const depositionID = this.workflow.destination.zenodo.deposition_id;
+
+        window.ipcRenderer.send(
+          "open-link-in-browser",
+          `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
+        );
+      },
     },
-    async viewDatasetOnZenodo() {
-      window.ipcRenderer.send(
-        "open-link-in-browser",
-        `${process.env.VUE_APP_ZENODO_URL}/record/${this.zenodoDatasetID}`
-      );
+    async mounted() {
+      this.dataset = await this.datasetStore.getCurrentDataset();
+      this.workflow = this.dataset.workflows[this.workflowID];
+
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(7);
+
+      this.workflow.currentRoute = this.$route.path;
+
+      const tokenObject = await this.tokens.getToken("zenodo");
+      this.zenodoToken = tokenObject.token;
+      // console.log(this.zenodoToken);
     },
-
-    async openDraftDataset() {
-      const depositionID = this.workflow.destination.zenodo.deposition_id;
-
-      window.ipcRenderer.send(
-        "open-link-in-browser",
-        `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
-      );
-    },
-  },
-  async mounted() {
-    this.dataset = await this.datasetStore.getCurrentDataset();
-    this.workflow = this.dataset.workflows[this.workflowID];
-
-    this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(7);
-
-    this.workflow.currentRoute = this.$route.path;
-
-    const tokenObject = await this.tokens.getToken("zenodo");
-    this.zenodoToken = tokenObject.token;
-    // console.log(this.zenodoToken);
-  },
-};
+  };
 </script>
 
 <style lang="postcss" scoped>
-.blob {
-  box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
-  animation: pulse-blue 2s infinite;
-}
-
-@keyframes pulse-blue {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+  .blob {
+    box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
+    animation: pulse-blue 2s infinite;
   }
 
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
-  }
+  @keyframes pulse-blue {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+    }
 
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+    }
   }
-}
 </style>

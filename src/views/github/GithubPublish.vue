@@ -266,416 +266,416 @@
 </template>
 
 <script>
-import axios from "axios";
-import { ElLoading, ElNotification } from "element-plus";
-import { Icon } from "@iconify/vue";
+  import axios from "axios";
+  import { ElLoading, ElNotification } from "element-plus";
+  import { Icon } from "@iconify/vue";
 
-import { useDatasetsStore } from "@/store/datasets";
-import { useTokenStore } from "@/store/access.js";
+  import { useDatasetsStore } from "@/store/datasets";
+  import { useTokenStore } from "@/store/access.js";
 
-export default {
-  name: "GithubPublish",
-  components: { Icon },
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      tokens: useTokenStore(),
-      dataset: {},
-      folderPath: "",
-      datasetID: this.$route.params.datasetID,
-      workflowID: this.$route.params.workflowID,
-      workflow: {},
-      githubToken: "",
-      repoName: "",
-      showReleasePrompt: true,
-      showDeclinedInstructions: false,
-      showApprovedInstructions: false,
-      retrievedTags: [],
-      selectedTag: "",
-      retrievedBranches: [],
-      selectedBranch: "",
-      releaseTitle: "",
-      releaseBody: "# Your release notes here",
-      prerelease: false,
-      draftReleaseURL: "",
-      publishedReleaseURL: "",
-      showFinalInstructions: false,
-    };
-  },
-  computed: {
-    disableAutoGenerateReleaseNotes() {
-      if (this.selectedTag === "") {
+  export default {
+    name: "GithubPublish",
+    components: { Icon },
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        tokens: useTokenStore(),
+        dataset: {},
+        folderPath: "",
+        datasetID: this.$route.params.datasetID,
+        workflowID: this.$route.params.workflowID,
+        workflow: {},
+        githubToken: "",
+        repoName: "",
+        showReleasePrompt: true,
+        showDeclinedInstructions: false,
+        showApprovedInstructions: false,
+        retrievedTags: [],
+        selectedTag: "",
+        retrievedBranches: [],
+        selectedBranch: "",
+        releaseTitle: "",
+        releaseBody: "# Your release notes here",
+        prerelease: false,
+        draftReleaseURL: "",
+        publishedReleaseURL: "",
+        showFinalInstructions: false,
+      };
+    },
+    computed: {
+      disableAutoGenerateReleaseNotes() {
+        if (this.selectedTag === "") {
+          return true;
+        }
+        if (this.selectedBranch === "") {
+          return true;
+        }
+        return false;
+      },
+      disablePublish() {
+        const valid = this.validateReleaseForm();
+        if (valid) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+    },
+    methods: {
+      async sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      },
+      selectEvent(type) {
+        console.log(type, this.selectedTag);
+      },
+      openDropdown() {
+        this.$refs.dropdown1.handleOpen();
+      },
+      createLoading() {
+        const loading = ElLoading.service({
+          lock: true,
+          text: "Reading GitHub repository...",
+        });
+        return loading;
+      },
+      validateReleaseForm() {
+        if (this.selectedTag === "") {
+          return false;
+        }
+
+        if (this.selectedBranch === "") {
+          return false;
+        }
+
+        if (this.releaseTitle === "") {
+          return false;
+        }
+
+        if (this.releaseBody === "") {
+          return false;
+        }
+
         return true;
-      }
-      if (this.selectedBranch === "") {
-        return true;
-      }
-      return false;
-    },
-    disablePublish() {
-      const valid = this.validateReleaseForm();
-      if (valid) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-  },
-  methods: {
-    async sleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    },
-    selectEvent(type) {
-      console.log(type, this.selectedTag);
-    },
-    openDropdown() {
-      this.$refs.dropdown1.handleOpen();
-    },
-    createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Reading GitHub repository...",
-      });
-      return loading;
-    },
-    validateReleaseForm() {
-      if (this.selectedTag === "") {
-        return false;
-      }
+      },
+      async openCommitList() {
+        const githubURL = `https://github.com/${this.repoName}/commits`;
 
-      if (this.selectedBranch === "") {
-        return false;
-      }
+        window.ipcRenderer.send("open-link-in-browser", githubURL);
+      },
+      async openAllReleases() {
+        const githubURL = `https://github.com/${this.repoName}/releases`;
 
-      if (this.releaseTitle === "") {
-        return false;
-      }
-
-      if (this.releaseBody === "") {
-        return false;
-      }
-
-      return true;
-    },
-    async openCommitList() {
-      const githubURL = `https://github.com/${this.repoName}/commits`;
-
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
-    },
-    async openAllReleases() {
-      const githubURL = `https://github.com/${this.repoName}/releases`;
-
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
-    },
-    async openDraftRelease(githubURL) {
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
-    },
-    async viewZenodoRelease() {
-      const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
-      window.ipcRenderer.send("open-link-in-browser", zenodoURL);
-    },
-    declineRelease() {
-      this.showReleasePrompt = false;
-      this.showApprovedInstructions = false;
-      this.showDeclinedInstructions = true;
-    },
-    approveRelease() {
-      this.showReleasePrompt = false;
-      this.showDeclinedInstructions = false;
-      this.showApprovedInstructions = true;
-    },
-    async pushRelease(config) {
-      return await axios(config)
-        .then((response) => {
-          if (response.status === 201) {
-            if ("html_url" in response.data) {
-              return response.data.html_url;
+        window.ipcRenderer.send("open-link-in-browser", githubURL);
+      },
+      async openDraftRelease(githubURL) {
+        window.ipcRenderer.send("open-link-in-browser", githubURL);
+      },
+      async viewZenodoRelease() {
+        const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
+        window.ipcRenderer.send("open-link-in-browser", zenodoURL);
+      },
+      declineRelease() {
+        this.showReleasePrompt = false;
+        this.showApprovedInstructions = false;
+        this.showDeclinedInstructions = true;
+      },
+      approveRelease() {
+        this.showReleasePrompt = false;
+        this.showDeclinedInstructions = false;
+        this.showApprovedInstructions = true;
+      },
+      async pushRelease(config) {
+        return await axios(config)
+          .then((response) => {
+            if (response.status === 201) {
+              if ("html_url" in response.data) {
+                return response.data.html_url;
+              } else {
+                return `https://github.com/${this.repoName}/releases`;
+              }
             } else {
-              return `https://github.com/${this.repoName}/releases`;
+              throw new Error(
+                `Error creating release: ${response.status} ${response.statusText}`
+              );
             }
-          } else {
-            throw new Error(
-              `Error creating release: ${response.status} ${response.statusText}`
-            );
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-    },
-    async createRelease(releaseType) {
-      let errorMessage = "";
-      let successMessage = "";
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+      },
+      async createRelease(releaseType) {
+        let errorMessage = "";
+        let successMessage = "";
 
-      let requestBody = {
-        tag_name: this.selectedTag,
-        target_commitish: this.selectedBranch,
-        name: this.releaseTitle,
-        body: this.releaseBody,
-        prerelease: this.prerelease,
-      };
+        let requestBody = {
+          tag_name: this.selectedTag,
+          target_commitish: this.selectedBranch,
+          name: this.releaseTitle,
+          body: this.releaseBody,
+          prerelease: this.prerelease,
+        };
 
-      if (releaseType === "publish") {
-        let response = "";
-
-        try {
-          response = await this.$confirm(
-            "Once a release has been made you will not be able to remove it from Zenodo. Are you sure you want to continue?",
-            "Confirm publish",
-            {
-              confirmButtonText: "Publish",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            }
-          );
-        } catch (error) {
-          response = error;
-        }
-
-        if (response !== "confirm") {
-          return;
-        }
-
-        errorMessage = "Error publishing release";
-        successMessage = "Release published successfully";
-        requestBody.draft = false;
-      }
-      if (releaseType === "draft") {
-        errorMessage = "There was an error with creating the draft release";
-        successMessage = "Draft release created successfully";
-        requestBody.draft = true;
-      }
-
-      const config = {
-        method: "post",
-        url: `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/releases`,
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-          Authorization: `Bearer ${this.githubToken}`,
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(requestBody),
-      };
-
-      const response = await this.pushRelease(config);
-
-      if (response === "ERROR") {
-        ElNotification({
-          title: "Error",
-          message: errorMessage,
-          type: "error",
-          position: "bottom-right",
-        });
-
-        this.workflow.datasetPublished = false;
-
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
-      } else {
         if (releaseType === "publish") {
-          this.publishedReleaseURL = response;
+          let response = "";
+
+          try {
+            response = await this.$confirm(
+              "Once a release has been made you will not be able to remove it from Zenodo. Are you sure you want to continue?",
+              "Confirm publish",
+              {
+                confirmButtonText: "Publish",
+                cancelButtonText: "Cancel",
+                type: "warning",
+              }
+            );
+          } catch (error) {
+            response = error;
+          }
+
+          if (response !== "confirm") {
+            return;
+          }
+
+          errorMessage = "Error publishing release";
+          successMessage = "Release published successfully";
+          requestBody.draft = false;
         }
         if (releaseType === "draft") {
-          this.draftReleaseURL = response;
+          errorMessage = "There was an error with creating the draft release";
+          successMessage = "Draft release created successfully";
+          requestBody.draft = true;
         }
 
-        ElNotification({
-          title: "Success",
-          message: successMessage,
-          type: "success",
-          position: "bottom-right",
+        const config = {
+          method: "post",
+          url: `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/releases`,
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${this.githubToken}`,
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(requestBody),
+        };
+
+        const response = await this.pushRelease(config);
+
+        if (response === "ERROR") {
+          ElNotification({
+            title: "Error",
+            message: errorMessage,
+            type: "error",
+            position: "bottom-right",
+          });
+
+          this.workflow.datasetPublished = false;
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        } else {
+          if (releaseType === "publish") {
+            this.publishedReleaseURL = response;
+          }
+          if (releaseType === "draft") {
+            this.draftReleaseURL = response;
+          }
+
+          ElNotification({
+            title: "Success",
+            message: successMessage,
+            type: "success",
+            position: "bottom-right",
+          });
+
+          this.workflow.datasetPublished = true;
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+
+          this.showApprovedInstructions = false;
+          this.showFinalInstructions = true;
+        }
+      },
+      async autoGenerateReleaseNotes() {
+        let response = "";
+
+        const data = JSON.stringify({
+          tag_name: this.selectedTag,
+          target_commitish: this.selectedBranch,
         });
 
-        this.workflow.datasetPublished = true;
+        const config = {
+          method: "post",
+          url: `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/releases/generate-notes`,
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${this.githubToken}`,
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
+        response = await axios(config)
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              console.log("response.data", response.data.body);
+              this.releaseBody = response.data.body;
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
 
-        this.showApprovedInstructions = false;
-        this.showFinalInstructions = true;
-      }
+        if (response !== "ERROR") {
+          return response;
+        } else {
+          return false;
+        }
+      },
+      async prefillGithubEntries() {
+        let response = "";
+
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/tags`,
+            {
+              params: {
+                per_page: 100,
+              },
+              headers: {
+                Accept: "application/vnd.github.v3+json",
+                Authorization: `Bearer ${this.githubToken}`,
+              },
+            }
+          )
+          .then((res) => {
+            return res.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (response !== "ERROR") {
+          this.retrievedTags = response.map((tag) => {
+            return {
+              label: tag.name,
+              value: tag.name,
+              commit: tag.commit.sha,
+              url: tag.commit.url,
+              disabled: true,
+            };
+          });
+        }
+
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/branches`,
+            {
+              params: {
+                per_page: 100,
+              },
+              headers: {
+                Accept: "application/vnd.github.v3+json",
+                Authorization: `Bearer ${this.githubToken}`,
+              },
+            }
+          )
+          .then((res) => {
+            return res.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (response !== "ERROR") {
+          this.retrievedBranches = response.map((branch) => {
+            return {
+              label: branch.name,
+              value: branch.name,
+              commit: branch.commit.sha,
+              url: branch.commit.url,
+            };
+          });
+        }
+
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}`,
+            {
+              params: {},
+              headers: {
+                Accept: "application/vnd.github.v3+json",
+                Authorization: `Bearer ${this.githubToken}`,
+              },
+            }
+          )
+          .then((res) => {
+            return res.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (response !== "ERROR") {
+          this.selectedBranch = response.default_branch;
+        }
+
+        return;
+      },
     },
-    async autoGenerateReleaseNotes() {
-      let response = "";
+    async mounted() {
+      let spinner = this.createLoading();
+      this.dataset = await this.datasetStore.getCurrentDataset();
+      this.workflow = this.dataset.workflows[this.workflowID];
 
-      const data = JSON.stringify({
-        tag_name: this.selectedTag,
-        target_commitish: this.selectedBranch,
-      });
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(7);
 
-      const config = {
-        method: "post",
-        url: `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/releases/generate-notes`,
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-          Authorization: `Bearer ${this.githubToken}`,
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
+      this.workflow.currentRoute = this.$route.path;
 
-      response = await axios(config)
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            console.log("response.data", response.data.body);
-            this.releaseBody = response.data.body;
-            return true;
-          } else {
-            return false;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
+      const tokenObject = await this.tokens.getToken("github");
+      this.githubToken = tokenObject.token;
 
-      if (response !== "ERROR") {
-        return response;
-      } else {
-        return false;
-      }
+      this.repoName = this.workflow.github.repo;
+      // this.repoName = "fairdataihub/Custom-Hook";
+      // this.repoName = "fairdataihub/FAIRshare";
+
+      await this.prefillGithubEntries();
+
+      spinner.close();
     },
-    async prefillGithubEntries() {
-      let response = "";
-
-      response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/tags`,
-          {
-            params: {
-              per_page: 100,
-            },
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
-        .then((res) => {
-          return res.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response !== "ERROR") {
-        this.retrievedTags = response.map((tag) => {
-          return {
-            label: tag.name,
-            value: tag.name,
-            commit: tag.commit.sha,
-            url: tag.commit.url,
-            disabled: true,
-          };
-        });
-      }
-
-      response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/branches`,
-          {
-            params: {
-              per_page: 100,
-            },
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
-        .then((res) => {
-          return res.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response !== "ERROR") {
-        this.retrievedBranches = response.map((branch) => {
-          return {
-            label: branch.name,
-            value: branch.name,
-            commit: branch.commit.sha,
-            url: branch.commit.url,
-          };
-        });
-      }
-
-      response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}`,
-          {
-            params: {},
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
-        .then((res) => {
-          return res.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response !== "ERROR") {
-        this.selectedBranch = response.default_branch;
-      }
-
-      return;
-    },
-  },
-  async mounted() {
-    let spinner = this.createLoading();
-    this.dataset = await this.datasetStore.getCurrentDataset();
-    this.workflow = this.dataset.workflows[this.workflowID];
-
-    this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(7);
-
-    this.workflow.currentRoute = this.$route.path;
-
-    const tokenObject = await this.tokens.getToken("github");
-    this.githubToken = tokenObject.token;
-
-    this.repoName = this.workflow.github.repo;
-    // this.repoName = "fairdataihub/Custom-Hook";
-    // this.repoName = "fairdataihub/FAIRshare";
-
-    await this.prefillGithubEntries();
-
-    spinner.close();
-  },
-};
+  };
 </script>
 
 <style lang="postcss" scoped>
-.blob {
-  box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
-  animation: pulse-blue 2s infinite;
-}
-
-@keyframes pulse-blue {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+  .blob {
+    box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
+    animation: pulse-blue 2s infinite;
   }
 
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
-  }
+  @keyframes pulse-blue {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+    }
 
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+    }
   }
-}
 </style>

@@ -139,121 +139,121 @@
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
+  import { Icon } from "@iconify/vue";
 
-import { useDatasetsStore } from "@/store/datasets";
+  import { useDatasetsStore } from "@/store/datasets";
 
-export default {
-  name: "ShowAllProjects",
-  components: { Icon },
+  export default {
+    name: "ShowAllProjects",
+    components: { Icon },
 
-  data() {
-    return {
-      datasetStore: useDatasetsStore(),
-      selectedDataset: "",
-      datasetsInProgress: [],
-      datasetsPublished: [],
-    };
-  },
-  computed: {},
-  methods: {
-    selectDataset(event, datasetID) {
-      if (datasetID === this.selectedDataset) {
-        this.selectedDataset = "";
-      } else {
-        this.selectedDataset = datasetID;
-      }
-
-      if (event && event.detail === 2) {
-        this.selectedDataset = "";
-        this.navigateToDataset(datasetID);
-      }
+    data() {
+      return {
+        datasetStore: useDatasetsStore(),
+        selectedDataset: "",
+        datasetsInProgress: [],
+        datasetsPublished: [],
+      };
     },
-    startCuratingProject() {
-      this.navigateToDataset(this.selectedDataset);
+    computed: {},
+    methods: {
+      selectDataset(event, datasetID) {
+        if (datasetID === this.selectedDataset) {
+          this.selectedDataset = "";
+        } else {
+          this.selectedDataset = datasetID;
+        }
+
+        if (event && event.detail === 2) {
+          this.selectedDataset = "";
+          this.navigateToDataset(datasetID);
+        }
+      },
+      startCuratingProject() {
+        this.navigateToDataset(this.selectedDataset);
+      },
+      async editProject() {
+        await this.datasetStore.getDataset(this.selectedDataset);
+        const routerPath = `/datasets/${this.selectedDataset}/edit`;
+        this.$router.push({ path: routerPath });
+      },
+      async navigateToDataset(datasetID) {
+        let routerPath;
+
+        await this.datasetStore.getDataset(datasetID);
+
+        routerPath = `/datasets/${datasetID}/landing`;
+        // routerPath = `/datasets/${datasetID}`;
+        // routerPath = `/datasets/new/${datasetID}/confirm`;
+        // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+        // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+        // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
+        // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
+        // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
+        // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
+        // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+        // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
+        // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
+        // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
+
+        this.$router.push({ path: routerPath });
+      },
     },
-    async editProject() {
-      await this.datasetStore.getDataset(this.selectedDataset);
-      const routerPath = `/datasets/${this.selectedDataset}/edit`;
-      this.$router.push({ path: routerPath });
-    },
-    async navigateToDataset(datasetID) {
-      let routerPath;
+    async mounted() {
+      this.datasetStore.hideProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(1);
 
-      await this.datasetStore.getDataset(datasetID);
+      let allDatasets = await this.datasetStore.getAllDatasets();
 
-      routerPath = `/datasets/${datasetID}/landing`;
-      // routerPath = `/datasets/${datasetID}`;
-      // routerPath = `/datasets/new/${datasetID}/confirm`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
-      // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
-      // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
-      // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
-      // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
-      // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
+      // make a local copy of the datasets object
+      const datasets = JSON.parse(JSON.stringify(allDatasets));
 
-      this.$router.push({ path: routerPath });
-    },
-  },
-  async mounted() {
-    this.datasetStore.hideProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(1);
+      // filter datasets in progress
+      let datasetsInProgressIDs = [];
 
-    let allDatasets = await this.datasetStore.getAllDatasets();
-
-    // make a local copy of the datasets object
-    const datasets = JSON.parse(JSON.stringify(allDatasets));
-
-    // filter datasets in progress
-    let datasetsInProgressIDs = [];
-
-    for (const key in datasets) {
-      if ("workflows" in datasets[key]) {
-        for (const workflow in datasets[key].workflows) {
-          if (!("datasetPublished" in datasets[key].workflows[workflow])) {
-            datasetsInProgressIDs.push(key);
-          } else {
-            if (
-              "datasetPublished" in datasets[key].workflows[workflow] &&
-              !datasets[key].workflows[workflow].datasetPublished
-            ) {
+      for (const key in datasets) {
+        if ("workflows" in datasets[key]) {
+          for (const workflow in datasets[key].workflows) {
+            if (!("datasetPublished" in datasets[key].workflows[workflow])) {
               datasetsInProgressIDs.push(key);
+            } else {
+              if (
+                "datasetPublished" in datasets[key].workflows[workflow] &&
+                !datasets[key].workflows[workflow].datasetPublished
+              ) {
+                datasetsInProgressIDs.push(key);
+              }
             }
           }
+        } else {
+          datasetsInProgressIDs.push(key);
         }
-      } else {
-        datasetsInProgressIDs.push(key);
       }
-    }
 
-    // remove duplicates from array
-    datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
+      // remove duplicates from array
+      datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
 
-    // filter datasets that are in progress based on the IDs
-    for (const datasetID of datasetsInProgressIDs) {
-      this.datasetsInProgress.push(datasets[datasetID]);
-    }
+      // filter datasets that are in progress based on the IDs
+      for (const datasetID of datasetsInProgressIDs) {
+        this.datasetsInProgress.push(datasets[datasetID]);
+      }
 
-    // get list of all IDs
-    let datasetIDs = [];
-    for (const key in datasets) {
-      datasetIDs.push(key);
-    }
+      // get list of all IDs
+      let datasetIDs = [];
+      for (const key in datasets) {
+        datasetIDs.push(key);
+      }
 
-    // get the difference of array of datasetIds
-    let datasetsPublishedIDs = datasetIDs.filter(
-      (datasetID) => !datasetsInProgressIDs.includes(datasetID)
-    );
+      // get the difference of array of datasetIds
+      let datasetsPublishedIDs = datasetIDs.filter(
+        (datasetID) => !datasetsInProgressIDs.includes(datasetID)
+      );
 
-    // filter datasets that are published based on the IDs
-    for (const datasetID of datasetsPublishedIDs) {
-      this.datasetsPublished.push(datasets[datasetID]);
-    }
-  },
-};
+      // filter datasets that are published based on the IDs
+      for (const datasetID of datasetsPublishedIDs) {
+        this.datasetsPublished.push(datasets[datasetID]);
+      }
+    },
+  };
 </script>
