@@ -77,7 +77,7 @@
               <span
                 :class="
                   node.label == 'codemeta.json' ||
-                  node.label == 'citation.cff' ||
+                  node.label == 'CITATION.cff' ||
                   node.label == 'LICENSE'
                     ? 'text-secondary-500'
                     : ''
@@ -317,7 +317,7 @@ export default {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label == "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        } else if (data.label == "citation.cff") {
+        } else if (data.label == "CITATION.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (!data.isDir) {
           await this.openFileExplorer(data.fullPath);
@@ -329,6 +329,7 @@ export default {
     },
     getAllFilesFromFolder(dir) {
       let filesystem = require("fs");
+      let that = this;
       function dfs(dir) {
         let results = [];
         filesystem.readdirSync(dir).forEach(function (file) {
@@ -347,10 +348,44 @@ export default {
           }
           results.push(newObj);
         });
+
+        let newObj = {};
+
+        if (!results.some((el) => el.label === "codemeta.json")) {
+          newObj.label = "codemeta.json";
+          newObj.isDir = false;
+
+          results.push(newObj);
+        }
+
+        if (!results.some((el) => el.label === "CITATION.cff")) {
+          newObj = {};
+          newObj.label = "CITATION.cff";
+          newObj.isDir = false;
+
+          results.push(newObj);
+        }
+
+        if (!results.some((el) => el.label === "LICENSE")) {
+          if (that.workflow.generateLicense) {
+            newObj = {};
+            newObj.label = "LICENSE";
+            newObj.isDir = false;
+
+            results.push(newObj);
+          }
+        }
+
         return results;
       }
-      let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
+      let root = {
+        label: dir,
+        children: dfs(dir),
+        fullPath: dir,
+        isDir: true,
+      };
       this.fileData.push(root);
+      console.log(this.fileData);
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {

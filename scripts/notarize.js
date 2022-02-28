@@ -14,7 +14,7 @@ module.exports = async function (params) {
   console.log("afterSign hook triggered", params);
 
   // Same appId in electron-builder.
-  let appId = "com.fairdataihub.sodaforcovid19research";
+  let appId = "com.fairdataihub.fairshare";
 
   let appPath = path.join(
     params.appOutDir,

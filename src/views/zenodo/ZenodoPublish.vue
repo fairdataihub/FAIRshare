@@ -11,7 +11,10 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex h-full flex-col items-center justify-center px-10">
+      <div
+        class="flex h-full flex-col items-center justify-center px-10"
+        v-if="!published"
+      >
         <p class="pb-5 text-center">
           Once the record is published you will no longer be able to change the
           files in this upload. This is because a Digital Object Identifier
@@ -30,13 +33,40 @@
           </button>
         </div>
       </div>
+      <div
+        class="flex h-full flex-col items-center justify-center px-10"
+        v-else
+      >
+        <Vue3Lottie
+          animationLink="https://assets4.lottiefiles.com/packages/lf20_lg6lh7fp.json"
+          class="pointer-events-none absolute top-0 left-0 h-full w-full"
+          :loop="1"
+        />
+        <p class="pb-5 text-center">
+          Your dataset was successfully published. You can now view it on
+          Zenodo.
+        </p>
+        <div class="flex space-x-4">
+          <router-link :to="`/datasets`" class="">
+            <button class="primary-plain-button">
+              <el-icon><data-line /></el-icon> Go to the homepage
+            </button>
+          </router-link>
+          <button
+            class="blob primary-button transition-all"
+            @click="viewDatasetOnZenodo"
+          >
+            View dataset on Zenodo <el-icon><star-icon /></el-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import axios from "axios";
-import { ElMessageBox, ElLoading } from "element-plus";
+import axios from "axios";
+import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -53,6 +83,8 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       zenodoToken: "",
+      published: false,
+      zenodoDatasetID: "",
     };
   },
   computed: {},
@@ -61,32 +93,35 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async publishDeposition() {
-      // const depositionID = this.workflow.destination.zenodo.deposition_id;
-
-      // const response = await axios
-      //   .post(`${this.$server_url}/zenodo/publish`, {
-      //     access_token: this.zenodoToken,
-      //     deposition_id: depositionID,
-      //   })
-      //   .then((response) => {
-      //     return response.data;
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     return "ERROR";
-      //   });
+      const depositionID = this.workflow.destination.zenodo.deposition_id;
 
       const loading = ElLoading.service({
         lock: true,
-        text: "Loading",
+        text: "Publishing dataset on Zenodo...",
         background: "rgba(0, 0, 0, 0.7)",
       });
 
-      await this.sleep(3000);
+      const response = await axios
+        .post(`${this.$server_url}/zenodo/publish`, {
+          access_token: this.zenodoToken,
+          deposition_id: depositionID,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
 
-      const response = {
-        id: "5750415",
-      };
+      // await this.sleep(1000);
+
+      // const response = {
+      //   id: "5750415",
+      // };
+
+      this.zenodoDatasetID = response.id;
+      console.log(this.zenodoDatasetID);
 
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
@@ -104,32 +139,21 @@ export default {
 
         this.workflow.datasetPublished = true;
 
+        this.published = true;
+
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
-
-        ElMessageBox.alert(
-          "Your dataset was published to Zenodo. Click 'OK' to view this record on Zenodo.",
-          "Published to Zenodo",
-          {
-            confirmButtonText: "OK",
-            callback: (action) => {
-              if (action === "confirm") {
-                console.log(`Opening ${response.id}`);
-
-                window.ipcRenderer.send(
-                  "open-link-in-browser",
-                  `https://sandbox.zenodo.org/record/${response.id}`
-                );
-
-                this.$router.push({ path: `/datasets/${this.datasetID}` });
-              }
-            },
-          }
-        );
       }
 
       loading.close();
     },
+    async viewDatasetOnZenodo() {
+      window.ipcRenderer.send(
+        "open-link-in-browser",
+        `${process.env.VUE_APP_ZENODO_URL}/record/${this.zenodoDatasetID}`
+      );
+    },
+
     async openDraftDataset() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
 

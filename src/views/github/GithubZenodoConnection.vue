@@ -78,7 +78,7 @@
                 repository to the 'ON' position.
               </li>
 
-              <li>Wait for FairShare to notice the change.</li>
+              <li>Wait for Fairshare to notice the change.</li>
             </ul>
             <p class="mt-2">
               You will only need to do this once. For any future GitHub
@@ -136,8 +136,8 @@
               <span
                 :class="
                   node.label == 'codemeta.json' ||
-                  node.label == 'citation.cff' ||
-                  node.label == 'zenodo.json' ||
+                  node.label == 'CITATION.cff' ||
+                  node.label == '.zenodo.json' ||
                   (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
                     : ''
@@ -216,11 +216,7 @@
     </div>
     <transition name="fade" mode="out-in" appear>
       <div class="fixed bottom-2 right-3" v-show="showSpinner">
-        <Vue3Lottie
-          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
-          :width="80"
-          :height="80"
-        />
+        <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
       </div>
     </transition>
   </div>
@@ -691,17 +687,17 @@ export default {
       if (
         (data.label === "LICENSE" && this.workflow.generateLicense) ||
         data.label === "codemeta.json" ||
-        data.label === "citation.cff" ||
-        data.label === "zenodo.json"
+        data.label === "CITATION.cff" ||
+        data.label === ".zenodo.json"
       ) {
         this.drawerModel = true;
         if (data.label === "LICENSE" && this.workflow.generateLicense) {
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label === "codemeta.json") {
           this.PreviewNewlyCreatedMetadataFile = true;
-        } else if (data.label === "citation.cff") {
+        } else if (data.label === "CITATION.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
-        } else if (data.label === "zenodo.json") {
+        } else if (data.label === ".zenodo.json") {
           this.PreviewNewlyCreatedZenodoFile = true;
         }
         let title = data.label;
@@ -785,6 +781,45 @@ export default {
 
       if (response !== "ERROR") {
         this.fileData = JSON.parse(response);
+
+        // check if label exists in fileData
+
+        let newObj = {};
+
+        if (!this.fileData.some((el) => el.label === "codemeta.json")) {
+          newObj.label = "codemeta.json";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === "CITATION.cff")) {
+          newObj = {};
+          newObj.label = "CITATION.cff";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === ".zenodo.json")) {
+          newObj = {};
+          newObj.label = ".zenodo.json";
+          newObj.isDir = false;
+
+          this.fileData.push(newObj);
+        }
+
+        if (!this.fileData.some((el) => el.label === "LICENSE")) {
+          if (this.workflow.generateLicense) {
+            newObj = {};
+            newObj.label = "LICENSE";
+            newObj.isDir = false;
+
+            this.fileData.push(newObj);
+          }
+        }
+
+        console.log(this.fileData);
       } else {
         this.$message({
           message: "Could not get the contents of the repository",
@@ -863,7 +898,7 @@ export default {
       const data = JSON.stringify({
         name: "web",
         config: {
-          url: `https://sandbox.zenodo.org/api/hooks/receivers/github/events/?access_token=${GithubZenodoConnectionToken}`,
+          url: `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=${GithubZenodoConnectionToken}`,
           content_type: "json",
           secret: "secret",
           insecure_ssl: 0,

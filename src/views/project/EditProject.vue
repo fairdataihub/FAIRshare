@@ -40,7 +40,7 @@
           <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
 
-        <el-form-item label="Dataset description">
+        <el-form-item label="Project description">
           <el-popover
             ref="popover"
             placement="bottom"

@@ -38,7 +38,7 @@
 
             <div class="p-4">
               <el-form-item
-                label="Publication Date"
+                label="Publication date"
                 :required="true"
                 :error="publicationDateErrorMessage"
               >
@@ -1140,7 +1140,7 @@
     <transition name="fade" mode="out-in" appear>
       <div class="fixed bottom-1 right-2" v-show="savingSpinner">
         <Vue3Lottie
-          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :animationData="$helix_spinner"
           :width="60"
           :height="60"
           :loop="1"

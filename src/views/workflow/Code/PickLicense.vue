@@ -45,6 +45,30 @@
               </el-option>
             </el-select>
 
+            <div class="flex w-full flex-row items-center">
+              <span class="mx-1 text-sm italic text-zinc-600">
+                Suggestions:
+              </span>
+              <div class="flex-row">
+                <el-tag
+                  class="mx-2 cursor-copy transition-all hover:shadow-md"
+                  size="small"
+                  @click="pickSuggestedLicense('MIT')"
+                  :type="licenseForm.license === 'MIT' ? '' : 'info'"
+                >
+                  MIT
+                </el-tag>
+                <el-tag
+                  class="mx-1 cursor-copy transition-all hover:shadow-md"
+                  size="small"
+                  @click="pickSuggestedLicense('Apache-2.0')"
+                  :type="licenseForm.license === 'Apache-2.0' ? '' : 'info'"
+                >
+                  Apache-2.0
+                </el-tag>
+              </div>
+            </div>
+
             <div
               class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
               v-if="licenseForm.license != ''"
@@ -247,6 +271,10 @@ export default {
         text: loadingText,
       });
       return loading;
+    },
+    pickSuggestedLicense(license) {
+      this.licenseForm.license = license;
+      this.licenseChange(license);
     },
     licenseChange(val) {
       if (this.originalLicense !== val) {

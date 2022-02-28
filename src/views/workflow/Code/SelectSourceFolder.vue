@@ -29,7 +29,7 @@
             @click="selectSourceLocation('github')"
           >
             <img
-              src="../../../assets/images/github.jpeg"
+              src="../../../assets/images/githublogo.jpeg"
               alt=""
               class="h-24 w-full"
             />

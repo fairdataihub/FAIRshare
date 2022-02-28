@@ -3,7 +3,9 @@
     class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
-      <span class="font-medium"> Start a new data curation project </span>
+      <span class="text-lg font-medium">
+        Start a new data curation project
+      </span>
       <span> Fill out some general details about your dataset here. </span>
 
       <el-divider> </el-divider>
@@ -17,10 +19,10 @@
         label-position="top"
       >
         <el-form-item label="Project name" prop="datasetName">
-          <el-input v-model="datasetForm.datasetName"></el-input>
+          <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
 
-        <el-form-item label="Project description">
+        <el-form-item label="Project description" prop="datasetDescription">
           <el-popover
             ref="popover"
             placement="bottom"
@@ -31,6 +33,7 @@
               <el-input
                 v-model="datasetForm.datasetDescription"
                 type="textarea"
+                :autosize="{ minRows: 3, maxRows: 5 }"
               ></el-input>
             </template>
 
@@ -51,7 +54,7 @@
             v-model="datasetForm.dataType"
             class="checkbox-group"
           >
-            <div class="flex gap-8">
+            <div class="flex gap-8 transition-all">
               <el-popover
                 placement="bottom"
                 title=""
@@ -63,7 +66,7 @@
                   <el-checkbox
                     border
                     name="type1"
-                    class="single-check-box"
+                    class="single-check-box transition-all"
                     label="Research software"
                   >
                     <div class="flex flex-col items-center">
@@ -238,6 +241,13 @@ export default {
             trigger: "blur",
           },
         ],
+        datasetDescription: [
+          {
+            required: true,
+            message: "Please provide a project description",
+            trigger: "blur",
+          },
+        ],
         dataType: [
           {
             type: "array",
@@ -310,7 +320,7 @@ export default {
 
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
-          console.log("error submit!!");
+          console.log("Invalid form entries");
           return false;
         }
       });
@@ -380,17 +390,17 @@ export default {
 </script>
 <style scoped>
 .checkbox-group {
-  @apply box-border flex flex-col items-center justify-center gap-8 pt-4;
+  @apply box-border flex flex-col items-center justify-center gap-8 pt-4 transition-all;
 }
 .single-check-box {
   @apply flex h-40 w-40 items-center justify-center shadow-md transition-all;
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-  @apply border-secondary-500 shadow-md shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-md shadow-secondary-500/50 transition-all;
 }
 
 .single-check-box:not(.is-disabled):hover {
-  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
 }
 </style>

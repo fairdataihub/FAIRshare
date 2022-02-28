@@ -34,15 +34,14 @@ import GithubPublish from "../views/github/GithubPublish.vue";
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
+import HomePage from "../views/home/HomePage.vue";
 import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";
-
-// not used for any purpose yet
-import HomePage from "../views/HomePage.vue";
+import AppAbout from "../views/about/AppAbout.vue";
 
 const routes = [
-  { path: "/", component: HomePage },
+  { path: "/", component: HomePage }, // not used for any purpose yet; use `/home` instead
   { path: "/home", component: HomePage },
   { path: "/datasets", component: ShowAllProjects, name: "ShowAllProjects" },
   {
@@ -139,6 +138,7 @@ const routes = [
   { path: "/settings", component: AppSettings },
   { path: "/documentation", component: AppDocumentation },
   { path: "/contactUs", component: ContactUs },
+  { path: "/about", component: AppAbout },
 ];
 
 export const router = createRouter({

@@ -17,6 +17,7 @@ import enUS from "@kangc/v-md-editor/lib/lang/en-US";
 import "./assets/css/utilities-theme.css";
 import "./assets/css/index.css";
 import "element-plus/dist/index.css";
+import "vue3-lottie/dist/style.css";
 
 // css for the markdown editor
 import "katex/dist/katex.min.css";
@@ -27,6 +28,8 @@ import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
+
+import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
 // config for the markdown editor
 VMdEditor.use(githubTheme, {});
@@ -39,6 +42,7 @@ let app = createApp(App);
 
 // global variables for use in the app
 app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
+app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 
 // register components globally
 app.component("line-divider", LineDivider);
@@ -77,6 +81,7 @@ import {
   Notebook,
   Monitor,
   PictureFilled,
+  Postcard,
   QuestionFilled,
   Reading,
   RemoveFilled,
@@ -121,6 +126,7 @@ app.component("lock-icon", Lock);
 app.component("monitor-icon", Monitor);
 app.component("notebook-icon", Notebook);
 app.component("picture-filled", PictureFilled);
+app.component("postcard-icon", Postcard);
 app.component("question-filled", QuestionFilled);
 app.component("reading-icon", Reading);
 app.component("remove-filled", RemoveFilled);

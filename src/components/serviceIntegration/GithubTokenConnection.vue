@@ -118,7 +118,7 @@ export default {
           duration: 2000,
         });
         this.callback();
-        this.onStatusChange("connected");
+        this.onStatusChange("connected", value);
       }
       spinner.close();
     },

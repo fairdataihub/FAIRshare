@@ -5,8 +5,8 @@
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center py-5">
-          <h1 class="text-3xl font-bold text-slate-800 xl:text-4xl">
-            SODA for COVID-19 Research
+          <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">
+            FAIRshare
           </h1>
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
@@ -22,7 +22,10 @@
       <div class="flex w-full justify-evenly space-x-14 py-3">
         <div class="item-center flex flex-col justify-center">
           <div class="item-center flex w-full justify-center py-3">
-            <img src="../assets/images/overview.svg" class="h-auto w-11/12" />
+            <img
+              src="../../assets/images/overview.svg"
+              class="h-auto w-11/12"
+            />
           </div>
         </div>
       </div>
@@ -31,9 +34,7 @@
         <div class="flex justify-center space-x-4 py-3">
           <button
             class="secondary-plain-button text-base"
-            @click="
-              openWebsite('https://soda-for-covid-19-research-docs.vercel.app/')
-            "
+            @click="openWebsite('https://fair-share-docs.vercel.app/')"
           >
             <el-icon><notebook-icon /></el-icon>
             Read the documentation

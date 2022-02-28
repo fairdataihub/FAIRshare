@@ -39,7 +39,7 @@
           class="flex flex-col items-center justify-center"
         >
           <p class="pb-10 text-center text-lg">
-            No worries. You can always come back to this page and let FAIRShare
+            No worries. You can always come back to this page and let FAIRshare
             create your release for you.
           </p>
           <button class="primary-button" @click="approveRelease">
@@ -467,6 +467,11 @@ export default {
           type: "error",
           position: "bottom-right",
         });
+
+        this.workflow.datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
       } else {
         if (releaseType === "publish") {
           this.publishedReleaseURL = response;
@@ -481,6 +486,11 @@ export default {
           type: "success",
           position: "bottom-right",
         });
+
+        this.workflow.datasetPublished = true;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
 
         this.showApprovedInstructions = false;
         this.showFinalInstructions = true;
@@ -637,7 +647,7 @@ export default {
 
     this.repoName = this.workflow.github.repo;
     // this.repoName = "fairdataihub/Custom-Hook";
-    // this.repoName = "fairdataihub/SODA-for-SPARC";
+    // this.repoName = "fairdataihub/FAIRshare";
 
     await this.prefillGithubEntries();
 
