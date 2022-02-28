@@ -123,7 +123,6 @@
                         <el-tag
                           v-for="workflow in dataset.workflows.workflow1.type"
                           :key="workflow"
-                          :type="workflow"
                           size="small"
                         >
                           {{
@@ -243,7 +242,6 @@
                         <el-tag
                           v-for="workflow in dataset.workflows.workflow1.type"
                           :key="workflow"
-                          :type="workflow"
                           size="small"
                         >
                           {{
@@ -368,7 +366,7 @@ export default {
 
       if (difference < 24) {
         if (difference === 1) {
-          return `a hour`;
+          return `an hour`;
         } else {
           return `${difference} hours`;
         }
