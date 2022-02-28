@@ -348,37 +348,35 @@ export default {
           }
           results.push(newObj);
         });
-
-        let newObj = {};
-
-        if (!results.some((el) => el.label === "codemeta.json")) {
-          newObj.label = "codemeta.json";
-          newObj.isDir = false;
-
-          results.push(newObj);
-        }
-
-        if (!results.some((el) => el.label === "CITATION.cff")) {
-          newObj = {};
-          newObj.label = "CITATION.cff";
-          newObj.isDir = false;
-
-          results.push(newObj);
-        }
-
-        if (!results.some((el) => el.label === "LICENSE")) {
-          if (that.workflow.generateLicense) {
-            newObj = {};
-            newObj.label = "LICENSE";
-            newObj.isDir = false;
-
-            results.push(newObj);
-          }
-        }
-
         return results;
       }
       let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
+
+      if (!root.children.some((el) => el.label === "codemeta.json")) {
+        let newObj = {};
+        newObj.label = "codemeta.json";
+        newObj.isDir = false;
+
+        root.children.push(newObj);
+      }
+
+      if (!root.children.some((el) => el.label === "CITATION.cff")) {
+        let newObj = {};
+        newObj.label = "CITATION.cff";
+        newObj.isDir = false;
+
+        root.children.push(newObj);
+      }
+
+      if (!root.children.some((el) => el.label === "LICENSE")) {
+        if (that.workflow.generateLicense) {
+          let newObj = {};
+          newObj.label = "LICENSE";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
       this.fileData.push(root);
       console.log(this.fileData);
     },
