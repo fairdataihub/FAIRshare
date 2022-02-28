@@ -56,133 +56,133 @@
 </template>
 
 <script>
-  import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
-  import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
+import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
+import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
 
-  import { useTokenStore } from "@/store/access";
-  import { ElNotification, ElMessageBox } from "element-plus";
+import { useTokenStore } from "@/store/access";
+import { ElNotification, ElMessageBox } from "element-plus";
 
-  export default {
-    // output component: return a button which can open a dialog that contains two buttons
-    name: "ConnectGithub",
-    components: {
-      GithubTokenConnection: GithubTokenConnection,
-      GithubOAuthConnection: GithubOAuthConnection,
+export default {
+  // output component: return a button which can open a dialog that contains two buttons
+  name: "ConnectGithub",
+  components: {
+    GithubTokenConnection: GithubTokenConnection,
+    GithubOAuthConnection: GithubOAuthConnection,
+  },
+  props: {
+    statusChangeFunction: {
+      type: Function,
+      required: false,
+      default: () => {},
     },
-    props: {
-      statusChangeFunction: {
-        type: Function,
-        required: false,
-        default: () => {},
-      },
+  },
+  setup() {
+    const manager = useTokenStore();
+    return {
+      manager,
+    };
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      showTokenConnect: false,
+      showOAuthConnect: false,
+    };
+  },
+  methods: {
+    // callbacks for cleaning
+    hideGithubTokenConnect() {
+      this.showTokenConnect = false;
     },
-    setup() {
-      const manager = useTokenStore();
-      return {
-        manager,
-      };
+    hideGithubOAuthConnect() {
+      this.showOAuthConnect = false;
     },
-    data() {
-      return {
-        dialogVisible: false,
-        showTokenConnect: false,
-        showOAuthConnect: false,
-      };
+    // call child components
+    showGithubTokenConnect() {
+      this.showTokenConnect = true;
+      this.dialogVisible = false;
     },
-    methods: {
-      // callbacks for cleaning
-      hideGithubTokenConnect() {
-        this.showTokenConnect = false;
-      },
-      hideGithubOAuthConnect() {
-        this.showOAuthConnect = false;
-      },
-      // call child components
-      showGithubTokenConnect() {
-        this.showTokenConnect = true;
-        this.dialogVisible = false;
-      },
-      showGithubOAuthConnect() {
-        this.showOAuthConnect = true;
-        this.dialogVisible = false;
-      },
-      // delete key or add key
-      interactWithService(serviceName) {
-        if (serviceName == "github") {
-          if ("github" in this.manager.accessTokens) {
-            this.APIkeyWarning("github");
-          } else {
-            this.dialogVisible = true;
-          }
-        }
-      },
-      // delete key and give notification
-      APIkeyWarning(key) {
-        ElMessageBox.confirm(
-          "Disconnecting will delete the access token stored. Continue?",
-          "Warning",
-          {
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            type: "warning",
-          }
-        )
-          .then(async () => {
-            this.deleteToken(key);
-          })
-          .catch(() => {
-            // ElNotification({
-            //   type: "info",
-            //   message: "Delete canceled",
-            //   position: "bottom-right",
-            //   duration: 2000,
-            // });
-          });
-      },
-      async deleteToken(key) {
-        let errorFound = false;
-        try {
-          await this.manager.deleteToken(key);
-          this.statusChangeFunction("disconnected");
-        } catch (e) {
-          errorFound = true;
-          console.log(e);
-        }
-        if (!errorFound) {
-          ElNotification({
-            type: "success",
-            message: "Deleted",
-            position: "bottom-right",
-            duration: 2000,
-          });
-        }
-      },
+    showGithubOAuthConnect() {
+      this.showOAuthConnect = true;
+      this.dialogVisible = false;
     },
-    computed: {
-      // github status for the button
-      githubDetails() {
-        let githubObject = {
-          status: "Not Connected",
-          name: "",
-          action: "Connect to GitHub",
-          buttonStyle: "primary-plain-button",
-        };
+    // delete key or add key
+    interactWithService(serviceName) {
+      if (serviceName == "github") {
         if ("github" in this.manager.accessTokens) {
-          githubObject.status = "Connected";
-          githubObject.name = this.manager.accessTokens.github.name;
-          githubObject.action = "Disconnect from GitHub";
-          githubObject.buttonStyle = "danger-plain-button";
+          this.APIkeyWarning("github");
+        } else {
+          this.dialogVisible = true;
         }
-        return githubObject;
-      },
+      }
     },
-  };
+    // delete key and give notification
+    APIkeyWarning(key) {
+      ElMessageBox.confirm(
+        "Disconnecting will delete the access token stored. Continue?",
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(async () => {
+          this.deleteToken(key);
+        })
+        .catch(() => {
+          // ElNotification({
+          //   type: "info",
+          //   message: "Delete canceled",
+          //   position: "bottom-right",
+          //   duration: 2000,
+          // });
+        });
+    },
+    async deleteToken(key) {
+      let errorFound = false;
+      try {
+        await this.manager.deleteToken(key);
+        this.statusChangeFunction("disconnected");
+      } catch (e) {
+        errorFound = true;
+        console.log(e);
+      }
+      if (!errorFound) {
+        ElNotification({
+          type: "success",
+          message: "Deleted",
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
+    },
+  },
+  computed: {
+    // github status for the button
+    githubDetails() {
+      let githubObject = {
+        status: "Not Connected",
+        name: "",
+        action: "Connect to GitHub",
+        buttonStyle: "primary-plain-button",
+      };
+      if ("github" in this.manager.accessTokens) {
+        githubObject.status = "Connected";
+        githubObject.name = this.manager.accessTokens.github.name;
+        githubObject.action = "Disconnect from GitHub";
+        githubObject.buttonStyle = "danger-plain-button";
+      }
+      return githubObject;
+    },
+  },
+};
 </script>
 <style scoped>
-  .dialog-Container {
-    @apply flex h-32 flex-col items-center justify-center gap-3;
-  }
-  .inputField {
-    @apply flex gap-6;
-  }
+.dialog-Container {
+  @apply flex h-32 flex-col items-center justify-center gap-3;
+}
+.inputField {
+  @apply flex gap-6;
+}
 </style>

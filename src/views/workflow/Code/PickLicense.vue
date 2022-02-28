@@ -164,224 +164,145 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "@/store/datasets";
-  import { useTokenStore } from "@/store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
-  import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
-  import { Icon } from "@iconify/vue";
-  import { ElLoading, ElMessage } from "element-plus";
-  import axios from "axios";
+import { Icon } from "@iconify/vue";
+import { ElLoading, ElMessage } from "element-plus";
+import axios from "axios";
 
-  // import { QuillEditor } from "@vueup/vue-quill";
-  // import "@vueup/vue-quill/dist/vue-quill.snow.css";
+// import { QuillEditor } from "@vueup/vue-quill";
+// import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
-  export default {
-    name: "CodePickLicense",
-    components: {
-      Icon,
-      // QuillEditor,
-    },
-    data() {
-      return {
-        loading: true,
-        datasetStore: useDatasetsStore(),
-        tokens: useTokenStore(),
-        datasetID: this.$route.params.datasetID,
-        workflowID: this.$route.params.workflowID,
-        dataset: {},
-        workflow: {},
-        questions: [
-          "Is the data being curated in accordance with the standards?",
-          "Is the data being curated in accordance with the standards?",
+export default {
+  name: "CodePickLicense",
+  components: {
+    Icon,
+    // QuillEditor,
+  },
+  data() {
+    return {
+      loading: true,
+      datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
+      datasetID: this.$route.params.datasetID,
+      workflowID: this.$route.params.workflowID,
+      dataset: {},
+      workflow: {},
+      questions: [
+        "Is the data being curated in accordance with the standards?",
+        "Is the data being curated in accordance with the standards?",
+      ],
+      licenseForm: {
+        license: "",
+      },
+      rules: {
+        license: [
+          {
+            type: "string",
+            required: true,
+            message: "Please select your license",
+            trigger: "change",
+          },
         ],
-        licenseForm: {
-          license: "",
-        },
-        rules: {
-          license: [
-            {
-              type: "string",
-              required: true,
-              message: "Please select your license",
-              trigger: "change",
-            },
-          ],
-        },
-        licenseHtmlUrl: "",
-        licenseTitle: "",
-        showLicenseDetails: false,
-        loadingLicenseDetails: false,
-        licenseOptions: licensesJSON.licenses,
-        spinnerGlobal: null,
-        licenseChanged: false,
-        originalLicense: "",
-        saveLicense: "",
-        displayLicenseEditor: false,
-        draftLicense: "",
-      };
-    },
-    computed: {
-      licenseDisabled() {
-        let disabled = false;
-
-        if (this.licenseForm.license === "") {
-          return true;
-        }
-
-        if (this.licenseChanged) {
-          disabled = true;
-        }
-
-        if (disabled && this.saveLicense === "") {
-          return true;
-        } else if (disabled && this.saveLicense === "No") {
-          return false;
-        }
-
-        return disabled;
       },
-    },
-    methods: {
-      finishLoading() {
-        this.loadingLicenseDetails = false;
-        this.loading = false;
-      },
-      async openLicenseDetails() {
-        this.spinnerGlobal = await this.createLoading("loading...");
+      licenseHtmlUrl: "",
+      licenseTitle: "",
+      showLicenseDetails: false,
+      loadingLicenseDetails: false,
+      licenseOptions: licensesJSON.licenses,
+      spinnerGlobal: null,
+      licenseChanged: false,
+      originalLicense: "",
+      saveLicense: "",
+      displayLicenseEditor: false,
+      draftLicense: "",
+    };
+  },
+  computed: {
+    licenseDisabled() {
+      let disabled = false;
 
-        this.licenseHtmlUrl = "/";
+      if (this.licenseForm.license === "") {
+        return true;
+      }
+
+      if (this.licenseChanged) {
+        disabled = true;
+      }
+
+      if (disabled && this.saveLicense === "") {
+        return true;
+      } else if (disabled && this.saveLicense === "No") {
+        return false;
+      }
+
+      return disabled;
+    },
+  },
+  methods: {
+    finishLoading() {
+      this.loadingLicenseDetails = false;
+      this.loading = false;
+    },
+    async openLicenseDetails() {
+      this.spinnerGlobal = await this.createLoading("loading...");
+
+      this.licenseHtmlUrl = "/";
+      const licenseId = this.licenseForm.license;
+
+      //get license object
+      const licenseObject = await this.licenseOptions.find(
+        (license) => license.licenseId === licenseId
+      );
+
+      this.licenseHtmlUrl = licenseObject.reference;
+      this.licenseTitle = licenseObject.name;
+
+      this.showLicenseDetails = true;
+      this.loadingLicenseDetails = true;
+      await this.spinnerGlobal.close();
+    },
+    createLoading(loadingText) {
+      const loading = ElLoading.service({
+        lock: true,
+        text: loadingText,
+      });
+      return loading;
+    },
+    pickSuggestedLicense(license) {
+      this.licenseForm.license = license;
+      this.licenseChange(license);
+    },
+    licenseChange(val) {
+      if (this.originalLicense !== val) {
+        this.licenseChanged = true;
+        this.displayLicenseEditor = false;
+        this.saveLicense = "";
+        this.draftLicense = "";
+      } else {
+        this.licenseChanged = false;
+      }
+    },
+    async showLicenseEditor() {
+      if (this.saveLicense === "Yes") {
         const licenseId = this.licenseForm.license;
 
-        //get license object
-        const licenseObject = await this.licenseOptions.find(
+        // get license object
+        const licenseObject = this.licenseOptions.find(
           (license) => license.licenseId === licenseId
         );
 
-        this.licenseHtmlUrl = licenseObject.reference;
-        this.licenseTitle = licenseObject.name;
+        const licensejson = licenseObject.detailsUrl;
 
-        this.showLicenseDetails = true;
-        this.loadingLicenseDetails = true;
-        await this.spinnerGlobal.close();
-      },
-      createLoading(loadingText) {
-        const loading = ElLoading.service({
-          lock: true,
-          text: loadingText,
-        });
-        return loading;
-      },
-      pickSuggestedLicense(license) {
-        this.licenseForm.license = license;
-        this.licenseChange(license);
-      },
-      licenseChange(val) {
-        if (this.originalLicense !== val) {
-          this.licenseChanged = true;
-          this.displayLicenseEditor = false;
-          this.saveLicense = "";
-          this.draftLicense = "";
-        } else {
-          this.licenseChanged = false;
-        }
-      },
-      async showLicenseEditor() {
-        if (this.saveLicense === "Yes") {
-          const licenseId = this.licenseForm.license;
-
-          // get license object
-          const licenseObject = this.licenseOptions.find(
-            (license) => license.licenseId === licenseId
-          );
-
-          const licensejson = licenseObject.detailsUrl;
-
-          const response = await axios
-            .get(`${this.$server_url}/utilities/requestjson`, {
-              params: {
-                url: licensejson,
-              },
-            })
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-              return "ERROR";
-            });
-
-          console.log(response);
-          this.draftLicense = response.licenseText;
-
-          this.displayLicenseEditor = true;
-        } else {
-          this.displayLicenseEditor = false;
-        }
-      },
-      generateContinue() {
-        if (this.draftLicense.trim() == "") {
-          ElMessage({
-            message: "Your license text cannot be empty",
-            type: "error",
-          });
-          return;
-        }
-
-        this.dataset.data.Code.questions.license = this.licenseForm.license;
-        this.dataset.data.general.questions.license = this.licenseForm.license;
-
-        // turn this to false after license is generated at the end of the workflow
-        this.workflow.generateLicense = true;
-        this.workflow.licenseText = this.draftLicense;
-
-        this.datasetStore.updateCurrentDataset(this.dataset);
-        this.datasetStore.syncDatasets();
-
-        this.$router.push(
-          `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-        );
-      },
-      startCuration() {
-        this.$refs.licenseForm.validate((valid) => {
-          console.log(valid);
-          if (valid) {
-            this.dataset.data.Code.questions.license = this.licenseForm.license;
-            this.dataset.data.general.questions.license =
-              this.licenseForm.license;
-
-            this.datasetStore.updateCurrentDataset(this.dataset);
-            this.datasetStore.syncDatasets();
-
-            this.$router.push(
-              `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-            );
-          }
-        });
-      },
-      async prefillGithubLicense() {
-        let loadingState = await this.createLoading();
-
-        // get a list of contributors for the repo
-        const tokenObject = await this.tokens.getToken("github");
-        const GithubAccessToken = tokenObject.token;
-
-        const selectedRepo = this.workflow.github.repo;
-
-        let response = "";
-
-        response = await axios
-          .get(
-            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`,
-            {
-              params: {
-                accept: "application/vnd.github.v3+json",
-              },
-              headers: {
-                Authorization: `Bearer  ${GithubAccessToken}`,
-              },
-            }
-          )
+        const response = await axios
+          .get(`${this.$server_url}/utilities/requestjson`, {
+            params: {
+              url: licensejson,
+            },
+          })
           .then((response) => {
             return response.data;
           })
@@ -390,63 +311,138 @@
             return "ERROR";
           });
 
-        if (response !== "ERROR") {
-          if ("license" in response && response.license != null) {
-            if (
-              "spdx_id" in response.license &&
-              (response.license.spdx_id != null ||
-                response.license.spdx_id != "")
-            ) {
-              this.originalLicense =
-                this.licenseForm.license =
-                this.dataset.data.Code.questions.license =
-                  response.license.spdx_id;
-              // this.licenseForm.license = this.dataset.data.Code.questions.license;
-              // this.originalLicense = this.licenseForm.license;
-            }
+        console.log(response);
+        this.draftLicense = response.licenseText;
+
+        this.displayLicenseEditor = true;
+      } else {
+        this.displayLicenseEditor = false;
+      }
+    },
+    generateContinue() {
+      if (this.draftLicense.trim() == "") {
+        ElMessage({
+          message: "Your license text cannot be empty",
+          type: "error",
+        });
+        return;
+      }
+
+      this.dataset.data.Code.questions.license = this.licenseForm.license;
+      this.dataset.data.general.questions.license = this.licenseForm.license;
+
+      // turn this to false after license is generated at the end of the workflow
+      this.workflow.generateLicense = true;
+      this.workflow.licenseText = this.draftLicense;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      this.$router.push(
+        `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
+      );
+    },
+    startCuration() {
+      this.$refs.licenseForm.validate((valid) => {
+        console.log(valid);
+        if (valid) {
+          this.dataset.data.Code.questions.license = this.licenseForm.license;
+          this.dataset.data.general.questions.license =
+            this.licenseForm.license;
+
+          this.datasetStore.updateCurrentDataset(this.dataset);
+          this.datasetStore.syncDatasets();
+
+          this.$router.push(
+            `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
+          );
+        }
+      });
+    },
+    async prefillGithubLicense() {
+      let loadingState = await this.createLoading();
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response !== "ERROR") {
+        if ("license" in response && response.license != null) {
+          if (
+            "spdx_id" in response.license &&
+            (response.license.spdx_id != null || response.license.spdx_id != "")
+          ) {
+            this.originalLicense =
+              this.licenseForm.license =
+              this.dataset.data.Code.questions.license =
+                response.license.spdx_id;
+            // this.licenseForm.license = this.dataset.data.Code.questions.license;
+            // this.originalLicense = this.licenseForm.license;
           }
         }
+      }
 
-        loadingState.close();
-      },
+      loadingState.close();
     },
-    async mounted() {
-      this.dataset = await this.datasetStore.getCurrentDataset();
+  },
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
 
-      this.workflow = this.dataset.workflows[this.workflowID];
+    this.workflow = this.dataset.workflows[this.workflowID];
 
-      this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(4);
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(4);
 
-      this.workflow.currentRoute = this.$route.path;
+    this.workflow.currentRoute = this.$route.path;
 
-      console.log(this.dataset.data.general.questions);
+    console.log(this.dataset.data.general.questions);
 
-      if (
-        "general" in this.dataset.data &&
-        "questions" in this.dataset.data.general &&
-        "license" in this.dataset.data.general.questions
-      ) {
-        console.log(this.dataset.data.general.questions.license);
-        this.licenseForm.license = this.dataset.data.general.questions.license;
-        this.originalLicense = this.licenseForm.license;
-      } else {
-        if ("source" in this.workflow) {
-          if (this.workflow.source.type === "github") {
-            await this.prefillGithubLicense();
-          }
-          if (this.workflow.source.type === "local") {
-            this.licenseForm.license = "";
-            this.originalLicense = "";
-          }
-        } else {
+    if (
+      "general" in this.dataset.data &&
+      "questions" in this.dataset.data.general &&
+      "license" in this.dataset.data.general.questions
+    ) {
+      console.log(this.dataset.data.general.questions.license);
+      this.licenseForm.license = this.dataset.data.general.questions.license;
+      this.originalLicense = this.licenseForm.license;
+    } else {
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          await this.prefillGithubLicense();
+        }
+        if (this.workflow.source.type === "local") {
           this.licenseForm.license = "";
           this.originalLicense = "";
         }
+      } else {
+        this.licenseForm.license = "";
+        this.originalLicense = "";
       }
-    },
-  };
+    }
+  },
+};
 </script>
 
 <style></style>

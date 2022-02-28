@@ -45,70 +45,70 @@
 </template>
 
 <script>
-  export default {
-    name: "FormCardContent",
-    props: {
-      stepId: {
-        type: Number,
-        default: 1,
-        required: true,
-      },
-      currentStepId: {
-        type: Number,
-      },
-      nextStep: {
-        type: Function,
-      },
-      prevStep: {
-        type: Function,
-      },
-      validityCheck: {
-        type: Object,
-        default: () => {},
-      },
-      lastStep: {
-        type: Boolean,
-        default: false,
-      },
-      stepTitle: {
-        type: String,
-        default: "",
-      },
+export default {
+  name: "FormCardContent",
+  props: {
+    stepId: {
+      type: Number,
+      default: 1,
+      required: true,
     },
-    data() {
-      return {};
+    currentStepId: {
+      type: Number,
     },
-    computed: {
-      firstStep() {
-        return this.currentStepId === 1;
-      },
-      nextText() {
-        return this.lastStep ? "Continue" : "Next";
-      },
-      prevText() {
-        if (this.currentStepId === 1) {
-          return "Back";
-        } else {
-          return "Previous";
-        }
-      },
-      prevType() {
-        if (this.currentStepId === 1) {
-          return "danger";
-        } else {
-          return "info";
-        }
-      },
-      checkInvalidStatus() {
-        for (const key in this.validityCheck) {
-          if (this.validityCheck[key]) {
-            return true;
-          }
-        }
-        return false;
-      },
+    nextStep: {
+      type: Function,
     },
-    methods: {},
-    async mounted() {},
-  };
+    prevStep: {
+      type: Function,
+    },
+    validityCheck: {
+      type: Object,
+      default: () => {},
+    },
+    lastStep: {
+      type: Boolean,
+      default: false,
+    },
+    stepTitle: {
+      type: String,
+      default: "",
+    },
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    firstStep() {
+      return this.currentStepId === 1;
+    },
+    nextText() {
+      return this.lastStep ? "Continue" : "Next";
+    },
+    prevText() {
+      if (this.currentStepId === 1) {
+        return "Back";
+      } else {
+        return "Previous";
+      }
+    },
+    prevType() {
+      if (this.currentStepId === 1) {
+        return "danger";
+      } else {
+        return "info";
+      }
+    },
+    checkInvalidStatus() {
+      for (const key in this.validityCheck) {
+        if (this.validityCheck[key]) {
+          return true;
+        }
+      }
+      return false;
+    },
+  },
+  methods: {},
+  async mounted() {},
+};
 </script>

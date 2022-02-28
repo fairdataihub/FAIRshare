@@ -248,118 +248,118 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "@/store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
-  import { ElMessageBox } from "element-plus";
+import { ElMessageBox } from "element-plus";
 
-  export default {
-    name: "CodeReviewStandards",
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        datasetID: this.$route.params.datasetID,
-        workflowID: this.$route.params.workflowID,
-        dataset: {},
-        workflow: {},
-        activeNames: [],
-        questions: {
-          question1: "",
-          question2: "",
-          question3: "",
-          question4: "",
-          question5: "",
-        },
-      };
+export default {
+  name: "CodeReviewStandards",
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      datasetID: this.$route.params.datasetID,
+      workflowID: this.$route.params.workflowID,
+      dataset: {},
+      workflow: {},
+      activeNames: [],
+      questions: {
+        question1: "",
+        question2: "",
+        question3: "",
+        question4: "",
+        question5: "",
+      },
+    };
+  },
+  computed: {
+    disableContinue() {
+      //disable continue button if no questions answered
+      let disabled = false;
+
+      for (const question in this.questions) {
+        if (this.questions[question] === "") {
+          disabled = true;
+        }
+      }
+
+      return disabled;
     },
-    computed: {
-      disableContinue() {
-        //disable continue button if no questions answered
-        let disabled = false;
-
-        for (const question in this.questions) {
-          if (this.questions[question] === "") {
-            disabled = true;
-          }
-        }
-
-        return disabled;
-      },
+  },
+  methods: {
+    async openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
-    methods: {
-      async openWebsite(url) {
-        window.ipcRenderer.send("open-link-in-browser", url);
-      },
-      async goBack() {
-        let routerPath = "";
+    async goBack() {
+      let routerPath = "";
 
-        if ("source" in this.workflow) {
-          if (this.workflow.source.type === "local") {
-            routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
-          } else if (this.workflow.source.type === "github") {
-            routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`;
-          }
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "local") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        } else if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`;
         }
+      }
 
-        this.$router.push(routerPath);
-      },
-      async startCuration() {
-        let showWarning = false;
-
-        for (const question in this.questions) {
-          if (this.questions[question] === "No") {
-            showWarning = true;
-          }
-        }
-
-        if (showWarning) {
-          ElMessageBox.confirm(
-            "For your research software to be fully FAIR, we expect you to answer 'Yes' to all the questions. We suggest to review again where you answered 'No' and modyfying your data files if necessary before contuining.",
-            "Warning",
-            {
-              confirmButtonText: "Continue anyway",
-              cancelButtonText: "I want to go back and review",
-              type: "warning",
-            }
-          )
-            .then(() => {
-              this.dataset.data.Code.standards = this.questions;
-
-              this.datasetStore.updateCurrentDataset(this.dataset);
-              this.datasetStore.syncDatasets();
-
-              this.$router.push(
-                `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-              );
-            })
-            .catch(() => {});
-        } else {
-          this.dataset.data.Code.standards = this.questions;
-
-          this.datasetStore.updateCurrentDataset(this.dataset);
-          this.datasetStore.syncDatasets();
-
-          this.$router.push(
-            `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-          );
-        }
-      },
+      this.$router.push(routerPath);
     },
-    async mounted() {
-      this.dataset = await this.datasetStore.getCurrentDataset();
+    async startCuration() {
+      let showWarning = false;
 
-      this.workflow = this.dataset.workflows[this.workflowID];
+      for (const question in this.questions) {
+        if (this.questions[question] === "No") {
+          showWarning = true;
+        }
+      }
 
-      this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(2);
+      if (showWarning) {
+        ElMessageBox.confirm(
+          "For your research software to be fully FAIR, we expect you to answer 'Yes' to all the questions. We suggest to review again where you answered 'No' and modyfying your data files if necessary before contuining.",
+          "Warning",
+          {
+            confirmButtonText: "Continue anyway",
+            cancelButtonText: "I want to go back and review",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            this.dataset.data.Code.standards = this.questions;
 
-      this.workflow.currentRoute = this.$route.path;
+            this.datasetStore.updateCurrentDataset(this.dataset);
+            this.datasetStore.syncDatasets();
 
-      if ("standards" in this.dataset.data.Code) {
-        this.questions = this.dataset.data.Code.standards;
+            this.$router.push(
+              `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
+            );
+          })
+          .catch(() => {});
+      } else {
+        this.dataset.data.Code.standards = this.questions;
+
+        this.datasetStore.updateCurrentDataset(this.dataset);
+        this.datasetStore.syncDatasets();
+
+        this.$router.push(
+          `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
+        );
       }
     },
-  };
+  },
+  async mounted() {
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(2);
+
+    this.workflow.currentRoute = this.$route.path;
+
+    if ("standards" in this.dataset.data.Code) {
+      this.questions = this.dataset.data.Code.standards;
+    }
+  },
+};
 </script>
 
 <style></style>

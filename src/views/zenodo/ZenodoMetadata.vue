@@ -1152,728 +1152,725 @@
 </template>
 
 <script>
-  import { Icon } from "@iconify/vue";
-  import draggable from "vuedraggable";
-  import { v4 as uuidv4 } from "uuid";
-  import semver from "semver";
-  import doiRegex from "doi-regex";
-  import { ElMessageBox, ElMessage } from "element-plus";
-  import validator from "validator";
+import { Icon } from "@iconify/vue";
+import draggable from "vuedraggable";
+import { v4 as uuidv4 } from "uuid";
+import semver from "semver";
+import doiRegex from "doi-regex";
+import { ElMessageBox, ElMessage } from "element-plus";
+import validator from "validator";
 
-  import _ from "lodash";
+import _ from "lodash";
 
-  import { useDatasetsStore } from "@/store/datasets";
-  import licensesJSON from "@/assets/supplementalFiles/licenses.json";
-  import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
-  import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
-  import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
+import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
-  export default {
-    name: "ZenodoMetadata",
-    components: {
-      draggable,
-      Icon,
-    },
-    data() {
+export default {
+  name: "ZenodoMetadata",
+  components: {
+    draggable,
+    Icon,
+  },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      dataset: {},
+      workflowID: this.$route.params.workflowID,
+      workflow: {},
+      loading: true,
+      savingSpinner: true,
+      activeNames: [],
+      drag: true,
+      licenseOptions: licensesJSON.licenses,
+      languageOptions: languagesJSON.languages,
+      relatedIdentifierRelationships:
+        zenodoMetadataOptions.relatedIdentifierRelationships,
+      relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
+      contributorTypes: contributorTypesJSON.contributorTypes,
+      zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
+      authorsErrorMessage: "",
+      contributorsErrorMessage: "",
+      subjectsErrorMessage: "",
+      titleErrorMessage: "",
+      descriptionErrorMessage: "",
+      publicationDateErrorMessage: "",
+      versionErrorMessage: "",
+      relatedIdentifiersErrorMessage: "",
+      invalidStatus: {},
+      rulesForZenodoMetadataForm: {
+        title: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "blur",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "Required.",
+            trigger: "blur",
+          },
+        ],
+        license: [
+          {
+            required: true,
+            message:
+              "Required. Selected license applies to all of your files in the dataset.",
+            trigger: "change",
+          },
+        ],
+      },
+      originalObject: {},
+    };
+  },
+  computed: {
+    dragOptions() {
       return {
-        datasetStore: useDatasetsStore(),
-        dataset: {},
-        workflowID: this.$route.params.workflowID,
-        workflow: {},
-        loading: true,
-        savingSpinner: true,
-        activeNames: [],
-        drag: true,
-        licenseOptions: licensesJSON.licenses,
-        languageOptions: languagesJSON.languages,
-        relatedIdentifierRelationships:
-          zenodoMetadataOptions.relatedIdentifierRelationships,
-        relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
-        contributorTypes: contributorTypesJSON.contributorTypes,
-        zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
-        authorsErrorMessage: "",
-        contributorsErrorMessage: "",
-        subjectsErrorMessage: "",
-        titleErrorMessage: "",
-        descriptionErrorMessage: "",
-        publicationDateErrorMessage: "",
-        versionErrorMessage: "",
-        relatedIdentifiersErrorMessage: "",
-        invalidStatus: {},
-        rulesForZenodoMetadataForm: {
-          title: [
-            {
-              required: true,
-              message: "Required.",
-              trigger: "blur",
-            },
-          ],
-          description: [
-            {
-              required: true,
-              message: "Required.",
-              trigger: "blur",
-            },
-          ],
-          license: [
-            {
-              required: true,
-              message:
-                "Required. Selected license applies to all of your files in the dataset.",
-              trigger: "change",
-            },
-          ],
-        },
-        originalObject: {},
+        animation: 200,
+        disabled: false,
       };
     },
-    computed: {
-      dragOptions() {
-        return {
-          animation: 200,
-          disabled: false,
-        };
-      },
-      checkInvalidStatus() {
-        console.log(this.invalidStatus);
+    checkInvalidStatus() {
+      console.log(this.invalidStatus);
 
-        if (this.$refs.zmForm) {
-          this.$refs.zmForm.validate();
-        }
+      if (this.$refs.zmForm) {
+        this.$refs.zmForm.validate();
+      }
 
-        if (this.invalidStatus == {}) {
+      if (this.invalidStatus == {}) {
+        return true;
+      }
+
+      for (const key in this.invalidStatus) {
+        if (this.invalidStatus[key]) {
           return true;
         }
+      }
 
-        for (const key in this.invalidStatus) {
-          if (this.invalidStatus[key]) {
-            return true;
-          }
-        }
-
-        return false;
-      },
+      return false;
     },
-    methods: {
-      addIds(array) {
-        array.forEach((element) => {
-          element.id = uuidv4();
+  },
+  methods: {
+    addIds(array) {
+      array.forEach((element) => {
+        element.id = uuidv4();
+      });
+    },
+    initializeEmptyObjects(root, obj) {
+      if (typeof obj === "undefined") {
+        root[obj] = {};
+      }
+    },
+    addSubject() {
+      this.zenodoMetadataForm.subjects.push({
+        term: "",
+        identifier: "",
+        id: uuidv4(),
+      });
+    },
+    deleteSubject(id) {
+      this.zenodoMetadataForm.subjects =
+        this.zenodoMetadataForm.subjects.filter((subject) => {
+          return subject.id !== id;
         });
-      },
-      initializeEmptyObjects(root, obj) {
-        if (typeof obj === "undefined") {
-          root[obj] = {};
+    },
+    addAuthor() {
+      this.zenodoMetadataForm.authors.push({
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteAuthor(id) {
+      this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter(
+        (author) => {
+          return author.id !== id;
         }
-      },
-      addSubject() {
-        this.zenodoMetadataForm.subjects.push({
-          term: "",
-          identifier: "",
-          id: uuidv4(),
+      );
+    },
+    addKeyword() {
+      this.zenodoMetadataForm.keywords.push({
+        keyword: "",
+        id: uuidv4(),
+      });
+    },
+    deleteKeyword(id) {
+      this.zenodoMetadataForm.keywords =
+        this.zenodoMetadataForm.keywords.filter((keyword) => {
+          return keyword.id !== id;
         });
-      },
-      deleteSubject(id) {
-        this.zenodoMetadataForm.subjects =
-          this.zenodoMetadataForm.subjects.filter((subject) => {
-            return subject.id !== id;
-          });
-      },
-      addAuthor() {
-        this.zenodoMetadataForm.authors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: uuidv4(),
-        });
-      },
-      deleteAuthor(id) {
-        this.zenodoMetadataForm.authors =
-          this.zenodoMetadataForm.authors.filter((author) => {
-            return author.id !== id;
-          });
-      },
-      addKeyword() {
-        this.zenodoMetadataForm.keywords.push({
-          keyword: "",
-          id: uuidv4(),
-        });
-      },
-      deleteKeyword(id) {
-        this.zenodoMetadataForm.keywords =
-          this.zenodoMetadataForm.keywords.filter((keyword) => {
-            return keyword.id !== id;
-          });
-      },
-      addRelatedIdentifier() {
-        this.zenodoMetadataForm.relatedIdentifiers.push({
-          identifier: "",
-          relationship: "",
-          resourceType: "",
-          id: uuidv4(),
-        });
-      },
-      deleteRelatedIdentifier(id) {
-        this.zenodoMetadataForm.relatedIdentifiers =
-          this.zenodoMetadataForm.relatedIdentifiers.filter(
-            (relatedIdentifier) => {
-              return relatedIdentifier.id !== id;
-            }
-          );
-      },
-      addContributor() {
-        this.zenodoMetadataForm.contributors.push({
-          contributorType: "",
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: uuidv4(),
-        });
-      },
-      deleteContributor(id) {
-        this.zenodoMetadataForm.contributors =
-          this.zenodoMetadataForm.contributors.filter((contributor) => {
-            return contributor.id !== id;
-          });
-      },
-      addReference() {
-        this.zenodoMetadataForm.references.push({
-          reference: "",
-          id: uuidv4(),
-        });
-      },
-      deleteReference(id) {
-        this.zenodoMetadataForm.references =
-          this.zenodoMetadataForm.references.filter((reference) => {
-            return reference.id !== id;
-          });
-      },
-      addSupervisor() {
-        this.zenodoMetadataForm.thesis.supervisors.push({
-          name: "",
-          affiliation: "",
-          orcid: "",
-          id: uuidv4(),
-        });
-      },
-      deleteSupervisor(id) {
-        this.zenodoMetadataForm.thesis.supervisors =
-          this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
-            return supervisor.name !== id;
-          });
-      },
-      addZenodoMetadata(_evt, shouldNavigateBack = false) {
-        console.log(this.zenodoMetadataForm.publicationDate);
-        if (this.zenodoMetadataForm.publicationDate === "") {
-          ElMessage.error("Please add a publication date.");
-          return;
-        }
-
-        if (this.zenodoMetadataForm.license.licenseName === "") {
-          ElMessage.error("Please select a license.");
-          return;
-        }
-
-        this.workflow = this.dataset.workflows[this.workflowID];
-
-        this.workflow.expandOptions = [];
-
-        this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
-        this.datasetStore.updateCurrentDataset(this.dataset);
-        this.datasetStore.syncDatasets();
-
-        if (shouldNavigateBack) {
-          // console.log("shouldNavigateBack");
-          this.$router.push(
-            `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
-          );
-          return;
-        }
-
-        let routerPath = "";
-
-        if ("source" in this.workflow) {
-          if (this.workflow.source.type === "github") {
-            routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/zenodoConnection`;
+    },
+    addRelatedIdentifier() {
+      this.zenodoMetadataForm.relatedIdentifiers.push({
+        identifier: "",
+        relationship: "",
+        resourceType: "",
+        id: uuidv4(),
+      });
+    },
+    deleteRelatedIdentifier(id) {
+      this.zenodoMetadataForm.relatedIdentifiers =
+        this.zenodoMetadataForm.relatedIdentifiers.filter(
+          (relatedIdentifier) => {
+            return relatedIdentifier.id !== id;
           }
-          if (this.workflow.source.type === "local") {
-            routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
-          }
-        } else {
+        );
+    },
+    addContributor() {
+      this.zenodoMetadataForm.contributors.push({
+        contributorType: "",
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteContributor(id) {
+      this.zenodoMetadataForm.contributors =
+        this.zenodoMetadataForm.contributors.filter((contributor) => {
+          return contributor.id !== id;
+        });
+    },
+    addReference() {
+      this.zenodoMetadataForm.references.push({
+        reference: "",
+        id: uuidv4(),
+      });
+    },
+    deleteReference(id) {
+      this.zenodoMetadataForm.references =
+        this.zenodoMetadataForm.references.filter((reference) => {
+          return reference.id !== id;
+        });
+    },
+    addSupervisor() {
+      this.zenodoMetadataForm.thesis.supervisors.push({
+        name: "",
+        affiliation: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteSupervisor(id) {
+      this.zenodoMetadataForm.thesis.supervisors =
+        this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
+          return supervisor.name !== id;
+        });
+    },
+    addZenodoMetadata(_evt, shouldNavigateBack = false) {
+      console.log(this.zenodoMetadataForm.publicationDate);
+      if (this.zenodoMetadataForm.publicationDate === "") {
+        ElMessage.error("Please add a publication date.");
+        return;
+      }
+
+      if (this.zenodoMetadataForm.license.licenseName === "") {
+        ElMessage.error("Please select a license.");
+        return;
+      }
+
+      this.workflow = this.dataset.workflows[this.workflowID];
+
+      this.workflow.expandOptions = [];
+
+      this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      if (shouldNavigateBack) {
+        // console.log("shouldNavigateBack");
+        this.$router.push(
+          `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
+        );
+        return;
+      }
+
+      let routerPath = "";
+
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/zenodoConnection`;
+        }
+        if (this.workflow.source.type === "local") {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
         }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      }
 
-        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
-        this.$router.push({ path: routerPath });
+      // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      this.$router.push({ path: routerPath });
 
-        //validate first
-      },
-      prefillZenodoQuestions() {
-        if (
-          "questions" in this.dataset.data.general &&
-          Object.keys(this.dataset.data.general.questions).length !== 0
-        ) {
-          const generalForm = this.dataset.data.general.questions;
-          // console.log(generalForm);
+      //validate first
+    },
+    prefillZenodoQuestions() {
+      if (
+        "questions" in this.dataset.data.general &&
+        Object.keys(this.dataset.data.general.questions).length !== 0
+      ) {
+        const generalForm = this.dataset.data.general.questions;
+        // console.log(generalForm);
 
-          let date = new Date();
+        let date = new Date();
 
-          this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(
-            date.getMonth() + 1
-          )
-            .toString()
-            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
-          if ("name" in generalForm) {
-            this.zenodoMetadataForm.title = generalForm.name;
+        if ("name" in generalForm) {
+          this.zenodoMetadataForm.title = generalForm.name;
+        }
+
+        if ("description" in generalForm) {
+          this.zenodoMetadataForm.description = generalForm.description;
+        }
+
+        if ("keywords" in generalForm) {
+          this.zenodoMetadataForm.keywords = generalForm.keywords;
+        }
+
+        if ("license" in generalForm) {
+          this.zenodoMetadataForm.license.licenseName = generalForm.license;
+        }
+
+        if ("authors" in generalForm) {
+          let authors = generalForm.authors;
+          let newAuthors = [];
+          authors.forEach((author) => {
+            let authorName = "";
+
+            if (author.familyName) {
+              authorName = author.familyName + ", " + author.givenName;
+            } else {
+              authorName = author.givenName;
+            }
+
+            let newAuthor = {
+              name: authorName,
+              affiliation: author.affiliation,
+              orcid: author.orcid,
+              id: uuidv4(),
+            };
+            newAuthors.push(newAuthor);
+          });
+          this.zenodoMetadataForm.authors = newAuthors;
+        }
+
+        if ("contributors" in generalForm) {
+          let contributors = generalForm.contributors;
+          let newContributors = [];
+          contributors.forEach((contributor) => {
+            let newContributor = {
+              contributorType: contributor.contributorType,
+              name: contributor.familyName + ", " + contributor.givenName,
+              affiliation: contributor.affiliation,
+              orcid: contributor.orcid,
+              id: uuidv4(),
+            };
+            newContributors.push(newContributor);
+          });
+          this.zenodoMetadataForm.contributors = newContributors;
+        }
+      }
+    },
+    navigateBack() {
+      let newChanges = false;
+
+      if (!_.isEqual(this.originalObject, this.zenodoMetadataForm)) {
+        newChanges = true;
+      }
+
+      if (newChanges) {
+        ElMessageBox.confirm(
+          "You have some unsaved changes. Do you want to save your edits?",
+          "Warning",
+          {
+            confirmButtonText: "Save and go back",
+            cancelButtonText: "Don't save and go back",
+            type: "warning",
           }
+        )
+          .then(() => {
+            // save changes
+            this.addZenodoMetadata(true, true);
+          })
+          .catch(() => {
+            // don't save changes
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
+            });
+          });
+      } else {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
+        });
+      }
+    },
+  },
+  watch: {
+    "zenodoMetadataForm.authors": {
+      handler(val) {
+        if (val.length === 0) {
+          this.authorsErrorMessage = "Please provide at least one author.";
+          this.invalidStatus.authors = true;
+          this.$refs.zmForm.validate();
+          return;
+        } else {
+          this.authorsErrorMessage = ""; //clear error message
+          this.invalidStatus.authors = false;
+        }
 
-          if ("description" in generalForm) {
-            this.zenodoMetadataForm.description = generalForm.description;
-          }
+        if (val.length > 0) {
+          for (let author of val) {
+            if (author.name === "" || author.affiliation === "") {
+              // console.log("author error");
+              this.authorsErrorMessage =
+                "Name and Affiliation for each author is mandatory";
+              this.invalidStatus.authors = true;
+              this.$refs.zmForm.validate();
+              break;
+            } else {
+              this.authorsErrorMessage = "";
+              this.invalidStatus.authors = false;
+            }
 
-          if ("keywords" in generalForm) {
-            this.zenodoMetadataForm.keywords = generalForm.keywords;
-          }
-
-          if ("license" in generalForm) {
-            this.zenodoMetadataForm.license.licenseName = generalForm.license;
-          }
-
-          if ("authors" in generalForm) {
-            let authors = generalForm.authors;
-            let newAuthors = [];
-            authors.forEach((author) => {
-              let authorName = "";
-
-              if (author.familyName) {
-                authorName = author.familyName + ", " + author.givenName;
-              } else {
-                authorName = author.givenName;
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                // console.log(digit);
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
               }
 
-              let newAuthor = {
-                name: authorName,
-                affiliation: author.affiliation,
-                orcid: author.orcid,
-                id: uuidv4(),
-              };
-              newAuthors.push(newAuthor);
-            });
-            this.zenodoMetadataForm.authors = newAuthors;
-          }
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
 
-          if ("contributors" in generalForm) {
-            let contributors = generalForm.contributors;
-            let newContributors = [];
-            contributors.forEach((contributor) => {
-              let newContributor = {
-                contributorType: contributor.contributorType,
-                name: contributor.familyName + ", " + contributor.givenName,
-                affiliation: contributor.affiliation,
-                orcid: contributor.orcid,
-                id: uuidv4(),
-              };
-              newContributors.push(newContributor);
-            });
-            this.zenodoMetadataForm.contributors = newContributors;
-          }
-        }
-      },
-      navigateBack() {
-        let newChanges = false;
-
-        if (!_.isEqual(this.originalObject, this.zenodoMetadataForm)) {
-          newChanges = true;
-        }
-
-        if (newChanges) {
-          ElMessageBox.confirm(
-            "You have some unsaved changes. Do you want to save your edits?",
-            "Warning",
-            {
-              confirmButtonText: "Save and go back",
-              cancelButtonText: "Don't save and go back",
-              type: "warning",
-            }
-          )
-            .then(() => {
-              // save changes
-              this.addZenodoMetadata(true, true);
-            })
-            .catch(() => {
-              // don't save changes
-              this.$router.push({
-                path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
-              });
-            });
-        } else {
-          this.$router.push({
-            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
-          });
-        }
-      },
-    },
-    watch: {
-      "zenodoMetadataForm.authors": {
-        handler(val) {
-          if (val.length === 0) {
-            this.authorsErrorMessage = "Please provide at least one author.";
-            this.invalidStatus.authors = true;
-            this.$refs.zmForm.validate();
-            return;
-          } else {
-            this.authorsErrorMessage = ""; //clear error message
-            this.invalidStatus.authors = false;
-          }
-
-          if (val.length > 0) {
-            for (let author of val) {
-              if (author.name === "" || author.affiliation === "") {
-                // console.log("author error");
-                this.authorsErrorMessage =
-                  "Name and Affiliation for each author is mandatory";
-                this.invalidStatus.authors = true;
-                this.$refs.zmForm.validate();
-                break;
-              } else {
+              if (checkDigit === orcid.substr(-1)) {
                 this.authorsErrorMessage = "";
                 this.invalidStatus.authors = false;
-              }
-
-              // validate orcid
-              if (author.orcid !== "") {
-                const orcid = author.orcid;
-                let total = 0;
-                for (let i = 0; i < orcid.length - 1; i++) {
-                  const digit = parseInt(orcid.substr(i, 1));
-                  // console.log(digit);
-                  if (isNaN(digit)) {
-                    continue;
-                  }
-                  total = (total + digit) * 2;
-                }
-
-                const remainder = total % 11;
-                const result = (12 - remainder) % 11;
-                const checkDigit = result === 10 ? "X" : String(result);
-
-                if (checkDigit === orcid.substr(-1)) {
-                  this.authorsErrorMessage = "";
-                  this.invalidStatus.authors = false;
-                } else {
-                  // console.log("invalid orcid");
-                  this.authorsErrorMessage = "ORCID is not valid";
-                  this.$refs.zmForm.validate();
-                  this.invalidStatus.authors = true;
-                  break;
-                }
+              } else {
+                // console.log("invalid orcid");
+                this.authorsErrorMessage = "ORCID is not valid";
+                this.$refs.zmForm.validate();
+                this.invalidStatus.authors = true;
+                break;
               }
             }
           }
-        },
-        deep: true,
+        }
       },
-      "zenodoMetadataForm.contributors": {
-        handler(val) {
-          if (val.length > 0) {
-            for (let contributor of val) {
-              if (contributor.name === "" || contributor.affiliation === "") {
-                // console.log("contributor error");
-                this.contributorsErrorMessage =
-                  "Name and Affiliation for each contributor is mandatory";
+      deep: true,
+    },
+    "zenodoMetadataForm.contributors": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let contributor of val) {
+            if (contributor.name === "" || contributor.affiliation === "") {
+              // console.log("contributor error");
+              this.contributorsErrorMessage =
+                "Name and Affiliation for each contributor is mandatory";
+              this.$refs.zmForm.validate();
+              this.invalidStatus.contributors = true;
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
+            }
+
+            // validate orcid
+            if (contributor.orcid !== "") {
+              const orcid = contributor.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              } else {
+                // console.log("invalid orcid");
+                this.contributorsErrorMessage = "ORCID is not valid";
                 this.$refs.zmForm.validate();
                 this.invalidStatus.contributors = true;
                 break;
-              } else {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              }
-
-              // validate orcid
-              if (contributor.orcid !== "") {
-                const orcid = contributor.orcid;
-                let total = 0;
-                for (let i = 0; i < orcid.length - 1; i++) {
-                  const digit = parseInt(orcid.substr(i, 1));
-                  if (isNaN(digit)) {
-                    continue;
-                  }
-                  total = (total + digit) * 2;
-                }
-
-                const remainder = total % 11;
-                const result = (12 - remainder) % 11;
-                const checkDigit = result === 10 ? "X" : String(result);
-
-                if (checkDigit === orcid.substr(-1)) {
-                  this.contributorsErrorMessage = "";
-                  this.invalidStatus.contributors = false;
-                } else {
-                  // console.log("invalid orcid");
-                  this.contributorsErrorMessage = "ORCID is not valid";
-                  this.$refs.zmForm.validate();
-                  this.invalidStatus.contributors = true;
-                  break;
-                }
               }
             }
           }
-        },
-        deep: true,
+        }
       },
-      "zenodoMetadataForm.publicationDate": {
-        handler(val) {
-          if (val === "" || val === null) {
-            this.publicationDateErrorMessage =
-              "Please provide the date of publication.";
-            this.$refs.zmForm.validate();
-            this.invalidStatus.publicationDate = true;
-            return;
-          } else {
-            this.publicationDateErrorMessage = "";
-            this.invalidStatus.publicationDate = false;
-          }
-        },
-        deep: true,
+      deep: true,
+    },
+    "zenodoMetadataForm.publicationDate": {
+      handler(val) {
+        if (val === "" || val === null) {
+          this.publicationDateErrorMessage =
+            "Please provide the date of publication.";
+          this.$refs.zmForm.validate();
+          this.invalidStatus.publicationDate = true;
+          return;
+        } else {
+          this.publicationDateErrorMessage = "";
+          this.invalidStatus.publicationDate = false;
+        }
       },
-      "zenodoMetadataForm.title": {
-        handler(val) {
-          if (val === "") {
-            this.titleErrorMessage =
-              "Please provide a valid and descriptive title.";
-            this.$refs.zmForm.validate();
-            this.invalidStatus.title = true;
-            return;
-          } else {
-            this.titleErrorMessage = "";
-            this.invalidStatus.title = false;
-          }
-        },
-        deep: true,
+      deep: true,
+    },
+    "zenodoMetadataForm.title": {
+      handler(val) {
+        if (val === "") {
+          this.titleErrorMessage =
+            "Please provide a valid and descriptive title.";
+          this.$refs.zmForm.validate();
+          this.invalidStatus.title = true;
+          return;
+        } else {
+          this.titleErrorMessage = "";
+          this.invalidStatus.title = false;
+        }
       },
-      "zenodoMetadataForm.license": {
-        handler(val) {
-          const value = val.licensename;
-          if (value === "" || val === null) {
-            // this.titleErrorMessage =
-            ("Please provide a valid and descriptive title.");
-            this.$refs.zmForm.validate();
-            this.invalidStatus.license = true;
-            return;
-          } else {
-            // this.titleErrorMessage = "";
-            this.invalidStatus.license = false;
-          }
-        },
-        deep: true,
+      deep: true,
+    },
+    "zenodoMetadataForm.license": {
+      handler(val) {
+        const value = val.licensename;
+        if (value === "" || val === null) {
+          // this.titleErrorMessage =
+          ("Please provide a valid and descriptive title.");
+          this.$refs.zmForm.validate();
+          this.invalidStatus.license = true;
+          return;
+        } else {
+          // this.titleErrorMessage = "";
+          this.invalidStatus.license = false;
+        }
       },
-      "zenodoMetadataForm.description": {
-        handler(val) {
-          if (val === "") {
-            this.descriptionErrorMessage =
-              "Please provide a valid and identifiable description.";
-            this.$refs.zmForm.validate();
-            this.invalidStatus.description = true;
-            return;
-          } else {
-            this.descriptionErrorMessage = "";
-            this.invalidStatus.description = false;
-          }
-        },
-        deep: true,
+      deep: true,
+    },
+    "zenodoMetadataForm.description": {
+      handler(val) {
+        if (val === "") {
+          this.descriptionErrorMessage =
+            "Please provide a valid and identifiable description.";
+          this.$refs.zmForm.validate();
+          this.invalidStatus.description = true;
+          return;
+        } else {
+          this.descriptionErrorMessage = "";
+          this.invalidStatus.description = false;
+        }
       },
-      "zenodoMetadataForm.version": {
-        handler(val) {
-          if (val != "" && semver.valid(val) === null) {
-            this.versionErrorMessage = "Please provide a valid version number.";
-            this.$refs.zmForm.validate();
-            this.invalidStatus.version = true;
-            return;
-          } else {
-            this.versionErrorMessage = "";
-            this.invalidStatus.version = false;
-          }
-        },
-        deep: true,
+      deep: true,
+    },
+    "zenodoMetadataForm.version": {
+      handler(val) {
+        if (val != "" && semver.valid(val) === null) {
+          this.versionErrorMessage = "Please provide a valid version number.";
+          this.$refs.zmForm.validate();
+          this.invalidStatus.version = true;
+          return;
+        } else {
+          this.versionErrorMessage = "";
+          this.invalidStatus.version = false;
+        }
       },
-      "zenodoMetadataForm.relatedIdentifiers": {
-        handler(val) {
-          // console.log(val);
-          if (val.length === 0) {
-            this.relatedIdentifiersErrorMessage = "";
-            this.invalidStatus.relatedIdentifiers = false;
-          } else {
-            for (let relatedIdentifier of val) {
-              if (relatedIdentifier.identifier === "") {
+      deep: true,
+    },
+    "zenodoMetadataForm.relatedIdentifiers": {
+      handler(val) {
+        // console.log(val);
+        if (val.length === 0) {
+          this.relatedIdentifiersErrorMessage = "";
+          this.invalidStatus.relatedIdentifiers = false;
+        } else {
+          for (let relatedIdentifier of val) {
+            if (relatedIdentifier.identifier === "") {
+              this.relatedIdentifiersErrorMessage =
+                "Please provide a related identifier.";
+              this.$refs.zmForm.validate();
+              this.invalidStatus.relatedIdentifiers = true;
+              break;
+            } else if (relatedIdentifier.identifier != "") {
+              let validIdentifier = false;
+
+              if (doiRegex().test(relatedIdentifier.identifier)) {
+                validIdentifier = true;
+              }
+
+              if (
+                !validIdentifier &&
+                validator.isURL(relatedIdentifier.identifier)
+              ) {
+                validIdentifier = true;
+              } else {
+                validIdentifier = false;
+              }
+
+              if (!validIdentifier) {
                 this.relatedIdentifiersErrorMessage =
-                  "Please provide a related identifier.";
+                  "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
                 this.$refs.zmForm.validate();
                 this.invalidStatus.relatedIdentifiers = true;
                 break;
-              } else if (relatedIdentifier.identifier != "") {
-                let validIdentifier = false;
-
-                if (doiRegex().test(relatedIdentifier.identifier)) {
-                  validIdentifier = true;
-                }
-
-                if (
-                  !validIdentifier &&
-                  validator.isURL(relatedIdentifier.identifier)
-                ) {
-                  validIdentifier = true;
-                } else {
-                  validIdentifier = false;
-                }
-
-                if (!validIdentifier) {
-                  this.relatedIdentifiersErrorMessage =
-                    "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
-                  this.$refs.zmForm.validate();
-                  this.invalidStatus.relatedIdentifiers = true;
-                  break;
-                } else {
-                  this.relatedIdentifiersErrorMessage = "";
-                  this.invalidStatus.relatedIdentifiers = false;
-                }
               } else {
                 this.relatedIdentifiersErrorMessage = "";
                 this.invalidStatus.relatedIdentifiers = false;
               }
+            } else {
+              this.relatedIdentifiersErrorMessage = "";
+              this.invalidStatus.relatedIdentifiers = false;
             }
           }
-        },
-        deep: true,
+        }
       },
-      "zenodoMetadataForm.subjects": {
-        handler(val) {
-          if (val.length > 0) {
-            for (let subject of val) {
-              if (subject.term === "") {
-                // console.log("subject error");
+      deep: true,
+    },
+    "zenodoMetadataForm.subjects": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let subject of val) {
+            if (subject.term === "") {
+              // console.log("subject error");
+              this.subjectsErrorMessage =
+                "Please provide a valid and identifiable subject.";
+              this.$refs.zmForm.validate();
+              this.invalidStatus.subjects = true;
+              break;
+            } else {
+              const validIdentifier = validator.isURL(val);
+
+              if (!validIdentifier) {
                 this.subjectsErrorMessage =
-                  "Please provide a valid and identifiable subject.";
+                  "Please provide a valid identifier. Your identifier has to be in the form of a URL";
                 this.$refs.zmForm.validate();
                 this.invalidStatus.subjects = true;
                 break;
               } else {
-                const validIdentifier = validator.isURL(val);
-
-                if (!validIdentifier) {
-                  this.subjectsErrorMessage =
-                    "Please provide a valid identifier. Your identifier has to be in the form of a URL";
-                  this.$refs.zmForm.validate();
-                  this.invalidStatus.subjects = true;
-                  break;
-                } else {
-                  this.subjectsErrorMessage = "";
-                  this.invalidStatus.subjects = false;
-                }
+                this.subjectsErrorMessage = "";
+                this.invalidStatus.subjects = false;
               }
             }
-          } else {
-            this.subjectsErrorMessage = "";
-            this.invalidStatus.subjects = false;
           }
-        },
-        deep: true,
+        } else {
+          this.subjectsErrorMessage = "";
+          this.invalidStatus.subjects = false;
+        }
       },
+      deep: true,
     },
-    async mounted() {
-      this.loading = this.$loading({
-        lock: true,
-        text: "Loading",
-        fullscreen: true,
-        background: "rgba(0, 0, 0, 0.7)",
-      });
+  },
+  async mounted() {
+    this.loading = this.$loading({
+      lock: true,
+      text: "Loading",
+      fullscreen: true,
+      background: "rgba(0, 0, 0, 0.7)",
+    });
 
-      this.zenodoMetadataForm = zenodoMetadataOptions.defaultForm;
+    this.zenodoMetadataForm = zenodoMetadataOptions.defaultForm;
 
-      this.dataset = JSON.parse(
-        JSON.stringify(await this.datasetStore.getCurrentDataset())
+    this.dataset = JSON.parse(
+      JSON.stringify(await this.datasetStore.getCurrentDataset())
+    );
+
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
+
+    this.workflow.currentRoute = this.$route.path;
+
+    if (this.workflow.expandOptions.length === 0) {
+      this.activeNames = ["basicInformation", "license"];
+      // this.activeNames = ["relatedIdentifiers"];
+    } else {
+      this.activeNames = this.workflow.expandOptions;
+      this.workflow.expandOptions = [];
+    }
+
+    if (
+      this.workflow.destination.zenodo.questions &&
+      Object.keys(this.workflow.destination.zenodo.questions).length !== 0
+    ) {
+      this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+
+      this.initializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.license
+      );
+      this.initializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.journal
+      );
+      this.initializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.conference
+      );
+      this.initializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.bookReportChapter
+      );
+      this.initializeEmptyObjects(
+        this.zenodoMetadataForm,
+        this.zenodoMetadataForm.thesis
       );
 
-      this.workflow = this.dataset.workflows[this.workflowID];
+      const generalForm = this.dataset.data.general.questions;
+      this.zenodoMetadataForm.license.licenseName = generalForm.license;
 
-      this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(5);
+      this.addIds(this.zenodoMetadataForm.authors);
+      this.addIds(this.zenodoMetadataForm.keywords);
+      this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
+      this.addIds(this.zenodoMetadataForm.contributors);
+      this.addIds(this.zenodoMetadataForm.references);
+      this.addIds(this.zenodoMetadataForm.thesis.supervisors);
+      this.addIds(this.zenodoMetadataForm.subjects);
+      this.loading.close();
 
-      this.workflow.currentRoute = this.$route.path;
+      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
+    } else {
+      this.prefillZenodoQuestions();
 
-      if (this.workflow.expandOptions.length === 0) {
-        this.activeNames = ["basicInformation", "license"];
-        // this.activeNames = ["relatedIdentifiers"];
-      } else {
-        this.activeNames = this.workflow.expandOptions;
-        this.workflow.expandOptions = [];
-      }
+      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
 
-      if (
-        this.workflow.destination.zenodo.questions &&
-        Object.keys(this.workflow.destination.zenodo.questions).length !== 0
-      ) {
-        this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+      this.loading.close();
+    }
 
-        this.initializeEmptyObjects(
-          this.zenodoMetadataForm,
-          this.zenodoMetadataForm.license
-        );
-        this.initializeEmptyObjects(
-          this.zenodoMetadataForm,
-          this.zenodoMetadataForm.journal
-        );
-        this.initializeEmptyObjects(
-          this.zenodoMetadataForm,
-          this.zenodoMetadataForm.conference
-        );
-        this.initializeEmptyObjects(
-          this.zenodoMetadataForm,
-          this.zenodoMetadataForm.bookReportChapter
-        );
-        this.initializeEmptyObjects(
-          this.zenodoMetadataForm,
-          this.zenodoMetadataForm.thesis
-        );
-
-        const generalForm = this.dataset.data.general.questions;
-        this.zenodoMetadataForm.license.licenseName = generalForm.license;
-
-        this.addIds(this.zenodoMetadataForm.authors);
-        this.addIds(this.zenodoMetadataForm.keywords);
-        this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
-        this.addIds(this.zenodoMetadataForm.contributors);
-        this.addIds(this.zenodoMetadataForm.references);
-        this.addIds(this.zenodoMetadataForm.thesis.supervisors);
-        this.addIds(this.zenodoMetadataForm.subjects);
-        this.loading.close();
-
-        this.originalObject = JSON.parse(
-          JSON.stringify(this.zenodoMetadataForm)
-        );
-      } else {
-        this.prefillZenodoQuestions();
-
-        this.originalObject = JSON.parse(
-          JSON.stringify(this.zenodoMetadataForm)
-        );
-
-        this.loading.close();
-      }
-
-      // Add the functions here to check the pre saved values for on mounted.
-      // decide if the intermdiate data is saved in workflow or data.
-    },
-  };
-  // CHANGE TO ONE FORM SINCE THAT iS BETTER
+    // Add the functions here to check the pre saved values for on mounted.
+    // decide if the intermdiate data is saved in workflow or data.
+  },
+};
+// CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
 <style lang="postcss" scoped>
-  .handle {
-    cursor: move;
-  }
+.handle {
+  cursor: move;
+}
 
-  .el-select-group > .el-select-dropdown__item {
-    margin-left: 5px;
-  }
+.el-select-group > .el-select-dropdown__item {
+  margin-left: 5px;
+}
 </style>

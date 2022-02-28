@@ -41,86 +41,86 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "@/store/datasets";
-  import { app } from "@electron/remote";
+import { useDatasetsStore } from "@/store/datasets";
+import { app } from "@electron/remote";
 
-  export default {
-    name: "AppDocumentation",
-    components: {},
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        about: [],
-      };
+export default {
+  name: "AppDocumentation",
+  components: {},
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      about: [],
+    };
+  },
+  methods: {
+    openURL(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
-    methods: {
-      openURL(url) {
-        window.ipcRenderer.send("open-link-in-browser", url);
-      },
-    },
-    computed: {},
-    async mounted() {
-      this.datasetStore.hideProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(1);
+  },
+  computed: {},
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
 
-      this.about.push({
-        label: "FAIRshare version",
-        value: app.getVersion(),
-        span: 1,
-      });
+    this.about.push({
+      label: "FAIRshare version",
+      value: app.getVersion(),
+      span: 1,
+    });
 
-      this.about.push({ label: "Locale", value: app.getLocale(), span: 1 });
+    this.about.push({ label: "Locale", value: app.getLocale(), span: 1 });
 
-      this.about.push({
-        label: "Electron",
-        value: process.versions.electron,
-        span: 1,
-      });
+    this.about.push({
+      label: "Electron",
+      value: process.versions.electron,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "Node.js",
-        value: process.versions.node,
-        span: 1,
-      });
+    this.about.push({
+      label: "Node.js",
+      value: process.versions.node,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "Chromium",
-        value: process.versions.chrome,
-        span: 1,
-      });
+    this.about.push({
+      label: "Chromium",
+      value: process.versions.chrome,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "V8",
-        value: process.versions.v8,
-        span: 1,
-      });
+    this.about.push({
+      label: "V8",
+      value: process.versions.v8,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "OS",
-        value: process.platform,
-        span: 1,
-      });
+    this.about.push({
+      label: "OS",
+      value: process.platform,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "pid",
-        value: process.pid,
-        span: 1,
-      });
+    this.about.push({
+      label: "pid",
+      value: process.pid,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "ppid",
-        value: process.ppid,
-        span: 1,
-      });
+    this.about.push({
+      label: "ppid",
+      value: process.ppid,
+      span: 1,
+    });
 
-      this.about.push({
-        label: "Application path",
-        value: app.getAppPath(),
-        span: 1,
-      });
-    },
-  };
+    this.about.push({
+      label: "Application path",
+      value: app.getAppPath(),
+      span: 1,
+    });
+  },
+};
 </script>
 
 <style scoped></style>

@@ -410,220 +410,218 @@
 </template>
 
 <script>
-  import { ElLoading } from "element-plus";
-  import dayjs from "dayjs";
+import { ElLoading } from "element-plus";
+import dayjs from "dayjs";
 
-  import { useDatasetsStore } from "@/store/datasets";
-  import languagesJson from "@/assets/supplementalFiles/zenodoLanguages.json";
+import { useDatasetsStore } from "@/store/datasets";
+import languagesJson from "@/assets/supplementalFiles/zenodoLanguages.json";
 
-  export default {
-    name: "ZenodoMetadataReview",
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        dataset: {},
-        workflowID: this.$route.params.workflowID,
-        datasetID: this.$route.params.datasetID,
-        workflow: {},
-        loading: "",
-        zenodoMetadata: {
-          license: {},
-          journal: {},
-          conference: {},
-          bookReportChapter: {},
-          thesis: {},
-        },
-        languageOptions: languagesJson.languages,
-      };
+export default {
+  name: "ZenodoMetadataReview",
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      dataset: {},
+      workflowID: this.$route.params.workflowID,
+      datasetID: this.$route.params.datasetID,
+      workflow: {},
+      loading: "",
+      zenodoMetadata: {
+        license: {},
+        journal: {},
+        conference: {},
+        bookReportChapter: {},
+        thesis: {},
+      },
+      languageOptions: languagesJson.languages,
+    };
+  },
+  computed: {
+    displayLanguage() {
+      const that = this;
+
+      function getLanguage(language) {
+        return that.languageOptions.find((lang) => lang.alpha3 === language);
+      }
+
+      if (
+        "language" in this.zenodoMetadata &&
+        this.zenodoMetadata.language != ""
+      ) {
+        const lang = this.zenodoMetadata.language;
+        const returnVal = getLanguage(lang);
+        return `${returnVal.name} (${returnVal.alpha3})`;
+      } else {
+        return "";
+      }
     },
-    computed: {
-      displayLanguage() {
-        const that = this;
-
-        function getLanguage(language) {
-          return that.languageOptions.find((lang) => lang.alpha3 === language);
-        }
-
-        if (
-          "language" in this.zenodoMetadata &&
-          this.zenodoMetadata.language != ""
-        ) {
-          const lang = this.zenodoMetadata.language;
-          const returnVal = getLanguage(lang);
-          return `${returnVal.name} (${returnVal.alpha3})`;
-        } else {
-          return "";
-        }
-      },
-      displayPublicationDate() {
-        if (
-          "publicationDate" in this.zenodoMetadata &&
-          this.zenodoMetadata.publicationDate != ""
-        ) {
-          const date = this.zenodoMetadata.publicationDate;
-          return dayjs(date).format("MMMM D, YYYY");
-        } else {
-          return "";
-        }
-      },
-      displayConferenceDate() {
-        if (
-          "conference" in this.zenodoMetadata &&
-          "dates" in this.zenodoMetadata.conference &&
-          this.zenodoMetadata.conference.dates.length == 2
-        ) {
-          return (
-            dayjs(this.zenodoMetadata.conference.dates[0]).format(
-              "MMMM D, YYYY"
-            ) +
-            " - " +
-            dayjs(this.zenodoMetadata.conference.dates[1]).format(
-              "MMMM D, YYYY"
-            )
-          );
-        } else {
-          return "";
-        }
-      },
-      showRelatedAlternateIdentifiers() {
-        if (
-          "relatedAlternateIdentifiers" in this.zenodoMetadata &&
-          this.zenodoMetadata.relatedAlternateIdentifiers.length > 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showContributors() {
-        if (
-          "contributors" in this.zenodoMetadata &&
-          this.zenodoMetadata.contributors.length > 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showReferences() {
-        if (
-          "references" in this.zenodoMetadata &&
-          this.zenodoMetadata.references.length > 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showJournal() {
-        if (
-          "journal" in this.zenodoMetadata &&
-          (this.zenodoMetadata.journal.title != "" ||
-            this.zenodoMetadata.journal.volume != "" ||
-            this.zenodoMetadata.journal.issue != "" ||
-            this.zenodoMetadata.journal.pages != "")
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showConference() {
-        if (
-          "conference" in this.zenodoMetadata &&
-          "dates" in this.zenodoMetadata.conference &&
-          (this.zenodoMetadata.conference.title != "" ||
-            this.zenodoMetadata.conference.acronym != "" ||
-            this.zenodoMetadata.conference.dates.length == 2 ||
-            this.zenodoMetadata.conference.place != "" ||
-            this.zenodoMetadata.conference.website != "" ||
-            this.zenodoMetadata.conference.session != "")
-        ) {
-          return true;
-        } else {
-          // console.log(this.zenodoMetadata.conference);
-          return false;
-        }
-      },
-
-      showBookReportChapter() {
-        if (
-          "bookReportChapter" in this.zenodoMetadata &&
-          (this.zenodoMetadata.bookReportChapter.publisher != "" ||
-            this.zenodoMetadata.bookReportChapter.place != "" ||
-            this.zenodoMetadata.bookReportChapter.isbn != "" ||
-            this.zenodoMetadata.bookReportChapter.title != "" ||
-            this.zenodoMetadata.bookReportChapter.pages != "")
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showThesis() {
-        if (
-          "thesis" in this.zenodoMetadata &&
-          (this.zenodoMetadata.thesis.awardingUniversity != "" ||
-            this.zenodoMetadata.thesis.supervisors.length > 0)
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      showSubjects() {
-        if (
-          "subjects" in this.zenodoMetadata &&
-          this.zenodoMetadata.subjects.length > 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+    displayPublicationDate() {
+      if (
+        "publicationDate" in this.zenodoMetadata &&
+        this.zenodoMetadata.publicationDate != ""
+      ) {
+        const date = this.zenodoMetadata.publicationDate;
+        return dayjs(date).format("MMMM D, YYYY");
+      } else {
+        return "";
+      }
     },
-    methods: {
-      editInformation(expandOptions) {
-        this.workflow.expandOptions = [...expandOptions];
-
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
-        this.$router.push({ path: routerPath });
-      },
-      checkZenodoAccessToken() {
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
-        this.$router.push({ path: routerPath });
-      },
+    displayConferenceDate() {
+      if (
+        "conference" in this.zenodoMetadata &&
+        "dates" in this.zenodoMetadata.conference &&
+        this.zenodoMetadata.conference.dates.length == 2
+      ) {
+        return (
+          dayjs(this.zenodoMetadata.conference.dates[0]).format(
+            "MMMM D, YYYY"
+          ) +
+          " - " +
+          dayjs(this.zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY")
+        );
+      } else {
+        return "";
+      }
     },
-    async mounted() {
-      this.loading = ElLoading.service({
-        lock: true,
-        text: "Loading data from stores...",
-        background: "rgba(255, 255, 255, 0.95)",
-      });
-
-      this.dataset = await this.datasetStore.getCurrentDataset();
-
-      this.workflow = this.dataset.workflows[this.workflowID];
-      this.zenodoMetadata = this.workflow.destination.zenodo.questions;
-
-      this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(5);
-
-      this.workflow.currentRoute = this.$route.path;
-
-      this.loading.close();
+    showRelatedAlternateIdentifiers() {
+      if (
+        "relatedAlternateIdentifiers" in this.zenodoMetadata &&
+        this.zenodoMetadata.relatedAlternateIdentifiers.length > 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
-  };
-  // Add computed to hide properties
+    showContributors() {
+      if (
+        "contributors" in this.zenodoMetadata &&
+        this.zenodoMetadata.contributors.length > 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showReferences() {
+      if (
+        "references" in this.zenodoMetadata &&
+        this.zenodoMetadata.references.length > 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showJournal() {
+      if (
+        "journal" in this.zenodoMetadata &&
+        (this.zenodoMetadata.journal.title != "" ||
+          this.zenodoMetadata.journal.volume != "" ||
+          this.zenodoMetadata.journal.issue != "" ||
+          this.zenodoMetadata.journal.pages != "")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showConference() {
+      if (
+        "conference" in this.zenodoMetadata &&
+        "dates" in this.zenodoMetadata.conference &&
+        (this.zenodoMetadata.conference.title != "" ||
+          this.zenodoMetadata.conference.acronym != "" ||
+          this.zenodoMetadata.conference.dates.length == 2 ||
+          this.zenodoMetadata.conference.place != "" ||
+          this.zenodoMetadata.conference.website != "" ||
+          this.zenodoMetadata.conference.session != "")
+      ) {
+        return true;
+      } else {
+        // console.log(this.zenodoMetadata.conference);
+        return false;
+      }
+    },
+
+    showBookReportChapter() {
+      if (
+        "bookReportChapter" in this.zenodoMetadata &&
+        (this.zenodoMetadata.bookReportChapter.publisher != "" ||
+          this.zenodoMetadata.bookReportChapter.place != "" ||
+          this.zenodoMetadata.bookReportChapter.isbn != "" ||
+          this.zenodoMetadata.bookReportChapter.title != "" ||
+          this.zenodoMetadata.bookReportChapter.pages != "")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showThesis() {
+      if (
+        "thesis" in this.zenodoMetadata &&
+        (this.zenodoMetadata.thesis.awardingUniversity != "" ||
+          this.zenodoMetadata.thesis.supervisors.length > 0)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showSubjects() {
+      if (
+        "subjects" in this.zenodoMetadata &&
+        this.zenodoMetadata.subjects.length > 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  methods: {
+    editInformation(expandOptions) {
+      this.workflow.expandOptions = [...expandOptions];
+
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
+      this.$router.push({ path: routerPath });
+    },
+    checkZenodoAccessToken() {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
+      this.$router.push({ path: routerPath });
+    },
+  },
+  async mounted() {
+    this.loading = ElLoading.service({
+      lock: true,
+      text: "Loading data from stores...",
+      background: "rgba(255, 255, 255, 0.95)",
+    });
+
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.workflow = this.dataset.workflows[this.workflowID];
+    this.zenodoMetadata = this.workflow.destination.zenodo.questions;
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
+
+    this.workflow.currentRoute = this.$route.path;
+
+    this.loading.close();
+  },
+};
+// Add computed to hide properties
 </script>
 
 <style lang="postcss">
-  .handle {
-    cursor: move;
-  }
+.handle {
+  cursor: move;
+}
 
-  .el-select-group > .el-select-dropdown__item {
-    margin-left: 5px;
-  }
+.el-select-group > .el-select-dropdown__item {
+  margin-left: 5px;
+}
 </style>

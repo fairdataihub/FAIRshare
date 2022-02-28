@@ -18,47 +18,47 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
-  export default {
-    name: "WorkflowProgressBar",
-    props: {
-      currentStep: {
-        type: Number,
-        default: 3,
-      },
+export default {
+  name: "WorkflowProgressBar",
+  props: {
+    currentStep: {
+      type: Number,
+      default: 3,
     },
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        progressBar: {},
-        steps: [
-          {
-            description: "Select data files",
-          },
-          {
-            description: "Review standards",
-          },
-          {
-            description: "Provide metadata",
-          },
-          {
-            description: "Select a license",
-          },
-          {
-            description: "Select repository",
-          },
-          {
-            description: "Upload dataset",
-          },
-          {
-            description: "Publish dataset",
-          },
-        ],
-      };
-    },
-    async mounted() {
-      this.progressBar = await this.datasetStore.getProgressBar();
-    },
-  };
+  },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      progressBar: {},
+      steps: [
+        {
+          description: "Select data files",
+        },
+        {
+          description: "Review standards",
+        },
+        {
+          description: "Provide metadata",
+        },
+        {
+          description: "Select a license",
+        },
+        {
+          description: "Select repository",
+        },
+        {
+          description: "Upload dataset",
+        },
+        {
+          description: "Publish dataset",
+        },
+      ],
+    };
+  },
+  async mounted() {
+    this.progressBar = await this.datasetStore.getProgressBar();
+  },
+};
 </script>

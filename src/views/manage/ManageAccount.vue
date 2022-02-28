@@ -139,113 +139,113 @@
 </template>
 
 <script>
-  import { useTokenStore } from "@/store/access";
-  import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access";
+import { useDatasetsStore } from "@/store/datasets";
 
-  import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
-  import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
+import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
-  export default {
-    name: "ManageAccount",
+export default {
+  name: "ManageAccount",
 
-    components: {
-      ConnectGithub,
-      ConnectZenodo,
+  components: {
+    ConnectGithub,
+    ConnectZenodo,
+  },
+
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      manager: useTokenStore(),
+      buttonList: [],
+      dialogVisible: false,
+      dialogNumInput: 0,
+    };
+  },
+
+  methods: {
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
+  },
 
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        manager: useTokenStore(),
-        buttonList: [],
-        dialogVisible: false,
-        dialogNumInput: 0,
+  computed: {
+    // zenodo status
+    zenodoDetails() {
+      let zenodoObject = {
+        status: "Not Connected",
+        name: "",
+        action: "Connect",
+        buttonStyle: "primary-plain-button",
       };
+      if ("zenodo" in this.manager.accessTokens) {
+        zenodoObject.status = "Connected";
+        zenodoObject.name = this.manager.accessTokens.zenodo.name;
+        zenodoObject.action = "Disconnect";
+        zenodoObject.buttonStyle = "danger-plain-button";
+      }
+      return zenodoObject;
     },
-
-    methods: {
-      openWebsite(url) {
-        window.ipcRenderer.send("open-link-in-browser", url);
-      },
+    connectedToZenodo() {
+      return "zenodo" in this.manager.accessTokens;
     },
-
-    computed: {
-      // zenodo status
-      zenodoDetails() {
-        let zenodoObject = {
-          status: "Not Connected",
-          name: "",
-          action: "Connect",
-          buttonStyle: "primary-plain-button",
-        };
-        if ("zenodo" in this.manager.accessTokens) {
-          zenodoObject.status = "Connected";
-          zenodoObject.name = this.manager.accessTokens.zenodo.name;
-          zenodoObject.action = "Disconnect";
-          zenodoObject.buttonStyle = "danger-plain-button";
-        }
-        return zenodoObject;
-      },
-      connectedToZenodo() {
-        return "zenodo" in this.manager.accessTokens;
-      },
-      // github status
-      githubDetails() {
-        let githubObject = {
-          status: "Not Connected",
-          name: "",
-          action: "Connect",
-          buttonStyle: "primary-plain-button",
-        };
-        if ("github" in this.manager.accessTokens) {
-          githubObject.status = "Connected";
-          githubObject.name = this.manager.accessTokens.github.name;
-          githubObject.action = "Disconnect";
-          githubObject.buttonStyle = "danger-plain-button";
-        }
-        return githubObject;
-      },
-      connectedToGithub() {
-        return "github" in this.manager.accessTokens;
-      },
+    // github status
+    githubDetails() {
+      let githubObject = {
+        status: "Not Connected",
+        name: "",
+        action: "Connect",
+        buttonStyle: "primary-plain-button",
+      };
+      if ("github" in this.manager.accessTokens) {
+        githubObject.status = "Connected";
+        githubObject.name = this.manager.accessTokens.github.name;
+        githubObject.action = "Disconnect";
+        githubObject.buttonStyle = "danger-plain-button";
+      }
+      return githubObject;
     },
-
-    async mounted() {
-      this.datasetStore.hideProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(1);
-
-      await this.manager.loadTokens();
+    connectedToGithub() {
+      return "github" in this.manager.accessTokens;
     },
-  };
+  },
+
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+
+    await this.manager.loadTokens();
+  },
+};
 </script>
 
 <style scoped>
-  .card-container {
-    @apply my-5 flex h-[220px] w-4/5 flex-row rounded-md border border-gray-200 py-3 shadow-lg transition-all;
-  }
-  .image-container {
-    @apply flex h-full w-4/12 items-center justify-center;
-  }
-  .card-container-content {
-    @apply flex h-full w-8/12 flex-col px-2;
-  }
-  .dot {
-    @apply mr-2 h-[12px] w-[12px] rounded-full;
-  }
-  .card-container-status {
-    @apply flex h-1/5 flex-row items-center justify-start;
-  }
-  .centering-container {
-    @apply flex h-2/5 items-center justify-center;
-  }
-  .center {
-    @apply py-3 pr-3;
-  }
-  .bottom {
-    @apply items-end justify-end pr-5 pb-3;
-  }
-  .tag-container {
-    @apply ml-2;
-  }
+.card-container {
+  @apply my-5 flex h-[220px] w-4/5 flex-row rounded-md border border-gray-200 py-3 shadow-lg transition-all;
+}
+.image-container {
+  @apply flex h-full w-4/12 items-center justify-center;
+}
+.card-container-content {
+  @apply flex h-full w-8/12 flex-col px-2;
+}
+.dot {
+  @apply mr-2 h-[12px] w-[12px] rounded-full;
+}
+.card-container-status {
+  @apply flex h-1/5 flex-row items-center justify-start;
+}
+.centering-container {
+  @apply flex h-2/5 items-center justify-center;
+}
+.center {
+  @apply py-3 pr-3;
+}
+.bottom {
+  @apply items-end justify-end pr-5 pb-3;
+}
+.tag-container {
+  @apply ml-2;
+}
 </style>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  export default {
-    name: "LineDivider",
-  };
+export default {
+  name: "LineDivider",
+};
 </script>

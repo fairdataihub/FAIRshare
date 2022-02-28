@@ -104,43 +104,43 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "@/store/datasets";
-  import gsap from "gsap";
+import { useDatasetsStore } from "@/store/datasets";
+import gsap from "gsap";
 
-  export default {
-    name: "ProjectLanding",
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        dataset: {},
-        datasetID: this.$route.params.datasetID,
-      };
+export default {
+  name: "ProjectLanding",
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      dataset: {},
+      datasetID: this.$route.params.datasetID,
+    };
+  },
+  methods: {
+    navigateToWorkflows() {
+      this.$router.push({ path: `/datasets/${this.datasetID}` });
     },
-    methods: {
-      navigateToWorkflows() {
-        this.$router.push({ path: `/datasets/${this.datasetID}` });
+  },
+  async mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+
+    gsap.fromTo(
+      ".el-timeline-item",
+      {
+        opacity: 0,
+        y: -60,
       },
-    },
-    async mounted() {
-      this.datasetStore.hideProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(1);
-
-      gsap.fromTo(
-        ".el-timeline-item",
-        {
-          opacity: 0,
-          y: -60,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.1,
-          stagger: 0.1,
-        }
-      );
-    },
-  };
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.1,
+        stagger: 0.1,
+      }
+    );
+  },
+};
 </script>
 
 <style scoped></style>

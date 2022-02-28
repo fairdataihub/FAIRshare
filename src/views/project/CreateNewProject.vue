@@ -215,183 +215,182 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "@/store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
-  import { v4 as uuidv4 } from "uuid";
-  import { ElNotification } from "element-plus";
-  import { Icon } from "@iconify/vue";
+import { v4 as uuidv4 } from "uuid";
+import { ElNotification } from "element-plus";
+import { Icon } from "@iconify/vue";
 
-  export default {
-    name: "CreateNewProject",
-    components: {
-      Icon,
-    },
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        datasetForm: {
-          datasetName: "",
-          datasetDescription: "",
-          dataType: [],
-        },
-        rules: {
-          datasetName: [
-            {
-              required: true,
-              message: "Please provide a project name",
-              trigger: "blur",
-            },
-          ],
-          datasetDescription: [
-            {
-              required: true,
-              message: "Please provide a project description",
-              trigger: "blur",
-            },
-          ],
-          dataType: [
-            {
-              type: "array",
-              required: true,
-              message: "Please select at least one data type",
-              trigger: "change",
-            },
-          ],
-        },
-      };
-    },
-    methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            const datasetID = uuidv4();
-            const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
+export default {
+  name: "CreateNewProject",
+  components: {
+    Icon,
+  },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      datasetForm: {
+        datasetName: "",
+        datasetDescription: "",
+        dataType: [],
+      },
+      rules: {
+        datasetName: [
+          {
+            required: true,
+            message: "Please provide a project name",
+            trigger: "blur",
+          },
+        ],
+        datasetDescription: [
+          {
+            required: true,
+            message: "Please provide a project description",
+            trigger: "blur",
+          },
+        ],
+        dataType: [
+          {
+            type: "array",
+            required: true,
+            message: "Please select at least one data type",
+            trigger: "change",
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const datasetID = uuidv4();
+          const datasetImage = `https://avatars.dicebear.com/api/jdenticon/${uuidv4()}.svg`;
 
-            const index =
-              this.datasetForm.dataType.indexOf("Research software");
+          const index = this.datasetForm.dataType.indexOf("Research software");
 
-            if (index !== -1) {
-              this.datasetForm.dataType[index] = "Code";
+          if (index !== -1) {
+            this.datasetForm.dataType[index] = "Code";
+          }
+
+          let dataset = {
+            id: datasetID,
+            image: datasetImage,
+            name: this.datasetForm.datasetName.trim(),
+            description: this.datasetForm.datasetDescription.trim(),
+            dataType: this.datasetForm.dataType,
+            data: {},
+            workflowConfirmed: false,
+          };
+          console.log("dataset: ", dataset);
+          dataset.data.general = {
+            questions: {},
+          };
+
+          for (const type of dataset.dataType) {
+            let tempType = type;
+            console.log(type);
+            if (tempType == "Research software") {
+              tempType = "Code";
             }
-
-            let dataset = {
-              id: datasetID,
-              image: datasetImage,
-              name: this.datasetForm.datasetName.trim(),
-              description: this.datasetForm.datasetDescription.trim(),
-              dataType: this.datasetForm.dataType,
-              data: {},
-              workflowConfirmed: false,
-            };
-            console.log("dataset: ", dataset);
-            dataset.data.general = {
+            dataset.data[tempType] = {
+              uploaded: false,
               questions: {},
             };
-
-            for (const type of dataset.dataType) {
-              let tempType = type;
-              console.log(type);
-              if (tempType == "Research software") {
-                tempType = "Code";
-              }
-              dataset.data[tempType] = {
-                uploaded: false,
-                questions: {},
-              };
-            }
-
-            this.datasetStore.addDataset(dataset, datasetID);
-
-            ElNotification({
-              type: "success",
-              message: "Created your new project!",
-              position: "bottom-right",
-              duration: 3000,
-            });
-
-            this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
-          } else {
-            console.log("Invalid form entries");
-            return false;
           }
-        });
-      },
-      cancelNewDataset() {
-        this.$router.push({ name: "ShowAllProjects" });
-      },
+
+          this.datasetStore.addDataset(dataset, datasetID);
+
+          ElNotification({
+            type: "success",
+            message: "Created your new project!",
+            position: "bottom-right",
+            duration: 3000,
+          });
+
+          this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
+        } else {
+          console.log("Invalid form entries");
+          return false;
+        }
+      });
     },
-    mounted() {
-      document
-        .querySelectorAll(
-          ".createNewProjectFormItemContainer .el-checkbox__label"
-        )
-        .forEach((el) => {
-          el.style.paddingLeft = "0px";
-        });
-
-      document
-        .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
-        .forEach((el) => {
-          el.style.display = "flex";
-          el.style.flexDirection = "column-reverse";
-          el.style.gap = "2px";
-        });
-      document
-        .querySelectorAll(
-          ".createNewProjectFormItemContainer .el-checkbox__input"
-        )
-        .forEach((el) => {
-          el.style.display = "none";
-        });
-
-      document
-        .querySelectorAll(
-          ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
-        )
-        .forEach((el) => {
-          el.style.padding = "0px";
-        });
-
-      document
-        .querySelectorAll(
-          ".createNewProjectFormItemContainer .el-checkbox.is-bordered+.el-checkbox.is-bordered"
-        )
-        .forEach((el) => {
-          el.style.marginLeft = "0px";
-        });
-
-      document
-        .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
-        .forEach((el) => {
-          el.style.marginRight = "0px";
-          el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
-        });
-
-      document
-        .querySelectorAll(
-          ".createNewProjectFormItemContainer .el-form-item__content"
-        )
-        .forEach((el) => {
-          el.style.marginRight = "0px";
-          el.style.setProperty("justify-content", "center");
-          el.style.setProperty("align-items", "center");
-        });
+    cancelNewDataset() {
+      this.$router.push({ name: "ShowAllProjects" });
     },
-  };
+  },
+  mounted() {
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__label"
+      )
+      .forEach((el) => {
+        el.style.paddingLeft = "0px";
+      });
+
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
+      .forEach((el) => {
+        el.style.display = "flex";
+        el.style.flexDirection = "column-reverse";
+        el.style.gap = "2px";
+      });
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox__input"
+      )
+      .forEach((el) => {
+        el.style.display = "none";
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.padding = "0px";
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-checkbox.is-bordered+.el-checkbox.is-bordered"
+      )
+      .forEach((el) => {
+        el.style.marginLeft = "0px";
+      });
+
+    document
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
+      .forEach((el) => {
+        el.style.marginRight = "0px";
+        el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
+      });
+
+    document
+      .querySelectorAll(
+        ".createNewProjectFormItemContainer .el-form-item__content"
+      )
+      .forEach((el) => {
+        el.style.marginRight = "0px";
+        el.style.setProperty("justify-content", "center");
+        el.style.setProperty("align-items", "center");
+      });
+  },
+};
 </script>
 <style scoped>
-  .checkbox-group {
-    @apply box-border flex flex-col items-center justify-center gap-8 pt-4 transition-all;
-  }
-  .single-check-box {
-    @apply flex h-40 w-40 items-center justify-center shadow-md transition-all;
-  }
+.checkbox-group {
+  @apply box-border flex flex-col items-center justify-center gap-8 pt-4 transition-all;
+}
+.single-check-box {
+  @apply flex h-40 w-40 items-center justify-center shadow-md transition-all;
+}
 
-  .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-    @apply border-secondary-500 shadow-md shadow-secondary-500/50 transition-all;
-  }
+.createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
+  @apply border-secondary-500 shadow-md shadow-secondary-500/50 transition-all;
+}
 
-  .single-check-box:not(.is-disabled):hover {
-    @apply border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
-  }
+.single-check-box:not(.is-disabled):hover {
+  @apply border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+}
 </style>

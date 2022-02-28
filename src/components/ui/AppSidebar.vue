@@ -79,38 +79,38 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "../../store/datasets";
 
-  export default {
-    name: "AppSidebar",
-    components: {},
-    props: ["environment"],
-    data() {
-      return {
-        dropdownOpen: false,
-        datasetStore: useDatasetsStore(),
-        process: process,
-        sideBarOpen: true,
-      };
-    },
-    watch: {
-      "datasetStore.sidebarVisible": {
-        handler(val) {
-          this.sideBarOpen = val;
-        },
-        deep: true,
+export default {
+  name: "AppSidebar",
+  components: {},
+  props: ["environment"],
+  data() {
+    return {
+      dropdownOpen: false,
+      datasetStore: useDatasetsStore(),
+      process: process,
+      sideBarOpen: true,
+    };
+  },
+  watch: {
+    "datasetStore.sidebarVisible": {
+      handler(val) {
+        this.sideBarOpen = val;
       },
+      deep: true,
     },
-    methods: {
-      isDataset: function () {
-        if (this.$route.path.search("datasets") != -1) {
-          return "router-link-active";
-        }
-        return "";
-      },
+  },
+  methods: {
+    isDataset: function () {
+      if (this.$route.path.search("datasets") != -1) {
+        return "router-link-active";
+      }
+      return "";
     },
-    created() {
-      this.sideBarOpen = this.datasetStore.sidebarVisible;
-    },
-  };
+  },
+  created() {
+    this.sideBarOpen = this.datasetStore.sidebarVisible;
+  },
+};
 </script>

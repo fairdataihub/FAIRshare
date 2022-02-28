@@ -23,41 +23,41 @@
 </template>
 
 <script>
-  export default {
-    name: "PillProgressBar",
-    props: {
-      totalSteps: {
-        type: Number,
-        default: 3,
-      },
-      currentStep: {
-        type: Number,
-        default: 1,
-      },
-      titles: {
-        type: Array,
-        default: () => [],
-      },
+export default {
+  name: "PillProgressBar",
+  props: {
+    totalSteps: {
+      type: Number,
+      default: 3,
     },
-    computed: {
-      development() {
-        if (process.env.NODE_ENV === "development") {
-          return true;
-        }
-        return false;
-      },
+    currentStep: {
+      type: Number,
+      default: 1,
     },
-    emits: ["updateCurrentStep"],
-    data() {
-      return {};
+    titles: {
+      type: Array,
+      default: () => [],
     },
-    methods: {
-      setCurrentStep(step) {
-        this.$emit("updateCurrentStep", step);
-      },
+  },
+  computed: {
+    development() {
+      if (process.env.NODE_ENV === "development") {
+        return true;
+      }
+      return false;
     },
-    async mounted() {},
-  };
+  },
+  emits: ["updateCurrentStep"],
+  data() {
+    return {};
+  },
+  methods: {
+    setCurrentStep(step) {
+      this.$emit("updateCurrentStep", step);
+    },
+  },
+  async mounted() {},
+};
 </script>
 
 <style lang="postcss" scoped></style>

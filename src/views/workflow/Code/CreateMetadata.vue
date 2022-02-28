@@ -1254,800 +1254,960 @@
 </template>
 
 <script>
-  import { Icon } from "@iconify/vue";
-  import { v4 as uuidv4 } from "uuid";
-  import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
+import { Icon } from "@iconify/vue";
+import { v4 as uuidv4 } from "uuid";
+import { ElMessageBox, ElMessage, ElNotification } from "element-plus";
 
-  import draggable from "vuedraggable";
-  import validator from "validator";
-  import axios from "axios";
-  import _ from "lodash";
-  import humanparser from "humanparser";
+import draggable from "vuedraggable";
+import validator from "validator";
+import axios from "axios";
+import _ from "lodash";
+import humanparser from "humanparser";
 
-  import { useDatasetsStore } from "@/store/datasets";
-  import { useTokenStore } from "@/store/access.js";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access.js";
 
-  import PillProgressBar from "@/components/ui/PillProgressBar.vue";
+import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
-  import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
-  import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
-  import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
+import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
+import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
-  import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
+import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
-  export default {
-    name: "CodeCreateMetadata",
-    components: {
-      draggable,
-      Icon,
-      PillProgressBar,
-    },
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        tokens: useTokenStore(),
-        currentStep: 1,
-        pillTitles: [
-          "Basic info",
-          "Authors and Contributors",
-          "Discoverability",
-          "Development tools",
-          "Run-time environment",
-          "Current version of the software",
-          "Additional Info",
-        ],
-        SaveLottieJSON,
-        dataset: {},
-        workflowID: this.$route.params.workflowID,
-        workflow: {},
-        loading: false,
-        interval: null,
-        contributorTypes: contributorTypesJSON.contributorTypes,
-        programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
-        runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
-        operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
-        applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
-        repoStatusOptions: repoStatusJSON.repoStatus,
-        step1Form: {
-          name: "",
-          description: "",
-          creationDate: "",
-          firstReleaseDate: "",
-        },
-        step1FormRules: {
-          name: [
-            {
-              required: true,
-              message: "Please enter the name of the software",
-              trigger: "blur",
-            },
-          ],
-          description: [
-            {
-              required: true,
-              message: "Please enter a description",
-              trigger: "blur",
-            },
-          ],
-        },
-        step2Form: {
-          authors: [],
-          contributors: [],
-        },
-        step3Form: {
-          applicationCategory: "",
-          keywords: [],
-          funding: {
-            code: "",
-            organization: "",
+export default {
+  name: "CodeCreateMetadata",
+  components: {
+    draggable,
+    Icon,
+    PillProgressBar,
+  },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
+      currentStep: 1,
+      pillTitles: [
+        "Basic info",
+        "Authors and Contributors",
+        "Discoverability",
+        "Development tools",
+        "Run-time environment",
+        "Current version of the software",
+        "Additional Info",
+      ],
+      SaveLottieJSON,
+      dataset: {},
+      workflowID: this.$route.params.workflowID,
+      workflow: {},
+      loading: false,
+      interval: null,
+      contributorTypes: contributorTypesJSON.contributorTypes,
+      programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
+      runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
+      operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
+      applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
+      repoStatusOptions: repoStatusJSON.repoStatus,
+      step1Form: {
+        name: "",
+        description: "",
+        creationDate: "",
+        firstReleaseDate: "",
+      },
+      step1FormRules: {
+        name: [
+          {
+            required: true,
+            message: "Please enter the name of the software",
+            trigger: "blur",
           },
+        ],
+        description: [
+          {
+            required: true,
+            message: "Please enter a description",
+            trigger: "blur",
+          },
+        ],
+      },
+      step2Form: {
+        authors: [],
+        contributors: [],
+      },
+      step3Form: {
+        applicationCategory: "",
+        keywords: [],
+        funding: {
+          code: "",
+          organization: "",
         },
-        step4Form: {
-          codeRepository: "",
-          continuousIntegration: "",
-          issueTracker: "",
-          relatedLinks: [],
-        },
-        step5Form: {
-          programmingLanguage: [],
-          runtimePlatform: [],
-          operatingSystem: [],
-          otherSoftwareRequirements: [],
-        },
-        step6Form: {
-          currentVersion: "",
-          currentVersionReleaseDate: "",
-          currentVersionDownloadLink: "",
-          currentVersionReleaseNotes: "",
-        },
-        step7Form: {
-          referencePublication: "",
-          developmentStatus: "",
-          isPartOf: "",
-        },
-        authorsErrorMessage: "",
-        contributorsErrorMessage: "",
-        isPartOfErrorMessage: "",
-        versionErrorMessage: "",
-        currentVersionDownloadLinkErrorMessage: "",
-        relatedLinksErrorMessage: "",
-        issueTrackerErrorMessage: "",
-        continuousIntegrationErrorMessage: "",
-        codeRepositoryErrorMessage: "",
-        invalidStatus: {},
-        originalObject: {},
-        showSaving: false,
-        showSpinner: false,
-      };
-    },
-    watch: {
-      "step2Form.authors": {
-        handler(val) {
-          if (val.length > 0) {
-            for (let author of val) {
-              if (
-                author.givenName === "" ||
-                author.affiliation === "" ||
-                author.affiliation === undefined
-              ) {
-                this.authorsErrorMessage =
-                  "First name and Affiliation for each author is mandatory";
-                this.invalidStatus.authors = true;
+      },
+      step4Form: {
+        codeRepository: "",
+        continuousIntegration: "",
+        issueTracker: "",
+        relatedLinks: [],
+      },
+      step5Form: {
+        programmingLanguage: [],
+        runtimePlatform: [],
+        operatingSystem: [],
+        otherSoftwareRequirements: [],
+      },
+      step6Form: {
+        currentVersion: "",
+        currentVersionReleaseDate: "",
+        currentVersionDownloadLink: "",
+        currentVersionReleaseNotes: "",
+      },
+      step7Form: {
+        referencePublication: "",
+        developmentStatus: "",
+        isPartOf: "",
+      },
+      authorsErrorMessage: "",
+      contributorsErrorMessage: "",
+      isPartOfErrorMessage: "",
+      versionErrorMessage: "",
+      currentVersionDownloadLinkErrorMessage: "",
+      relatedLinksErrorMessage: "",
+      issueTrackerErrorMessage: "",
+      continuousIntegrationErrorMessage: "",
+      codeRepositoryErrorMessage: "",
+      invalidStatus: {},
+      originalObject: {},
+      showSaving: false,
+      showSpinner: false,
+    };
+  },
+  watch: {
+    "step2Form.authors": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let author of val) {
+            if (
+              author.givenName === "" ||
+              author.affiliation === "" ||
+              author.affiliation === undefined
+            ) {
+              this.authorsErrorMessage =
+                "First name and Affiliation for each author is mandatory";
+              this.invalidStatus.authors = true;
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
+              break;
+            } else {
+              this.authorsErrorMessage = "";
+              this.invalidStatus.authors = false;
+            }
+
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.authorsErrorMessage = "";
+                this.invalidStatus.authors = false;
+              } else {
+                // console.log("invalid orcid");
+                this.authorsErrorMessage = "ORCID is not valid";
                 if (this.$refs["s2Form"]) {
                   this.$refs["s2Form"].validate();
                 }
+                this.invalidStatus.authors = true;
                 break;
-              } else {
-                this.authorsErrorMessage = "";
-                this.invalidStatus.authors = false;
               }
 
-              // validate orcid
-              if (author.orcid !== "") {
-                const orcid = author.orcid;
-                let total = 0;
-                for (let i = 0; i < orcid.length - 1; i++) {
-                  const digit = parseInt(orcid.substr(i, 1));
-                  if (isNaN(digit)) {
-                    continue;
-                  }
-                  total = (total + digit) * 2;
-                }
+              // validate email
+              if (author.email !== "") {
+                const validIdentifier = validator.isEmail(author.email);
 
-                const remainder = total % 11;
-                const result = (12 - remainder) % 11;
-                const checkDigit = result === 10 ? "X" : String(result);
-
-                if (checkDigit === orcid.substr(-1)) {
-                  this.authorsErrorMessage = "";
-                  this.invalidStatus.authors = false;
-                } else {
-                  // console.log("invalid orcid");
-                  this.authorsErrorMessage = "ORCID is not valid";
+                if (!validIdentifier) {
+                  this.authorsErrorMessage = "Email is not valid";
                   if (this.$refs["s2Form"]) {
                     this.$refs["s2Form"].validate();
                   }
                   this.invalidStatus.authors = true;
                   break;
-                }
-
-                // validate email
-                if (author.email !== "") {
-                  const validIdentifier = validator.isEmail(author.email);
-
-                  if (!validIdentifier) {
-                    this.authorsErrorMessage = "Email is not valid";
-                    if (this.$refs["s2Form"]) {
-                      this.$refs["s2Form"].validate();
-                    }
-                    this.invalidStatus.authors = true;
-                    break;
-                  } else {
-                    this.authorsErrorMessage = "";
-                    this.invalidStatus.authors = false;
-                  }
+                } else {
+                  this.authorsErrorMessage = "";
+                  this.invalidStatus.authors = false;
                 }
               }
             }
-          } else {
-            this.authorsErrorMessage = "";
-            this.invalidStatus.authors = false;
           }
-        },
-        deep: true,
+        } else {
+          this.authorsErrorMessage = "";
+          this.invalidStatus.authors = false;
+        }
       },
-      "step2Form.contributors": {
-        handler(val) {
-          if (val.length > 0) {
-            for (let contributor of val) {
-              if (
-                contributor.givenName === "" ||
-                contributor.affiliation === ""
-              ) {
-                this.contributorsErrorMessage =
-                  "Name and Affiliation for each contributor is mandatory";
-                this.invalidStatus.contributors = true;
-                this.$refs.s2Form.validate();
-                break;
-              } else {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              }
-
-              // validate orcid
-              if (contributor.orcid !== "") {
-                const orcid = contributor.orcid;
-                let total = 0;
-                for (let i = 0; i < orcid.length - 1; i++) {
-                  const digit = parseInt(orcid.substr(i, 1));
-                  if (isNaN(digit)) {
-                    continue;
-                  }
-                  total = (total + digit) * 2;
-                }
-
-                const remainder = total % 11;
-                const result = (12 - remainder) % 11;
-                const checkDigit = result === 10 ? "X" : String(result);
-
-                if (checkDigit === orcid.substr(-1)) {
-                  this.contributorsErrorMessage = "";
-                  this.invalidStatus.contributors = false;
-                } else {
-                  // console.log("invalid orcid");
-                  this.contributorsErrorMessage = "ORCID is not valid";
-                  this.$refs.s2Form.validate();
-                  this.invalidStatus.contributors = true;
-                  break;
-                }
-              }
-
-              // validate email
-              if (contributor.email !== "") {
-                const validIdentifier = validator.isEmail(contributor.email);
-
-                if (!validIdentifier) {
-                  this.contributorsErrorMessage = "Email is not valid";
-                  this.$refs.s2Form.validate();
-                  this.invalidStatus.contributors = true;
-                  break;
-                } else {
-                  this.contributorsErrorMessage = "";
-                  this.invalidStatus.contributors = false;
-                }
-              }
-
-              // validate contributor role
-              if (contributor.contributorType === "") {
-                this.contributorsErrorMessage =
-                  "Please select contributor type for each contributor";
-                this.invalidStatus.contributors = true;
-                this.$refs.s2Form.validate();
-                break;
-              } else {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              }
-            }
-          } else {
-            this.contributorsErrorMessage = "";
-            this.invalidStatus.contributors = false;
-          }
-        },
-        deep: true,
-      },
-      "step7Form.isPartOf": {
-        handler(val) {
-          if (val != "") {
-            const validIdentifier = validator.isURL(val);
-
-            if (!validIdentifier) {
-              this.isPartOfErrorMessage = "Please provide a valid URL";
-              this.$refs.s7Form.validate();
-              this.invalidStatus.isPartOf = true;
-              return;
+      deep: true,
+    },
+    "step2Form.contributors": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let contributor of val) {
+            if (
+              contributor.givenName === "" ||
+              contributor.affiliation === ""
+            ) {
+              this.contributorsErrorMessage =
+                "Name and Affiliation for each contributor is mandatory";
+              this.invalidStatus.contributors = true;
+              this.$refs.s2Form.validate();
+              break;
             } else {
-              this.isPartOfErrorMessage = "";
-              this.invalidStatus.isPartOf = false;
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
             }
+
+            // validate orcid
+            if (contributor.orcid !== "") {
+              const orcid = contributor.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              } else {
+                // console.log("invalid orcid");
+                this.contributorsErrorMessage = "ORCID is not valid";
+                this.$refs.s2Form.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              }
+            }
+
+            // validate email
+            if (contributor.email !== "") {
+              const validIdentifier = validator.isEmail(contributor.email);
+
+              if (!validIdentifier) {
+                this.contributorsErrorMessage = "Email is not valid";
+                this.$refs.s2Form.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              } else {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              }
+            }
+
+            // validate contributor role
+            if (contributor.contributorType === "") {
+              this.contributorsErrorMessage =
+                "Please select contributor type for each contributor";
+              this.invalidStatus.contributors = true;
+              this.$refs.s2Form.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
+            }
+          }
+        } else {
+          this.contributorsErrorMessage = "";
+          this.invalidStatus.contributors = false;
+        }
+      },
+      deep: true,
+    },
+    "step7Form.isPartOf": {
+      handler(val) {
+        if (val != "") {
+          const validIdentifier = validator.isURL(val);
+
+          if (!validIdentifier) {
+            this.isPartOfErrorMessage = "Please provide a valid URL";
+            this.$refs.s7Form.validate();
+            this.invalidStatus.isPartOf = true;
+            return;
           } else {
             this.isPartOfErrorMessage = "";
             this.invalidStatus.isPartOf = false;
           }
-        },
-        deep: true,
+        } else {
+          this.isPartOfErrorMessage = "";
+          this.invalidStatus.isPartOf = false;
+        }
       },
-      "step4Form.codeRepository": {
-        handler(val) {
-          if (val != "") {
-            const validIdentifier = validator.isURL(val);
+      deep: true,
+    },
+    "step4Form.codeRepository": {
+      handler(val) {
+        if (val != "") {
+          const validIdentifier = validator.isURL(val);
 
-            if (!validIdentifier) {
-              this.codeRepositoryErrorMessage = "Please provide a valid URL";
-              this.$refs.s4Form.validate();
-              this.invalidStatus.codeRepository = true;
-              return;
-            } else {
-              this.codeRepositoryErrorMessage = "";
-              this.invalidStatus.codeRepository = false;
-            }
+          if (!validIdentifier) {
+            this.codeRepositoryErrorMessage = "Please provide a valid URL";
+            this.$refs.s4Form.validate();
+            this.invalidStatus.codeRepository = true;
+            return;
           } else {
             this.codeRepositoryErrorMessage = "";
             this.invalidStatus.codeRepository = false;
           }
-        },
-        deep: true,
+        } else {
+          this.codeRepositoryErrorMessage = "";
+          this.invalidStatus.codeRepository = false;
+        }
       },
-      "step4Form.continuousIntegration": {
-        handler(val) {
-          if (val != "") {
-            const validIdentifier = validator.isURL(val);
+      deep: true,
+    },
+    "step4Form.continuousIntegration": {
+      handler(val) {
+        if (val != "") {
+          const validIdentifier = validator.isURL(val);
 
-            if (!validIdentifier) {
-              this.continuousIntegrationErrorMessage =
-                "Please provide a valid URL";
-              this.$refs.s4Form.validate();
-              this.invalidStatus.continuousIntegration = true;
-              return;
-            } else {
-              this.continuousIntegrationErrorMessage = "";
-              this.invalidStatus.continuousIntegration = false;
-            }
+          if (!validIdentifier) {
+            this.continuousIntegrationErrorMessage =
+              "Please provide a valid URL";
+            this.$refs.s4Form.validate();
+            this.invalidStatus.continuousIntegration = true;
+            return;
           } else {
             this.continuousIntegrationErrorMessage = "";
             this.invalidStatus.continuousIntegration = false;
           }
-        },
-        deep: true,
+        } else {
+          this.continuousIntegrationErrorMessage = "";
+          this.invalidStatus.continuousIntegration = false;
+        }
       },
-      "step4Form.issueTracker": {
-        handler(val) {
-          if (val != "") {
-            const validIdentifier = validator.isURL(val);
+      deep: true,
+    },
+    "step4Form.issueTracker": {
+      handler(val) {
+        if (val != "") {
+          const validIdentifier = validator.isURL(val);
 
-            if (!validIdentifier) {
-              this.issueTrackerErrorMessage = "Please provide a valid URL";
-              this.$refs.s4Form.validate();
-              this.invalidStatus.issueTracker = true;
-              return;
-            } else {
-              this.issueTrackerErrorMessage = "";
-              this.invalidStatus.issueTracker = false;
-            }
+          if (!validIdentifier) {
+            this.issueTrackerErrorMessage = "Please provide a valid URL";
+            this.$refs.s4Form.validate();
+            this.invalidStatus.issueTracker = true;
+            return;
           } else {
             this.issueTrackerErrorMessage = "";
             this.invalidStatus.issueTracker = false;
           }
-        },
-        deep: true,
+        } else {
+          this.issueTrackerErrorMessage = "";
+          this.invalidStatus.issueTracker = false;
+        }
       },
-      "step6Form.currentVersionDownloadLink": {
-        handler(val) {
-          if (val != "") {
-            const validIdentifier = validator.isURL(val);
+      deep: true,
+    },
+    "step6Form.currentVersionDownloadLink": {
+      handler(val) {
+        if (val != "") {
+          const validIdentifier = validator.isURL(val);
 
-            if (!validIdentifier) {
-              this.currentVersionDownloadLinkErrorMessage =
-                "Please provide a valid URL";
-              this.$refs.s6Form.validate();
-              this.invalidStatus.currentVersionDownloadLink = true;
-              return;
-            } else {
-              this.currentVersionDownloadLinkErrorMessage = "";
-              this.invalidStatus.currentVersionDownloadLink = false;
-            }
+          if (!validIdentifier) {
+            this.currentVersionDownloadLinkErrorMessage =
+              "Please provide a valid URL";
+            this.$refs.s6Form.validate();
+            this.invalidStatus.currentVersionDownloadLink = true;
+            return;
           } else {
             this.currentVersionDownloadLinkErrorMessage = "";
             this.invalidStatus.currentVersionDownloadLink = false;
           }
-        },
-        deep: true,
+        } else {
+          this.currentVersionDownloadLinkErrorMessage = "";
+          this.invalidStatus.currentVersionDownloadLink = false;
+        }
       },
-      "step4Form.relatedLinks": {
-        handler(val) {
-          if (val.length > 0) {
-            for (let relatedLink of val) {
-              if (relatedLink.link !== "") {
-                const validIdentifier = validator.isURL(relatedLink.link);
+      deep: true,
+    },
+    "step4Form.relatedLinks": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let relatedLink of val) {
+            if (relatedLink.link !== "") {
+              const validIdentifier = validator.isURL(relatedLink.link);
 
-                if (!validIdentifier) {
-                  this.relatedLinksErrorMessage = "Please provide a valid URL";
-                  this.$refs.s4Form.validate();
-                  this.invalidStatus.relatedLinks = true;
-                  break;
-                } else {
-                  this.relatedLinksErrorMessage = "";
-                  this.invalidStatus.relatedLinks = false;
-                }
+              if (!validIdentifier) {
+                this.relatedLinksErrorMessage = "Please provide a valid URL";
+                this.$refs.s4Form.validate();
+                this.invalidStatus.relatedLinks = true;
+                break;
+              } else {
+                this.relatedLinksErrorMessage = "";
+                this.invalidStatus.relatedLinks = false;
               }
             }
-          } else {
-            this.relatedLinksErrorMessage = "";
-            this.invalidStatus.relatedLinks = false;
           }
-        },
-        deep: true,
+        } else {
+          this.relatedLinksErrorMessage = "";
+          this.invalidStatus.relatedLinks = false;
+        }
       },
+      deep: true,
     },
-    computed: {
-      //check if code workflow is present
-      codePresent() {
-        if ("type" in this.workflow) {
-          return this.workflow.type.includes("Code");
-        }
-        return false;
-      },
-      developmentStatus() {
-        const that = this;
-
-        function getStatus(repoStatus) {
-          return that.repoStatusOptions.find(
-            (status) => status.value === repoStatus
-          );
-        }
-
-        if (
-          "developmentStatus" in this.step7Form &&
-          this.step7Form.developmentStatus != ""
-        ) {
-          const status = this.step7Form.developmentStatus;
-          const returnVal = getStatus(status);
-
-          return returnVal.description;
-        } else {
-          return "";
-        }
-      },
-      checkInvalidStatus() {
-        for (const key in this.invalidStatus) {
-          if (this.invalidStatus[key]) {
-            return true;
-          }
-        }
-        return false;
-      },
+  },
+  computed: {
+    //check if code workflow is present
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
     },
-    methods: {
-      async sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      },
-      setCurrentStep(step) {
-        this.currentStep = step;
-      },
-      showSavingIcon() {
-        this.showSaving = false;
-        this.showSaving = true;
-      },
-      hideSavingIcon() {
-        this.showSaving = false;
-      },
-      async prevFormStep() {
-        this.showSavingIcon();
+    developmentStatus() {
+      const that = this;
 
-        if (this.currentStep - 1 > 0) {
-          this.currentStep--;
-        } else {
-          this.navigateBack();
-        }
-      },
-      async nextFormStep() {
-        const totalSteps = 7;
+      function getStatus(repoStatus) {
+        return that.repoStatusOptions.find(
+          (status) => status.value === repoStatus
+        );
+      }
 
-        if (this.currentStep + 1 > totalSteps) {
-          if (!this.checkInvalidStatus) {
-            this.navigateToSelectDestination();
-          }
-        } else {
-          this.currentStep++;
-        }
-      },
-      navigateToStep2FromStep1() {
-        this.$refs["s1Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(2);
-          }
-        });
-      },
-      navigateToStep3FromStep2() {
-        if (this.step2Form.authors.length <= 0) {
-          ElMessage.error("Please add at least one author.");
-          return;
-        }
+      if (
+        "developmentStatus" in this.step7Form &&
+        this.step7Form.developmentStatus != ""
+      ) {
+        const status = this.step7Form.developmentStatus;
+        const returnVal = getStatus(status);
 
-        this.$refs["s2Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(3);
-          }
-        });
-      },
-      navigateToStep4FromStep3() {
-        if (this.step3Form.keywords.length <= 0) {
-          ElMessage.error("Please add at least one keyword.");
-          return;
+        return returnVal.description;
+      } else {
+        return "";
+      }
+    },
+    checkInvalidStatus() {
+      for (const key in this.invalidStatus) {
+        if (this.invalidStatus[key]) {
+          return true;
         }
+      }
+      return false;
+    },
+  },
+  methods: {
+    async sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    },
+    setCurrentStep(step) {
+      this.currentStep = step;
+    },
+    showSavingIcon() {
+      this.showSaving = false;
+      this.showSaving = true;
+    },
+    hideSavingIcon() {
+      this.showSaving = false;
+    },
+    async prevFormStep() {
+      this.showSavingIcon();
 
-        this.$refs["s3Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(4);
-          }
-        });
-      },
-      navigateToStep5FromStep4() {
-        this.$refs["s4Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(5);
-          }
-        });
-      },
-      navigateToStep6FromStep5() {
-        if (this.step5Form.programmingLanguage.length <= 0) {
-          ElMessage.error("Please add at least one programming language.");
-          return;
-        }
-        this.$refs["s5Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(6);
-          }
-        });
-      },
-      navigateToStep7FromStep6() {
-        this.$refs["s6Form"].validate(async (valid) => {
-          if (valid) {
-            await this.saveCurrentEntries();
-            this.setCurrentStep(7);
-          }
-        });
-      },
-      addIds(array) {
-        array.forEach((element) => {
-          element.id = uuidv4();
-        });
-      },
-      initializeEmptyObjects(root, obj) {
-        if (typeof obj === "undefined") {
-          root[obj] = {};
-        }
-      },
-      focusOnElementRef(elementRef) {
-        // check if element is available in 100ms intervals
-        const interval = setInterval(() => {
-          if (this.$refs[elementRef]) {
-            this.$refs[elementRef].focus();
-            clearInterval(interval);
-          }
-        }, 50);
-      },
-      addKeyword(keyword = "") {
-        if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
-          this.$message.warning("Keyword already exists.");
-          return;
-        }
+      if (this.currentStep - 1 > 0) {
+        this.currentStep--;
+      } else {
+        this.navigateBack();
+      }
+    },
+    async nextFormStep() {
+      const totalSteps = 7;
 
-        const uuid = uuidv4();
-        this.step3Form.keywords.push({
-          keyword: keyword,
-          id: uuidv4(),
-        });
-        this.focusOnElementRef(uuid);
-      },
-      deleteKeyword(id) {
-        this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
-          return keyword.id !== id;
-        });
-      },
-      addAuthor() {
-        this.step2Form.authors.push({
-          givenName: "",
-          familyName: "",
-          affiliation: "",
-          email: "",
-          orcid: "",
-          id: uuidv4(),
-        });
-      },
-      deleteAuthor(id) {
-        this.step2Form.authors = this.step2Form.authors.filter((author) => {
-          return author.id !== id;
-        });
-      },
-      addContributor() {
-        this.step2Form.contributors.push({
-          contributorType: "",
-          givenName: "",
-          familyName: "",
-          affiliation: "",
-          email: "",
-          orcid: "",
-          id: uuidv4(),
-        });
-      },
-      deleteContributor(id) {
-        this.step2Form.contributors = this.step2Form.contributors.filter(
-          (contributor) => {
-            return contributor.id !== id;
+      if (this.currentStep + 1 > totalSteps) {
+        if (!this.checkInvalidStatus) {
+          this.navigateToSelectDestination();
+        }
+      } else {
+        this.currentStep++;
+      }
+    },
+    navigateToStep2FromStep1() {
+      this.$refs["s1Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(2);
+        }
+      });
+    },
+    navigateToStep3FromStep2() {
+      if (this.step2Form.authors.length <= 0) {
+        ElMessage.error("Please add at least one author.");
+        return;
+      }
+
+      this.$refs["s2Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(3);
+        }
+      });
+    },
+    navigateToStep4FromStep3() {
+      if (this.step3Form.keywords.length <= 0) {
+        ElMessage.error("Please add at least one keyword.");
+        return;
+      }
+
+      this.$refs["s3Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(4);
+        }
+      });
+    },
+    navigateToStep5FromStep4() {
+      this.$refs["s4Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(5);
+        }
+      });
+    },
+    navigateToStep6FromStep5() {
+      if (this.step5Form.programmingLanguage.length <= 0) {
+        ElMessage.error("Please add at least one programming language.");
+        return;
+      }
+      this.$refs["s5Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(6);
+        }
+      });
+    },
+    navigateToStep7FromStep6() {
+      this.$refs["s6Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(7);
+        }
+      });
+    },
+    addIds(array) {
+      array.forEach((element) => {
+        element.id = uuidv4();
+      });
+    },
+    initializeEmptyObjects(root, obj) {
+      if (typeof obj === "undefined") {
+        root[obj] = {};
+      }
+    },
+    focusOnElementRef(elementRef) {
+      // check if element is available in 100ms intervals
+      const interval = setInterval(() => {
+        if (this.$refs[elementRef]) {
+          this.$refs[elementRef].focus();
+          clearInterval(interval);
+        }
+      }, 50);
+    },
+    addKeyword(keyword = "") {
+      if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
+        this.$message.warning("Keyword already exists.");
+        return;
+      }
+
+      const uuid = uuidv4();
+      this.step3Form.keywords.push({
+        keyword: keyword,
+        id: uuidv4(),
+      });
+      this.focusOnElementRef(uuid);
+    },
+    deleteKeyword(id) {
+      this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
+        return keyword.id !== id;
+      });
+    },
+    addAuthor() {
+      this.step2Form.authors.push({
+        givenName: "",
+        familyName: "",
+        affiliation: "",
+        email: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteAuthor(id) {
+      this.step2Form.authors = this.step2Form.authors.filter((author) => {
+        return author.id !== id;
+      });
+    },
+    addContributor() {
+      this.step2Form.contributors.push({
+        contributorType: "",
+        givenName: "",
+        familyName: "",
+        affiliation: "",
+        email: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteContributor(id) {
+      this.step2Form.contributors = this.step2Form.contributors.filter(
+        (contributor) => {
+          return contributor.id !== id;
+        }
+      );
+    },
+    addRelatedLink() {
+      this.step4Form.relatedLinks.push({
+        link: "",
+        id: uuidv4(),
+      });
+    },
+    deleteRelatedLink(id) {
+      this.step4Form.relatedLinks = this.step4Form.relatedLinks.filter(
+        (relatedLink) => {
+          return relatedLink.id !== id;
+        }
+      );
+    },
+    addOtherSoftwareRequirements() {
+      this.step5Form.otherSoftwareRequirements.push({
+        link: "",
+        id: uuidv4(),
+      });
+    },
+    deleteOtherSoftwareRequirements(id) {
+      this.step5Form.otherSoftwareRequirements =
+        this.step5Form.otherSoftwareRequirements.filter(
+          (otherSoftwareRequirement) => {
+            return otherSoftwareRequirement.id !== id;
           }
         );
-      },
-      addRelatedLink() {
-        this.step4Form.relatedLinks.push({
-          link: "",
-          id: uuidv4(),
+    },
+    filterArrayOfObjects(array, key) {
+      return array.filter((element) => {
+        return element[key] !== "";
+      });
+    },
+    async saveCurrentEntries() {
+      this.showSavingIcon();
+
+      this.dataset.data.general.questions.name = this.step1Form.name;
+      this.dataset.data.general.questions.description =
+        this.step1Form.description;
+
+      this.step3Form.keywords = this.filterArrayOfObjects(
+        this.step3Form.keywords,
+        "keyword"
+      );
+
+      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
+      this.dataset.data.general.questions.authors = this.step2Form.authors;
+      this.dataset.data.general.questions.contributors =
+        this.step2Form.contributors;
+      this.dataset.data.general.questions.funding = this.step3Form.funding;
+      this.dataset.data.general.questions.referencePublication =
+        this.step7Form.referencePublication;
+
+      this.step4Form.relatedLinks = this.filterArrayOfObjects(
+        this.step4Form.relatedLinks,
+        "link"
+      );
+
+      this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
+        this.step5Form.otherSoftwareRequirements,
+        "link"
+      );
+
+      if (this.codePresent) {
+        let codeForm = {};
+
+        codeForm.name = this.step1Form.name;
+        codeForm.description = this.step1Form.description;
+        codeForm.creationDate = this.step1Form.creationDate;
+        codeForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+
+        codeForm.authors = this.step2Form.authors;
+        codeForm.contributors = this.step2Form.contributors;
+
+        codeForm.keywords = this.step3Form.keywords;
+        codeForm.funding = this.step3Form.funding;
+        codeForm.applicationCategory = this.step3Form.applicationCategory;
+
+        codeForm.codeRepository = this.step4Form.codeRepository;
+        codeForm.continuousIntegration = this.step4Form.continuousIntegration;
+        codeForm.issueTracker = this.step4Form.issueTracker;
+        codeForm.relatedLinks = this.step4Form.relatedLinks;
+
+        codeForm.programmingLanguage = this.step5Form.programmingLanguage;
+        codeForm.runtimePlatform = this.step5Form.runtimePlatform;
+        codeForm.operatingSystem = this.step5Form.operatingSystem;
+        codeForm.otherSoftwareRequirements =
+          this.step5Form.otherSoftwareRequirements;
+
+        codeForm.currentVersion = this.step6Form.currentVersion;
+        codeForm.currentVersionReleaseDate =
+          this.step6Form.currentVersionReleaseDate;
+        codeForm.currentVersionDownloadLink =
+          this.step6Form.currentVersionDownloadLink;
+        codeForm.currentVersionReleaseNotes =
+          this.step6Form.currentVersionReleaseNotes;
+
+        codeForm.referencePublication = this.step7Form.referencePublication;
+        codeForm.developmentStatus = this.step7Form.developmentStatus;
+        codeForm.isPartOf = this.step7Form.isPartOf;
+
+        this.dataset.data.Code.questions = codeForm;
+      }
+
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+    },
+    async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+      await this.saveCurrentEntries();
+
+      if (shouldNavigateBack) {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
         });
-      },
-      deleteRelatedLink(id) {
-        this.step4Form.relatedLinks = this.step4Form.relatedLinks.filter(
-          (relatedLink) => {
-            return relatedLink.id !== id;
+        return;
+      }
+
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
+
+      this.$router.push({ path: routerPath });
+    },
+    navigateBack() {
+      let newChanges = false;
+
+      // if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
+      //   newChanges = true;
+      // }
+
+      if (newChanges) {
+        ElMessageBox.confirm(
+          "You have some unsaved changes. Do you want to save your edits?",
+          "Warning",
+          {
+            confirmButtonText: "Save and go back",
+            cancelButtonText: "Don't save and go back",
+            type: "warning",
           }
-        );
-      },
-      addOtherSoftwareRequirements() {
-        this.step5Form.otherSoftwareRequirements.push({
-          link: "",
-          id: uuidv4(),
-        });
-      },
-      deleteOtherSoftwareRequirements(id) {
-        this.step5Form.otherSoftwareRequirements =
-          this.step5Form.otherSoftwareRequirements.filter(
-            (otherSoftwareRequirement) => {
-              return otherSoftwareRequirement.id !== id;
-            }
-          );
-      },
-      filterArrayOfObjects(array, key) {
-        return array.filter((element) => {
-          return element[key] !== "";
-        });
-      },
-      async saveCurrentEntries() {
-        this.showSavingIcon();
-
-        this.dataset.data.general.questions.name = this.step1Form.name;
-        this.dataset.data.general.questions.description =
-          this.step1Form.description;
-
-        this.step3Form.keywords = this.filterArrayOfObjects(
-          this.step3Form.keywords,
-          "keyword"
-        );
-
-        this.dataset.data.general.questions.keywords = this.step3Form.keywords;
-        this.dataset.data.general.questions.authors = this.step2Form.authors;
-        this.dataset.data.general.questions.contributors =
-          this.step2Form.contributors;
-        this.dataset.data.general.questions.funding = this.step3Form.funding;
-        this.dataset.data.general.questions.referencePublication =
-          this.step7Form.referencePublication;
-
-        this.step4Form.relatedLinks = this.filterArrayOfObjects(
-          this.step4Form.relatedLinks,
-          "link"
-        );
-
-        this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
-          this.step5Form.otherSoftwareRequirements,
-          "link"
-        );
-
-        if (this.codePresent) {
-          let codeForm = {};
-
-          codeForm.name = this.step1Form.name;
-          codeForm.description = this.step1Form.description;
-          codeForm.creationDate = this.step1Form.creationDate;
-          codeForm.firstReleaseDate = this.step1Form.firstReleaseDate;
-
-          codeForm.authors = this.step2Form.authors;
-          codeForm.contributors = this.step2Form.contributors;
-
-          codeForm.keywords = this.step3Form.keywords;
-          codeForm.funding = this.step3Form.funding;
-          codeForm.applicationCategory = this.step3Form.applicationCategory;
-
-          codeForm.codeRepository = this.step4Form.codeRepository;
-          codeForm.continuousIntegration = this.step4Form.continuousIntegration;
-          codeForm.issueTracker = this.step4Form.issueTracker;
-          codeForm.relatedLinks = this.step4Form.relatedLinks;
-
-          codeForm.programmingLanguage = this.step5Form.programmingLanguage;
-          codeForm.runtimePlatform = this.step5Form.runtimePlatform;
-          codeForm.operatingSystem = this.step5Form.operatingSystem;
-          codeForm.otherSoftwareRequirements =
-            this.step5Form.otherSoftwareRequirements;
-
-          codeForm.currentVersion = this.step6Form.currentVersion;
-          codeForm.currentVersionReleaseDate =
-            this.step6Form.currentVersionReleaseDate;
-          codeForm.currentVersionDownloadLink =
-            this.step6Form.currentVersionDownloadLink;
-          codeForm.currentVersionReleaseNotes =
-            this.step6Form.currentVersionReleaseNotes;
-
-          codeForm.referencePublication = this.step7Form.referencePublication;
-          codeForm.developmentStatus = this.step7Form.developmentStatus;
-          codeForm.isPartOf = this.step7Form.isPartOf;
-
-          this.dataset.data.Code.questions = codeForm;
-        }
-
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
-      },
-      async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
-        await this.saveCurrentEntries();
-
-        if (shouldNavigateBack) {
-          this.$router.push({
-            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+        )
+          .then(() => {
+            // save changes
+            this.navigateToSelectDestination(true, true);
+          })
+          .catch(() => {
+            // don't save changes
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
+            });
           });
-          return;
-        }
+      } else {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
+        });
+      }
+    },
+    async prefillGithubAuthors() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting authors",
+        position: "top-right",
+        type: "info",
+      });
 
-        const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
 
-        this.$router.push({ path: routerPath });
-      },
-      navigateBack() {
-        let newChanges = false;
+      const selectedRepo = this.workflow.github.repo;
 
-        // if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
-        //   newChanges = true;
-        // }
+      let response = "";
 
-        if (newChanges) {
-          ElMessageBox.confirm(
-            "You have some unsaved changes. Do you want to save your edits?",
-            "Warning",
+      response = await axios
+        .get(`${this.$server_url}/github/repo/contributors`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: selectedRepo.split("/")[0],
+            repo: selectedRepo.split("/")[1],
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      let contributors = [];
+
+      if (response != "ERROR") {
+        response.forEach((contributor) => {
+          contributors.push(contributor.login);
+        });
+      }
+
+      let authors = [];
+
+      for (const contributor of contributors) {
+        response = await axios
+          .get(
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
             {
-              confirmButtonText: "Save and go back",
-              cancelButtonText: "Don't save and go back",
-              type: "warning",
+              params: {
+                accept: "application/vnd.github.v3+json",
+              },
+              headers: {
+                Authorization: `Bearer  ${GithubAccessToken}`,
+              },
             }
           )
-            .then(() => {
-              // save changes
-              this.navigateToSelectDestination(true, true);
-            })
-            .catch(() => {
-              // don't save changes
-              this.$router.push({
-                path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
-              });
-            });
-        } else {
-          this.$router.push({
-            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
+          .then((response) => {
+            const authorObject = {};
+
+            if (response.data.name != null) {
+              const parsedNames = humanparser.parseName(response.data.name);
+              if ("lastName" in parsedNames) {
+                authorObject.familyName = parsedNames.lastName;
+              } else {
+                authorObject.familyName = "";
+              }
+              if ("firstName" in parsedNames) {
+                authorObject.givenName = parsedNames.firstName;
+              } else {
+                authorObject.givenName = response.data.name;
+              }
+            }
+
+            if (response.data.email != null) {
+              authorObject.email = response.data.email;
+            }
+
+            if (response.data.company != null) {
+              authorObject.company = response.data.company;
+            }
+
+            if (!_.isEmpty(authorObject)) {
+              authors.push(authorObject);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
           });
-        }
-      },
-      async prefillGithubAuthors() {
-        ElNotification({
-          title: "Info",
-          message: "Requesting authors",
-          position: "top-right",
-          type: "info",
+      }
+
+      authors.forEach((author) => {
+        const authorObject = {
+          givenName: author.givenName,
+          familyName: author.familyName,
+          affiliation: author.company,
+          email: author.email,
+          orcid: "",
+          id: uuidv4(),
+        };
+
+        this.step2Form.authors.push(authorObject);
+      });
+
+      ElNotification({
+        title: "Success",
+        message: "Retrieved authors",
+        position: "top-right",
+        type: "success",
+      });
+    },
+    async prefillGithubMisc() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting repo info",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
         });
 
-        // get a list of contributors for the repo
-        const tokenObject = await this.tokens.getToken("github");
-        const GithubAccessToken = tokenObject.token;
+      if (response != "ERROR") {
+        if (response.html_url != null) {
+          this.step4Form.codeRepository = response.html_url;
+          this.step4Form.issueTracker = `${response.html_url}/issues`;
+        }
 
-        const selectedRepo = this.workflow.github.repo;
+        if (response.homepage != null) {
+          this.step4Form.relatedLinks.push({
+            link: response.homepage,
+            id: uuidv4(),
+          });
+        }
 
-        let response = "";
+        if (response.topics != null && response.topics.length > 0) {
+          response.topics.forEach((topic) => {
+            this.step3Form.keywords.push({
+              keyword: topic,
+              id: uuidv4(),
+            });
+          });
+        }
 
-        response = await axios
-          .get(`${this.$server_url}/github/repo/contributors`, {
+        if ("created_at" in response) {
+          this.step1Form.creationDate = response.created_at;
+        }
+
+        this.step6Form.currentVersionReleaseDate = new Date().toISOString();
+
+        if (response.description != null) {
+          this.step1Form.description = response.description;
+        }
+
+        const splitRepoNameOwner = selectedRepo.split("/");
+
+        const releaseList = await axios
+          .get(`${this.$server_url}/github/repo/releases`, {
             params: {
               access_token: GithubAccessToken,
-              owner: selectedRepo.split("/")[0],
-              repo: selectedRepo.split("/")[1],
+              owner: splitRepoNameOwner[0],
+              repo: splitRepoNameOwner[1],
             },
           })
           .then((response) => {
@@ -2058,102 +2218,19 @@
             return "ERROR";
           });
 
-        let contributors = [];
+        if (releaseList !== "ERROR") {
+          if (releaseList.length > 0) {
+            const release = releaseList.slice(-1).pop();
 
-        if (response != "ERROR") {
-          response.forEach((contributor) => {
-            contributors.push(contributor.login);
-          });
+            if ("created_at" in release) {
+              this.step1Form.firstReleaseDate = release.created_at;
+            }
+          }
         }
 
-        let authors = [];
-
-        for (const contributor of contributors) {
-          response = await axios
-            .get(
-              `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
-              {
-                params: {
-                  accept: "application/vnd.github.v3+json",
-                },
-                headers: {
-                  Authorization: `Bearer  ${GithubAccessToken}`,
-                },
-              }
-            )
-            .then((response) => {
-              const authorObject = {};
-
-              if (response.data.name != null) {
-                const parsedNames = humanparser.parseName(response.data.name);
-                if ("lastName" in parsedNames) {
-                  authorObject.familyName = parsedNames.lastName;
-                } else {
-                  authorObject.familyName = "";
-                }
-                if ("firstName" in parsedNames) {
-                  authorObject.givenName = parsedNames.firstName;
-                } else {
-                  authorObject.givenName = response.data.name;
-                }
-              }
-
-              if (response.data.email != null) {
-                authorObject.email = response.data.email;
-              }
-
-              if (response.data.company != null) {
-                authorObject.company = response.data.company;
-              }
-
-              if (!_.isEmpty(authorObject)) {
-                authors.push(authorObject);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-
-        authors.forEach((author) => {
-          const authorObject = {
-            givenName: author.givenName,
-            familyName: author.familyName,
-            affiliation: author.company,
-            email: author.email,
-            orcid: "",
-            id: uuidv4(),
-          };
-
-          this.step2Form.authors.push(authorObject);
-        });
-
-        ElNotification({
-          title: "Success",
-          message: "Retrieved authors",
-          position: "top-right",
-          type: "success",
-        });
-      },
-      async prefillGithubMisc() {
-        ElNotification({
-          title: "Info",
-          message: "Requesting repo info",
-          position: "top-right",
-          type: "info",
-        });
-
-        // get a list of contributors for the repo
-        const tokenObject = await this.tokens.getToken("github");
-        const GithubAccessToken = tokenObject.token;
-
-        const selectedRepo = this.workflow.github.repo;
-
-        let response = "";
-
-        response = await axios
+        const lanuagesResponse = await axios
           .get(
-            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`,
+            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
             {
               params: {
                 accept: "application/vnd.github.v3+json",
@@ -2171,184 +2248,103 @@
             return "ERROR";
           });
 
-        if (response != "ERROR") {
-          if (response.html_url != null) {
-            this.step4Form.codeRepository = response.html_url;
-            this.step4Form.issueTracker = `${response.html_url}/issues`;
+        if (lanuagesResponse != "ERROR") {
+          const languages = Object.keys(lanuagesResponse);
+          if (languages.length > 0) {
+            this.step5Form.programmingLanguage = languages;
           }
-
-          if (response.homepage != null) {
-            this.step4Form.relatedLinks.push({
-              link: response.homepage,
-              id: uuidv4(),
-            });
-          }
-
-          if (response.topics != null && response.topics.length > 0) {
-            response.topics.forEach((topic) => {
-              this.step3Form.keywords.push({
-                keyword: topic,
-                id: uuidv4(),
-              });
-            });
-          }
-
-          if ("created_at" in response) {
-            this.step1Form.creationDate = response.created_at;
-          }
-
-          this.step6Form.currentVersionReleaseDate = new Date().toISOString();
-
-          if (response.description != null) {
-            this.step1Form.description = response.description;
-          }
-
-          const splitRepoNameOwner = selectedRepo.split("/");
-
-          const releaseList = await axios
-            .get(`${this.$server_url}/github/repo/releases`, {
-              params: {
-                access_token: GithubAccessToken,
-                owner: splitRepoNameOwner[0],
-                repo: splitRepoNameOwner[1],
-              },
-            })
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-              return "ERROR";
-            });
-
-          if (releaseList !== "ERROR") {
-            if (releaseList.length > 0) {
-              const release = releaseList.slice(-1).pop();
-
-              if ("created_at" in release) {
-                this.step1Form.firstReleaseDate = release.created_at;
-              }
-            }
-          }
-
-          const lanuagesResponse = await axios
-            .get(
-              `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
-              {
-                params: {
-                  accept: "application/vnd.github.v3+json",
-                },
-                headers: {
-                  Authorization: `Bearer  ${GithubAccessToken}`,
-                },
-              }
-            )
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-              return "ERROR";
-            });
-
-          if (lanuagesResponse != "ERROR") {
-            const languages = Object.keys(lanuagesResponse);
-            if (languages.length > 0) {
-              this.step5Form.programmingLanguage = languages;
-            }
-          }
-
-          ElNotification({
-            title: "Success",
-            message: "Repo info retrieved",
-            position: "top-right",
-            type: "success",
-          });
         }
-      },
+
+        ElNotification({
+          title: "Success",
+          message: "Repo info retrieved",
+          position: "top-right",
+          type: "success",
+        });
+      }
     },
-    mounted() {
-      this.$nextTick(async function () {
-        this.dataset = await this.datasetStore.getCurrentDataset();
+  },
+  mounted() {
+    this.$nextTick(async function () {
+      this.dataset = await this.datasetStore.getCurrentDataset();
 
-        this.workflow = this.dataset.workflows[this.workflowID];
+      this.workflow = this.dataset.workflows[this.workflowID];
 
-        this.datasetStore.showProgressBar();
-        this.datasetStore.setProgressBarType("zenodo");
-        this.datasetStore.setCurrentStep(3);
+      this.datasetStore.showProgressBar();
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(3);
 
-        this.workflow.currentRoute = this.$route.path;
+      this.workflow.currentRoute = this.$route.path;
 
-        if (this.codePresent) {
-          if (
-            this.dataset.data.Code.questions &&
-            Object.keys(this.dataset.data.Code.questions).length !== 0
-          ) {
-            let codeForm = this.dataset.data.Code.questions;
+      if (this.codePresent) {
+        if (
+          this.dataset.data.Code.questions &&
+          Object.keys(this.dataset.data.Code.questions).length !== 0
+        ) {
+          let codeForm = this.dataset.data.Code.questions;
 
-            this.step1Form.name = codeForm.name;
-            this.step1Form.description = codeForm.description;
-            this.step1Form.creationDate = codeForm.creationDate;
-            this.step1Form.firstReleaseDate = codeForm.firstReleaseDate;
+          this.step1Form.name = codeForm.name;
+          this.step1Form.description = codeForm.description;
+          this.step1Form.creationDate = codeForm.creationDate;
+          this.step1Form.firstReleaseDate = codeForm.firstReleaseDate;
 
-            this.step2Form.authors = codeForm.authors;
-            this.step2Form.contributors = codeForm.contributors;
+          this.step2Form.authors = codeForm.authors;
+          this.step2Form.contributors = codeForm.contributors;
 
-            this.step3Form.keywords = codeForm.keywords;
-            this.step3Form.funding = codeForm.funding;
-            this.step3Form.applicationCategory = codeForm.applicationCategory;
+          this.step3Form.keywords = codeForm.keywords;
+          this.step3Form.funding = codeForm.funding;
+          this.step3Form.applicationCategory = codeForm.applicationCategory;
 
-            this.step4Form.codeRepository = codeForm.codeRepository;
-            this.step4Form.continuousIntegration =
-              codeForm.continuousIntegration;
-            this.step4Form.issueTracker = codeForm.issueTracker;
-            this.step4Form.relatedLinks = codeForm.relatedLinks;
+          this.step4Form.codeRepository = codeForm.codeRepository;
+          this.step4Form.continuousIntegration = codeForm.continuousIntegration;
+          this.step4Form.issueTracker = codeForm.issueTracker;
+          this.step4Form.relatedLinks = codeForm.relatedLinks;
 
-            this.step5Form.programmingLanguage = codeForm.programmingLanguage;
-            this.step5Form.runtimePlatform = codeForm.runtimePlatform;
-            this.step5Form.operatingSystem = codeForm.operatingSystem;
-            this.step5Form.otherSoftwareRequirements =
-              codeForm.otherSoftwareRequirements;
+          this.step5Form.programmingLanguage = codeForm.programmingLanguage;
+          this.step5Form.runtimePlatform = codeForm.runtimePlatform;
+          this.step5Form.operatingSystem = codeForm.operatingSystem;
+          this.step5Form.otherSoftwareRequirements =
+            codeForm.otherSoftwareRequirements;
 
-            this.step6Form.currentVersion = codeForm.currentVersion;
-            this.step6Form.currentVersionReleaseDate =
-              codeForm.currentVersionReleaseDate;
-            this.step6Form.currentVersionDownloadLink =
-              codeForm.currentVersionDownloadLink;
-            this.step6Form.currentVersionReleaseNotes =
-              codeForm.currentVersionReleaseNotes;
+          this.step6Form.currentVersion = codeForm.currentVersion;
+          this.step6Form.currentVersionReleaseDate =
+            codeForm.currentVersionReleaseDate;
+          this.step6Form.currentVersionDownloadLink =
+            codeForm.currentVersionDownloadLink;
+          this.step6Form.currentVersionReleaseNotes =
+            codeForm.currentVersionReleaseNotes;
 
-            this.step7Form.referencePublication = codeForm.referencePublication;
-            this.step7Form.developmentStatus = codeForm.developmentStatus;
-            this.step7Form.isPartOf = codeForm.isPartOf;
+          this.step7Form.referencePublication = codeForm.referencePublication;
+          this.step7Form.developmentStatus = codeForm.developmentStatus;
+          this.step7Form.isPartOf = codeForm.isPartOf;
 
-            // this.initializeEmptyObjects(this.codeForm, this.codeForm.funding);
-            this.initializeEmptyObjects(this.step3Form, this.step3Form.funding);
+          // this.initializeEmptyObjects(this.codeForm, this.codeForm.funding);
+          this.initializeEmptyObjects(this.step3Form, this.step3Form.funding);
 
-            this.addIds(this.step3Form.keywords);
-            this.addIds(this.step2Form.authors);
-            this.addIds(this.step2Form.contributors);
+          this.addIds(this.step3Form.keywords);
+          this.addIds(this.step2Form.authors);
+          this.addIds(this.step2Form.contributors);
 
-            this.addIds(this.step4Form.relatedLinks);
-            this.addIds(this.step5Form.otherSoftwareRequirements);
+          this.addIds(this.step4Form.relatedLinks);
+          this.addIds(this.step5Form.otherSoftwareRequirements);
 
-            // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
-          } else {
-            this.step1Form.name = this.dataset.name;
-            this.step1Form.description = this.dataset.description;
-            // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+          // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
+        } else {
+          this.step1Form.name = this.dataset.name;
+          this.step1Form.description = this.dataset.description;
+          // this.originalObject.Code = JSON.parse(JSON.stringify(this.codeForm));
 
-            if ("source" in this.workflow) {
-              if (this.workflow.source.type === "github") {
-                this.showSpinner = true;
-                await this.prefillGithubAuthors();
-                await this.prefillGithubMisc();
-                this.showSpinner = false;
-              }
+          if ("source" in this.workflow) {
+            if (this.workflow.source.type === "github") {
+              this.showSpinner = true;
+              await this.prefillGithubAuthors();
+              await this.prefillGithubMisc();
+              this.showSpinner = false;
             }
           }
         }
-      });
-    },
-  };
+      }
+    });
+  },
+};
 </script>

@@ -132,109 +132,109 @@
 </template>
 
 <script>
-  import { useDatasetsStore } from "../../store/datasets";
-  import { Icon } from "@iconify/vue";
+import { useDatasetsStore } from "../../store/datasets";
+import { Icon } from "@iconify/vue";
 
-  export default {
-    name: "SelectRepositoryDestination",
-    components: { Icon },
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-        dataset: {},
-        workflowID: this.$route.params.workflowID,
-        datasetID: this.$route.params.datasetID,
-        workflow: {},
-        loading: false,
-        repoID: "",
-        repositories: [
-          {
-            id: "zenodo",
-            name: "Zenodo",
-            imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
-          },
-          {
-            id: "figshare",
-            name: "Figshare",
-            imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
-          },
-        ],
-      };
+export default {
+  name: "SelectRepositoryDestination",
+  components: { Icon },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+      dataset: {},
+      workflowID: this.$route.params.workflowID,
+      datasetID: this.$route.params.datasetID,
+      workflow: {},
+      loading: false,
+      repoID: "",
+      repositories: [
+        {
+          id: "zenodo",
+          name: "Zenodo",
+          imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
+        },
+        {
+          id: "figshare",
+          name: "Figshare",
+          imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
+        },
+      ],
+    };
+  },
+  computed: {},
+  methods: {
+    selectRepo(event, repoID) {
+      this.repoID = repoID;
+      if (event && event.detail === 2) {
+        this.addMetadata();
+      }
     },
-    computed: {},
-    methods: {
-      selectRepo(event, repoID) {
-        this.repoID = repoID;
-        if (event && event.detail === 2) {
-          this.addMetadata();
-        }
-      },
-      openWebsite(url) {
-        window.ipcRenderer.send("open-link-in-browser", url);
-      },
-      addMetadata() {
-        this.dataset.destinationSelected = true;
-
-        if (!("destination" in this.workflow)) {
-          this.workflow.destination = {};
-        }
-
-        if (!this.workflow.destination[this.repoID]) {
-          this.workflow.destination[this.repoID] = {
-            id: this.repoID,
-            questions: {},
-            status: {},
-          };
-        }
-
-        console.log(this.workflow.destination);
-
-        if (this.workflow.destination.name === this.repoID) {
-          //do nothing
-          this.workflow.destination.name = this.repoID;
-        } else {
-          // warn the user that they are changing repos (add a sweetalert or something)
-          this.workflow.destination.name = this.repoID;
-        }
-
-        console.log(this.workflow.destination);
-
-        this.datasetStore.updateCurrentDataset(this.dataset);
-        this.datasetStore.syncDatasets();
-
-        const redirectURL = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
-        this.$router.push(redirectURL);
-      },
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
-    async mounted() {
-      this.loading = true;
+    addMetadata() {
+      this.dataset.destinationSelected = true;
 
-      this.dataset = await this.datasetStore.getCurrentDataset();
-      this.workflow = this.dataset.workflows[this.workflowID];
+      if (!("destination" in this.workflow)) {
+        this.workflow.destination = {};
+      }
 
-      this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(5);
-
-      this.workflow.currentRoute = this.$route.path;
-
-      if (this.workflow.destination) {
-        this.repoID = this.workflow.destination.name;
+      if (!this.workflow.destination[this.repoID]) {
+        this.workflow.destination[this.repoID] = {
+          id: this.repoID,
+          questions: {},
+          status: {},
+        };
       }
 
       console.log(this.workflow.destination);
 
-      this.loading = false;
+      if (this.workflow.destination.name === this.repoID) {
+        //do nothing
+        this.workflow.destination.name = this.repoID;
+      } else {
+        // warn the user that they are changing repos (add a sweetalert or something)
+        this.workflow.destination.name = this.repoID;
+      }
+
+      console.log(this.workflow.destination);
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      const redirectURL = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
+      this.$router.push(redirectURL);
     },
-  };
+  },
+  async mounted() {
+    this.loading = true;
+
+    this.dataset = await this.datasetStore.getCurrentDataset();
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(5);
+
+    this.workflow.currentRoute = this.$route.path;
+
+    if (this.workflow.destination) {
+      this.repoID = this.workflow.destination.name;
+    }
+
+    console.log(this.workflow.destination);
+
+    this.loading = false;
+  },
+};
 </script>
 
 <style scoped>
-  .single-check-box {
-    @apply flex h-48 w-48 items-center justify-center transition-all;
-  }
+.single-check-box {
+  @apply flex h-48 w-48 items-center justify-center transition-all;
+}
 
-  .single-check-box:not(.disabled-card, .selected-repo):hover {
-    @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
-  }
+.single-check-box:not(.disabled-card, .selected-repo):hover {
+  @apply border border-secondary-500 shadow-lg shadow-secondary-500/50 transition-all;
+}
 </style>

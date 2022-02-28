@@ -83,37 +83,37 @@
 </template>
 
 <script>
-  import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue";
 
-  import { useDatasetsStore } from "@/store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
 
-  export default {
-    name: "HomePage",
-    components: {
-      Icon,
+export default {
+  name: "HomePage",
+  components: {
+    Icon,
+  },
+  data() {
+    return {
+      datasetStore: useDatasetsStore(),
+    };
+  },
+  methods: {
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
-    data() {
-      return {
-        datasetStore: useDatasetsStore(),
-      };
+    startCuratingProject() {
+      this.navigateToDataset();
     },
-    methods: {
-      openWebsite(url) {
-        window.ipcRenderer.send("open-link-in-browser", url);
-      },
-      startCuratingProject() {
-        this.navigateToDataset();
-      },
-      async navigateToDataset() {
-        let routerPath;
-        routerPath = `/datasets`;
-        this.$router.push({ path: routerPath });
-      },
+    async navigateToDataset() {
+      let routerPath;
+      routerPath = `/datasets`;
+      this.$router.push({ path: routerPath });
     },
-    mounted() {
-      this.datasetStore.hideProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
-      this.datasetStore.setCurrentStep(1);
-    },
-  };
+  },
+  mounted() {
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+  },
+};
 </script>
