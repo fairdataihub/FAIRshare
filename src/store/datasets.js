@@ -118,6 +118,8 @@ export const useDatasetsStore = defineStore({
     },
     async updateCurrentDataset(dataset) {
       try {
+        const now = new Date();
+        dataset.meta.dateModified = now;
         this.currentDataset = dataset;
       } catch (error) {
         console.log(error);

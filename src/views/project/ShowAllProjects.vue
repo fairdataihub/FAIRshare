@@ -35,18 +35,103 @@
                 :key="dataset"
                 class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
-                @click="selectDataset($event, dataset.id)"
+                @click="selectDataset($event, dataset.id, 'draft')"
               >
                 <!-- @click="navigateToDataset(`${dataset.id}`)" -->
                 <div class="flex flex-row items-center">
                   <img :src="dataset.image" alt="" class="w-20" />
-                  <div class="flex flex-col px-4">
+                  <div class="mt-1 flex flex-col px-4 text-zinc-600">
                     <span class="text-md font-medium">
                       {{ dataset.name }}
                     </span>
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
+                    <div class="h-[2px]"></div>
+                    <div class="flex flex-wrap items-end space-x-3">
+                      <el-tooltip
+                        effect="dark"
+                        :content="`Created on ${longDate(
+                          dataset.meta.dateCreated
+                        )}`"
+                        placement="bottom"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="clarity:date-outline-badged" />
+                          <span class="pr-2 pl-1 text-sm">
+                            {{ shortDate(dataset.meta.dateCreated) }}
+                          </span>
+                        </div>
+                      </el-tooltip>
+
+                      <el-tooltip
+                        effect="dark"
+                        :content="`Last modified on ${longDate(
+                          dataset.meta.dateModified
+                        )}`"
+                        placement="bottom"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="bx:time" />
+                          <span class="pr-2 pl-1 text-sm">
+                            {{ dateDifference(dataset.meta.dateModified) }} ago
+                          </span>
+                        </div>
+                      </el-tooltip>
+
+                      <div v-if="dataset.meta.destination != 'Unknown'">
+                        <el-tooltip
+                          effect="dark"
+                          content="This dataset will be made FAIR using the Zenodo repository"
+                          placement="bottom"
+                          v-if="dataset.meta.destination === 'zenodo'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="clarity:upload-cloud-line" />
+                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
+                          </div>
+                        </el-tooltip>
+                      </div>
+
+                      <div v-if="dataset.meta.location != 'Unknown'">
+                        <el-tooltip
+                          effect="dark"
+                          :content="`The source for this dataset is the local folder at ${dataset.meta.locationPath} `"
+                          placement="bottom"
+                          v-if="dataset.meta.location === 'local'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="ic:outline-source" />
+                            <span class="pr-2 pl-1 text-sm"> Local </span>
+                          </div>
+                        </el-tooltip>
+
+                        <el-tooltip
+                          effect="dark"
+                          :content="`The source for this dataset is the GitHub repository ${dataset.meta.locationPath} `"
+                          placement="bottom"
+                          v-if="dataset.meta.location === 'github'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="ic:outline-source" />
+                            <span class="pr-2 pl-1 text-sm"> GitHub </span>
+                          </div>
+                        </el-tooltip>
+                      </div>
+
+                      <div>
+                        <el-tag
+                          v-for="workflow in dataset.workflows.workflow1.type"
+                          :key="workflow"
+                          :type="workflow"
+                          size="small"
+                        >
+                          {{
+                            workflow === "Code" ? "Research software" : workflow
+                          }}
+                        </el-tag>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -67,7 +152,7 @@
                 :key="dataset"
                 class="project my-4 rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all hover:border-transparent"
                 :class="{ 'selected-project': dataset.id === selectedDataset }"
-                @click="selectDataset($event, dataset.id)"
+                @click="selectDataset($event, dataset.id, 'published')"
               >
                 <!-- @click="navigateToDataset(`${dataset.id}`)" -->
                 <div class="flex flex-row items-center">
@@ -79,6 +164,100 @@
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
+                    <div
+                      class="mt-1 flex flex-wrap items-end space-x-3 text-zinc-600"
+                    >
+                      <el-tooltip
+                        effect="dark"
+                        :content="`Created on ${longDate(
+                          dataset.meta.dateCreated
+                        )}`"
+                        placement="bottom"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="clarity:date-outline-badged" />
+                          <span class="pr-2 pl-1 text-sm">
+                            {{ shortDate(dataset.meta.dateCreated) }}
+                          </span>
+                        </div>
+                      </el-tooltip>
+
+                      <el-tooltip
+                        effect="dark"
+                        :content="`Last modified on ${longDate(
+                          dataset.meta.dateModified
+                        )}`"
+                        placement="bottom"
+                      >
+                        <div class="flex items-center">
+                          <Icon
+                            icon="healthicons:i-schedule-school-date-time"
+                          />
+                          <span class="pr-2 pl-1 text-sm">
+                            {{ dateDifference(dataset.meta.dateModified) }} ago
+                          </span>
+                        </div>
+                      </el-tooltip>
+
+                      <el-tooltip
+                        effect="dark"
+                        :content="`This dataset will be made FAIR using the ${dataset.meta.destination} repository`"
+                        placement="bottom"
+                        v-if="dataset.meta.destination != 'Unknown'"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="clarity:upload-cloud-line" />
+                          <span class="pr-2 pl-1 text-sm capitalize">
+                            {{ dataset.meta.destination }}
+                          </span>
+                        </div>
+                      </el-tooltip>
+
+                      <div v-if="dataset.meta.location != 'Unknown'">
+                        <el-tooltip
+                          effect="dark"
+                          :content="`The source for this dataset is ${dataset.meta.locationPath} `"
+                          placement="bottom"
+                          v-if="dataset.meta.location === 'local'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="ic:outline-source" />
+                            <span class="pr-2 pl-1 text-sm"> Local </span>
+                          </div>
+                        </el-tooltip>
+
+                        <el-tooltip
+                          effect="dark"
+                          :content="`The source for this dataset is the GitHub repository ${dataset.meta.locationPath} `"
+                          placement="bottom"
+                          v-if="dataset.meta.location === 'github'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="ic:outline-source" />
+                            <span class="pr-2 pl-1 text-sm"> GitHub </span>
+                          </div>
+                        </el-tooltip>
+                      </div>
+
+                      <div>
+                        <el-tag
+                          v-for="workflow in dataset.workflows.workflow1.type"
+                          :key="workflow"
+                          :type="workflow"
+                          size="small"
+                        >
+                          {{
+                            workflow === "Code" ? "Research software" : workflow
+                          }}
+                        </el-tag>
+                      </div>
+                    </div>
+
+                    <div class="flex hidden flex-wrap">
+                      <el-button @click="PublishNewVersion(dataset)"
+                        >publish a new version</el-button
+                      >
+                    </div>
                   </div>
                 </div>
                 <div class="ml-2 hidden items-center">
@@ -103,7 +282,7 @@
             </div>
           </router-link>
           <div
-            class="flex flex-row space-x-4 px-2"
+            class="flex flex-row space-x-4 pr-2 pl-1"
             v-if="selectedDataset !== ''"
           >
             <button class="secondary-plain-button" @click="editProject">
@@ -140,9 +319,8 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-
 import { useDatasetsStore } from "@/store/datasets";
-
+import dayjs from "dayjs";
 export default {
   name: "ShowAllProjects",
   components: { Icon },
@@ -157,6 +335,76 @@ export default {
   },
   computed: {},
   methods: {
+    shortDate(date) {
+      return dayjs(date).format("MMM DD");
+    },
+    longDate(date) {
+      return dayjs(date).format("MMM DD, YYYY - hh:mm A");
+    },
+    dateDifference(date) {
+      const now = dayjs();
+
+      let difference = "";
+
+      difference = now.diff(date, "second");
+
+      if (difference < 60) {
+        return `a few seconds`;
+      }
+
+      difference = now.diff(date, "minute");
+
+      if (difference < 60) {
+        if (difference === 1) {
+          return `a minute`;
+        } else if (difference < 10) {
+          return `a few minutes`;
+        } else {
+          return `${difference} minutes`;
+        }
+      }
+
+      difference = now.diff(date, "hour");
+
+      if (difference < 24) {
+        if (difference === 1) {
+          return `a hour`;
+        } else {
+          return `${difference} hours`;
+        }
+      }
+
+      difference = now.diff(date, "day");
+
+      if (difference < 30) {
+        if (difference === 1) {
+          return `a day`;
+        } else {
+          return `${difference} days`;
+        }
+      }
+
+      difference = now.diff(date, "month");
+
+      if (difference < 12) {
+        if (difference === 1) {
+          return `a month`;
+        } else {
+          return `${difference} months`;
+        }
+      }
+
+      difference = now.diff(date, "year");
+
+      if (difference === 1) {
+        return `a year`;
+      } else {
+        return `${difference} years`;
+      }
+    },
+    PublishNewVersion(dataset) {
+      console.log("publish a new version", dataset);
+    },
     selectDataset(event, datasetID) {
       if (datasetID === this.selectedDataset) {
         this.selectedDataset = "";
@@ -205,13 +453,10 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     let allDatasets = await this.datasetStore.getAllDatasets();
-
     // make a local copy of the datasets object
     const datasets = JSON.parse(JSON.stringify(allDatasets));
-
     // filter datasets in progress
     let datasetsInProgressIDs = [];
-
     for (const key in datasets) {
       if ("workflows" in datasets[key]) {
         for (const workflow in datasets[key].workflows) {
@@ -230,26 +475,21 @@ export default {
         datasetsInProgressIDs.push(key);
       }
     }
-
     // remove duplicates from array
     datasetsInProgressIDs = [...new Set(datasetsInProgressIDs)];
-
     // filter datasets that are in progress based on the IDs
     for (const datasetID of datasetsInProgressIDs) {
       this.datasetsInProgress.push(datasets[datasetID]);
     }
-
     // get list of all IDs
     let datasetIDs = [];
     for (const key in datasets) {
       datasetIDs.push(key);
     }
-
     // get the difference of array of datasetIds
     let datasetsPublishedIDs = datasetIDs.filter(
       (datasetID) => !datasetsInProgressIDs.includes(datasetID)
     );
-
     // filter datasets that are published based on the IDs
     for (const datasetID of datasetsPublishedIDs) {
       this.datasetsPublished.push(datasets[datasetID]);

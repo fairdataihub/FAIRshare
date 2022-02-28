@@ -216,7 +216,6 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
-
 import { v4 as uuidv4 } from "uuid";
 import { ElNotification } from "element-plus";
 import { Icon } from "@iconify/vue";
@@ -273,6 +272,8 @@ export default {
             this.datasetForm.dataType[index] = "Code";
           }
 
+          const now = new Date();
+
           let dataset = {
             id: datasetID,
             image: datasetImage,
@@ -281,8 +282,17 @@ export default {
             dataType: this.datasetForm.dataType,
             data: {},
             workflowConfirmed: false,
+            meta: {
+              dateCreated: now,
+              dateModified: now,
+              location: "Unknown",
+              locationPath: "Unknown",
+              destination: "Unknown",
+            },
           };
+
           console.log("dataset: ", dataset);
+
           dataset.data.general = {
             questions: {},
           };
