@@ -213,7 +213,6 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
-import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { ElNotification } from "element-plus";
 import { Icon } from "@iconify/vue";
@@ -262,30 +261,10 @@ export default {
           if (index !== -1) {
             this.datasetForm.dataType[index] = "Code";
           }
-          let today = new Date();
-          let currentDate =
-            today.getFullYear() +
-            "-" +
-            (today.getMonth() + 1) +
-            "-" +
-            today.getDate();
-          let currentTime =
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds();
-          let dateTime = currentDate + " " + currentTime;
-          let now = dayjs().format("MMMM D");
+
+          const now = new Date();
+
           let dataset = {
-            meta: {
-              dateCreated: now,
-              dateCreatedDetail: dateTime,
-              dateLastModified: "Unknown",
-              dateLastModifiedDetail: "Unknown",
-              location: "Unknown",
-              destination: "Unknown",
-            },
             id: datasetID,
             image: datasetImage,
             name: this.datasetForm.datasetName.trim(),
@@ -293,8 +272,17 @@ export default {
             dataType: this.datasetForm.dataType,
             data: {},
             workflowConfirmed: false,
+            meta: {
+              dateCreated: now,
+              dateModified: now,
+              location: "Unknown",
+              locationPath: "Unknown",
+              destination: "Unknown",
+            },
           };
+
           console.log("dataset: ", dataset);
+
           dataset.data.general = {
             questions: {},
           };
@@ -399,10 +387,10 @@ export default {
 }
 
 .createNewProjectFormItemContainer .el-checkbox.is-bordered.is-checked {
-  @apply border-secondary-500 shadow-md shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-md;
 }
 
 .single-check-box:not(.is-disabled):hover {
-  @apply border-secondary-500 shadow-lg shadow-secondary-500/50;
+  @apply border-secondary-500 shadow-secondary-500/50 shadow-lg;
 }
 </style>

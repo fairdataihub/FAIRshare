@@ -242,6 +242,8 @@ export default {
         };
       }
 
+      this.dataset.meta.locationPath = this.selectedRepo;
+
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 

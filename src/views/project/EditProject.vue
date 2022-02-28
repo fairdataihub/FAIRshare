@@ -30,6 +30,12 @@
         class="rounded-lg border-2 border-slate-100 p-4"
         :rules="rules"
       >
+        <el-form-item label="Project ID">
+          <span class="cursor-not-allowed text-zinc-500">
+            {{ dataset.id }}
+          </span>
+        </el-form-item>
+
         <el-form-item label="Dataset name" prop="datasetName">
           <el-input v-model="datasetForm.datasetName" size="large"></el-input>
         </el-form-item>
