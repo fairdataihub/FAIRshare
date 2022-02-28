@@ -121,7 +121,7 @@
 
                       <div>
                         <el-tag
-                          v-for="workflow in dataset.workflows.workflow1.type"
+                          v-for="workflow in dataset.dataType"
                           :key="workflow"
                           size="small"
                         >
@@ -189,9 +189,7 @@
                         placement="bottom"
                       >
                         <div class="flex items-center">
-                          <Icon
-                            icon="healthicons:i-schedule-school-date-time"
-                          />
+                          <Icon icon="bx:time" />
                           <span class="pr-2 pl-1 text-sm">
                             {{ dateDifference(dataset.meta.dateModified) }} ago
                           </span>
@@ -251,10 +249,10 @@
                       </div>
                     </div>
 
-                    <div class="flex hidden flex-wrap">
-                      <el-button @click="PublishNewVersion(dataset)"
-                        >publish a new version</el-button
-                      >
+                    <div class="hidden flex-wrap">
+                      <el-button @click="PublishNewVersion(dataset)">
+                        publish a new version
+                      </el-button>
                     </div>
                   </div>
                 </div>
