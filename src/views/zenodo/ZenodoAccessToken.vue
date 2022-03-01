@@ -79,7 +79,7 @@
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'CITATION.cff' ||
-                  node.label == 'LICENSE'
+                  (node.label == 'LICENSE' && workflow.generateLicense)
                     ? 'text-secondary-500'
                     : ''
                 "
