@@ -32,7 +32,7 @@ from utilities import (
     requestJSON,
     createFile,
     openFileExplorer,
-    readFromDir
+    readFromDir,
 )
 
 API_VERSION = "0.0.1"
@@ -807,6 +807,7 @@ class OpenFileExplorer(Resource):
         file_path = args["file_path"]
 
         return openFileExplorer(file_path)
+
 
 @utilities.route("/readFromDir", endpoint="ReadFromDir")
 class ReadFromDir(Resource):

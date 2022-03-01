@@ -96,15 +96,18 @@ def openFileExplorer(file_path):
     except Exception as e:
         raise e
 
+
 def readFromDir(dir):
 
     try:
         import os
+
         result = {}
+
         def dfs(dir):
             result = []
             for filename in os.listdir(dir):
-                newDic = {"label":"", "isDir":"", "children":[], "fullpath":""}
+                newDic = {"label": "", "isDir": "", "children": [], "fullpath": ""}
                 fileFullName = os.path.join(dir, filename)
                 if os.path.isdir(fileFullName):
                     newDic["label"] = filename
@@ -117,8 +120,8 @@ def readFromDir(dir):
                     newDic["fullpath"] = fileFullName
                 result.append(newDic)
             return result
-        root = { "label": dir, "children": dfs(dir), "fullPath": dir, "isDir": True }
+
+        root = {"label": dir, "children": dfs(dir), "fullPath": dir, "isDir": True}
         return root
     except Exception as e:
         raise e
-
