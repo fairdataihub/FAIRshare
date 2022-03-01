@@ -176,7 +176,7 @@ export default {
       }
 
       axios
-        .post(`${this.$server_url}/utilities/openFileExplorer`, {
+        .post(`${this.$server_url}/utilities/openfileexplorer`, {
           file_path: customPath,
         })
         .then((_response) => {

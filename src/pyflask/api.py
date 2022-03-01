@@ -32,6 +32,7 @@ from utilities import (
     requestJSON,
     createFile,
     openFileExplorer,
+    readFolderContents,
 )
 
 API_VERSION = "0.0.1"
@@ -784,7 +785,7 @@ class CreateFile(Resource):
         return createFile(folder_path, file_name, file_content, content_type)
 
 
-@utilities.route("/openFileExplorer", endpoint="OpenFileExplorer")
+@utilities.route("/openfileexplorer", endpoint="OpenFileExplorer")
 class OpenFileExplorer(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
@@ -806,6 +807,30 @@ class OpenFileExplorer(Resource):
         file_path = args["file_path"]
 
         return openFileExplorer(file_path)
+
+
+@utilities.route("/readfoldercontents", endpoint="ReadFolderContents")
+class ReadFolderContents(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "read file names from the selected directory recursively",  # noqa:501
+        },
+    )
+    def post(self):
+        """read files in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to read files at",
+        )
+        args = parser.parse_args()
+        folder_path = args["folder_path"]
+
+        return readFolderContents(folder_path)
 
 
 # 5000 is the flask default port.
