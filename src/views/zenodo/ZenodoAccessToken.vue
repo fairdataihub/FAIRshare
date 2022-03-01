@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      flex
-      h-full
-      w-full
-      max-w-screen-xl
-      flex-col
-      items-center
-      justify-center
-      p-3
-      pr-5
-    "
+    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -290,7 +280,7 @@ export default {
       return response;
     },
     async openFileExplorer(path) {
-      console.log(path)
+      console.log(path);
       this.showLoading = ElLoading.service({
         lock: true,
         text: "Loading",
@@ -337,7 +327,7 @@ export default {
         this.fileData.push(
           await this.readFromDir(this.dataset.data.Code.folderPath)
         );
-        let root = this.fileData[0]
+        let root = this.fileData[0];
         if (!root.children.some((el) => el.label === "codemeta.json")) {
           let newObj = {};
           newObj.label = "codemeta.json";
