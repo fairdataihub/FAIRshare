@@ -26,8 +26,8 @@ export default {
     async connectOAuth() {
       this.spinnerGlobal = this.createLoading();
       window.ipcRenderer.send("OAuth-Github", "test");
-      window.ipcRenderer.once("OAuth-Github-Reply", async (_e, _arg) => {
-        if (_arg == "failed") {
+      window.ipcRenderer.once("OAuth-Github-Reply", async (_e, arg) => {
+        if (arg == "failed") {
           ElNotification({
             type: "error",
             message: "Login failed",
@@ -35,13 +35,13 @@ export default {
             duration: 2000,
           });
           this.callback();
-        } else if (this.manager.verifyGithubToken(_arg)) {
+        } else if (this.manager.verifyGithubToken(arg)) {
           let key = "github";
           let errorFound = false;
-          let name = await this.manager.getGithubUser(_arg);
+          let name = await this.manager.getGithubUser(arg);
           let tokenObject = {};
           try {
-            tokenObject.token = _arg;
+            tokenObject.token = arg;
             tokenObject.name = name;
             tokenObject.type = "OAuth";
             await this.manager.saveToken(key, tokenObject);
@@ -57,7 +57,7 @@ export default {
               duration: 2000,
             });
             this.callback();
-            this.onStatusChange("connected");
+            this.onStatusChange("connected", arg);
           }
         } else {
           ElNotification({

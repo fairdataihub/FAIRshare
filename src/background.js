@@ -139,8 +139,8 @@ async function createWindow() {
   // Also remove from the copy-files script from package.json
 
   const splash = new BrowserWindow({
-    width: 1022,
-    height: 600,
+    width: 500,
+    height: 500,
     frame: false,
     icon: __dirname + "/assets/menu-icon/soda_icon.png",
     alwaysOnTop: true,

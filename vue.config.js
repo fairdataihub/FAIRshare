@@ -6,7 +6,7 @@ module.exports = {
       preload: { preload: "src/preload.js" },
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
-        appId: "com.fairdataihub.sodaforcovid19research",
+        appId: "com.fairdataihub.fairshare",
         asar: true,
         afterSign: "./scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,

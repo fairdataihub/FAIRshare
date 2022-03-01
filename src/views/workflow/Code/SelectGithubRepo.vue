@@ -106,11 +106,7 @@
     </div>
     <transition name="fade" mode="out-in" appear>
       <div class="fixed bottom-2 right-3" v-show="showSpinner">
-        <Vue3Lottie
-          animationLink="https://assets5.lottiefiles.com/packages/lf20_69bpyfie.json"
-          :width="80"
-          :height="80"
-        />
+        <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
       </div>
     </transition>
   </div>
@@ -178,6 +174,7 @@ export default {
 
       if (this.showFilePreview) {
         this.showSpinner = true;
+        this.fileData = [];
         const response = await this.getGithubRepoContents();
         this.showSpinner = false;
 
@@ -241,6 +238,8 @@ export default {
         };
       }
 
+      this.dataset.meta.locationPath = this.selectedRepo;
+
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
@@ -283,10 +282,15 @@ export default {
         });
       }
     },
-    async showConnection(status) {
+    async showConnection(status, token = "") {
       console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
+
+        if (token !== "") {
+          this.GithubAccessToken = token;
+          await this.getUserRepos();
+        }
       }
     },
   },

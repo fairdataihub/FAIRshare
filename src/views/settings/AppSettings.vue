@@ -23,7 +23,7 @@
               </h2>
               <div class="flex flex-col items-start">
                 <p class="mb-2 text-sm">
-                  Do you want to allow FAIRShare to download and update to beta
+                  Do you want to allow FAIRshare to download and update to beta
                   versions of the application? Beta versions may not yet be
                   stable and may contain bugs but you will be able to preview
                   and test the latest features ahead of time.
@@ -76,7 +76,7 @@
               </h2>
               <div class="flex flex-col items-start">
                 <p class="mb-2">
-                  The FAIRShare config folder holds key information regarding
+                  The FAIRshare config folder holds key information regarding
                   your projects, access tokens and datasets.
                 </p>
                 <button
@@ -176,7 +176,7 @@ export default {
       }
 
       axios
-        .post(`${this.$server_url}/utilities/openFileExplorer`, {
+        .post(`${this.$server_url}/utilities/openfileexplorer`, {
           file_path: customPath,
         })
         .then((_response) => {

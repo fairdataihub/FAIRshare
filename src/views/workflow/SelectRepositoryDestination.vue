@@ -187,8 +187,6 @@ export default {
         };
       }
 
-      console.log(this.workflow.destination);
-
       if (this.workflow.destination.name === this.repoID) {
         //do nothing
         this.workflow.destination.name = this.repoID;
@@ -197,7 +195,7 @@ export default {
         this.workflow.destination.name = this.repoID;
       }
 
-      console.log(this.workflow.destination);
+      this.dataset.meta.destination = this.repoID;
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();

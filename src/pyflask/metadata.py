@@ -104,15 +104,15 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 metadata["keywords"].append(item["keyword"])
 
     if "programmingLanguage" in code_data:
-        if code_data["programmingLanguage"] != "":
+        if len(code_data["programmingLanguage"]) > 0:
             metadata["programmingLanguage"] = code_data["programmingLanguage"]
 
     if "runtimePlatform" in code_data:
-        if code_data["runtimePlatform"] != "":
+        if len(code_data["runtimePlatform"]) > 0:
             metadata["runtimePlatform"] = code_data["runtimePlatform"]
 
     if "operatingSystem" in code_data:
-        if code_data["operatingSystem"] != "":
+        if len(code_data["operatingSystem"]) > 0:
             metadata["operatingSystem"] = code_data["operatingSystem"]
 
     if "otherSoftwareRequirements" in code_data:
@@ -236,7 +236,9 @@ def createMetadata(data_types, data, virtual_file):
 
 def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
-    citationObject = {}
+    citationObject = {
+        "cff-version": "1.2.0",
+    }
 
     if "name" in general_data:
         if general_data["name"] != "":
@@ -325,7 +327,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
                 "currentVersionReleaseDate"
             ]  # noqa: E501
 
-    # return the citation.cff object if virtual is set to true
+    # return the CITATION.cff object if virtual is set to true
     if virtual_file:
         return json.dumps(citationObject)
 
@@ -333,8 +335,8 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
-    # Create the citation.cff file
-    with open(os.path.join(folder_path, "citation.cff"), "w") as file:
+    # Create the CITATION.cff file
+    with open(os.path.join(folder_path, "CITATION.cff"), "w") as file:
         yaml.dump(citationObject, file)
 
     def line_prepender(filename, line):
@@ -343,13 +345,13 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
             f.seek(0, 0)
             f.write(line.rstrip("\r\n") + "\n" + content)
 
-    line_prepender(os.path.join(folder_path, "citation.cff"), "\n")
+    line_prepender(os.path.join(folder_path, "CITATION.cff"), "\n")
     line_prepender(
-        os.path.join(folder_path, "citation.cff"),
+        os.path.join(folder_path, "CITATION.cff"),
         "# Visit https://fairdataihub.org/sodaforcovid to learn more!",
     )
     line_prepender(
-        os.path.join(folder_path, "citation.cff"),
+        os.path.join(folder_path, "CITATION.cff"),
         "# This CITATION.cff file was generated with Fair Share.",
     )
 

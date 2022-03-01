@@ -5,7 +5,7 @@
       align-center
       finish-status="success"
       v-if="progressBar.type === 'zenodo'"
-      class="py-3"
+      class="pt-3"
     >
       <el-step
         v-for="step in steps"
@@ -13,6 +13,7 @@
         :description="step.description"
       ></el-step>
     </el-steps>
+    <line-divider></line-divider>
   </div>
 </template>
 

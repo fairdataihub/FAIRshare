@@ -159,7 +159,7 @@ export default {
     console.log(this.appPath);
 
     this.$router.push({
-      path: "/",
+      path: "/home",
     });
   },
 };

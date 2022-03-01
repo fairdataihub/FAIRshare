@@ -2,7 +2,9 @@
   <div class="flex h-screen w-full flex-row items-center justify-center">
     <div ref="" class="flex h-full flex-row items-center p-3">
       <div class="flex h-full flex-col overflow-y-auto">
-        <span class="text-left font-medium"> Start the curation process </span>
+        <span class="text-left text-lg font-medium">
+          Start the curation process
+        </span>
 
         <span class="">
           When you are ready, click on the curation buttons below to fill out
@@ -84,9 +86,13 @@ export default {
     navigateToCurate(workflowID) {
       let routerPath = "";
 
+      // add published checks before the upload ones
+
       if (
         "datasetUploaded" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].datasetUploaded
+        this.dataset.workflows[workflowID].datasetUploaded &&
+        "source" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].source.type === "local"
       ) {
         ElMessageBox.confirm(
           "It looks like you have already uploaded this dataset to Zenodo but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
@@ -105,6 +111,29 @@ export default {
             routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
             this.$router.push({ path: routerPath });
           });
+      } else if (
+        "datasetUploaded" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].datasetUploaded &&
+        "source" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].source.type === "github"
+      ) {
+        ElMessageBox.confirm(
+          "It looks like you have already uploaded this dataset to GitHub but you haven't published it yet. Would you like to publish this now or create a new upload for this specific workflow?",
+          "You haven't published this dataset yet",
+          {
+            confirmButtonText: "I want to publish",
+            cancelButtonText: "I want to upload my data again",
+            type: "info",
+          }
+        )
+          .then(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/github/publish`;
+            this.$router.push({ path: routerPath });
+          })
+          .catch(() => {
+            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+            this.$router.push({ path: routerPath });
+          });
       } else {
         if ("currentRoute" in this.dataset.workflows[workflowID]) {
           if (
@@ -116,8 +145,9 @@ export default {
               "It looks like you were working on this workflow before. Would you like to continue where you left off?",
               "Continue where you left off",
               {
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, start from the beginning",
+                distinguishCancelAndClose: true,
                 type: "info",
               }
             )
@@ -125,9 +155,11 @@ export default {
                 routerPath = this.dataset.workflows[workflowID].currentRoute;
                 this.$router.push({ path: routerPath });
               })
-              .catch(() => {
-                routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-                this.$router.push({ path: routerPath });
+              .catch((action) => {
+                if (action === "cancel") {
+                  routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+                  this.$router.push({ path: routerPath });
+                }
               });
           } else {
             routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;

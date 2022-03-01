@@ -5,7 +5,10 @@
       :key="step"
       class="group relative h-[7px] w-full cursor-pointer rounded text-secondary-500 transition-all hover:bg-secondary-400"
       style="border: 1px solid"
-      :class="{ 'bg-secondary-500 ': step <= currentStep }"
+      :class="{
+        'bg-secondary-500 ': step <= currentStep,
+        'pointer-events-none': !development,
+      }"
       @click="setCurrentStep(step)"
     >
       <span
@@ -34,6 +37,14 @@ export default {
     titles: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    development() {
+      if (process.env.NODE_ENV === "development") {
+        return true;
+      }
+      return false;
     },
   },
   emits: ["updateCurrentStep"],

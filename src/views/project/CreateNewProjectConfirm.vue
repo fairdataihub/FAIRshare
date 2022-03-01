@@ -9,21 +9,23 @@
 
       <line-divider> </line-divider>
 
-      <p class="py-2"></p>
-      <!-- <p class="py-2">
-        FAIRShare will help you make you research software by guiding you
-        step-by-step through the following process:
-      </p> -->
+      <div class="flex flex-col items-center justify-center">
+        <Vue3Lottie
+          animationLink="https://assets9.lottiefiles.com/packages/lf20_bk87clix.json"
+          :width="200"
+          :height="200"
+        />
 
-      <div class="flex w-full flex-row justify-center py-6" id="button-area">
-        <router-link to="/datasets" class="hidden">
-          <el-button type="danger" plain> Cancel </el-button>
-        </router-link>
+        <div class="flex w-full flex-row justify-center py-6" id="button-area">
+          <router-link to="/datasets" class="hidden">
+            <el-button type="danger" plain> Cancel </el-button>
+          </router-link>
 
-        <button class="primary-button" @click="createWorkflows">
-          Start curating
-          <el-icon> <d-arrow-right /> </el-icon>
-        </button>
+          <button class="primary-button" @click="createWorkflows">
+            Let's start curating
+            <el-icon> <d-arrow-right /> </el-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>

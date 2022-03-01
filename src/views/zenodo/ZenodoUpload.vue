@@ -5,7 +5,7 @@
         Uploading your data to Zenodo
       </span>
       <span class="text-left">
-        This one is on us. SODA is creating a Zenodo record for you and
+        This one is on us. FAIRshare is creating a Zenodo record for you and
         uploading all your files with the relevant metadata.
       </span>
 
@@ -623,11 +623,11 @@ export default {
 
         if (response === "ERROR") {
           this.alertMessage =
-            "There was an error with creating the citation.cff file";
+            "There was an error with creating the CITATION.cff file";
           return "FAIL";
         } else {
           this.statusMessage =
-            "Created the citation.cff file in the target folder";
+            "Created the CITATION.cff file in the target folder";
         }
       }
 
@@ -731,7 +731,7 @@ export default {
 
         return;
       } else {
-        this.workflow.datasetUploaded = false;
+        this.workflow.datasetUploaded = true;
         this.workflow.datasetPublished = false;
         this.workflow.generateLicense = false;
 

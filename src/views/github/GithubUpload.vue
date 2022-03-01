@@ -515,10 +515,10 @@ export default {
 
         if (response === "ERROR") {
           this.alertMessage =
-            "There was an error with creating the citation.cff file";
+            "There was an error with creating the CITATION.cff file";
           return "FAIL";
         } else {
-          this.statusMessage = "Created a temporary citation.cff file";
+          this.statusMessage = "Created a temporary CITATION.cff file";
         }
       }
 
@@ -602,7 +602,7 @@ export default {
 
         return;
       } else {
-        this.workflow.datasetUploaded = false;
+        this.workflow.datasetUploaded = true;
         this.workflow.datasetPublished = false;
         this.workflow.generateLicense = false;
 
