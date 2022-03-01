@@ -1,6 +1,16 @@
 <template>
   <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
+    class="
+      flex
+      h-full
+      w-full
+      max-w-screen-xl
+      flex-col
+      items-center
+      justify-center
+      p-3
+      pr-5
+    "
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
@@ -67,6 +77,7 @@
             open in your file browser.
           </p>
           <el-tree
+            v-if="finishedLoading"
             :data="fileData"
             :props="defaultProps"
             @node-click="handleNodeClick"
@@ -138,6 +149,11 @@
         </div>
       </transition>
     </div>
+    <transition name="fade" mode="out-in" appear>
+      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+        <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -148,7 +164,6 @@ import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
-import path from "path";
 import axios from "axios";
 import { ElLoading } from "element-plus";
 import { marked } from "marked";
@@ -184,6 +199,8 @@ export default {
       PreviewNewlyCreatedCitationFile: false,
       drawerModel: true,
       showLoading: false,
+      showSpinner: false,
+      finishedLoading: false,
     };
   },
   //el-tree-node__content
@@ -273,6 +290,7 @@ export default {
       return response;
     },
     async openFileExplorer(path) {
+      console.log(path)
       this.showLoading = ElLoading.service({
         lock: true,
         text: "Loading",
@@ -294,8 +312,78 @@ export default {
         });
       return response;
     },
-    showFilePreview() {
+    async readFromDir(dir) {
+      const response = await axios
+        .post(`${this.$server_url}/utilities/readFromDir`, {
+          file_path: dir,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async showFilePreview() {
       this.showFilePreviewSection = !this.showFilePreviewSection;
+      this.finishedLoading = false;
+      if (this.showFilePreviewSection) {
+        this.fileData = [];
+        this.showSpinner = true;
+        this.tableData = await this.createCodeMetadataFile();
+        this.citationData = await this.createCitationFile();
+        this.fileData.push(
+          await this.readFromDir(this.dataset.data.Code.folderPath)
+        );
+        let root = this.fileData[0]
+        if (!root.children.some((el) => el.label === "codemeta.json")) {
+          let newObj = {};
+          newObj.label = "codemeta.json";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+
+        if (!root.children.some((el) => el.label === "CITATION.cff")) {
+          let newObj = {};
+          newObj.label = "CITATION.cff";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+
+        if (!root.children.some((el) => el.label === "LICENSE")) {
+          if (this.workflow.generateLicense) {
+            let newObj = {};
+            newObj.label = "LICENSE";
+            newObj.isDir = false;
+
+            root.children.push(newObj);
+          }
+        }
+        console.log(this.fileData);
+        //this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
+        this.tableData = this.jsonToTableDataRecursive(
+          this.tableData,
+          1,
+          "ROOT"
+        );
+
+        this.citationData = this.jsonToTableDataRecursive(
+          this.citationData,
+          1,
+          "ROOT"
+        );
+
+        if (this.workflow.generateLicense) {
+          //  await this.createLicenseFile();
+          this.licenseData = this.workflow.licenseText;
+        }
+        this.showSpinner = false;
+        this.finishedLoading = true;
+      }
     },
     handleCloseDrawer() {
       this.fileTitle = "";
@@ -320,65 +408,12 @@ export default {
         } else if (data.label == "CITATION.cff") {
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (!data.isDir) {
-          await this.openFileExplorer(data.fullPath);
+          await this.openFileExplorer(data.fullpath);
         }
 
         let title = data.label;
         this.handleOpenDrawer(title);
       }
-    },
-    getAllFilesFromFolder(dir) {
-      let filesystem = require("fs");
-      let that = this;
-      function dfs(dir) {
-        let results = [];
-        filesystem.readdirSync(dir).forEach(function (file) {
-          let newObj = {};
-          let filefullname = path.join(dir, file);
-          let stat = filesystem.statSync(filefullname);
-          if (stat && stat.isDirectory()) {
-            newObj.label = file;
-            newObj.isDir = true;
-            newObj.children = dfs(filefullname);
-            newObj.fullPath = filefullname;
-          } else {
-            newObj.label = file;
-            newObj.isDir = false;
-            newObj.fullPath = filefullname;
-          }
-          results.push(newObj);
-        });
-        return results;
-      }
-      let root = { label: dir, children: dfs(dir), fullPath: dir, isDir: true };
-
-      if (!root.children.some((el) => el.label === "codemeta.json")) {
-        let newObj = {};
-        newObj.label = "codemeta.json";
-        newObj.isDir = false;
-
-        root.children.push(newObj);
-      }
-
-      if (!root.children.some((el) => el.label === "CITATION.cff")) {
-        let newObj = {};
-        newObj.label = "CITATION.cff";
-        newObj.isDir = false;
-
-        root.children.push(newObj);
-      }
-
-      if (!root.children.some((el) => el.label === "LICENSE")) {
-        if (that.workflow.generateLicense) {
-          let newObj = {};
-          newObj.label = "LICENSE";
-          newObj.isDir = false;
-
-          root.children.push(newObj);
-        }
-      }
-      this.fileData.push(root);
-      console.log(this.fileData);
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
@@ -521,24 +556,6 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
-
-    let spinner = this.createLoading();
-    this.tableData = await this.createCodeMetadataFile();
-    this.citationData = await this.createCitationFile();
-    this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
-    this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
-
-    this.citationData = this.jsonToTableDataRecursive(
-      this.citationData,
-      1,
-      "ROOT"
-    );
-
-    if (this.workflow.generateLicense) {
-      // await this.createLicenseFile();
-      this.licenseData = this.workflow.licenseText;
-    }
-    spinner.close();
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
