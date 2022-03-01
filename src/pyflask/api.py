@@ -828,7 +828,7 @@ class ReadFolderContents(Resource):
             help="folder path to read files at",
         )
         args = parser.parse_args()
-        folder_path = args["file_path"]
+        folder_path = args["folder_path"]
 
         return readFolderContents(folder_path)
 
