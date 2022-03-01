@@ -44,9 +44,7 @@ app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 CORS(app)
 
 # configure root logger
-LOG_FOLDER = os.path.join(
-    os.path.expanduser("~"), ".fairshare", "logs"
-)  # noqa: E501
+LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".fairshare", "logs")  # noqa: E501
 LOG_FILENAME = "api.log"
 LOG_PATH = os.path.join(LOG_FOLDER, LOG_FILENAME)
 
