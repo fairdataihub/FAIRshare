@@ -809,12 +809,12 @@ class OpenFileExplorer(Resource):
         return openFileExplorer(file_path)
 
 
-@utilities.route("/readfoldercontents", endpoint="readFolderContents")
-class readFolderContents(Resource):
+@utilities.route("/readfoldercontents", endpoint="ReadFolderContents")
+class ReadFolderContents(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={
-            "folder_path": "read file names from the selected directory recursively",
+            "folder_path": "read file names from the selected directory recursively",  # noqa:501
         },
     )
     def post(self):
