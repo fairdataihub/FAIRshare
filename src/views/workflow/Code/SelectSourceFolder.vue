@@ -165,12 +165,26 @@ export default {
         dataTypes.forEach((type, _index) => {
           this.dataset.data[type].folderPath = this.folderPath;
         });
+
+        if (!("meta" in this.dataset)) {
+          this.dataset.meta = {};
+        }
+
+        this.dataset.meta.location = "local";
+        this.dataset.meta.locationPath = this.folderPath;
       }
 
       if (this.locationID === "github") {
         if (!("github" in this.workflow)) {
           this.workflow.github = {};
         }
+
+        if (!("meta" in this.dataset)) {
+          this.dataset.meta = {};
+        }
+
+        this.dataset.meta.location = "github";
+        this.dataset.meta.locationPath = "";
       }
 
       this.workflow.sourceSelected = true;
@@ -200,7 +214,6 @@ export default {
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
-    console.log(this.workflow);
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");

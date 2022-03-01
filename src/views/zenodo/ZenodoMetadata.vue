@@ -1235,8 +1235,6 @@ export default {
       };
     },
     checkInvalidStatus() {
-      console.log(this.invalidStatus);
-
       if (this.$refs.zmForm) {
         this.$refs.zmForm.validate();
       }
