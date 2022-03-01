@@ -631,11 +631,7 @@ export default {
     const tokenObject = await this.tokens.getToken("github");
     this.githubToken = tokenObject.token;
 
-    const tempFolderPath = path.join(
-      app.getPath("home"),
-      ".sodaforcovid19research",
-      "temp"
-    );
+    const tempFolderPath = path.join(app.getPath("home"), ".fairshare", "temp");
 
     // delete the temp folder if it exists
     // starting from a clean slate

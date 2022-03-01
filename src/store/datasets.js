@@ -14,7 +14,7 @@ import { defineStore } from "pinia";
 const USER_PATH = app.getPath("home");
 const DATASETS_STORE_PATH = path.join(
   USER_PATH,
-  ".sodaforcovid19research",
+  ".fairshare",
   "unpublishedDatasets.json"
 );
 

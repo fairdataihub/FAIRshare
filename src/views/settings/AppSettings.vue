@@ -163,13 +163,13 @@ export default {
       if (type === "configFolder") {
         customPath = path.join(
           app.getPath("home"),
-          ".sodaforcovid19research",
+          ".fairshare",
           "accessTokens.json"
         );
       } else if (type === "backendLogs") {
         customPath = path.join(
           app.getPath("home"),
-          ".sodaforcovid19research",
+          ".fairshare",
           "logs",
           "api.log"
         );

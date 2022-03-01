@@ -1,4 +1,4 @@
-name: sodacovid-release
+name: fairshare-dev
 channels:
   - conda-forge
   - defaults

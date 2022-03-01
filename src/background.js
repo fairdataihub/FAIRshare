@@ -13,11 +13,7 @@ const log = require("electron-log");
 log.info("starting log");
 
 const USER_PATH = app.getPath("home");
-const CONFIG_STORE_PATH = path.join(
-  USER_PATH,
-  ".sodaforcovid19research",
-  "config.json"
-);
+const CONFIG_STORE_PATH = path.join(USER_PATH, ".fairshare", "config.json");
 
 const getReleaseChannel = () => {
   const exists = fs.pathExistsSync(CONFIG_STORE_PATH);
@@ -120,7 +116,7 @@ async function createWindow() {
     height: 850,
     minWidth: 1150,
     minHeight: 850,
-    icon: __dirname + "/assets/menu-icon/soda_icon.png",
+    icon: __dirname + "/assets/app-icons/Icon.png",
     show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -142,7 +138,7 @@ async function createWindow() {
     width: 500,
     height: 500,
     frame: false,
-    icon: __dirname + "/assets/menu-icon/soda_icon.png",
+    icon: __dirname + "/assets/app-icons/Icon.png",
     alwaysOnTop: true,
     transparent: true,
   });

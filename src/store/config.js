@@ -6,11 +6,7 @@ import { app } from "@electron/remote";
 import { defineStore } from "pinia";
 
 const USER_PATH = app.getPath("home");
-const CONFIG_STORE_PATH = path.join(
-  USER_PATH,
-  ".sodaforcovid19research",
-  "config.json"
-);
+const CONFIG_STORE_PATH = path.join(USER_PATH, ".fairshare", "config.json");
 
 // function to create the dataset store file in the user path
 const createFile = async () => {

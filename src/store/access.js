@@ -10,7 +10,7 @@ import axios from "axios";
 const USER_PATH = app.getPath("home");
 const TOKEN_STORE_PATH = path.join(
   USER_PATH,
-  ".sodaforcovid19research",
+  ".fairshare",
   "accessTokens.json"
 );
 

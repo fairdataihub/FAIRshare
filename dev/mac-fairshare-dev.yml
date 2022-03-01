@@ -1,20 +1,15 @@
-name: sodacovid-dev
+name: fairshare-dev
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - _libgcc_mutex=0.1
-  - _openmp_mutex=4.5
   - ca-certificates=2021.10.8
   - certifi=2021.10.8
   - icu=69.1
-  - ld_impl_linux-64=2.35.1
+  - libcxx=12.0.0
   - libffi=3.3
-  - libgcc-ng=11.2.0
-  - libstdcxx-ng=11.2.0
   - libuv=1.42.0
   - libzlib=1.2.11
-  - llvm-openmp=12.0.1
   - ncurses=6.3
   - nodejs=16.13.0
   - openssl=1.1.1l
@@ -43,6 +38,7 @@ dependencies:
       - itsdangerous==2.0.1
       - jinja2==3.0.3
       - jsonschema==4.2.1
+      - macholib==1.15.2
       - markupsafe==2.0.1
       - pyinstaller==4.7
       - pyinstaller-hooks-contrib==2021.4

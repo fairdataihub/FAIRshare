@@ -25,14 +25,14 @@ def foldersPresent(folder_path):
 def zipFolder(folder_path):
     try:
         home_path = os.path.expanduser("~")
-        soda_folder_path = os.path.join(
-            home_path, ".sodaforcovid19research", "dataset"
+        fairshare_folder_path = os.path.join(
+            home_path, ".fairshare", "dataset"
         )  # noqa: E501
 
-        if not os.path.exists(soda_folder_path):
-            os.makedirs(soda_folder_path)
+        if not os.path.exists(fairshare_folder_path):
+            os.makedirs(fairshare_folder_path)
 
-        zip_path = os.path.join(soda_folder_path, "dataset")
+        zip_path = os.path.join(fairshare_folder_path, "dataset")
 
         if os.path.exists(zip_path + ".zip"):
             os.remove(zip_path + ".zip")

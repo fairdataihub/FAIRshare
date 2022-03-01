@@ -34,7 +34,7 @@
   "main": "background.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fairdataihub/SODA-for-COVID-19-Research.git"
+    "url": "https://github.com/fairdataihub/FAIRshare.git"
   },
   "dependencies": {
     "@electron/remote": "^2.0.0",
