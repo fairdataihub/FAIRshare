@@ -113,12 +113,6 @@
           <div v-if="displayLicenseEditor" class="pb-5">
             <p class="py-2">Edit if required and continue</p>
 
-            <!-- <QuillEditor
-              theme="snow"
-              :content="draftLicense"
-              toolbar="essential"
-              contentType="text"
-            /> -->
             <v-md-editor
               v-model="draftLicense"
               height="400px"
@@ -173,14 +167,10 @@ import { Icon } from "@iconify/vue";
 import { ElLoading, ElMessage } from "element-plus";
 import axios from "axios";
 
-// import { QuillEditor } from "@vueup/vue-quill";
-// import "@vueup/vue-quill/dist/vue-quill.snow.css";
-
 export default {
   name: "CodePickLicense",
   components: {
     Icon,
-    // QuillEditor,
   },
   data() {
     return {
