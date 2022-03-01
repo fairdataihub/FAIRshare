@@ -287,7 +287,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       const response = await axios
-        .post(`${this.$server_url}/utilities/openFileExplorer`, {
+        .post(`${this.$server_url}/utilities/openfileexplorer`, {
           file_path: path,
         })
         .then((response) => {
@@ -302,10 +302,10 @@ export default {
         });
       return response;
     },
-    async readFromDir(dir) {
+    async readFolderContents(dir) {
       const response = await axios
-        .post(`${this.$server_url}/utilities/readFromDir`, {
-          file_path: dir,
+        .post(`${this.$server_url}/utilities/readfoldercontents`, {
+          folder_path: dir,
         })
         .then((response) => {
           return response.data;
@@ -325,7 +325,7 @@ export default {
         this.tableData = await this.createCodeMetadataFile();
         this.citationData = await this.createCitationFile();
         this.fileData.push(
-          await this.readFromDir(this.dataset.data.Code.folderPath)
+          await this.readFolderContents(this.dataset.data.Code.folderPath)
         );
         let root = this.fileData[0];
         if (!root.children.some((el) => el.label === "codemeta.json")) {

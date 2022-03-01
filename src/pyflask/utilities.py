@@ -97,17 +97,18 @@ def openFileExplorer(file_path):
         raise e
 
 
-def readFromDir(dir):
-
+def readFolderContents(dir):
     try:
-        import os
-
-        result = {}
 
         def dfs(dir):
             result = []
             for filename in os.listdir(dir):
-                newDic = {"label": "", "isDir": "", "children": [], "fullpath": ""}
+                newDic = {
+                    "label": "",
+                    "isDir": "",
+                    "children": [],
+                    "fullpath": "",
+                }  # noqa: E501
                 fileFullName = os.path.join(dir, filename)
                 if os.path.isdir(fileFullName):
                     newDic["label"] = filename
@@ -121,7 +122,12 @@ def readFromDir(dir):
                 result.append(newDic)
             return result
 
-        root = {"label": dir, "children": dfs(dir), "fullPath": dir, "isDir": True}
+        root = {
+            "label": dir,
+            "children": dfs(dir),
+            "fullPath": dir,
+            "isDir": True,
+        }  # noqa: E501
         return root
     except Exception as e:
         raise e
