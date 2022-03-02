@@ -330,7 +330,11 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
-    this.uploadToRepo = this.workflow.uploadToRepo ? "Yes" : "No";
+    if ("uploadToRepo" in this.workflow) {
+      this.uploadToRepo = this.workflow.uploadToRepo ? "Yes" : "No";
+    } else {
+      this.uploadToRepo = "None";
+    }
 
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;
