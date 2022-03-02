@@ -298,7 +298,18 @@ export default {
           await this.datasetStore.updateCurrentDataset(this.dataset);
           await this.datasetStore.syncDatasets();
 
-          const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+          let routerPath = "";
+
+          if ("source" in this.workflow) {
+            if (this.workflow.source.type === "github") {
+              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
+            }
+            if (this.workflow.source.type === "local") {
+              routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+            }
+          } else {
+            routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+          }
 
           this.$router.push({ path: routerPath });
         })

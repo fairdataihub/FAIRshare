@@ -37,6 +37,7 @@ import ManageAccount from "../views/manage/ManageAccount.vue";
 // components required for options that can be skipped
 import LocalNoUpload from "../views/noUpload/LocalNoUpload.vue";
 import LocalNoUploadEnd from "../views/noUpload/LocalNoUploadEnd.vue";
+import GithubNoUploadEnd from "../views/noUpload/GithubNoUploadEnd.vue";
 
 import HomePage from "../views/home/HomePage.vue";
 import AppSettings from "../views/settings/AppSettings.vue";
@@ -143,6 +144,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/localNoUpload/finalPage",
     component: LocalNoUploadEnd,
     name: "LocalNoUploadEnd",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/githubNoUpload/finalPage",
+    component: GithubNoUploadEnd,
+    name: "GithubNoUploadEnd",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",
