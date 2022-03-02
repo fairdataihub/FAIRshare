@@ -19,6 +19,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build-preclean": "node ./scripts/prebuild.js",
+    "python:clean": "yarn gulp clean-pre-python-build",
     "python:build": "yarn gulp clean-pre-python-build && python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
     "python:dev": "python ./src/pyflask/api.py",
     "electron:build": "yarn gulp clean-pre-electron-build && vue-cli-service electron:build",
