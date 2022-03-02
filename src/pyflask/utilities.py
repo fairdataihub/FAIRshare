@@ -5,6 +5,7 @@ import shutil
 import requests
 import platform
 import subprocess
+import uuid
 
 
 def foldersPresent(folder_path):
@@ -104,6 +105,7 @@ def readFolderContents(dir):
             result = []
             for filename in os.listdir(dir):
                 newDic = {
+                    "id": str(uuid.uuid4()),
                     "label": "",
                     "isDir": "",
                     "children": [],

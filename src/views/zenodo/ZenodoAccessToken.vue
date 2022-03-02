@@ -12,138 +12,153 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div v-if="ready">
-        <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-          Looks like we already have your Zenodo login details. Click on the
-          'Start upload' button below.
+      <div>
+        <p class="text=lg mb-5">
+          A list of all the files that we are going to upload to Zenodo is shown
+          below. You can click on any of them to view their contents or open in
+          your file browser.
         </p>
-        <!-- show error message if token is not valid -->
-        <div v-else class="flex flex-col items-center justify-center py-10">
-          <p class="mb-5">
-            We couldn't find your Zenodo login details. Please click on the
-            button below to connect to your Zenodo account.
-          </p>
-
-          <ConnectZenodo :statusChangeFunction="showConnection"></ConnectZenodo>
+        <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
+          <transition name="fade" mode="out-in" appear>
+            <el-tree
+              v-if="finishedLoading"
+              :data="fileData"
+              :props="defaultProps"
+              @node-click="handleNodeClick"
+            >
+              <template #default="{ node }">
+                <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+                <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+                <span
+                  :class="
+                    (node.label == 'codemeta.json' &&
+                      workflow.generateCodeMeta) ||
+                    (node.label == 'CITATION.cff' &&
+                      workflow.generateCodeMeta) ||
+                    (node.label == 'LICENSE' && workflow.generateLicense)
+                      ? 'text-secondary-500'
+                      : ''
+                  "
+                  >{{ node.label }}</span
+                >
+              </template>
+            </el-tree>
+            <div class="flex items-center justify-center" v-else>
+              <Vue3Lottie
+                animationLink="https://assets1.lottiefiles.com/packages/lf20_nninlpvr.json"
+                :width="150"
+                :height="150"
+              />
+            </div>
+          </transition>
         </div>
-      </div>
-      <LoadingFoldingCube v-else></LoadingFoldingCube>
-
-      <div class="flex w-full flex-row justify-center space-x-4 py-2">
-        <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
-          class=""
+        <el-drawer
+          v-if="anyfilePreview"
+          v-model="drawerModel"
+          :title="fileTitle"
+          direction="rtl"
+          size="60%"
+          :before-close="handleCloseDrawer"
+          :lock-scroll="false"
         >
-          <button class="primary-plain-button">
-            <el-icon><d-arrow-left /></el-icon> Back
-          </button>
-        </router-link>
-
-        <button
-          class="secondary-plain-button"
-          @click="showFilePreview"
-          v-if="validTokenAvailable"
-        >
-          <el-icon><checked-icon /></el-icon>
-          View files ready for upload
-        </button>
-
-        <button
-          class="primary-button"
-          :disabled="disableContinue"
-          @click="uploadToZenodo"
-          v-if="validTokenAvailable"
-        >
-          Start upload
-          <el-icon> <d-arrow-right /> </el-icon>
-        </button>
-      </div>
-      <transition appear mode="out-in" name="fade">
-        <div v-if="showFilePreviewSection" class="py-5">
-          <line-divider />
-          <p class="text=lg my-5">
-            A list of all the files that we are going to upload to Zenodo is
-            shown below. You can click on any of them to view their contents or
-            open in your file browser.
-          </p>
-          <el-tree
-            v-if="finishedLoading"
-            :data="fileData"
-            :props="defaultProps"
-            @node-click="handleNodeClick"
-          >
-            <template #default="{ node }">
-              <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
-              <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-              <span
-                :class="
-                  node.label == 'codemeta.json' ||
-                  node.label == 'CITATION.cff' ||
-                  (node.label == 'LICENSE' && workflow.generateLicense)
-                    ? 'text-secondary-500'
-                    : ''
-                "
-                >{{ node.label }}</span
+          <el-scrollbar style="height: calc(100vh - 45px)">
+            <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
+              <el-table
+                :data="tableData"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
               >
-            </template>
-          </el-tree>
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column prop="Value" label="Value" />
+              </el-table>
+            </div>
 
-          <el-drawer
-            v-if="anyfilePreview"
-            v-model="drawerModel"
-            :title="fileTitle"
-            direction="rtl"
-            size="60%"
-            :before-close="handleCloseDrawer"
-            :lock-scroll="false"
+            <div v-if="PreviewNewlyCreatedCitationFile" class="pb-20">
+              <el-table
+                :data="citationData"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
+              >
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column
+                  prop="Value"
+                  label="Value"
+                  class="break-normal"
+                />
+              </el-table>
+            </div>
+
+            <div v-if="PreviewNewlyCreatedLicenseFile" class="">
+              <div
+                class="prose prose-base prose-slate pb-20"
+                v-html="compiledLicense"
+              ></div>
+            </div>
+          </el-scrollbar>
+        </el-drawer>
+      </div>
+
+      <line-divider></line-divider>
+      <transition name="fade" mode="out-in" appear>
+        <div v-if="ready">
+          <p v-if="validTokenAvailable" class="my-10 w-full text-center">
+            Looks like we already have your Zenodo login details. Click on the
+            'Start upload' button below.
+          </p>
+          <!-- show error message if token is not valid -->
+          <div v-else class="flex flex-col items-center justify-center py-10">
+            <p class="mb-5">
+              We couldn't find your Zenodo login details. Please click on the
+              button below to connect to your Zenodo account.
+            </p>
+
+            <ConnectZenodo
+              :statusChangeFunction="showConnection"
+            ></ConnectZenodo>
+          </div>
+        </div>
+        <LoadingFoldingCube v-else></LoadingFoldingCube>
+      </transition>
+
+      <transition name="fade" mode="out-in" appear>
+        <div
+          class="flex w-full flex-row justify-center space-x-4 py-2"
+          v-if="finishedLoading"
+        >
+          <router-link
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+            class=""
           >
-            <el-scrollbar style="height: calc(100vh - 45px)">
-              <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
-                <el-table
-                  :data="tableData"
-                  style="width: 100%"
-                  row-key="id"
-                  border
-                  default-expand-all
-                >
-                  <el-table-column prop="Name" label="Name" />
-                  <el-table-column prop="Value" label="Value" />
-                </el-table>
-              </div>
+            <button class="primary-plain-button">
+              <el-icon><d-arrow-left /></el-icon> Back
+            </button>
+          </router-link>
 
-              <div v-if="PreviewNewlyCreatedCitationFile" class="pb-20">
-                <el-table
-                  :data="citationData"
-                  style="width: 100%"
-                  row-key="id"
-                  border
-                  default-expand-all
-                >
-                  <el-table-column prop="Name" label="Name" />
-                  <el-table-column
-                    prop="Value"
-                    label="Value"
-                    class="break-normal"
-                  />
-                </el-table>
-              </div>
+          <button
+            class="secondary-plain-button hidden"
+            @click="showFilePreview"
+            v-if="validTokenAvailable"
+          >
+            <el-icon><checked-icon /></el-icon>
+            View files ready for upload
+          </button>
 
-              <div v-if="PreviewNewlyCreatedLicenseFile" class="">
-                <div
-                  class="prose prose-base prose-slate pb-20"
-                  v-html="compiledLicense"
-                ></div>
-              </div>
-            </el-scrollbar>
-          </el-drawer>
+          <button
+            class="primary-button"
+            :disabled="disableContinue"
+            @click="uploadToZenodo"
+            v-if="validTokenAvailable"
+          >
+            Start upload
+            <el-icon> <d-arrow-right /> </el-icon>
+          </button>
         </div>
       </transition>
     </div>
-    <transition name="fade" mode="out-in" appear>
-      <div class="fixed bottom-2 right-3" v-show="showSpinner">
-        <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -157,6 +172,7 @@ import { useTokenStore } from "@/store/access.js";
 import axios from "axios";
 import { ElLoading } from "element-plus";
 import { marked } from "marked";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "ZenodoAccessToken",
@@ -179,17 +195,17 @@ export default {
       citationData: [],
       fileData: [],
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },
       fileTitle: "",
-      showFilePreviewSection: false,
+      showContinueSection: false,
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
       drawerModel: true,
       showLoading: false,
-      showSpinner: false,
       finishedLoading: false,
     };
   },
@@ -317,63 +333,66 @@ export default {
       return response;
     },
     async showFilePreview() {
-      this.showFilePreviewSection = !this.showFilePreviewSection;
       this.finishedLoading = false;
-      if (this.showFilePreviewSection) {
-        this.fileData = [];
-        this.showSpinner = true;
-        this.tableData = await this.createCodeMetadataFile();
-        this.citationData = await this.createCitationFile();
-        this.fileData.push(
-          await this.readFolderContents(this.dataset.data.Code.folderPath)
-        );
-        let root = this.fileData[0];
-        if (!root.children.some((el) => el.label === "codemeta.json")) {
+
+      this.fileData = [];
+
+      this.tableData = await this.createCodeMetadataFile();
+      this.citationData = await this.createCitationFile();
+
+      this.fileData.push(
+        await this.readFolderContents(this.dataset.data.Code.folderPath)
+      );
+
+      let root = this.fileData[0];
+
+      if (!root.children.some((el) => el.label === "codemeta.json")) {
+        if (this.workflow.generateCodeMeta) {
           let newObj = {};
+          newObj.id = uuidv4();
           newObj.label = "codemeta.json";
           newObj.isDir = false;
 
           root.children.push(newObj);
         }
+      }
 
-        if (!root.children.some((el) => el.label === "CITATION.cff")) {
+      if (!root.children.some((el) => el.label === "CITATION.cff")) {
+        if (this.workflow.generateCodeMeta) {
           let newObj = {};
+          newObj.id = uuidv4();
           newObj.label = "CITATION.cff";
           newObj.isDir = false;
 
           root.children.push(newObj);
         }
-
-        if (!root.children.some((el) => el.label === "LICENSE")) {
-          if (this.workflow.generateLicense) {
-            let newObj = {};
-            newObj.label = "LICENSE";
-            newObj.isDir = false;
-
-            root.children.push(newObj);
-          }
-        }
-        console.log(this.fileData);
-        //this.getAllFilesFromFolder(this.dataset.data.Code.folderPath);
-        this.tableData = this.jsonToTableDataRecursive(
-          this.tableData,
-          1,
-          "ROOT"
-        );
-
-        this.citationData = this.jsonToTableDataRecursive(
-          this.citationData,
-          1,
-          "ROOT"
-        );
-
-        if (this.workflow.generateLicense) {
-          //  await this.createLicenseFile();
-          this.licenseData = this.workflow.licenseText;
-        }
-        this.showSpinner = false;
-        this.finishedLoading = true;
       }
+
+      if (!root.children.some((el) => el.label === "LICENSE")) {
+        if (this.workflow.generateLicense) {
+          let newObj = {};
+          newObj.id = uuidv4();
+          newObj.label = "LICENSE";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
+
+      this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
+
+      this.citationData = this.jsonToTableDataRecursive(
+        this.citationData,
+        1,
+        "ROOT"
+      );
+
+      if (this.workflow.generateLicense) {
+        this.licenseData = this.workflow.licenseText;
+      }
+
+      this.ready = true;
+      this.finishedLoading = true;
     },
     handleCloseDrawer() {
       this.fileTitle = "";
@@ -557,11 +576,11 @@ export default {
 
     if (validZenodoConnection) {
       this.validTokenAvailable = true;
-      this.ready = true;
     } else {
       this.validTokenAvailable = false;
-      this.ready = true;
     }
+
+    this.showFilePreview();
   },
 };
 </script>

@@ -257,12 +257,18 @@ export default {
 
       this.dataset.meta.destination = this.repoID;
 
+      if (this.uploadToRepo === "Yes") {
+        this.workflow.uploadToRepo = true;
+      } else {
+        this.workflow.uploadToRepo = false;
+      }
+
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
       // using the zenodo one here. I don't think this matters since we aren't uploading anything
       // Might change it to its own page later
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/upload`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
       this.$router.push(routerPath);
     },
     async saveSkip() {
