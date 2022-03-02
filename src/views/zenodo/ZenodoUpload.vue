@@ -565,7 +565,8 @@ export default {
       return response;
     },
     async uploadWorkflow() {
-      let response = "";
+      let response = {};
+
       response = await this.createZenodoDeposition();
 
       if (response === "ERROR") {
@@ -592,23 +593,27 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent && "metadata" in response) {
-        this.dataset.data.Code.questions.uniqueIdentifier =
-          response.metadata.prereserve_doi.doi;
+      if (this.workflow.generateCodeMeta) {
+        if (this.codePresent) {
+          if ("metadata" in response) {
+            this.dataset.data.Code.questions.uniqueIdentifier =
+              response.metadata.prereserve_doi.doi;
+          }
 
-        response = await this.createCodeMetadataFile();
-        // console.log(response);
+          response = await this.createCodeMetadataFile();
+          // console.log(response);
 
-        if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the code metadata file";
-          return "FAIL";
-        } else {
-          this.statusMessage =
-            "Created the codemeta.json file in the target folder";
+          if (response === "ERROR") {
+            this.alertMessage =
+              "There was an error with creating the code metadata file";
+            return "FAIL";
+          } else {
+            this.statusMessage =
+              "Created the codemeta.json file in the target folder";
 
-          await this.datasetStore.updateCurrentDataset(this.dataset);
-          await this.datasetStore.syncDatasets();
+            await this.datasetStore.updateCurrentDataset(this.dataset);
+            await this.datasetStore.syncDatasets();
+          }
         }
       }
 
@@ -617,17 +622,19 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent) {
-        response = await this.createCitationFile();
-        // console.log(response);
+      if (this.workflow.generateCodeMeta) {
+        if (this.codePresent) {
+          response = await this.createCitationFile();
+          // console.log(response);
 
-        if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the CITATION.cff file";
-          return "FAIL";
-        } else {
-          this.statusMessage =
-            "Created the CITATION.cff file in the target folder";
+          if (response === "ERROR") {
+            this.alertMessage =
+              "There was an error with creating the CITATION.cff file";
+            return "FAIL";
+          } else {
+            this.statusMessage =
+              "Created the CITATION.cff file in the target folder";
+          }
         }
       }
 
