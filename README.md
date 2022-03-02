@@ -1,3 +1,3 @@
 # FAIRshare
 
-All instructions needed for running the application can be found [here](https://fair-share-docs.vercel.app/docs/developer-documentation/project-setup).
+All instructions needed for running the application can be found [here](https://docs.fairshareapp.io/docs/developer-documentation/project-setup).
