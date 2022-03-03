@@ -55,7 +55,7 @@
     <warning-confirm
       ref="warningConfirm"
       title="Warning"
-      @messageOkay="confirmDeleteToken"
+      @messageConfirmed="confirmDeleteToken"
     >
       <p class="text-center text-base text-gray-500">
         Disconnecting will delete the access token stored. Would you like to

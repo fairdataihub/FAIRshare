@@ -1139,7 +1139,7 @@
         <warning-confirm
           ref="warningConfirm"
           title="Warning"
-          @messageOkay="confirmNavigateBackSave('ok')"
+          @messageConfirmed="confirmNavigateBackSave('ok')"
           @messageCancel="confirmNavigateBackSave('cancel')"
           confirmButtonText="Save and go back"
           cancelButtonText="Don't save and go back"

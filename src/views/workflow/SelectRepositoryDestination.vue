@@ -186,7 +186,7 @@
             <warning-confirm
               ref="warningConfirm"
               title="Warning"
-              @messageOkay="skipUploadToRepo"
+              @messageConfirmed="skipUploadToRepo"
               confirmButtonText="Yes, I want to skip"
             >
               <p class="text-center text-base text-gray-500">

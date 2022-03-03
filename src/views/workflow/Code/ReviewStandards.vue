@@ -245,7 +245,7 @@
         <warning-confirm
           ref="warningConfirm"
           title="Warning"
-          @messageOkay="startCuration"
+          @messageConfirmed="startCuration"
           confirmButtonText="Continue anyway"
           cancelButtonText="I want to go back and review"
         >

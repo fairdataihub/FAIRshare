@@ -199,7 +199,7 @@
               <warning-confirm
                 ref="warningConfirm"
                 title="Confirm publish"
-                @messageOkay="createRelease('publish')"
+                @messageConfirmed="createRelease('publish')"
               >
                 <p class="text-center text-base text-gray-500">
                   Once a release has been made you will not be able to remove it

@@ -140,7 +140,7 @@ export default {
   },
   emits: [
     "messageClosed",
-    "messageOkay",
+    "messageConfirmed",
     "messageCancel",
     "messageOutsideClicked",
   ],
@@ -149,7 +149,7 @@ export default {
       if (!val) {
         this.$emit("messageClosed");
         if (type === "okay") {
-          this.$emit("messageOkay");
+          this.$emit("messageConfirmed");
         }
         if (type === "cancel") {
           this.$emit("messageCancel");

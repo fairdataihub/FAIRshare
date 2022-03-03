@@ -28,16 +28,6 @@
           >
             View the Documentation <el-icon><notebook-icon /></el-icon>
           </button>
-          <button class="primary-plain-button" @click="openDialog">
-            open Dialog
-          </button>
-          <info-confirm ref="warningConfirm" title="Info">
-            <p class="text-center text-base text-gray-500">
-              Are you sure you want to skip uploading this dataset to a data
-              repository? This is not recommended according to the FAIR
-              guidelines.
-            </p>
-          </info-confirm>
         </div>
       </div>
     </div>
@@ -59,9 +49,6 @@ export default {
   methods: {
     openURL(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
-    },
-    openDialog() {
-      this.$refs.warningConfirm.show();
     },
   },
   computed: {},

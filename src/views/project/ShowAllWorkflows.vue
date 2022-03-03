@@ -47,7 +47,7 @@
         <info-confirm
           ref="infoConfirmLocalZenodoUploadNoPublish"
           title="You haven't published this dataset yet"
-          @messageOkay="localZenodoUploadNoPublishResponse('ok')"
+          @messageConfirmed="localZenodoUploadNoPublishResponse('ok')"
           @messageCancel="localZenodoUploadNoPublishResponse('cancel')"
           confirmButtonText="I want to publish"
           cancelButtonText="I want to upload my data again"
@@ -61,7 +61,7 @@
         <info-confirm
           ref="infoConfirmGithubUploadNoPublish"
           title="You haven't published this dataset yet"
-          @messageOkay="localGithubUploadNoPublishResponse('ok')"
+          @messageConfirmed="localGithubUploadNoPublishResponse('ok')"
           @messageCancel="localGithubUploadNoPublishResponse('cancel')"
           confirmButtonText="I want to publish"
           cancelButtonText="I want to upload my data again"
@@ -75,7 +75,7 @@
         <info-confirm
           ref="infoConfirmContinueCuration"
           title="Continue where you left off"
-          @messageOkay="continueCuration('ok')"
+          @messageConfirmed="continueCuration('ok')"
           @messageCancel="continueCuration('cancel')"
           confirmButtonText="Yes, continue"
           cancelButtonText="No, start from the beginning"

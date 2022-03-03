@@ -29,6 +29,7 @@
         @submit.prevent
         class="rounded-lg border-2 border-slate-100 p-4"
         :rules="rules"
+        size="large"
       >
         <el-form-item label="Project ID">
           <span class="cursor-not-allowed text-zinc-500">
@@ -112,9 +113,37 @@
               certain.
             </p>
             <div>
-              <button class="danger-button py-0" @click="deleteDataset">
+              <button class="danger-button py-0" @click="openDialog">
                 <el-icon><delete-icon /></el-icon> Delete project
               </button>
+
+              <warning-prompt
+                ref="warningPrompt"
+                title="Delete project"
+                confirmButtonText="I understand. Delete this project"
+                :confirmDisabled="disableConfirm"
+                @messageConfirmed="deleteProject"
+              >
+                <div w-full>
+                  <p class="mb-3 w-full text-left text-sm text-gray-500">
+                    This action cannot be undone. This will permanently delete
+                    the project.
+                  </p>
+                  <p class="mb-2 text-left text-sm text-gray-500">
+                    Please type
+                    <span class="font-bold">{{ originalName }}</span> to
+                    confirm.
+                  </p>
+
+                  <el-input
+                    v-model="deleteInput"
+                    :placeholder="originalName"
+                    clearable
+                    size="large"
+                    class="w-full"
+                  />
+                </div>
+              </warning-prompt>
             </div>
           </div>
         </el-form-item>
@@ -149,7 +178,7 @@
 </template>
 
 <script>
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
 
@@ -167,6 +196,7 @@ export default {
         // dataType: [],
       },
       originalName: "",
+      deleteInput: "",
       deleteDisabled: false,
       rules: {
         datasetName: [
@@ -187,7 +217,15 @@ export default {
       },
     };
   },
+  computed: {
+    disableConfirm() {
+      return this.deleteInput.trim() !== this.originalName.trim();
+    },
+  },
   methods: {
+    openDialog() {
+      this.$refs.warningPrompt.show();
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -221,41 +259,15 @@ export default {
     goBack() {
       this.$router.push({ name: "ShowAllProjects" });
     },
-    deleteDataset() {
-      ElMessageBox.prompt(
-        `This action cannot be undone. This will permanently delete the project.
-        <br />
-        Please type <strong> ${this.originalName} </strong> to confirm.`,
-        "Are you absolutely sure?",
-        {
-          showCancelButton: false,
-          type: "warning",
-          confirmButtonText:
-            "I understand the consequences, delete this project",
-          confirmButtonClass:
-            "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
-          dangerouslyUseHTMLString: true,
-          inputValidator: (value) => {
-            if (value === this.originalName) {
-              return true;
-            }
-            return "Please type the project name correctly";
-          },
-        }
-      )
-        .then(async ({ value }) => {
-          console.log(value);
+    async deleteProject() {
+      await this.datasetStore.deleteDataset(this.datasetID);
 
-          await this.datasetStore.deleteDataset(this.datasetID);
+      ElMessage({
+        type: "success",
+        message: `Your project was deleted.`,
+      });
 
-          ElMessage({
-            type: "success",
-            message: `Project ${value} deleted.`,
-          });
-
-          this.goBack();
-        })
-        .catch(() => {});
+      this.goBack();
     },
   },
   async mounted() {

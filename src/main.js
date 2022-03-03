@@ -31,6 +31,9 @@ import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
 import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
 import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
+import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
+
+import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
@@ -55,6 +58,9 @@ app.component("form-help-content", FormHelpContent);
 
 app.component("warning-confirm", WarningConfirm);
 app.component("info-confirm", InfoConfirm);
+app.component("error-confirm", ErrorConfirm);
+
+app.component("warning-prompt", WarningPrompt);
 
 // import and register icons globally
 import {

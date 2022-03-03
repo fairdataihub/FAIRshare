@@ -1305,7 +1305,7 @@
             <warning-confirm
               ref="warningConfirm"
               title="Warning"
-              @messageOkay="navigateToSelectDestination"
+              @messageConfirmed="navigateToSelectDestination"
               confirmButtonText="Yes, I want to skip"
             >
               <p class="text-center text-base text-gray-500">

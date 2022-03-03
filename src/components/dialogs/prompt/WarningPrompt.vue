@@ -31,26 +31,26 @@
             <div
               class="my-8 ml-[9rem] inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
-              <div class="flex flex-col items-center justify-start">
-                <div class="mb-0">
+              <div class="flex flex-col items-start justify-start">
+                <div class="mb-0 flex w-full justify-center">
                   <Vue3Lottie
-                    animationLink="https://assets5.lottiefiles.com/packages/lf20_Tkwjw8.json"
+                    animationLink="https://assets1.lottiefiles.com/packages/lf20_8zle4p5u.json"
                     :width="100"
                     :height="100"
                     :loop="1"
                   />
                 </div>
-                <div class="my-2">
+                <div class="my-2 flex w-full flex-col">
                   <DialogTitle
                     as="h3"
-                    class="text-center text-xl font-medium leading-6 text-gray-900"
+                    class="text-left text-xl font-medium leading-6 text-gray-900"
                   >
                     {{ localTitle }}
                   </DialogTitle>
 
-                  <div class="mt-2">
+                  <div class="mt-2 w-full">
                     <slot>
-                      <p class="text-center text-base text-gray-500">
+                      <p class="text-left text-base text-gray-500">
                         {{ localContent }}
                       </p>
                     </slot>
@@ -70,7 +70,8 @@
                 <button
                   type="button"
                   class="primary-button"
-                  @click="setIsOpen(false, 'okay')"
+                  @click="setIsOpen(false, 'confirm')"
+                  :disabled="confirmDisabled"
                 >
                   {{ localConfirmButtonText }}
                 </button>
@@ -93,7 +94,7 @@ import {
 } from "@headlessui/vue";
 
 export default {
-  name: "WarningConfirm",
+  name: "WarningPrompt",
   components: {
     Dialog,
     DialogOverlay,
@@ -137,25 +138,33 @@ export default {
       type: Boolean,
       default: true,
     },
+    confirmDisabled: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
   },
   emits: [
     "messageClosed",
     "messageConfirmed",
     "messageCancel",
     "messageOutsideClicked",
+    "messageClosed",
   ],
   methods: {
     setIsOpen(val, type) {
       if (!val) {
         this.$emit("messageClosed");
-        if (type === "okay") {
+        if (type === "confirm") {
           this.$emit("messageConfirmed");
         }
         if (type === "cancel") {
           this.$emit("messageCancel");
+          this.$emit("messageClosed");
         }
         if (type === "outside") {
           this.$emit("messageOutsideClicked");
+          this.$emit("messageClosed");
         }
       }
       this.isOpen = val;
@@ -165,12 +174,6 @@ export default {
     },
     setContent(val) {
       this.localContent = val;
-    },
-    okClicked() {
-      this.setIsOpen(false, "okay");
-    },
-    cancelClicked() {
-      this.setIsOpen(false, "cancel");
     },
     show() {
       this.setIsOpen(true, "show");
