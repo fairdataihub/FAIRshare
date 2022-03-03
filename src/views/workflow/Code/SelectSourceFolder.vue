@@ -215,57 +215,60 @@ export default {
       /* eslint-disable */
       console.log(target.description);
       this.step1Form.name = target.name;
-      this.step1Form.description = target.description
-      this.step1Form.creationDate = target.creationDate
-      this.step1Form.firstReleaseDate = target.firstReleaseDate
+      this.step1Form.description = target.description;
+      this.step1Form.creationDate = target.creationDate;
+      this.step1Form.firstReleaseDate = target.firstReleaseDate;
 
-      this.step2Form.authors = target.author
+      this.step2Form.authors = target.author;
       this.step2Form.authors.forEach((element) => {
-        delete element["@type"]
-        delete element["@id"]
-        element.affiliation = element.affiliation.name
-        element.orcid = ""
+        delete element["@type"];
+        delete element["@id"];
+        element.affiliation = element.affiliation.name;
+        element.orcid = "";
       });
-      this.step2Form.contributors = target.contributor
+      this.step2Form.contributors = target.contributor;
       this.step2Form.contributors.forEach((element) => {
-        delete element["@type"]
-        delete element["@id"]
-        element.affiliation = element.affiliation.name
-        element.orcid = "" 
+        delete element["@type"];
+        delete element["@id"];
+        element.affiliation = element.affiliation.name;
+        element.orcid = "";
       });
       this.addIds(this.step2Form.authors);
       this.addIds(this.step2Form.contributors);
 
       this.step3Form.applicationCategory = target.applicationCategory;
       target.keywords.forEach((element) => {
-        this.step3Form.keywords.push({"keyword":element, "id":uuidv4()})
+        this.step3Form.keywords.push({ keyword: element, id: uuidv4() });
       });
-      this.step3Form.funding.organization = target.funding["@name"]
+      this.step3Form.funding.organization = target.funding["@name"];
 
-      this.step4Form.codeRepository = target.codeRepository
-      this.step4Form.continuousIntegration = target.contIntegration
-      this.step4Form.issueTracker = target.issueTracker
+      this.step4Form.codeRepository = target.codeRepository;
+      this.step4Form.continuousIntegration = target.contIntegration;
+      this.step4Form.issueTracker = target.issueTracker;
       target.relatedLink.forEach((element) => {
-        this.step4Form.relatedLinks.push({"link":element, "id":uuidv4()})
+        this.step4Form.relatedLinks.push({ link: element, id: uuidv4() });
       });
 
-      this.step5Form.programmingLanguage = target.programmingLanguage
-      this.step5Form.runtimePlatform = target.runtimePlatform
-      this.step5Form.operatingSystem = target.operatingSystem
+      this.step5Form.programmingLanguage = target.programmingLanguage;
+      this.step5Form.runtimePlatform = target.runtimePlatform;
+      this.step5Form.operatingSystem = target.operatingSystem;
       target.softwareRequirements.forEach((element) => {
-        this.step5Form.otherSoftwareRequirements.push({"link":element, "id":uuidv4()})
+        this.step5Form.otherSoftwareRequirements.push({
+          link: element,
+          id: uuidv4(),
+        });
       });
 
-      this.step6Form.currentVersion = target.version
-      this.step6Form.currentVersionReleaseDate = ""
-      this.step6Form.currentVersionDownloadLink = target.downloadUrl
-      this.step6Form.currentVersionReleaseNotes = target.releaseNotes
+      this.step6Form.currentVersion = target.version;
+      this.step6Form.currentVersionReleaseDate = "";
+      this.step6Form.currentVersionDownloadLink = target.downloadUrl;
+      this.step6Form.currentVersionReleaseNotes = target.releaseNotes;
 
-      this.step7Form.referencePublication = target.referencePublication
-      this.step7Form.developmentStatus = target.developmentStatus
-      this.step7Form.isPartOf = target.isPartOf
+      this.step7Form.referencePublication = target.referencePublication;
+      this.step7Form.developmentStatus = target.developmentStatus;
+      this.step7Form.isPartOf = target.isPartOf;
       await this.saveCurrentEntries();
-      console.log(this.dataset)
+      console.log(this.dataset);
     },
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
@@ -352,9 +355,12 @@ export default {
             if (!data.canceled) {
               this.folderPath = data.filePaths[0];
               /* eslint-disable */
-              let check = await this.fileExistInFolder(this.folderPath,"codemeta.json")
-              if(check != "Not Found"){
-                this.updateDataset(check)
+              let check = await this.fileExistInFolder(
+                this.folderPath,
+                "codemeta.json"
+              );
+              if (check != "Not Found") {
+                this.updateDataset(check);
               }
             }
             this.folderDialogOpen = false;
@@ -431,7 +437,6 @@ export default {
       this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
-
 
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 

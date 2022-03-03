@@ -322,7 +322,7 @@ function retrieveCode(url) {
       let query = parsedURL.query;
       let code = query.code;
       let error = query.error;
-      console.log("parsed: ",parsedURL)
+      console.log("parsed: ", parsedURL);
       if (error) {
         reject(error);
         authWindow.removeAllListeners("closed");
@@ -339,14 +339,14 @@ function retrieveCode(url) {
     }
 
     authWindow.webContents.on("will-navigate", (_event, url) => {
-      console.log("will-navigate", url)
+      console.log("will-navigate", url);
       newlink(url);
     });
 
     authWindow.webContents.on(
       "did-get-redirect-request",
       (_event, _oldUrl, newUrl) => {
-        console.log("did-get-redirect-request")
+        console.log("did-get-redirect-request");
         newlink(newUrl);
       }
     );
@@ -405,14 +405,14 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
 ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
   // console.log(test)
   let success = false;
-  const CLIENT_ID_ZENODO = ""
-  const CLIENT_SECRET_ZENODO = ""
+  const CLIENT_ID_ZENODO = "";
+  const CLIENT_SECRET_ZENODO = "";
   await axios
     .get("https://sandbox.zenodo.org/oauth/authorize", {
       params: {
         client_id: CLIENT_ID_ZENODO,
         response_type: "code",
-        redirect_uri:"http://localhost:8080",
+        redirect_uri: "http://localhost:8080",
         scope: "deposite:write deposite:actions",
       },
     })
@@ -427,7 +427,7 @@ ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
             {
               client_id: CLIENT_ID_ZENODO,
               client_secret: CLIENT_SECRET_ZENODO,
-              grant_type:"authorization_code",
+              grant_type: "authorization_code",
               code: code,
             },
             {
