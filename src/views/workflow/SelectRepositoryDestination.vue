@@ -179,10 +179,22 @@
               Back
             </button>
 
-            <button class="primary-button" @click="skipUploadToRepo">
+            <button class="primary-button" @click="showRepoUploadWarning">
               Continue
               <el-icon><d-arrow-right /></el-icon>
             </button>
+            <warning-confirm
+              ref="warningConfirm"
+              title="Warning"
+              @messageOkay="skipUploadToRepo"
+              confirmButtonText="Yes, I want to skip"
+            >
+              <p class="text-center text-base text-gray-500">
+                Are you sure you want to skip uploading this dataset to a data
+                repository? This is not recommended according to the FAIR
+                guidelines.
+              </p>
+            </warning-confirm>
           </div>
         </transition>
       </div>
@@ -284,44 +296,33 @@ export default {
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/pickLicense`;
       this.$router.push(routerPath);
     },
-    skipUploadToRepo() {
-      this.$confirm(
-        "Are you sure you want to skip uploading this dataset to a data repository? This is not recommended according to the FAIR guidelines.",
-        "Warning",
-        {
-          confirmButtonText: "Yes, I want to skip",
-          cancelButtonText: "Cancel",
-          type: "warning",
+    showRepoUploadWarning() {
+      this.$refs.warningConfirm.show();
+    },
+    async skipUploadToRepo() {
+      if (this.uploadToRepo === "Yes") {
+        this.workflow.uploadToRepo = true;
+      } else {
+        this.workflow.uploadToRepo = false;
+      }
+
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+
+      let routerPath = "";
+
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
         }
-      )
-        .then(async () => {
-          if (this.uploadToRepo === "Yes") {
-            this.workflow.uploadToRepo = true;
-          } else {
-            this.workflow.uploadToRepo = false;
-          }
+        if (this.workflow.source.type === "local") {
+          routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+        }
+      } else {
+        routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+      }
 
-          await this.datasetStore.updateCurrentDataset(this.dataset);
-          await this.datasetStore.syncDatasets();
-
-          let routerPath = "";
-
-          if ("source" in this.workflow) {
-            if (this.workflow.source.type === "github") {
-              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
-            }
-            if (this.workflow.source.type === "local") {
-              routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
-            }
-          } else {
-            routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
-          }
-
-          this.$router.push({ path: routerPath });
-        })
-        .catch(() => {
-          // do nothing
-        });
+      this.$router.push({ path: routerPath });
     },
   },
   async mounted() {

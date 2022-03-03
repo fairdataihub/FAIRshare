@@ -43,14 +43,14 @@
                 <div class="my-2">
                   <DialogTitle
                     as="h3"
-                    class="text-lg font-medium leading-6 text-gray-900"
+                    class="text-center text-xl font-medium leading-6 text-gray-900"
                   >
                     {{ localTitle }}
                   </DialogTitle>
 
                   <div class="mt-2">
                     <slot>
-                      <p class="text-sm text-gray-500">
+                      <p class="text-center text-base text-gray-500">
                         {{ localContent }}
                       </p>
                     </slot>
@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
       localTitle: this.title,
       localContent: this.content,
       localConfirmButtonText: this.confirmButtonText,
@@ -146,7 +146,6 @@ export default {
   ],
   methods: {
     setIsOpen(val, type) {
-      console.log(type);
       if (!val) {
         this.$emit("messageClosed");
         if (type === "okay") {

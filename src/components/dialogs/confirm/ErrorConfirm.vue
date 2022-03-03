@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
       localTitle: this.title,
       localContent: this.content,
       localConfirmButtonText: this.confirmButtonText,

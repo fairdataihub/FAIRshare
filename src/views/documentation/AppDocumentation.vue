@@ -31,7 +31,13 @@
           <button class="primary-plain-button" @click="openDialog">
             open Dialog
           </button>
-          <warning-confirm ref="errorDialog"> Some message </warning-confirm>
+          <warning-confirm ref="warningConfirm" title="Warning">
+            <p class="text-center text-base text-gray-500">
+              Are you sure you want to skip uploading this dataset to a data
+              repository? This is not recommended according to the FAIR
+              guidelines.
+            </p>
+          </warning-confirm>
         </div>
       </div>
     </div>
@@ -55,7 +61,7 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
     openDialog() {
-      this.$refs.errorDialog.show();
+      this.$refs.warningConfirm.show();
     },
   },
   computed: {},

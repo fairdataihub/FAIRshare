@@ -1296,12 +1296,24 @@
               <button
                 class="primary-button"
                 :disabled="checkInvalidStatus"
-                @click="skipCodeMeta"
+                @click="showSkipMetadataCreationWarning"
               >
                 Continue
                 <el-icon><d-arrow-right /></el-icon>
               </button>
             </div>
+            <warning-confirm
+              ref="warningConfirm"
+              title="Warning"
+              @messageOkay="navigateToSelectDestination"
+              confirmButtonText="Yes, I want to skip"
+            >
+              <p class="text-center text-base text-gray-500">
+                Are you sure you want to skip creating the codemeta.json and
+                CITATION.cff files for this dataset? This is not recommended
+                according to the FAIR guidelines.
+              </p>
+            </warning-confirm>
           </div>
         </transition>
       </div>
@@ -1826,23 +1838,10 @@ export default {
 
       this.navigateBack();
     },
-    skipCodeMeta() {
-      this.$confirm(
-        "Are you sure you want to skip creating the codemeta.json and CITATION.cff files for this dataset? This is not recommended according to the FAIR guidelines.",
-        "Warning",
-        {
-          confirmButtonText: "Yes, I want to skip",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(() => {
-          this.navigateToSelectDestination();
-        })
-        .catch(() => {
-          // do nothing
-        });
+    showSkipMetadataCreationWarning() {
+      this.$refs.warningConfirm.show();
     },
+
     navigateToStep2FromStep1() {
       this.$refs["s1Form"].validate(async (valid) => {
         if (valid) {
@@ -2111,37 +2110,9 @@ export default {
       this.$router.push({ path: routerPath });
     },
     navigateBack() {
-      let newChanges = false;
-
-      // if (!newChanges && !_.isEqual(this.originalObject.Code, this.codeForm)) {
-      //   newChanges = true;
-      // }
-
-      if (newChanges) {
-        this.$confirm(
-          "You have some unsaved changes. Do you want to save your edits?",
-          "Warning",
-          {
-            confirmButtonText: "Save and go back",
-            cancelButtonText: "Don't save and go back",
-            type: "warning",
-          }
-        )
-          .then(() => {
-            // save changes
-            this.navigateToSelectDestination(true, true);
-          })
-          .catch(() => {
-            // don't save changes
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
-            });
-          });
-      } else {
-        this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
-        });
-      }
+      this.$router.push({
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
+      });
     },
     async prefillGithubAuthors() {
       ElNotification({
