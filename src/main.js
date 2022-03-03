@@ -30,6 +30,7 @@ import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
 import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
+import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
 
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
@@ -53,6 +54,7 @@ app.component("VuePopper", Popper);
 app.component("form-help-content", FormHelpContent);
 
 app.component("warning-confirm", WarningConfirm);
+app.component("info-confirm", InfoConfirm);
 
 // import and register icons globally
 import {

@@ -29,12 +29,12 @@
             leave-to="opacity-0 scale-95"
           >
             <div
-              class="my-8 ml-[9rem] inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="my-8 ml-[9rem] inline-block max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <div class="flex flex-col items-center justify-start">
                 <div class="mb-0">
                   <Vue3Lottie
-                    animationLink="https://assets5.lottiefiles.com/packages/lf20_Tkwjw8.json"
+                    animationLink="https://assets10.lottiefiles.com/packages/lf20_98zCnL/47%20-%20Information.json"
                     :width="100"
                     :height="100"
                     :loop="1"
@@ -93,7 +93,7 @@ import {
 } from "@headlessui/vue";
 
 export default {
-  name: "WarningConfirm",
+  name: "InfoConfirm",
   components: {
     Dialog,
     DialogOverlay,

@@ -48,6 +48,16 @@
       :onStatusChange="statusChangeFunction"
     ></ZenodoTokenConnection>
     <!-- <ZenodoOAuthConnection v-if="showOAuthConnect" v-model="showOAuthConnect" :callback = "hideZenodoOAuthConnect"></ZenodoOAuthConnection> -->
+    <warning-confirm
+      ref="warningConfirm"
+      title="Warning"
+      @messageOkay="confirmDeleteToken"
+    >
+      <p class="text-center text-base text-gray-500">
+        Disconnecting will delete the access token stored. Would you like to
+        continue?
+      </p>
+    </warning-confirm>
   </div>
 </template>
 
@@ -55,7 +65,7 @@
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
 
 import { useTokenStore } from "@/store/access";
-import { ElNotification, ElMessageBox } from "element-plus";
+import { ElNotification } from "element-plus";
 
 export default {
   // output component: return a button which can open a dialog that contains two buttons
@@ -99,35 +109,20 @@ export default {
     interactWithService(serviceName) {
       if (serviceName == "zenodo") {
         if ("zenodo" in this.manager.accessTokens) {
-          this.APIkeyWarning("zenodo");
+          this.$refs.warningConfirm.show();
         } else {
           this.dialogVisible = true;
         }
       }
     },
-    // delete key and give notification
-    APIkeyWarning(key) {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken(key);
-        })
-        .catch(() => {
-          // ElNotification({
-          //   type: "info",
-          //   message: "Delete canceled",
-          //   position: "bottom-right",
-          //   duration: 2000,
-          // });
-        });
+    // delete key
+    confirmDeleteToken() {
+      this.deleteToken("zenodo");
     },
+    // // delete key and give notification
+    // APIkeyWarning(_key) {
+    //   this.$refs.warningConfirm.show();
+    // },
     async deleteToken(key) {
       let errorFound = false;
       try {

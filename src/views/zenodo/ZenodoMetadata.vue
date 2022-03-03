@@ -1135,6 +1135,19 @@
         >
           Continue <el-icon> <d-arrow-right /> </el-icon>
         </button>
+
+        <warning-confirm
+          ref="warningConfirm"
+          title="Warning"
+          @messageOkay="confirmNavigateBackSave('ok')"
+          @messageCancel="confirmNavigateBackSave('cancel')"
+          confirmButtonText="Save and go back"
+          cancelButtonText="Don't save and go back"
+        >
+          <p class="text-center text-base text-gray-500">
+            You have some unsaved changes. Do you want to save your edits?
+          </p>
+        </warning-confirm>
       </div>
     </div>
     <transition name="fade" mode="out-in" appear>
@@ -1157,7 +1170,7 @@ import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
 import doiRegex from "doi-regex";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import validator from "validator";
 
 import _ from "lodash";
@@ -1478,6 +1491,17 @@ export default {
         }
       }
     },
+    confirmNavigateBackSave(response) {
+      if (response == "ok") {
+        // save changes
+        this.addZenodoMetadata(true, true);
+      } else if (response == "cancel") {
+        // don't save changes
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
+        });
+      }
+    },
     navigateBack() {
       let newChanges = false;
 
@@ -1486,25 +1510,7 @@ export default {
       }
 
       if (newChanges) {
-        ElMessageBox.confirm(
-          "You have some unsaved changes. Do you want to save your edits?",
-          "Warning",
-          {
-            confirmButtonText: "Save and go back",
-            cancelButtonText: "Don't save and go back",
-            type: "warning",
-          }
-        )
-          .then(() => {
-            // save changes
-            this.addZenodoMetadata(true, true);
-          })
-          .catch(() => {
-            // don't save changes
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,
-            });
-          });
+        this.$refs.warningConfirm.show();
       } else {
         this.$router.push({
           path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`,

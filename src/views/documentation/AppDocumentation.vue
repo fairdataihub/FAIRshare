@@ -31,13 +31,13 @@
           <button class="primary-plain-button" @click="openDialog">
             open Dialog
           </button>
-          <warning-confirm ref="warningConfirm" title="Warning">
+          <info-confirm ref="warningConfirm" title="Info">
             <p class="text-center text-base text-gray-500">
               Are you sure you want to skip uploading this dataset to a data
               repository? This is not recommended according to the FAIR
               guidelines.
             </p>
-          </warning-confirm>
+          </info-confirm>
         </div>
       </div>
     </div>
