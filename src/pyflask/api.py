@@ -33,7 +33,7 @@ from utilities import (
     createFile,
     openFileExplorer,
     readFolderContents,
-    fileExistInFolder
+    fileExistInFolder,
 )
 
 API_VERSION = "0.0.1"
@@ -831,13 +831,14 @@ class ReadFolderContents(Resource):
 
         return readFolderContents(folder_path)
 
+
 @utilities.route("/fileexistinfolder", endpoint="FileExistInFolder")
 class FileExistInFolder(Resource):
     @utilities.doc(
         responses={200: "Success", 400: "Validation error"},
         params={
             "folder_path": "check if the file exists in the folder",  # noqa:501
-            "file_name": "name of the target file"
+            "file_name": "name of the target file",
         },
     )
     def post(self):
