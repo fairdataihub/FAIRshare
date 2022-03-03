@@ -131,3 +131,16 @@ def readFolderContents(dir):
         return root
     except Exception as e:
         raise e
+
+def fileExistInFolder(folder_path, file_name):
+    try:
+        for filename in os.listdir(folder_path):
+            if filename == file_name:
+                import json
+                fileFullName = os.path.join(folder_path, filename)
+                f = open(fileFullName)
+                return json.load(f)
+        return "Not Found"
+    except Exception as e:
+        raise e
+

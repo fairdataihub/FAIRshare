@@ -83,9 +83,9 @@
 
 <script>
 import { dialog } from "@electron/remote";
-
+import axios from "axios";
 import { useDatasetsStore } from "@/store/datasets";
-
+import { v4 as uuidv4 } from "uuid";
 export default {
   name: "CodeSelectSourceFolder",
   components: {},
@@ -99,9 +99,56 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       locationID: "",
+      step1Form: {
+        name: "",
+        description: "",
+        creationDate: "",
+        firstReleaseDate: "",
+      },
+      step2Form: {
+        authors: [],
+        contributors: [],
+      },
+      step3Form: {
+        applicationCategory: "",
+        keywords: [],
+        funding: {
+          code: "",
+          organization: "",
+        },
+      },
+      step4Form: {
+        codeRepository: "",
+        continuousIntegration: "",
+        issueTracker: "",
+        relatedLinks: [],
+      },
+      step5Form: {
+        programmingLanguage: [],
+        runtimePlatform: [],
+        operatingSystem: [],
+        otherSoftwareRequirements: [],
+      },
+      step6Form: {
+        currentVersion: "",
+        currentVersionReleaseDate: "",
+        currentVersionDownloadLink: "",
+        currentVersionReleaseNotes: "",
+      },
+      step7Form: {
+        referencePublication: "",
+        developmentStatus: "",
+        isPartOf: "",
+      },
     };
   },
   computed: {
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
     emptyInput() {
       if (this.locationID === "local") {
         if (this.folderPath.trim() === "") {
@@ -140,17 +187,175 @@ export default {
     },
   },
   methods: {
+    async fileExistInFolder(dir, target) {
+      const response = await axios
+        .post(`${this.$server_url}/utilities/fileexistinfolder`, {
+          folder_path: dir,
+          file_name: target,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          return "ERROR";
+        });
+      return response;
+    },
+
     selectSourceLocation(locationID) {
       this.locationID = locationID;
+    },
+    addIds(array) {
+      array.forEach((element) => {
+        element.id = uuidv4();
+      });
+    },
+    async updateDataset(target) {
+      /* eslint-disable */
+      console.log(target.description);
+      this.step1Form.name = target.name;
+      this.step1Form.description = target.description
+      this.step1Form.creationDate = target.creationDate
+      this.step1Form.firstReleaseDate = target.firstReleaseDate
+
+      this.step2Form.authors = target.author
+      this.step2Form.authors.forEach((element) => {
+        delete element["@type"]
+        delete element["@id"]
+        element.affiliation = element.affiliation.name
+        element.orcid = ""
+      });
+      this.step2Form.contributors = target.contributor
+      this.step2Form.contributors.forEach((element) => {
+        delete element["@type"]
+        delete element["@id"]
+        element.affiliation = element.affiliation.name
+        element.orcid = "" 
+      });
+      this.addIds(this.step2Form.authors);
+      this.addIds(this.step2Form.contributors);
+
+      this.step3Form.applicationCategory = target.applicationCategory;
+      target.keywords.forEach((element) => {
+        this.step3Form.keywords.push({"keyword":element, "id":uuidv4()})
+      });
+      this.step3Form.funding.organization = target.funding["@name"]
+
+      this.step4Form.codeRepository = target.codeRepository
+      this.step4Form.continuousIntegration = target.contIntegration
+      this.step4Form.issueTracker = target.issueTracker
+      target.relatedLink.forEach((element) => {
+        this.step4Form.relatedLinks.push({"link":element, "id":uuidv4()})
+      });
+
+      this.step5Form.programmingLanguage = target.programmingLanguage
+      this.step5Form.runtimePlatform = target.runtimePlatform
+      this.step5Form.operatingSystem = target.operatingSystem
+      target.softwareRequirements.forEach((element) => {
+        this.step5Form.otherSoftwareRequirements.push({"link":element, "id":uuidv4()})
+      });
+
+      this.step6Form.currentVersion = target.version
+      this.step6Form.currentVersionReleaseDate = ""
+      this.step6Form.currentVersionDownloadLink = target.downloadUrl
+      this.step6Form.currentVersionReleaseNotes = target.releaseNotes
+
+      this.step7Form.referencePublication = target.referencePublication
+      this.step7Form.developmentStatus = target.developmentStatus
+      this.step7Form.isPartOf = target.isPartOf
+      await this.saveCurrentEntries();
+      console.log(this.dataset)
+    },
+    filterArrayOfObjects(array, key) {
+      return array.filter((element) => {
+        return element[key] !== "";
+      });
+    },
+    async saveCurrentEntries() {
+      this.dataset.data.general.questions.name = this.step1Form.name;
+      this.dataset.data.general.questions.description =
+        this.step1Form.description;
+
+      this.step3Form.keywords = this.filterArrayOfObjects(
+        this.step3Form.keywords,
+        "keyword"
+      );
+
+      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
+      this.dataset.data.general.questions.authors = this.step2Form.authors;
+      this.dataset.data.general.questions.contributors =
+        this.step2Form.contributors;
+      this.dataset.data.general.questions.funding = this.step3Form.funding;
+      this.dataset.data.general.questions.referencePublication =
+        this.step7Form.referencePublication;
+
+      this.step4Form.relatedLinks = this.filterArrayOfObjects(
+        this.step4Form.relatedLinks,
+        "link"
+      );
+
+      this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
+        this.step5Form.otherSoftwareRequirements,
+        "link"
+      );
+
+      if (this.codePresent) {
+        let codeForm = {};
+
+        codeForm.name = this.step1Form.name;
+        codeForm.description = this.step1Form.description;
+        codeForm.creationDate = this.step1Form.creationDate;
+        codeForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+
+        codeForm.authors = this.step2Form.authors;
+        codeForm.contributors = this.step2Form.contributors;
+
+        codeForm.keywords = this.step3Form.keywords;
+        codeForm.funding = this.step3Form.funding;
+        codeForm.applicationCategory = this.step3Form.applicationCategory;
+
+        codeForm.codeRepository = this.step4Form.codeRepository;
+        codeForm.continuousIntegration = this.step4Form.continuousIntegration;
+        codeForm.issueTracker = this.step4Form.issueTracker;
+        codeForm.relatedLinks = this.step4Form.relatedLinks;
+
+        codeForm.programmingLanguage = this.step5Form.programmingLanguage;
+        codeForm.runtimePlatform = this.step5Form.runtimePlatform;
+        codeForm.operatingSystem = this.step5Form.operatingSystem;
+        codeForm.otherSoftwareRequirements =
+          this.step5Form.otherSoftwareRequirements;
+
+        codeForm.currentVersion = this.step6Form.currentVersion;
+        codeForm.currentVersionReleaseDate =
+          this.step6Form.currentVersionReleaseDate;
+        codeForm.currentVersionDownloadLink =
+          this.step6Form.currentVersionDownloadLink;
+        codeForm.currentVersionReleaseNotes =
+          this.step6Form.currentVersionReleaseNotes;
+
+        codeForm.referencePublication = this.step7Form.referencePublication;
+        codeForm.developmentStatus = this.step7Form.developmentStatus;
+        codeForm.isPartOf = this.step7Form.isPartOf;
+
+        this.dataset.data.Code.questions = codeForm;
+      }
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
     },
     selectFolderPath() {
       if (!this.folderDialogOpen) {
         this.folderDialogOpen = true;
         dialog
           .showOpenDialog({ properties: ["openDirectory"] })
-          .then((data) => {
+          .then(async (data) => {
             if (!data.canceled) {
               this.folderPath = data.filePaths[0];
+              /* eslint-disable */
+              let check = await this.fileExistInFolder(this.folderPath,"codemeta.json")
+              if(check != "Not Found"){
+                this.updateDataset(check)
+              }
             }
             this.folderDialogOpen = false;
           });
@@ -226,6 +431,8 @@ export default {
       this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
+
+
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {

@@ -243,6 +243,19 @@ export default {
           console.error(error);
           return "ERROR";
         });
+      await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          return JSON.parse(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
       return response;
     },
     async createCitationFile() {
