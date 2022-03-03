@@ -28,6 +28,10 @@
           >
             View the Documentation <el-icon><notebook-icon /></el-icon>
           </button>
+          <button class="primary-plain-button" @click="openDialog">
+            open Dialog
+          </button>
+          <warning-confirm ref="errorDialog"> Some message </warning-confirm>
         </div>
       </div>
     </div>
@@ -43,11 +47,15 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      open: true,
     };
   },
   methods: {
     openURL(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
+    },
+    openDialog() {
+      this.$refs.errorDialog.show();
     },
   },
   computed: {},

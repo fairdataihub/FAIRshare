@@ -29,6 +29,8 @@ import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
+import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
+
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
 // config for the markdown editor
@@ -49,6 +51,8 @@ app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
 app.component("VuePopper", Popper);
 app.component("form-help-content", FormHelpContent);
+
+app.component("warning-confirm", WarningConfirm);
 
 // import and register icons globally
 import {
