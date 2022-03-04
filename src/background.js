@@ -337,7 +337,8 @@ function retrieveCode(url) {
         });
       }
     }
-
+    // probabaly needs to add an additional listener to make zenodo oauth working
+    // see here https://www.electronjs.org/docs/latest/api/web-contents
     authWindow.webContents.on("will-navigate", (_event, url) => {
       console.log("will-navigate", url);
       newlink(url);
@@ -404,6 +405,8 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
 
 ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
   // console.log(test)
+  // complete this part to make zenodo oauth working
+  // api calls are given at the buttom of your zenodo app page
   let success = false;
   const CLIENT_ID_ZENODO = "";
   const CLIENT_SECRET_ZENODO = "";
