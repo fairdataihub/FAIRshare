@@ -125,7 +125,7 @@
             what it will look like after is shown below.
           </p>
 
-          <el-tree
+          <el-tree-v2
             :data="fileData"
             :props="defaultProps"
             @node-click="handleNodeClick"
@@ -144,8 +144,9 @@
                 "
                 >{{ node.label }}</span
               >
+              <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
             </template>
-          </el-tree>
+          </el-tree-v2>
 
           <el-drawer
             v-model="drawerModel"
@@ -254,6 +255,7 @@ export default {
       currentBranch: "",
       rippleLottieJSON,
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },

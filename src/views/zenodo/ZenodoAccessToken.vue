@@ -66,7 +66,7 @@
             shown below. You can click on any of them to view their contents or
             open in your file browser.
           </p>
-          <el-tree
+          <el-tree-v2
             v-if="finishedLoading"
             :data="fileData"
             :props="defaultProps"
@@ -85,8 +85,9 @@
                 "
                 >{{ node.label }}</span
               >
+              <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
             </template>
-          </el-tree>
+          </el-tree-v2>
 
           <el-drawer
             v-if="anyfilePreview"
@@ -179,6 +180,7 @@ export default {
       citationData: [],
       fileData: [],
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },
