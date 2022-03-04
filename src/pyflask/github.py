@@ -232,12 +232,13 @@ def getRepoContentTree(access_token, owner, repo):
 
         def convertContentTree(contentTree):
             import uuid
+
             outputList = []
             for item in contentTree:
                 if "children" in contentTree[item]:
                     outputList.append(
                         {
-                            "id":uuid.uuid1().int,
+                            "id": uuid.uuid1().int,
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
@@ -252,7 +253,7 @@ def getRepoContentTree(access_token, owner, repo):
                 else:
                     outputList.append(
                         {
-                            "id":uuid.uuid1().int,
+                            "id": uuid.uuid1().int,
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
