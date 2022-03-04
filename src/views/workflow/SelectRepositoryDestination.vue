@@ -147,27 +147,131 @@
         </div>
       </div> -->
 
-            <div
-              class="w-max-content absolute bottom-0 flex flex-row justify-center space-x-4 py-6"
-            >
-              <router-link
-                :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
-                class=""
-              >
-                <button class="primary-plain-button">
-                  <el-icon><d-arrow-left /></el-icon> Back
-                </button>
-              </router-link>
+            <fade-transition>
+              <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
+                <p class="mb-4">
+                  Is your dataset already published on Zenodo or would you like
+                  to create a new Zenodo publication?
+                </p>
 
-              <button
-                class="primary-button"
-                @click="addMetadata"
-                :disabled="repoID === ''"
-                id="continue"
+                <div class="flex flex-row items-center justify-center">
+                  <el-radio
+                    v-model="newVersion"
+                    label="false"
+                    size="large"
+                    border
+                    @change="selectZenodoDeposition"
+                  >
+                    Create a new Zenodo deposition
+                  </el-radio>
+                  <el-radio
+                    v-model="newVersion"
+                    label="true"
+                    size="large"
+                    border
+                    @change="selectZenodoDeposition"
+                  >
+                    Create a new version of an existing Zenodo deposition
+                  </el-radio>
+                </div>
+              </div>
+            </fade-transition>
+
+            <fade-transition>
+              <div
+                class="h-[300px] w-[600px] pb-20"
+                v-if="showSelectZenodoDeposition"
               >
-                Continue <el-icon> <d-arrow-right /> </el-icon>
-              </button>
-            </div>
+                <Listbox v-model="selectedDeposition">
+                  <div class="relative mt-1">
+                    <ListboxButton
+                      class="relative w-full cursor-default rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none sm:text-sm"
+                    >
+                      <span class="block truncate">{{
+                        selectedDeposition.metadata.title
+                      }}</span>
+                      <!-- <span
+                          class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                        >
+                          <SelectorIcon
+                            class="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span> -->
+                    </ListboxButton>
+
+                    <transition
+                      enter-active-class="transition duration-100 ease-in"
+                      enter-to-class="opacity-100"
+                      enter-from-class="opacity-0"
+                      leave-active-class="transition duration-100 ease-in"
+                      leave-from-class="opacity-100"
+                      leave-to-class="opacity-0"
+                    >
+                      <ListboxOptions
+                        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      >
+                        <ListboxOption
+                          v-slot="{ active, selected }"
+                          v-for="deposition in filteredDepositions"
+                          :key="deposition.id"
+                          :value="deposition"
+                          as="template"
+                        >
+                          <li
+                            :class="[
+                              active
+                                ? 'bg-amber-100 text-amber-900'
+                                : 'text-gray-900',
+                              'relative cursor-default select-none py-2 pl-10 pr-4',
+                            ]"
+                          >
+                            <span
+                              :class="[
+                                selected ? 'font-medium' : 'font-normal',
+                                'block truncate',
+                              ]"
+                              >{{ deposition.metadata.title }}</span
+                            >
+                            <!-- <span
+                                v-if="selected"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+                              >
+                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              </span> -->
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+              </div>
+            </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-if="newVersion === 'false'"
+              >
+                <router-link
+                  :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
+                  class=""
+                >
+                  <button class="primary-plain-button">
+                    <el-icon><d-arrow-left /></el-icon> Back
+                  </button>
+                </router-link>
+
+                <button
+                  class="primary-button"
+                  @click="addMetadata"
+                  :disabled="repoID === ''"
+                  id="continue"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
           </div>
           <div v-else class="flex w-full justify-center space-x-4 px-5 py-4">
             <button
@@ -203,22 +307,37 @@
 </template>
 
 <script>
-import { useDatasetsStore } from "../../store/datasets";
+import { useDatasetsStore } from "@/store/datasets";
+import { useTokenStore } from "@/store/access";
+
 import { Icon } from "@iconify/vue";
+import axios from "axios";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/vue";
 
 export default {
   name: "SelectRepositoryDestination",
-  components: { Icon },
+  components: { Icon, Listbox, ListboxButton, ListboxOptions, ListboxOption },
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      tokens: useTokenStore(),
       dataset: {},
       workflowID: this.$route.params.workflowID,
       datasetID: this.$route.params.datasetID,
       workflow: {},
+      zenodoToken: "",
       loading: false,
       repoID: "",
+      showSelectZenodoDeposition: false,
+      filteredDepositions: [],
+      selectedDeposition: {},
       uploadToRepo: "None",
+      newVersion: "",
       repositories: [
         {
           id: "zenodo",
@@ -239,6 +358,36 @@ export default {
       this.repoID = repoID;
       if (event && event.detail === 2) {
         this.addMetadata();
+      }
+    },
+    async getAllDepositions() {
+      const response = await axios
+        .get(`${this.$server_url}/zenodo/depositions`, {
+          params: {
+            access_token: this.zenodoToken,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      this.filteredDepositions = response.filter((deposition) => {
+        return deposition.submitted === true;
+      });
+
+      console.log(this.filteredDepositions);
+      this.selectedDeposition = this.filteredDepositions[0];
+      this.showSelectZenodoDeposition = true;
+    },
+    async selectZenodoDeposition() {
+      if (this.newVersion === "true") {
+        await this.getAllDepositions();
+      } else {
+        this.showSelectZenodoDeposition = false;
       }
     },
     openWebsite(url) {
@@ -330,6 +479,9 @@ export default {
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    const tokenObject = await this.tokens.getToken("zenodo");
+    this.zenodoToken = tokenObject.token;
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");

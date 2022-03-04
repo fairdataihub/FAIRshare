@@ -35,6 +35,8 @@ import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 
+import FadeTransition from "./components/transitions/FadeTransition.vue";
+
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
 // config for the markdown editor
@@ -61,6 +63,8 @@ app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
 
 app.component("warning-prompt", WarningPrompt);
+
+app.component("fade-transition", FadeTransition);
 
 // import and register icons globally
 import {
