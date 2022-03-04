@@ -86,6 +86,14 @@
                 >{{ node.label }}</span
               >
               <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+              <el-icon
+                v-if="
+                  node.label == 'codemeta.json' ||
+                  node.label == 'CITATION.cff' ||
+                  (node.label == 'LICENSE' && workflow.generateLicense)
+                "
+                ><download-icon />
+              </el-icon>
             </template>
           </el-tree-v2>
 
@@ -245,19 +253,6 @@ export default {
           console.error(error);
           return "ERROR";
         });
-      await axios
-        .post(`${this.$server_url}/metadata/create`, {
-          data_types: JSON.stringify(this.workflow.type),
-          data_object: JSON.stringify(this.dataset.data),
-          virtual_file: false,
-        })
-        .then((response) => {
-          return JSON.parse(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
       return response;
     },
     async createCitationFile() {
@@ -343,6 +338,7 @@ export default {
           await this.readFolderContents(this.dataset.data.Code.folderPath)
         );
         let root = this.fileData[0];
+        console.log(root);
         if (!root.children.some((el) => el.label === "codemeta.json")) {
           let newObj = {};
           newObj.label = "codemeta.json";

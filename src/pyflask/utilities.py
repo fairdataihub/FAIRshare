@@ -98,12 +98,14 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
+    import uuid
     try:
 
         def dfs(dir):
             result = []
             for filename in os.listdir(dir):
                 newDic = {
+                    "id": uuid.uuid1().int,
                     "label": "",
                     "isDir": "",
                     "children": [],
@@ -123,6 +125,7 @@ def readFolderContents(dir):
             return result
 
         root = {
+            "id": uuid.uuid1().int,
             "label": dir,
             "children": dfs(dir),
             "fullPath": dir,

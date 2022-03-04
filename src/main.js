@@ -96,6 +96,7 @@ import {
   VideoPlay,
   View,
   Folder,
+  Download,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -142,6 +143,7 @@ app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
 app.component("folder-icon", Folder);
 app.component("view-icon", View);
+app.component("download-icon", Download);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router
