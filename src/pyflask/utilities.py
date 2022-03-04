@@ -99,6 +99,7 @@ def openFileExplorer(file_path):
 
 def readFolderContents(dir):
     import uuid
+
     try:
 
         def dfs(dir):
