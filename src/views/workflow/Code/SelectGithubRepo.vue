@@ -161,6 +161,23 @@ export default {
     },
   },
   methods: {
+    exportToJson(obj, file_name) {
+      /* eslint-disable */
+      let filename = file_name;
+      let contentType = "application/json;charset=utf-8;";
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], { type: contentType });
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        var virtualFile = document.createElement('a');
+        virtualFile.download = filename;
+        virtualFile.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.target = '_blank';
+        document.body.appendChild(virtualFile);
+        virtualFile.click();
+        document.body.removeChild(virtualFile);
+      }
+    },
     createLoading() {
       const loading = ElLoading.service({
         lock: true,

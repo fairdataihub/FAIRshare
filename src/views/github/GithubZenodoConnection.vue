@@ -268,8 +268,10 @@ export default {
       PreviewNewlyCreatedZenodoFile: false,
       licenseData: "",
       tableData: [],
+      tableDataRecord: [],
       zenodoData: [],
       citationData: [],
+      citationDataRecord: [],
       fullNameDictionary: {},
       ownerDictionary: {},
       nameDictionary: {},
@@ -285,6 +287,23 @@ export default {
     },
   },
   methods: {
+    exportToJson(obj, file_name) {
+      /* eslint-disable */
+      let filename = file_name;
+      let contentType = "application/json;charset=utf-8;";
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], { type: contentType });
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        var virtualFile = document.createElement('a');
+        virtualFile.download = filename;
+        virtualFile.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.target = '_blank';
+        document.body.appendChild(virtualFile);
+        virtualFile.click();
+        document.body.removeChild(virtualFile);
+      }
+    },
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -694,10 +713,13 @@ export default {
       ) {
         this.drawerModel = true;
         if (data.label === "LICENSE" && this.workflow.generateLicense) {
+          this.exportToJson({"licenseData":this.licenseData}, "LICENSE")
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label === "codemeta.json") {
+          this.exportToJson(this.tableDataRecord, "codemeta.json")
           this.PreviewNewlyCreatedMetadataFile = true;
         } else if (data.label === "CITATION.cff") {
+          this.exportToJson(this.citationDataRecord, "CITATION.cff")
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (data.label === ".zenodo.json") {
           this.PreviewNewlyCreatedZenodoFile = true;
@@ -1037,11 +1059,14 @@ export default {
         }
       }, 5000);
     }
-
+    this.tableDataRecord = [];
+    this.citationDataRecord = [];
     this.tableData = await this.createCodeMetadataFile();
+    this.tableDataRecord = Object.assign({}, this.tableData);
     this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
 
     this.citationData = await this.createCitationFile();
+    this.citationDataRecord = Object.assign({}, this.citationData);
     this.citationData = this.jsonToTableDataRecursive(
       this.citationData,
       1,
