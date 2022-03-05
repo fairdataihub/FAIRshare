@@ -292,13 +292,17 @@ export default {
       let filename = file_name;
       let contentType = "application/json;charset=utf-8;";
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], { type: contentType });
+        var blob = new Blob(
+          [decodeURIComponent(encodeURI(JSON.stringify(obj)))],
+          { type: contentType }
+        );
         navigator.msSaveOrOpenBlob(blob, filename);
       } else {
-        var virtualFile = document.createElement('a');
+        var virtualFile = document.createElement("a");
         virtualFile.download = filename;
-        virtualFile.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(obj));
-        virtualFile.target = '_blank';
+        virtualFile.href =
+          "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.target = "_blank";
         document.body.appendChild(virtualFile);
         virtualFile.click();
         document.body.removeChild(virtualFile);
@@ -713,13 +717,13 @@ export default {
       ) {
         this.drawerModel = true;
         if (data.label === "LICENSE" && this.workflow.generateLicense) {
-          this.exportToJson({"licenseData":this.licenseData}, "LICENSE")
+          this.exportToJson({ licenseData: this.licenseData }, "LICENSE");
           this.PreviewNewlyCreatedLicenseFile = true;
         } else if (data.label === "codemeta.json") {
-          this.exportToJson(this.tableDataRecord, "codemeta.json")
+          this.exportToJson(this.tableDataRecord, "codemeta.json");
           this.PreviewNewlyCreatedMetadataFile = true;
         } else if (data.label === "CITATION.cff") {
-          this.exportToJson(this.citationDataRecord, "CITATION.cff")
+          this.exportToJson(this.citationDataRecord, "CITATION.cff");
           this.PreviewNewlyCreatedCitationFile = true;
         } else if (data.label === ".zenodo.json") {
           this.PreviewNewlyCreatedZenodoFile = true;
