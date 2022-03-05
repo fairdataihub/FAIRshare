@@ -35,6 +35,8 @@ import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 
+import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
+
 import FadeTransition from "./components/transitions/FadeTransition.vue";
 
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
@@ -63,6 +65,8 @@ app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
 
 app.component("warning-prompt", WarningPrompt);
+
+app.component("general-dialog", GeneralDialog);
 
 app.component("fade-transition", FadeTransition);
 
@@ -102,6 +106,7 @@ import {
   Reading,
   RemoveFilled,
   Right,
+  Select,
   Setting,
   Star,
   Ticket,
@@ -147,6 +152,7 @@ app.component("question-filled", QuestionFilled);
 app.component("reading-icon", Reading);
 app.component("remove-filled", RemoveFilled);
 app.component("right-icon", Right);
+app.component("select-icon", Select);
 app.component("setting-icon", Setting);
 app.component("star-icon", Star);
 app.component("ticket-icon", Ticket);

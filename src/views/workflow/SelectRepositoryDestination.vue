@@ -132,21 +132,6 @@
               </div>
             </div>
 
-            <!-- This will be enabled in the future. -->
-            <!-- change to grid-cols-2 -->
-            <!-- <div class="grid grid-cols-1 gap-4">
-        <div
-          v-for="repo of repositories"
-          :key="repo.id"
-          class="flex flex-col items-center justify-between p-4 my-5 transition-all bg-gray-200 rounded-lg shadow-md cursor-pointer hover:bg-gray-300 hover:shadow-lg h-30 w-30"
-          :class="{ 'selected-repo': repoID === repo.id }"
-          @click="selectRepo($event, repo.id)"
-        >
-          <img :src="repo.imgURL" alt="" class="h-16 mb-3" />
-          <span class="mx-5 text-lg"> {{ repo.name }} </span>
-        </div>
-      </div> -->
-
             <fade-transition>
               <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
                 <p class="mb-4">
@@ -178,74 +163,186 @@
             </fade-transition>
 
             <fade-transition>
-              <div
-                class="h-[300px] w-[600px] pb-20"
-                v-if="showSelectZenodoDeposition"
-              >
-                <Listbox v-model="selectedDeposition">
-                  <div class="relative mt-1">
-                    <ListboxButton
-                      class="relative w-full cursor-default rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none sm:text-sm"
-                    >
-                      <span class="block truncate">{{
-                        selectedDeposition.metadata.title
-                      }}</span>
-                      <!-- <span
+              <div v-if="showSelectZenodoDeposition">
+                <!-- Add a card style background here -->
+
+                <div class="flex flex-col">
+                  <div class="mt-4 px-4" v-if="'id' in selectedDeposition">
+                    <p class="py-1 text-base">
+                      <span class="font-medium">Title:</span>
+                      {{ selectedDeposition.metadata.title }}
+                    </p>
+                    <p class="py-1 text-base">
+                      <span class="font-medium">Last published:</span>
+                      {{ selectedDeposition.metadata.publication_date }}
+                    </p>
+                    <p class="py-1 text-base">
+                      <span class="font-medium">DOI: </span>
+                      <span
+                        @click="openWebsite(selectedDeposition.doi_url)"
+                        class="text-url"
+                      >
+                        {{ selectedDeposition.doi_url }}
+                      </span>
+                    </p>
+                    <p class="py-1 text-base">
+                      <span class="font-medium">Description:</span>
+                      {{ selectedDeposition.metadata.description }}
+                    </p>
+                    <p class="py-1 text-base">
+                      <span class="font-medium">Upload type:</span>
+                      {{ selectedDeposition.metadata.upload_type }}
+                    </p>
+                    <p class="py-1 text-base">
+                      <span class="font-medium">License:</span>
+                      {{ selectedDeposition.metadata.license }}
+                    </p>
+                  </div>
+                  <button
+                    class="secondary-plain-button"
+                    @click="showZenodoDepositionSelectorModal"
+                  >
+                    Select Zenodo Deposition
+                  </button>
+                </div>
+              </div>
+            </fade-transition>
+
+            <general-dialog
+              ref="generalDialog"
+              title="Select your Zenodo deposition"
+              @messageConfirmed="
+                selectedDeposition = selectedDepositionFromList
+              "
+            >
+              <div class="mt-4 flex flex-col">
+                <fade-transition>
+                  <Listbox
+                    v-model="selectedDepositionFromList"
+                    v-if="loadedZenodoDepositions"
+                  >
+                    <div class="relative mt-1">
+                      <ListboxButton
+                        class="relative h-[45px] w-full cursor-default rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none sm:text-sm"
+                      >
+                        <span class="block truncate">{{
+                          selectedDepositionFromList.metadata.title
+                        }}</span>
+                        <span
                           class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
                         >
-                          <SelectorIcon
-                            class="h-5 w-5 text-gray-400"
+                          <Icon
+                            class="h-6 w-6 text-gray-400"
+                            icon="heroicons-outline:selector"
                             aria-hidden="true"
                           />
-                        </span> -->
-                    </ListboxButton>
+                        </span>
+                      </ListboxButton>
 
-                    <transition
-                      enter-active-class="transition duration-100 ease-in"
-                      enter-to-class="opacity-100"
-                      enter-from-class="opacity-0"
-                      leave-active-class="transition duration-100 ease-in"
-                      leave-from-class="opacity-100"
-                      leave-to-class="opacity-0"
-                    >
-                      <ListboxOptions
-                        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      <transition
+                        enter-active-class="transition duration-100 ease-in"
+                        enter-to-class="opacity-100"
+                        enter-from-class="opacity-0"
+                        leave-active-class="transition duration-100 ease-in"
+                        leave-from-class="opacity-100"
+                        leave-to-class="opacity-0"
                       >
-                        <ListboxOption
-                          v-slot="{ active, selected }"
-                          v-for="deposition in filteredDepositions"
-                          :key="deposition.id"
-                          :value="deposition"
-                          as="template"
+                        <ListboxOptions
+                          class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                         >
-                          <li
-                            :class="[
-                              active
-                                ? 'bg-amber-100 text-amber-900'
-                                : 'text-gray-900',
-                              'relative cursor-default select-none py-2 pl-10 pr-4',
-                            ]"
+                          <ListboxOption
+                            v-slot="{ active, selected }"
+                            v-for="deposition in filteredDepositions"
+                            :key="deposition.id"
+                            :value="deposition"
+                            as="template"
                           >
-                            <span
+                            <li
                               :class="[
-                                selected ? 'font-medium' : 'font-normal',
-                                'block truncate',
+                                active
+                                  ? 'bg-zinc-100 text-zinc-900'
+                                  : 'text-gray-900',
+                                selected
+                                  ? 'bg-secondary-100 text-gray-900'
+                                  : 'text-gray-900',
+                                'relative cursor-default select-none border-t border-b border-zinc-50 py-2 pl-10 pr-4',
                               ]"
-                              >{{ deposition.metadata.title }}</span
                             >
-                            <!-- <span
+                              <div class="flex flex-col">
+                                <div class="flex pb-1">
+                                  <span
+                                    :class="[
+                                      selected ? 'font-medium' : 'font-normal',
+                                      'mr-2 block truncate ',
+                                    ]"
+                                  >
+                                    {{ deposition.title }}
+                                  </span>
+                                  <el-tag size="small">
+                                    {{ deposition.metadata.upload_type }}
+                                  </el-tag>
+                                </div>
+                                <span
+                                  :class="[
+                                    selected ? 'font-medium' : 'font-normal',
+                                    'block truncate text-xs',
+                                  ]"
+                                >
+                                  {{ deposition.doi }}
+                                </span>
+                              </div>
+                              <span
                                 v-if="selected"
-                                class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary-600"
                               >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                              </span> -->
-                          </li>
-                        </ListboxOption>
-                      </ListboxOptions>
-                    </transition>
+                                <el-icon size="18"><select-icon /></el-icon>
+                              </span>
+                            </li>
+                          </ListboxOption>
+                        </ListboxOptions>
+                      </transition>
+                    </div>
+                  </Listbox>
+                </fade-transition>
+                <fade-transition>
+                  <div class="mt-4 px-4" v-if="loadedZenodoDepositions">
+                    <line-divider class="my-2" />
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">Title:</span>
+                      {{ selectedDepositionFromList.metadata.title }}
+                    </p>
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">Last published:</span>
+                      {{ selectedDepositionFromList.metadata.publication_date }}
+                    </p>
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">DOI: </span>
+                      <span
+                        @click="openWebsite(selectedDepositionFromList.doi_url)"
+                        class="text-url"
+                      >
+                        {{ selectedDepositionFromList.doi_url }}
+                      </span>
+                    </p>
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">Description:</span>
+                      {{ selectedDepositionFromList.metadata.description }}
+                    </p>
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">Upload type:</span>
+                      {{ selectedDepositionFromList.metadata.upload_type }}
+                    </p>
+                    <p class="py-1 text-sm">
+                      <span class="font-medium">License:</span>
+                      {{ selectedDepositionFromList.metadata.license }}
+                    </p>
                   </div>
-                </Listbox>
+                </fade-transition>
               </div>
+            </general-dialog>
+
+            <fade-transition>
+              <div class="h-[300px] w-[600px] pb-20"></div>
             </fade-transition>
 
             <fade-transition>
@@ -265,6 +362,30 @@
                 <button
                   class="primary-button"
                   @click="addMetadata"
+                  :disabled="repoID === ''"
+                  id="continue"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-if="newVersion === 'true'"
+              >
+                <router-link
+                  :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
+                  class=""
+                >
+                  <button class="primary-plain-button">
+                    <el-icon><d-arrow-left /></el-icon> Back
+                  </button>
+                </router-link>
+
+                <button
+                  class="primary-button"
+                  @click="saveSelectedVersionDetails"
                   :disabled="repoID === ''"
                   id="continue"
                 >
@@ -312,6 +433,7 @@ import { useTokenStore } from "@/store/access";
 
 import { Icon } from "@iconify/vue";
 import axios from "axios";
+import _ from "lodash";
 import {
   Listbox,
   ListboxButton,
@@ -334,22 +456,15 @@ export default {
       loading: false,
       repoID: "",
       showSelectZenodoDeposition: false,
+      loadedZenodoDepositions: false,
+      showZenodoDepositionSelector: false,
       filteredDepositions: [],
-      selectedDeposition: {},
+      selectedDepositionFromList: {
+        metadata: {},
+      },
+      selectedDeposition: { metadata: {} },
       uploadToRepo: "None",
       newVersion: "",
-      repositories: [
-        {
-          id: "zenodo",
-          name: "Zenodo",
-          imgURL: "https://api.iconify.design/simple-icons/zenodo.svg",
-        },
-        {
-          id: "figshare",
-          name: "Figshare",
-          imgURL: "https://api.iconify.design/simple-icons/figshare.svg",
-        },
-      ],
     };
   },
   computed: {},
@@ -360,7 +475,14 @@ export default {
         this.addMetadata();
       }
     },
+    showZenodoDepositionSelectorModal() {
+      this.$refs.generalDialog.show();
+    },
+    saveSelectedVersionDetails() {
+      this.addMetadata("zenodo-new-version");
+    },
     async getAllDepositions() {
+      this.loadedZenodoDepositions = false;
       const response = await axios
         .get(`${this.$server_url}/zenodo/depositions`, {
           params: {
@@ -380,12 +502,21 @@ export default {
       });
 
       console.log(this.filteredDepositions);
-      this.selectedDeposition = this.filteredDepositions[0];
-      this.showSelectZenodoDeposition = true;
+      this.selectedDepositionFromList = this.filteredDepositions[0];
+
+      if (
+        !_.isEqual(this.selectedDeposition, this.selectedDepositionFromList)
+      ) {
+        // this.selectedDepositionFromList = this.selectedDeposition;
+      }
+
+      this.showZenodoDepositionSelector = true;
+      this.loadedZenodoDepositions = true;
     },
     async selectZenodoDeposition() {
       if (this.newVersion === "true") {
-        await this.getAllDepositions();
+        this.getAllDepositions();
+        this.showSelectZenodoDeposition = true;
       } else {
         this.showSelectZenodoDeposition = false;
       }
@@ -393,7 +524,7 @@ export default {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
-    addMetadata() {
+    addMetadata(type) {
       this.dataset.destinationSelected = true;
 
       if (!("destination" in this.workflow)) {
@@ -422,6 +553,17 @@ export default {
         this.workflow.uploadToRepo = true;
       } else {
         this.workflow.uploadToRepo = false;
+      }
+
+      if (type === "zenodo-new-version") {
+        this.workflow.destination[this.repoID].selectedDeposition =
+          this.selectedDeposition;
+      }
+
+      if (this.newVersion === "true") {
+        this.workflow.destination[this.repoID].newVersion = this.newVersion;
+      } else {
+        this.workflow.destination[this.repoID].newVersion = this.newVersion;
       }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
@@ -497,6 +639,18 @@ export default {
 
     if (this.workflow.destination) {
       this.repoID = this.workflow.destination.name;
+      if ("selectedDeposition" in this.workflow.destination[this.repoID]) {
+        this.selectedDeposition =
+          this.workflow.destination[this.repoID].selectedDeposition;
+      }
+
+      if ("newVersion" in this.workflow.destination[this.repoID]) {
+        this.newVersion = this.workflow.destination[this.repoID].newVersion;
+        this.showSelectZenodoDeposition = true;
+      } else {
+        this.newVersion = "None";
+        this.showSelectZenodoDeposition = false;
+      }
     }
 
     this.loading = false;
