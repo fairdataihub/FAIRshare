@@ -2031,14 +2031,13 @@ export default {
         if (val.length > 0) {
           for (let subject of val) {
             if (subject.term === "") {
-              // console.log("subject error");
               this.subjectsErrorMessage =
                 "Please provide a valid and identifiable subject.";
               this.$refs.zmForm.validate();
               this.invalidStatus.subjects = true;
               break;
             } else {
-              const validIdentifier = validator.isURL(val);
+              const validIdentifier = validator.isURL(subject.identifier);
 
               if (!validIdentifier) {
                 this.subjectsErrorMessage =
