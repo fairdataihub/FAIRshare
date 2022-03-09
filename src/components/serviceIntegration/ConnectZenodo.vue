@@ -31,6 +31,7 @@
                 <button
                   class="primary-plain-button"
                   @click="showZenodoOAuthConnect"
+                  disabled
                 >
                   Connect with username
                 </button>
@@ -46,18 +47,18 @@
       :callback="hideZenodoTokenConnect"
       :onStatusChange="statusChangeFunction"
     ></ZenodoTokenConnection>
-    <ZenodoOAuthConnection
+    <!-- <ZenodoOAuthConnection
       v-if="showOAuthConnect"
       v-model="showOAuthConnect"
       :callback="hideZenodoOAuthConnect"
       :onStatusChange="statusChangeFunction"
-    ></ZenodoOAuthConnection>
+    ></ZenodoOAuthConnection> -->
   </div>
 </template>
 
 <script>
 import ZenodoTokenConnection from "@/components/serviceIntegration/ZenodoTokenConnection";
-import ZenodoOAuthConnection from "@/components/serviceIntegration/ZenodoOAuthConnection";
+// import ZenodoOAuthConnection from "@/components/serviceIntegration/ZenodoOAuthConnection";
 import { useTokenStore } from "@/store/access";
 import { ElNotification, ElMessageBox } from "element-plus";
 
@@ -65,8 +66,8 @@ export default {
   // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectZenodo",
   components: {
-    ZenodoTokenConnection: ZenodoTokenConnection,
-    ZenodoOAuthConnection: ZenodoOAuthConnection,
+    ZenodoTokenConnection,
+    //  ZenodoOAuthConnection,
   },
   props: {
     statusChangeFunction: {

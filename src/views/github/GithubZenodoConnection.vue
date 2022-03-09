@@ -125,15 +125,12 @@
             what it will look like after is shown below.
           </p>
 
-          <el-tree-v2
-            :data="fileData"
-            :props="defaultProps"
-            @node-click="handleNodeClick"
-          >
-            <template #default="{ node }">
+          <el-tree-v2 :data="fileData" :props="defaultProps">
+            <template #default="{ node, data }">
               <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
               <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-              <span
+              <div
+                class="inline-flex items-center"
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'CITATION.cff' ||
@@ -142,9 +139,29 @@
                     ? 'text-secondary-500'
                     : ''
                 "
-                >{{ node.label }}</span
               >
-              <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                <span>
+                  {{ node.label }}
+                </span>
+                <button
+                  @click="handleNodeClick(data, 'view')"
+                  class="flex items-center"
+                >
+                  <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                </button>
+                <button
+                  @click="handleNodeClick(data, 'download')"
+                  class="flex items-center"
+                  v-if="
+                    node.label == 'codemeta.json' ||
+                    node.label == 'CITATION.cff' ||
+                    node.label == '.zenodo.json' ||
+                    (node.label == 'LICENSE' && workflow.generateLicense)
+                  "
+                >
+                  <el-icon><download-icon /> </el-icon>
+                </button>
+              </div>
             </template>
           </el-tree-v2>
 
@@ -157,7 +174,7 @@
             :lock-scroll="false"
           >
             <el-scrollbar style="height: calc(100vh - 45px)">
-              <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
+              <div v-if="PreviewNewlyCreatedCodeMetaFile" class="pb-20">
                 <el-table
                   :data="tableData"
                   style="width: 100%"
@@ -263,7 +280,7 @@ export default {
       tree: [],
       fileTitle: "",
       PreviewNewlyCreatedLicenseFile: false,
-      PreviewNewlyCreatedMetadataFile: false,
+      PreviewNewlyCreatedCodeMetaFile: false,
       PreviewNewlyCreatedCitationFile: false,
       PreviewNewlyCreatedZenodoFile: false,
       licenseData: "",
@@ -708,25 +725,44 @@ export default {
       return metadata;
     },
 
-    async handleNodeClick(data) {
+    async handleNodeClick(data, action) {
       if (
         (data.label === "LICENSE" && this.workflow.generateLicense) ||
         data.label === "codemeta.json" ||
         data.label === "CITATION.cff" ||
         data.label === ".zenodo.json"
       ) {
-        this.drawerModel = true;
+        if (action === "view") {
+          this.drawerModel = true;
+        }
         if (data.label === "LICENSE" && this.workflow.generateLicense) {
-          this.exportToJson({ licenseData: this.licenseData }, "LICENSE");
-          this.PreviewNewlyCreatedLicenseFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedLicenseFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson({ licenseData: this.licenseData }, "LICENSE");
+          }
         } else if (data.label === "codemeta.json") {
-          this.exportToJson(this.tableDataRecord, "codemeta.json");
-          this.PreviewNewlyCreatedMetadataFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedCodeMetaFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.tableDataRecord, "codemeta.json");
+          }
         } else if (data.label === "CITATION.cff") {
-          this.exportToJson(this.citationDataRecord, "CITATION.cff");
-          this.PreviewNewlyCreatedCitationFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedCitationFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.citationDataRecord, "CITATION.cff");
+          }
         } else if (data.label === ".zenodo.json") {
-          this.PreviewNewlyCreatedZenodoFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedZenodoFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.zenodoData, ".zenodo.json");
+          }
         }
         let title = data.label;
         this.handleOpenDrawer(title);
@@ -748,7 +784,7 @@ export default {
     handleCloseDrawer() {
       this.fileTitle = "";
       this.PreviewNewlyCreatedLicenseFile = false;
-      this.PreviewNewlyCreatedMetadataFile = false;
+      this.PreviewNewlyCreatedCodeMetaFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
       this.PreviewNewlyCreatedZenodoFile = false;
       this.drawerModel = false;

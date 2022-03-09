@@ -70,12 +70,12 @@
             v-if="finishedLoading"
             :data="fileData"
             :props="defaultProps"
-            @node-click="handleNodeClick"
           >
-            <template #default="{ node }">
+            <template #default="{ node, data }">
               <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
               <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-              <span
+              <div
+                class="inline-flex items-center"
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'CITATION.cff' ||
@@ -83,17 +83,29 @@
                     ? 'text-secondary-500'
                     : ''
                 "
-                >{{ node.label }}</span
               >
-              <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
-              <el-icon
-                v-if="
-                  node.label == 'codemeta.json' ||
-                  node.label == 'CITATION.cff' ||
-                  (node.label == 'LICENSE' && workflow.generateLicense)
-                "
-                ><download-icon />
-              </el-icon>
+                <span>
+                  {{ node.label }}
+                </span>
+
+                <button
+                  @click="handleNodeClick(data, 'view')"
+                  class="flex items-center"
+                >
+                  <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                </button>
+                <button
+                  @click="handleNodeClick(data, 'download')"
+                  class="flex items-center"
+                  v-if="
+                    node.label == 'codemeta.json' ||
+                    node.label == 'CITATION.cff' ||
+                    (node.label == 'LICENSE' && workflow.generateLicense)
+                  "
+                >
+                  <el-icon><download-icon /> </el-icon>
+                </button>
+              </div>
             </template>
           </el-tree-v2>
 
@@ -313,7 +325,6 @@ export default {
       return response;
     },
     async openFileExplorer(path) {
-      console.log(path);
       this.showLoading = ElLoading.service({
         lock: true,
         text: "Loading",
@@ -429,17 +440,30 @@ export default {
 
       this.fileTitle = title;
     },
-    async handleNodeClick(data) {
+    async handleNodeClick(data, action) {
       if (!data.isDir) {
         if (data.label == "LICENSE" && this.workflow.generateLicense) {
-          this.exportToJson(this.licenseData, "LICENSE");
-          this.PreviewNewlyCreatedLicenseFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedLicenseFile = true;
+          }
+
+          if (action === "download") {
+            this.exportToJson(this.licenseData, "LICENSE");
+          }
         } else if (data.label == "codemeta.json") {
-          this.exportToJson(this.tableDataRecord, "codemeta.json");
-          this.PreviewNewlyCreatedMetadataFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.tableDataRecord, "codemeta.json");
+          }
         } else if (data.label == "CITATION.cff") {
-          this.exportToJson(this.citationDataRecord, "CITATION.cff");
-          this.PreviewNewlyCreatedCitationFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedCitationFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.citationDataRecord, "CITATION.cff");
+          }
         } else if (!data.isDir) {
           await this.openFileExplorer(data.fullpath);
         }
