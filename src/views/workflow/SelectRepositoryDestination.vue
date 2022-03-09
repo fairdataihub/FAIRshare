@@ -194,7 +194,7 @@
                     </p>
                   </div>
                   <button
-                    class="secondary-plain-button w-max"
+                    class="secondary-plain-button mb-5 w-max"
                     @click="showZenodoDepositionSelectorModal"
                   >
                     Select
@@ -354,10 +354,6 @@
                 <fade-transition> </fade-transition>
               </div>
             </general-dialog>
-
-            <fade-transition>
-              <div class="h-[300px] w-[600px] pb-20"></div>
-            </fade-transition>
 
             <fade-transition>
               <div

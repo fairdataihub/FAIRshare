@@ -1568,6 +1568,7 @@ export default {
             "related_identifiers" in
             this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
+            this.zenodoMetadataForm.relatedIdentifiers = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.related_identifiers.forEach(
               ({ identifier, relation, resource_type }) => {
                 this.zenodoMetadataForm.relatedIdentifiers.push({
@@ -1584,6 +1585,7 @@ export default {
             "references" in
             this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
+            this.zenodoMetadataForm.references = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.references.forEach(
               (reference) => {
                 this.zenodoMetadataForm.references.push({
@@ -1736,6 +1738,7 @@ export default {
             "thesis_supervisors" in
             this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
+            this.zenodoMetadataForm.thesis.supervisors = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_supervisors.forEach(
               ({ name, affiliation, orcid }) => {
                 this.zenodoMetadataForm.thesis.supervisors.push({
@@ -1752,6 +1755,7 @@ export default {
             "subjects" in
             this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
+            this.zenodoMetadataForm.subjects = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.subjects.forEach(
               ({ term, identifier }) => {
                 this.zenodoMetadataForm.subjects.push({
@@ -1992,19 +1996,14 @@ export default {
               this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
+              console.log(doiRegex().test(relatedIdentifier.identifier));
               let validIdentifier = false;
 
-              if (doiRegex().test(relatedIdentifier.identifier)) {
-                validIdentifier = true;
-              }
-
               if (
-                !validIdentifier &&
+                doiRegex().test(relatedIdentifier.identifier) ||
                 validator.isURL(relatedIdentifier.identifier)
               ) {
                 validIdentifier = true;
-              } else {
-                validIdentifier = false;
               }
 
               if (!validIdentifier) {

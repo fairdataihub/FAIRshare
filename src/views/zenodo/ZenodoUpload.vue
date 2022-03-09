@@ -111,7 +111,7 @@ export default {
       await this.sleep(300);
       // return "ERROR";
       return axios
-        .post(`${this.$server_url}/zenodo/new`, {
+        .post(`${this.$server_url}/zenodo/deposition`, {
           access_token: this.zenodoToken,
         })
         .then((response) => {
@@ -354,17 +354,19 @@ export default {
         }
 
         if (
-          "thesis_supervisors" in zenodoMetadata.thesis &&
-          zenodoMetadata.thesis.thesis_supervisors.length > 0
+          "supervisors" in zenodoMetadata.thesis &&
+          zenodoMetadata.thesis.supervisors.length > 0
         ) {
           metadata.thesis_supervisors = [];
-          zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
-            metadata.thesis_supervisors.push({
-              name: supervisor.name,
-              affiliation: supervisor.affiliation,
-              orcid: supervisor.orcid,
-            });
-          });
+          zenodoMetadata.thesis.supervisors.forEach(
+            ({ name, affiliation, orcid }) => {
+              metadata.thesis_supervisors.push({
+                name,
+                affiliation,
+                orcid,
+              });
+            }
+          );
         }
       }
 
@@ -386,7 +388,7 @@ export default {
       });
 
       return axios
-        .post(`${this.$server_url}/zenodo/metadata`, {
+        .post(`${this.$server_url}/zenodo/deposition/metadata`, {
           access_token: this.zenodoToken,
           deposition_id: this.workflow.destination.zenodo.deposition_id,
           metadata: metadataObject,
@@ -417,7 +419,7 @@ export default {
       await this.sleep(100);
 
       await axios
-        .post(`${this.$server_url}/zenodo/upload`, {
+        .post(`${this.$server_url}/zenodo/deposition/files/upload`, {
           access_token: this.zenodoToken,
           bucket_url: bucket_url,
           file_path: file_path,
@@ -564,20 +566,112 @@ export default {
         });
       return response;
     },
+
     async uploadWorkflow() {
       let response = {};
 
-      response = await this.createZenodoDeposition();
+      if (this.workflow.destination.zenodo.newVersion) {
+        this.statusMessage = "Creating a new version of the Zenodo Deposition";
 
-      if (response === "ERROR") {
-        this.alertMessage = "There was an error creating the deposition";
-        return "FAIL";
+        await this.sleep(300);
+
+        const original_deposition_id =
+          this.workflow.destination.zenodo.selectedDeposition.id;
+
+        let res = null;
+
+        res = await axios
+          .post(`${this.$server_url}/zenodo/deposition/newversion`, {
+            access_token: this.zenodoToken,
+            deposition_id: original_deposition_id,
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        const deposition_id = res;
+
+        if (res === "ERROR") {
+          this.alertMessage = "There was an error with creating a new version";
+          return "FAIL";
+        } else {
+          this.statusMessage =
+            "A new version of the Zenodo deposition was created";
+        }
+
+        this.statusMessage = "Requesting new Zenodo deposition version data";
+
+        await this.sleep(300);
+
+        res = await axios
+          .get(`${this.$server_url}/zenodo/deposition`, {
+            params: {
+              access_token: this.zenodoToken,
+              deposition_id,
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (res === "ERROR") {
+          this.alertMessage =
+            "There was an error with requesting data from Zenodo";
+          return "FAIL";
+        } else {
+          //create a copy of the res object
+          response = JSON.parse(JSON.stringify(res));
+
+          this.statusMessage =
+            "Succeeded in requesting data from the new version of the zenodo deposition";
+        }
+
+        const files_list = res.files;
+
+        for (let file of files_list) {
+          this.statusMessage = `Removing pre-existing file '${file.filename}' from new Zenodo deposition version`;
+
+          await this.sleep(100);
+
+          await axios
+            .delete(`${this.$server_url}/zenodo/deposition/files`, {
+              data: {
+                access_token: this.zenodoToken,
+                deposition_id,
+                file_id: file.id,
+              },
+            })
+            .then((response) => {
+              return response.data;
+            })
+            .catch((error) => {
+              console.error(error);
+              return "ERROR";
+            });
+        }
+
+        this.statusMessage = "Succeeded in removing all old pre-existing files";
       } else {
-        this.statusMessage = "Empty deposition created on Zenodo";
-      }
+        response = await this.createZenodoDeposition();
 
-      this.percentage = 10;
-      this.indeterminate = false;
+        if (response === "ERROR") {
+          this.alertMessage = "There was an error creating the deposition";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Empty deposition created on Zenodo";
+        }
+
+        this.percentage = 10;
+        this.indeterminate = false;
+      }
 
       await this.sleep(300);
 
@@ -695,7 +789,7 @@ export default {
           this.workflow.destination.zenodo.deposition_id
         );
         const response = await axios
-          .delete(`${this.$server_url}/zenodo/delete`, {
+          .delete(`${this.$server_url}/zenodo/deposition`, {
             data: {
               access_token: this.zenodoToken,
               deposition_id: this.workflow.destination.zenodo.deposition_id,

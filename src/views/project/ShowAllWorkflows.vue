@@ -158,6 +158,7 @@ export default {
       this.workflowID = workflowID;
 
       // add published checks before the upload ones
+      // This hasn't been done yet since we need to figure out where we want to put them for this specific workflow.
 
       if (
         "datasetUploaded" in this.dataset.workflows[workflowID] &&
