@@ -5,6 +5,7 @@ import shutil
 import requests
 import platform
 import subprocess
+import uuid
 
 
 def foldersPresent(folder_path):
@@ -98,7 +99,6 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
-    import uuid
 
     try:
 

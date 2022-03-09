@@ -99,56 +99,9 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       locationID: "",
-      step1Form: {
-        name: "",
-        description: "",
-        creationDate: "",
-        firstReleaseDate: "",
-      },
-      step2Form: {
-        authors: [],
-        contributors: [],
-      },
-      step3Form: {
-        applicationCategory: "",
-        keywords: [],
-        funding: {
-          code: "",
-          organization: "",
-        },
-      },
-      step4Form: {
-        codeRepository: "",
-        continuousIntegration: "",
-        issueTracker: "",
-        relatedLinks: [],
-      },
-      step5Form: {
-        programmingLanguage: [],
-        runtimePlatform: [],
-        operatingSystem: [],
-        otherSoftwareRequirements: [],
-      },
-      step6Form: {
-        currentVersion: "",
-        currentVersionReleaseDate: "",
-        currentVersionDownloadLink: "",
-        currentVersionReleaseNotes: "",
-      },
-      step7Form: {
-        referencePublication: "",
-        developmentStatus: "",
-        isPartOf: "",
-      },
     };
   },
   computed: {
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
-      }
-      return false;
-    },
     emptyInput() {
       if (this.locationID === "local") {
         if (this.folderPath.trim() === "") {
@@ -196,7 +149,7 @@ export default {
         this.folderDialogOpen = true;
         dialog
           .showOpenDialog({ properties: ["openDirectory"] })
-          .then(async (data) => {
+          .then((data) => {
             if (!data.canceled) {
               this.folderPath = data.filePaths[0];
             }

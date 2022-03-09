@@ -2,6 +2,7 @@ from __future__ import print_function
 import requests
 import json
 import base64
+import uuid
 
 
 def uploadFileToGithub(access_token, file_name, file_path, repo_name):
@@ -231,7 +232,6 @@ def getRepoContentTree(access_token, owner, repo):
             return contentTree
 
         def convertContentTree(contentTree):
-            import uuid
 
             outputList = []
             for item in contentTree:
