@@ -67,11 +67,13 @@ import {
   Delete,
   DeleteFilled,
   Document,
+  Download,
   Edit,
   EditPen,
   Files,
   Flag,
   Fold,
+  Folder,
   Histogram,
   HomeFilled,
   InfoFilled,
@@ -94,7 +96,7 @@ import {
   User,
   UserFilled,
   VideoPlay,
-  Folder,
+  View,
 } from "@element-plus/icons-vue";
 
 app.component("arrow-right-bold", ArrowRightBold);
@@ -112,11 +114,13 @@ app.component("data-line", DataLine);
 app.component("delete-icon", Delete);
 app.component("delete-filled", DeleteFilled);
 app.component("document-icon", Document);
+app.component("download-icon", Download);
 app.component("edit-icon", Edit);
 app.component("edit-pen", EditPen);
 app.component("files-icon", Files);
 app.component("flag-icon", Flag);
 app.component("fold-icon", Fold);
+app.component("folder-icon", Folder);
 app.component("histogram-icon", Histogram);
 app.component("home-filled", HomeFilled);
 app.component("info-filled", InfoFilled);
@@ -139,7 +143,7 @@ app.component("upload-filled", UploadFilled);
 app.component("user-icon", User);
 app.component("user-filled", UserFilled);
 app.component("video-play", VideoPlay);
-app.component("folder-icon", Folder);
+app.component("view-icon", View);
 
 // additional vue libraries to be used in the app
 app.use(router); // vue router

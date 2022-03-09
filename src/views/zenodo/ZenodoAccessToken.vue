@@ -66,16 +66,16 @@
             shown below. You can click on any of them to view their contents or
             open in your file browser.
           </p>
-          <el-tree
+          <el-tree-v2
             v-if="finishedLoading"
             :data="fileData"
             :props="defaultProps"
-            @node-click="handleNodeClick"
           >
-            <template #default="{ node }">
+            <template #default="{ node, data }">
               <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
               <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-              <span
+              <div
+                class="inline-flex items-center"
                 :class="
                   node.label == 'codemeta.json' ||
                   node.label == 'CITATION.cff' ||
@@ -83,10 +83,31 @@
                     ? 'text-secondary-500'
                     : ''
                 "
-                >{{ node.label }}</span
               >
+                <span>
+                  {{ node.label }}
+                </span>
+
+                <button
+                  @click="handleNodeClick(data, 'view')"
+                  class="flex items-center"
+                >
+                  <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                </button>
+                <button
+                  @click="handleNodeClick(data, 'download')"
+                  class="flex items-center"
+                  v-if="
+                    node.label == 'codemeta.json' ||
+                    node.label == 'CITATION.cff' ||
+                    (node.label == 'LICENSE' && workflow.generateLicense)
+                  "
+                >
+                  <el-icon><download-icon /> </el-icon>
+                </button>
+              </div>
             </template>
-          </el-tree>
+          </el-tree-v2>
 
           <el-drawer
             v-if="anyfilePreview"
@@ -177,8 +198,11 @@ export default {
       licenseData: "",
       tableData: [],
       citationData: [],
+      tableDataRecord: [],
+      citationDataRecord: [],
       fileData: [],
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },
@@ -222,6 +246,27 @@ export default {
     },
   },
   methods: {
+    exportToJson(obj, file_name) {
+      /* eslint-disable */
+      let filename = file_name;
+      let contentType = "application/json;charset=utf-8;";
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(
+          [decodeURIComponent(encodeURI(JSON.stringify(obj)))],
+          { type: contentType }
+        );
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        var virtualFile = document.createElement("a");
+        virtualFile.download = filename;
+        virtualFile.href =
+          "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.target = "_blank";
+        document.body.appendChild(virtualFile);
+        virtualFile.click();
+        document.body.removeChild(virtualFile);
+      }
+    },
     createLoading() {
       const loading = ElLoading.service({
         lock: true,
@@ -280,7 +325,6 @@ export default {
       return response;
     },
     async openFileExplorer(path) {
-      console.log(path);
       this.showLoading = ElLoading.service({
         lock: true,
         text: "Loading",
@@ -322,12 +366,19 @@ export default {
       if (this.showFilePreviewSection) {
         this.fileData = [];
         this.showSpinner = true;
+
+        this.tableDataRecord = [];
+        this.citationDataRecord = [];
         this.tableData = await this.createCodeMetadataFile();
         this.citationData = await this.createCitationFile();
+        this.tableDataRecord = Object.assign({}, this.tableData);
+        this.citationDataRecord = Object.assign({}, this.citationData);
+
         this.fileData.push(
           await this.readFolderContents(this.dataset.data.Code.folderPath)
         );
         let root = this.fileData[0];
+        console.log(root);
         if (!root.children.some((el) => el.label === "codemeta.json")) {
           let newObj = {};
           newObj.label = "codemeta.json";
@@ -389,14 +440,30 @@ export default {
 
       this.fileTitle = title;
     },
-    async handleNodeClick(data) {
+    async handleNodeClick(data, action) {
       if (!data.isDir) {
         if (data.label == "LICENSE" && this.workflow.generateLicense) {
-          this.PreviewNewlyCreatedLicenseFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedLicenseFile = true;
+          }
+
+          if (action === "download") {
+            this.exportToJson(this.licenseData, "LICENSE");
+          }
         } else if (data.label == "codemeta.json") {
-          this.PreviewNewlyCreatedMetadataFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.tableDataRecord, "codemeta.json");
+          }
         } else if (data.label == "CITATION.cff") {
-          this.PreviewNewlyCreatedCitationFile = true;
+          if (action === "view") {
+            this.PreviewNewlyCreatedCitationFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.citationDataRecord, "CITATION.cff");
+          }
         } else if (!data.isDir) {
           await this.openFileExplorer(data.fullpath);
         }

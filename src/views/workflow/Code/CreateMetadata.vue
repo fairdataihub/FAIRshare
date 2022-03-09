@@ -1538,7 +1538,7 @@ export default {
     },
     "step7Form.isPartOf": {
       handler(val) {
-        if (val != "") {
+        if (val != "" && val != undefined) {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
@@ -1559,7 +1559,7 @@ export default {
     },
     "step4Form.codeRepository": {
       handler(val) {
-        if (val != "") {
+        if (val != "" && val != undefined) {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
@@ -1580,7 +1580,7 @@ export default {
     },
     "step4Form.continuousIntegration": {
       handler(val) {
-        if (val != "") {
+        if (val != "" && val != undefined) {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
@@ -1602,7 +1602,7 @@ export default {
     },
     "step4Form.issueTracker": {
       handler(val) {
-        if (val != "") {
+        if (val != "" && val != undefined) {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
@@ -1623,7 +1623,7 @@ export default {
     },
     "step6Form.currentVersionDownloadLink": {
       handler(val) {
-        if (val != "") {
+        if (val != "" && val != undefined) {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
@@ -1647,7 +1647,7 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let relatedLink of val) {
-            if (relatedLink.link !== "") {
+            if (relatedLink.link !== "" && relatedLink.link !== undefined) {
               const validIdentifier = validator.isURL(relatedLink.link);
 
               if (!validIdentifier) {
@@ -2263,8 +2263,97 @@ export default {
         });
       }
     },
+    prefillLocalCodeMeta(codeMeta) {
+      this.step1Form.name = codeMeta.name;
+      this.step1Form.description = codeMeta.description;
+      this.step1Form.creationDate = codeMeta.dateCreated;
+      this.step1Form.firstReleaseDate = codeMeta.datePublished;
+
+      this.step2Form.authors = [];
+      codeMeta.author.forEach(
+        ({
+          givenName = "",
+          familyName = "",
+          email = "",
+          affiliation = "",
+          orcid = "",
+        }) => {
+          this.step2Form.authors.push({
+            givenName,
+            familyName,
+            affiliation: affiliation.name,
+            email,
+            orcid,
+            id: uuidv4(),
+          });
+        }
+      );
+
+      this.step2Form.contributors = [];
+      if ("contributor" in codeMeta) {
+        codeMeta.contributor.forEach(
+          ({
+            givenName = "",
+            familyName = "",
+            email = "",
+            affiliation = "",
+            orcid = "",
+          }) => {
+            this.step2Form.contributors.push({
+              givenName,
+              familyName,
+              affiliation: affiliation.name,
+              email,
+              orcid,
+              id: uuidv4(),
+            });
+          }
+        );
+      }
+
+      this.step3Form.applicationCategory = codeMeta.applicationCategory;
+      codeMeta.keywords.forEach((keyword) => {
+        this.step3Form.keywords.push({ keyword, id: uuidv4() });
+      });
+      this.step3Form.funding.code = codeMeta.funding;
+      if ("funder" in codeMeta) {
+        this.step3Form.funding.organization = codeMeta.funder.name;
+      }
+
+      this.step4Form.codeRepository = codeMeta.codeRepository;
+      this.step4Form.continuousIntegration = codeMeta.contIntegration;
+      this.step4Form.issueTracker = codeMeta.issueTracker;
+      if ("relatedLink" in codeMeta) {
+        codeMeta.relatedLink.forEach((link) => {
+          this.step4Form.relatedLinks.push({ link, id: uuidv4() });
+        });
+      }
+
+      this.step5Form.programmingLanguage = codeMeta.programmingLanguage;
+      this.step5Form.runtimePlatform = codeMeta.runtimePlatform;
+      this.step5Form.operatingSystem = codeMeta.operatingSystem;
+      if ("softwareRequirements" in codeMeta) {
+        codeMeta.softwareRequirements.forEach((link) => {
+          this.step5Form.otherSoftwareRequirements.push({
+            link,
+            id: uuidv4(),
+          });
+        });
+      }
+
+      this.step6Form.currentVersion = codeMeta.version;
+      this.step6Form.currentVersionReleaseDate = codeMeta.dateModified;
+      this.step6Form.currentVersionDownloadLink = codeMeta.downloadUrl;
+      this.step6Form.currentVersionReleaseNotes = codeMeta.releaseNotes;
+
+      this.step7Form.referencePublication = codeMeta.referencePublication;
+      if ("developmentStatus" in codeMeta) {
+        this.step7Form.developmentStatus = codeMeta.developmentStatus;
+      }
+      this.step7Form.isPartOf = codeMeta.isPartOf;
+    },
   },
-  mounted() {
+  async mounted() {
     this.$nextTick(async function () {
       this.dataset = await this.datasetStore.getCurrentDataset();
 
@@ -2339,6 +2428,28 @@ export default {
               this.showSpinner = true;
               await this.prefillGithubAuthors();
               await this.prefillGithubMisc();
+              this.showSpinner = false;
+            }
+            if (this.workflow.source.type === "local") {
+              this.showSpinner = true;
+
+              const response = await axios
+                .post(`${this.$server_url}/utilities/fileexistinfolder`, {
+                  folder_path: this.dataset.data.Code.folderPath,
+                  file_name: "codemeta.json",
+                })
+                .then((response) => {
+                  return response.data;
+                })
+                .catch((error) => {
+                  console.log(error);
+                  return "ERROR";
+                });
+
+              if (response !== "ERROR" && response !== "Not Found") {
+                await this.prefillLocalCodeMeta(response);
+              }
+
               this.showSpinner = false;
             }
           }

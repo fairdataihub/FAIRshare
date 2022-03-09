@@ -143,6 +143,7 @@ export default {
     selectSourceLocation(locationID) {
       this.locationID = locationID;
     },
+
     selectFolderPath() {
       if (!this.folderDialogOpen) {
         this.folderDialogOpen = true;
@@ -226,6 +227,7 @@ export default {
       this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
+
     // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
 
     // if (this.workflow.folderPath) {

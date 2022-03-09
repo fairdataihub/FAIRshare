@@ -91,7 +91,7 @@
           shown below. Current branch is <b>{{ currentBranch }}</b
           >.
         </p>
-        <el-tree
+        <el-tree-v2
           :data="fileData"
           :props="defaultProps"
           @node-click="handleNodeClick"
@@ -100,8 +100,9 @@
             <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
             <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
             <span>{{ node.label }}</span>
+            <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
           </template>
-        </el-tree>
+        </el-tree-v2>
       </div>
     </div>
     <transition name="fade" mode="out-in" appear>
@@ -143,6 +144,7 @@ export default {
       showFilePreview: false,
       ready: false,
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },

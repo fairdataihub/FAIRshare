@@ -33,6 +33,7 @@ from utilities import (
     createFile,
     openFileExplorer,
     readFolderContents,
+    fileExistInFolder,
 )
 
 API_VERSION = "0.0.1"
@@ -829,6 +830,37 @@ class ReadFolderContents(Resource):
         folder_path = args["folder_path"]
 
         return readFolderContents(folder_path)
+
+
+@utilities.route("/fileexistinfolder", endpoint="FileExistInFolder")
+class FileExistInFolder(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "folder_path": "check if the file exists in the folder",  # noqa:501
+            "file_name": "name of the target file",
+        },
+    )
+    def post(self):
+        """read files in the provided folder path"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to find files at",
+        )
+        parser.add_argument(
+            "file_name",
+            type=str,
+            required=True,
+            help="name of the target file",
+        )
+        args = parser.parse_args()
+        folder_path = args["folder_path"]
+        file_name = args["file_name"]
+        return fileExistInFolder(folder_path, file_name)
 
 
 # 5000 is the flask default port.
