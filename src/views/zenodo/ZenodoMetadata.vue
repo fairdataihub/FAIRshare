@@ -1374,7 +1374,10 @@ export default {
         });
     },
     addZenodoMetadata(_evt, shouldNavigateBack = false) {
-      console.log(this.zenodoMetadataForm.publicationDate);
+      if (this.zenodoMetadataForm.authors.length == 0) {
+        ElMessage.error("Please add at least one author.");
+      }
+
       if (this.zenodoMetadataForm.publicationDate === "") {
         ElMessage.error("Please add a publication date.");
         return;
@@ -1444,7 +1447,13 @@ export default {
         }
 
         if ("keywords" in generalForm) {
-          this.zenodoMetadataForm.keywords = generalForm.keywords;
+          this.zenodoMetadataForm.keywords = [];
+          generalForm.keywords.forEach((keyword) => {
+            this.zenodoMetadataForm.keywords.push({
+              keyword,
+              id: uuidv4(),
+            });
+          });
         }
 
         if ("license" in generalForm) {
@@ -1488,6 +1497,363 @@ export default {
             newContributors.push(newContributor);
           });
           this.zenodoMetadataForm.contributors = newContributors;
+
+          this.activeNames.indexOf("contributors") === -1
+            ? this.activeNames.push("contributors")
+            : null;
+        }
+
+        if (
+          "newVersion" in this.workflow.destination.zenodo &&
+          this.workflow.destination.zenodo.newVersion
+        ) {
+          if (this.zenodoMetadataForm.keywords.length == 0) {
+            if (
+              "keywords" in
+              this.workflow.destination.zenodo.selectedDeposition.metadata
+            ) {
+              this.workflow.destination.zenodo.selectedDeposition.metadata.keywords.forEach(
+                (keyword) => {
+                  this.zenodoMetadataForm.keywords.push({
+                    keyword,
+                    id: uuidv4(),
+                  });
+                }
+              );
+            }
+          }
+
+          if (this.zenodoMetadataForm.authors.length == 0) {
+            if (
+              "creators" in
+              this.workflow.destination.zenodo.selectedDeposition.metadata
+            ) {
+              this.workflow.destination.zenodo.selectedDeposition.metadata.creators.forEach(
+                ({ name, affiliation, orcid }) => {
+                  this.zenodoMetadataForm.authors.push({
+                    name,
+                    affiliation,
+                    orcid,
+                    id: uuidv4(),
+                  });
+                }
+              );
+            }
+          }
+
+          if (this.zenodoMetadataForm.contributors.length == 0) {
+            if (
+              "contributors" in
+              this.workflow.destination.zenodo.selectedDeposition.metadata
+            ) {
+              this.workflow.destination.zenodo.selectedDeposition.metadata.contributors.forEach(
+                ({ name, type, affiliation, orcid }) => {
+                  this.zenodoMetadataForm.contributors.push({
+                    name,
+                    contributorType: type,
+                    affiliation,
+                    orcid,
+                    id: uuidv4(),
+                  });
+                }
+              );
+
+              this.activeNames.indexOf("contributors") === -1
+                ? this.activeNames.push("contributors")
+                : null;
+            }
+          }
+
+          if (
+            "notes" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.additionalNotes =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.notes;
+          }
+
+          if (
+            "related_identifiers" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.relatedIdentifiers = [];
+            this.workflow.destination.zenodo.selectedDeposition.metadata.related_identifiers.forEach(
+              ({ identifier, relation, resource_type }) => {
+                this.zenodoMetadataForm.relatedIdentifiers.push({
+                  identifier,
+                  relationship: relation,
+                  resourceType: resource_type,
+                  id: uuidv4(),
+                });
+              }
+            );
+
+            this.activeNames.indexOf("relatedIdentifiers") === -1
+              ? this.activeNames.push("relatedIdentifiers")
+              : null;
+          }
+
+          if (
+            "references" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.references = [];
+            this.workflow.destination.zenodo.selectedDeposition.metadata.references.forEach(
+              (reference) => {
+                this.zenodoMetadataForm.references.push({
+                  reference,
+                  id: uuidv4(),
+                });
+              }
+            );
+
+            this.activeNames.indexOf("references") === -1
+              ? this.activeNames.push("references")
+              : null;
+          }
+
+          if (
+            "version" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.version =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.version;
+          }
+          if (
+            "language" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.language =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.language;
+          }
+
+          if (
+            "journal_title" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.journal.title =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.journal_title;
+
+            this.activeNames.indexOf("journal") === -1
+              ? this.activeNames.push("journal")
+              : null;
+          }
+          if (
+            "journal_volume" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.journal.volume =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.journal_volume;
+
+            this.activeNames.indexOf("journal") === -1
+              ? this.activeNames.push("journal")
+              : null;
+          }
+          if (
+            "journal_issue" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.journal.issue =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.journal_issue;
+
+            this.activeNames.indexOf("journal") === -1
+              ? this.activeNames.push("journal")
+              : null;
+          }
+          if (
+            "journal_pages" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.journal.pages =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.journal_pages;
+
+            this.activeNames.indexOf("journal") === -1
+              ? this.activeNames.push("journal")
+              : null;
+          }
+
+          if (
+            "conference_title" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.title =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_title;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+          if (
+            "conference_acronym" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.acronym =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_acronym;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+          // Will have to comeback to this one
+          // if (
+          //   "conference_dates" in
+          //   this.workflow.destination.zenodo.selectedDeposition.metadata
+          // ) {
+          //   this.zenodoMetadataForm.conference.dates =
+          //     this.workflow.destination.zenodo.selectedDeposition.metadata.conference_dates;
+          // }
+          if (
+            "conference_place" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.place =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_place;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+          if (
+            "conference_url" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.website =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_url;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+          if (
+            "conference_session" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.session =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+          if (
+            "conference_session_part" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.conference.part =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session_part;
+
+            this.activeNames.indexOf("conference") === -1
+              ? this.activeNames.push("conference")
+              : null;
+          }
+
+          if (
+            "imprint_publisher" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.bookReportChapter.publisher =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_publisher;
+
+            this.activeNames.indexOf("bookReportChapter") === -1
+              ? this.activeNames.push("bookReportChapter")
+              : null;
+          }
+          if (
+            "imprint_isbn" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.bookReportChapter.isbn =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_isbn;
+
+            this.activeNames.indexOf("bookReportChapter") === -1
+              ? this.activeNames.push("bookReportChapter")
+              : null;
+          }
+          if (
+            "imprint_place" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.bookReportChapter.place =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_place;
+
+            this.activeNames.indexOf("bookReportChapter") === -1
+              ? this.activeNames.push("bookReportChapter")
+              : null;
+          }
+          if (
+            "partof_title" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.bookReportChapter.title =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.partof_title;
+
+            this.activeNames.indexOf("bookReportChapter") === -1
+              ? this.activeNames.push("bookReportChapter")
+              : null;
+          }
+          if (
+            "partof_pages" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.bookReportChapter.pages =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.partof_pages;
+
+            this.activeNames.indexOf("bookReportChapter") === -1
+              ? this.activeNames.push("bookReportChapter")
+              : null;
+          }
+
+          if (
+            "thesis_university" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.thesis.awardingUniversity =
+              this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_university;
+
+            this.activeNames.indexOf("thesis") === -1
+              ? this.activeNames.push("thesis")
+              : null;
+          }
+          if (
+            "thesis_supervisors" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.thesis.supervisors = [];
+            this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_supervisors.forEach(
+              ({ name, affiliation, orcid }) => {
+                this.zenodoMetadataForm.thesis.supervisors.push({
+                  name,
+                  affiliation,
+                  orcid,
+                  id: uuidv4(),
+                });
+              }
+            );
+
+            this.activeNames.indexOf("thesis") === -1
+              ? this.activeNames.push("thesis")
+              : null;
+          }
+
+          if (
+            "subjects" in
+            this.workflow.destination.zenodo.selectedDeposition.metadata
+          ) {
+            this.zenodoMetadataForm.subjects = [];
+            this.workflow.destination.zenodo.selectedDeposition.metadata.subjects.forEach(
+              ({ term, identifier }) => {
+                this.zenodoMetadataForm.subjects.push({
+                  term,
+                  identifier,
+                  id: uuidv4(),
+                });
+              }
+            );
+
+            this.activeNames.indexOf("subjects") === -1
+              ? this.activeNames.push("subjects")
+              : null;
+          }
         }
       }
     },
@@ -1716,19 +2082,14 @@ export default {
               this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
+              console.log(doiRegex().test(relatedIdentifier.identifier));
               let validIdentifier = false;
 
-              if (doiRegex().test(relatedIdentifier.identifier)) {
-                validIdentifier = true;
-              }
-
               if (
-                !validIdentifier &&
+                doiRegex().test(relatedIdentifier.identifier) ||
                 validator.isURL(relatedIdentifier.identifier)
               ) {
                 validIdentifier = true;
-              } else {
-                validIdentifier = false;
               }
 
               if (!validIdentifier) {
@@ -1755,14 +2116,13 @@ export default {
         if (val.length > 0) {
           for (let subject of val) {
             if (subject.term === "") {
-              // console.log("subject error");
               this.subjectsErrorMessage =
                 "Please provide a valid and identifiable subject.";
               this.$refs.zmForm.validate();
               this.invalidStatus.subjects = true;
               break;
             } else {
-              const validIdentifier = validator.isURL(val);
+              const validIdentifier = validator.isURL(subject.identifier);
 
               if (!validIdentifier) {
                 this.subjectsErrorMessage =
@@ -1814,9 +2174,12 @@ export default {
       this.workflow.expandOptions = [];
     }
 
+    const testvar = true;
+
     if (
       this.workflow.destination.zenodo.questions &&
-      Object.keys(this.workflow.destination.zenodo.questions).length !== 0
+      Object.keys(this.workflow.destination.zenodo.questions).length !== 0 &&
+      !testvar
     ) {
       this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
 

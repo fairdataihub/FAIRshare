@@ -102,7 +102,7 @@ export default {
       });
 
       const response = await axios
-        .post(`${this.$server_url}/zenodo/publish`, {
+        .post(`${this.$server_url}/zenodo/deposition/publish`, {
           access_token: this.zenodoToken,
           deposition_id: depositionID,
         })

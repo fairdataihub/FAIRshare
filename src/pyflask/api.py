@@ -10,12 +10,15 @@ from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
 
 from zenodo import (
+    getAZenodoDeposition,
     getAllZenodoDepositions,
     createNewZenodoDeposition,
     uploadFileToZenodoDeposition,
     addMetadataToZenodoDeposition,
     publishZenodoDeposition,
     deleteZenodoDeposition,
+    createNewZenodoDepositionVersion,
+    removeFileFromZenodoDeposition,
 )
 from github import (
     uploadFileToGithub,
@@ -186,6 +189,65 @@ class zenodoURL(Resource):
         return config.ZENODO_SERVER_URL
 
 
+@zenodo.route("/deposition", endpoint="zenodoDeposition")
+class zenodoDeposition(Resource):
+    @zenodo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "Zenodo deposition id. For new versions the new deposit id is required",  # noqa: E501
+        },
+    )
+    def get(self):
+        """Get a single Zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "deposition_id",
+            type=str,
+            required=True,
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        deposition_id = args["deposition_id"]
+
+        response = getAZenodoDeposition(access_token, deposition_id)
+        return response
+
+    def delete(self):
+        """Delete a zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "deposition_id",
+            type=str,
+            required=True,
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        deposition_id = args["deposition_id"]
+
+        return deleteZenodoDeposition(access_token, deposition_id)
+
+
 @zenodo.route("/depositions", endpoint="zenodoGetAll")
 class zenodoGetAll(Resource):
     @zenodo.doc(
@@ -213,7 +275,7 @@ class zenodoGetAll(Resource):
         return response
 
 
-@zenodo.route("/new", endpoint="zenodoCreateNew")
+@zenodo.route("/deposition", endpoint="zenodoCreateNew")
 class zenodoCreateNew(Resource):
     @zenodo.doc(
         responses={
@@ -244,7 +306,7 @@ class zenodoCreateNew(Resource):
         return response
 
 
-@zenodo.route("/upload", endpoint="zenodoUploadFile")
+@zenodo.route("/deposition/files/upload", endpoint="zenodoUploadFile")
 class zenodoUploadFile(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -288,7 +350,7 @@ class zenodoUploadFile(Resource):
         )  # noqa: E501
 
 
-@zenodo.route("/metadata", endpoint="zenodoAddMetadata")
+@zenodo.route("/deposition/metadata", endpoint="zenodoAddMetadata")
 class zenodoAddMetadata(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -332,7 +394,7 @@ class zenodoAddMetadata(Resource):
         )  # noqa: E501
 
 
-@zenodo.route("/publish", endpoint="zenodoPublish")
+@zenodo.route("/deposition/publish", endpoint="zenodoPublish")
 class zenodoPublish(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -366,8 +428,52 @@ class zenodoPublish(Resource):
         return publishZenodoDeposition(access_token, deposition_id)
 
 
-@zenodo.route("/delete", endpoint="zenodoDelete")
-class zenodoDelete(Resource):
+@zenodo.route("/deposition/files", endpoint="zenodoDeleteFile")
+class zenodoDeleteFile(Resource):
+    @zenodo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "deposition id of the zenodo object",
+            "file_id": "file id of the file to delete",
+        },
+    )
+    def delete(self):
+        """Delete a zenodo deposition file"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "deposition_id",
+            type=str,
+            required=True,
+            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+        )
+        parser.add_argument(
+            "file_id",
+            type=str,
+            required=True,
+            help="file_id is required. file_id needs to be of type str",  # noqa: E501
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        deposition_id = args["deposition_id"]
+        file_id = args["file_id"]
+
+        return removeFileFromZenodoDeposition(
+            access_token, deposition_id, file_id
+        )  # noqa: E501
+
+
+@zenodo.route("/deposition/newversion", endpoint="zenodoNewVersion")
+class zenodoNewVersion(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
         params={
@@ -375,7 +481,7 @@ class zenodoDelete(Resource):
             "deposition_id": "deposition id of the zenodo object",
         },
     )
-    def delete(self):
+    def post(self):
         """Delete a zenodo deposition"""
         parser = reqparse.RequestParser()
 
@@ -397,7 +503,7 @@ class zenodoDelete(Resource):
         access_token = args["access_token"]
         deposition_id = args["deposition_id"]
 
-        return deleteZenodoDeposition(access_token, deposition_id)
+        return createNewZenodoDepositionVersion(access_token, deposition_id)
 
 
 ###############################################################################
