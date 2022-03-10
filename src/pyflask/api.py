@@ -4,6 +4,7 @@ import json
 import logging
 import logging.handlers
 import os
+import sys
 
 from flask import Flask
 from flask_cors import CORS
@@ -973,5 +974,13 @@ class FileExistInFolder(Resource):
 # Using 7632 since it spells SODA lol.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=7632)
+    requested_port = 5000  # default port to run on
+
+    # Check for a port override
+    if len(sys.argv) > 1:
+        requested_port = int(sys.argv[1])
+
+    api.logger.info(f"PORT_NUMBER: {requested_port}")
+
+    app.run(host="127.0.0.1", port=requested_port)
     # app.run(host="127.0.0.1", port=7632, debug=True)

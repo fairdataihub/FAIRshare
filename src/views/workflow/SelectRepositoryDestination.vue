@@ -576,9 +576,9 @@ export default {
       }
 
       if (this.newVersion === "true") {
-        this.workflow.destination[this.repoID].newVersion = this.newVersion;
+        this.workflow.destination[this.repoID].newVersion = true;
       } else {
-        this.workflow.destination[this.repoID].newVersion = this.newVersion;
+        this.workflow.destination[this.repoID].newVersion = false;
       }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
@@ -662,7 +662,8 @@ export default {
         }
 
         if ("newVersion" in this.workflow.destination[this.repoID]) {
-          this.newVersion = this.workflow.destination[this.repoID].newVersion;
+          this.newVersion =
+            this.workflow.destination[this.repoID].newVersion.toString();
           this.showSelectZenodoDeposition = true;
         } else {
           this.newVersion = "None";
