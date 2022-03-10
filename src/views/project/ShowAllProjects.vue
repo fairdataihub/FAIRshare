@@ -16,7 +16,7 @@
           Continue curating your datasets
         </span>
 
-        <span>
+        <span v-if="datasetsInProgress.length > 0">
           You have some incomplete projects. Select one to continue working on
           it.
         </span>
@@ -24,7 +24,7 @@
         <!-- <el-divider> </el-divider> -->
 
         <div class="h-full flex-grow overflow-y-auto">
-          <div>
+          <div v-if="datasetsInProgress.length > 0">
             <el-divider content-position="left">
               Projects currently in progress
             </el-divider>

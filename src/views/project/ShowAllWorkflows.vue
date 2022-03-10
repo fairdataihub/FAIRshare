@@ -35,7 +35,6 @@
             <button
               class="primary-plain-button"
               @click="navigateToCurate(`${key}`)"
-              :disabled="workflow.datasetPublished"
               ref="continueButton"
             >
               Curate {{ combineDataTypes(workflow.type) }}
@@ -44,6 +43,17 @@
             <br />
           </div>
         </div>
+        <info-confirm
+          ref="infoConfirmWorkflowPublished"
+          title="Dataset is already published"
+          @messageConfirmed="navigateToSelectFolder"
+          confirmButtonText="I want to publish a new version"
+        >
+          <p class="text-center text-base text-gray-500">
+            It looks like you've already published this dataset. Would you like
+            to go through this workflow again to publish a new version?
+          </p>
+        </info-confirm>
         <info-confirm
           ref="infoConfirmLocalZenodoUploadNoPublish"
           title="You haven't published this dataset yet"
@@ -123,6 +133,10 @@ export default {
         return returnString;
       }
     },
+    navigateToSelectFolder() {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+      this.$router.push({ path: routerPath });
+    },
     localZenodoUploadNoPublishResponse(response) {
       let routerPath = "";
       if (response === "ok") {
@@ -161,35 +175,49 @@ export default {
       // This hasn't been done yet since we need to figure out where we want to put them for this specific workflow.
 
       if (
+        "datasetPublished" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].datasetPublished &&
+        "source" in this.dataset.workflows[workflowID] &&
+        this.dataset.workflows[workflowID].source.type === "local"
+      ) {
+        this.$refs.infoConfirmWorkflowPublished.show();
+        return;
+      }
+
+      if (
         "datasetUploaded" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].datasetUploaded &&
         "source" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].source.type === "local"
       ) {
         this.$refs.infoConfirmLocalZenodoUploadNoPublish.show();
-      } else if (
+        return;
+      }
+
+      if (
         "datasetUploaded" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].datasetUploaded &&
         "source" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].source.type === "github"
       ) {
         this.$refs.infoConfirmGithubUploadNoPublish.show();
-      } else {
-        if ("currentRoute" in this.dataset.workflows[workflowID]) {
-          if (
-            this.dataset.workflows[workflowID].currentRoute != "" &&
-            this.dataset.workflows[workflowID].currentRoute !=
-              `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
-          ) {
-            this.$refs.infoConfirmContinueCuration.show();
-          } else {
-            routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-            this.$router.push({ path: routerPath });
-          }
+        return;
+      }
+
+      if ("currentRoute" in this.dataset.workflows[workflowID]) {
+        if (
+          this.dataset.workflows[workflowID].currentRoute != "" &&
+          this.dataset.workflows[workflowID].currentRoute !=
+            `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
+        ) {
+          this.$refs.infoConfirmContinueCuration.show();
         } else {
           routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
           this.$router.push({ path: routerPath });
         }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+        this.$router.push({ path: routerPath });
       }
 
       // if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
