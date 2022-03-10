@@ -235,13 +235,27 @@
 
         <button
           class="primary-button"
-          @click="startCuration"
+          @click="checkStandards"
           :disabled="disableContinue"
           id="continue"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
+        <warning-confirm
+          ref="warningConfirm"
+          title="Warning"
+          @messageConfirmed="startCuration"
+          confirmButtonText="Continue anyway"
+          cancelButtonText="I want to go back and review"
+        >
+          <p class="text-center text-base text-gray-500">
+            For your research software to be fully FAIR, we expect you to answer
+            'Yes' to all the questions. We suggest to review again where you
+            answered 'No' and modifying your data files if necessary before
+            continuing.
+          </p>
+        </warning-confirm>
       </div>
     </div>
   </div>
@@ -249,8 +263,6 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
-
-import { ElMessageBox } from "element-plus";
 
 export default {
   name: "CodeReviewStandards",
@@ -302,7 +314,7 @@ export default {
 
       this.$router.push(routerPath);
     },
-    async startCuration() {
+    async checkStandards() {
       let showWarning = false;
 
       for (const question in this.questions) {
@@ -312,36 +324,20 @@ export default {
       }
 
       if (showWarning) {
-        ElMessageBox.confirm(
-          "For your research software to be fully FAIR, we expect you to answer 'Yes' to all the questions. We suggest to review again where you answered 'No' and modyfying your data files if necessary before contuining.",
-          "Warning",
-          {
-            confirmButtonText: "Continue anyway",
-            cancelButtonText: "I want to go back and review",
-            type: "warning",
-          }
-        )
-          .then(() => {
-            this.dataset.data.Code.standards = this.questions;
-
-            this.datasetStore.updateCurrentDataset(this.dataset);
-            this.datasetStore.syncDatasets();
-
-            this.$router.push(
-              `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-            );
-          })
-          .catch(() => {});
+        this.$refs.warningConfirm.show();
       } else {
-        this.dataset.data.Code.standards = this.questions;
-
-        this.datasetStore.updateCurrentDataset(this.dataset);
-        this.datasetStore.syncDatasets();
-
-        this.$router.push(
-          `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-        );
+        this.startCuration();
       }
+    },
+    startCuration() {
+      this.dataset.data.Code.standards = this.questions;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
+      this.$router.push(
+        `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
+      );
     },
   },
   async mounted() {

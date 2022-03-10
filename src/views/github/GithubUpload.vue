@@ -492,15 +492,17 @@ export default {
     async uploadWorkflow() {
       let response = "";
 
-      if (this.codePresent) {
-        response = await this.createCodeMetadataFile();
+      if (this.workflow.generateCodeMeta) {
+        if (this.codePresent) {
+          response = await this.createCodeMetadataFile();
 
-        if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the code metadata file";
-          return "FAIL";
-        } else {
-          this.statusMessage = "Created a temporary codemeta.json file";
+          if (response === "ERROR") {
+            this.alertMessage =
+              "There was an error with creating the code metadata file";
+            return "FAIL";
+          } else {
+            this.statusMessage = "Created a temporary codemeta.json file";
+          }
         }
       }
 
@@ -509,16 +511,18 @@ export default {
 
       await this.sleep(300);
 
-      if (this.codePresent) {
-        response = await this.createCitationFile();
-        // console.log(response);
+      if (this.workflow.generateCodeMeta) {
+        if (this.codePresent) {
+          response = await this.createCitationFile();
+          // console.log(response);
 
-        if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the CITATION.cff file";
-          return "FAIL";
-        } else {
-          this.statusMessage = "Created a temporary CITATION.cff file";
+          if (response === "ERROR") {
+            this.alertMessage =
+              "There was an error with creating the CITATION.cff file";
+            return "FAIL";
+          } else {
+            this.statusMessage = "Created a temporary CITATION.cff file";
+          }
         }
       }
 
@@ -544,21 +548,23 @@ export default {
 
       await this.sleep(300);
 
-      response = await this.createZenodoJSON();
+      if (this.workflow.uploadToRepo) {
+        response = await this.createZenodoJSON();
 
-      if (response === "ERROR") {
-        this.alertMessage =
-          "There was an error with creating the .zenodo.json file";
-        return "FAIL";
-      } else {
-        // console.log(response);
-        this.statusMessage = "Created a temporary .zenodo.json file";
+        if (response === "ERROR") {
+          this.alertMessage =
+            "There was an error with creating the .zenodo.json file";
+          return "FAIL";
+        } else {
+          // console.log(response);
+          this.statusMessage = "Created a temporary .zenodo.json file";
+        }
+
+        this.percentage = 20;
+        this.indeterminate = false;
+
+        this.workflow.destination.zenodo.status.metadataAdded = true;
       }
-
-      this.percentage = 20;
-      this.indeterminate = false;
-
-      this.workflow.destination.zenodo.status.metadataAdded = true;
 
       await this.sleep(300);
 
@@ -572,7 +578,9 @@ export default {
         this.statusMessage = "Uploaded all files to GitHub successfully.";
       }
 
-      this.workflow.destination.zenodo.status.filesUploaded = true;
+      if (this.workflow.uploadToRepo) {
+        this.workflow.destination.zenodo.status.filesUploaded = true;
+      }
 
       return "SUCCESS";
     },
@@ -609,7 +617,14 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
+        let routerPath = "";
+
+        if (this.workflow.uploadToRepo) {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
+        } else {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/githubNoUpload/finalPage`;
+        }
+
         this.$router.push({ path: routerPath });
       }
     },

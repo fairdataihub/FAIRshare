@@ -19,6 +19,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build-preclean": "node ./scripts/prebuild.js",
+    "python:clean": "yarn gulp clean-pre-python-build",
     "python:build": "yarn gulp clean-pre-python-build && python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
     "python:dev": "python ./src/pyflask/api.py",
     "electron:build": "yarn gulp clean-pre-electron-build && vue-cli-service electron:build",
@@ -39,6 +40,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.0",
     "@element-plus/icons-vue": "^0.2.7",
+    "@headlessui/vue": "^1.5.0",
     "@kangc/v-md-editor": "^2.3.13",
     "axios": "^0.21.2",
     "axios-retry": "^3.2.0",

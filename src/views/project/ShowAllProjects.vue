@@ -79,20 +79,6 @@
                         </div>
                       </el-tooltip>
 
-                      <div v-if="dataset.meta.destination != 'Unknown'">
-                        <el-tooltip
-                          effect="dark"
-                          content="This dataset will be made FAIR using the Zenodo repository"
-                          placement="bottom"
-                          v-if="dataset.meta.destination === 'zenodo'"
-                        >
-                          <div class="flex items-center">
-                            <Icon icon="clarity:upload-cloud-line" />
-                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
-                          </div>
-                        </el-tooltip>
-                      </div>
-
                       <div v-if="dataset.meta.location != 'Unknown'">
                         <el-tooltip
                           effect="dark"
@@ -115,6 +101,20 @@
                           <div class="flex items-center">
                             <Icon icon="ic:outline-source" />
                             <span class="pr-2 pl-1 text-sm"> GitHub </span>
+                          </div>
+                        </el-tooltip>
+                      </div>
+
+                      <div v-if="dataset.meta.destination != 'Unknown'">
+                        <el-tooltip
+                          effect="dark"
+                          content="This dataset will be made FAIR using the Zenodo repository"
+                          placement="bottom"
+                          v-if="dataset.meta.destination === 'zenodo'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="clarity:upload-cloud-line" />
+                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
                           </div>
                         </el-tooltip>
                       </div>
@@ -196,20 +196,6 @@
                         </div>
                       </el-tooltip>
 
-                      <el-tooltip
-                        effect="dark"
-                        :content="`This dataset will be made FAIR using the ${dataset.meta.destination} repository`"
-                        placement="bottom"
-                        v-if="dataset.meta.destination != 'Unknown'"
-                      >
-                        <div class="flex items-center">
-                          <Icon icon="clarity:upload-cloud-line" />
-                          <span class="pr-2 pl-1 text-sm capitalize">
-                            {{ dataset.meta.destination }}
-                          </span>
-                        </div>
-                      </el-tooltip>
-
                       <div v-if="dataset.meta.location != 'Unknown'">
                         <el-tooltip
                           effect="dark"
@@ -235,6 +221,20 @@
                           </div>
                         </el-tooltip>
                       </div>
+
+                      <el-tooltip
+                        effect="dark"
+                        :content="`This dataset will be made FAIR using the ${dataset.meta.destination} repository`"
+                        placement="bottom"
+                        v-if="dataset.meta.destination != 'Unknown'"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="clarity:upload-cloud-line" />
+                          <span class="pr-2 pl-1 text-sm capitalize">
+                            {{ dataset.meta.destination }}
+                          </span>
+                        </div>
+                      </el-tooltip>
 
                       <div>
                         <el-tag
@@ -429,13 +429,13 @@ export default {
       routerPath = `/datasets/${datasetID}/landing`;
       // routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+      routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;

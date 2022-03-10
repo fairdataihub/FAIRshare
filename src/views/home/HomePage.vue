@@ -34,7 +34,7 @@
         <div class="flex justify-center space-x-4 py-3">
           <button
             class="secondary-plain-button text-base"
-            @click="openWebsite('https://fair-share-docs.vercel.app/')"
+            @click="openWebsite('https://docs.fairshareapp.io/')"
           >
             <el-icon><notebook-icon /></el-icon>
             Read the documentation

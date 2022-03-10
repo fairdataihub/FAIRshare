@@ -29,6 +29,16 @@ import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
 
+import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
+import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
+import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
+
+import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
+
+import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
+
+import FadeTransition from "./components/transitions/FadeTransition.vue";
+
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
 
 // config for the markdown editor
@@ -49,6 +59,16 @@ app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
 app.component("VuePopper", Popper);
 app.component("form-help-content", FormHelpContent);
+
+app.component("warning-confirm", WarningConfirm);
+app.component("info-confirm", InfoConfirm);
+app.component("error-confirm", ErrorConfirm);
+
+app.component("warning-prompt", WarningPrompt);
+
+app.component("general-dialog", GeneralDialog);
+
+app.component("fade-transition", FadeTransition);
 
 // import and register icons globally
 import {
@@ -88,6 +108,7 @@ import {
   Reading,
   RemoveFilled,
   Right,
+  Select,
   Setting,
   Star,
   Ticket,
@@ -135,6 +156,7 @@ app.component("question-filled", QuestionFilled);
 app.component("reading-icon", Reading);
 app.component("remove-filled", RemoveFilled);
 app.component("right-icon", Right);
+app.component("select-icon", Select);
 app.component("setting-icon", Setting);
 app.component("star-icon", Star);
 app.component("ticket-icon", Ticket);

@@ -34,6 +34,11 @@ import GithubPublish from "../views/github/GithubPublish.vue";
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
+// components required for options that can be skipped
+import LocalNoUpload from "../views/noUpload/LocalNoUpload.vue";
+import LocalNoUploadEnd from "../views/noUpload/LocalNoUploadEnd.vue";
+import GithubNoUploadEnd from "../views/noUpload/GithubNoUploadEnd.vue";
+
 import HomePage from "../views/home/HomePage.vue";
 import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
@@ -109,6 +114,7 @@ const routes = [
     component: ZenodoUpload,
     name: "ZenodoUpload",
   },
+
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
@@ -128,6 +134,21 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/publish",
     component: GithubPublish,
     name: "GithubPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/localNoUpload/generate",
+    component: LocalNoUpload,
+    name: "LocalNoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/localNoUpload/finalPage",
+    component: LocalNoUploadEnd,
+    name: "LocalNoUploadEnd",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/githubNoUpload/finalPage",
+    component: GithubNoUploadEnd,
+    name: "GithubNoUploadEnd",
   },
   {
     path: "/datasets/:datasetID/:workflowID/figshare/metadata",

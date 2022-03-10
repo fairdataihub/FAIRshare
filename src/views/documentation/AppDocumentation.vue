@@ -24,7 +24,7 @@
         <div>
           <button
             class="primary-plain-button"
-            @click="openURL('https://fair-share-docs.vercel.app/')"
+            @click="openURL('https://docs.fairshareapp.io/')"
           >
             View the Documentation <el-icon><notebook-icon /></el-icon>
           </button>
@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      open: true,
     };
   },
   methods: {

@@ -184,7 +184,7 @@
             <div class="flex items-center justify-center space-x-4">
               <button
                 class="primary-plain-button"
-                @click="createRelease('publish')"
+                @click="confirmPublishWarning"
                 :disabled="disablePublish"
               >
                 Publish release
@@ -196,6 +196,16 @@
               >
                 Create a draft release
               </button>
+              <warning-confirm
+                ref="warningConfirm"
+                title="Confirm publish"
+                @messageConfirmed="createRelease('publish')"
+              >
+                <p class="text-center text-base text-gray-500">
+                  Once a release has been made you will not be able to remove it
+                  from Zenodo. Are you sure you want to continue?
+                </p>
+              </warning-confirm>
             </div>
           </div>
         </div>
@@ -404,6 +414,9 @@ export default {
           return "ERROR";
         });
     },
+    confirmPublishWarning() {
+      this.$refs.warningConfirm.show();
+    },
     async createRelease(releaseType) {
       let errorMessage = "";
       let successMessage = "";
@@ -417,26 +430,6 @@ export default {
       };
 
       if (releaseType === "publish") {
-        let response = "";
-
-        try {
-          response = await this.$confirm(
-            "Once a release has been made you will not be able to remove it from Zenodo. Are you sure you want to continue?",
-            "Confirm publish",
-            {
-              confirmButtonText: "Publish",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            }
-          );
-        } catch (error) {
-          response = error;
-        }
-
-        if (response !== "confirm") {
-          return;
-        }
-
         errorMessage = "Error publishing release";
         successMessage = "Release published successfully";
         requestBody.draft = false;
