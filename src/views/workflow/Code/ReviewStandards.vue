@@ -275,11 +275,11 @@ export default {
       workflow: {},
       activeNames: [],
       questions: {
-        question1: "",
-        question2: "",
-        question3: "",
-        question4: "",
-        question5: "",
+        question1: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question2: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question3: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question4: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question5: process.env.NODE_ENV === "development" ? "Yes" : "",
       },
     };
   },
