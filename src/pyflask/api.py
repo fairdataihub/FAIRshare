@@ -6,7 +6,7 @@ import logging.handlers
 import os
 import sys
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
 
@@ -78,6 +78,18 @@ api = Api(
     description="The backend api system for the Electron Vue app",
     doc="/docs",
 )
+
+
+@api.route("/fairshare_server_shutdown", endpoint="shutdown")
+class shutdown(Resource):
+    def post(self):
+        func = request.environ.get("werkzeug.server.shutdown")
+
+        if func is None:
+            print("Not running with the Werkzeug Server")
+            return
+
+        func()
 
 
 @api.route("/api_version", endpoint="apiVersion")
@@ -982,5 +994,10 @@ if __name__ == "__main__":
 
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
+    print(f"Running on port {requested_port}.")
+    print(
+        f"API documentation hosted at http://127.0.0.1:{requested_port}/docs"
+    )  # noqa: E501
+
     app.run(host="127.0.0.1", port=requested_port)
-    # app.run(host="127.0.0.1", port=7632, debug=True)
+    # app.run(host="127.0.0.1", port=requested_port, debug=True)

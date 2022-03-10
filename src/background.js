@@ -5,7 +5,9 @@ import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
+import axios from "axios";
 
+const fp = require("find-free-port");
 const fs = require("fs-extra");
 const path = require("path");
 const log = require("electron-log");
@@ -59,7 +61,12 @@ const PY_MODULE = "api";
 let mainWindow;
 
 let pyProc = null;
-const pyPort = "7632";
+let pyPort = null;
+
+global.PYPORT = pyPort;
+
+const startingPort = 7632;
+const portRange = 100;
 
 const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
@@ -86,27 +93,63 @@ const getScriptPath = () => {
   return path.join(process.resourcesPath, PY_MODULE);
 };
 
+const killAllPreviousProcesses = async () => {
+  console.log("Killing all previous processes");
+
+  // kill all previous python processes that could be running.
+  let promisesArray = [];
+
+  // create a loop of 100
+  for (let i = 0; i < portRange; i++) {
+    promisesArray.push(
+      axios.post(
+        `http://127.0.0.1:${startingPort + i}/fairshare_server_shutdown`,
+        {}
+      )
+    );
+  }
+
+  // wait for all the promises to resolve
+  await Promise.allSettled(promisesArray);
+};
+
 // create the python process
-const createPyProc = () => {
+const createPyProc = async () => {
   let script = getScriptPath();
 
-  console.log(`Starting python process at ${script}`);
-  console.log(`API documentation hosted at http://127.0.0.1:7632/docs`);
-  if (guessPackaged()) {
-    pyProc = require("child_process").execFile(script, [pyPort], {
-      stdio: "ignore",
-    });
-  } else {
-    pyProc = require("child_process").spawn("python", [script, pyPort], {
-      stdio: "ignore",
-    });
-  }
+  await killAllPreviousProcesses();
 
-  if (pyProc != null) {
-    console.log("child process success on port " + pyPort);
-  } else {
-    console.error("child process failed to start on port" + pyPort);
-  }
+  fp(startingPort, startingPort + portRange)
+    .then(([freep]) => {
+      console.log(
+        `Found a free port at ${freep}. Using port ${freep} for python process.`
+      );
+      pyPort = freep;
+      global.PYPORT = pyPort;
+
+      console.log(`Starting python process at ${script}`);
+      console.log(
+        `API documentation hosted at http://127.0.0.1:${pyPort}/docs`
+      );
+      if (guessPackaged()) {
+        pyProc = require("child_process").execFile(script, [pyPort], {
+          stdio: "ignore",
+        });
+      } else {
+        pyProc = require("child_process").spawn("python", [script, pyPort], {
+          stdio: "ignore",
+        });
+      }
+
+      if (pyProc != null) {
+        console.log("child process success on port " + pyPort);
+      } else {
+        console.error("child process failed to start on port" + pyPort);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 async function createWindow() {
@@ -201,8 +244,11 @@ async function createWindow() {
 }
 
 // Close the webserver process on app exit
-const exitPyProc = (main_pid) => {
+const exitPyProc = async (main_pid) => {
   console.log("killing python process...");
+
+  await killAllPreviousProcesses();
+
   if ((process.platform == "darwin") | (process.platform == "linux")) {
     pyProc.kill();
     return new Promise(function (resolve) {
@@ -297,7 +343,7 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
 
 // OAuth
 //import { useTokenStore } from "./store/access";
-import axios from "axios";
+
 const nodeUrl = require("url");
 const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;

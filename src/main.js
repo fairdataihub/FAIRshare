@@ -1,3 +1,4 @@
+import { getGlobal } from "@electron/remote";
 import { createApp } from "vue";
 import App from "./App.vue";
 import { router } from "./router";
@@ -51,7 +52,9 @@ VMdEditor.lang.use("en-US", enUS); // set language to english
 let app = createApp(App);
 
 // global variables for use in the app
-app.config.globalProperties.$server_url = "http://127.0.0.1:7632";
+app.config.globalProperties.$server_url = `http://127.0.0.1:${getGlobal(
+  "PYPORT"
+)}`;
 app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 
 // register components globally
