@@ -62,14 +62,14 @@
                 <button
                   v-if="localShowCancelButton"
                   type="button"
-                  class="secondary-plain-button"
+                  class="primary-plain-button"
                   @click="setIsOpen(false, 'cancel')"
                 >
                   {{ localCancelButtonText }}
                 </button>
                 <button
                   type="button"
-                  class="primary-button"
+                  class="danger-button"
                   @click="setIsOpen(false, 'confirm')"
                   :disabled="confirmDisabled"
                 >

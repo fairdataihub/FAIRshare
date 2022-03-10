@@ -125,11 +125,13 @@
                 @messageConfirmed="deleteProject"
               >
                 <div w-full>
-                  <p class="mb-3 w-full text-left text-sm text-gray-500">
+                  <p class="mb-3 w-full text-left text-base text-gray-500">
                     This action cannot be undone. This will permanently delete
-                    the project.
+                    the
+                    <span class="font-bold">{{ originalName }}</span>
+                    project.
                   </p>
-                  <p class="mb-2 text-left text-sm text-gray-500">
+                  <p class="mb-2 text-left text-base text-gray-500">
                     Please type
                     <span class="font-bold">{{ originalName }}</span> to
                     confirm.
@@ -224,6 +226,7 @@ export default {
   },
   methods: {
     openDialog() {
+      this.deleteInput = "";
       this.$refs.warningPrompt.show();
     },
     submitForm(formName) {

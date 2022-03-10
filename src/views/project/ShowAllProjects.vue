@@ -299,11 +299,12 @@
           <div
             class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
           >
-            <Icon
-              icon="fluent:quiz-new-24-regular"
-              class="h-20 w-10/12 text-blue-500"
+            <Vue3Lottie
+              animationLink="https://assets2.lottiefiles.com/packages/lf20_16MhZz.json"
+              :width="300"
+              :height="300"
             />
-            <span class="text-large font-medium">
+            <span class="text-xl font-bold">
               Start a new data curation project
             </span>
           </div>
