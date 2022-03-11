@@ -178,7 +178,8 @@ export default {
         "datasetPublished" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].datasetPublished &&
         "source" in this.dataset.workflows[workflowID] &&
-        this.dataset.workflows[workflowID].source.type === "local"
+        (this.dataset.workflows[workflowID].source.type === "local" ||
+          this.dataset.workflows[workflowID].source.type === "github")
       ) {
         this.$refs.infoConfirmWorkflowPublished.show();
         return;

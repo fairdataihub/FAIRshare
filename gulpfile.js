@@ -28,8 +28,8 @@ gulp.task("clean-pre-python-build", function () {
   );
 
   console.log("Removing src/pyflaskdist/ ...");
-  console.log("Removing api.spec ...");
   console.log("Removing build/ ...");
+  console.log("Removing api.spec ...");
 
   return del(["src/pyflaskdist", "./api.spec", "./build"]);
 });
@@ -51,7 +51,7 @@ gulp.task("copy-python", function () {
 });
 
 gulp.task("copy-splash-screen", function () {
-  console.log("Copying splash screen to dist_electron folder...");
+  console.log("Copying splash screen to dist_electron folder ...");
 
   return gulp
     .src(["./public/splash-screen.html"])
