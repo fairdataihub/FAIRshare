@@ -250,9 +250,9 @@
           cancelButtonText="I want to go back and review"
         >
           <p class="text-center text-base text-gray-500">
-            For your research software to be fully FAIR, we expect you to answer
-            'Yes' to all the questions. We suggest to review again where you
-            answered 'No' and modifying your data files if necessary before
+            For your research software to be completely FAIR, we expect you to
+            answer 'Yes' to all the questions. We suggest reviewing where you
+            selected 'No' and modifying your data files if necessary before
             continuing.
           </p>
         </warning-confirm>

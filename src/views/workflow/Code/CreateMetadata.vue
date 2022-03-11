@@ -561,7 +561,7 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="addKeyword('COVID-19')"
+                                @click="addKeyword(null, 'COVID-19')"
                                 :type="
                                   step3Form.keywords.some(
                                     (el) => el.keyword === 'COVID-19'
@@ -575,7 +575,7 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="addKeyword('Machine Learning')"
+                                @click="addKeyword(null, 'Machine Learning')"
                                 :type="
                                   step3Form.keywords.some(
                                     (el) => el.keyword === 'Machine Learning'
@@ -589,22 +589,24 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="addKeyword('Artifical Intelligence')"
+                                @click="
+                                  addKeyword(null, 'Artificial Intelligence')
+                                "
                                 :type="
                                   step3Form.keywords.some(
                                     (el) =>
-                                      el.keyword === 'Artifical Intelligence'
+                                      el.keyword === 'Artificial Intelligence'
                                   )
                                     ? ''
                                     : 'info'
                                 "
                               >
-                                Artifical Intelligence
+                                Artificial Intelligence
                               </el-tag>
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="addKeyword('Infection rate')"
+                                @click="addKeyword(null, 'Infection rate')"
                                 :type="
                                   step3Form.keywords.some(
                                     (el) => el.keyword === 'Infection rate'
@@ -618,7 +620,9 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="addKeyword('Mortality prediction')"
+                                @click="
+                                  addKeyword(null, 'Mortality prediction')
+                                "
                                 :type="
                                   step3Form.keywords.some(
                                     (el) =>
@@ -636,7 +640,7 @@
 
                         <div
                           class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
-                          @click="addKeyword('')"
+                          @click="addKeyword(null, '')"
                         >
                           <Icon icon="carbon:add" />
                           <span> Add a keyword </span>
@@ -1932,18 +1936,18 @@ export default {
         }
       }, 50);
     },
-    addKeyword(keyword = "") {
+    addKeyword(_event, keyword = "") {
       if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
         this.$message.warning("Keyword already exists.");
         return;
       }
 
-      const uuid = uuidv4();
+      const id = uuidv4();
       this.step3Form.keywords.push({
-        keyword: keyword,
-        id: uuidv4(),
+        keyword,
+        id,
       });
-      this.focusOnElementRef(uuid);
+      this.focusOnElementRef(id);
     },
     deleteKeyword(id) {
       this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {

@@ -6,7 +6,10 @@
       <span class="text-lg font-medium">
         Start a new data curation project
       </span>
-      <span> Fill out some general details about your dataset here. </span>
+      <span>
+        Fill out some general details about your project here. These fields will
+        be primarily used to identify your project.
+      </span>
 
       <el-divider> </el-divider>
 

@@ -79,6 +79,7 @@
             </div>
 
             <el-drawer
+              v-if="showLicenseDetails"
               v-model="showLicenseDetails"
               :title="licenseTitle"
               direction="rtl"
@@ -234,6 +235,7 @@ export default {
   },
   methods: {
     finishLoading() {
+      console.log("finished loading iframe");
       this.loadingLicenseDetails = false;
       this.loading = false;
     },

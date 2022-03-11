@@ -1448,9 +1448,9 @@ export default {
 
         if ("keywords" in generalForm) {
           this.zenodoMetadataForm.keywords = [];
-          generalForm.keywords.forEach((keyword) => {
+          generalForm.keywords.forEach((element) => {
             this.zenodoMetadataForm.keywords.push({
-              keyword,
+              keyword: element.keyword,
               id: uuidv4(),
             });
           });
