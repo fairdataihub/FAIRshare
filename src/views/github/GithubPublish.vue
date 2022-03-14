@@ -191,19 +191,30 @@
               </button>
               <button
                 class="primary-button"
-                @click="createRelease('draft')"
+                @click="confirmDraftWarning"
                 :disabled="disablePublish"
               >
                 Create a draft release
               </button>
               <warning-confirm
-                ref="warningConfirm"
+                ref="publishWarningConfirm"
                 title="Confirm publish"
                 @messageConfirmed="createRelease('publish')"
               >
                 <p class="text-center text-base text-gray-500">
                   Once a release has been made you will not be able to remove it
                   from Zenodo. Are you sure you want to continue?
+                </p>
+              </warning-confirm>
+              <warning-confirm
+                ref="draftWarningConfirm"
+                title="Confirm creating a draft release"
+                @messageConfirmed="createRelease('draft')"
+              >
+                <p class="text-center text-base text-gray-500">
+                  This will only create a draft version of your release on
+                  GitHub. To actually publish this release you will need to use
+                  GitHub's webpage. Are you sure you want to continue?
                 </p>
               </warning-confirm>
             </div>
@@ -415,7 +426,10 @@ export default {
         });
     },
     confirmPublishWarning() {
-      this.$refs.warningConfirm.show();
+      this.$refs.publishWarningConfirm.show();
+    },
+    confirmDraftWarning() {
+      this.$refs.draftWarningConfirm.show();
     },
     async createRelease(releaseType) {
       let errorMessage = "";
