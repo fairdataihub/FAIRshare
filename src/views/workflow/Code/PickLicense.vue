@@ -84,14 +84,22 @@
               :title="licenseTitle"
               direction="rtl"
             >
-              <div
-                v-loading="loading"
-                :class="loading ? 'h-full w-full' : 'h-[0px] w-[0px]'"
-              ></div>
+              <fade-transition>
+                <div v-if="loading">
+                  <div class="fixed bottom-2 right-3">
+                    <Vue3Lottie
+                      :animationData="$helix_spinner"
+                      :width="80"
+                      :height="80"
+                    />
+                  </div>
+                </div>
+              </fade-transition>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
-                class="h-full w-full"
+                class="h-full w-full transition-all"
+                :class="loading ? 'opacity-0' : 'opacity-100'"
                 @load="finishLoading"
               ></iframe>
             </el-drawer>
@@ -165,7 +173,7 @@ import { useTokenStore } from "@/store/access.js";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElLoading, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import axios from "axios";
 
 export default {
@@ -235,12 +243,11 @@ export default {
   },
   methods: {
     finishLoading() {
-      console.log("finished loading iframe");
       this.loadingLicenseDetails = false;
       this.loading = false;
     },
     async openLicenseDetails() {
-      this.spinnerGlobal = await this.createLoading("loading...");
+      this.loading = true;
 
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
@@ -255,15 +262,8 @@ export default {
 
       this.showLicenseDetails = true;
       this.loadingLicenseDetails = true;
-      await this.spinnerGlobal.close();
     },
-    createLoading(loadingText) {
-      const loading = ElLoading.service({
-        lock: true,
-        text: loadingText,
-      });
-      return loading;
-    },
+
     pickSuggestedLicense(license) {
       this.licenseForm.license = license;
       this.licenseChange(license);
