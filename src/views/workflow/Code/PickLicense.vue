@@ -352,8 +352,6 @@ export default {
       });
     },
     async prefillGithubLicense() {
-      let loadingState = await this.createLoading();
-
       // get a list of contributors for the repo
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
@@ -394,8 +392,6 @@ export default {
           }
         }
       }
-
-      loadingState.close();
     },
   },
   async mounted() {

@@ -45,14 +45,15 @@
                   </span>
 
                   <button
+                    v-if="node.isLeaf"
                     @click="handleNodeClick(data, 'view')"
-                    class="flex items-center"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                   >
-                    <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                    <el-icon><view-icon /></el-icon>
                   </button>
                   <button
                     @click="handleNodeClick(data, 'download')"
-                    class="flex items-center"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                     v-if="
                       (node.label == 'codemeta.json' &&
                         workflow.generateCodeMeta) ||

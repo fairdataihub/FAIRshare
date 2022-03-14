@@ -133,7 +133,10 @@
             </div>
 
             <fade-transition>
-              <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
+              <div
+                v-if="repoID === 'zenodo' && workflow.source.type === 'local'"
+                class="mb-8 flex flex-col"
+              >
                 <p class="mb-4">
                   Is your dataset already published on Zenodo or would you like
                   to create a new Zenodo publication?
@@ -482,6 +485,11 @@ export default {
   methods: {
     selectRepo(event, repoID) {
       this.repoID = repoID;
+
+      if (this.workflow.source.type === "github") {
+        this.newVersion = "false";
+      }
+
       if (event && event.detail === 2) {
         this.addMetadata();
       }
@@ -661,12 +669,20 @@ export default {
             this.workflow.destination[this.repoID].selectedDeposition;
         }
 
-        if ("newVersion" in this.workflow.destination[this.repoID]) {
-          this.newVersion =
-            this.workflow.destination[this.repoID].newVersion.toString();
-          this.showSelectZenodoDeposition = true;
-        } else {
-          this.newVersion = "None";
+        if (this.workflow.source.type === "local") {
+          if (
+            "newVersion" in this.workflow.destination[this.repoID] &&
+            this.workflow.source.type === "local"
+          ) {
+            this.newVersion =
+              this.workflow.destination[this.repoID].newVersion.toString();
+            this.showSelectZenodoDeposition = true;
+          } else {
+            this.newVersion = "None";
+            this.showSelectZenodoDeposition = false;
+          }
+        } else if (this.workflow.source.type === "github") {
+          this.newVersion = "false";
           this.showSelectZenodoDeposition = false;
         }
       } else {

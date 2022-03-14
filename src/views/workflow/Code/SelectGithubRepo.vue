@@ -91,16 +91,19 @@
           shown below. Current branch is <b>{{ currentBranch }}</b
           >.
         </p>
-        <el-tree-v2
-          :data="fileData"
-          :props="defaultProps"
-          @node-click="handleNodeClick"
-        >
-          <template #default="{ node }">
+        <el-tree-v2 :data="fileData" :props="defaultProps">
+          <template #default="{ node, data }">
             <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
             <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
             <span>{{ node.label }}</span>
-            <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+
+            <button
+              v-if="node.isLeaf"
+              @click="handleNodeClick(data, 'view')"
+              class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
+            >
+              <el-icon><view-icon /></el-icon>
+            </button>
           </template>
         </el-tree-v2>
       </div>
@@ -218,7 +221,7 @@ export default {
       return response;
     },
 
-    async handleNodeClick(data) {
+    async handleNodeClick(data, _action) {
       const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
       if (data.isLeaf) {
         window.ipcRenderer.send("open-link-in-browser", githubURL);

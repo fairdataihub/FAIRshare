@@ -44,14 +44,15 @@
                     {{ node.label }}
                   </span>
                   <button
+                    v-if="node.isLeaf"
                     @click="handleNodeClick(data, 'view')"
-                    class="flex items-center"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                   >
-                    <el-icon v-if="node.isLeaf"><view-icon /></el-icon>
+                    <el-icon><view-icon /></el-icon>
                   </button>
                   <button
                     @click="handleNodeClick(data, 'download')"
-                    class="flex items-center"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                     v-if="
                       (node.label == 'codemeta.json' &&
                         workflow.generateCodeMeta) ||
@@ -209,11 +210,14 @@
                   repository to the 'ON' position.
                 </li>
 
-                <li>Wait for Fairshare to notice the change.</li>
+                <li>
+                  Wait for FAIRshare to notice the change. This may take about
+                  30 seconds.
+                </li>
               </ul>
               <p class="mt-2">
                 You will only need to do this once. For any future GitHub
-                repositories, Fair Share will automatically add the relevant
+                repositories, FAIRshare will automatically add the relevant
                 connections for you.
               </p>
             </div>
