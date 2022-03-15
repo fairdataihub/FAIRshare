@@ -40,8 +40,7 @@ export default {
     // connection status
     connectedToZenodoByToken() {
       return (
-        "zenodo" in this.manager.accessTokens &&
-        this.manager.accessTokens.zenodo.type == "token"
+        "zenodo" in this.manager.accessTokens && this.manager.accessTokens.zenodo.type == "token"
       );
     },
   },
@@ -115,10 +114,7 @@ export default {
     // call a dialog for accepting user-inputs
     useAPIkey() {
       this.dialogNumInput = 2;
-      this.dialogHeaders = [
-        "Zenodo access token",
-        "Token nick name of your choice",
-      ];
+      this.dialogHeaders = ["Zenodo access token", "Token nick name of your choice"];
       this.dialogVisible = true;
     },
   },

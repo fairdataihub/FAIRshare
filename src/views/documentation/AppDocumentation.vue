@@ -1,16 +1,13 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Documentation</h1>
 
       <line-divider></line-divider>
 
       <h2>
-        We have created a documentation page for each component or feature in
-        FAIRshare. You can find the documentation site by clicking on the button
-        below:
+        We have created a documentation page for each component or feature in FAIRshare. You can
+        find the documentation site by clicking on the button below:
       </h2>
 
       <div class="flex h-full w-full flex-col items-center justify-start">
@@ -22,10 +19,7 @@
           />
         </div>
         <div>
-          <button
-            class="primary-plain-button"
-            @click="openURL('https://docs.fairshareapp.io/')"
-          >
+          <button class="primary-plain-button" @click="openURL('https://docs.fairshareapp.io/')">
             View the Documentation <el-icon><notebook-icon /></el-icon>
           </button>
         </div>

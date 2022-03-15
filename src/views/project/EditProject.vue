@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="flex h-screen w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
-  >
+  <div class="flex h-screen w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5">
     <div class="flex h-full w-full flex-col py-5">
       <el-page-header @back="goBack" class="hidden text-lg">
         <template #content>
           <p>
             Project settings -
-            <span class="text-sm">
-              Update your project name, description and other settings
-            </span>
+            <span class="text-sm"> Update your project name, description and other settings </span>
           </p>
         </template>
       </el-page-header>
@@ -42,12 +38,7 @@
         </el-form-item>
 
         <el-form-item label="Project description">
-          <el-popover
-            ref="popover"
-            placement="bottom"
-            :width="300"
-            trigger="manual"
-          >
+          <el-popover ref="popover" placement="bottom" :width="300" trigger="manual">
             <template #reference>
               <el-input
                 v-model="datasetForm.datasetDescription"
@@ -58,9 +49,8 @@
             </template>
 
             <span class="break-normal text-left text-sm">
-              Use a description that is easily identifiable. This will be shown
-              in the dataset selection screen and is not part of your submitted
-              metadata.
+              Use a description that is easily identifiable. This will be shown in the dataset
+              selection screen and is not part of your submitted metadata.
             </span>
           </el-popover>
         </el-form-item>
@@ -108,10 +98,7 @@
 
         <el-form-item label="Delete project">
           <div class="flex w-full flex-col">
-            <p>
-              Once you delete a project, there is no going back. Please be
-              certain.
-            </p>
+            <p>Once you delete a project, there is no going back. Please be certain.</p>
             <div>
               <button class="danger-button py-0" @click="openDialog">
                 <el-icon><delete-icon /></el-icon> Delete project
@@ -126,15 +113,13 @@
               >
                 <div w-full>
                   <p class="mb-3 w-full text-left text-base text-gray-500">
-                    This action cannot be undone. This will permanently delete
-                    the
+                    This action cannot be undone. This will permanently delete the
                     <span class="font-bold">{{ originalName }}</span>
                     project.
                   </p>
                   <p class="mb-2 text-left text-base text-gray-500">
                     Please type
-                    <span class="font-bold">{{ originalName }}</span> to
-                    confirm.
+                    <span class="font-bold">{{ originalName }}</span> to confirm.
                   </p>
 
                   <el-input

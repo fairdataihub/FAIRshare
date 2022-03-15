@@ -23,9 +23,7 @@ gulp.task("clean-css", function () {
 });
 
 gulp.task("clean-pre-python-build", function () {
-  console.log(
-    "Removing any pre-existing python folders and files before build..."
-  );
+  console.log("Removing any pre-existing python folders and files before build...");
 
   console.log("Removing src/pyflaskdist/ ...");
   console.log("Removing build/ ...");
@@ -45,23 +43,16 @@ gulp.task("clean-pre-electron-build", function () {
 gulp.task("copy-python", function () {
   console.log("Copying src/pyflask folder to dist_electron folder...");
 
-  return gulp
-    .src(["./src/pyflask/**/*"])
-    .pipe(gulp.dest("./dist_electron/pyflask"));
+  return gulp.src(["./src/pyflask/**/*"]).pipe(gulp.dest("./dist_electron/pyflask"));
 });
 
 gulp.task("copy-splash-screen", function () {
   console.log("Copying splash screen to dist_electron folder ...");
 
-  return gulp
-    .src(["./public/splash-screen.html"])
-    .pipe(gulp.dest("./dist_electron"));
+  return gulp.src(["./public/splash-screen.html"]).pipe(gulp.dest("./dist_electron"));
 });
 
-gulp.task(
-  "build-css",
-  gulp.series("compile-tailwind", "rename-css", "clean-css")
-);
+gulp.task("build-css", gulp.series("compile-tailwind", "rename-css", "clean-css"));
 
 gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen"));
 

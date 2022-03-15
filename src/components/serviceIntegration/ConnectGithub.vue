@@ -8,10 +8,7 @@
     >
       <template #reference> -->
     <div>
-      <button
-        @click="interactWithService('github')"
-        :class="githubDetails.buttonStyle"
-      >
+      <button @click="interactWithService('github')" :class="githubDetails.buttonStyle">
         {{ githubDetails.action }}
       </button>
     </div>
@@ -25,16 +22,10 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button
-            class="primary-plain-button w-52"
-            @click="showGithubTokenConnect"
-          >
+          <button class="primary-plain-button w-52" @click="showGithubTokenConnect">
             Connect with token
           </button>
-          <button
-            class="primary-plain-button w-52"
-            @click="showGithubOAuthConnect"
-          >
+          <button class="primary-plain-button w-52" @click="showGithubOAuthConnect">
             Connect with username
           </button>
         </div>
@@ -52,14 +43,9 @@
       :callback="hideGithubOAuthConnect"
       :onStatusChange="statusChangeFunction"
     ></GithubOAuthConnection>
-    <warning-confirm
-      ref="warningConfirm"
-      title="Warning"
-      @messageConfirmed="confirmDeleteToken"
-    >
+    <warning-confirm ref="warningConfirm" title="Warning" @messageConfirmed="confirmDeleteToken">
       <p class="text-center text-base text-gray-500">
-        Disconnecting will delete the access token stored. Would you like to
-        continue?
+        Disconnecting will delete the access token stored. Would you like to continue?
       </p>
     </warning-confirm>
   </div>

@@ -7,27 +7,19 @@
       class="flex h-full flex-row items-center px-3"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
-      <div
-        class="flex h-full w-full flex-col"
-        v-if="datasetStore.datasetCount > 0"
-      >
+      <div class="flex h-full w-full flex-col" v-if="datasetStore.datasetCount > 0">
         <!-- <div class="flex flex-col h-full"> -->
-        <span class="text-lg font-medium">
-          Continue curating your datasets
-        </span>
+        <span class="text-lg font-medium"> Continue curating your datasets </span>
 
         <span v-if="datasetsInProgress.length > 0">
-          You have some incomplete projects. Select one to continue working on
-          it.
+          You have some incomplete projects. Select one to continue working on it.
         </span>
 
         <!-- <el-divider> </el-divider> -->
 
         <div class="h-full flex-grow overflow-y-auto">
           <div v-if="datasetsInProgress.length > 0">
-            <el-divider content-position="left">
-              Projects currently in progress
-            </el-divider>
+            <el-divider content-position="left"> Projects currently in progress </el-divider>
 
             <div class="w-full px-10">
               <div
@@ -51,9 +43,7 @@
                     <div class="flex flex-wrap items-end space-x-3">
                       <el-tooltip
                         effect="dark"
-                        :content="`Created on ${longDate(
-                          dataset.meta.dateCreated
-                        )}`"
+                        :content="`Created on ${longDate(dataset.meta.dateCreated)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -66,9 +56,7 @@
 
                       <el-tooltip
                         effect="dark"
-                        :content="`Last modified on ${longDate(
-                          dataset.meta.dateModified
-                        )}`"
+                        :content="`Last modified on ${longDate(dataset.meta.dateModified)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -120,14 +108,8 @@
                       </div>
 
                       <div>
-                        <el-tag
-                          v-for="workflow in dataset.dataType"
-                          :key="workflow"
-                          size="small"
-                        >
-                          {{
-                            workflow === "Code" ? "Research software" : workflow
-                          }}
+                        <el-tag v-for="workflow in dataset.dataType" :key="workflow" size="small">
+                          {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
                     </div>
@@ -141,9 +123,7 @@
           </div>
 
           <div class="mt-5" v-if="datasetsPublished.length > 0">
-            <el-divider content-position="left">
-              Fully published projects
-            </el-divider>
+            <el-divider content-position="left"> Fully published projects </el-divider>
 
             <div class="w-full px-10">
               <div
@@ -163,14 +143,10 @@
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
-                    <div
-                      class="mt-1 flex flex-wrap items-end space-x-3 text-zinc-600"
-                    >
+                    <div class="mt-1 flex flex-wrap items-end space-x-3 text-zinc-600">
                       <el-tooltip
                         effect="dark"
-                        :content="`Created on ${longDate(
-                          dataset.meta.dateCreated
-                        )}`"
+                        :content="`Created on ${longDate(dataset.meta.dateCreated)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -183,9 +159,7 @@
 
                       <el-tooltip
                         effect="dark"
-                        :content="`Last modified on ${longDate(
-                          dataset.meta.dateModified
-                        )}`"
+                        :content="`Last modified on ${longDate(dataset.meta.dateModified)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -242,9 +216,7 @@
                           :key="workflow"
                           size="small"
                         >
-                          {{
-                            workflow === "Code" ? "Research software" : workflow
-                          }}
+                          {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
                     </div>
@@ -271,16 +243,11 @@
             <div
               class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
             >
-              <span class="font-medium">
-                Or start a new data curation project
-              </span>
+              <span class="font-medium"> Or start a new data curation project </span>
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
-          <div
-            class="flex flex-row space-x-4 pr-2 pl-1"
-            v-if="selectedDataset !== ''"
-          >
+          <div class="flex flex-row space-x-4 pr-2 pl-1" v-if="selectedDataset !== ''">
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting-icon /></el-icon> Project settings
             </button>
@@ -304,9 +271,7 @@
               :width="300"
               :height="300"
             />
-            <span class="text-xl font-bold">
-              Start a new data curation project
-            </span>
+            <span class="text-xl font-bold"> Start a new data curation project </span>
           </div>
         </router-link>
       </div>

@@ -16,10 +16,7 @@ module.exports = async function (params) {
   // Same appId in electron-builder.
   let appId = "com.fairdataihub.fairshare";
 
-  let appPath = path.join(
-    params.appOutDir,
-    `${params.packager.appInfo.productFilename}.app`
-  );
+  let appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
   if (!fs.existsSync(appPath)) {
     throw new Error(`Cannot find application at: ${appPath}`);
   }

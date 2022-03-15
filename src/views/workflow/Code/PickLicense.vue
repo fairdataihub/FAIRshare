@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Select a license that defines the desired conditions for using your
-        software
+        Select a license that defines the desired conditions for using your software
       </span>
 
       <el-divider> </el-divider>
@@ -46,9 +43,7 @@
             </el-select>
 
             <div class="flex w-full flex-row items-center">
-              <span class="mx-1 text-sm italic text-zinc-600">
-                Suggestions:
-              </span>
+              <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
               <div class="flex-row">
                 <el-tag
                   class="mx-2 cursor-copy transition-all hover:shadow-md"
@@ -87,11 +82,7 @@
               <fade-transition>
                 <div v-if="loading">
                   <div class="fixed bottom-2 right-3">
-                    <Vue3Lottie
-                      :animationData="$helix_spinner"
-                      :width="80"
-                      :height="80"
-                    />
+                    <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
                   </div>
                 </div>
               </fade-transition>
@@ -107,8 +98,7 @@
 
           <div v-if="licenseChanged">
             <p class="text-base">
-              Do you want to create and add a license terms file into your
-              dataset?
+              Do you want to create and add a license terms file into your dataset?
             </p>
 
             <div class="pb-3">
@@ -142,11 +132,7 @@
           </button>
         </router-link>
 
-        <button
-          v-if="displayLicenseEditor"
-          class="primary-button"
-          @click="generateContinue"
-        >
+        <button v-if="displayLicenseEditor" class="primary-button" @click="generateContinue">
           Generate license and Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -330,24 +316,19 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push(
-        `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-      );
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/selectDestination`);
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
         console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
-          this.dataset.data.general.questions.license =
-            this.licenseForm.license;
+          this.dataset.data.general.questions.license = this.licenseForm.license;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();
 
-          this.$router.push(
-            `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-          );
+          this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/selectDestination`);
         }
       });
     },

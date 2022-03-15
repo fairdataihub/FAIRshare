@@ -1,11 +1,7 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Zenodo connection details
-      </span>
+      <span class="text-left text-lg font-medium"> Zenodo connection details </span>
       <span class="text-left">
         We will use this to upload and edit your dataset on your Zenodo account.
       </span>
@@ -14,27 +10,20 @@
 
       <div>
         <p class="text=lg mb-5">
-          A list of all the files that we are going to upload to Zenodo is shown
-          below. You can click on any of them to view their contents or open in
-          your file browser.
+          A list of all the files that we are going to upload to Zenodo is shown below. You can
+          click on any of them to view their contents or open in your file browser.
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
-            <el-tree-v2
-              v-if="finishedLoading"
-              :data="fileData"
-              :props="defaultProps"
-            >
+            <el-tree-v2 v-if="finishedLoading" :data="fileData" :props="defaultProps">
               <template #default="{ node, data }">
                 <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
                 <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
                 <div
                   class="inline-flex items-center"
                   :class="
-                    (node.label == 'codemeta.json' &&
-                      workflow.generateCodeMeta) ||
-                    (node.label == 'CITATION.cff' &&
-                      workflow.generateCodeMeta) ||
+                    (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                    (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                     (node.label == 'LICENSE' && workflow.generateLicense)
                       ? 'text-secondary-500'
                       : ''
@@ -55,10 +44,8 @@
                     @click="handleNodeClick(data, 'download')"
                     class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                     v-if="
-                      (node.label == 'codemeta.json' &&
-                        workflow.generateCodeMeta) ||
-                      (node.label == 'CITATION.cff' &&
-                        workflow.generateCodeMeta) ||
+                      (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                      (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                       (node.label == 'LICENSE' && workflow.generateLicense)
                     "
                   >
@@ -108,19 +95,12 @@
                 default-expand-all
               >
                 <el-table-column prop="Name" label="Name" />
-                <el-table-column
-                  prop="Value"
-                  label="Value"
-                  class="break-normal"
-                />
+                <el-table-column prop="Value" label="Value" class="break-normal" />
               </el-table>
             </div>
 
             <div v-if="PreviewNewlyCreatedLicenseFile" class="">
-              <div
-                class="prose prose-base prose-slate pb-20"
-                v-html="compiledLicense"
-              ></div>
+              <div class="prose prose-base prose-slate pb-20" v-html="compiledLicense"></div>
             </div>
           </el-scrollbar>
         </el-drawer>
@@ -130,29 +110,24 @@
       <transition name="fade" mode="out-in" appear>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-            Looks like we already have your Zenodo login details. Click on the
-            'Start upload' button below.
+            Looks like we already have your Zenodo login details. Click on the 'Start upload' button
+            below.
           </p>
           <!-- show error message if token is not valid -->
           <div v-else class="flex flex-col items-center justify-center py-10">
             <p class="mb-5">
-              We couldn't find your Zenodo login details. Please click on the
-              button below to connect to your Zenodo account.
+              We couldn't find your Zenodo login details. Please click on the button below to
+              connect to your Zenodo account.
             </p>
 
-            <ConnectZenodo
-              :statusChangeFunction="showConnection"
-            ></ConnectZenodo>
+            <ConnectZenodo :statusChangeFunction="showConnection"></ConnectZenodo>
           </div>
         </div>
         <LoadingFoldingCube v-else></LoadingFoldingCube>
       </transition>
 
       <transition name="fade" mode="out-in" appear>
-        <div
-          class="flex w-full flex-row justify-center space-x-4 py-2"
-          v-if="finishedLoading"
-        >
+        <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
           <router-link
             :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
             class=""
@@ -269,16 +244,14 @@ export default {
       let filename = file_name;
       let contentType = "application/json;charset=utf-8;";
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        var blob = new Blob(
-          [decodeURIComponent(encodeURI(JSON.stringify(obj)))],
-          { type: contentType }
-        );
+        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], {
+          type: contentType,
+        });
         navigator.msSaveOrOpenBlob(blob, filename);
       } else {
         var virtualFile = document.createElement("a");
         virtualFile.download = filename;
-        virtualFile.href =
-          "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.href = "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
         virtualFile.target = "_blank";
         document.body.appendChild(virtualFile);
         virtualFile.click();
@@ -390,9 +363,7 @@ export default {
       this.tableDataRecord = Object.assign({}, this.tableData);
       this.citationDataRecord = Object.assign({}, this.citationData);
 
-      this.fileData.push(
-        await this.readFolderContents(this.dataset.data.Code.folderPath)
-      );
+      this.fileData.push(await this.readFolderContents(this.dataset.data.Code.folderPath));
 
       let root = this.fileData[0];
 
@@ -431,11 +402,7 @@ export default {
 
       this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
 
-      this.citationData = this.jsonToTableDataRecursive(
-        this.citationData,
-        1,
-        "ROOT"
-      );
+      this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
 
       if (this.workflow.generateLicense) {
         this.licenseData = this.workflow.licenseText;
@@ -452,8 +419,7 @@ export default {
     },
     async handleOpenDrawer(title) {
       if (title == "LICENSE") {
-        title +=
-          " (This preview may not be completely representative of the final license)";
+        title += " (This preview may not be completely representative of the final license)";
       }
 
       this.fileTitle = title;
@@ -506,11 +472,7 @@ export default {
           //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
-          let value = this.jsonToTableDataRecursive(
-            jsonObject[property],
-            newId,
-            property
-          );
+          let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
           // console.log(property, value)
           if (Array.isArray(value)) {
             newObj.id = newId;
@@ -526,11 +488,7 @@ export default {
           count += 1;
         }
         return result;
-      } else if (
-        jsonObject &&
-        Array.isArray(jsonObject) &&
-        jsonObject.length != 0
-      ) {
+      } else if (jsonObject && Array.isArray(jsonObject) && jsonObject.length != 0) {
         // array
         let result = [];
         for (let i = 0; i < jsonObject.length; i++) {
@@ -561,11 +519,7 @@ export default {
             newName = String(i + 1) + "th " + customName;
           }
 
-          let value = this.jsonToTableDataRecursive(
-            jsonObject[i],
-            newId,
-            newName
-          );
+          let value = this.jsonToTableDataRecursive(jsonObject[i], newId, newName);
 
           if (Array.isArray(value)) {
             newObj.id = newId;

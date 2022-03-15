@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-row items-center justify-center text-gray-500 hover:text-black"
-  >
+  <div class="flex flex-row items-center justify-center text-gray-500 hover:text-black">
     <el-popover
       placement="bottom"
       :width="`full`"

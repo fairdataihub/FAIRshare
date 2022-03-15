@@ -1,14 +1,11 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Zenodo Metadata </span>
 
       <span class="mb-2">
-        Before we send this data over, Zenodo requires some additional
-        information from you. We will use this information to create a Zenodo
-        record. Please fill out the following form.
+        Before we send this data over, Zenodo requires some additional information from you. We will
+        use this information to create a Zenodo record. Please fill out the following form.
       </span>
 
       <el-form
@@ -26,12 +23,8 @@
             name="basicInformation"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  Basic Information
-                </p>
+              <div class="flex w-full flex-row items-center justify-between font-inter">
+                <p class="px-4 text-sm font-semibold text-blue-500">Basic Information</p>
                 <span class="pr-2 text-gray-400"> required </span>
               </div>
             </template>
@@ -51,27 +44,17 @@
                   >
                   </el-date-picker>
                   <p class="pt-1 text-xs text-gray-500">
-                    In case your upload was already published elsewhere, please
-                    use the date of first publication.
+                    In case your upload was already published elsewhere, please use the date of
+                    first publication.
                   </p>
                 </div>
               </el-form-item>
 
-              <el-form-item
-                label="Title"
-                prop="title"
-                :error="titleErrorMessage"
-                :required="true"
-              >
-                <el-input v-model="zenodoMetadataForm.title" type="text">
-                </el-input>
+              <el-form-item label="Title" prop="title" :error="titleErrorMessage" :required="true">
+                <el-input v-model="zenodoMetadataForm.title" type="text"> </el-input>
               </el-form-item>
 
-              <el-form-item
-                label="Authors"
-                :error="authorsErrorMessage"
-                :required="true"
-              >
+              <el-form-item label="Authors" :error="authorsErrorMessage" :required="true">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.authors"
@@ -80,9 +63,7 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.name"
@@ -102,9 +83,7 @@
                             type="text"
                             placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                           ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
+                          <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                         </div>
                         <div class="mx-2"></div>
                       </div>
@@ -114,9 +93,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -125,9 +102,7 @@
                             @confirm="deleteAuthor(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -147,11 +122,7 @@
                 </div>
               </el-form-item>
 
-              <el-form-item
-                label="Description"
-                :error="descriptionErrorMessage"
-                :required="true"
-              >
+              <el-form-item label="Description" :error="descriptionErrorMessage" :required="true">
                 <VuePopper
                   :hover="true"
                   offsetDistance="0"
@@ -160,10 +131,7 @@
                         of your submitted metadata."
                   class="mx-0 w-full"
                 >
-                  <el-input
-                    v-model="zenodoMetadataForm.description"
-                    type="textarea"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.description" type="textarea"></el-input>
                 </VuePopper>
               </el-form-item>
 
@@ -175,13 +143,10 @@
                     placeholder="1.0.4"
                   ></el-input>
                   <p class="pt-1 text-xs text-gray-500">
-                    Optional. Mostly relevant for software and dataset uploads.
-                    Any string will be accepted, but semantically-versioned tag
-                    is recommended. <br />
+                    Optional. Mostly relevant for software and dataset uploads. Any string will be
+                    accepted, but semantically-versioned tag is recommended. <br />
                     See
-                    <a href="https://semver.org/" target="_blank">
-                      semver.org
-                    </a>
+                    <a href="https://semver.org/" target="_blank"> semver.org </a>
                     for more information on semantic versioning.
                   </p>
                 </div>
@@ -204,9 +169,8 @@
                     </el-option>
                   </el-select>
                   <p class="pt-1 text-xs text-gray-500">
-                    Optional. Primary language of the record. Start by typing
-                    the language's common name in English, or its ISO 639 code
-                    (two or three-letter code).
+                    Optional. Primary language of the record. Start by typing the language's common
+                    name in English, or its ISO 639 code (two or three-letter code).
                     <br />
                     See
                     <a
@@ -229,15 +193,9 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.keyword"
-                          type="text"
-                          placeholder=""
-                        ></el-input>
+                        <el-input v-model="element.keyword" type="text" placeholder=""></el-input>
                         <div class="mx-2"></div>
                       </div>
                       <div class="flex w-1/12 flex-row justify-evenly">
@@ -246,9 +204,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-center justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-center justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -257,9 +213,7 @@
                             @confirm="deleteKeyword(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -281,10 +235,7 @@
 
               <el-form-item label="Additional Notes">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.additionalNotes"
-                    type="textarea"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.additionalNotes" type="textarea"></el-input>
                   <p class="pt-1 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
@@ -296,9 +247,7 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
+              <div class="flex w-full flex-row items-center justify-between font-inter">
                 <p class="px-4 text-sm font-semibold text-blue-500">License</p>
                 <span class="pr-2 text-gray-400"> required </span>
               </div>
@@ -307,9 +256,7 @@
             <div class="p-4">
               <el-form-item label="Access right" :required="true">
                 <div class="flex flex-col">
-                  <el-radio-group
-                    v-model="zenodoMetadataForm.license.accessRight"
-                  >
+                  <el-radio-group v-model="zenodoMetadataForm.license.accessRight">
                     <div class="flex flex-col">
                       <el-radio label="open">
                         <el-icon>
@@ -335,8 +282,7 @@
                     </div>
                   </el-radio-group>
                   <p class="pt-1 text-xs text-gray-500">
-                    Required. Open access uploads have considerably higher
-                    visibility on Zenodo.
+                    Required. Open access uploads have considerably higher visibility on Zenodo.
                   </p>
                 </div>
               </el-form-item>
@@ -358,16 +304,14 @@
                   </el-option>
                 </el-select>
                 <p class="pt-2 text-xs text-gray-500">
-                  Required. Selected license applies to all of your files
-                  displayed on the top of the form. <br />
-                  If you want to upload some of your files under different
-                  licenses, please do so in separate uploads. <br />
-                  If you cannot find the license you're looking for, include a
-                  relevant LICENSE file in your record and choose one of the
+                  Required. Selected license applies to all of your files displayed on the top of
+                  the form. <br />
+                  If you want to upload some of your files under different licenses, please do so in
+                  separate uploads. <br />
+                  If you cannot find the license you're looking for, include a relevant LICENSE file
+                  in your record and choose one of the
                   <span class="italic"> Other </span> licenses available
-                  <span class="italic">
-                    (Other (Open), Other (Attribution) </span
-                  >, etc.). <br />
+                  <span class="italic"> (Other (Open), Other (Attribution) </span>, etc.). <br />
                   The supported licenses in the list are harvested from
                   <a
                     href="https://opendefinition.org/"
@@ -377,11 +321,7 @@
                     opendefinition.org
                   </a>
                   and
-                  <a
-                    href="https://spdx.org/"
-                    target="_blank"
-                    class="text-blue-500 hover:underline"
-                  >
+                  <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
                     spdx.org
                   </a>
                   .
@@ -395,9 +335,7 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
+              <div class="flex w-full flex-row items-center justify-between font-inter">
                 <p class="px-4 text-sm font-semibold text-blue-500">
                   Related/alternate identifiers
                 </p>
@@ -407,14 +345,11 @@
 
             <div class="p-4">
               <p class="mb-4 text-xs">
-                Specify identifiers of related publications and datasets.
-                Supported identifiers include: DOI and URLs.
+                Specify identifiers of related publications and datasets. Supported identifiers
+                include: DOI and URLs.
                 <br />
               </p>
-              <el-form-item
-                label="Related identifiers"
-                :error="relatedIdentifiersErrorMessage"
-              >
+              <el-form-item label="Related identifiers" :error="relatedIdentifiersErrorMessage">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.relatedIdentifiers"
@@ -423,9 +358,7 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
                         <div class="mx-2 w-6/12">
                           <el-input
@@ -481,9 +414,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -492,9 +423,7 @@
                             @confirm="deleteRelatedIdentifier(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -521,12 +450,8 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  Contributors
-                </p>
+              <div class="flex w-full flex-row items-center justify-between font-inter">
+                <p class="px-4 text-sm font-semibold text-blue-500">Contributors</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
@@ -545,9 +470,7 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
                         <div class="w-3/12">
                           <el-input
@@ -570,9 +493,7 @@
                               type="text"
                               placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                             ></el-input>
-                            <span class="mt-1 ml-2 text-xs text-gray-400">
-                              Optional
-                            </span>
+                            <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                           </div>
                         </div>
                         <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
@@ -597,9 +518,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -608,9 +527,7 @@
                             @confirm="deleteContributor(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -637,12 +554,8 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  References
-                </p>
+              <div class="flex w-full flex-row items-center justify-between font-inter">
+                <p class="px-4 text-sm font-semibold text-blue-500">References</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
@@ -657,9 +570,7 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.reference"
@@ -674,9 +585,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -685,9 +594,7 @@
                             @confirm="deleteReference(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -714,9 +621,7 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
+              <div class="flex w-full flex-row items-center justify-between font-inter">
                 <p class="px-4 text-sm font-semibold text-blue-500">Journal</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
@@ -725,37 +630,25 @@
             <div class="p-4">
               <el-form-item label="Journal title">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.journal.title"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.journal.title" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Volume">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.journal.volume"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.journal.volume" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Issue">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.journal.issue"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.journal.issue" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Pages">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.journal.pages"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.journal.pages" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
@@ -767,12 +660,8 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  Conference
-                </p>
+              <div class="flex w-full flex-row items-center justify-between font-inter">
+                <p class="px-4 text-sm font-semibold text-blue-500">Conference</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
@@ -780,19 +669,13 @@
             <div class="p-4">
               <el-form-item label="Conference title">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.conference.title"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.conference.title" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Acronym">
                 <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="zenodoMetadataForm.conference.acronym"
-                    type="text"
-                  ></el-input>
+                  <el-input v-model="zenodoMetadataForm.conference.acronym" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
@@ -863,12 +746,8 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  Book/Report/Chapter
-                </p>
+              <div class="flex w-full flex-row items-center justify-between font-inter">
+                <p class="px-4 text-sm font-semibold text-blue-500">Book/Report/Chapter</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
             </template>
@@ -911,8 +790,7 @@
                     type="text"
                   ></el-input>
                   <p class="pt-2 text-xs text-gray-500">
-                    Optional. Title of the book or report which this upload is
-                    part of.
+                    Optional. Title of the book or report which this upload is part of.
                   </p>
                 </div>
               </el-form-item>
@@ -933,9 +811,7 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
+              <div class="flex w-full flex-row items-center justify-between font-inter">
                 <p class="px-4 text-sm font-semibold text-blue-500">Thesis</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
@@ -961,9 +837,7 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
                         <el-input
                           v-model="element.name"
@@ -983,9 +857,7 @@
                             type="text"
                             placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                           ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400">
-                            Optional
-                          </span>
+                          <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                         </div>
                         <div class="mx-2"></div>
                       </div>
@@ -995,9 +867,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -1006,9 +876,7 @@
                             @confirm="deleteSupervisor(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -1035,9 +903,7 @@
             class="zenodo-collapse-item my-1 border-2 border-gray-100"
           >
             <template #title>
-              <div
-                class="flex w-full flex-row items-center justify-between font-inter"
-              >
+              <div class="flex w-full flex-row items-center justify-between font-inter">
                 <p class="px-4 text-sm font-semibold text-blue-500">Subjects</p>
                 <span class="pr-2 text-gray-400"> optional </span>
               </div>
@@ -1045,16 +911,12 @@
 
             <div class="p-4">
               <p class="mb-4 text-xs">
-                Specify subjects from a taxonomy or controlled vocabulary. Each
-                term must be uniquely identified (e.g. a URL). For free form
-                text, use the keywords field in basic information section.
+                Specify subjects from a taxonomy or controlled vocabulary. Each term must be
+                uniquely identified (e.g. a URL). For free form text, use the keywords field in
+                basic information section.
                 <br />
               </p>
-              <el-form-item
-                label="Subjects"
-                :error="subjectsErrorMessage"
-                :required="false"
-              >
+              <el-form-item label="Subjects" :error="subjectsErrorMessage" :required="false">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.subjects"
@@ -1063,15 +925,9 @@
                   class="w-full"
                 >
                   <template #item="{ element }">
-                    <div
-                      class="mb-2 flex flex-row justify-between transition-all"
-                    >
+                    <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.term"
-                          type="text"
-                          placeholder="Term"
-                        ></el-input>
+                        <el-input v-model="element.term" type="text" placeholder="Term"></el-input>
                         <div class="mx-2"></div>
                         <el-input
                           v-model="element.identifier"
@@ -1086,9 +942,7 @@
                         >
                           <Icon icon="ic:outline-drag-indicator" />
                         </div>
-                        <div
-                          class="flex items-start justify-center text-gray-500 transition-all"
-                        >
+                        <div class="flex items-start justify-center text-gray-500 transition-all">
                           <el-popconfirm
                             title="Are you sure you want to remove this?"
                             icon-color="red"
@@ -1097,9 +951,7 @@
                             @confirm="deleteSubject(element.id)"
                           >
                             <template #reference>
-                              <el-icon
-                                class="cursor-pointer hover:text-gray-800"
-                              >
+                              <el-icon class="cursor-pointer hover:text-gray-800">
                                 <delete-filled />
                               </el-icon>
                             </template>
@@ -1128,11 +980,7 @@
           <el-icon><d-arrow-left /></el-icon> Back
         </button>
 
-        <button
-          class="primary-button"
-          @click="addZenodoMetadata"
-          :disabled="checkInvalidStatus"
-        >
+        <button class="primary-button" @click="addZenodoMetadata" :disabled="checkInvalidStatus">
           Continue <el-icon> <d-arrow-right /> </el-icon>
         </button>
 
@@ -1199,8 +1047,7 @@ export default {
       drag: true,
       licenseOptions: licensesJSON.licenses,
       languageOptions: languagesJSON.languages,
-      relatedIdentifierRelationships:
-        zenodoMetadataOptions.relatedIdentifierRelationships,
+      relatedIdentifierRelationships: zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
@@ -1231,8 +1078,7 @@ export default {
         license: [
           {
             required: true,
-            message:
-              "Required. Selected license applies to all of your files in the dataset.",
+            message: "Required. Selected license applies to all of your files in the dataset.",
             trigger: "change",
           },
         ],
@@ -1284,10 +1130,9 @@ export default {
       });
     },
     deleteSubject(id) {
-      this.zenodoMetadataForm.subjects =
-        this.zenodoMetadataForm.subjects.filter((subject) => {
-          return subject.id !== id;
-        });
+      this.zenodoMetadataForm.subjects = this.zenodoMetadataForm.subjects.filter((subject) => {
+        return subject.id !== id;
+      });
     },
     addAuthor() {
       this.zenodoMetadataForm.authors.push({
@@ -1298,11 +1143,9 @@ export default {
       });
     },
     deleteAuthor(id) {
-      this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter(
-        (author) => {
-          return author.id !== id;
-        }
-      );
+      this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter((author) => {
+        return author.id !== id;
+      });
     },
     addKeyword() {
       this.zenodoMetadataForm.keywords.push({
@@ -1311,10 +1154,9 @@ export default {
       });
     },
     deleteKeyword(id) {
-      this.zenodoMetadataForm.keywords =
-        this.zenodoMetadataForm.keywords.filter((keyword) => {
-          return keyword.id !== id;
-        });
+      this.zenodoMetadataForm.keywords = this.zenodoMetadataForm.keywords.filter((keyword) => {
+        return keyword.id !== id;
+      });
     },
     addRelatedIdentifier() {
       this.zenodoMetadataForm.relatedIdentifiers.push({
@@ -1326,11 +1168,9 @@ export default {
     },
     deleteRelatedIdentifier(id) {
       this.zenodoMetadataForm.relatedIdentifiers =
-        this.zenodoMetadataForm.relatedIdentifiers.filter(
-          (relatedIdentifier) => {
-            return relatedIdentifier.id !== id;
-          }
-        );
+        this.zenodoMetadataForm.relatedIdentifiers.filter((relatedIdentifier) => {
+          return relatedIdentifier.id !== id;
+        });
     },
     addContributor() {
       this.zenodoMetadataForm.contributors.push({
@@ -1342,10 +1182,11 @@ export default {
       });
     },
     deleteContributor(id) {
-      this.zenodoMetadataForm.contributors =
-        this.zenodoMetadataForm.contributors.filter((contributor) => {
+      this.zenodoMetadataForm.contributors = this.zenodoMetadataForm.contributors.filter(
+        (contributor) => {
           return contributor.id !== id;
-        });
+        }
+      );
     },
     addReference() {
       this.zenodoMetadataForm.references.push({
@@ -1354,10 +1195,11 @@ export default {
       });
     },
     deleteReference(id) {
-      this.zenodoMetadataForm.references =
-        this.zenodoMetadataForm.references.filter((reference) => {
+      this.zenodoMetadataForm.references = this.zenodoMetadataForm.references.filter(
+        (reference) => {
           return reference.id !== id;
-        });
+        }
+      );
     },
     addSupervisor() {
       this.zenodoMetadataForm.thesis.supervisors.push({
@@ -1432,9 +1274,7 @@ export default {
 
         let date = new Date();
 
-        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(
-          date.getMonth() + 1
-        )
+        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(date.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
@@ -1508,10 +1348,7 @@ export default {
           this.workflow.destination.zenodo.newVersion
         ) {
           if (this.zenodoMetadataForm.keywords.length == 0) {
-            if (
-              "keywords" in
-              this.workflow.destination.zenodo.selectedDeposition.metadata
-            ) {
+            if ("keywords" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.keywords.forEach(
                 (keyword) => {
                   this.zenodoMetadataForm.keywords.push({
@@ -1524,10 +1361,7 @@ export default {
           }
 
           if (this.zenodoMetadataForm.authors.length == 0) {
-            if (
-              "creators" in
-              this.workflow.destination.zenodo.selectedDeposition.metadata
-            ) {
+            if ("creators" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.creators.forEach(
                 ({ name, affiliation, orcid }) => {
                   this.zenodoMetadataForm.authors.push({
@@ -1542,10 +1376,7 @@ export default {
           }
 
           if (this.zenodoMetadataForm.contributors.length == 0) {
-            if (
-              "contributors" in
-              this.workflow.destination.zenodo.selectedDeposition.metadata
-            ) {
+            if ("contributors" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.contributors.forEach(
                 ({ name, type, affiliation, orcid }) => {
                   this.zenodoMetadataForm.contributors.push({
@@ -1564,17 +1395,13 @@ export default {
             }
           }
 
-          if (
-            "notes" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("notes" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.additionalNotes =
               this.workflow.destination.zenodo.selectedDeposition.metadata.notes;
           }
 
           if (
-            "related_identifiers" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
+            "related_identifiers" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
             this.zenodoMetadataForm.relatedIdentifiers = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.related_identifiers.forEach(
@@ -1593,10 +1420,7 @@ export default {
               : null;
           }
 
-          if (
-            "references" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("references" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.references = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.references.forEach(
               (reference) => {
@@ -1612,70 +1436,41 @@ export default {
               : null;
           }
 
-          if (
-            "version" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("version" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.version =
               this.workflow.destination.zenodo.selectedDeposition.metadata.version;
           }
-          if (
-            "language" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("language" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.language =
               this.workflow.destination.zenodo.selectedDeposition.metadata.language;
           }
 
-          if (
-            "journal_title" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("journal_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_title;
 
-            this.activeNames.indexOf("journal") === -1
-              ? this.activeNames.push("journal")
-              : null;
+            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
-          if (
-            "journal_volume" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("journal_volume" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.volume =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_volume;
 
-            this.activeNames.indexOf("journal") === -1
-              ? this.activeNames.push("journal")
-              : null;
+            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
-          if (
-            "journal_issue" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("journal_issue" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.issue =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_issue;
 
-            this.activeNames.indexOf("journal") === -1
-              ? this.activeNames.push("journal")
-              : null;
+            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
-          if (
-            "journal_pages" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("journal_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_pages;
 
-            this.activeNames.indexOf("journal") === -1
-              ? this.activeNames.push("journal")
-              : null;
+            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
 
-          if (
-            "conference_title" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("conference_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.conference.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_title;
 
@@ -1684,8 +1479,7 @@ export default {
               : null;
           }
           if (
-            "conference_acronym" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
+            "conference_acronym" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
             this.zenodoMetadataForm.conference.acronym =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_acronym;
@@ -1702,10 +1496,7 @@ export default {
           //   this.zenodoMetadataForm.conference.dates =
           //     this.workflow.destination.zenodo.selectedDeposition.metadata.conference_dates;
           // }
-          if (
-            "conference_place" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("conference_place" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.conference.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_place;
 
@@ -1713,10 +1504,7 @@ export default {
               ? this.activeNames.push("conference")
               : null;
           }
-          if (
-            "conference_url" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("conference_url" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.conference.website =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_url;
 
@@ -1725,8 +1513,7 @@ export default {
               : null;
           }
           if (
-            "conference_session" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
+            "conference_session" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
             this.zenodoMetadataForm.conference.session =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session;
@@ -1747,10 +1534,7 @@ export default {
               : null;
           }
 
-          if (
-            "imprint_publisher" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("imprint_publisher" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.publisher =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_publisher;
 
@@ -1758,10 +1542,7 @@ export default {
               ? this.activeNames.push("bookReportChapter")
               : null;
           }
-          if (
-            "imprint_isbn" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("imprint_isbn" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.isbn =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_isbn;
 
@@ -1769,10 +1550,7 @@ export default {
               ? this.activeNames.push("bookReportChapter")
               : null;
           }
-          if (
-            "imprint_place" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("imprint_place" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_place;
 
@@ -1780,10 +1558,7 @@ export default {
               ? this.activeNames.push("bookReportChapter")
               : null;
           }
-          if (
-            "partof_title" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("partof_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_title;
 
@@ -1791,10 +1566,7 @@ export default {
               ? this.activeNames.push("bookReportChapter")
               : null;
           }
-          if (
-            "partof_pages" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("partof_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_pages;
 
@@ -1803,20 +1575,14 @@ export default {
               : null;
           }
 
-          if (
-            "thesis_university" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("thesis_university" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.thesis.awardingUniversity =
               this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_university;
 
-            this.activeNames.indexOf("thesis") === -1
-              ? this.activeNames.push("thesis")
-              : null;
+            this.activeNames.indexOf("thesis") === -1 ? this.activeNames.push("thesis") : null;
           }
           if (
-            "thesis_supervisors" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
+            "thesis_supervisors" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
             this.zenodoMetadataForm.thesis.supervisors = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_supervisors.forEach(
@@ -1830,15 +1596,10 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("thesis") === -1
-              ? this.activeNames.push("thesis")
-              : null;
+            this.activeNames.indexOf("thesis") === -1 ? this.activeNames.push("thesis") : null;
           }
 
-          if (
-            "subjects" in
-            this.workflow.destination.zenodo.selectedDeposition.metadata
-          ) {
+          if ("subjects" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.subjects = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.subjects.forEach(
               ({ term, identifier }) => {
@@ -1850,9 +1611,7 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("subjects") === -1
-              ? this.activeNames.push("subjects")
-              : null;
+            this.activeNames.indexOf("subjects") === -1 ? this.activeNames.push("subjects") : null;
           }
         }
       }
@@ -1901,8 +1660,7 @@ export default {
           for (let author of val) {
             if (author.name === "" || author.affiliation === "") {
               // console.log("author error");
-              this.authorsErrorMessage =
-                "Name and Affiliation for each author is mandatory";
+              this.authorsErrorMessage = "Name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
               this.$refs.zmForm.validate();
               break;
@@ -1995,8 +1753,7 @@ export default {
     "zenodoMetadataForm.publicationDate": {
       handler(val) {
         if (val === "" || val === null) {
-          this.publicationDateErrorMessage =
-            "Please provide the date of publication.";
+          this.publicationDateErrorMessage = "Please provide the date of publication.";
           this.$refs.zmForm.validate();
           this.invalidStatus.publicationDate = true;
           return;
@@ -2010,8 +1767,7 @@ export default {
     "zenodoMetadataForm.title": {
       handler(val) {
         if (val === "") {
-          this.titleErrorMessage =
-            "Please provide a valid and descriptive title.";
+          this.titleErrorMessage = "Please provide a valid and descriptive title.";
           this.$refs.zmForm.validate();
           this.invalidStatus.title = true;
           return;
@@ -2041,8 +1797,7 @@ export default {
     "zenodoMetadataForm.description": {
       handler(val) {
         if (val === "") {
-          this.descriptionErrorMessage =
-            "Please provide a valid and identifiable description.";
+          this.descriptionErrorMessage = "Please provide a valid and identifiable description.";
           this.$refs.zmForm.validate();
           this.invalidStatus.description = true;
           return;
@@ -2076,8 +1831,7 @@ export default {
         } else {
           for (let relatedIdentifier of val) {
             if (relatedIdentifier.identifier === "") {
-              this.relatedIdentifiersErrorMessage =
-                "Please provide a related identifier.";
+              this.relatedIdentifiersErrorMessage = "Please provide a related identifier.";
               this.$refs.zmForm.validate();
               this.invalidStatus.relatedIdentifiers = true;
               break;
@@ -2116,8 +1870,7 @@ export default {
         if (val.length > 0) {
           for (let subject of val) {
             if (subject.term === "") {
-              this.subjectsErrorMessage =
-                "Please provide a valid and identifiable subject.";
+              this.subjectsErrorMessage = "Please provide a valid and identifiable subject.";
               this.$refs.zmForm.validate();
               this.invalidStatus.subjects = true;
               break;
@@ -2154,9 +1907,7 @@ export default {
 
     this.zenodoMetadataForm = zenodoMetadataOptions.defaultForm;
 
-    this.dataset = JSON.parse(
-      JSON.stringify(await this.datasetStore.getCurrentDataset())
-    );
+    this.dataset = JSON.parse(JSON.stringify(await this.datasetStore.getCurrentDataset()));
 
     this.workflow = this.dataset.workflows[this.workflowID];
 
@@ -2183,26 +1934,14 @@ export default {
     ) {
       this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
 
-      this.initializeEmptyObjects(
-        this.zenodoMetadataForm,
-        this.zenodoMetadataForm.license
-      );
-      this.initializeEmptyObjects(
-        this.zenodoMetadataForm,
-        this.zenodoMetadataForm.journal
-      );
-      this.initializeEmptyObjects(
-        this.zenodoMetadataForm,
-        this.zenodoMetadataForm.conference
-      );
+      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.license);
+      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.journal);
+      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.conference);
       this.initializeEmptyObjects(
         this.zenodoMetadataForm,
         this.zenodoMetadataForm.bookReportChapter
       );
-      this.initializeEmptyObjects(
-        this.zenodoMetadataForm,
-        this.zenodoMetadataForm.thesis
-      );
+      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.thesis);
 
       const generalForm = this.dataset.data.general.questions;
       this.zenodoMetadataForm.license.licenseName = generalForm.license;

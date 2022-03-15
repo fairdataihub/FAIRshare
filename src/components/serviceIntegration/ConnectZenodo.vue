@@ -1,9 +1,6 @@
 <template>
   <div>
-    <button
-      :class="zenodoDetails.buttonStyle"
-      @click="interactWithService('zenodo')"
-    >
+    <button :class="zenodoDetails.buttonStyle" @click="interactWithService('zenodo')">
       {{ zenodoDetails.action }}
     </button>
     <el-dialog
@@ -14,25 +11,13 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button
-            class="primary-plain-button w-52"
-            @click="showZenodoTokenConnect"
-          >
+          <button class="primary-plain-button w-52" @click="showZenodoTokenConnect">
             Connect with token
           </button>
-          <el-popover
-            placement="top"
-            :hide-after="0"
-            trigger="hover"
-            content="Coming soon..."
-          >
+          <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
             <template #reference>
               <div>
-                <button
-                  class="primary-plain-button"
-                  @click="showZenodoOAuthConnect"
-                  disabled
-                >
+                <button class="primary-plain-button" @click="showZenodoOAuthConnect" disabled>
                   Connect with username
                 </button>
               </div>
@@ -54,14 +39,9 @@
       :onStatusChange="statusChangeFunction"
     ></ZenodoOAuthConnection> -->
 
-    <warning-confirm
-      ref="warningConfirm"
-      title="Warning"
-      @messageConfirmed="confirmDeleteToken"
-    >
+    <warning-confirm ref="warningConfirm" title="Warning" @messageConfirmed="confirmDeleteToken">
       <p class="text-center text-base text-gray-500">
-        Disconnecting will delete the access token stored. Would you like to
-        continue?
+        Disconnecting will delete the access token stored. Would you like to continue?
       </p>
     </warning-confirm>
   </div>

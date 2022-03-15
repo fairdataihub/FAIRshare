@@ -112,12 +112,7 @@ export default {
         axios
           .get(`${this.$server_url}/api_version`)
           .then((response) => {
-            if (
-              semver.lte(
-                semver.clean(MIN_API_VERSION),
-                semver.clean(response.data)
-              )
-            ) {
+            if (semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))) {
               console.log("API version satisfied");
 
               this.loadStores();

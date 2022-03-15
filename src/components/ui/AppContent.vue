@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="main-frame"
-    class="flex h-screen w-full flex-row justify-center overflow-y-auto"
-  >
+  <div id="main-frame" class="flex h-screen w-full flex-row justify-center overflow-y-auto">
     <div class="flex w-full flex-col items-center justify-center">
       <WorkflowProgressBar class="max-w-screen-xl pt-2" />
 

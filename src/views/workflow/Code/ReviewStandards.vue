@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Verify if you have followed standard/best research software development
-        practices
+        Verify if you have followed standard/best research software development practices
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -14,8 +11,7 @@
         <!-- template start -->
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable high-level best practices for
-            biomedical research software?
+            Have you followed applicable high-level best practices for biomedical research software?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -24,13 +20,10 @@
                 <span class="pr-2"> Learn more </span>
               </template>
               <div class="px-3 py-2">
-                We refer to the following relevant literature on high-level best
-                practices:
+                We refer to the following relevant literature on high-level best practices:
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite('https://doi.org/10.1371/journal.pcbi.1005510')
-                  "
+                  @click="openWebsite('https://doi.org/10.1371/journal.pcbi.1005510')"
                 >
                   Good enough practices in scientific computing</span
                 >.
@@ -39,18 +32,13 @@
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question1" label="Yes" size="large">
-              Yes
-            </el-radio>
-            <el-radio v-model="questions.question1" label="No" size="large">
-              No
-            </el-radio>
+            <el-radio v-model="questions.question1" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question1" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable language-specific standards and best
-            practices?
+            Have you followed applicable language-specific standards and best practices?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -60,22 +48,15 @@
               </template>
 
               <div class="px-3 py-2">
-                These standards depend on the language used in your software.
-                For instance, we refer to the
-                <span
-                  class="text-url"
-                  @click="openWebsite('https://www.python.org/dev/')"
-                >
+                These standards depend on the language used in your software. For instance, we refer
+                to the
+                <span class="text-url" @click="openWebsite('https://www.python.org/dev/')">
                   Python Developer's Guide
                 </span>
                 for Python or
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite(
-                      'https://google.github.io/styleguide/Rguide.html'
-                    )
-                  "
+                  @click="openWebsite('https://google.github.io/styleguide/Rguide.html')"
                 >
                   Google’s R Style Guide</span
                 >
@@ -85,18 +66,13 @@
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question2" label="Yes" size="large">
-              Yes
-            </el-radio>
-            <el-radio v-model="questions.question2" label="No" size="large">
-              No
-            </el-radio>
+            <el-radio v-model="questions.question2" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question2" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable domain-specific standards and best
-            practices?
+            Have you followed applicable domain-specific standards and best practices?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -106,53 +82,38 @@
               </template>
 
               <div class="px-3 py-2">
-                We refer to the following relevant literature on best practices
-                for biomedical research software:
+                We refer to the following relevant literature on best practices for biomedical
+                research software:
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite('https://doi.org/10.1016/j.cels.2018.03.014')
-                  "
+                  @click="openWebsite('https://doi.org/10.1016/j.cels.2018.03.014')"
                 >
-                  Practical Computational Reproducibility in the Life
-                  Sciences</span
+                  Practical Computational Reproducibility in the Life Sciences</span
                 >,
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite(
-                      'https://dx.doi.org/10.12688%2Ff1000research.10750.2'
-                    )
-                  "
+                  @click="openWebsite('https://dx.doi.org/10.12688%2Ff1000research.10750.2')"
                 >
                   General guidelines for biomedical software development </span
                 >,
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite('https://doi.org/10.3389/fgene.2014.00199')
-                  "
+                  @click="openWebsite('https://doi.org/10.3389/fgene.2014.00199')"
                 >
-                  On best practices in the development of bioinformatics
-                  software</span
+                  On best practices in the development of bioinformatics software</span
                 >.
               </div>
             </el-collapse-item>
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question3" label="Yes" size="large">
-              Yes
-            </el-radio>
-            <el-radio v-model="questions.question3" label="No" size="large">
-              No
-            </el-radio>
+            <el-radio v-model="questions.question3" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question3" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Is your software documentation following applicable standards and
-            best practices?
+            Is your software documentation following applicable standards and best practices?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -165,11 +126,7 @@
                 We refer to the following literature:
                 <span
                   class="text-url"
-                  @click="
-                    openWebsite(
-                      'https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561'
-                    )
-                  "
+                  @click="openWebsite('https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561')"
                 >
                   Ten simple rules for documenting scientific software</span
                 >.
@@ -178,18 +135,14 @@
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question4" label="Yes" size="large">
-              Yes
-            </el-radio>
-            <el-radio v-model="questions.question4" label="No" size="large">
-              No
-            </el-radio>
+            <el-radio v-model="questions.question4" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question4" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you ensured that your code and data files do not include any
-            information violating HIPAA?
+            Have you ensured that your code and data files do not include any information violating
+            HIPAA?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -210,19 +163,15 @@
                 >
                   Department of Health and Human Services</span
                 >
-                for information on the Health Insurance Portability and
-                Accountability Act (HIPAA) Privacy Rules.
+                for information on the Health Insurance Portability and Accountability Act (HIPAA)
+                Privacy Rules.
               </div>
             </el-collapse-item>
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question5" label="Yes" size="large">
-              Yes
-            </el-radio>
-            <el-radio v-model="questions.question5" label="No" size="large">
-              No
-            </el-radio>
+            <el-radio v-model="questions.question5" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question5" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <!-- template end -->
@@ -250,10 +199,9 @@
           cancelButtonText="I want to go back and review"
         >
           <p class="text-center text-base text-gray-500">
-            For your research software to be completely FAIR, we expect you to
-            answer 'Yes' to all the questions. We suggest reviewing where you
-            selected 'No' and modifying your data files if necessary before
-            continuing.
+            For your research software to be completely FAIR, we expect you to answer 'Yes' to all
+            the questions. We suggest reviewing where you selected 'No' and modifying your data
+            files if necessary before continuing.
           </p>
         </warning-confirm>
       </div>
@@ -335,9 +283,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push(
-        `/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`
-      );
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/Code/createMetadata`);
     },
   },
   async mounted() {

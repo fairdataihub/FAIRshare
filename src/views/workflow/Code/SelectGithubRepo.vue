@@ -1,14 +1,10 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
         Pick the GitHub repository you want to use
       </span>
-      <span class="text-left">
-        Lets select the GitHub repository that you want to make FAIR.
-      </span>
+      <span class="text-left"> Lets select the GitHub repository that you want to make FAIR. </span>
 
       <el-divider class="my-4"> </el-divider>
 
@@ -45,8 +41,8 @@
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
-            We couldn't find your GitHub login details. Please click on the
-            button below to connect to your GitHub account.
+            We couldn't find your GitHub login details. Please click on the button below to connect
+            to your GitHub account.
           </p>
 
           <ConnectGithub :statusChangeFunction="showConnection"></ConnectGithub>
@@ -87,8 +83,8 @@
       <div v-if="showFilePreview" class="py-5">
         <line-divider />
         <p class="text=lg my-5">
-          A list of all the files and folders in the selected repository are
-          shown below. Current branch is <b>{{ currentBranch }}</b
+          A list of all the files and folders in the selected repository are shown below. Current
+          branch is <b>{{ currentBranch }}</b
           >.
         </p>
         <el-tree-v2 :data="fileData" :props="defaultProps">
@@ -195,9 +191,7 @@ export default {
     },
 
     async getGithubRepoContents() {
-      const repoObject = this.githubRepos.find(
-        (repo) => repo.value === this.selectedRepo
-      );
+      const repoObject = this.githubRepos.find((repo) => repo.value === this.selectedRepo);
 
       const fullRepoName = repoObject.label.split("/");
       this.currentBranch = repoObject.default_branch;
@@ -274,8 +268,7 @@ export default {
         this.validTokenAvailable = false;
       } else {
         response.forEach((repo) => {
-          const selectionDisabled =
-            repo.visibility === "private" ? true : false;
+          const selectionDisabled = repo.visibility === "private" ? true : false;
           this.githubRepos.push({
             value: repo.full_name,
             label: repo.full_name,

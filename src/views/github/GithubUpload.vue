@@ -1,9 +1,7 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Uploading your metadata files to GitHub
-      </span>
+      <span class="text-left text-lg font-medium"> Uploading your metadata files to GitHub </span>
       <span class="text-left">
         This one is on us. We're working hard to get your files up to GitHub.
       </span>
@@ -27,10 +25,7 @@
         >
         </el-alert>
         <div class="flex flex-row items-center justify-start py-3" v-else>
-          <LoadingCubeGrid
-            class="h-5 w-5"
-            v-if="percentage !== 100"
-          ></LoadingCubeGrid>
+          <LoadingCubeGrid class="h-5 w-5" v-if="percentage !== 100"></LoadingCubeGrid>
           <p class="pl-4">
             {{ statusMessage }}
             <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
@@ -165,10 +160,7 @@ export default {
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
         metadata.title = zenodoMetadata.title;
       }
-      if (
-        "publicationDate" in zenodoMetadata &&
-        zenodoMetadata.publicationDate != ""
-      ) {
+      if ("publicationDate" in zenodoMetadata && zenodoMetadata.publicationDate != "") {
         metadata.publication_date = zenodoMetadata.publicationDate;
       }
 
@@ -217,10 +209,7 @@ export default {
         metadata.language = zenodoMetadata.language;
       }
 
-      if (
-        "additionalNotes" in zenodoMetadata &&
-        zenodoMetadata.additionalNotes != ""
-      ) {
+      if ("additionalNotes" in zenodoMetadata && zenodoMetadata.additionalNotes != "") {
         metadata.notes = zenodoMetadata.additionalNotes;
       }
 
@@ -266,43 +255,25 @@ export default {
       }
 
       if ("journal" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.journal && zenodoMetadata.journal.title !== "") {
           metadata.journal_title = zenodoMetadata.journal.title;
         }
-        if (
-          "volume" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.volume !== ""
-        ) {
+        if ("volume" in zenodoMetadata.journal && zenodoMetadata.journal.volume !== "") {
           metadata.journal_volume = zenodoMetadata.journal.volume;
         }
-        if (
-          "issue" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.issue !== ""
-        ) {
+        if ("issue" in zenodoMetadata.journal && zenodoMetadata.journal.issue !== "") {
           metadata.journal_issue = zenodoMetadata.journal.issue;
         }
-        if (
-          "pages" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.pages !== ""
-        ) {
+        if ("pages" in zenodoMetadata.journal && zenodoMetadata.journal.pages !== "") {
           metadata.journal_pages = zenodoMetadata.journal.pages;
         }
       }
 
       if ("conference" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.conference && zenodoMetadata.conference.title !== "") {
           metadata.conference_title = zenodoMetadata.conference.title;
         }
-        if (
-          "acronym" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.acronym !== ""
-        ) {
+        if ("acronym" in zenodoMetadata.conference && zenodoMetadata.conference.acronym !== "") {
           metadata.conference_acronym = zenodoMetadata.conference.acronym;
         }
 
@@ -315,28 +286,16 @@ export default {
           }
         }
 
-        if (
-          "place" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.place !== ""
-        ) {
+        if ("place" in zenodoMetadata.conference && zenodoMetadata.conference.place !== "") {
           metadata.conference_place = zenodoMetadata.conference.place;
         }
-        if (
-          "url" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.url !== ""
-        ) {
+        if ("url" in zenodoMetadata.conference && zenodoMetadata.conference.url !== "") {
           metadata.conference_url = zenodoMetadata.conference.url;
         }
-        if (
-          "session" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.session !== ""
-        ) {
+        if ("session" in zenodoMetadata.conference && zenodoMetadata.conference.session !== "") {
           metadata.conference_session = zenodoMetadata.conference.session;
         }
-        if (
-          "part" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.part !== ""
-        ) {
+        if ("part" in zenodoMetadata.conference && zenodoMetadata.conference.part !== "") {
           metadata.conference_session_part = zenodoMetadata.conference.part;
         }
       }
@@ -346,8 +305,7 @@ export default {
           "publisher" in zenodoMetadata.bookReportChapter &&
           zenodoMetadata.bookReportChapter.publisher !== ""
         ) {
-          metadata.imprint_publisher =
-            zenodoMetadata.bookReportChapter.publisher;
+          metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
         }
         if (
           "isbn" in zenodoMetadata.bookReportChapter &&
@@ -471,8 +429,7 @@ export default {
       const folderPath = this.dataset.data.Code.folderPath;
       const repoName = this.workflow.github.repo;
 
-      this.statusMessage =
-        "Getting ready to upload metadata files to GitHub...";
+      this.statusMessage = "Getting ready to upload metadata files to GitHub...";
       await this.sleep(300);
 
       const contents = fs.readdirSync(folderPath);
@@ -501,8 +458,7 @@ export default {
           response = await this.createCodeMetadataFile();
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the code metadata file";
+            this.alertMessage = "There was an error with creating the code metadata file";
             return "FAIL";
           } else {
             this.statusMessage = "Created a temporary codemeta.json file";
@@ -520,8 +476,7 @@ export default {
           response = await this.createCitationFile();
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the CITATION.cff file";
+            this.alertMessage = "There was an error with creating the CITATION.cff file";
             return "FAIL";
           } else {
             this.statusMessage = "Created a temporary CITATION.cff file";
@@ -538,8 +493,7 @@ export default {
         response = await this.createLicenseFile();
 
         if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the LICENSE file";
+          this.alertMessage = "There was an error with creating the LICENSE file";
           return "FAIL";
         } else {
           this.statusMessage = "Created a temporary LICENSE file";
@@ -555,8 +509,7 @@ export default {
         response = await this.createZenodoJSON();
 
         if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the .zenodo.json file";
+          this.alertMessage = "There was an error with creating the .zenodo.json file";
           return "FAIL";
         } else {
           this.statusMessage = "Created a temporary .zenodo.json file";
@@ -635,11 +588,7 @@ export default {
       this.progressStatus = "";
       this.showAlert = false;
 
-      const tempFolderPath = path.join(
-        app.getPath("home"),
-        ".fairshare",
-        "temp"
-      );
+      const tempFolderPath = path.join(app.getPath("home"), ".fairshare", "temp");
 
       // delete the temp folder if it exists
       // starting from a clean slate

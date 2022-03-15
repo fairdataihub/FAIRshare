@@ -41,8 +41,7 @@ export default {
     // connection status
     connectedToGithubByToken() {
       return (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
+        "github" in this.manager.accessTokens && this.manager.accessTokens.github.type == "token"
       );
     },
   },

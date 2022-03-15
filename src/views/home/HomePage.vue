@@ -1,13 +1,9 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center py-5">
-          <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">
-            FAIRshare
-          </h1>
+          <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">FAIRshare</h1>
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
           <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
@@ -22,10 +18,7 @@
       <div class="flex w-full justify-evenly space-x-14 py-3">
         <div class="item-center flex flex-col justify-center">
           <div class="item-center flex w-full justify-center py-3">
-            <img
-              src="../../assets/images/overview.svg"
-              class="h-auto w-11/12"
-            />
+            <img src="../../assets/images/overview.svg" class="h-auto w-11/12" />
           </div>
         </div>
       </div>
@@ -40,25 +33,16 @@
             Read the documentation
           </button>
 
-          <button
-            class="primary-plain-button text-base"
-            @click="startCuratingProject"
-          >
+          <button class="primary-plain-button text-base" @click="startCuratingProject">
             Getting started
             <el-icon class="icon-animate"> <d-arrow-right /> </el-icon>
           </button>
 
-          <button
-            class="danger-plain-button hidden text-base"
-            @click="datasetStore.hideSidebar"
-          >
+          <button class="danger-plain-button hidden text-base" @click="datasetStore.hideSidebar">
             Hide sidebar
           </button>
 
-          <button
-            class="danger-button hidden text-base"
-            @click="datasetStore.showSidebar"
-          >
+          <button class="danger-button hidden text-base" @click="datasetStore.showSidebar">
             Show sidebar
           </button>
         </div>
@@ -72,10 +56,7 @@
           >
             Learn more about FAIR
           </span>
-          <Icon
-            icon="grommet-icons:form-next-link"
-            class="icon-animate ml-2 h-5 w-5"
-          />
+          <Icon icon="grommet-icons:form-next-link" class="icon-animate ml-2 h-5 w-5" />
         </div>
       </div>
     </div>

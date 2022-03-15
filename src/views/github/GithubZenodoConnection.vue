@@ -1,39 +1,27 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <h1 class="pb-1 text-left text-lg font-medium">
-        Connect your GitHub account to Zenodo
-      </h1>
-      <h2 class="text-left">
-        Let's see if you GitHub account is already connected to Zenodo.
-      </h2>
+      <h1 class="pb-1 text-left text-lg font-medium">Connect your GitHub account to Zenodo</h1>
+      <h2 class="text-left">Let's see if you GitHub account is already connected to Zenodo.</h2>
 
       <el-divider class="my-2"> </el-divider>
 
       <div>
         <p class="text=lg my-2">
-          We will be adding some files to your GitHub repository. A preview of
-          what it will look like after is shown below.
+          We will be adding some files to your GitHub repository. A preview of what it will look
+          like after is shown below.
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
-            <el-tree-v2
-              v-if="!showSpinner"
-              :data="fileData"
-              :props="defaultProps"
-            >
+            <el-tree-v2 v-if="!showSpinner" :data="fileData" :props="defaultProps">
               <template #default="{ node, data }">
                 <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
                 <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
                 <div
                   class="inline-flex items-center"
                   :class="
-                    (node.label == 'codemeta.json' &&
-                      workflow.generateCodeMeta) ||
-                    (node.label == 'CITATION.cff' &&
-                      workflow.generateCodeMeta) ||
+                    (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                    (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                     node.label == '.zenodo.json' ||
                     (node.label == 'LICENSE' && workflow.generateLicense)
                       ? 'text-secondary-500'
@@ -54,10 +42,8 @@
                     @click="handleNodeClick(data, 'download')"
                     class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                     v-if="
-                      (node.label == 'codemeta.json' &&
-                        workflow.generateCodeMeta) ||
-                      (node.label == 'CITATION.cff' &&
-                        workflow.generateCodeMeta) ||
+                      (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                      (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                       node.label == '.zenodo.json' ||
                       (node.label == 'LICENSE' && workflow.generateLicense)
                     "
@@ -107,11 +93,7 @@
                 default-expand-all
               >
                 <el-table-column prop="Name" label="Name" />
-                <el-table-column
-                  prop="Value"
-                  label="Value"
-                  class="break-normal"
-                />
+                <el-table-column prop="Value" label="Value" class="break-normal" />
               </el-table>
             </div>
 
@@ -124,19 +106,12 @@
                 default-expand-all
               >
                 <el-table-column prop="Name" label="Name" />
-                <el-table-column
-                  prop="Value"
-                  label="Value"
-                  class="break-normal"
-                />
+                <el-table-column prop="Value" label="Value" class="break-normal" />
               </el-table>
             </div>
 
             <div v-if="PreviewNewlyCreatedLicenseFile" class="">
-              <div
-                class="prose prose-base prose-slate pb-20"
-                v-html="compiledLicense"
-              ></div>
+              <div class="prose prose-base prose-slate pb-20" v-html="compiledLicense"></div>
             </div>
           </el-scrollbar>
         </el-drawer>
@@ -158,16 +133,14 @@
               />
             </div>
             <p class="my-3 w-full text-center">
-              Your account has been setup for Zenodo integration. Let's move on
-              to the next step.
+              Your account has been setup for Zenodo integration. Let's move on to the next step.
             </p>
           </div>
           <!-- show how to connect to zenodo if no hook is found -->
           <div v-else class="flex w-full flex-col">
             <div class="mb-5 flex items-center justify-center">
               <h3 class="mx-2 font-normal text-secondary-600">
-                We are not seeing any Zenodo connections already setup with
-                GitHub.
+                We are not seeing any Zenodo connections already setup with GitHub.
               </h3>
               <Vue3Lottie
                 animationLink="https://assets1.lottiefiles.com/private_files/lf30_lkauxe8i.json"
@@ -178,29 +151,23 @@
 
             <div>
               <p class="mb-2">
-                To connect your GitHub account with Zenodo there are a few steps
-                you need to do from your side.
+                To connect your GitHub account with Zenodo there are a few steps you need to do from
+                your side.
               </p>
               <ul class="ml-2 list-inside list-disc">
                 <li>
-                  Login to Zenodo and go to the GitHub connections in your
-                  profile settings. Alternatively, you can also click the button
-                  below to take you to the appropriate page.
+                  Login to Zenodo and go to the GitHub connections in your profile settings.
+                  Alternatively, you can also click the button below to take you to the appropriate
+                  page.
                 </li>
 
                 <div class="my-2 flex w-full items-center justify-center">
-                  <button
-                    class="secondary-plain-button my-1"
-                    @click="openWebsite"
-                  >
+                  <button class="secondary-plain-button my-1" @click="openWebsite">
                     Connect GitHub to Zenodo
                   </button>
                 </div>
 
-                <li>
-                  Authenticate with GitHub and wait for your list of
-                  repositories to show up.
-                </li>
+                <li>Authenticate with GitHub and wait for your list of repositories to show up.</li>
 
                 <li>
                   Toggle the switch for the
@@ -210,15 +177,11 @@
                   repository to the 'ON' position.
                 </li>
 
-                <li>
-                  Wait for FAIRshare to notice the change. This may take about
-                  30 seconds.
-                </li>
+                <li>Wait for FAIRshare to notice the change. This may take about 30 seconds.</li>
               </ul>
               <p class="mt-2">
-                You will only need to do this once. For any future GitHub
-                repositories, FAIRshare will automatically add the relevant
-                connections for you.
+                You will only need to do this once. For any future GitHub repositories, FAIRshare
+                will automatically add the relevant connections for you.
               </p>
             </div>
           </div>
@@ -226,10 +189,7 @@
       </div>
 
       <transition name="fade" mode="out-in" appear>
-        <div
-          class="flex w-full flex-row justify-center space-x-4 py-2"
-          v-if="finishedLoading"
-        >
+        <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
           <router-link
             :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
             class=""
@@ -248,11 +208,7 @@
             View files ready for upload
           </button>
 
-          <button
-            class="primary-button"
-            @click="uploadToZenodo"
-            v-if="validZenodoHookTokenFound"
-          >
+          <button class="primary-button" @click="uploadToZenodo" v-if="validZenodoHookTokenFound">
             Start upload
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
@@ -331,16 +287,14 @@ export default {
       let filename = file_name;
       let contentType = "application/json;charset=utf-8;";
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        var blob = new Blob(
-          [decodeURIComponent(encodeURI(JSON.stringify(obj)))],
-          { type: contentType }
-        );
+        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], {
+          type: contentType,
+        });
         navigator.msSaveOrOpenBlob(blob, filename);
       } else {
         var virtualFile = document.createElement("a");
         virtualFile.download = filename;
-        virtualFile.href =
-          "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
+        virtualFile.href = "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
         virtualFile.target = "_blank";
         document.body.appendChild(virtualFile);
         virtualFile.click();
@@ -374,11 +328,7 @@ export default {
         for (let property in jsonObject) {
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
-          let value = this.jsonToTableDataRecursive(
-            jsonObject[property],
-            newId,
-            property
-          );
+          let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
 
           if (Array.isArray(value)) {
             newObj.id = newId;
@@ -394,11 +344,7 @@ export default {
           count += 1;
         }
         return result;
-      } else if (
-        jsonObject &&
-        Array.isArray(jsonObject) &&
-        jsonObject.length != 0
-      ) {
+      } else if (jsonObject && Array.isArray(jsonObject) && jsonObject.length != 0) {
         // array
         let result = [];
         for (let i = 0; i < jsonObject.length; i++) {
@@ -430,11 +376,7 @@ export default {
             newName = String(i + 1) + "th " + customName;
           }
 
-          let value = this.jsonToTableDataRecursive(
-            jsonObject[i],
-            newId,
-            newName
-          );
+          let value = this.jsonToTableDataRecursive(jsonObject[i], newId, newName);
 
           if (Array.isArray(value)) {
             newObj.id = newId;
@@ -500,10 +442,7 @@ export default {
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
         metadata.title = zenodoMetadata.title;
       }
-      if (
-        "publicationDate" in zenodoMetadata &&
-        zenodoMetadata.publicationDate != ""
-      ) {
+      if ("publicationDate" in zenodoMetadata && zenodoMetadata.publicationDate != "") {
         metadata.publication_date = zenodoMetadata.publicationDate;
       }
 
@@ -552,10 +491,7 @@ export default {
         metadata.language = zenodoMetadata.language;
       }
 
-      if (
-        "additionalNotes" in zenodoMetadata &&
-        zenodoMetadata.additionalNotes != ""
-      ) {
+      if ("additionalNotes" in zenodoMetadata && zenodoMetadata.additionalNotes != "") {
         metadata.notes = zenodoMetadata.additionalNotes;
       }
 
@@ -601,43 +537,25 @@ export default {
       }
 
       if ("journal" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.journal && zenodoMetadata.journal.title !== "") {
           metadata.journal_title = zenodoMetadata.journal.title;
         }
-        if (
-          "volume" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.volume !== ""
-        ) {
+        if ("volume" in zenodoMetadata.journal && zenodoMetadata.journal.volume !== "") {
           metadata.journal_volume = zenodoMetadata.journal.volume;
         }
-        if (
-          "issue" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.issue !== ""
-        ) {
+        if ("issue" in zenodoMetadata.journal && zenodoMetadata.journal.issue !== "") {
           metadata.journal_issue = zenodoMetadata.journal.issue;
         }
-        if (
-          "pages" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.pages !== ""
-        ) {
+        if ("pages" in zenodoMetadata.journal && zenodoMetadata.journal.pages !== "") {
           metadata.journal_pages = zenodoMetadata.journal.pages;
         }
       }
 
       if ("conference" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.conference && zenodoMetadata.conference.title !== "") {
           metadata.conference_title = zenodoMetadata.conference.title;
         }
-        if (
-          "acronym" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.acronym !== ""
-        ) {
+        if ("acronym" in zenodoMetadata.conference && zenodoMetadata.conference.acronym !== "") {
           metadata.conference_acronym = zenodoMetadata.conference.acronym;
         }
 
@@ -650,28 +568,16 @@ export default {
           }
         }
 
-        if (
-          "place" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.place !== ""
-        ) {
+        if ("place" in zenodoMetadata.conference && zenodoMetadata.conference.place !== "") {
           metadata.conference_place = zenodoMetadata.conference.place;
         }
-        if (
-          "url" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.url !== ""
-        ) {
+        if ("url" in zenodoMetadata.conference && zenodoMetadata.conference.url !== "") {
           metadata.conference_url = zenodoMetadata.conference.url;
         }
-        if (
-          "session" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.session !== ""
-        ) {
+        if ("session" in zenodoMetadata.conference && zenodoMetadata.conference.session !== "") {
           metadata.conference_session = zenodoMetadata.conference.session;
         }
-        if (
-          "part" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.part !== ""
-        ) {
+        if ("part" in zenodoMetadata.conference && zenodoMetadata.conference.part !== "") {
           metadata.conference_session_part = zenodoMetadata.conference.part;
         }
       }
@@ -681,8 +587,7 @@ export default {
           "publisher" in zenodoMetadata.bookReportChapter &&
           zenodoMetadata.bookReportChapter.publisher !== ""
         ) {
-          metadata.imprint_publisher =
-            zenodoMetadata.bookReportChapter.publisher;
+          metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
         }
         if (
           "isbn" in zenodoMetadata.bookReportChapter &&
@@ -796,8 +701,7 @@ export default {
 
     async handleOpenDrawer(title) {
       if (title == "LICENSE") {
-        title +=
-          " (This preview may not be completely representative of the final license)";
+        title += " (This preview may not be completely representative of the final license)";
       }
 
       this.fileTitle = title;
@@ -827,16 +731,13 @@ export default {
       const fullRepoName = this.selectedRepo.split("/");
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.selectedRepo}`,
-          {
-            params: {},
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${GithubAccessToken}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.selectedRepo}`, {
+          params: {},
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${GithubAccessToken}`,
+          },
+        })
         .then((res) => {
           return res.data;
         })
@@ -934,18 +835,15 @@ export default {
       let response = "";
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.selectedRepo}/hooks`,
-          {
-            params: {
-              per_page: 100,
-            },
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${GithubAccessToken}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.selectedRepo}/hooks`, {
+          params: {
+            per_page: 100,
+          },
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${GithubAccessToken}`,
+          },
+        })
         .then((response) => {
           return response.data;
         })
@@ -1056,9 +954,7 @@ export default {
           type: "info",
         });
 
-        const tokenCreated = await this.createGithubZenodoWebhook(
-          GithubZenodoConnectionToken
-        );
+        const tokenCreated = await this.createGithubZenodoWebhook(GithubZenodoConnectionToken);
 
         if (tokenCreated) {
           ElNotification({
@@ -1101,8 +997,7 @@ export default {
                 )
               ) {
                 const webhookConfigURL = webhook.config.url;
-                const webhookConfigURLArray =
-                  webhookConfigURL.split("access_token=");
+                const webhookConfigURLArray = webhookConfigURL.split("access_token=");
                 const webhookConfigURLToken = webhookConfigURLArray[1];
 
                 if (webhookConfigURLToken) {
@@ -1131,11 +1026,7 @@ export default {
 
     this.citationData = await this.createCitationFile();
     this.citationDataRecord = Object.assign({}, this.citationData);
-    this.citationData = this.jsonToTableDataRecursive(
-      this.citationData,
-      1,
-      "ROOT"
-    );
+    this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
 
     this.zenodoData = await this.createZenodoJsonFile();
     this.zenodoData = this.jsonToTableDataRecursive(this.zenodoData, 1, "ROOT");

@@ -1,17 +1,13 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">
-        Manage Accounts
-      </h1>
+      <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Manage Accounts</h1>
 
       <line-divider></line-divider>
 
       <h2>
-        An overview of all your accounts connected to FAIRshare and the actions
-        you can take are shown below.
+        An overview of all your accounts connected to FAIRshare and the actions you can take are
+        shown below.
       </h2>
 
       <div class="flex w-full flex-col items-center justify-center pt-5">
@@ -43,15 +39,8 @@
                 </div>
               </div>
 
-              <div
-                class="centering-container tag-container"
-                v-if="connectedToZenodo"
-              >
-                <el-tag
-                  type="success"
-                  effect="plain"
-                  class="border-green-400 text-green-600"
-                >
+              <div class="centering-container tag-container" v-if="connectedToZenodo">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
                   <el-icon> <user-filled /> </el-icon>
                   <span class="px-2">
                     {{ zenodoDetails.name }}
@@ -61,9 +50,8 @@
             </div>
             <div class="centering-container center">
               <p class="mt-1">
-                Connect FAIRshare with your Zenodo account to allow us to upload
-                your data directly to Zenodo. To learn more about connecting
-                FAIRshare to Zenodo, please visit the
+                Connect FAIRshare with your Zenodo account to allow us to upload your data directly
+                to Zenodo. To learn more about connecting FAIRshare to Zenodo, please visit the
                 <span
                   class="text-url"
                   @click="
@@ -111,15 +99,8 @@
                 </div>
               </div>
 
-              <div
-                class="centering-container tag-container"
-                v-if="connectedToGithub"
-              >
-                <el-tag
-                  type="success"
-                  effect="plain"
-                  class="border-green-400 text-green-600"
-                >
+              <div class="centering-container tag-container" v-if="connectedToGithub">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
                   <el-icon> <user-filled /> </el-icon>
                   <span class="px-2">
                     {{ githubDetails.name }}
@@ -129,9 +110,8 @@
             </div>
             <div class="centering-container center">
               <p>
-                Connect your GitHub account to FAIRshare to allow us to upload
-                your data directly to GitHub. To learn more about connecting
-                FAIRshare to GitHub, please visit the
+                Connect your GitHub account to FAIRshare to allow us to upload your data directly to
+                GitHub. To learn more about connecting FAIRshare to GitHub, please visit the
                 <span
                   class="text-url"
                   @click="

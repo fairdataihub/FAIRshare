@@ -1,9 +1,7 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Let's generate your files
-      </span>
+      <span class="text-left text-lg font-medium"> Let's generate your files </span>
       <span class="text-left">
         This one is on us. FAIRshare is creating your requested files for you.
       </span>
@@ -27,10 +25,7 @@
         >
         </el-alert>
         <div class="flex flex-row items-center justify-start py-3" v-else>
-          <LoadingCubeGrid
-            class="h-5 w-5"
-            v-if="percentage !== 100"
-          ></LoadingCubeGrid>
+          <LoadingCubeGrid class="h-5 w-5" v-if="percentage !== 100"></LoadingCubeGrid>
           <p class="pl-4">
             {{ statusMessage }}
             <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
@@ -164,12 +159,10 @@ export default {
           response = await this.createCodeMetadataFile();
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the code metadata file";
+            this.alertMessage = "There was an error with creating the code metadata file";
             return "FAIL";
           } else {
-            this.statusMessage =
-              "Created the codemeta.json file in the target folder";
+            this.statusMessage = "Created the codemeta.json file in the target folder";
 
             await this.datasetStore.updateCurrentDataset(this.dataset);
             await this.datasetStore.syncDatasets();
@@ -188,12 +181,10 @@ export default {
           // console.log(response);
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the CITATION.cff file";
+            this.alertMessage = "There was an error with creating the CITATION.cff file";
             return "FAIL";
           } else {
-            this.statusMessage =
-              "Created the CITATION.cff file in the target folder";
+            this.statusMessage = "Created the CITATION.cff file in the target folder";
           }
         }
       }
@@ -207,8 +198,7 @@ export default {
         response = await this.createLicenseFile();
 
         if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the LICENSE file";
+          this.alertMessage = "There was an error with creating the LICENSE file";
           return "FAIL";
         } else {
           this.statusMessage = "Created the LICENSE file in the target folder";

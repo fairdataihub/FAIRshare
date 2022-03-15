@@ -1,12 +1,10 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Uploading your data to Zenodo
-      </span>
+      <span class="text-left text-lg font-medium"> Uploading your data to Zenodo </span>
       <span class="text-left">
-        This one is on us. FAIRshare is creating a Zenodo record for you and
-        uploading all your files with the relevant metadata.
+        This one is on us. FAIRshare is creating a Zenodo record for you and uploading all your
+        files with the relevant metadata.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -28,10 +26,7 @@
         >
         </el-alert>
         <div class="flex flex-row items-center justify-start py-3" v-else>
-          <LoadingCubeGrid
-            class="h-5 w-5"
-            v-if="percentage !== 100"
-          ></LoadingCubeGrid>
+          <LoadingCubeGrid class="h-5 w-5" v-if="percentage !== 100"></LoadingCubeGrid>
           <p class="pl-4">
             {{ statusMessage }}
             <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
@@ -135,10 +130,7 @@ export default {
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
         metadata.title = zenodoMetadata.title;
       }
-      if (
-        "publicationDate" in zenodoMetadata &&
-        zenodoMetadata.publicationDate != ""
-      ) {
+      if ("publicationDate" in zenodoMetadata && zenodoMetadata.publicationDate != "") {
         metadata.publication_date = zenodoMetadata.publicationDate;
       }
 
@@ -187,10 +179,7 @@ export default {
         metadata.language = zenodoMetadata.language;
       }
 
-      if (
-        "additionalNotes" in zenodoMetadata &&
-        zenodoMetadata.additionalNotes != ""
-      ) {
+      if ("additionalNotes" in zenodoMetadata && zenodoMetadata.additionalNotes != "") {
         metadata.notes = zenodoMetadata.additionalNotes;
       }
 
@@ -236,43 +225,25 @@ export default {
       }
 
       if ("journal" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.journal && zenodoMetadata.journal.title !== "") {
           metadata.journal_title = zenodoMetadata.journal.title;
         }
-        if (
-          "volume" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.volume !== ""
-        ) {
+        if ("volume" in zenodoMetadata.journal && zenodoMetadata.journal.volume !== "") {
           metadata.journal_volume = zenodoMetadata.journal.volume;
         }
-        if (
-          "issue" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.issue !== ""
-        ) {
+        if ("issue" in zenodoMetadata.journal && zenodoMetadata.journal.issue !== "") {
           metadata.journal_issue = zenodoMetadata.journal.issue;
         }
-        if (
-          "pages" in zenodoMetadata.journal &&
-          zenodoMetadata.journal.pages !== ""
-        ) {
+        if ("pages" in zenodoMetadata.journal && zenodoMetadata.journal.pages !== "") {
           metadata.journal_pages = zenodoMetadata.journal.pages;
         }
       }
 
       if ("conference" in zenodoMetadata) {
-        if (
-          "title" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.title !== ""
-        ) {
+        if ("title" in zenodoMetadata.conference && zenodoMetadata.conference.title !== "") {
           metadata.conference_title = zenodoMetadata.conference.title;
         }
-        if (
-          "acronym" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.acronym !== ""
-        ) {
+        if ("acronym" in zenodoMetadata.conference && zenodoMetadata.conference.acronym !== "") {
           metadata.conference_acronym = zenodoMetadata.conference.acronym;
         }
 
@@ -285,28 +256,16 @@ export default {
           }
         }
 
-        if (
-          "place" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.place !== ""
-        ) {
+        if ("place" in zenodoMetadata.conference && zenodoMetadata.conference.place !== "") {
           metadata.conference_place = zenodoMetadata.conference.place;
         }
-        if (
-          "url" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.url !== ""
-        ) {
+        if ("url" in zenodoMetadata.conference && zenodoMetadata.conference.url !== "") {
           metadata.conference_url = zenodoMetadata.conference.url;
         }
-        if (
-          "session" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.session !== ""
-        ) {
+        if ("session" in zenodoMetadata.conference && zenodoMetadata.conference.session !== "") {
           metadata.conference_session = zenodoMetadata.conference.session;
         }
-        if (
-          "part" in zenodoMetadata.conference &&
-          zenodoMetadata.conference.part !== ""
-        ) {
+        if ("part" in zenodoMetadata.conference && zenodoMetadata.conference.part !== "") {
           metadata.conference_session_part = zenodoMetadata.conference.part;
         }
       }
@@ -316,8 +275,7 @@ export default {
           "publisher" in zenodoMetadata.bookReportChapter &&
           zenodoMetadata.bookReportChapter.publisher !== ""
         ) {
-          metadata.imprint_publisher =
-            zenodoMetadata.bookReportChapter.publisher;
+          metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
         }
         if (
           "isbn" in zenodoMetadata.bookReportChapter &&
@@ -358,15 +316,13 @@ export default {
           zenodoMetadata.thesis.supervisors.length > 0
         ) {
           metadata.thesis_supervisors = [];
-          zenodoMetadata.thesis.supervisors.forEach(
-            ({ name, affiliation, orcid }) => {
-              metadata.thesis_supervisors.push({
-                name,
-                affiliation,
-                orcid,
-              });
-            }
-          );
+          zenodoMetadata.thesis.supervisors.forEach(({ name, affiliation, orcid }) => {
+            metadata.thesis_supervisors.push({
+              name,
+              affiliation,
+              orcid,
+            });
+          });
         }
       }
 
@@ -402,8 +358,7 @@ export default {
               });
             }
             this.alertTitle = "Metadata error";
-            this.alertMessage =
-              "Could not add your metadata to the dataset. Please try again.";
+            this.alertMessage = "Could not add your metadata to the dataset. Please try again.";
             return "ERROR";
           } else {
             return response.data;
@@ -432,9 +387,7 @@ export default {
           return "ERROR";
         });
 
-      this.statusMessage = `Uploaded ${path.basename(
-        file_path
-      )} to Zenodo successfully`;
+      this.statusMessage = `Uploaded ${path.basename(file_path)} to Zenodo successfully`;
       await this.sleep(300);
       return;
     },
@@ -458,8 +411,7 @@ export default {
         });
 
       if (response) {
-        this.statusMessage =
-          "Found sub folders. Creating a zip of the requested folder";
+        this.statusMessage = "Found sub folders. Creating a zip of the requested folder";
         await this.sleep(300);
 
         const zippedPath = await axios
@@ -480,10 +432,7 @@ export default {
           "Created a zipped folder successfully. Getting ready to upload to Zenodo";
         await this.sleep(300);
 
-        await this.uploadToZenodo(
-          this.workflow.destination.zenodo.bucket,
-          zippedPath
-        );
+        await this.uploadToZenodo(this.workflow.destination.zenodo.bucket, zippedPath);
       } else {
         this.statusMessage = "Getting ready to upload to Zenodo";
         await this.sleep(300);
@@ -575,8 +524,7 @@ export default {
 
         await this.sleep(300);
 
-        const original_deposition_id =
-          this.workflow.destination.zenodo.selectedDeposition.id;
+        const original_deposition_id = this.workflow.destination.zenodo.selectedDeposition.id;
 
         let res = null;
 
@@ -599,8 +547,7 @@ export default {
           this.alertMessage = "There was an error with creating a new version";
           return "FAIL";
         } else {
-          this.statusMessage =
-            "A new version of the Zenodo deposition was created";
+          this.statusMessage = "A new version of the Zenodo deposition was created";
         }
 
         this.statusMessage = "Requesting new Zenodo deposition version data";
@@ -623,8 +570,7 @@ export default {
           });
 
         if (res === "ERROR") {
-          this.alertMessage =
-            "There was an error with requesting data from Zenodo";
+          this.alertMessage = "There was an error with requesting data from Zenodo";
           return "FAIL";
         } else {
           //create a copy of the res object
@@ -698,12 +644,10 @@ export default {
           // console.log(response);
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the code metadata file";
+            this.alertMessage = "There was an error with creating the code metadata file";
             return "FAIL";
           } else {
-            this.statusMessage =
-              "Created the codemeta.json file in the target folder";
+            this.statusMessage = "Created the codemeta.json file in the target folder";
 
             await this.datasetStore.updateCurrentDataset(this.dataset);
             await this.datasetStore.syncDatasets();
@@ -722,12 +666,10 @@ export default {
           // console.log(response);
 
           if (response === "ERROR") {
-            this.alertMessage =
-              "There was an error with creating the CITATION.cff file";
+            this.alertMessage = "There was an error with creating the CITATION.cff file";
             return "FAIL";
           } else {
-            this.statusMessage =
-              "Created the CITATION.cff file in the target folder";
+            this.statusMessage = "Created the CITATION.cff file in the target folder";
           }
         }
       }
@@ -741,8 +683,7 @@ export default {
         response = await this.createLicenseFile();
 
         if (response === "ERROR") {
-          this.alertMessage =
-            "There was an error with creating the LICENSE file";
+          this.alertMessage = "There was an error with creating the LICENSE file";
           return "FAIL";
         } else {
           this.statusMessage = "Created the LICENSE file in the target folder";
@@ -752,13 +693,11 @@ export default {
       response = await this.addMetadaToZenodoDeposition();
 
       if (response === "ERROR") {
-        this.alertMessage =
-          "There was an error when adding metadata to the deposition";
+        this.alertMessage = "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
         console.log(response);
-        this.statusMessage =
-          "Metadata successfully added to the Zenodo deposition";
+        this.statusMessage = "Metadata successfully added to the Zenodo deposition";
       }
 
       this.percentage = 25;
@@ -771,8 +710,7 @@ export default {
       response = await this.checkForFoldersAndUpload();
 
       if (response === "ERROR") {
-        this.alertMessage =
-          "There was an error with uploading files to the Zenodo deposition";
+        this.alertMessage = "There was an error with uploading files to the Zenodo deposition";
         return "FAIL";
       } else {
         this.statusMessage = "Uploaded all files to Zenodo successfully.";
@@ -784,10 +722,7 @@ export default {
     },
     async deleteDraftZenodoDeposition() {
       if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(
-          this.zenodoToken,
-          this.workflow.destination.zenodo.deposition_id
-        );
+        console.log(this.zenodoToken, this.workflow.destination.zenodo.deposition_id);
         const response = await axios
           .delete(`${this.$server_url}/zenodo/deposition`, {
             data: {

@@ -11,9 +11,7 @@
       }"
       @click="setCurrentStep(step)"
     >
-      <span
-        class="absolute hidden w-full px-2 pt-3 text-center text-xs text-gray-400"
-      >
+      <span class="absolute hidden w-full px-2 pt-3 text-center text-xs text-gray-400">
         {{ titles[step - 1] }}
       </span>
       <!-- Add this if we want to show title on active step 

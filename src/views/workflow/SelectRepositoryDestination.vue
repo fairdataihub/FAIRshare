@@ -6,47 +6,28 @@
     <div class="flex h-full w-full flex-col items-start justify-start">
       <div class="w-full">
         <span class="mb-2 w-full">
-          Would you like to upload your dataset to a repository through
-          FAIRshare?
+          Would you like to upload your dataset to a repository through FAIRshare?
         </span>
 
         <div class="py-1">
-          <el-radio v-model="uploadToRepo" label="Yes" size="large">
-            Yes
-          </el-radio>
-          <el-radio v-model="uploadToRepo" label="No" size="large">
-            No
-          </el-radio>
-          <el-radio
-            v-model="uploadToRepo"
-            label="None"
-            size="large"
-            border
-            class="!hidden"
-          >
+          <el-radio v-model="uploadToRepo" label="Yes" size="large"> Yes </el-radio>
+          <el-radio v-model="uploadToRepo" label="No" size="large"> No </el-radio>
+          <el-radio v-model="uploadToRepo" label="None" size="large" border class="!hidden">
             None
           </el-radio>
         </div>
       </div>
 
-      <div
-        v-if="uploadToRepo !== 'None'"
-        class="flex h-full w-full flex-col items-center"
-      >
+      <div v-if="uploadToRepo !== 'None'" class="flex h-full w-full flex-col items-center">
         <transition name="fade" mode="out-in" appear>
-          <div
-            v-if="uploadToRepo === 'Yes'"
-            class="flex h-full w-full flex-col items-center"
-          >
+          <div v-if="uploadToRepo === 'Yes'" class="flex h-full w-full flex-col items-center">
             <line-divider class="w-full py-3"></line-divider>
 
             <span class="text-center">
-              Based on your dataset requirements, we suggest uploading your data
-              to one of these repositories.
+              Based on your dataset requirements, we suggest uploading your data to one of these
+              repositories.
             </span>
-            <span class="text-center text-sm">
-              Please click one of the following options:
-            </span>
+            <span class="text-center text-sm"> Please click one of the following options: </span>
 
             <div class="my-8 grid grid-cols-3 gap-8">
               <div>
@@ -69,20 +50,13 @@
                     @click="openWebsite('https://zenodo.org')"
                   >
                     <span class="font-medium"> Learn more... </span>
-                    <Icon
-                      icon="grommet-icons:form-next-link"
-                      class="ml-2 h-5 w-5"
-                    />
+                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
                   </div>
                 </div>
               </div>
 
               <div>
-                <el-popover
-                  placement="bottom"
-                  trigger="hover"
-                  content="Coming soon..."
-                >
+                <el-popover placement="bottom" trigger="hover" content="Coming soon...">
                   <template #reference>
                     <div>
                       <div
@@ -103,11 +77,7 @@
               </div>
 
               <div>
-                <el-popover
-                  placement="bottom"
-                  trigger="hover"
-                  content="Coming soon..."
-                >
+                <el-popover placement="bottom" trigger="hover" content="Coming soon...">
                   <template #reference>
                     <div>
                       <div
@@ -122,9 +92,7 @@
                           alt=""
                           class="mb-3 h-16 opacity-50"
                         />
-                        <span class="mx-5 w-full text-center text-lg">
-                          Software Heritage
-                        </span>
+                        <span class="mx-5 w-full text-center text-lg"> Software Heritage </span>
                       </div>
                     </div>
                   </template>
@@ -138,8 +106,8 @@
                 class="mb-8 flex flex-col"
               >
                 <p class="mb-4">
-                  Is your dataset already published on Zenodo or would you like
-                  to create a new Zenodo publication?
+                  Is your dataset already published on Zenodo or would you like to create a new
+                  Zenodo publication?
                 </p>
 
                 <div class="flex flex-row items-center justify-center">
@@ -174,9 +142,7 @@
                     class="mt-4 mb-8 flex w-full flex-col items-start justify-center rounded-xl border border-zinc-100 px-4 py-4 shadow-xl"
                     v-if="'id' in selectedDeposition"
                   >
-                    <h3 class="font-semibold">
-                      Currently selected Zenodo deposition
-                    </h3>
+                    <h3 class="font-semibold">Currently selected Zenodo deposition</h3>
                     <line-divider class="my-1 w-full" />
                     <p class="py-1 text-base">
                       <span class="font-medium">Title:</span>
@@ -188,10 +154,7 @@
                     </p>
                     <p class="py-1 text-base">
                       <span class="font-medium">DOI: </span>
-                      <span
-                        @click="openWebsite(selectedDeposition.doi_url)"
-                        class="text-url"
-                      >
+                      <span @click="openWebsite(selectedDeposition.doi_url)" class="text-url">
                         {{ selectedDeposition.doi_url }}
                       </span>
                     </p>
@@ -201,8 +164,7 @@
                     @click="showZenodoDepositionSelectorModal"
                   >
                     Select
-                    {{ "id" in selectedDeposition ? "another" : "" }} Zenodo
-                    deposition
+                    {{ "id" in selectedDeposition ? "another" : "" }} Zenodo deposition
                   </button>
                 </div>
               </div>
@@ -211,17 +173,12 @@
             <general-dialog
               ref="generalDialog"
               title="Select your Zenodo deposition"
-              @messageConfirmed="
-                selectedDeposition = selectedDepositionFromList
-              "
+              @messageConfirmed="selectedDeposition = selectedDepositionFromList"
             >
               <div class="mt-4 flex flex-col">
                 <fade-transition>
                   <div v-if="loadedZenodoDepositions">
-                    <Listbox
-                      v-model="selectedDepositionFromList"
-                      v-if="loadedZenodoDepositions"
-                    >
+                    <Listbox v-model="selectedDepositionFromList" v-if="loadedZenodoDepositions">
                       <div class="relative mt-1">
                         <ListboxButton
                           class="relative h-[45px] w-full cursor-default rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none sm:text-sm"
@@ -260,12 +217,8 @@
                             >
                               <li
                                 :class="[
-                                  active
-                                    ? 'bg-zinc-100 text-zinc-900'
-                                    : 'text-gray-900',
-                                  selected
-                                    ? 'bg-secondary-100 text-gray-900'
-                                    : 'text-gray-900',
+                                  active ? 'bg-zinc-100 text-zinc-900' : 'text-gray-900',
+                                  selected ? 'bg-secondary-100 text-gray-900' : 'text-gray-900',
                                   'relative cursor-default select-none border-t border-b border-zinc-50 py-2 pl-10 pr-4',
                                 ]"
                               >
@@ -273,9 +226,7 @@
                                   <div class="flex pb-1">
                                     <span
                                       :class="[
-                                        selected
-                                          ? 'font-medium'
-                                          : 'font-normal',
+                                        selected ? 'font-medium' : 'font-normal',
                                         'mr-2 block truncate ',
                                       ]"
                                     >
@@ -314,16 +265,12 @@
                       </p>
                       <p class="py-1 text-sm">
                         <span class="font-medium">Last published:</span>
-                        {{
-                          selectedDepositionFromList.metadata.publication_date
-                        }}
+                        {{ selectedDepositionFromList.metadata.publication_date }}
                       </p>
                       <p class="py-1 text-sm">
                         <span class="font-medium">DOI: </span>
                         <span
-                          @click="
-                            openWebsite(selectedDepositionFromList.doi_url)
-                          "
+                          @click="openWebsite(selectedDepositionFromList.doi_url)"
                           class="text-url"
                         >
                           {{ selectedDepositionFromList.doi_url }}
@@ -343,15 +290,8 @@
                       </p>
                     </div>
                   </div>
-                  <div
-                    v-else
-                    class="flex h-full w-full items-center justify-center"
-                  >
-                    <Vue3Lottie
-                      :animationData="$helix_spinner"
-                      :width="200"
-                      :height="200"
-                    />
+                  <div v-else class="flex h-full w-full items-center justify-center">
+                    <Vue3Lottie :animationData="$helix_spinner" :width="200" :height="200" />
                   </div>
                 </fade-transition>
                 <fade-transition> </fade-transition>
@@ -408,11 +348,7 @@
             </fade-transition>
           </div>
           <div v-else class="flex w-full justify-center space-x-4 px-5 py-4">
-            <button
-              class="primary-plain-button"
-              size="medium"
-              @click="saveSkip"
-            >
+            <button class="primary-plain-button" size="medium" @click="saveSkip">
               <el-icon><d-arrow-left /></el-icon>
               Back
             </button>
@@ -428,9 +364,8 @@
               confirmButtonText="Yes, I want to skip"
             >
               <p class="text-center text-base text-gray-500">
-                Are you sure you want to skip uploading this dataset to a data
-                repository? This is not recommended according to the FAIR
-                guidelines.
+                Are you sure you want to skip uploading this dataset to a data repository? This is
+                not recommended according to the FAIR guidelines.
               </p>
             </warning-confirm>
           </div>
@@ -447,12 +382,7 @@ import { useTokenStore } from "@/store/access";
 import { Icon } from "@iconify/vue";
 import axios from "axios";
 import _ from "lodash";
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-} from "@headlessui/vue";
+import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@headlessui/vue";
 
 export default {
   name: "SelectRepositoryDestination",
@@ -525,9 +455,7 @@ export default {
       this.selectedDepositionFromList = this.filteredDepositions[0];
 
       if (!_.isEqual(this.selectedDeposition, { metadata: {} })) {
-        if (
-          !_.isEqual(this.selectedDeposition, this.selectedDepositionFromList)
-        ) {
+        if (!_.isEqual(this.selectedDeposition, this.selectedDepositionFromList)) {
           this.selectedDepositionFromList = this.selectedDeposition;
         }
       }
@@ -579,8 +507,7 @@ export default {
       }
 
       if (type === "zenodo-new-version") {
-        this.workflow.destination[this.repoID].selectedDeposition =
-          this.selectedDeposition;
+        this.workflow.destination[this.repoID].selectedDeposition = this.selectedDeposition;
       }
 
       if (this.newVersion === "true") {
@@ -665,8 +592,7 @@ export default {
 
       if (this.repoID !== "") {
         if ("selectedDeposition" in this.workflow.destination[this.repoID]) {
-          this.selectedDeposition =
-            this.workflow.destination[this.repoID].selectedDeposition;
+          this.selectedDeposition = this.workflow.destination[this.repoID].selectedDeposition;
         }
 
         if (this.workflow.source.type === "local") {
@@ -674,8 +600,7 @@ export default {
             "newVersion" in this.workflow.destination[this.repoID] &&
             this.workflow.source.type === "local"
           ) {
-            this.newVersion =
-              this.workflow.destination[this.repoID].newVersion.toString();
+            this.newVersion = this.workflow.destination[this.repoID].newVersion.toString();
             this.showSelectZenodoDeposition = true;
           } else {
             this.newVersion = "None";

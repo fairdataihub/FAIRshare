@@ -2,22 +2,16 @@
   <div class="flex h-screen w-full flex-row items-center justify-center">
     <div ref="" class="flex h-full flex-row items-center p-3">
       <div class="flex h-full flex-col overflow-y-auto">
-        <span class="text-left text-lg font-medium">
-          Start the curation process
-        </span>
+        <span class="text-left text-lg font-medium"> Start the curation process </span>
 
         <span class="">
-          When you are ready, click on the curation buttons below to fill out
-          some metadata information.
+          When you are ready, click on the curation buttons below to fill out some metadata
+          information.
         </span>
 
         <el-divider> </el-divider>
 
-        <div
-          class="flex flex-col p-2"
-          v-for="(workflow, key) in dataset.workflows"
-          :key="key"
-        >
+        <div class="flex flex-col p-2" v-for="(workflow, key) in dataset.workflows" :key="key">
           <div class="bg-gray-300 px-4 py-2">
             <span class="text-lg">
               {{ combineDataTypes(workflow.type) }}
@@ -50,8 +44,8 @@
           confirmButtonText="I want to publish a new version"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you've already published this dataset. Would you like
-            to go through this workflow again to publish a new version?
+            It looks like you've already published this dataset. Would you like to go through this
+            workflow again to publish a new version?
           </p>
         </info-confirm>
         <info-confirm
@@ -63,9 +57,9 @@
           cancelButtonText="I want to upload my data again"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you have already uploaded this dataset to Zenodo but
-            you haven't published it yet. Would you like to publish this now or
-            create a new upload for this specific workflow?
+            It looks like you have already uploaded this dataset to Zenodo but you haven't published
+            it yet. Would you like to publish this now or create a new upload for this specific
+            workflow?
           </p>
         </info-confirm>
         <info-confirm
@@ -77,9 +71,9 @@
           cancelButtonText="I want to upload my data again"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you have already uploaded this dataset to GitHub but
-            you haven't published it yet. Would you like to publish this now or
-            create a new upload for this specific workflow?
+            It looks like you have already uploaded this dataset to GitHub but you haven't published
+            it yet. Would you like to publish this now or create a new upload for this specific
+            workflow?
           </p>
         </info-confirm>
         <info-confirm
@@ -91,8 +85,8 @@
           cancelButtonText="No, start from the beginning"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you were working on this workflow before. Would you
-            like to continue where you left off?
+            It looks like you were working on this workflow before. Would you like to continue where
+            you left off?
           </p>
         </info-confirm>
       </div>

@@ -1,12 +1,8 @@
 <template>
   <div v-if="currentStepId == stepId" :key="stepId">
-    <div
-      class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
-    >
+    <div class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md">
       <div class="w-full bg-gray-100 px-4 py-2">
-        <span
-          class="pointer-events-none text-lg font-semibold text-primary-600"
-        >
+        <span class="pointer-events-none text-lg font-semibold text-primary-600">
           {{ stepTitle }}
         </span>
       </div>
@@ -14,16 +10,10 @@
         <slot> </slot>
       </div>
     </div>
-    <div
-      class="form-navigation-buttons flex w-full justify-center space-x-4 px-5"
-    >
+    <div class="form-navigation-buttons flex w-full justify-center space-x-4 px-5">
       <button
         @click="prevStep"
-        :class="
-          this.currentStepId === 1
-            ? 'primary-plain-button'
-            : 'secondary-plain-button'
-        "
+        :class="this.currentStepId === 1 ? 'primary-plain-button' : 'secondary-plain-button'"
         size="medium"
         :disabled="checkInvalidStatus"
       >
@@ -31,11 +21,7 @@
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
       </button>
       <!-- :plain="!lastStep" -->
-      <button
-        class="primary-button"
-        @click="nextStep"
-        :disabled="checkInvalidStatus"
-      >
+      <button class="primary-button" @click="nextStep" :disabled="checkInvalidStatus">
         {{ nextText }}
         <el-icon v-if="lastStep"><d-arrow-right /></el-icon>
         <el-icon v-else><right-icon /></el-icon>

@@ -102,10 +102,7 @@ const killAllPreviousProcesses = async () => {
   // create a loop of 100
   for (let i = 0; i < portRange; i++) {
     promisesArray.push(
-      axios.post(
-        `http://127.0.0.1:${startingPort + i}/fairshare_server_shutdown`,
-        {}
-      )
+      axios.post(`http://127.0.0.1:${startingPort + i}/fairshare_server_shutdown`, {})
     );
   }
 
@@ -121,16 +118,12 @@ const createPyProc = async () => {
 
   fp(startingPort, startingPort + portRange)
     .then(([freep]) => {
-      console.log(
-        `Found a free port at ${freep}. Using port ${freep} for python process.`
-      );
+      console.log(`Found a free port at ${freep}. Using port ${freep} for python process.`);
       pyPort = freep;
       global.PYPORT = pyPort;
 
       console.log(`Starting python process at ${script}`);
-      console.log(
-        `API documentation hosted at http://127.0.0.1:${pyPort}/docs`
-      );
+      console.log(`API documentation hosted at http://127.0.0.1:${pyPort}/docs`);
       if (guessPackaged()) {
         pyProc = require("child_process").execFile(script, [pyPort], {
           stdio: "ignore",
@@ -390,13 +383,10 @@ function retrieveCode(url) {
       newlink(url);
     });
 
-    authWindow.webContents.on(
-      "did-get-redirect-request",
-      (_event, _oldUrl, newUrl) => {
-        console.log("did-get-redirect-request");
-        newlink(newUrl);
-      }
-    );
+    authWindow.webContents.on("did-get-redirect-request", (_event, _oldUrl, newUrl) => {
+      console.log("did-get-redirect-request");
+      newlink(newUrl);
+    });
   });
 }
 ipcMain.on("OAuth-Github", async (_event, _test) => {
@@ -429,10 +419,7 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
           )
           .then(async (response) => {
             console.log("response after code: ", response.data.access_token);
-            mainWindow.webContents.send(
-              "OAuth-Github-Reply",
-              response.data.access_token
-            );
+            mainWindow.webContents.send("OAuth-Github-Reply", response.data.access_token);
             success = true;
           })
           .catch((error) => {
@@ -487,10 +474,7 @@ ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
           )
           .then(async (response) => {
             console.log("response after code: ", response.data.access_token);
-            mainWindow.webContents.send(
-              "OAuth-Zenodo-Reply",
-              response.data.access_token
-            );
+            mainWindow.webContents.send("OAuth-Zenodo-Reply", response.data.access_token);
             success = true;
           })
           .catch(() => {
