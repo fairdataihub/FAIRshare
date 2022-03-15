@@ -16,9 +16,9 @@
           :indeterminate="indeterminate"
           :status="progressStatus"
           :stroke-width="10"
+          class="my-2"
         />
         <el-alert
-          class="my-2"
           v-if="showAlert"
           :title="alertTitle"
           type="error"
@@ -451,7 +451,11 @@ export default {
         });
 
       if (response === "ERROR") {
-        this.alertMessage = `Error uploading ${fileName} to GitHub`;
+        if (fileName === "LICENSE") {
+          this.alertMessage = `Error uploading ${fileName} to GitHub. There may be illegal characters in the contents of the file. Please verify that the file is valid and try again.`;
+        } else {
+          this.alertMessage = `Error uploading ${fileName} to GitHub. Please verify that the file is valid and try again.`;
+        }
         await this.sleep(300);
         this.statusMessage = "";
       } else {
@@ -514,7 +518,6 @@ export default {
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage =
@@ -556,7 +559,6 @@ export default {
             "There was an error with creating the .zenodo.json file";
           return "FAIL";
         } else {
-          // console.log(response);
           this.statusMessage = "Created a temporary .zenodo.json file";
         }
 
@@ -571,8 +573,8 @@ export default {
       response = await this.uploadMetadataFiles();
 
       if (response === "ERROR") {
-        this.alertMessage =
-          "There was an error with uploading files to the GitHub repository";
+        // this.alertMessage =
+        //   "There was an error with uploading files to the GitHub repository";
         return "FAIL";
       } else {
         this.statusMessage = "Uploaded all files to GitHub successfully.";
@@ -597,7 +599,7 @@ export default {
 
       this.dataset.data.Code.folderPath = "";
 
-      if (response === "FAIL") {
+      if (response === "FAIL" || response === "ERROR") {
         this.indeterminate = true;
         this.progressStatus = "exception";
         this.showAlert = true;
@@ -629,6 +631,29 @@ export default {
       }
     },
     async retryUpload() {
+      this.indeterminate = false;
+      this.progressStatus = "";
+      this.showAlert = false;
+
+      const tempFolderPath = path.join(
+        app.getPath("home"),
+        ".fairshare",
+        "temp"
+      );
+
+      // delete the temp folder if it exists
+      // starting from a clean slate
+      if (fs.existsSync(tempFolderPath)) {
+        fs.rmdirSync(tempFolderPath, { recursive: true, force: true });
+      }
+
+      // recreate the temp folder
+      if (!fs.existsSync(tempFolderPath)) {
+        fs.mkdirSync(tempFolderPath);
+      }
+
+      this.dataset.data.Code.folderPath = tempFolderPath;
+
       this.runGithubUpload();
     },
   },

@@ -2231,7 +2231,7 @@ export default {
     async prefillGithubMisc() {
       ElNotification({
         title: "Info",
-        message: "Requesting repo info",
+        message: "Requesting repository info",
         position: "top-right",
         type: "info",
       });
@@ -2350,7 +2350,7 @@ export default {
 
         ElNotification({
           title: "Success",
-          message: "Repo info retrieved",
+          message: "Repository info retrieved",
           position: "top-right",
           type: "success",
         });

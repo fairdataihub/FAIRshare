@@ -352,7 +352,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     )
     line_prepender(
         os.path.join(folder_path, "CITATION.cff"),
-        "# This CITATION.cff file was generated with Fair Share.",
+        "# This CITATION.cff file was generated with FAIRshare.",
     )
 
     return True

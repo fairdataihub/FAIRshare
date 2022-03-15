@@ -133,7 +133,13 @@ export default {
         return returnString;
       }
     },
-    navigateToSelectFolder() {
+    async navigateToSelectFolder() {
+      this.dataset.workflows[this.workflowID].datasetUploaded = false;
+      this.dataset.workflows[this.workflowID].datasetPublished = false;
+
+      this.datasetStore.updateCurrentDataset(this.dataset);
+      this.datasetStore.syncDatasets();
+
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
       this.$router.push({ path: routerPath });
     },

@@ -76,12 +76,12 @@ export default {
       if (header == "GitHub access token") {
         window.ipcRenderer.send(
           "open-link-in-browser",
-          "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+          "https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github"
         );
       } else if (header == "Zenodo access token") {
         window.ipcRenderer.send(
           "open-link-in-browser",
-          "https://developers.zenodo.org/"
+          "https://docs.fairshareapp.io/docs/manage-accounts/connect-to-zenodo"
         );
       }
     },

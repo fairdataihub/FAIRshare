@@ -60,19 +60,21 @@
               </div>
             </div>
             <div class="centering-container center">
-              <p>
-                Connect with your zenodo account by using an access token.
-                Please see more details at
+              <p class="mt-1">
+                Connect FAIRshare with your Zenodo account to allow us to upload
+                your data directly to Zenodo. To learn more about connecting
+                FAIRshare to Zenodo, please visit the
                 <span
                   class="text-url"
                   @click="
                     openWebsite(
-                      'https://developers.zenodo.org/#quickstart-upload'
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-zenodo'
                     )
                   "
                 >
-                  zenodo access token documentation.
-                </span>
+                  Zenodo documentation</span
+                >
+                page.
               </p>
             </div>
             <div class="centering-container bottom">
@@ -127,18 +129,20 @@
             </div>
             <div class="centering-container center">
               <p>
-                Connect with your GitHub account by using an access token or
-                OAuth. Please see more details at
+                Connect your GitHub account to FAIRshare to allow us to upload
+                your data directly to GitHub. To learn more about connecting
+                FAIRshare to GitHub, please visit the
                 <span
                   class="text-url"
                   @click="
                     openWebsite(
-                      'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github'
                     )
                   "
                 >
-                  GitHub access token documentation.
-                </span>
+                  GitHub documentation</span
+                >
+                page.
               </p>
             </div>
             <div class="centering-container bottom">
