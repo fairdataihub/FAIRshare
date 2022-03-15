@@ -11,24 +11,13 @@
 
       <div class="flex flex-col">
         <span class="mb-2">
-          Would you like FAIRshare to create the mandatory files codemeta.json
-          and CITATION.cff?
+          Would you like FAIRshare to create the mandatory files codemeta.json and CITATION.cff?
         </span>
 
         <div class="py-1">
-          <el-radio v-model="generateCodeMeta" label="Yes" size="large">
-            Yes
-          </el-radio>
-          <el-radio v-model="generateCodeMeta" label="No" size="large">
-            No
-          </el-radio>
-          <el-radio
-            v-model="generateCodeMeta"
-            label="None"
-            size="large"
-            border
-            class="!hidden"
-          >
+          <el-radio v-model="generateCodeMeta" label="Yes" size="large"> Yes </el-radio>
+          <el-radio v-model="generateCodeMeta" label="No" size="large"> No </el-radio>
+          <el-radio v-model="generateCodeMeta" label="None" size="large" border class="!hidden">
             None
           </el-radio>
         </div>
@@ -40,8 +29,8 @@
             <line-divider></line-divider>
 
             <span class="mb-2">
-              We will use this information to automatically include the standard
-              codemeta.json and CITATION.cff file in your dataset.
+              We will use this information to automatically include the standard codemeta.json and
+              CITATION.cff file in your dataset.
             </span>
 
             <div>
@@ -59,9 +48,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Basic Information
                       </span>
                     </div>
@@ -78,20 +65,14 @@
                       >
                         <el-form-item label="Software name" prop="name">
                           <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step1Form.name"
-                              placeholder="My Software"
-                            ></el-input>
+                            <el-input v-model="step1Form.name" placeholder="My Software"></el-input>
                             <form-help-content
                               popoverContent="The name of the software"
                             ></form-help-content>
                           </div>
                         </el-form-item>
 
-                        <el-form-item
-                          label="Software description/abstract"
-                          prop="description"
-                        >
+                        <el-form-item label="Software description/abstract" prop="description">
                           <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step1Form.description"
@@ -137,19 +118,12 @@
                     </div>
                   </div>
                   <div class="flex w-full justify-center space-x-4 px-5 py-4">
-                    <button
-                      @click="prevFormStep"
-                      class="primary-plain-button"
-                      size="medium"
-                    >
+                    <button @click="prevFormStep" class="primary-plain-button" size="medium">
                       <el-icon><back-icon /></el-icon>
                       Back
                     </button>
                     <!-- :plain="!lastStep" -->
-                    <button
-                      class="primary-button"
-                      @click="navigateToStep2FromStep1"
-                    >
+                    <button class="primary-button" @click="navigateToStep2FromStep1">
                       Next
                       <el-icon><right-icon /></el-icon>
                     </button>
@@ -161,9 +135,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Authors and Contributors
                       </span>
                     </div>
@@ -177,11 +149,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item
-                          label="Authors"
-                          :error="authorsErrorMessage"
-                          required
-                        >
+                        <el-form-item label="Authors" :error="authorsErrorMessage" required>
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
@@ -189,12 +157,8 @@
                             handle=".handle"
                           >
                             <template #item="{ element }">
-                              <div
-                                class="mb-2 flex flex-row justify-between transition-all"
-                              >
-                                <div
-                                  class="flex w-11/12 flex-row justify-between"
-                                >
+                              <div class="mb-2 flex flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
                                   <el-input
                                     v-model="element.givenName"
                                     type="text"
@@ -223,11 +187,7 @@
                                       type="text"
                                       placeholder="E-mail address"
                                     ></el-input>
-                                    <span
-                                      class="mt-1 ml-2 text-xs text-gray-400"
-                                    >
-                                      Optional
-                                    </span>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                                   </div>
 
                                   <div class="mx-2 flex w-full flex-col">
@@ -236,16 +196,10 @@
                                       type="text"
                                       placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                                     ></el-input>
-                                    <span
-                                      class="mt-1 ml-2 text-xs text-gray-400"
-                                    >
-                                      Optional
-                                    </span>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                                   </div>
                                 </div>
-                                <div
-                                  class="flex w-1/12 flex-row items-start justify-evenly py-4"
-                                >
+                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -285,10 +239,7 @@
                           ></form-help-content>
                         </div>
 
-                        <el-form-item
-                          label="Contributors"
-                          :error="contributorsErrorMessage"
-                        >
+                        <el-form-item label="Contributors" :error="contributorsErrorMessage">
                           <draggable
                             tag="div"
                             :list="step2Form.contributors"
@@ -296,9 +247,7 @@
                             handle=".handle"
                           >
                             <template #item="{ element }">
-                              <div
-                                class="mb-2 flex flex-row justify-between transition-all"
-                              >
+                              <div class="mb-2 flex flex-row justify-between transition-all">
                                 <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
                                   <el-select
                                     v-model="element.contributorType"
@@ -315,9 +264,7 @@
                                   </el-select>
                                 </div>
 
-                                <div
-                                  class="flex w-11/12 flex-row justify-between"
-                                >
+                                <div class="flex w-11/12 flex-row justify-between">
                                   <div class="mr-2 w-1/5">
                                     <el-input
                                       v-model="element.givenName"
@@ -348,11 +295,7 @@
                                       type="text"
                                       placeholder="E-mail address"
                                     ></el-input>
-                                    <span
-                                      class="mt-1 ml-2 text-xs text-gray-400"
-                                    >
-                                      Optional
-                                    </span>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                                   </div>
 
                                   <div class="mx-2 flex w-1/5 flex-col">
@@ -361,16 +304,10 @@
                                       type="text"
                                       placeholder="ORCID (e.g. 0000-0002-1825-0097)"
                                     ></el-input>
-                                    <span
-                                      class="mt-1 ml-2 text-xs text-gray-400"
-                                    >
-                                      Optional
-                                    </span>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                                   </div>
                                 </div>
-                                <div
-                                  class="flex w-1/12 flex-row items-start justify-evenly py-4"
-                                >
+                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -439,9 +376,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Discoverability
                       </span>
                     </div>
@@ -478,21 +413,14 @@
                               ></form-help-content>
                             </div>
                             <div class="flex w-full flex-row items-center">
-                              <span class="mx-2 text-sm italic text-zinc-600">
-                                Suggestions:
-                              </span>
+                              <span class="mx-2 text-sm italic text-zinc-600"> Suggestions: </span>
                               <div class="flex-row">
                                 <el-tag
                                   class="mx-2 cursor-copy transition-all hover:shadow-md"
                                   size="small"
-                                  @click="
-                                    step3Form.applicationCategory = 'Scientific'
-                                  "
+                                  @click="step3Form.applicationCategory = 'Scientific'"
                                   :type="
-                                    step3Form.applicationCategory ===
-                                    'Scientific'
-                                      ? ''
-                                      : 'info'
+                                    step3Form.applicationCategory === 'Scientific' ? '' : 'info'
                                   "
                                 >
                                   Scientific
@@ -511,12 +439,8 @@
                             class="w-full"
                           >
                             <template #item="{ element }">
-                              <div
-                                class="mb-2 flex w-full flex-row justify-between transition-all"
-                              >
-                                <div
-                                  class="flex w-11/12 flex-row justify-between"
-                                >
+                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
                                   <el-input
                                     v-model="element.keyword"
                                     type="text"
@@ -526,9 +450,7 @@
                                   ></el-input>
                                   <div class="mx-2"></div>
                                 </div>
-                                <div
-                                  class="flex w-1/12 flex-row justify-evenly"
-                                >
+                                <div class="flex w-1/12 flex-row justify-evenly">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -554,18 +476,14 @@
                             </template>
                           </draggable>
                           <div class="flex w-full flex-row items-center">
-                            <span class="mx-2 text-sm italic text-zinc-600">
-                              Suggestions:
-                            </span>
+                            <span class="mx-2 text-sm italic text-zinc-600"> Suggestions: </span>
                             <div class="flex-row">
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
                                 @click="addKeyword(null, 'COVID-19')"
                                 :type="
-                                  step3Form.keywords.some(
-                                    (el) => el.keyword === 'COVID-19'
-                                  )
+                                  step3Form.keywords.some((el) => el.keyword === 'COVID-19')
                                     ? ''
                                     : 'info'
                                 "
@@ -577,9 +495,7 @@
                                 size="small"
                                 @click="addKeyword(null, 'Machine Learning')"
                                 :type="
-                                  step3Form.keywords.some(
-                                    (el) => el.keyword === 'Machine Learning'
-                                  )
+                                  step3Form.keywords.some((el) => el.keyword === 'Machine Learning')
                                     ? ''
                                     : 'info'
                                 "
@@ -589,13 +505,10 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="
-                                  addKeyword(null, 'Artificial Intelligence')
-                                "
+                                @click="addKeyword(null, 'Artificial Intelligence')"
                                 :type="
                                   step3Form.keywords.some(
-                                    (el) =>
-                                      el.keyword === 'Artificial Intelligence'
+                                    (el) => el.keyword === 'Artificial Intelligence'
                                   )
                                     ? ''
                                     : 'info'
@@ -608,9 +521,7 @@
                                 size="small"
                                 @click="addKeyword(null, 'Infection rate')"
                                 :type="
-                                  step3Form.keywords.some(
-                                    (el) => el.keyword === 'Infection rate'
-                                  )
+                                  step3Form.keywords.some((el) => el.keyword === 'Infection rate')
                                     ? ''
                                     : 'info'
                                 "
@@ -620,13 +531,10 @@
                               <el-tag
                                 class="mx-1 cursor-copy transition-all hover:shadow-md"
                                 size="small"
-                                @click="
-                                  addKeyword(null, 'Mortality prediction')
-                                "
+                                @click="addKeyword(null, 'Mortality prediction')"
                                 :type="
                                   step3Form.keywords.some(
-                                    (el) =>
-                                      el.keyword === 'Mortality prediction'
+                                    (el) => el.keyword === 'Mortality prediction'
                                   )
                                     ? ''
                                     : 'info'
@@ -675,9 +583,7 @@
                             ></form-help-content>
                           </div>
                           <div class="flex w-full flex-row items-center">
-                            <span class="mx-1 text-sm italic text-zinc-600">
-                              Suggestions:
-                            </span>
+                            <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
                             <div class="flex-row">
                               <el-tag
                                 class="mx-2 cursor-copy transition-all hover:shadow-md"
@@ -744,9 +650,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Development tools
                       </span>
                     </div>
@@ -760,10 +664,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item
-                          label="Code repository"
-                          :error="codeRepositoryErrorMessage"
-                        >
+                        <el-form-item label="Code repository" :error="codeRepositoryErrorMessage">
                           <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step4Form.codeRepository"
@@ -790,10 +691,7 @@
                           </div>
                         </el-form-item>
 
-                        <el-form-item
-                          label="Issue Tracker"
-                          :error="issueTrackerErrorMessage"
-                        >
+                        <el-form-item label="Issue Tracker" :error="issueTrackerErrorMessage">
                           <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step4Form.issueTracker"
@@ -805,10 +703,7 @@
                           </div>
                         </el-form-item>
 
-                        <el-form-item
-                          label="Related links"
-                          :error="relatedLinksErrorMessage"
-                        >
+                        <el-form-item label="Related links" :error="relatedLinksErrorMessage">
                           <draggable
                             tag="div"
                             :list="step4Form.relatedLinks"
@@ -817,12 +712,8 @@
                             class="w-full"
                           >
                             <template #item="{ element }">
-                              <div
-                                class="mb-2 flex flex-row justify-between transition-all"
-                              >
-                                <div
-                                  class="flex w-11/12 flex-row justify-between"
-                                >
+                              <div class="mb-2 flex flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
                                   <el-input
                                     v-model="element.link"
                                     type="text"
@@ -830,9 +721,7 @@
                                   ></el-input>
                                   <div class="mx-1"></div>
                                 </div>
-                                <div
-                                  class="flex w-1/12 flex-row justify-evenly"
-                                >
+                                <div class="flex w-1/12 flex-row justify-evenly">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -899,9 +788,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Run-time environment
                       </span>
                     </div>
@@ -1000,12 +887,8 @@
                             class="w-full"
                           >
                             <template #item="{ element }">
-                              <div
-                                class="mb-2 flex w-full flex-row justify-between transition-all"
-                              >
-                                <div
-                                  class="flex w-11/12 flex-row justify-between"
-                                >
+                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
                                   <el-input
                                     v-model="element.link"
                                     type="text"
@@ -1013,9 +896,7 @@
                                   ></el-input>
                                   <div class="mx-1"></div>
                                 </div>
-                                <div
-                                  class="flex w-1/12 flex-row justify-evenly"
-                                >
+                                <div class="flex w-1/12 flex-row justify-evenly">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -1029,11 +910,7 @@
                                       icon-color="red"
                                       confirm-button-text="Yes"
                                       cancel-button-text="No"
-                                      @confirm="
-                                        deleteOtherSoftwareRequirements(
-                                          element.id
-                                        )
-                                      "
+                                      @confirm="deleteOtherSoftwareRequirements(element.id)"
                                     >
                                       <template #reference>
                                         <el-icon><delete-filled /></el-icon>
@@ -1086,9 +963,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Current version of the software
                       </span>
                     </div>
@@ -1102,10 +977,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item
-                          label="Current version"
-                          :error="versionErrorMessage"
-                        >
+                        <el-form-item label="Current version" :error="versionErrorMessage">
                           <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step6Form.currentVersion"
@@ -1190,9 +1062,7 @@
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
-                      <span
-                        class="pointer-events-none text-lg font-semibold text-primary-600"
-                      >
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Additional information
                       </span>
                     </div>
@@ -1245,10 +1115,7 @@
                           </p>
                         </el-form-item>
 
-                        <el-form-item
-                          label="Is part of"
-                          :error="isPartOfErrorMessage"
-                        >
+                        <el-form-item label="Is part of" :error="isPartOfErrorMessage">
                           <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step7Form.isPartOf"
@@ -1289,11 +1156,7 @@
           </div>
           <div v-else>
             <div class="flex w-full justify-center space-x-4 px-5 py-4">
-              <button
-                class="primary-plain-button"
-                size="medium"
-                @click="saveSkip"
-              >
+              <button class="primary-plain-button" size="medium" @click="saveSkip">
                 <el-icon><back-icon /></el-icon>
                 Back
               </button>
@@ -1314,9 +1177,8 @@
               confirmButtonText="Yes, I want to skip"
             >
               <p class="text-center text-base text-gray-500">
-                Are you sure you want to skip creating the codemeta.json and
-                CITATION.cff files for this dataset? This is not recommended
-                according to the FAIR guidelines.
+                Are you sure you want to skip creating the codemeta.json and CITATION.cff files for
+                this dataset? This is not recommended according to the FAIR guidelines.
               </p>
             </warning-confirm>
           </div>
@@ -1480,8 +1342,7 @@ export default {
               author.affiliation === "" ||
               author.affiliation === undefined
             ) {
-              this.authorsErrorMessage =
-                "First name and Affiliation for each author is mandatory";
+              this.authorsErrorMessage = "First name and Affiliation for each author is mandatory";
               this.invalidStatus.authors = true;
               if (this.$refs["s2Form"]) {
                 this.$refs["s2Form"].validate();
@@ -1550,10 +1411,7 @@ export default {
       handler(val) {
         if (val.length > 0) {
           for (let contributor of val) {
-            if (
-              contributor.givenName === "" ||
-              contributor.affiliation === ""
-            ) {
+            if (contributor.givenName === "" || contributor.affiliation === "") {
               this.contributorsErrorMessage =
                 "Name and Affiliation for each contributor is mandatory";
               this.invalidStatus.contributors = true;
@@ -1609,8 +1467,7 @@ export default {
 
             // validate contributor role
             if (contributor.contributorType === "") {
-              this.contributorsErrorMessage =
-                "Please select contributor type for each contributor";
+              this.contributorsErrorMessage = "Please select contributor type for each contributor";
               this.invalidStatus.contributors = true;
               this.$refs.s2Form.validate();
               break;
@@ -1674,8 +1531,7 @@ export default {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
-            this.continuousIntegrationErrorMessage =
-              "Please provide a valid URL";
+            this.continuousIntegrationErrorMessage = "Please provide a valid URL";
             this.$refs.s4Form.validate();
             this.invalidStatus.continuousIntegration = true;
             return;
@@ -1717,8 +1573,7 @@ export default {
           const validIdentifier = validator.isURL(val);
 
           if (!validIdentifier) {
-            this.currentVersionDownloadLinkErrorMessage =
-              "Please provide a valid URL";
+            this.currentVersionDownloadLinkErrorMessage = "Please provide a valid URL";
             this.$refs.s6Form.validate();
             this.invalidStatus.currentVersionDownloadLink = true;
             return;
@@ -1771,15 +1626,10 @@ export default {
       const that = this;
 
       function getStatus(repoStatus) {
-        return that.repoStatusOptions.find(
-          (status) => status.value === repoStatus
-        );
+        return that.repoStatusOptions.find((status) => status.value === repoStatus);
       }
 
-      if (
-        "developmentStatus" in this.step7Form &&
-        this.step7Form.developmentStatus != ""
-      ) {
+      if ("developmentStatus" in this.step7Form && this.step7Form.developmentStatus != "") {
         const status = this.step7Form.developmentStatus;
         const returnVal = getStatus(status);
 
@@ -1982,11 +1832,9 @@ export default {
       });
     },
     deleteContributor(id) {
-      this.step2Form.contributors = this.step2Form.contributors.filter(
-        (contributor) => {
-          return contributor.id !== id;
-        }
-      );
+      this.step2Form.contributors = this.step2Form.contributors.filter((contributor) => {
+        return contributor.id !== id;
+      });
     },
     addRelatedLink() {
       this.step4Form.relatedLinks.push({
@@ -1995,11 +1843,9 @@ export default {
       });
     },
     deleteRelatedLink(id) {
-      this.step4Form.relatedLinks = this.step4Form.relatedLinks.filter(
-        (relatedLink) => {
-          return relatedLink.id !== id;
-        }
-      );
+      this.step4Form.relatedLinks = this.step4Form.relatedLinks.filter((relatedLink) => {
+        return relatedLink.id !== id;
+      });
     },
     addOtherSoftwareRequirements() {
       this.step5Form.otherSoftwareRequirements.push({
@@ -2008,12 +1854,11 @@ export default {
       });
     },
     deleteOtherSoftwareRequirements(id) {
-      this.step5Form.otherSoftwareRequirements =
-        this.step5Form.otherSoftwareRequirements.filter(
-          (otherSoftwareRequirement) => {
-            return otherSoftwareRequirement.id !== id;
-          }
-        );
+      this.step5Form.otherSoftwareRequirements = this.step5Form.otherSoftwareRequirements.filter(
+        (otherSoftwareRequirement) => {
+          return otherSoftwareRequirement.id !== id;
+        }
+      );
     },
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
@@ -2024,26 +1869,18 @@ export default {
       this.showSavingIcon();
 
       this.dataset.data.general.questions.name = this.step1Form.name;
-      this.dataset.data.general.questions.description =
-        this.step1Form.description;
+      this.dataset.data.general.questions.description = this.step1Form.description;
 
-      this.step3Form.keywords = this.filterArrayOfObjects(
-        this.step3Form.keywords,
-        "keyword"
-      );
+      this.step3Form.keywords = this.filterArrayOfObjects(this.step3Form.keywords, "keyword");
 
       this.dataset.data.general.questions.keywords = this.step3Form.keywords;
       this.dataset.data.general.questions.authors = this.step2Form.authors;
-      this.dataset.data.general.questions.contributors =
-        this.step2Form.contributors;
+      this.dataset.data.general.questions.contributors = this.step2Form.contributors;
       this.dataset.data.general.questions.funding = this.step3Form.funding;
       this.dataset.data.general.questions.referencePublication =
         this.step7Form.referencePublication;
 
-      this.step4Form.relatedLinks = this.filterArrayOfObjects(
-        this.step4Form.relatedLinks,
-        "link"
-      );
+      this.step4Form.relatedLinks = this.filterArrayOfObjects(this.step4Form.relatedLinks, "link");
 
       this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
         this.step5Form.otherSoftwareRequirements,
@@ -2073,16 +1910,12 @@ export default {
         codeForm.programmingLanguage = this.step5Form.programmingLanguage;
         codeForm.runtimePlatform = this.step5Form.runtimePlatform;
         codeForm.operatingSystem = this.step5Form.operatingSystem;
-        codeForm.otherSoftwareRequirements =
-          this.step5Form.otherSoftwareRequirements;
+        codeForm.otherSoftwareRequirements = this.step5Form.otherSoftwareRequirements;
 
         codeForm.currentVersion = this.step6Form.currentVersion;
-        codeForm.currentVersionReleaseDate =
-          this.step6Form.currentVersionReleaseDate;
-        codeForm.currentVersionDownloadLink =
-          this.step6Form.currentVersionDownloadLink;
-        codeForm.currentVersionReleaseNotes =
-          this.step6Form.currentVersionReleaseNotes;
+        codeForm.currentVersionReleaseDate = this.step6Form.currentVersionReleaseDate;
+        codeForm.currentVersionDownloadLink = this.step6Form.currentVersionDownloadLink;
+        codeForm.currentVersionReleaseNotes = this.step6Form.currentVersionReleaseNotes;
 
         codeForm.referencePublication = this.step7Form.referencePublication;
         codeForm.developmentStatus = this.step7Form.developmentStatus;
@@ -2163,17 +1996,14 @@ export default {
 
       for (const contributor of contributors) {
         response = await axios
-          .get(
-            `${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`,
-            {
-              params: {
-                accept: "application/vnd.github.v3+json",
-              },
-              headers: {
-                Authorization: `Bearer  ${GithubAccessToken}`,
-              },
-            }
-          )
+          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`, {
+            params: {
+              accept: "application/vnd.github.v3+json",
+            },
+            headers: {
+              Authorization: `Bearer  ${GithubAccessToken}`,
+            },
+          })
           .then((response) => {
             const authorObject = {};
 
@@ -2322,17 +2152,14 @@ export default {
         }
 
         const lanuagesResponse = await axios
-          .get(
-            `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`,
-            {
-              params: {
-                accept: "application/vnd.github.v3+json",
-              },
-              headers: {
-                Authorization: `Bearer  ${GithubAccessToken}`,
-              },
-            }
-          )
+          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`, {
+            params: {
+              accept: "application/vnd.github.v3+json",
+            },
+            headers: {
+              Authorization: `Bearer  ${GithubAccessToken}`,
+            },
+          })
           .then((response) => {
             return response.data;
           })
@@ -2364,13 +2191,7 @@ export default {
 
       this.step2Form.authors = [];
       codeMeta.author.forEach(
-        ({
-          givenName = "",
-          familyName = "",
-          email = "",
-          affiliation = "",
-          orcid = "",
-        }) => {
+        ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
           this.step2Form.authors.push({
             givenName,
             familyName,
@@ -2385,13 +2206,7 @@ export default {
       this.step2Form.contributors = [];
       if ("contributor" in codeMeta) {
         codeMeta.contributor.forEach(
-          ({
-            givenName = "",
-            familyName = "",
-            email = "",
-            affiliation = "",
-            orcid = "",
-          }) => {
+          ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
             this.step2Form.contributors.push({
               givenName,
               familyName,
@@ -2493,16 +2308,12 @@ export default {
           this.step5Form.programmingLanguage = codeForm.programmingLanguage;
           this.step5Form.runtimePlatform = codeForm.runtimePlatform;
           this.step5Form.operatingSystem = codeForm.operatingSystem;
-          this.step5Form.otherSoftwareRequirements =
-            codeForm.otherSoftwareRequirements;
+          this.step5Form.otherSoftwareRequirements = codeForm.otherSoftwareRequirements;
 
           this.step6Form.currentVersion = codeForm.currentVersion;
-          this.step6Form.currentVersionReleaseDate =
-            codeForm.currentVersionReleaseDate;
-          this.step6Form.currentVersionDownloadLink =
-            codeForm.currentVersionDownloadLink;
-          this.step6Form.currentVersionReleaseNotes =
-            codeForm.currentVersionReleaseNotes;
+          this.step6Form.currentVersionReleaseDate = codeForm.currentVersionReleaseDate;
+          this.step6Form.currentVersionDownloadLink = codeForm.currentVersionDownloadLink;
+          this.step6Form.currentVersionReleaseNotes = codeForm.currentVersionReleaseNotes;
 
           this.step7Form.referencePublication = codeForm.referencePublication;
           this.step7Form.developmentStatus = codeForm.developmentStatus;

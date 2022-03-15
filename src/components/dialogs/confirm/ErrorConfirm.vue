@@ -15,9 +15,7 @@
             <DialogOverlay class="fixed inset-0 bg-zinc-800/30" />
           </TransitionChild>
 
-          <span class="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
+          <span class="inline-block h-screen align-middle" aria-hidden="true"> &#8203; </span>
 
           <TransitionChild
             as="template"
@@ -41,10 +39,7 @@
                   />
                 </div>
                 <div class="my-2">
-                  <DialogTitle
-                    as="h3"
-                    class="text-lg font-medium leading-6 text-gray-900"
-                  >
+                  <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                     {{ localTitle }}
                   </DialogTitle>
 
@@ -67,11 +62,7 @@
                 >
                   {{ localCancelButtonText }}
                 </button>
-                <button
-                  type="button"
-                  class="primary-button"
-                  @click="setIsOpen(false, 'okay')"
-                >
+                <button type="button" class="primary-button" @click="setIsOpen(false, 'okay')">
                   {{ localConfirmButtonText }}
                 </button>
               </div>
@@ -138,12 +129,7 @@ export default {
       default: true,
     },
   },
-  emits: [
-    "messageClosed",
-    "messageConfirmed",
-    "messageCancel",
-    "messageOutsideClicked",
-  ],
+  emits: ["messageClosed", "messageConfirmed", "messageCancel", "messageOutsideClicked"],
   methods: {
     setIsOpen(val, type) {
       console.log(type);

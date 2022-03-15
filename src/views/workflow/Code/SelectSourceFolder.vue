@@ -1,17 +1,12 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Provide the location of the files you want to include in your research
-        software dataset
+        Provide the location of the files you want to include in your research software dataset
       </span>
 
       <el-divider class="my-4"> </el-divider>
-      <span class="mb-2">
-        Where are your research software files located?
-      </span>
+      <span class="mb-2"> Where are your research software files located? </span>
       <div class="item-center flex justify-center gap-8 pt-8">
         <div
           class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
@@ -28,11 +23,7 @@
             :class="{ 'selected-location': locationID === 'github' }"
             @click="selectSourceLocation('github')"
           >
-            <img
-              src="../../../assets/images/githublogo.jpeg"
-              alt=""
-              class="h-24 w-full"
-            />
+            <img src="../../../assets/images/githublogo.jpeg" alt="" class="h-24 w-full" />
             <span class="mx-5 text-lg"> On GitHub </span>
           </div>
         </div>
@@ -54,9 +45,7 @@
       </div>
 
       <div class="flex w-full flex-col pt-20" v-if="locationID === 'github'">
-        <h3 class="text-center">
-          Continue to select the repository you want to use.
-        </h3>
+        <h3 class="text-center">Continue to select the repository you want to use.</h3>
       </div>
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2 pt-8">
@@ -104,11 +93,7 @@ export default {
   computed: {
     emptyInput() {
       if (this.locationID === "local") {
-        if (
-          this.folderPath === "" ||
-          this.folderPath === null ||
-          this.folderPath === undefined
-        ) {
+        if (this.folderPath === "" || this.folderPath === null || this.folderPath === undefined) {
           return true;
         }
         if (this.folderPath.trim() === "") {
@@ -154,14 +139,12 @@ export default {
     selectFolderPath() {
       if (!this.folderDialogOpen) {
         this.folderDialogOpen = true;
-        dialog
-          .showOpenDialog({ properties: ["openDirectory"] })
-          .then((data) => {
-            if (!data.canceled) {
-              this.folderPath = data.filePaths[0];
-            }
-            this.folderDialogOpen = false;
-          });
+        dialog.showOpenDialog({ properties: ["openDirectory"] }).then((data) => {
+          if (!data.canceled) {
+            this.folderPath = data.filePaths[0];
+          }
+          this.folderDialogOpen = false;
+        });
       }
     },
     startCuration() {
@@ -209,9 +192,7 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (this.locationID === "github") {
-        this.$router.push(
-          `/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`
-        );
+        this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`);
       } else {
         this.$router.push({
           path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,

@@ -8,16 +8,8 @@
     <div class="dialog-Container">
       <el-form ref="formRef" :model="userInputs" label-position="top">
         <div class="inputField" v-for="i in this.numInput" :key="i">
-          <el-form-item
-            :label="this.headers[i - 1]"
-            :prop="this.headers[i - 1]"
-            required
-          >
-            <el-input
-              class="inputBar"
-              size="large"
-              v-model="userInputs[this.headers[i - 1]]"
-            />
+          <el-form-item :label="this.headers[i - 1]" :prop="this.headers[i - 1]" required>
+            <el-input class="inputBar" size="large" v-model="userInputs[this.headers[i - 1]]" />
           </el-form-item>
         </div>
         <div
@@ -25,22 +17,16 @@
           @click="openWebsite(this.headers[0])"
         >
           <span class="font-medium">
-            How to generate a {{ this.headers[0].split(" ")[0] }} personal
-            access token?
+            How to generate a {{ this.headers[0].split(" ")[0] }} personal access token?
           </span>
           <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
         </div>
         <el-form-item>
           <div class="bottom gap-[5px]">
-            <button
-              class="danger-plain-button h-9"
-              @click="closeDialog('Cancelled')"
-            >
+            <button class="danger-plain-button h-9" @click="closeDialog('Cancelled')">
               Cancel
             </button>
-            <button class="primary-button h-9" @click="confirmInput('formRef')">
-              OK
-            </button>
+            <button class="primary-button h-9" @click="confirmInput('formRef')">OK</button>
           </div>
         </el-form-item>
       </el-form>

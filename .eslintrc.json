@@ -3,11 +3,7 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:vue/essential",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:vue/essential", "plugin:prettier/recommended"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -23,7 +19,8 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
+        "endOfLine": "auto",
+        "printWidth": 100
       }
     ]
   }
