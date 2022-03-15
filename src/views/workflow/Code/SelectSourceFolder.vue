@@ -104,6 +104,13 @@ export default {
   computed: {
     emptyInput() {
       if (this.locationID === "local") {
+        if (
+          this.folderPath === "" ||
+          this.folderPath === null ||
+          this.folderPath === undefined
+        ) {
+          return true;
+        }
         if (this.folderPath.trim() === "") {
           return true;
         } else {

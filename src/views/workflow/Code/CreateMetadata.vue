@@ -656,6 +656,7 @@
                               type="text"
                               placeholder="PRA_2018_73"
                             ></el-input>
+                            {{ step3Form.funding.code }}
                             <form-help-content
                               popoverContent="Code of the grant funding this software (comma separate if multiple)"
                             ></form-help-content>
@@ -2407,9 +2408,11 @@ export default {
       codeMeta.keywords.forEach((keyword) => {
         this.step3Form.keywords.push({ keyword, id: uuidv4() });
       });
-      this.step3Form.funding.code = codeMeta.funding;
+      if ("funding" in codeMeta) {
+        this.step3Form.funding.code = codeMeta.funding;
+      }
       if ("funder" in codeMeta) {
-        this.step3Form.funding.organization = codeMeta.funder.name;
+        this.step3Form.funding.organization = codeMeta.funder["@name"];
       }
 
       this.step4Form.codeRepository = codeMeta.codeRepository;
