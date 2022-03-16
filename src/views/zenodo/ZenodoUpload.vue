@@ -373,7 +373,7 @@ export default {
       this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
       await this.sleep(100);
 
-      await axios
+      const response = await axios
         .post(`${this.$server_url}/zenodo/deposition/files/upload`, {
           access_token: this.zenodoToken,
           bucket_url: bucket_url,
@@ -389,7 +389,7 @@ export default {
 
       this.statusMessage = `Uploaded ${path.basename(file_path)} to Zenodo successfully`;
       await this.sleep(300);
-      return;
+      return response;
     },
     async checkForFoldersAndUpload() {
       this.statusMessage = "Checking folder path";
@@ -448,10 +448,15 @@ export default {
             continue;
           }
 
-          await this.uploadToZenodo(
+          const response = await this.uploadToZenodo(
             this.workflow.destination.zenodo.bucket,
             path.join(folderPath, file)
           );
+
+          if (response === "ERROR") {
+            return "ERROR";
+          }
+
           this.percentage = ((index + 1) / contents.length) * 75 + 25;
           this.percentage = Math.round(this.percentage);
         }

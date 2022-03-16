@@ -73,6 +73,30 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
+    async updateForNewVersion() {
+      const response = await axios
+        .get(`${this.$server_url}/zenodo/depositions`, {
+          params: {
+            access_token: this.zenodoToken,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      const filteredDepositions = response.filter((deposition) => {
+        return deposition.submitted === true;
+      });
+
+      const selectedDeposition = filteredDepositions[0];
+
+      this.workflow.destination.zenodo.selectedDeposition = selectedDeposition;
+      this.workflow.destination.zenodo.newVersion = true;
+    },
     async publishDeposition() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
 
@@ -120,6 +144,13 @@ export default {
         this.workflow.datasetPublished = true;
 
         this.published = true;
+
+        if (
+          "newVersion" in this.workflow.destination.zenodo &&
+          this.workflow.destination.zenodo.newVersion === false
+        ) {
+          await this.updateForNewVersion();
+        }
 
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
