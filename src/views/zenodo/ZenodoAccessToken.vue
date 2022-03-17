@@ -169,6 +169,9 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import axios from "axios";
+import fs from "fs-extra";
+import path from "path";
+import { app, dialog } from "@electron/remote";
 import { ElLoading } from "element-plus";
 import { marked } from "marked";
 import { v4 as uuidv4 } from "uuid";
@@ -240,22 +243,44 @@ export default {
   },
   methods: {
     exportToJson(obj, file_name) {
-      /* eslint-disable */
-      let filename = file_name;
       let contentType = "application/json;charset=utf-8;";
+
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], {
           type: contentType,
         });
-        navigator.msSaveOrOpenBlob(blob, filename);
+        navigator.msSaveOrOpenBlob(blob, file_name);
       } else {
-        var virtualFile = document.createElement("a");
-        virtualFile.download = filename;
-        virtualFile.href = "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
-        virtualFile.target = "_blank";
-        document.body.appendChild(virtualFile);
-        virtualFile.click();
-        document.body.removeChild(virtualFile);
+        dialog
+          .showSaveDialog({
+            title: `Save ${file_name}`,
+            defaultPath: path.join(app.getPath("downloads"), file_name),
+          })
+          .then((result) => {
+            const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
+            console.log(result.filePath);
+            fs.writeFile(result.filePath, fileData, (err) => {
+              if (err) {
+                console.log(err);
+                this.$notify({
+                  title: "Error",
+                  type: "error",
+                  message: "Something went wrong while saving the file",
+                });
+              } else {
+                this.$notify({
+                  title: "Success",
+                  message: `${file_name} saved successfully`,
+                  type: "success",
+                  position: "bottom-right",
+                });
+                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
+              }
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     createLoading() {

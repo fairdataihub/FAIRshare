@@ -225,6 +225,9 @@ import { useTokenStore } from "@/store/access.js";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import axios from "axios";
+import fs from "fs-extra";
+import path from "path";
+import { app, dialog } from "@electron/remote";
 import dayjs from "dayjs";
 import { ElLoading, ElNotification } from "element-plus";
 
@@ -292,13 +295,36 @@ export default {
         });
         navigator.msSaveOrOpenBlob(blob, filename);
       } else {
-        var virtualFile = document.createElement("a");
-        virtualFile.download = filename;
-        virtualFile.href = "data:" + contentType + "," + encodeURIComponent(JSON.stringify(obj));
-        virtualFile.target = "_blank";
-        document.body.appendChild(virtualFile);
-        virtualFile.click();
-        document.body.removeChild(virtualFile);
+        dialog
+          .showSaveDialog({
+            title: `Save ${file_name}`,
+            defaultPath: path.join(app.getPath("downloads"), file_name),
+          })
+          .then((result) => {
+            const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
+            console.log(result.filePath);
+            fs.writeFile(result.filePath, fileData, (err) => {
+              if (err) {
+                console.log(err);
+                this.$notify({
+                  title: "Error",
+                  type: "error",
+                  message: "Something went wrong while saving the file",
+                });
+              } else {
+                this.$notify({
+                  title: "Success",
+                  message: `${file_name} saved successfully`,
+                  type: "success",
+                  position: "bottom-right",
+                });
+                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
+              }
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     createLoading() {
@@ -948,7 +974,7 @@ export default {
       if (response) {
         this.validZenodoHookTokenFound = true;
       } else {
-        ElNotification({
+        this.$notify({
           title: "Info",
           message: "Creating a Zenodo webhook for this repository.",
           type: "info",
