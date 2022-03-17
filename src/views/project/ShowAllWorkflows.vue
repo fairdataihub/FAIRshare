@@ -112,7 +112,7 @@ export default {
   methods: {
     combineDataTypes(dataTypes) {
       if (dataTypes.length === 1) {
-        return dataTypes[0];
+        return dataTypes[0] === "Code" ? "Research Software" : dataTypes[0];
       } else if (dataTypes.length === 2) {
         return `${dataTypes[0]} and ${dataTypes[1]}`;
       } else if (dataTypes.length > 2) {
