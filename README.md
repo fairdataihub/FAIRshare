@@ -29,7 +29,6 @@
 
 ## Table of Contents
 
-
 [contributors-shield]: https://img.shields.io/github/contributors/fairdataihub/FAIRshare.svg?style=flat-square
 [contributors-url]: https://github.com/fairdataihub/FAIRshare/graphs/contributors
 [stars-shield]: https://img.shields.io/github/stars/fairdataihub/FAIRshare.svg?style=flat-square
