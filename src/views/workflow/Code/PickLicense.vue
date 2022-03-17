@@ -96,7 +96,7 @@
             </el-drawer>
           </el-form-item>
 
-          <div v-if="licenseChanged">
+          <div v-if="showLicenseGenerateQuestion">
             <p class="text-base">
               Do you want to create and add a license terms file into your dataset?
             </p>
@@ -199,7 +199,7 @@ export default {
       loadingLicenseDetails: false,
       licenseOptions: licensesJSON.licenses,
       spinnerGlobal: null,
-      licenseChanged: false,
+      showLicenseGenerateQuestion: false,
       originalLicense: "",
       saveLicense: "",
       displayLicenseEditor: false,
@@ -214,7 +214,7 @@ export default {
         return true;
       }
 
-      if (this.licenseChanged) {
+      if (this.showLicenseGenerateQuestion) {
         disabled = true;
       }
 
@@ -254,15 +254,11 @@ export default {
       this.licenseForm.license = license;
       this.licenseChange(license);
     },
-    licenseChange(val) {
-      if (this.originalLicense !== val) {
-        this.licenseChanged = true;
-        this.displayLicenseEditor = false;
-        this.saveLicense = "";
-        this.draftLicense = "";
-      } else {
-        this.licenseChanged = false;
-      }
+    licenseChange(_license) {
+      this.showLicenseGenerateQuestion = true;
+      this.displayLicenseEditor = false;
+      this.saveLicense = "";
+      this.draftLicense = "";
     },
     async showLicenseEditor() {
       if (this.saveLicense === "Yes") {
@@ -289,7 +285,6 @@ export default {
             return "ERROR";
           });
 
-        console.log(response);
         this.draftLicense = response.licenseText;
 
         this.displayLicenseEditor = true;
@@ -311,6 +306,7 @@ export default {
 
       // turn this to false after license is generated at the end of the workflow
       this.workflow.generateLicense = true;
+      this.workflow.createLicenseSelect = this.saveLicense;
       this.workflow.licenseText = this.draftLicense;
 
       this.datasetStore.updateCurrentDataset(this.dataset);
@@ -324,6 +320,8 @@ export default {
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;
+
+          this.workflow.createLicenseSelect = this.saveLicense;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();
@@ -386,16 +384,22 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
-    console.log(this.dataset.data.general.questions);
-
     if (
       "general" in this.dataset.data &&
       "questions" in this.dataset.data.general &&
       "license" in this.dataset.data.general.questions
     ) {
-      console.log(this.dataset.data.general.questions.license);
       this.licenseForm.license = this.dataset.data.general.questions.license;
       this.originalLicense = this.licenseForm.license;
+      this.showLicenseGenerateQuestion = true;
+      this.saveLicense = this.workflow.createLicenseSelect;
+
+      if (this.saveLicense === "Yes") {
+        this.displayLicenseEditor = true;
+        this.draftLicense = this.workflow.licenseText;
+      } else {
+        this.displayLicenseEditor = false;
+      }
     } else {
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
@@ -413,5 +417,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
