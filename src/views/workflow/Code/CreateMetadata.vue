@@ -1177,8 +1177,8 @@
               confirmButtonText="Yes, I want to skip"
             >
               <p class="text-center text-base text-gray-500">
-                Are you sure you want to skip creating the codemeta.json and CITATION.cff files for
-                this dataset? This is not recommended according to the FAIR guidelines.
+                The codemeta.json and CITATION.cff files are highly recommended to make your
+                research software FAIR. Are you sure you want to skip this step?
               </p>
             </warning-confirm>
           </div>
