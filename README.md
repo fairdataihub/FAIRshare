@@ -7,7 +7,7 @@
 <br />
 <p align="center">
   <a href="#">
-    <img src="/src/assets/brand/logo-with-name.png" alt="Logo" width="100" height="100">
+    <img src="/src/assets/brand/logo-with-name.png" alt="Logo" width="400">
   </a>
 
   <h3 align="center">FAIR data sharing made easy</h3>
