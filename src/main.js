@@ -8,6 +8,8 @@ import Popper from "vue3-popper";
 import Vue3Lottie from "vue3-lottie";
 import VMdEditor from "@kangc/v-md-editor";
 
+import analytics from "./plugins/analytics";
+
 // plugins for the markdown editor
 import githubTheme from "@kangc/v-md-editor/lib/theme/github.js";
 import createKatexPlugin from "@kangc/v-md-editor/lib/plugins/katex/npm";
@@ -174,6 +176,9 @@ app.use(createPinia()); // pinia
 app.use(ElementPlus); // element plus
 app.use(VMdEditor); // markdown editor
 app.use(Vue3Lottie); // lottie animations
+app.use(analytics, {
+  trackingID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
+}); // analytics
 
 // Mount application to the root element
 app.mount("#app");
