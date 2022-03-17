@@ -325,7 +325,11 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
-                v-if="newVersion === 'true'"
+                v-if="
+                  newVersion === 'true' &&
+                  'metadata' in selectedDeposition &&
+                  Object.keys(selectedDeposition.metadata).length !== 0
+                "
               >
                 <router-link
                   :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
@@ -340,7 +344,7 @@
                   class="primary-button"
                   @click="saveSelectedVersionDetails"
                   :disabled="repoID === ''"
-                  id="continue"
+                  id="continueNewVersion"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
