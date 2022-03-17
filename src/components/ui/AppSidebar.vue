@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="debug-screens relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
+    class="relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
     :class="{
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
