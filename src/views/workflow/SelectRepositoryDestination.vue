@@ -134,7 +134,16 @@
             </fade-transition>
 
             <fade-transition>
-              <div v-if="showSelectZenodoDeposition">
+              <ConnectZenodo
+                v-if="
+                  repoID === 'zenodo' && showSelectZenodoDeposition && !validZenodoTokenAvailable
+                "
+                :statusChangeFunction="showConnection"
+              ></ConnectZenodo>
+            </fade-transition>
+
+            <fade-transition>
+              <div v-if="showSelectZenodoDeposition && validZenodoTokenAvailable">
                 <!-- Add a card style background here -->
 
                 <div class="flex flex-col items-center">
@@ -381,6 +390,8 @@
 </template>
 
 <script>
+import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access";
 
@@ -391,7 +402,7 @@ import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@headless
 
 export default {
   name: "SelectRepositoryDestination",
-  components: { Icon, Listbox, ListboxButton, ListboxOptions, ListboxOption },
+  components: { Icon, Listbox, ListboxButton, ListboxOptions, ListboxOption, ConnectZenodo },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -414,6 +425,7 @@ export default {
       uploadToRepo: "None",
       newVersion: "",
       loadingSpinner: false,
+      validZenodoTokenAvailable: false,
     };
   },
   computed: {},
@@ -427,6 +439,12 @@ export default {
 
       if (event && event.detail === 2) {
         this.addMetadata();
+      }
+    },
+    async showConnection(status) {
+      console.log(status);
+      if (status === "connected") {
+        this.validZenodoTokenAvailable = true;
       }
     },
     showZenodoDepositionSelectorModal() {
@@ -579,6 +597,14 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
+
+    const validZenodoConnection = await this.tokens.verifyZenodoConnection();
+
+    if (validZenodoConnection) {
+      this.validZenodoTokenAvailable = true;
+    } else {
+      this.validZenodoTokenAvailable = false;
+    }
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
