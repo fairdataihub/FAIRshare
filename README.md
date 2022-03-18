@@ -28,6 +28,7 @@
 <!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
+
 - [About](#about)
 - [Downloading FAIRshare](#Downloading-FAIRshare)
 - [Full Documentation](#Full-Documentation)
@@ -38,6 +39,7 @@
 - [Acknowledgements](#acknowledgements)
 
 ## About
+
 FAIRshare is a cross-platform desktop software that allows researchers to easily organize and share their biomedical research data according to applicable FAIR guidelines. In our first phase of development we are implementing a process for making biomedical research software FAIR and also working on supporting the FAIRification of COVID-19 and other infectious disease related research data (immunology, genomics, epidemiology, etc.). Learn more about FAIRshare, its impact, the development timeline, and related resources on our group's website at https://fairdataihub.org/fairshare.
 
 <p align="center">
@@ -59,7 +61,7 @@ See the [documentation](https://docs.sodaforsparc.io/docs/intro) for our full do
 
 ## Issues and Feedback
 
-To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab]https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us). 
+To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab]https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us).
 
 ## Using the Source Code
 
