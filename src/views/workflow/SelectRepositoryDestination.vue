@@ -456,11 +456,14 @@ export default {
       this.addMetadata("zenodo-new-version");
     },
     async getAllDepositions() {
+      const tokenObject = await this.tokens.getToken("zenodo");
+      const zenodoToken = tokenObject.token;
+
       this.loadedZenodoDepositions = false;
       const response = await axios
         .get(`${this.$server_url}/zenodo/depositions`, {
           params: {
-            access_token: this.zenodoToken,
+            access_token: zenodoToken,
           },
         })
         .then((response) => {
@@ -489,7 +492,9 @@ export default {
     },
     async selectZenodoDeposition() {
       if (this.newVersion === "true") {
-        this.getAllDepositions();
+        if (this.validZenodoTokenAvailable) {
+          this.getAllDepositions();
+        }
         this.showSelectZenodoDeposition = true;
       } else {
         this.showSelectZenodoDeposition = false;
