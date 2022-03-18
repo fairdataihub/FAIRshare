@@ -77,8 +77,8 @@ FAIRshare uses Google Analytics to track user interactions with the application.
 
 ## Acknowledgements
 
-- [NIAID](https://www.niaid.nih.gov/) (Funding source0
-- [The Butte Lab](https://buttelab.ucsf.edu/) (Collaborators on the project)
+- [NIAID](https://www.niaid.nih.gov/) (Funding source)
+- [The Butte Lab](https://buttelab.ucsf.edu/) (Collaborators)
 
 [contributors-shield]: https://img.shields.io/github/contributors/fairdataihub/FAIRshare.svg?style=flat-square
 [contributors-url]: https://github.com/fairdataihub/FAIRshare/graphs/contributors
