@@ -276,6 +276,7 @@
         </router-link>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/your-projects" />
   </div>
 </template>
 

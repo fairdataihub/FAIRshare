@@ -148,9 +148,9 @@ const createPyProc = async () => {
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1150,
+    width: 1200,
     height: 850,
-    minWidth: 1150,
+    minWidth: 1200,
     minHeight: 850,
     icon: __dirname + "/assets/app-icons/Icon.png",
     show: false,

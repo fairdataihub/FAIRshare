@@ -2,20 +2,20 @@
   <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
-        <div class="flex w-full items-center justify-center py-5">
+        <div class="flex w-full items-center justify-center pt-5 pb-1">
           <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">FAIRshare</h1>
         </div>
-        <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
-          <h2 class="text-2xl font-medium text-slate-700 xl:text-2xl">
+        <div class="mb-1 flex w-full flex-col items-center justify-center pt-2 pb-3">
+          <h2 class="text-xl font-medium text-slate-700">
             Make your biomedical research data, and beyond,
           </h2>
-          <h2 class="text-2xl font-medium text-slate-700 xl:text-2xl">
+          <h2 class="text-xl font-medium text-slate-700">
             Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
       </div>
 
-      <div class="grid h-auto w-full grid-cols-3 gap-12">
+      <div class="grid h-auto w-full grid-cols-3 gap-6">
         <div
           class="flex h-full flex-col items-center justify-between rounded-2xl border border-zinc-100 p-6 shadow-xl"
           v-for="item in heroData"
