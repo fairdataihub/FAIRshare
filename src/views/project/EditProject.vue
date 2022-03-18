@@ -238,8 +238,11 @@ export default {
 
           //   this.datasetStore.addDataset(dataset, datasetID);
 
+          this.$track("Projects", "Edit project", "success");
+
           this.$router.push({ name: "ShowAllProjects" });
         } else {
+          this.$track("Projects", "Edit project", "failed");
           console.log("error submit!!");
           return false;
         }

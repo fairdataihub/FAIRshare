@@ -58,6 +58,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import path from "path";
 import fs from "fs-extra";
+import klawSync from "klaw-sync";
 
 import LoadingCubeGrid from "@/components/spinners/LoadingCubeGrid.vue";
 import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
@@ -110,9 +111,11 @@ export default {
           access_token: this.zenodoToken,
         })
         .then((response) => {
+          this.$track("Zenodo", "Create empty deposition", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Zenodo", "Create empty deposition", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -359,12 +362,15 @@ export default {
             }
             this.alertTitle = "Metadata error";
             this.alertMessage = "Could not add your metadata to the dataset. Please try again.";
+            this.$track("Zenodo", "Add metadata to Zenodo deposition", "failed");
             return "ERROR";
           } else {
+            this.$track("Zenodo", "Add metadata to Zenodo deposition", "success");
             return response.data;
           }
         })
         .catch((error) => {
+          this.$track("Zenodo", "Add metadata to Zenodo deposition", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -380,9 +386,11 @@ export default {
           file_path: file_path,
         })
         .then((response) => {
+          this.$track("Zenodo", "Uploaded file to Zenodo", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Zenodo", "Uploaded file to Zenodo", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -478,9 +486,11 @@ export default {
           virtual_file: false,
         })
         .then((response) => {
+          this.$track("Metadata", "Create codemeta", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create codemeta", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -494,9 +504,12 @@ export default {
           virtual_file: false,
         })
         .then((response) => {
+          this.$track("Metadata", "Create citation", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create citation", "failed");
+
           console.error(error);
           return "ERROR";
         });
@@ -512,9 +525,11 @@ export default {
           content_type: "text",
         })
         .then((response) => {
+          this.$track("Metadata", "Create license", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create license", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -539,9 +554,11 @@ export default {
             deposition_id: original_deposition_id,
           })
           .then((response) => {
+            this.$track("Zenodo", "Create new version", "success");
             return response.data;
           })
           .catch((error) => {
+            this.$track("Zenodo", "Create new version", "failed");
             console.error(error);
             return "ERROR";
           });
@@ -715,9 +732,26 @@ export default {
       response = await this.checkForFoldersAndUpload();
 
       if (response === "ERROR") {
+        this.$track("Zenodo", "Dataset uploaded", "failed");
         this.alertMessage = "There was an error with uploading files to the Zenodo deposition";
         return "FAIL";
       } else {
+        const files = klawSync(this.dataset.data[this.workflow.type[0]].folderPath, {
+          nodir: true,
+        });
+
+        let totalSize = 0;
+
+        for (let file of files) {
+          totalSize += file.stats.size;
+        }
+
+        this.$track("Zenodo", "Files uploaded size", totalSize);
+
+        this.$track("Zenodo", "Files uploaded", files.length);
+
+        this.$track("Zenodo", "Dataset uploaded", "success");
+
         this.statusMessage = "Uploaded all files to Zenodo successfully.";
       }
 

@@ -50,6 +50,12 @@ export default {
   },
   methods: {
     openURL(url) {
+      if (url === "https://fairdataihub.org/contact-us") {
+        this.$track("Issues", "Other");
+      } else if (url === "https://github.com/fairdataihub/FAIRshare/issues/new/choose") {
+        this.$track("Issues", "FAIRshare");
+      }
+
       window.ipcRenderer.send("open-link-in-browser", url);
     },
   },

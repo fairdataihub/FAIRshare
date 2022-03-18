@@ -268,8 +268,12 @@ export default {
             duration: 3000,
           });
 
+          this.$track("Projects", "Create new project", "success");
+
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
+          this.$track("Projects", "Create new project", "failed");
+
           console.log("Invalid form entries");
           return false;
         }

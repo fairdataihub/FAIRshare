@@ -112,9 +112,11 @@ export default {
           deposition_id: depositionID,
         })
         .then((response) => {
+          this.$track("Zenodo", "Publish deposition", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Zenodo", "Publish deposition", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -134,7 +136,7 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        this.statusMessage = "There was an error when adding metadata to the deposition";
+        this.statusMessage = "There was an error when publishing the deposition";
         return "FAIL";
       } else {
         this.datasetStore.showProgressBar();

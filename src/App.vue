@@ -71,7 +71,7 @@ export default {
   },
   mounted() {
     this.$track("App Launched", "OS", process.platform);
-    this.$track("App Launched", "Version", process.version);
+    this.$track("App Launched", "Version", app.getVersion());
     this.$track("App Launched", "Arch", process.arch);
 
     // disable the mouse back and forward buttons

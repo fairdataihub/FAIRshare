@@ -58,6 +58,7 @@
     "gsap": "^3.9.1",
     "humanparser": "^2.6.0",
     "katex": "^0.15.2",
+    "klaw-sync": "^6.0.0",
     "lodash": "^4.17.21",
     "marked": "^4.0.12",
     "mousetrap": "^1.6.5",
