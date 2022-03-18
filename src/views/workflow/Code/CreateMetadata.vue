@@ -1185,8 +1185,9 @@
         </transition>
       </div>
     </div>
-    <transition name="fade" mode="out-in" appear>
-      <div class="fixed bottom-1 right-2" v-if="showSaving">
+
+    <fade-transition>
+      <div class="fixed bottom-2 right-20" v-if="showSaving">
         <Vue3Lottie
           :animationData="SaveLottieJSON"
           :width="75"
@@ -1195,12 +1196,15 @@
           @onComplete="hideSavingIcon"
         />
       </div>
-    </transition>
-    <transition name="fade" mode="out-in" appear>
-      <div class="fixed bottom-2 right-3" v-show="showSpinner">
+    </fade-transition>
+
+    <fade-transition>
+      <div class="fixed bottom-2 right-20" v-show="showSpinner">
         <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
       </div>
-    </transition>
+    </fade-transition>
+
+    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
   </div>
 </template>
 

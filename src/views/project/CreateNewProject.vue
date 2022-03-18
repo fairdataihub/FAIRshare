@@ -160,6 +160,7 @@
         </div>
       </el-form>
     </div>
+    <app-docs-link url="curate-and-share/create-new-project" position="bottom-4" />
   </div>
 </template>
 

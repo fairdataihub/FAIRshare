@@ -376,6 +376,7 @@
         </transition>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/select-github-repo" position="bottom-4" />
   </div>
 </template>
 

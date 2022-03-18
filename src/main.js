@@ -31,6 +31,7 @@ import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import LineDivider from "./components/ui/LineDivider.vue";
 import WorkflowProgressBarVue from "./components/ui/WorkflowProgressBar.vue";
 import FormHelpContent from "./components/ui/FormHelpContent.vue";
+import AppDocsLink from "./components/ui/AppDocsLink.vue";
 
 import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
 import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
@@ -58,10 +59,12 @@ app.config.globalProperties.$server_url = `http://127.0.0.1:${getGlobal("PYPORT"
 app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 
 // register components globally
+app.component("VuePopper", Popper);
+
 app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
-app.component("VuePopper", Popper);
 app.component("form-help-content", FormHelpContent);
+app.component("app-docs-link", AppDocsLink);
 
 app.component("warning-confirm", WarningConfirm);
 app.component("info-confirm", InfoConfirm);

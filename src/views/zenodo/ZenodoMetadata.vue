@@ -975,7 +975,7 @@
         </el-collapse>
       </el-form>
 
-      <div class="flex w-full flex-row justify-center space-x-4 py-4">
+      <div class="flex w-full flex-row justify-center space-x-4 py-6">
         <button class="primary-plain-button" @click="navigateBack">
           <el-icon><d-arrow-left /></el-icon> Back
         </button>
@@ -998,8 +998,8 @@
         </warning-confirm>
       </div>
     </div>
-    <transition name="fade" mode="out-in" appear>
-      <div class="fixed bottom-1 right-2" v-show="savingSpinner">
+    <fade-transition>
+      <div class="fixed bottom-1 right-2" v-if="savingSpinner">
         <Vue3Lottie
           :animationData="$helix_spinner"
           :width="60"
@@ -1008,7 +1008,10 @@
           @onComplete="savingSpinner = false"
         />
       </div>
-    </transition>
+      <div v-else>
+        <app-docs-link url="curate-and-share/add-zenodo-metadata" position="bottom-4" />
+      </div>
+    </fade-transition>
   </div>
 </template>
 

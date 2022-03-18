@@ -60,8 +60,12 @@
               <h2 class="py-2 text-lg font-semibold text-slate-600">Configuration Folder</h2>
               <div class="flex flex-col items-start">
                 <p class="mb-2">
-                  The FAIRshare config folder holds key information regarding your projects, access
-                  tokens and datasets.
+                  The FAIRshare configuration folder holds key information regarding your projects,
+                  access tokens and datasets.
+                  <br />
+                  <span class="text-xs font-medium text-zinc-500">
+                    You should not modify this folder unless you know what you are doing.
+                  </span>
                 </p>
                 <button @click="openFileExplorer('configFolder')" class="secondary-plain-button">
                   Open the config folder
@@ -75,6 +79,10 @@
                 <p class="mb-2">
                   Our backend service will create logs for errors that are shown in the UI. Click
                   the button to open the logs folder.
+                  <br />
+                  <span class="text-xs font-medium text-zinc-500">
+                    This is only intended to be used for debugging purposes.
+                  </span>
                 </p>
                 <button @click="openFileExplorer('backendLogs')" class="secondary-plain-button">
                   Open the logs folder
@@ -95,6 +103,7 @@
         />
       </div>
     </transition>
+    <app-docs-link url="manage-app-settings/overview" position="bottom-4" />
   </div>
 </template>
 

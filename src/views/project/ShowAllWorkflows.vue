@@ -91,6 +91,7 @@
         </info-confirm>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/your-workflows" position="bottom-4" />
   </div>
 </template>
 
@@ -137,12 +138,18 @@ export default {
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
       this.$router.push({ path: routerPath });
     },
-    localZenodoUploadNoPublishResponse(response) {
+    async localZenodoUploadNoPublishResponse(response) {
       let routerPath = "";
       if (response === "ok") {
         routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
         this.$router.push({ path: routerPath });
       } else if (response === "cancel") {
+        this.dataset.workflows[this.workflowID].datasetUploaded = false;
+        this.dataset.workflows[this.workflowID].datasetPublished = false;
+
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
+
         routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
         this.$router.push({ path: routerPath });
       }
