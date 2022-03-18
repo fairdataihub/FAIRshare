@@ -40,7 +40,7 @@ from utilities import (
     fileExistInFolder,
 )
 
-API_VERSION = "0.0.1"
+API_VERSION = "1.0.0"
 
 
 app = Flask(__name__)
