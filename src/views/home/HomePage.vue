@@ -15,11 +15,25 @@
         </div>
       </div>
 
-      <div class="flex w-full justify-evenly space-x-14 py-3">
-        <div class="item-center flex flex-col justify-center">
-          <div class="item-center flex w-full justify-center py-3">
-            <img src="../../assets/images/overview.svg" class="h-auto w-11/12" />
+      <div class="grid h-auto w-full grid-cols-3 gap-12">
+        <div
+          class="flex h-full flex-col items-center justify-between"
+          v-for="item in heroData"
+          :key="item.title"
+        >
+          <h3 class="textlgd text-center font-medium">
+            {{ item.title }}
+          </h3>
+          <div>
+            <Vue3Lottie
+              :animationLink="item.lottieURL"
+              :width="item.lottieWidth"
+              :height="item.lottieWidth"
+            />
           </div>
+          <p class="px-4 text-center text-sm font-normal">
+            {{ item.subtitle }}
+          </p>
         </div>
       </div>
 
@@ -76,6 +90,32 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      heroData: [
+        {
+          title: "1. Find applicable FAIR guidelines for your data",
+          subtitle:
+            "Answer questions related to your data to find applicable guidelines for making it FAIR",
+          lottieURL: "https://assets3.lottiefiles.com/packages/lf20_zjycbtqy.json",
+          lottieWidth: 250,
+          lottieHeight: 250,
+        },
+        {
+          title: "2. Follow our step-by-step process for curating your data",
+          subtitle:
+            "Implement the FAIR data and metadata requirements easily through our intuitive interface",
+          lottieURL: "https://assets2.lottiefiles.com/packages/lf20_31cmhkzs.json",
+          lottieWidth: 250,
+          lottieHeight: 250,
+        },
+        {
+          title: "3. Share resulting dataset on a suitable repository",
+          subtitle:
+            "Upload your dataset conveniently in a few click to a suitable FAIR data repository",
+          lottieURL: "https://assets10.lottiefiles.com/packages/lf20_komemhfl.json",
+          lottieWidth: 250,
+          lottieHeight: 250,
+        },
+      ],
     };
   },
   methods: {
