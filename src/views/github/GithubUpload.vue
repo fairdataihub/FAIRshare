@@ -108,9 +108,11 @@ export default {
           virtual_file: false,
         })
         .then((response) => {
+          this.$track("Metadata", "Create codemeta", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create codemeta", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -124,9 +126,12 @@ export default {
           virtual_file: false,
         })
         .then((response) => {
+          this.$track("Metadata", "Create citation", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create citation", "failed");
+
           console.error(error);
           return "ERROR";
         });
@@ -143,9 +148,11 @@ export default {
           content_type: "text",
         })
         .then((response) => {
+          this.$track("Metadata", "Create license", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create license", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -379,9 +386,11 @@ export default {
           content_type: "json",
         })
         .then((response) => {
+          this.$track("Metadata", "Create .zenodo", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Metadata", "Create .zenodo", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -401,9 +410,11 @@ export default {
           repo_name: repoName,
         })
         .then((response) => {
+          this.$track("GitHub", "Uploaded file to GitHub", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("GitHub", "Uploaded file to GitHub", "success");
           console.error(error);
           return "ERROR";
         });

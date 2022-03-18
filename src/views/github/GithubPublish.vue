@@ -446,9 +446,11 @@ export default {
         await this.datasetStore.syncDatasets();
       } else {
         if (releaseType === "publish") {
+          this.$track("GitHub", "Publish release", "success");
           this.publishedReleaseURL = response;
         }
         if (releaseType === "draft") {
+          this.$track("GitHub", "Draft release", "success");
           this.draftReleaseURL = response;
         }
 
@@ -489,6 +491,7 @@ export default {
 
       response = await axios(config)
         .then((response) => {
+          this.$track("GitHub", "Auto generated release notes", "success");
           console.log(response);
           if (response.status === 200) {
             console.log("response.data", response.data.body);
@@ -499,6 +502,7 @@ export default {
           }
         })
         .catch((error) => {
+          this.$track("GitHub", "Auto generated release notes", "failed");
           console.error(error);
           return "ERROR";
         });
