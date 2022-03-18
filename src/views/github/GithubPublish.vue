@@ -284,6 +284,7 @@ export default {
       selectedBranch: "",
       releaseTitle: "",
       releaseBody: "# Your release notes here",
+      repoSize: 0,
       prerelease: false,
       draftReleaseURL: "",
       publishedReleaseURL: "",
@@ -445,6 +446,7 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
       } else {
+        this.$track("GitHub", "Repository size", this.repoSize);
         if (releaseType === "publish") {
           this.$track("GitHub", "Publish release", "success");
           this.publishedReleaseURL = response;
@@ -592,6 +594,7 @@ export default {
         });
 
       if (response !== "ERROR") {
+        this.repoSize = response.size;
         this.selectedBranch = response.default_branch;
       }
 
