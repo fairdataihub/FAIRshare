@@ -6,10 +6,10 @@
           <h1 class="text-4xl font-bold text-slate-800 xl:text-4xl">FAIRshare</h1>
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center py-3">
-          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
-            Make your COVID-19 research data, and beyond,
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-2xl">
+            Make your biomedical research data, and beyond,
           </h2>
-          <h2 class="text-2xl font-medium text-slate-700 xl:text-3xl">
+          <h2 class="text-2xl font-medium text-slate-700 xl:text-2xl">
             Findable, Accessible, Interoperable, and Reusable (FAIR)
           </h2>
         </div>
@@ -17,7 +17,7 @@
 
       <div class="grid h-auto w-full grid-cols-3 gap-12">
         <div
-          class="flex h-full flex-col items-center justify-between"
+          class="flex h-full flex-col items-center justify-between rounded-2xl border border-zinc-100 p-6 shadow-xl"
           v-for="item in heroData"
           :key="item.title"
         >
@@ -31,7 +31,7 @@
               :height="item.lottieWidth"
             />
           </div>
-          <p class="px-4 text-center text-sm font-normal">
+          <p class="px-3 text-center text-sm font-normal">
             {{ item.subtitle }}
           </p>
         </div>
