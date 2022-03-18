@@ -39,11 +39,13 @@ module.exports = {
         },
         publish: {
           provider: "github",
-          repo: "https://github.com/fairdataihub/FAIRshare.git",
-
-          publishAutoUpdate: true,
-          host: "github.com",
           protocol: "https",
+          host: "github.com",
+          owner: "fairdataihub",
+          repo: "FAIRshare",
+
+          releaseType: "draft",
+          publishAutoUpdate: true,
         },
       },
     },

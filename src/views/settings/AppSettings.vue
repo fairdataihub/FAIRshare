@@ -51,7 +51,6 @@
                   start the app.
                 </p>
               </div>
-              <button @click="$track('test1')">track</button>
             </div>
           </div>
         </el-tab-pane>
