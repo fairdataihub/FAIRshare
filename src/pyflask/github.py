@@ -2,6 +2,7 @@ from __future__ import print_function
 import requests
 import json
 import base64
+import uuid
 
 
 def uploadFileToGithub(access_token, file_name, file_path, repo_name):
@@ -73,7 +74,7 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
 
 def getUserRepositories(access_token):
     def getGithubRepos(page):
-        url = f"https://api.github.com/user/repos?per_page=100&page={page}"
+        url = f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner,organization_member"  # noqa E501
 
         payload = {}
         headers = {
@@ -231,11 +232,13 @@ def getRepoContentTree(access_token, owner, repo):
             return contentTree
 
         def convertContentTree(contentTree):
+
             outputList = []
             for item in contentTree:
                 if "children" in contentTree[item]:
                     outputList.append(
                         {
+                            "id": uuid.uuid1().int,
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],
@@ -250,6 +253,7 @@ def getRepoContentTree(access_token, owner, repo):
                 else:
                     outputList.append(
                         {
+                            "id": uuid.uuid1().int,
                             "label": item,
                             "sha": contentTree[item]["sha"],
                             "url": contentTree[item]["url"],

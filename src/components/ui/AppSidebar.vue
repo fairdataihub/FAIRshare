@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="debug-screens relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
+    class="relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
     :class="{
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
@@ -15,11 +15,7 @@
       :class="{ 'pointer-events-none': !datasetStore.sidebarVisible }"
     >
       <div class="relative flex flex-row justify-center p-2">
-        <img
-          v-if="sideBarOpen"
-          class="m-4 w-28"
-          src="../../assets/brand/logo.svg"
-        />
+        <img v-if="sideBarOpen" class="m-4 w-28" src="../../assets/brand/logo.svg" />
 
         <div
           class="group absolute top-0 right-2 flex scale-100 transform cursor-pointer items-center justify-center p-1 transition-all hover:scale-110"

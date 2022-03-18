@@ -1,140 +1,138 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
-  >
-    <div class="flex h-full w-full flex-col items-center">
-      <div class="card-container">
-        <div class="image-container">
-          <img src="../../assets/images/zenodologo.png" class="image" />
-        </div>
-        <div class="card-container-content">
-          <div class="card-container-status">
-            <div class="centering-container">
-              <span
-                class="dot"
-                :class="{
-                  'bg-green-600': connectedToZenodo,
-                  'bg-gray-600': !connectedToZenodo,
-                }"
-              ></span>
-            </div>
+  <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
+    <div class="flex h-full w-full flex-col">
+      <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Manage Accounts</h1>
 
-            <div class="centering-container">
-              <div
-                class="mr-2"
-                :class="{
-                  'text-green-600': connectedToZenodo,
-                  'text-gray-600': !connectedToZenodo,
-                }"
-              >
-                {{ zenodoDetails.status }}
+      <line-divider></line-divider>
+
+      <h2>
+        An overview of all your accounts connected to FAIRshare and the actions you can take are
+        shown below.
+      </h2>
+
+      <div class="flex w-full flex-col items-center justify-center pt-5">
+        <div class="card-container">
+          <div class="image-container">
+            <img src="../../assets/images/zenodologo.png" class="image" />
+          </div>
+          <div class="card-container-content">
+            <div class="card-container-status">
+              <div class="centering-container">
+                <span
+                  class="dot"
+                  :class="{
+                    'bg-green-600': connectedToZenodo,
+                    'bg-gray-600': !connectedToZenodo,
+                  }"
+                ></span>
+              </div>
+
+              <div class="centering-container">
+                <div
+                  class="mr-2"
+                  :class="{
+                    'text-green-600': connectedToZenodo,
+                    'text-gray-600': !connectedToZenodo,
+                  }"
+                >
+                  {{ zenodoDetails.status }}
+                </div>
+              </div>
+
+              <div class="centering-container tag-container" v-if="connectedToZenodo">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
+                  <el-icon> <user-filled /> </el-icon>
+                  <span class="px-2">
+                    {{ zenodoDetails.name }}
+                  </span>
+                </el-tag>
               </div>
             </div>
-
-            <div
-              class="centering-container tag-container"
-              v-if="connectedToZenodo"
-            >
-              <el-tag
-                type="success"
-                effect="plain"
-                class="border-green-400 text-green-600"
-              >
-                <el-icon> <user-filled /> </el-icon>
-                <span class="px-2">
-                  {{ zenodoDetails.name }}
-                </span>
-              </el-tag>
+            <div class="centering-container center">
+              <p class="mt-1">
+                Connect FAIRshare with your Zenodo account to allow us to upload your data directly
+                to Zenodo. To learn more about connecting FAIRshare to Zenodo, please visit the
+                <span
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-zenodo'
+                    )
+                  "
+                >
+                  Zenodo documentation</span
+                >
+                page.
+              </p>
+            </div>
+            <div class="centering-container bottom">
+              <ConnectZenodo></ConnectZenodo>
             </div>
           </div>
-          <div class="centering-container center">
-            <p>
-              Connect with your zenodo account by using an access token. Please
-              see more details at
-              <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://developers.zenodo.org/#quickstart-upload'
-                  )
-                "
-              >
-                zenodo access token documentation.
-              </span>
-            </p>
-          </div>
-          <div class="centering-container bottom">
-            <ConnectZenodo></ConnectZenodo>
-          </div>
         </div>
-      </div>
 
-      <div class="card-container">
-        <div class="image-container">
-          <img src="../../assets/images/githublogo.jpeg" class="image" />
-        </div>
-        <div class="card-container-content">
-          <div class="card-container-status">
-            <div class="centering-container">
-              <span
-                class="dot"
-                :class="{
-                  'bg-green-600': connectedToGithub,
-                  'bg-gray-600': !connectedToGithub,
-                }"
-              ></span>
-            </div>
+        <div class="card-container">
+          <div class="image-container">
+            <img src="../../assets/images/githublogo.jpeg" class="image" />
+          </div>
+          <div class="card-container-content">
+            <div class="card-container-status">
+              <div class="centering-container">
+                <span
+                  class="dot"
+                  :class="{
+                    'bg-green-600': connectedToGithub,
+                    'bg-gray-600': !connectedToGithub,
+                  }"
+                ></span>
+              </div>
 
-            <div class="centering-container">
-              <div
-                class="mr-2"
-                :class="{
-                  'text-green-600': connectedToGithub,
-                  'text-gray-600': !connectedToGithub,
-                }"
-              >
-                {{ githubDetails.status }}
+              <div class="centering-container">
+                <div
+                  class="mr-2"
+                  :class="{
+                    'text-green-600': connectedToGithub,
+                    'text-gray-600': !connectedToGithub,
+                  }"
+                >
+                  {{ githubDetails.status }}
+                </div>
+              </div>
+
+              <div class="centering-container tag-container" v-if="connectedToGithub">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
+                  <el-icon> <user-filled /> </el-icon>
+                  <span class="px-2">
+                    {{ githubDetails.name }}
+                  </span>
+                </el-tag>
               </div>
             </div>
-
-            <div
-              class="centering-container tag-container"
-              v-if="connectedToGithub"
-            >
-              <el-tag
-                type="success"
-                effect="plain"
-                class="border-green-400 text-green-600"
-              >
-                <el-icon> <user-filled /> </el-icon>
-                <span class="px-2">
-                  {{ githubDetails.name }}
-                </span>
-              </el-tag>
+            <div class="centering-container center">
+              <p>
+                Connect your GitHub account to FAIRshare to allow us to upload your data directly to
+                GitHub. To learn more about connecting FAIRshare to GitHub, please visit the
+                <span
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github'
+                    )
+                  "
+                >
+                  GitHub documentation</span
+                >
+                page.
+              </p>
             </div>
-          </div>
-          <div class="centering-container center">
-            <p>
-              Connect with your GitHub account by using an access token or
-              OAuth. Please see more details at
-              <span
-                class="text-url"
-                @click="
-                  openWebsite(
-                    'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-                  )
-                "
-              >
-                GitHub access token documentation.
-              </span>
-            </p>
-          </div>
-          <div class="centering-container bottom">
-            <ConnectGithub></ConnectGithub>
+            <div class="centering-container bottom">
+              <ConnectGithub></ConnectGithub>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <app-docs-link url="manage-accounts/overview" position="bottom-4" />
   </div>
 </template>
 
@@ -214,6 +212,8 @@ export default {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+
+    console.log(await this.manager.getToken("github"));
 
     await this.manager.loadTokens();
   },

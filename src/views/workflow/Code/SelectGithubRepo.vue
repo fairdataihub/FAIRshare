@@ -1,14 +1,10 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
         Pick the GitHub repository you want to use
       </span>
-      <span class="text-left">
-        Lets select the GitHub repository that you want to make FAIR.
-      </span>
+      <span class="text-left"> Lets select the GitHub repository that you want to make FAIR. </span>
 
       <el-divider class="my-4"> </el-divider>
 
@@ -45,8 +41,8 @@
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
-            We couldn't find your GitHub login details. Please click on the
-            button below to connect to your GitHub account.
+            We couldn't find your GitHub login details. Please click on the button below to connect
+            to your GitHub account.
           </p>
 
           <ConnectGithub :statusChangeFunction="showConnection"></ConnectGithub>
@@ -87,21 +83,25 @@
       <div v-if="showFilePreview" class="py-5">
         <line-divider />
         <p class="text=lg my-5">
-          A list of all the files and folders in the selected repository are
-          shown below. Current branch is <b>{{ currentBranch }}</b
+          A list of all the files and folders in the selected repository are shown below. Current
+          branch is <b>{{ currentBranch }}</b
           >.
         </p>
-        <el-tree
-          :data="fileData"
-          :props="defaultProps"
-          @node-click="handleNodeClick"
-        >
-          <template #default="{ node }">
+        <el-tree-v2 :data="fileData" :props="defaultProps">
+          <template #default="{ node, data }">
             <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
             <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
             <span>{{ node.label }}</span>
+
+            <button
+              v-if="node.isLeaf"
+              @click="handleNodeClick(data, 'view')"
+              class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
+            >
+              <el-icon><view-icon /></el-icon>
+            </button>
           </template>
-        </el-tree>
+        </el-tree-v2>
       </div>
     </div>
     <transition name="fade" mode="out-in" appear>
@@ -143,6 +143,7 @@ export default {
       showFilePreview: false,
       ready: false,
       defaultProps: {
+        value: "id",
         children: "children",
         label: "label",
       },
@@ -190,9 +191,7 @@ export default {
     },
 
     async getGithubRepoContents() {
-      const repoObject = this.githubRepos.find(
-        (repo) => repo.value === this.selectedRepo
-      );
+      const repoObject = this.githubRepos.find((repo) => repo.value === this.selectedRepo);
 
       const fullRepoName = repoObject.label.split("/");
       this.currentBranch = repoObject.default_branch;
@@ -216,7 +215,7 @@ export default {
       return response;
     },
 
-    async handleNodeClick(data) {
+    async handleNodeClick(data, _action) {
       const githubURL = `https://github.com/${this.selectedRepo}/tree/${this.currentBranch}/${data.path}`;
       if (data.isLeaf) {
         window.ipcRenderer.send("open-link-in-browser", githubURL);
@@ -269,8 +268,7 @@ export default {
         this.validTokenAvailable = false;
       } else {
         response.forEach((repo) => {
-          const selectionDisabled =
-            repo.visibility === "private" ? true : false;
+          const selectionDisabled = repo.visibility === "private" ? true : false;
           this.githubRepos.push({
             value: repo.full_name,
             label: repo.full_name,
@@ -317,7 +315,7 @@ export default {
 
       await this.getUserRepos();
 
-      if ("github" in this.workflow) {
+      if ("github" in this.workflow && "repo" in this.workflow.github) {
         this.selectedRepo = this.workflow.github.repo;
       }
 

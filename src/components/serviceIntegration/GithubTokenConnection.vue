@@ -41,8 +41,7 @@ export default {
     // connection status
     connectedToGithubByToken() {
       return (
-        "github" in this.manager.accessTokens &&
-        this.manager.accessTokens.github.type == "token"
+        "github" in this.manager.accessTokens && this.manager.accessTokens.github.type == "token"
       );
     },
   },
@@ -90,6 +89,7 @@ export default {
           tokenObject.name = name;
           tokenObject.type = "token";
           await this.manager.saveToken(key, tokenObject);
+          this.$track("Connections", "GitHub", "connected");
         } catch (e) {
           errorFound = true;
         }

@@ -1,50 +1,34 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Publish your work to Zenodo
-      </span>
+      <span class="text-left text-lg font-medium"> Publish your work to Zenodo </span>
       <span class="text-left">
-        All your data has been uploaded to Zenodo. It's now time to publish your
-        work.
+        All your data has been uploaded to Zenodo. It's now time to publish your work.
       </span>
 
       <el-divider class="my-4"> </el-divider>
 
-      <div
-        class="flex h-full flex-col items-center justify-center px-10"
-        v-if="!published"
-      >
+      <div class="flex h-full flex-col items-center justify-center px-10" v-if="!published">
         <p class="pb-5 text-center">
-          Once the record is published you will no longer be able to change the
-          files in this upload. This is because a Digital Object Identifier
-          (DOI) will be registered immediately after publishing. You will still
-          be able to update the record's metadata later.
+          Once the record is published you will no longer be able to change the files in this
+          upload. This is because a Digital Object Identifier (DOI) will be registered immediately
+          after publishing. You will still be able to update the record's metadata later.
         </p>
         <div class="flex space-x-4">
-          <button class="primary-plain-button" @click="openDraftDataset">
-            View draft
-          </button>
-          <button
-            class="blob primary-button transition-all"
-            @click="publishDeposition"
-          >
+          <button class="primary-plain-button" @click="openDraftDataset">View draft</button>
+          <button class="blob primary-button transition-all" @click="publishDeposition">
             Publish <el-icon><star-icon /></el-icon>
           </button>
         </div>
       </div>
-      <div
-        class="flex h-full flex-col items-center justify-center px-10"
-        v-else
-      >
+      <div class="flex h-full flex-col items-center justify-center px-10" v-else>
         <Vue3Lottie
           animationLink="https://assets4.lottiefiles.com/packages/lf20_lg6lh7fp.json"
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
           :loop="1"
         />
         <p class="pb-5 text-center">
-          Your dataset was successfully published. You can now view it on
-          Zenodo.
+          Your dataset was successfully published. You can now view it on Zenodo.
         </p>
         <div class="flex space-x-4">
           <router-link :to="`/datasets`" class="">
@@ -52,10 +36,7 @@
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
-          <button
-            class="blob primary-button transition-all"
-            @click="viewDatasetOnZenodo"
-          >
+          <button class="blob primary-button transition-all" @click="viewDatasetOnZenodo">
             View dataset on Zenodo <el-icon><star-icon /></el-icon>
           </button>
         </div>
@@ -92,6 +73,30 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
+    async updateForNewVersion() {
+      const response = await axios
+        .get(`${this.$server_url}/zenodo/depositions`, {
+          params: {
+            access_token: this.zenodoToken,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      const filteredDepositions = response.filter((deposition) => {
+        return deposition.submitted === true;
+      });
+
+      const selectedDeposition = filteredDepositions[0];
+
+      this.workflow.destination.zenodo.selectedDeposition = selectedDeposition;
+      this.workflow.destination.zenodo.newVersion = true;
+    },
     async publishDeposition() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
 
@@ -102,14 +107,16 @@ export default {
       });
 
       const response = await axios
-        .post(`${this.$server_url}/zenodo/publish`, {
+        .post(`${this.$server_url}/zenodo/deposition/publish`, {
           access_token: this.zenodoToken,
           deposition_id: depositionID,
         })
         .then((response) => {
+          this.$track("Zenodo", "Publish deposition", "success");
           return response.data;
         })
         .catch((error) => {
+          this.$track("Zenodo", "Publish deposition", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -129,8 +136,7 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        this.statusMessage =
-          "There was an error when adding metadata to the deposition";
+        this.statusMessage = "There was an error when publishing the deposition";
         return "FAIL";
       } else {
         this.datasetStore.showProgressBar();
@@ -140,6 +146,13 @@ export default {
         this.workflow.datasetPublished = true;
 
         this.published = true;
+
+        if (
+          "newVersion" in this.workflow.destination.zenodo &&
+          this.workflow.destination.zenodo.newVersion === false
+        ) {
+          await this.updateForNewVersion();
+        }
 
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();

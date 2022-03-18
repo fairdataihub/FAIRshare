@@ -12,11 +12,7 @@ import { defineStore } from "pinia";
 //   "unpublishedDatasets.json"
 // );
 const USER_PATH = app.getPath("home");
-const DATASETS_STORE_PATH = path.join(
-  USER_PATH,
-  ".fairshare",
-  "unpublishedDatasets.json"
-);
+const DATASETS_STORE_PATH = path.join(USER_PATH, ".fairshare", "unpublishedDatasets.json");
 
 // function to create the dataset store file in the user path
 const createFile = async () => {

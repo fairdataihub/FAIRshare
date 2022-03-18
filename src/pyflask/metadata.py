@@ -89,10 +89,10 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     if "funding" in general_data:
         if "organization" in general_data["funding"]:
             if general_data["funding"]["organization"] != "":
-                metadata["funding"] = {}
+                metadata["funder"] = {}
 
-                metadata["funding"]["@type"] = "Organization"
-                metadata["funding"]["@name"] = general_data["funding"][
+                metadata["funder"]["@type"] = "Organization"
+                metadata["funder"]["@name"] = general_data["funding"][
                     "organization"
                 ]  # noqa: E501
 
@@ -352,7 +352,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     )
     line_prepender(
         os.path.join(folder_path, "CITATION.cff"),
-        "# This CITATION.cff file was generated with Fair Share.",
+        "# This CITATION.cff file was generated with FAIRshare.",
     )
 
     return True

@@ -6,12 +6,24 @@ import os
 import time
 
 
+def getAZenodoDeposition(access_token, deposition_id):
+    # get a specific dataset on Zenodo
+    try:
+        url = f"{config.ZENODO_SERVER_URL}/deposit/depositions/{deposition_id}?access_token={access_token}"  # noqa: E501
+
+        payload = {}
+        headers = {}
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        return response.json()
+    except Exception as e:
+        raise e
+
+
 def getAllZenodoDepositions(access_token):
     # get a list of all unpublished datasets on Zenodo
-    # print(
-    #     f"{config.ZENODO_SERVER_URL}/deposit/depositions?access_token={access_token}"
-    #     config.ZENODO_SERVER_URL + "deposit/depositions?access_token=%s" % access_token # noqa: E501
-    # )
+
     try:
         parameters = {"access_token": access_token}
         r = requests.get(
@@ -24,6 +36,8 @@ def getAllZenodoDepositions(access_token):
 
 
 def createNewZenodoDeposition(access_token):
+    # Create a new Zenodo deposition
+
     try:
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
@@ -39,6 +53,8 @@ def createNewZenodoDeposition(access_token):
 
 
 def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
+    # Upload a file to a Zenodo deposition
+
     try:
         if os.path.exists(file_path) and os.path.isfile(file_path):
             pass
@@ -66,6 +82,8 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
 
 
 def addMetadataToZenodoDeposition(access_token, deposition_id, metadata):
+    # Add metadata to a Zenodo deposition
+
     try:
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
@@ -82,6 +100,8 @@ def addMetadataToZenodoDeposition(access_token, deposition_id, metadata):
 
 
 def publishZenodoDeposition(access_token, deposition_id):
+    # Publish a Zenodo deposition
+
     try:
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
@@ -96,6 +116,8 @@ def publishZenodoDeposition(access_token, deposition_id):
 
 
 def deleteZenodoDeposition(access_token, deposition_id):
+    # Delete an unpublished Zenodo deposition
+
     try:
         headers = {"Content-Type": "application/json"}
         params = {"access_token": access_token}
@@ -110,6 +132,48 @@ def deleteZenodoDeposition(access_token, deposition_id):
             return "Delete successful"
         else:
             return "Delete failed"
+
+    except Exception as e:
+        raise e
+
+
+def createNewZenodoDepositionVersion(access_token, deposition_id):
+    # Create a new version of an existing Zenodo deposition
+
+    try:
+        url = f"{config.ZENODO_SERVER_URL}/deposit/depositions/{deposition_id}/actions/newversion?access_token={access_token}"  # noqa: E501
+
+        payload = {}
+        headers = {}
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        latest_draft_url = (response.json())["links"]["latest_draft"]
+        last_slash = latest_draft_url.rfind("/") + 1
+
+        new_version_id = latest_draft_url[last_slash:]
+
+        return new_version_id
+
+    except Exception as e:
+        raise e
+
+
+def removeFileFromZenodoDeposition(access_token, deposition_id, file_id):
+    # Remove file from an unpublished Zenodo deposition
+
+    try:
+        url = f"{config.ZENODO_SERVER_URL}/deposit/depositions/{deposition_id}/files/{file_id}?access_token={access_token}"  # noqa: E501
+
+        payload = {}
+        headers = {}
+
+        response = requests.request(
+            "DELETE", url, headers=headers, data=payload
+        )  # noqa: E501
+
+        if response.status_code == 204:
+            return "Delete successful"
 
     except Exception as e:
         raise e

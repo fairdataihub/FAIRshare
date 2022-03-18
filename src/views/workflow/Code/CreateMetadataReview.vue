@@ -3,19 +3,13 @@
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Review metadata </span>
       <span class="text-left">
-        Let's go through all your submitted metadata and verify that everything
-        looks good.
+        Let's go through all your submitted metadata and verify that everything looks good.
       </span>
 
       <line-divider></line-divider>
 
       <div class="my-2">
-        <el-descriptions
-          class="margin-top"
-          title="Basic Information"
-          size="small"
-          border
-        >
+        <el-descriptions class="margin-top" title="Basic Information" size="small" border>
           <template #extra>
             <el-button type="primary" @click="editInformation(['general'])">
               <el-icon><edit-icon /></el-icon> Edit basic information
@@ -62,10 +56,7 @@
             <template #label> Contributors </template>
             <div>
               <ul class="list-inside list-disc">
-                <li
-                  v-for="contributor in generalMetadata.contributors"
-                  :key="contributor.id"
-                >
+                <li v-for="contributor in generalMetadata.contributors" :key="contributor.id">
                   Name: {{ contributor.familyName }},
                   {{ contributor.givenName }}
                   <ul class="ml-6">
@@ -236,10 +227,7 @@
           </button>
         </router-link>
 
-        <button
-          class="primary-button flex flex-row items-center"
-          @click="selectDestination"
-        >
+        <button class="primary-button flex flex-row items-center" @click="selectDestination">
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -280,10 +268,7 @@ export default {
         return that.repoStatusOptions.find((item) => item.value === status);
       }
 
-      if (
-        "developmentStatus" in this.codeMetadata &&
-        this.codeMetadata.developmentStatus != ""
-      ) {
+      if ("developmentStatus" in this.codeMetadata && this.codeMetadata.developmentStatus != "") {
         const status = this.codeMetadata.developmentStatus;
         const returnVal = getStatus(status);
         return returnVal.description;
@@ -292,10 +277,7 @@ export default {
       }
     },
     displayCreationDate() {
-      if (
-        "creationDate" in this.codeMetadata &&
-        this.codeMetadata.creationDate != ""
-      ) {
+      if ("creationDate" in this.codeMetadata && this.codeMetadata.creationDate != "") {
         const date = this.codeMetadata.codeMetadata;
         return dayjs(date).format("MMMM D, YYYY");
       } else {
@@ -303,10 +285,7 @@ export default {
       }
     },
     displayFirstReleaseDate() {
-      if (
-        "firstReleaseDate" in this.codeMetadata &&
-        this.codeMetadata.firstReleaseDate != ""
-      ) {
+      if ("firstReleaseDate" in this.codeMetadata && this.codeMetadata.firstReleaseDate != "") {
         const date = this.codeMetadata.firstReleaseDate;
         return dayjs(date).format("MMMM D, YYYY");
       } else {

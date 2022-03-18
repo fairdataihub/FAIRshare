@@ -1,12 +1,11 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 px-5"
-  >
+  <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 px-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-lg font-medium">
-        Start a new data curation project
+      <span class="text-lg font-medium"> Start a new data curation project </span>
+      <span>
+        Fill out some general details about your project here. These fields will be primarily used
+        to identify your project.
       </span>
-      <span> Fill out some general details about your dataset here. </span>
 
       <el-divider> </el-divider>
 
@@ -23,12 +22,7 @@
         </el-form-item>
 
         <el-form-item label="Project description" prop="datasetDescription">
-          <el-popover
-            ref="popover"
-            placement="bottom"
-            :width="300"
-            trigger="manual"
-          >
+          <el-popover ref="popover" placement="bottom" :width="300" trigger="manual">
             <template #reference>
               <el-input
                 v-model="datasetForm.datasetDescription"
@@ -38,30 +32,16 @@
             </template>
 
             <span class="break-normal text-left text-sm">
-              Use a description that is easily identifiable. This will be shown
-              in the dataset selection screen and is not part of your submitted
-              metadata.
+              Use a description that is easily identifiable. This will be shown in the dataset
+              selection screen and is not part of your submitted metadata.
             </span>
           </el-popover>
         </el-form-item>
 
-        <el-form-item
-          label="Data type"
-          prop="dataType"
-          class="createNewProjectFormItemContainer"
-        >
-          <el-checkbox-group
-            v-model="datasetForm.dataType"
-            class="checkbox-group"
-          >
+        <el-form-item label="Data type" prop="dataType" class="createNewProjectFormItemContainer">
+          <el-checkbox-group v-model="datasetForm.dataType" class="checkbox-group">
             <div class="flex gap-8 transition-all">
-              <el-popover
-                placement="bottom"
-                title=""
-                :width="400"
-                :hide-after="0"
-                trigger="hover"
-              >
+              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
                   <el-checkbox
                     border
@@ -77,8 +57,7 @@
                   </el-checkbox>
                 </template>
                 <span class="break-normal text-left text-sm">
-                  Computational code, scripts, models, notebooks, code
-                  libraries, etc.
+                  Computational code, scripts, models, notebooks, code libraries, etc.
                 </span>
               </el-popover>
 
@@ -119,10 +98,7 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <Icon
-                        icon="healthicons:virus-patient-outline"
-                        class="my-2 h-12 w-12"
-                      />
+                      <Icon icon="healthicons:virus-patient-outline" class="my-2 h-12 w-12" />
                       <span class="text-sm">Epidemiology</span>
                     </div>
                   </el-checkbox>
@@ -131,20 +107,9 @@
             </div>
 
             <div class="flex gap-8">
-              <el-popover
-                placement="top"
-                :hide-after="0"
-                trigger="hover"
-                content="Coming soon..."
-              >
+              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
                 <template #reference>
-                  <el-checkbox
-                    border
-                    name="type"
-                    class="single-check-box"
-                    label="Genomic"
-                    disabled
-                  >
+                  <el-checkbox border name="type" class="single-check-box" label="Genomic" disabled>
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />
                       <span class="text-sm">Genomic</span>
@@ -153,12 +118,7 @@
                 </template>
               </el-popover>
 
-              <el-popover
-                placement="top"
-                :hide-after="0"
-                trigger="hover"
-                content="Coming soon..."
-              >
+              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
                 <template #reference>
                   <el-checkbox
                     border
@@ -175,20 +135,9 @@
                 </template>
               </el-popover>
 
-              <el-popover
-                placement="top"
-                :hide-after="0"
-                trigger="hover"
-                content="Coming soon..."
-              >
+              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
                 <template #reference>
-                  <el-checkbox
-                    border
-                    name="type"
-                    class="single-check-box"
-                    label="Media"
-                    disabled
-                  >
+                  <el-checkbox border name="type" class="single-check-box" label="Media" disabled>
                     <div class="flex flex-col items-center">
                       <video-play class="my-2 h-12 w-12"></video-play>
                       <span class="text-sm">Media</span>
@@ -211,6 +160,7 @@
         </div>
       </el-form>
     </div>
+    <app-docs-link url="curate-and-share/create-new-project" position="bottom-4" />
   </div>
 </template>
 
@@ -318,8 +268,12 @@ export default {
             duration: 3000,
           });
 
+          this.$track("Projects", "Create new project", "success");
+
           this.$router.push({ path: `/datasets/new/${datasetID}/confirm` });
         } else {
+          this.$track("Projects", "Create new project", "failed");
+
           console.log("Invalid form entries");
           return false;
         }
@@ -331,32 +285,24 @@ export default {
   },
   mounted() {
     document
-      .querySelectorAll(
-        ".createNewProjectFormItemContainer .el-checkbox__label"
-      )
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox__label")
       .forEach((el) => {
         el.style.paddingLeft = "0px";
       });
 
+    document.querySelectorAll(".createNewProjectFormItemContainer .el-checkbox").forEach((el) => {
+      el.style.display = "flex";
+      el.style.flexDirection = "column-reverse";
+      el.style.gap = "2px";
+    });
     document
-      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
-      .forEach((el) => {
-        el.style.display = "flex";
-        el.style.flexDirection = "column-reverse";
-        el.style.gap = "2px";
-      });
-    document
-      .querySelectorAll(
-        ".createNewProjectFormItemContainer .el-checkbox__input"
-      )
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox__input")
       .forEach((el) => {
         el.style.display = "none";
       });
 
     document
-      .querySelectorAll(
-        ".createNewProjectFormItemContainer .el-checkbox.is-bordered"
-      )
+      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox.is-bordered")
       .forEach((el) => {
         el.style.padding = "0px";
       });
@@ -369,17 +315,13 @@ export default {
         el.style.marginLeft = "0px";
       });
 
-    document
-      .querySelectorAll(".createNewProjectFormItemContainer .el-checkbox")
-      .forEach((el) => {
-        el.style.marginRight = "0px";
-        el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
-      });
+    document.querySelectorAll(".createNewProjectFormItemContainer .el-checkbox").forEach((el) => {
+      el.style.marginRight = "0px";
+      el.style.setProperty("--el-checkbox-checked-text-color", "#f97316");
+    });
 
     document
-      .querySelectorAll(
-        ".createNewProjectFormItemContainer .el-form-item__content"
-      )
+      .querySelectorAll(".createNewProjectFormItemContainer .el-form-item__content")
       .forEach((el) => {
         el.style.marginRight = "0px";
         el.style.setProperty("justify-content", "center");

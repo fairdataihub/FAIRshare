@@ -70,6 +70,10 @@ export default {
     },
   },
   mounted() {
+    this.$track("App Launched", "OS", process.platform);
+    this.$track("App Launched", "Version", app.getVersion());
+    this.$track("App Launched", "Arch", process.arch);
+
     // disable the mouse back and forward buttons
     window.addEventListener("mouseup", (e) => {
       if (e.button === 3 || e.button === 4) {
@@ -108,16 +112,11 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log(`Server Status: ${response.data}`);
         axios
           .get(`${this.$server_url}/api_version`)
           .then((response) => {
-            if (
-              semver.lte(
-                semver.clean(MIN_API_VERSION),
-                semver.clean(response.data)
-              )
-            ) {
+            if (semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))) {
               console.log("API version satisfied");
 
               this.loadStores();
@@ -156,7 +155,7 @@ export default {
       console.log("Update downloaded");
     });
 
-    console.log(this.appPath);
+    console.log(`Current app path: ${this.appPath}`);
 
     this.$router.push({
       path: "/home",

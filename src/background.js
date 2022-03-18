@@ -5,7 +5,9 @@ import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
+import axios from "axios";
 
+const fp = require("find-free-port");
 const fs = require("fs-extra");
 const path = require("path");
 const log = require("electron-log");
@@ -59,7 +61,12 @@ const PY_MODULE = "api";
 let mainWindow;
 
 let pyProc = null;
-const pyPort = "7632";
+let pyPort = null;
+
+global.PYPORT = pyPort;
+
+const startingPort = 7632;
+const portRange = 100;
 
 const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
@@ -86,35 +93,64 @@ const getScriptPath = () => {
   return path.join(process.resourcesPath, PY_MODULE);
 };
 
+const killAllPreviousProcesses = async () => {
+  console.log("Killing all previous processes");
+
+  // kill all previous python processes that could be running.
+  let promisesArray = [];
+
+  // create a loop of 100
+  for (let i = 0; i < portRange; i++) {
+    promisesArray.push(
+      axios.post(`http://127.0.0.1:${startingPort + i}/fairshare_server_shutdown`, {})
+    );
+  }
+
+  // wait for all the promises to resolve
+  await Promise.allSettled(promisesArray);
+};
+
 // create the python process
-const createPyProc = () => {
+const createPyProc = async () => {
   let script = getScriptPath();
 
-  console.log(`Starting python process at ${script}`);
-  console.log(`API documentation hosted at http://127.0.0.1:7632/docs`);
-  if (guessPackaged()) {
-    pyProc = require("child_process").execFile(script, [pyPort], {
-      stdio: "ignore",
-    });
-  } else {
-    pyProc = require("child_process").spawn("python", [script, pyPort], {
-      stdio: "ignore",
-    });
-  }
+  await killAllPreviousProcesses();
 
-  if (pyProc != null) {
-    console.log("child process success on port " + pyPort);
-  } else {
-    console.error("child process failed to start on port" + pyPort);
-  }
+  fp(startingPort, startingPort + portRange)
+    .then(([freep]) => {
+      console.log(`Found a free port at ${freep}. Using port ${freep} for python process.`);
+      pyPort = freep;
+      global.PYPORT = pyPort;
+
+      console.log(`Starting python process at ${script}`);
+      console.log(`API documentation hosted at http://127.0.0.1:${pyPort}/docs`);
+      if (guessPackaged()) {
+        pyProc = require("child_process").execFile(script, [pyPort], {
+          stdio: "ignore",
+        });
+      } else {
+        pyProc = require("child_process").spawn("python", [script, pyPort], {
+          stdio: "ignore",
+        });
+      }
+
+      if (pyProc != null) {
+        console.log("child process success on port " + pyPort);
+      } else {
+        console.error("child process failed to start on port" + pyPort);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1150,
+    width: 1200,
     height: 850,
-    minWidth: 1150,
+    minWidth: 1200,
     minHeight: 850,
     icon: __dirname + "/assets/app-icons/Icon.png",
     show: false,
@@ -201,8 +237,11 @@ async function createWindow() {
 }
 
 // Close the webserver process on app exit
-const exitPyProc = (main_pid) => {
+const exitPyProc = async (main_pid) => {
   console.log("killing python process...");
+
+  await killAllPreviousProcesses();
+
   if ((process.platform == "darwin") | (process.platform == "linux")) {
     pyProc.kill();
     return new Promise(function (resolve) {
@@ -297,7 +336,7 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
 
 // OAuth
 //import { useTokenStore } from "./store/access";
-import axios from "axios";
+
 const nodeUrl = require("url");
 const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
@@ -322,7 +361,7 @@ function retrieveCode(url) {
       let query = parsedURL.query;
       let code = query.code;
       let error = query.error;
-
+      console.log("parsed: ", parsedURL);
       if (error) {
         reject(error);
         authWindow.removeAllListeners("closed");
@@ -337,17 +376,17 @@ function retrieveCode(url) {
         });
       }
     }
-
+    // probabaly needs to add an additional listener to make zenodo oauth working
+    // see here https://www.electronjs.org/docs/latest/api/web-contents
     authWindow.webContents.on("will-navigate", (_event, url) => {
+      console.log("will-navigate", url);
       newlink(url);
     });
 
-    authWindow.webContents.on(
-      "did-get-redirect-request",
-      (_event, _oldUrl, newUrl) => {
-        newlink(newUrl);
-      }
-    );
+    authWindow.webContents.on("did-get-redirect-request", (_event, _oldUrl, newUrl) => {
+      console.log("did-get-redirect-request");
+      newlink(newUrl);
+    });
   });
 }
 ipcMain.on("OAuth-Github", async (_event, _test) => {
@@ -380,10 +419,7 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
           )
           .then(async (response) => {
             console.log("response after code: ", response.data.access_token);
-            mainWindow.webContents.send(
-              "OAuth-Github-Reply",
-              response.data.access_token
-            );
+            mainWindow.webContents.send("OAuth-Github-Reply", response.data.access_token);
             success = true;
           })
           .catch((error) => {
@@ -396,6 +432,61 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
     });
   if (!success) {
     mainWindow.webContents.send("OAuth-Github-Reply", "failed");
+  }
+  mainWindow.webContents.session.clearStorageData();
+});
+
+ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
+  // console.log(test)
+  // complete this part to make zenodo oauth working
+  // api calls are given at the buttom of your zenodo app page
+  let success = false;
+  const CLIENT_ID_ZENODO = "";
+  const CLIENT_SECRET_ZENODO = "";
+  await axios
+    .get("https://sandbox.zenodo.org/oauth/authorize", {
+      params: {
+        client_id: CLIENT_ID_ZENODO,
+        response_type: "code",
+        redirect_uri: "http://localhost:8080",
+        scope: "deposite:write deposite:actions",
+      },
+    })
+    .then(async (responseCode) => {
+      console.log("code:", responseCode.request.res.responseUrl);
+      let authUrl = responseCode.request.res.responseUrl;
+      await retrieveCode(authUrl).then(async (code) => {
+        console.log("code:", code);
+        await axios
+          .post(
+            "https://sandbox.zenodo.org/oauth/token",
+            {
+              client_id: CLIENT_ID_ZENODO,
+              client_secret: CLIENT_SECRET_ZENODO,
+              grant_type: "authorization_code",
+              code: code,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+              },
+            }
+          )
+          .then(async (response) => {
+            console.log("response after code: ", response.data.access_token);
+            mainWindow.webContents.send("OAuth-Zenodo-Reply", response.data.access_token);
+            success = true;
+          })
+          .catch(() => {
+            console.log("request token error: ");
+          });
+      });
+    })
+    .catch(() => {
+      console.log("request code error: ");
+    });
+  if (!success) {
+    mainWindow.webContents.send("OAuth-Zenodo-Reply", "failed");
   }
   mainWindow.webContents.session.clearStorageData();
 });

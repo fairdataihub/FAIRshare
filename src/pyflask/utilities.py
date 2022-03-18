@@ -5,6 +5,7 @@ import shutil
 import requests
 import platform
 import subprocess
+import uuid
 
 
 def foldersPresent(folder_path):
@@ -98,12 +99,14 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
+
     try:
 
         def dfs(dir):
             result = []
             for filename in os.listdir(dir):
                 newDic = {
+                    "id": uuid.uuid1().int,
                     "label": "",
                     "isDir": "",
                     "children": [],
@@ -123,11 +126,26 @@ def readFolderContents(dir):
             return result
 
         root = {
+            "id": uuid.uuid1().int,
             "label": dir,
             "children": dfs(dir),
             "fullPath": dir,
             "isDir": True,
         }  # noqa: E501
         return root
+    except Exception as e:
+        raise e
+
+
+def fileExistInFolder(folder_path, file_name):
+    try:
+        for filename in os.listdir(folder_path):
+            if filename == file_name:
+                import json
+
+                fileFullName = os.path.join(folder_path, filename)
+                f = open(fileFullName)
+                return json.load(f)
+        return "Not Found"
     except Exception as e:
         raise e

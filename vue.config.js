@@ -7,6 +7,7 @@ module.exports = {
       builderOptions: {
         // afterPack: "./scripts/postbuild.js",
         appId: "com.fairdataihub.fairshare",
+        productName: "FAIRshare",
         asar: true,
         afterSign: "./scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,

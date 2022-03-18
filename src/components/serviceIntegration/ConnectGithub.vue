@@ -8,10 +8,7 @@
     >
       <template #reference> -->
     <div>
-      <button
-        @click="interactWithService('github')"
-        :class="githubDetails.buttonStyle"
-      >
+      <button @click="interactWithService('github')" :class="githubDetails.buttonStyle">
         {{ githubDetails.action }}
       </button>
     </div>
@@ -25,16 +22,10 @@
     >
       <div class="dialog-Container">
         <div class="inputField">
-          <button
-            class="primary-plain-button w-52"
-            @click="showGithubTokenConnect"
-          >
+          <button class="primary-plain-button w-52" @click="showGithubTokenConnect">
             Connect with token
           </button>
-          <button
-            class="primary-plain-button w-52"
-            @click="showGithubOAuthConnect"
-          >
+          <button class="primary-plain-button w-52" @click="showGithubOAuthConnect">
             Connect with username
           </button>
         </div>
@@ -52,6 +43,11 @@
       :callback="hideGithubOAuthConnect"
       :onStatusChange="statusChangeFunction"
     ></GithubOAuthConnection>
+    <warning-confirm ref="warningConfirm" title="Warning" @messageConfirmed="confirmDeleteToken">
+      <p class="text-center text-base text-gray-500">
+        Disconnecting will delete the access token stored. Would you like to continue?
+      </p>
+    </warning-confirm>
   </div>
 </template>
 
@@ -60,7 +56,7 @@ import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenCo
 import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
 
 import { useTokenStore } from "@/store/access";
-import { ElNotification, ElMessageBox } from "element-plus";
+import { ElNotification } from "element-plus";
 
 export default {
   // output component: return a button which can open a dialog that contains two buttons
@@ -110,39 +106,24 @@ export default {
     interactWithService(serviceName) {
       if (serviceName == "github") {
         if ("github" in this.manager.accessTokens) {
-          this.APIkeyWarning("github");
+          this.$refs.warningConfirm.show();
         } else {
           this.dialogVisible = true;
         }
       }
     },
-    // delete key and give notification
-    APIkeyWarning(key) {
-      ElMessageBox.confirm(
-        "Disconnecting will delete the access token stored. Continue?",
-        "Warning",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.deleteToken(key);
-        })
-        .catch(() => {
-          // ElNotification({
-          //   type: "info",
-          //   message: "Delete canceled",
-          //   position: "bottom-right",
-          //   duration: 2000,
-          // });
-        });
+    confirmDeleteToken() {
+      this.deleteToken("github");
     },
+    // delete key and give notification
+    // APIkeyWarning(_key) {
+    //   this.$refs.warningConfirm.show();
+    // },
     async deleteToken(key) {
       let errorFound = false;
       try {
         await this.manager.deleteToken(key);
+        this.$track("Connections", "GitHub", "disconnected");
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;

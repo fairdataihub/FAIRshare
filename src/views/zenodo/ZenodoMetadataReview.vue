@@ -1,24 +1,16 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Zenodo metadata review
-      </span>
+      <span class="text-left text-lg font-medium"> Zenodo metadata review </span>
       <span class="text-left">
-        Let's review your Zenodo record details. This will be information that
-        is shown on your dataset publicly when other users are browsing the
-        dataset.
+        Let's review your Zenodo record details. This will be information that is shown on your
+        dataset publicly when other users are browsing the dataset.
       </span>
 
       <line-divider></line-divider>
 
       <div class="my-2">
-        <el-descriptions
-          class="margin-top"
-          title="Basic Information"
-          size="small"
-          border
-        >
+        <el-descriptions class="margin-top" title="Basic Information" size="small" border>
           <template #extra>
             <el-button
               type="primary"
@@ -100,13 +92,8 @@
           border
         >
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['relatedIdentifiers'])"
-              class="ml-2"
-            >
-              <el-icon><edit-icon /></el-icon> Edit related/alternate
-              identifiers
+            <el-button type="primary" @click="editInformation(['relatedIdentifiers'])" class="ml-2">
+              <el-icon><edit-icon /></el-icon> Edit related/alternate identifiers
             </el-button>
           </template>
           <el-descriptions-item>
@@ -114,10 +101,7 @@
 
             <div>
               <ul class="list-inside list-disc">
-                <li
-                  v-for="element in zenodoMetadata.relatedIdentifiers"
-                  :key="element.id"
-                >
+                <li v-for="element in zenodoMetadata.relatedIdentifiers" :key="element.id">
                   Identifier: {{ element.identifier }}
                   <ul class="ml-6">
                     <li>Relationship: {{ element.relationship }}</li>
@@ -139,11 +123,7 @@
           border
         >
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['contributors'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['contributors'])" class="ml-2">
               <el-icon><edit-icon /></el-icon> Edit contributors
             </el-button>
           </template>
@@ -152,10 +132,7 @@
 
             <div>
               <ul class="list-inside list-disc">
-                <li
-                  v-for="contributor in zenodoMetadata.contributors"
-                  :key="contributor.id"
-                >
+                <li v-for="contributor in zenodoMetadata.contributors" :key="contributor.id">
                   Name: {{ contributor.name }}
                   <ul class="ml-6">
                     <li>Affiliation: {{ contributor.affiliation }}</li>
@@ -178,22 +155,14 @@
           border
         >
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['references'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['references'])" class="ml-2">
               <el-icon><edit-icon /></el-icon> Edit references
             </el-button>
           </template>
           <el-descriptions-item>
             <template #label> References </template>
             <div class="flex flex-col">
-              <span
-                v-for="reference in zenodoMetadata.references"
-                :key="reference.id"
-                class="mb-2"
-              >
+              <span v-for="reference in zenodoMetadata.references" :key="reference.id" class="mb-2">
                 {{ reference.reference }}
               </span>
             </div>
@@ -204,11 +173,7 @@
       <div class="my-2" v-if="showJournal">
         <el-descriptions class="margin-top" title="Journal" size="small" border>
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['journal'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['journal'])" class="ml-2">
               <el-icon><edit-icon /></el-icon> Edit journal information
             </el-button>
           </template>
@@ -232,18 +197,9 @@
       </div>
 
       <div class="my-2" v-if="showConference">
-        <el-descriptions
-          class="margin-top"
-          title="Conference"
-          size="small"
-          border
-        >
+        <el-descriptions class="margin-top" title="Conference" size="small" border>
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['conference'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['conference'])" class="ml-2">
               <el-icon><edit /></el-icon> Edit conference information
             </el-button>
           </template>
@@ -280,20 +236,10 @@
       </div>
 
       <div class="my-2" v-if="showBookReportChapter">
-        <el-descriptions
-          class="margin-top"
-          title="Book/report/chapter"
-          size="small"
-          border
-        >
+        <el-descriptions class="margin-top" title="Book/report/chapter" size="small" border>
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['bookReportChapter'])"
-              class="ml-2"
-            >
-              <el-icon><edit-icon /></el-icon> Edit book/report/chapter
-              information
+            <el-button type="primary" @click="editInformation(['bookReportChapter'])" class="ml-2">
+              <el-icon><edit-icon /></el-icon> Edit book/report/chapter information
             </el-button>
           </template>
           <el-descriptions-item>
@@ -322,11 +268,7 @@
       <div class="my-2" v-if="showThesis">
         <el-descriptions class="margin-top" title="Thesis" size="small" border>
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['thesis'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['thesis'])" class="ml-2">
               <el-icon><edit-icon /></el-icon> Edit thesis information
             </el-button>
           </template>
@@ -339,10 +281,7 @@
 
             <div>
               <ul class="list-inside list-disc">
-                <li
-                  v-for="supervisor in zenodoMetadata.thesis.supervisors"
-                  :key="supervisor.id"
-                >
+                <li v-for="supervisor in zenodoMetadata.thesis.supervisors" :key="supervisor.id">
                   Name: {{ supervisor.name }}
                   <ul class="ml-6">
                     <li>Affiliation: {{ supervisor.affiliation }}</li>
@@ -364,22 +303,14 @@
           border
         >
           <template #extra>
-            <el-button
-              type="primary"
-              @click="editInformation(['subjects'])"
-              class="ml-2"
-            >
+            <el-button type="primary" @click="editInformation(['subjects'])" class="ml-2">
               <el-icon><edit-icon /></el-icon> Edit subjects
             </el-button>
           </template>
           <el-descriptions-item>
             <template #label> Subjects </template>
             <div class="flex flex-col">
-              <span
-                v-for="subject in zenodoMetadata.subjects"
-                :key="subject.id"
-                class="mb-2"
-              >
+              <span v-for="subject in zenodoMetadata.subjects" :key="subject.id" class="mb-2">
                 {{ subject.term }} - {{ subject.identifier }}
               </span>
             </div>
@@ -444,10 +375,7 @@ export default {
         return that.languageOptions.find((lang) => lang.alpha3 === language);
       }
 
-      if (
-        "language" in this.zenodoMetadata &&
-        this.zenodoMetadata.language != ""
-      ) {
+      if ("language" in this.zenodoMetadata && this.zenodoMetadata.language != "") {
         const lang = this.zenodoMetadata.language;
         const returnVal = getLanguage(lang);
         return `${returnVal.name} (${returnVal.alpha3})`;
@@ -456,10 +384,7 @@ export default {
       }
     },
     displayPublicationDate() {
-      if (
-        "publicationDate" in this.zenodoMetadata &&
-        this.zenodoMetadata.publicationDate != ""
-      ) {
+      if ("publicationDate" in this.zenodoMetadata && this.zenodoMetadata.publicationDate != "") {
         const date = this.zenodoMetadata.publicationDate;
         return dayjs(date).format("MMMM D, YYYY");
       } else {
@@ -473,9 +398,7 @@ export default {
         this.zenodoMetadata.conference.dates.length == 2
       ) {
         return (
-          dayjs(this.zenodoMetadata.conference.dates[0]).format(
-            "MMMM D, YYYY"
-          ) +
+          dayjs(this.zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
           " - " +
           dayjs(this.zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY")
         );
@@ -494,20 +417,14 @@ export default {
       }
     },
     showContributors() {
-      if (
-        "contributors" in this.zenodoMetadata &&
-        this.zenodoMetadata.contributors.length > 0
-      ) {
+      if ("contributors" in this.zenodoMetadata && this.zenodoMetadata.contributors.length > 0) {
         return true;
       } else {
         return false;
       }
     },
     showReferences() {
-      if (
-        "references" in this.zenodoMetadata &&
-        this.zenodoMetadata.references.length > 0
-      ) {
+      if ("references" in this.zenodoMetadata && this.zenodoMetadata.references.length > 0) {
         return true;
       } else {
         return false;
@@ -570,10 +487,7 @@ export default {
       }
     },
     showSubjects() {
-      if (
-        "subjects" in this.zenodoMetadata &&
-        this.zenodoMetadata.subjects.length > 0
-      ) {
+      if ("subjects" in this.zenodoMetadata && this.zenodoMetadata.subjects.length > 0) {
         return true;
       } else {
         return false;

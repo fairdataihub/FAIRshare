@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Select a license that defines the desired conditions for using your
-        software
+        Select a license that defines the desired conditions for using your software
       </span>
 
       <el-divider> </el-divider>
@@ -46,9 +43,7 @@
             </el-select>
 
             <div class="flex w-full flex-row items-center">
-              <span class="mx-1 text-sm italic text-zinc-600">
-                Suggestions:
-              </span>
+              <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
               <div class="flex-row">
                 <el-tag
                   class="mx-2 cursor-copy transition-all hover:shadow-md"
@@ -79,27 +74,31 @@
             </div>
 
             <el-drawer
+              v-if="showLicenseDetails"
               v-model="showLicenseDetails"
               :title="licenseTitle"
               direction="rtl"
             >
-              <div
-                v-loading="loading"
-                :class="loading ? 'h-full w-full' : 'h-[0px] w-[0px]'"
-              ></div>
+              <fade-transition>
+                <div v-if="loading">
+                  <div class="fixed bottom-2 right-3">
+                    <Vue3Lottie :animationData="$helix_spinner" :width="80" :height="80" />
+                  </div>
+                </div>
+              </fade-transition>
               <iframe
                 sandbox
                 :src="licenseHtmlUrl"
-                class="h-full w-full"
+                class="h-full w-full transition-all"
+                :class="loading ? 'opacity-0' : 'opacity-100'"
                 @load="finishLoading"
               ></iframe>
             </el-drawer>
           </el-form-item>
 
-          <div v-if="licenseChanged">
+          <div v-if="showLicenseGenerateQuestion">
             <p class="text-base">
-              Do you want to create and add a license terms file into your
-              dataset?
+              Do you want to create and add a license terms file into your dataset?
             </p>
 
             <div class="pb-3">
@@ -133,11 +132,7 @@
           </button>
         </router-link>
 
-        <button
-          v-if="displayLicenseEditor"
-          class="primary-button"
-          @click="generateContinue"
-        >
+        <button v-if="displayLicenseEditor" class="primary-button" @click="generateContinue">
           Generate license and Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -154,6 +149,7 @@
         </button>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/select-a-license" position="bottom-4" />
   </div>
 </template>
 
@@ -164,7 +160,7 @@ import { useTokenStore } from "@/store/access.js";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElLoading, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import axios from "axios";
 
 export default {
@@ -204,7 +200,7 @@ export default {
       loadingLicenseDetails: false,
       licenseOptions: licensesJSON.licenses,
       spinnerGlobal: null,
-      licenseChanged: false,
+      showLicenseGenerateQuestion: false,
       originalLicense: "",
       saveLicense: "",
       displayLicenseEditor: false,
@@ -219,7 +215,7 @@ export default {
         return true;
       }
 
-      if (this.licenseChanged) {
+      if (this.showLicenseGenerateQuestion) {
         disabled = true;
       }
 
@@ -238,7 +234,7 @@ export default {
       this.loading = false;
     },
     async openLicenseDetails() {
-      this.spinnerGlobal = await this.createLoading("loading...");
+      this.loading = true;
 
       this.licenseHtmlUrl = "/";
       const licenseId = this.licenseForm.license;
@@ -253,28 +249,17 @@ export default {
 
       this.showLicenseDetails = true;
       this.loadingLicenseDetails = true;
-      await this.spinnerGlobal.close();
     },
-    createLoading(loadingText) {
-      const loading = ElLoading.service({
-        lock: true,
-        text: loadingText,
-      });
-      return loading;
-    },
+
     pickSuggestedLicense(license) {
       this.licenseForm.license = license;
       this.licenseChange(license);
     },
-    licenseChange(val) {
-      if (this.originalLicense !== val) {
-        this.licenseChanged = true;
-        this.displayLicenseEditor = false;
-        this.saveLicense = "";
-        this.draftLicense = "";
-      } else {
-        this.licenseChanged = false;
-      }
+    licenseChange(_license) {
+      this.showLicenseGenerateQuestion = true;
+      this.displayLicenseEditor = false;
+      this.saveLicense = "";
+      this.draftLicense = "";
     },
     async showLicenseEditor() {
       if (this.saveLicense === "Yes") {
@@ -301,7 +286,6 @@ export default {
             return "ERROR";
           });
 
-        console.log(response);
         this.draftLicense = response.licenseText;
 
         this.displayLicenseEditor = true;
@@ -323,35 +307,31 @@ export default {
 
       // turn this to false after license is generated at the end of the workflow
       this.workflow.generateLicense = true;
+      this.workflow.createLicenseSelect = this.saveLicense;
       this.workflow.licenseText = this.draftLicense;
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push(
-        `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-      );
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/selectDestination`);
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
         console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
-          this.dataset.data.general.questions.license =
-            this.licenseForm.license;
+          this.dataset.data.general.questions.license = this.licenseForm.license;
+
+          this.workflow.createLicenseSelect = this.saveLicense;
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();
 
-          this.$router.push(
-            `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`
-          );
+          this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/selectDestination`);
         }
       });
     },
     async prefillGithubLicense() {
-      let loadingState = await this.createLoading();
-
       // get a list of contributors for the repo
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
@@ -392,8 +372,6 @@ export default {
           }
         }
       }
-
-      loadingState.close();
     },
   },
   async mounted() {
@@ -407,16 +385,22 @@ export default {
 
     this.workflow.currentRoute = this.$route.path;
 
-    console.log(this.dataset.data.general.questions);
-
     if (
       "general" in this.dataset.data &&
       "questions" in this.dataset.data.general &&
       "license" in this.dataset.data.general.questions
     ) {
-      console.log(this.dataset.data.general.questions.license);
       this.licenseForm.license = this.dataset.data.general.questions.license;
       this.originalLicense = this.licenseForm.license;
+      this.showLicenseGenerateQuestion = true;
+      this.saveLicense = this.workflow.createLicenseSelect;
+
+      if (this.saveLicense === "Yes") {
+        this.displayLicenseEditor = true;
+        this.draftLicense = this.workflow.licenseText;
+      } else {
+        this.displayLicenseEditor = false;
+      }
     } else {
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
@@ -434,5 +418,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

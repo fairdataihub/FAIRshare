@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="flex h-screen w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
-  >
+  <div class="flex h-screen w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5">
     <div class="flex h-full w-full flex-col py-5">
       <el-page-header @back="goBack" class="hidden text-lg">
         <template #content>
           <p>
             Project settings -
-            <span class="text-sm">
-              Update your project name, description and other settings
-            </span>
+            <span class="text-sm"> Update your project name, description and other settings </span>
           </p>
         </template>
       </el-page-header>
@@ -29,6 +25,7 @@
         @submit.prevent
         class="rounded-lg border-2 border-slate-100 p-4"
         :rules="rules"
+        size="large"
       >
         <el-form-item label="Project ID">
           <span class="cursor-not-allowed text-zinc-500">
@@ -41,12 +38,7 @@
         </el-form-item>
 
         <el-form-item label="Project description">
-          <el-popover
-            ref="popover"
-            placement="bottom"
-            :width="300"
-            trigger="manual"
-          >
+          <el-popover ref="popover" placement="bottom" :width="300" trigger="manual">
             <template #reference>
               <el-input
                 v-model="datasetForm.datasetDescription"
@@ -57,9 +49,8 @@
             </template>
 
             <span class="break-normal text-left text-sm">
-              Use a description that is easily identifiable. This will be shown
-              in the dataset selection screen and is not part of your submitted
-              metadata.
+              Use a description that is easily identifiable. This will be shown in the dataset
+              selection screen and is not part of your submitted metadata.
             </span>
           </el-popover>
         </el-form-item>
@@ -107,14 +98,39 @@
 
         <el-form-item label="Delete project">
           <div class="flex w-full flex-col">
-            <p>
-              Once you delete a project, there is no going back. Please be
-              certain.
-            </p>
+            <p>Once you delete a project, there is no going back. Please be certain.</p>
             <div>
-              <button class="danger-button py-0" @click="deleteDataset">
+              <button class="danger-button py-0" @click="openDialog">
                 <el-icon><delete-icon /></el-icon> Delete project
               </button>
+
+              <warning-prompt
+                ref="warningPrompt"
+                title="Delete project"
+                confirmButtonText="I understand. Delete this project"
+                :confirmDisabled="disableConfirm"
+                @messageConfirmed="deleteProject"
+              >
+                <div w-full>
+                  <p class="mb-3 w-full text-left text-base text-gray-500">
+                    This action cannot be undone. This will permanently delete the
+                    <span class="font-bold">{{ originalName }}</span>
+                    project.
+                  </p>
+                  <p class="mb-2 text-left text-base text-gray-500">
+                    Please type
+                    <span class="font-bold">{{ originalName }}</span> to confirm.
+                  </p>
+
+                  <el-input
+                    v-model="deleteInput"
+                    :placeholder="originalName"
+                    clearable
+                    size="large"
+                    class="w-full"
+                  />
+                </div>
+              </warning-prompt>
             </div>
           </div>
         </el-form-item>
@@ -145,11 +161,12 @@
         </button>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/project-settings" position="bottom-4" />
   </div>
 </template>
 
 <script>
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
 
@@ -167,6 +184,7 @@ export default {
         // dataType: [],
       },
       originalName: "",
+      deleteInput: "",
       deleteDisabled: false,
       rules: {
         datasetName: [
@@ -187,7 +205,16 @@ export default {
       },
     };
   },
+  computed: {
+    disableConfirm() {
+      return this.deleteInput.trim() !== this.originalName.trim();
+    },
+  },
   methods: {
+    openDialog() {
+      this.deleteInput = "";
+      this.$refs.warningPrompt.show();
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -211,8 +238,11 @@ export default {
 
           //   this.datasetStore.addDataset(dataset, datasetID);
 
+          this.$track("Projects", "Edit project", "success");
+
           this.$router.push({ name: "ShowAllProjects" });
         } else {
+          this.$track("Projects", "Edit project", "failed");
           console.log("error submit!!");
           return false;
         }
@@ -221,41 +251,15 @@ export default {
     goBack() {
       this.$router.push({ name: "ShowAllProjects" });
     },
-    deleteDataset() {
-      ElMessageBox.prompt(
-        `This action cannot be undone. This will permanently delete the project.
-        <br />
-        Please type <strong> ${this.originalName} </strong> to confirm.`,
-        "Are you absolutely sure?",
-        {
-          showCancelButton: false,
-          type: "warning",
-          confirmButtonText:
-            "I understand the consequences, delete this project",
-          confirmButtonClass:
-            "danger-plain-button plain danger border-red-500 --el-button-hover-border-color='#fff'",
-          dangerouslyUseHTMLString: true,
-          inputValidator: (value) => {
-            if (value === this.originalName) {
-              return true;
-            }
-            return "Please type the project name correctly";
-          },
-        }
-      )
-        .then(async ({ value }) => {
-          console.log(value);
+    async deleteProject() {
+      await this.datasetStore.deleteDataset(this.datasetID);
 
-          await this.datasetStore.deleteDataset(this.datasetID);
+      ElMessage({
+        type: "success",
+        message: `Your project was deleted.`,
+      });
 
-          ElMessage({
-            type: "success",
-            message: `Project ${value} deleted.`,
-          });
-
-          this.goBack();
-        })
-        .catch(() => {});
+      this.goBack();
     },
   },
   async mounted() {

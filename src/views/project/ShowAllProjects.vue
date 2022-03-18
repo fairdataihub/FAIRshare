@@ -7,27 +7,19 @@
       class="flex h-full flex-row items-center px-3"
       :class="{ 'w-full': datasetStore.datasetCount > 0 }"
     >
-      <div
-        class="flex h-full w-full flex-col"
-        v-if="datasetStore.datasetCount > 0"
-      >
+      <div class="flex h-full w-full flex-col" v-if="datasetStore.datasetCount > 0">
         <!-- <div class="flex flex-col h-full"> -->
-        <span class="text-lg font-medium">
-          Continue curating your datasets
-        </span>
+        <span class="text-lg font-medium"> Continue curating your datasets </span>
 
-        <span>
-          You have some incomplete projects. Select one to continue working on
-          it.
+        <span v-if="datasetsInProgress.length > 0">
+          You have some incomplete projects. Select one to continue working on it.
         </span>
 
         <!-- <el-divider> </el-divider> -->
 
         <div class="h-full flex-grow overflow-y-auto">
-          <div>
-            <el-divider content-position="left">
-              Projects currently in progress
-            </el-divider>
+          <div v-if="datasetsInProgress.length > 0">
+            <el-divider content-position="left"> Projects currently in progress </el-divider>
 
             <div class="w-full px-10">
               <div
@@ -51,9 +43,7 @@
                     <div class="flex flex-wrap items-end space-x-3">
                       <el-tooltip
                         effect="dark"
-                        :content="`Created on ${longDate(
-                          dataset.meta.dateCreated
-                        )}`"
+                        :content="`Created on ${longDate(dataset.meta.dateCreated)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -66,9 +56,7 @@
 
                       <el-tooltip
                         effect="dark"
-                        :content="`Last modified on ${longDate(
-                          dataset.meta.dateModified
-                        )}`"
+                        :content="`Last modified on ${longDate(dataset.meta.dateModified)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -78,20 +66,6 @@
                           </span>
                         </div>
                       </el-tooltip>
-
-                      <div v-if="dataset.meta.destination != 'Unknown'">
-                        <el-tooltip
-                          effect="dark"
-                          content="This dataset will be made FAIR using the Zenodo repository"
-                          placement="bottom"
-                          v-if="dataset.meta.destination === 'zenodo'"
-                        >
-                          <div class="flex items-center">
-                            <Icon icon="clarity:upload-cloud-line" />
-                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
-                          </div>
-                        </el-tooltip>
-                      </div>
 
                       <div v-if="dataset.meta.location != 'Unknown'">
                         <el-tooltip
@@ -119,15 +93,23 @@
                         </el-tooltip>
                       </div>
 
-                      <div>
-                        <el-tag
-                          v-for="workflow in dataset.dataType"
-                          :key="workflow"
-                          size="small"
+                      <div v-if="dataset.meta.destination != 'Unknown'">
+                        <el-tooltip
+                          effect="dark"
+                          content="This dataset will be made FAIR using the Zenodo repository"
+                          placement="bottom"
+                          v-if="dataset.meta.destination === 'zenodo'"
                         >
-                          {{
-                            workflow === "Code" ? "Research software" : workflow
-                          }}
+                          <div class="flex items-center">
+                            <Icon icon="clarity:upload-cloud-line" />
+                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
+                          </div>
+                        </el-tooltip>
+                      </div>
+
+                      <div>
+                        <el-tag v-for="workflow in dataset.dataType" :key="workflow" size="small">
+                          {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
                     </div>
@@ -141,9 +123,7 @@
           </div>
 
           <div class="mt-5" v-if="datasetsPublished.length > 0">
-            <el-divider content-position="left">
-              Fully published projects
-            </el-divider>
+            <el-divider content-position="left"> Fully published projects </el-divider>
 
             <div class="w-full px-10">
               <div
@@ -163,14 +143,10 @@
                     <p class="text-sm line-clamp-3">
                       {{ dataset.description }}
                     </p>
-                    <div
-                      class="mt-1 flex flex-wrap items-end space-x-3 text-zinc-600"
-                    >
+                    <div class="mt-1 flex flex-wrap items-end space-x-3 text-zinc-600">
                       <el-tooltip
                         effect="dark"
-                        :content="`Created on ${longDate(
-                          dataset.meta.dateCreated
-                        )}`"
+                        :content="`Created on ${longDate(dataset.meta.dateCreated)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
@@ -183,29 +159,13 @@
 
                       <el-tooltip
                         effect="dark"
-                        :content="`Last modified on ${longDate(
-                          dataset.meta.dateModified
-                        )}`"
+                        :content="`Last modified on ${longDate(dataset.meta.dateModified)}`"
                         placement="bottom"
                       >
                         <div class="flex items-center">
                           <Icon icon="bx:time" />
                           <span class="pr-2 pl-1 text-sm">
                             {{ dateDifference(dataset.meta.dateModified) }} ago
-                          </span>
-                        </div>
-                      </el-tooltip>
-
-                      <el-tooltip
-                        effect="dark"
-                        :content="`This dataset will be made FAIR using the ${dataset.meta.destination} repository`"
-                        placement="bottom"
-                        v-if="dataset.meta.destination != 'Unknown'"
-                      >
-                        <div class="flex items-center">
-                          <Icon icon="clarity:upload-cloud-line" />
-                          <span class="pr-2 pl-1 text-sm capitalize">
-                            {{ dataset.meta.destination }}
                           </span>
                         </div>
                       </el-tooltip>
@@ -236,15 +196,27 @@
                         </el-tooltip>
                       </div>
 
+                      <el-tooltip
+                        effect="dark"
+                        :content="`This dataset will be made FAIR using the ${dataset.meta.destination} repository`"
+                        placement="bottom"
+                        v-if="dataset.meta.destination != 'Unknown'"
+                      >
+                        <div class="flex items-center">
+                          <Icon icon="clarity:upload-cloud-line" />
+                          <span class="pr-2 pl-1 text-sm capitalize">
+                            {{ dataset.meta.destination }}
+                          </span>
+                        </div>
+                      </el-tooltip>
+
                       <div>
                         <el-tag
                           v-for="workflow in dataset.workflows.workflow1.type"
                           :key="workflow"
                           size="small"
                         >
-                          {{
-                            workflow === "Code" ? "Research software" : workflow
-                          }}
+                          {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
                     </div>
@@ -271,16 +243,11 @@
             <div
               class="hover-underline-animation my-3 flex w-max cursor-pointer flex-row items-center text-primary-600"
             >
-              <span class="font-medium">
-                Or start a new data curation project
-              </span>
+              <span class="font-medium"> Or start a new data curation project </span>
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
-          <div
-            class="flex flex-row space-x-4 pr-2 pl-1"
-            v-if="selectedDataset !== ''"
-          >
+          <div class="flex flex-row space-x-4 pr-2 pl-1" v-if="selectedDataset !== ''">
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting-icon /></el-icon> Project settings
             </button>
@@ -299,17 +266,17 @@
           <div
             class="flex w-max cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all hover:border-solid hover:bg-gray-100"
           >
-            <Icon
-              icon="fluent:quiz-new-24-regular"
-              class="h-20 w-10/12 text-blue-500"
+            <Vue3Lottie
+              animationLink="https://assets2.lottiefiles.com/packages/lf20_16MhZz.json"
+              :width="300"
+              :height="300"
             />
-            <span class="text-large font-medium">
-              Start a new data curation project
-            </span>
+            <span class="text-xl font-bold"> Start a new data curation project </span>
           </div>
         </router-link>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/your-projects" />
   </div>
 </template>
 
@@ -427,9 +394,12 @@ export default {
       await this.datasetStore.getDataset(datasetID);
 
       routerPath = `/datasets/${datasetID}/landing`;
+
+      // Some endpoints to help when testing sub-routes
+
       // routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;

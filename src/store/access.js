@@ -8,11 +8,7 @@ import CryptoJS from "crypto-js";
 import axios from "axios";
 
 const USER_PATH = app.getPath("home");
-const TOKEN_STORE_PATH = path.join(
-  USER_PATH,
-  ".fairshare",
-  "accessTokens.json"
-);
+const TOKEN_STORE_PATH = path.join(USER_PATH, ".fairshare", "accessTokens.json");
 
 // will change to use an actual secret key
 const SECRET_KEY = process.env.VUE_APP_ENCRYPTION_KEY;
@@ -179,9 +175,7 @@ export const useTokenStore = defineStore({
 
     async verifyGithubTokenScope(token) {
       const scope = ["admin:org_hook", "admin:repo_hook", "repo", "user"];
-      const response = await this.verifyGithubTokenScopeByTokenConnection(
-        token
-      );
+      const response = await this.verifyGithubTokenScopeByTokenConnection(token);
       if (response != "Error Found") {
         if (scope.every((item) => response.scope.includes(item))) {
           return true;
@@ -237,18 +231,11 @@ export const useTokenStore = defineStore({
     async githubAPI_listCurrentRepoBranches(token, repo, owner) {
       // return both repo names and repo full names
       let response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` +
-            owner +
-            `/` +
-            repo +
-            `/branches`,
-          {
-            headers: {
-              Authorization: `token ${token}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/` + owner + `/` + repo + `/branches`, {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
         .then((response) => {
           return { data: response.data, status: response.status };
         })

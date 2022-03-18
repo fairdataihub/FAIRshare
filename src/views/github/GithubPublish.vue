@@ -1,14 +1,10 @@
 <template>
-  <div
-    class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5"
-  >
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-semibold">
-        Publish your work to Zenodo
-      </span>
+      <span class="text-left text-lg font-semibold"> Publish your work to Zenodo </span>
       <span class="text-left">
-        All your metadata files have been uploaded to GitHub. It's now time to
-        publish your work to Zenodo by creating a release on GitHub.
+        All your metadata files have been uploaded to GitHub. It's now time to publish your work to
+        Zenodo by creating a release on GitHub.
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -21,26 +17,16 @@
         }"
         v-if="!showFinalInstructions"
       >
-        <div
-          class="flex items-center justify-center space-x-4 pb-20"
-          v-if="showReleasePrompt"
-        >
+        <div class="flex items-center justify-center space-x-4 pb-20" v-if="showReleasePrompt">
           <p class="text-center">Do you want us to create a release for you?</p>
-          <button class="danger-plain-button" @click="declineRelease">
-            No, I'll do it myself
-          </button>
-          <button class="primary-button" @click="approveRelease">
-            Yes, Create a release
-          </button>
+          <button class="danger-plain-button" @click="declineRelease">No, I'll do it myself</button>
+          <button class="primary-button" @click="approveRelease">Yes, Create a release</button>
         </div>
 
-        <div
-          v-if="showDeclinedInstructions"
-          class="flex flex-col items-center justify-center"
-        >
+        <div v-if="showDeclinedInstructions" class="flex flex-col items-center justify-center">
           <p class="pb-10 text-center text-lg">
-            No worries. You can always come back to this page and let FAIRshare
-            create your release for you.
+            No worries. You can always come back to this page and let FAIRshare create your release
+            for you.
           </p>
           <button class="primary-button" @click="approveRelease">
             <el-icon><edit-icon /></el-icon>
@@ -48,10 +34,7 @@
           </button>
         </div>
 
-        <div
-          class="flex w-full flex-col space-x-4 pb-5"
-          v-if="showApprovedInstructions"
-        >
+        <div class="flex w-full flex-col space-x-4 pb-5" v-if="showApprovedInstructions">
           <div class="w-full px-2">
             <div class="flex w-full flex-row items-center py-1">
               <p class="w-[200px] px-2 text-[15px] font-semibold text-zinc-600">
@@ -59,12 +42,7 @@
               </p>
 
               <div class="grow">
-                <el-dropdown
-                  ref="dropdown1"
-                  trigger="click"
-                  size="large"
-                  max-height="350px"
-                >
+                <el-dropdown ref="dropdown1" trigger="click" size="large" max-height="350px">
                   <el-input
                     v-model="selectedTag"
                     size="large"
@@ -155,13 +133,8 @@
             <div class="flex items-start justify-start py-4">
               <div class="flex flex-col">
                 <div class="flex items-center">
-                  <p class="px-2 text-[15px] font-semibold text-zinc-600">
-                    Is this a pre-release?
-                  </p>
-                  <el-tooltip
-                    :content="prerelease ? 'Yes' : 'No'"
-                    placement="right"
-                  >
+                  <p class="px-2 text-[15px] font-semibold text-zinc-600">Is this a pre-release?</p>
+                  <el-tooltip :content="prerelease ? 'Yes' : 'No'" placement="right">
                     <el-switch
                       v-model="prerelease"
                       class="ml-2"
@@ -170,10 +143,7 @@
                     />
                   </el-tooltip>
                 </div>
-                <p
-                  class="px-2 text-[14px] font-medium text-zinc-600"
-                  v-if="prerelease"
-                >
+                <p class="px-2 text-[14px] font-medium text-zinc-600" v-if="prerelease">
                   We will mark the release as non-production ready.
                 </p>
               </div>
@@ -184,26 +154,44 @@
             <div class="flex items-center justify-center space-x-4">
               <button
                 class="primary-plain-button"
-                @click="createRelease('publish')"
+                @click="confirmPublishWarning"
                 :disabled="disablePublish"
               >
                 Publish release
               </button>
               <button
                 class="primary-button"
-                @click="createRelease('draft')"
+                @click="confirmDraftWarning"
                 :disabled="disablePublish"
               >
                 Create a draft release
               </button>
+              <warning-confirm
+                ref="publishWarningConfirm"
+                title="Confirm publish"
+                @messageConfirmed="createRelease('publish')"
+              >
+                <p class="text-center text-base text-gray-500">
+                  Once a release has been made you will not be able to remove it from Zenodo. Are
+                  you sure you want to continue?
+                </p>
+              </warning-confirm>
+              <warning-confirm
+                ref="draftWarningConfirm"
+                title="Confirm creating a draft release"
+                @messageConfirmed="createRelease('draft')"
+              >
+                <p class="text-center text-base text-gray-500">
+                  This will only create a draft version of your release on GitHub. To actually
+                  publish this release you will need to use GitHub's webpage. Are you sure you want
+                  to continue?
+                </p>
+              </warning-confirm>
             </div>
           </div>
         </div>
       </div>
-      <div
-        class="flex h-full flex-col items-center justify-center"
-        v-if="showFinalInstructions"
-      >
+      <div class="flex h-full flex-col items-center justify-center" v-if="showFinalInstructions">
         <Vue3Lottie
           animationLink="https://assets4.lottiefiles.com/packages/lf20_lg6lh7fp.json"
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
@@ -211,8 +199,8 @@
         />
         <div v-if="draftReleaseURL !== ''">
           <p class="pb-10 text-center font-medium">
-            Your draft release is now on GitHub. You can go in and add
-            additional files or edit items before publishing. <br />
+            Your draft release is now on GitHub. You can go in and add additional files or edit
+            items before publishing. <br />
             You will also be able to directly publish your draft from GitHub.
             <br />
             <span class="font-medium text-secondary-500">
@@ -296,6 +284,7 @@ export default {
       selectedBranch: "",
       releaseTitle: "",
       releaseBody: "# Your release notes here",
+      repoSize: 0,
       prerelease: false,
       draftReleaseURL: "",
       publishedReleaseURL: "",
@@ -394,15 +383,19 @@ export default {
               return `https://github.com/${this.repoName}/releases`;
             }
           } else {
-            throw new Error(
-              `Error creating release: ${response.status} ${response.statusText}`
-            );
+            throw new Error(`Error creating release: ${response.status} ${response.statusText}`);
           }
         })
         .catch((error) => {
           console.error(error);
           return "ERROR";
         });
+    },
+    confirmPublishWarning() {
+      this.$refs.publishWarningConfirm.show();
+    },
+    confirmDraftWarning() {
+      this.$refs.draftWarningConfirm.show();
     },
     async createRelease(releaseType) {
       let errorMessage = "";
@@ -417,26 +410,6 @@ export default {
       };
 
       if (releaseType === "publish") {
-        let response = "";
-
-        try {
-          response = await this.$confirm(
-            "Once a release has been made you will not be able to remove it from Zenodo. Are you sure you want to continue?",
-            "Confirm publish",
-            {
-              confirmButtonText: "Publish",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            }
-          );
-        } catch (error) {
-          response = error;
-        }
-
-        if (response !== "confirm") {
-          return;
-        }
-
         errorMessage = "Error publishing release";
         successMessage = "Release published successfully";
         requestBody.draft = false;
@@ -473,10 +446,13 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
       } else {
+        this.$track("GitHub", "Repository size", this.repoSize);
         if (releaseType === "publish") {
+          this.$track("GitHub", "Publish release", "success");
           this.publishedReleaseURL = response;
         }
         if (releaseType === "draft") {
+          this.$track("GitHub", "Draft release", "success");
           this.draftReleaseURL = response;
         }
 
@@ -517,6 +493,7 @@ export default {
 
       response = await axios(config)
         .then((response) => {
+          this.$track("GitHub", "Auto generated release notes", "success");
           console.log(response);
           if (response.status === 200) {
             console.log("response.data", response.data.body);
@@ -527,6 +504,7 @@ export default {
           }
         })
         .catch((error) => {
+          this.$track("GitHub", "Auto generated release notes", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -541,18 +519,15 @@ export default {
       let response = "";
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/tags`,
-          {
-            params: {
-              per_page: 100,
-            },
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/tags`, {
+          params: {
+            per_page: 100,
+          },
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${this.githubToken}`,
+          },
+        })
         .then((res) => {
           return res.data;
         })
@@ -574,18 +549,15 @@ export default {
       }
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/branches`,
-          {
-            params: {
-              per_page: 100,
-            },
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}/branches`, {
+          params: {
+            per_page: 100,
+          },
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${this.githubToken}`,
+          },
+        })
         .then((res) => {
           return res.data;
         })
@@ -606,16 +578,13 @@ export default {
       }
 
       response = await axios
-        .get(
-          `${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}`,
-          {
-            params: {},
-            headers: {
-              Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${this.githubToken}`,
-            },
-          }
-        )
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${this.repoName}`, {
+          params: {},
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: `Bearer ${this.githubToken}`,
+          },
+        })
         .then((res) => {
           return res.data;
         })
@@ -625,6 +594,7 @@ export default {
         });
 
       if (response !== "ERROR") {
+        this.repoSize = response.size;
         this.selectedBranch = response.default_branch;
       }
 
