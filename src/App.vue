@@ -108,7 +108,7 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log(`Server Status: ${response.data}`);
         axios
           .get(`${this.$server_url}/api_version`)
           .then((response) => {
@@ -151,7 +151,7 @@ export default {
       console.log("Update downloaded");
     });
 
-    console.log(this.appPath);
+    console.log(`Current app path: ${this.appPath}`);
 
     this.$router.push({
       path: "/home",
