@@ -123,6 +123,7 @@ export default {
       let errorFound = false;
       try {
         await this.manager.deleteToken(key);
+        this.$track("Connections", "GitHub", "disconnected");
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;

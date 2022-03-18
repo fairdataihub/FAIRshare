@@ -70,6 +70,10 @@ export default {
     },
   },
   mounted() {
+    this.$track("App Launched", "OS", process.platform);
+    this.$track("App Launched", "Version", process.version);
+    this.$track("App Launched", "Arch", process.arch);
+
     // disable the mouse back and forward buttons
     window.addEventListener("mouseup", (e) => {
       if (e.button === 3 || e.button === 4) {

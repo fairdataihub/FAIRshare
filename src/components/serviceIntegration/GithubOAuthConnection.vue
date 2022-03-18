@@ -57,6 +57,7 @@ export default {
               duration: 2000,
             });
             this.callback();
+            this.$track("Connections", "GitHub", "connected");
             this.onStatusChange("connected", arg);
           }
         } else {

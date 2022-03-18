@@ -89,6 +89,7 @@ export default {
           tokenObject.name = name;
           tokenObject.type = "token";
           await this.manager.saveToken(key, tokenObject);
+          this.$track("Connections", "GitHub", "connected");
         } catch (e) {
           errorFound = true;
         }

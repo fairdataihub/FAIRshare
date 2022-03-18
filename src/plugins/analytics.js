@@ -44,6 +44,10 @@ export default {
       // create a new visitor
       const usr = ua(options.trackingID, clientID);
 
+      if (process.env.NODE_ENV === "development") {
+        dnt = false;
+      }
+
       // send the event
       if (!dnt) {
         usr

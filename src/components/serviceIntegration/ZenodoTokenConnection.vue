@@ -98,6 +98,7 @@ export default {
             duration: 2000,
           });
           this.callback();
+          this.$track("Connections", "Zenodo", "connected");
           this.onStatusChange("connected");
         }
       } else {
