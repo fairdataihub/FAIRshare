@@ -67,6 +67,16 @@
         </button>
       </div>
     </div>
+    <app-docs-link
+      url="curate-and-share/select-local-folder"
+      position="bottom-4"
+      v-if="locationID === 'local'"
+    />
+    <app-docs-link
+      url="curate-and-share/select-github-option"
+      position="bottom-4"
+      v-if="locationID === 'github'"
+    />
   </div>
 </template>
 

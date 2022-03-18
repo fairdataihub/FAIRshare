@@ -1,9 +1,6 @@
 <template>
-  <el-tooltip effect="dark" :content="content" placement="bottom">
-    <div
-      class="fixed bottom-28 right-5 rounded-full border border-zinc-50 opacity-30 shadow-sm transition-all hover:opacity-100 hover:shadow-xl"
-      @click="openHelpDocs"
-    >
+  <el-tooltip effect="dark" :content="content" placement="top">
+    <div :class="className" @click="openHelpDocs">
       <Vue3Lottie
         animationLink="https://assets5.lottiefiles.com/packages/lf20_tHEtXH.json"
         :width="70"
@@ -34,9 +31,19 @@ export default {
       required: false,
       default: "intro",
     },
+    position: {
+      type: String,
+      required: false,
+      default: "bottom-28",
+    },
   },
   data() {
     return {};
+  },
+  computed: {
+    className() {
+      return `fixed ${this.position} right-4 rounded-full border border-zinc-50 opacity-30 shadow-sm transition-all hover:opacity-100 hover:shadow-xl bg-transparent hover:bg-white `;
+    },
   },
   methods: {
     openHelpDocs() {

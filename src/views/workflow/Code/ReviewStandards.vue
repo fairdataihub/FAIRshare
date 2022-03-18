@@ -177,7 +177,7 @@
         <!-- template end -->
       </div>
 
-      <div class="flex w-full flex-row justify-center space-x-4 py-2">
+      <div class="flex w-full flex-row justify-center space-x-4 py-6">
         <button class="primary-plain-button" @click="goBack">
           <el-icon><d-arrow-left /></el-icon> Back
         </button>
@@ -206,6 +206,7 @@
         </warning-confirm>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/verify-best-practices" position="bottom-4" />
   </div>
 </template>
 

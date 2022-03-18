@@ -132,6 +132,7 @@
         </div>
       </div>
     </div>
+    <app-docs-link url="manage-accounts/overview" position="bottom-4" />
   </div>
 </template>
 

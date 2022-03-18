@@ -149,6 +149,7 @@
         </button>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/select-a-license" position="bottom-4" />
   </div>
 </template>
 
