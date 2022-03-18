@@ -315,7 +315,7 @@ export default {
 
       await this.getUserRepos();
 
-      if ("github" in this.workflow) {
+      if ("github" in this.workflow && "repo" in this.workflow.github) {
         this.selectedRepo = this.workflow.github.repo;
       }
 

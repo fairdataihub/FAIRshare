@@ -212,6 +212,8 @@ export default {
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
 
+    console.log(await this.manager.getToken("github"));
+
     await this.manager.loadTokens();
   },
 };
