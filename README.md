@@ -19,7 +19,7 @@
     <a href="https://docs.fairshareapp.io/docs/intro"><strong>Explore our documentation »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/fairdataihub/FAIRshare/issues">Report Issue</a>
+    <a href="https://github.com/fairdataihub/FAIRshare/issues/new/choose">Report Issue</a>
     ·
     <a href="https://fairdataihub.org/contact-us">Submit feedback </a>
   </p>
