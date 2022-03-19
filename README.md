@@ -57,7 +57,7 @@ All our releases are also accessible in the [releases tab](https://github.com/fa
 
 ## Full Documentation
 
-See the [documentation](https://docs.sodaforsparc.io/docs/intro) for our full documentation, including details about each features.
+See the [documentation](https://docs.fairshareapp.io/docs/intro) for our full documentation, including details about each features.
 
 ## Issues and Feedback
 
@@ -65,11 +65,11 @@ To report any issues with the software, suggest improvements, or request a new f
 
 ## Using the Source Code
 
-If you want to use the source code, contribute, modify FAIRshare to better suit your needs, or compile it for an operating system not mentioned above, please follow the instructions provided in the [developer manual](https://docs.sodaforsparc.io/docs/developer-documentation/project-setup) of our documentation.
+If you want to use the source code, contribute, modify FAIRshare to better suit your needs, or compile it for an operating system not mentioned above, please follow the instructions provided in the [developer manual](https://docs.fairshareapp.io/docs/developer-documentation/project-setup) of our documentation.
 
 ## License
 
-SODA is distributed under the MIT License. See [LICENSE](https://github.com/fairdataihub/FAIRshare/blob/main/LICENSE) for more information.
+FAIRshare is distributed under the MIT License. See [LICENSE](https://github.com/fairdataihub/FAIRshare/blob/main/LICENSE) for more information.
 
 ## Privacy Policy
 
