@@ -57,7 +57,7 @@ All our releases are also accessible in the [releases tab](https://github.com/fa
 
 ## Full Documentation
 
-See the [documentation](https://docs.fairshareapp.io/docs/intro) for our full documentation, including details about each features.
+See the [FAIRshare documentation](https://docs.fairshareapp.io/docs/intro) for details about each features.
 
 ## Issues and Feedback
 
