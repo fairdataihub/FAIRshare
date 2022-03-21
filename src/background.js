@@ -174,13 +174,17 @@ async function createWindow() {
     width: 500,
     height: 500,
     frame: false,
+    show: true,
     icon: __dirname + "/assets/app-icons/Icon.png",
     alwaysOnTop: true,
     transparent: true,
+    hasShadow: false,
+    resizable: false,
+    movable: false,
   });
   splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
 
-  ////// splash screen end
+  ///// splash screen end
   mainWindow.once("ready-to-show", () => {
     setTimeout(function () {
       splash.close();
@@ -230,7 +234,6 @@ async function createWindow() {
     // Load the index.html when not in development
     mainWindow.loadURL("app://./index.html");
 
-    // exitPyProc();
     // Check for updates
     autoUpdater.checkForUpdatesAndNotify();
   }

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Bug fixes:
 
 - On Linux the backend server was not being bundled correctly. This has been fixed to start on app launch.
+- Fixed an issue where the splash screen on macOS was rendering a shadow.
 
 ## v1.0.0 - 2021-03-18
 
