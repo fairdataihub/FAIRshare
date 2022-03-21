@@ -10,6 +10,51 @@
         </transition>
       </router-view>
     </AppContent>
+
+    <div
+      class="fixed bottom-4 right-4 flex w-[230px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
+      v-if="showDownloadingMessage"
+    >
+      <div
+        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+        @click="closeNotification"
+      >
+        <el-icon><circle-close-filled /></el-icon>
+      </div>
+      <Vue3Lottie
+        animationLink="https://assets5.lottiefiles.com/private_files/lf30_t26law.json"
+        :width="100"
+        :height="100"
+      />
+      <p class="text-center text-sm">FAIRshare is downloading the latest version of the app...</p>
+    </div>
+
+    <div
+      class="fixed bottom-4 right-4 flex w-[250px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-6 py-3 shadow-xl"
+      v-if="showRestartMessage"
+    >
+      <div
+        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+        @click="closeNotification"
+      >
+        <el-icon><circle-close-filled /></el-icon>
+      </div>
+      <Vue3Lottie
+        animationLink="https://assets8.lottiefiles.com/packages/lf20_dv9qkzg7.json"
+        :width="50"
+        :height="50"
+      />
+      <p class="py-3 text-center text-sm">
+        {{
+          platform == "darwin"
+            ? "Update downloaded. It will be installed when you close and relaunch the app."
+            : "Restart FAIRshare to install the latest version of the app."
+        }}
+      </p>
+      <button class="primary-plain-button py-1 px-2" @click="restartAppForUpdate">
+        {{ platform == "darwin" ? "Close FAIRshare" : "Restart FAIRshare" }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -44,6 +89,9 @@ export default {
       tokens: useTokenStore(),
       loading: "",
       environment: "",
+      showDownloadingMessage: false,
+      showRestartMessage: false,
+      platform: process.platform,
     };
   },
   methods: {
@@ -67,6 +115,13 @@ export default {
         console.error(error);
         this.loading.close();
       }
+    },
+    restartAppForUpdate() {
+      window.ipcRenderer.send("restart-fairshare-for-update");
+    },
+    closeNotification() {
+      this.showDownloadingMessage = false;
+      this.showRestartMessage = false;
     },
   },
   mounted() {
@@ -148,11 +203,16 @@ export default {
       });
 
     window.ipcRenderer.on("update-available", (_e, _arg) => {
-      console.log("New update available");
+      this.showDownloadingMessage = true;
+      this.$track("App Update", "Update available", `${app.getVersion()}`);
+      window.ipcRenderer.removeAllListeners("update-available");
     });
 
     window.ipcRenderer.on("update-downloaded", (_e, _arg) => {
-      console.log("Update downloaded");
+      this.showDownloadingMessage = false;
+      this.showRestartMessage = true;
+      this.$track("App Update", "Update downloaded", `${app.getVersion()}`);
+      window.ipcRenderer.removeAllListeners("update-downloaded");
     });
 
     console.log(`Current app path: ${this.appPath}`);
