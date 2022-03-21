@@ -90,7 +90,7 @@ export default {
       loading: "",
       environment: "",
       showDownloadingMessage: false,
-      showRestartMessage: true,
+      showRestartMessage: false,
       platform: process.platform,
     };
   },

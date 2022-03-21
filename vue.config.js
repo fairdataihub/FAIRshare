@@ -30,6 +30,7 @@ module.exports = {
         linux: {
           target: "AppImage",
           icon: "./src/assets/app-icons/Icon.png",
+          extraResources: [{ from: "./src/pyflaskdist/api" }],
         },
         nsis: {
           createDesktopShortcut: "always",
