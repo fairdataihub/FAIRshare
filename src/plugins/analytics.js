@@ -10,18 +10,23 @@ const config_folder_path = path.join(electronApp.getPath("home"), ".fairshare");
 
 let dnt = false;
 
-if (!fs.existsSync(config_folder_path)) {
-  fs.mkdirSync(config_folder_path);
+if (process.env.NODE_ENV === "development") {
+  console.log("Running in development mode, tracking in dev channel.");
   dnt = false;
-  console.log("No DNT settings found, using default settings.");
 } else {
-  let dnt_file_path = path.join(config_folder_path, "dnt.fdih");
-  if (fs.existsSync(dnt_file_path)) {
-    dnt = true;
-    console.log("DNT settings found, using them.");
-  } else {
+  if (!fs.existsSync(config_folder_path)) {
+    fs.mkdirSync(config_folder_path);
     dnt = false;
     console.log("No DNT settings found, using default settings.");
+  } else {
+    let dnt_file_path = path.join(config_folder_path, "dnt.fdih");
+    if (fs.existsSync(dnt_file_path)) {
+      dnt = true;
+      console.log("DNT settings found, using them.");
+    } else {
+      dnt = false;
+      console.log("No DNT settings found, using default settings.");
+    }
   }
 }
 
@@ -43,10 +48,6 @@ export default {
 
       // create a new visitor
       const usr = ua(options.trackingID, clientID);
-
-      if (process.env.NODE_ENV === "development") {
-        dnt = false;
-      }
 
       // send the event
       if (!dnt) {
