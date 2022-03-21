@@ -323,14 +323,19 @@ autoUpdater.on("update-available", () => {
 autoUpdater.on("update-downloaded", () => {
   log.info("update_downloaded");
   mainWindow.webContents.send("update-downloaded", true);
-  // exitPyProc(process.pid).then(() => {
-  // autoUpdater.quitAndInstall();
-  // });
 });
 
 ipcMain.on("open-link-in-browser", async (_event, link) => {
   shell.openExternal(link).then(() => {
     console.log("opened link", link);
+  });
+});
+
+ipcMain.on("restart-fairshare-for-update", (_event) => {
+  exitPyProc(process.pid).then(() => {
+    const isSilent = true;
+    const isForceRunAfter = true;
+    autoUpdater.quitAndInstall(isSilent, isForceRunAfter);
   });
 });
 
