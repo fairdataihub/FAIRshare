@@ -73,7 +73,7 @@ FAIRshare is distributed under the MIT License. See [LICENSE](https://github.com
 
 ## Privacy Policy
 
-FAIRshare uses Google Analytics to track user interactions with the application. Tracking is anonymous and no identifying personal information is collected. Tracking is implemented as part to report usage statistics to the funders of FAIRshare. Tracking is also used to indentify errors and subsequently improve user experience. To learn more about what is tracked and how we use Google Analytics within FAIRshare, please read our [Privacy Policy](https://docs.fairshareapp.io/docs/privacypolicy).
+FAIRshare uses Google Analytics to track user interactions with the application. Tracking is anonymous and no identifying personal information is collected. Tracking is implemented as part to report usage statistics to the funders of FAIRshare. Tracking is also used to identify errors and subsequently improve user experience. To learn more about what is tracked and how we use Google Analytics within FAIRshare, please read our [Privacy Policy](https://docs.fairshareapp.io/docs/privacypolicy).
 
 ## Acknowledgements
 
