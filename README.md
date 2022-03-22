@@ -61,7 +61,7 @@ See the [FAIRshare documentation](https://docs.fairshareapp.io/docs/intro) for d
 
 ## Issues and Feedback
 
-To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab]https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us).
+To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab](https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us).
 
 ## Using the Source Code
 
@@ -73,7 +73,7 @@ FAIRshare is distributed under the MIT License. See [LICENSE](https://github.com
 
 ## Privacy Policy
 
-FAIRshare uses Google Analytics to track user interactions with the application. Tracking is anonymous and no identifying personal information is collected. Tracking is implemented as part to report usage statistics to the funders of FAIRshare. Tracking is also used to indentify errors and subsequently improve user experience. To learn more about what is tracked and how we use Google Analytics within FAIRshare, please read our [Privacy Policy](https://docs.fairshareapp.io/docs/privacypolicy).
+FAIRshare uses Google Analytics to track user interactions with the application. Tracking is anonymous and no identifying personal information is collected. Tracking is implemented as part to report usage statistics to the funders of FAIRshare. Tracking is also used to identify errors and subsequently improve user experience. To learn more about what is tracked and how we use Google Analytics within FAIRshare, please read our [Privacy Policy](https://docs.fairshareapp.io/docs/privacypolicy).
 
 ## Acknowledgements
 
