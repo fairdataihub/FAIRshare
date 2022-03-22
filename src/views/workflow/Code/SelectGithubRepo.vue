@@ -10,9 +10,10 @@
 
       <div v-if="ready">
         <div v-if="validTokenAvailable">
-          <p class="my-5 w-full text-center">
-            Pick the GitHub repository you want to use. <br />
-            FAIRshare only supports public GitHub repositories.
+          <p class="my-5 w-full text-center text-base">
+            FAIRshare only supports public GitHub repositories. <br />
+            If your organization repository is not selectable, verify that you hold the
+            <span class="font-bold">admin</span> role for that repository.
           </p>
 
           <div class="py-5">
@@ -269,7 +270,7 @@ export default {
       } else {
         response.forEach((repo) => {
           const visibilityCheck = repo.visibility === "private" ? true : false;
-          const permissionsCheck = repo.permissions.admin;
+          const permissionsCheck = repo.permissions.write;
 
           const selectionDisabled = visibilityCheck || !permissionsCheck;
 
