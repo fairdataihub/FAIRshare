@@ -13,7 +13,7 @@
   <h3 align="center">FAIR data sharing made easy</h3>
 
   <p align="center">
-    Your one-stop tool for rapidly curating and sharing biomedical research data according to applicable FAIR guidelines <br/>
+    Your one-stop tool for rapidly curating and sharing biomedical research data and software according to applicable FAIR guidelines <br/>
     <br />
     <br />
     <a href="https://docs.fairshareapp.io/docs/intro"><strong>Explore our documentation »</strong></a>
