@@ -10,7 +10,7 @@
     <img src="/src/assets/brand/logo-with-name.png" alt="Logo" width="400">
   </a>
 
-  <h3 align="center">FAIR data sharing made easy</h3>
+  <h3 align="center">FAIR data and software sharing made easy</h3>
 
   <p align="center">
     Your one-stop tool for rapidly curating and sharing biomedical research data and software according to applicable FAIR guidelines <br/>
