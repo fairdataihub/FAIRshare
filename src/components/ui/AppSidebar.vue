@@ -65,6 +65,9 @@
             <el-icon><postcard-icon /></el-icon>
             <span v-show="sideBarOpen"> About </span>
           </router-link>
+          <div class="flex flex-col items-center justify-center pt-6">
+            <img src="../../assets/brand/fair-data-innovations-hub-logo.svg" class="w-[150px]" />
+          </div>
           <div class="absolute bottom-0 right-3 hidden">
             <span class="text-xs text-gray-400">{{ environment }}</span>
           </div>
