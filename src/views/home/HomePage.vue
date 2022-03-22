@@ -7,7 +7,7 @@
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center pt-2 pb-3">
           <h2 class="text-xl font-medium text-slate-700">
-            Make your biomedical research data, and beyond,
+            Make your biomedical research data and software
           </h2>
           <h2 class="text-xl font-medium text-slate-700">
             Findable, Accessible, Interoperable, and Reusable (FAIR)
