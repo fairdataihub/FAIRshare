@@ -268,7 +268,11 @@ export default {
         this.validTokenAvailable = false;
       } else {
         response.forEach((repo) => {
-          const selectionDisabled = repo.visibility === "private" ? true : false;
+          const visibilityCheck = repo.visibility === "private" ? true : false;
+          const permissionsCheck = repo.permissions.admin;
+
+          const selectionDisabled = visibilityCheck || !permissionsCheck;
+
           this.githubRepos.push({
             value: repo.full_name,
             label: repo.full_name,

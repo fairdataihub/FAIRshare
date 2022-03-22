@@ -61,7 +61,7 @@ See the [FAIRshare documentation](https://docs.fairshareapp.io/docs/intro) for d
 
 ## Issues and Feedback
 
-To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab]https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us).
+To report any issues with the software, suggest improvements, or request a new feature, please open a new issue via the [Issues tab](https://github.com/fairdataihub/FAIRshare/issues). Provide adequate information (operating system, steps leading to error, screenshots) so we can help you efficiently. Alternatively, you could also use [our feedback form](https://fairdataihub.org/contact-us).
 
 ## Using the Source Code
 
