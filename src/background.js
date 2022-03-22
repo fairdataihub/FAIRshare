@@ -224,9 +224,10 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    
     if (!process.env.IS_TEST) {
       //uncomment this before build
-      mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools({ mode: "detach" });
     }
     // mainWindow.webContents.openDevTools();
   } else {

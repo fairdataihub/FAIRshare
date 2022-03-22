@@ -28,10 +28,16 @@
             No worries. You can always come back to this page and let FAIRshare create your release
             for you.
           </p>
-          <button class="primary-button" @click="approveRelease">
-            <el-icon><edit-icon /></el-icon>
-            I changed my mind. Create a release for me
-          </button>
+          <div class="flex items-center justify-center space-x-4">
+            <button class="secondary-plain-button" @click="openRepository">
+              <el-icon><fold-icon /></el-icon>
+              View the repository
+            </button>
+            <button class="primary-button" @click="approveRelease">
+              <el-icon><edit-icon /></el-icon>
+              I changed my mind. Create a release for me
+            </button>
+          </div>
         </div>
 
         <div class="flex w-full flex-col space-x-4 pb-5" v-if="showApprovedInstructions">
@@ -345,6 +351,11 @@ export default {
       }
 
       return true;
+    },
+    async openRepository() {
+      const githubURL = `https://github.com/${this.repoName}`;
+
+      window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
     async openCommitList() {
       const githubURL = `https://github.com/${this.repoName}/commits`;
