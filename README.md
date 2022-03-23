@@ -31,7 +31,7 @@
 
 - [About](#about)
 - [Downloading FAIRshare](#Downloading-FAIRshare)
-- [Full Documentation](#Full-Documentation)
+- [Documentation](#Documentation)
 - [Issues and Feedback](#Issues-and-Feedback)
 - [Using the Source Code](#Using-the-Source-Code)
 - [License](#license)
@@ -55,7 +55,7 @@ FAIRshare is distributed as an easy-to-install desktop application for Windows, 
 
 All our releases are also accessible in the [releases tab](https://github.com/fairdataihub/FAIRshare/releases/latest).
 
-## Full Documentation
+## Documentation
 
 See the [FAIRshare documentation](https://docs.fairshareapp.io/docs/intro) for details about each features.
 
@@ -65,7 +65,7 @@ To report any issues with the software, suggest improvements, or request a new f
 
 ## Using the Source Code
 
-If you want to use the source code, contribute, modify FAIRshare to better suit your needs, or compile it for an operating system not mentioned above, please follow the instructions provided in the [developer manual](https://docs.fairshareapp.io/docs/developer-documentation/project-setup) of our documentation.
+If you want to use the source code, contribute, modify FAIRshare to better suit your needs, or compile it for an operating system not mentioned above, please follow the instructions provided in the [developer guide](https://docs.fairshareapp.io/docs/developer-documentation/project-setup) of our documentation.
 
 ## License
 
