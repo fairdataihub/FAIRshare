@@ -2187,7 +2187,7 @@ export default {
         });
       }
     },
-    prefillLocalCodeMeta(codeMeta) {
+    prefillFormFromCodeMetaObject(codeMeta) {
       this.step1Form.name = codeMeta.name;
       this.step1Form.description = codeMeta.description;
       this.step1Form.creationDate = codeMeta.dateCreated;
@@ -2376,7 +2376,7 @@ export default {
                 });
 
                 const codeMeta = JSON.parse(response);
-                await this.prefillLocalCodeMeta(codeMeta);
+                await this.prefillFormFromCodeMetaObject(codeMeta);
 
                 ElNotification({
                   title: "Success",
@@ -2409,7 +2409,7 @@ export default {
                 });
 
               if (response !== "ERROR" && response !== "Not Found") {
-                await this.prefillLocalCodeMeta(response);
+                await this.prefillFormFromCodeMetaObject(response);
               }
 
               this.showSpinner = false;
