@@ -229,7 +229,7 @@ import fs from "fs-extra";
 import path from "path";
 import { app, dialog } from "@electron/remote";
 import dayjs from "dayjs";
-import { ElLoading, ElNotification } from "element-plus";
+import { ElLoading } from "element-plus";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
 
@@ -276,6 +276,7 @@ export default {
       drawerModel: false,
       showSpinner: false,
       finishedLoading: false,
+      interval: null,
     };
   },
   computed: {
@@ -963,87 +964,86 @@ export default {
 
     const tokenObject = await this.tokens.getToken("github");
     this.GithubAccessToken = tokenObject.token;
-    const GithubZenodoConnectionToken = tokenObject.zenodoHookToken;
+    // const GithubZenodoConnectionToken = tokenObject.zenodoHookToken;
     // const GithubZenodoConnectionToken = false;
 
     this.showFilePreview();
 
-    if (GithubZenodoConnectionToken) {
+    // if (GithubZenodoConnectionToken) {
+    // const response = await this.checkIfZenodoHookIsPresent();
+
+    // if (response) {
+    //   this.validZenodoHookTokenFound = true;
+    // } else {
+    // this.$notify({
+    //   title: "Info",
+    //   message: "Creating a Zenodo webhook for this repository.",
+    //   type: "info",
+    // });
+    // const tokenCreated = await this.createGithubZenodoWebhook(GithubZenodoConnectionToken);
+    // if (tokenCreated) {
+    //   ElNotification({
+    //     title: "Success",
+    //     message: "Created a zenodo webhook for this repo successfully.",
+    //     type: "success",
+    //   });
+    //   setTimeout(() => {
+    //     this.validZenodoHookTokenFound = true;
+    //   }, 1000);
+    // } else {
+    //   ElNotification({
+    //     title: "Error",
+    //     message:
+    //       "Could not create the Zenodo webhook automatically. Please connect your Zenodo account to the GitHub repository manually.",
+    //     type: "error",
+    //     duration: 10000,
+    //   });
+    // }
+    // }
+    // spinner.close();
+    // } else {
+
+    this.interval = setInterval(async () => {
       const response = await this.checkIfZenodoHookIsPresent();
+      console.log(response);
+
+      spinner.close();
 
       if (response) {
+        // if (response.length > 0) {
+        //   for (const webhook of response) {
+        //     if (
+        //       "config" in webhook &&
+        //       "events" in webhook &&
+        //       webhook.events.includes("release") &&
+        //       "url" in webhook.config &&
+        //       webhook.config.url.includes(
+        //         `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=`
+        //       )
+        //     ) {
+        //       const webhookConfigURL = webhook.config.url;
+        //       const webhookConfigURLArray = webhookConfigURL.split("access_token=");
+        //       const webhookConfigURLToken = webhookConfigURLArray[1];
+
+        //       if (webhookConfigURLToken) {
+        //         const newTokenObject = JSON.parse(
+        //           JSON.stringify(await this.tokens.getToken("github"))
+        //         );
+        //         newTokenObject.zenodoHookToken = webhookConfigURLToken;
+        //         await this.tokens.saveToken("github", newTokenObject);
+        //       }
+        //     }
+        //   }
+        // }
+
         this.validZenodoHookTokenFound = true;
-      } else {
-        this.$notify({
-          title: "Info",
-          message: "Creating a Zenodo webhook for this repository.",
-          type: "info",
-        });
 
-        const tokenCreated = await this.createGithubZenodoWebhook(GithubZenodoConnectionToken);
-
-        if (tokenCreated) {
-          ElNotification({
-            title: "Success",
-            message: "Created a zenodo webhook for this repo successfully.",
-            type: "success",
-          });
-
-          setTimeout(() => {
-            this.validZenodoHookTokenFound = true;
-          }, 1000);
-        } else {
-          ElNotification({
-            title: "Error",
-            message:
-              "Could not create the Zenodo webhook automatically. Please connect your Zenodo account to the GitHub repository manually.",
-            type: "error",
-            duration: 10000,
-          });
-        }
+        this.interval = clearInterval(this.interval);
       }
-      spinner.close();
-    } else {
-      let interval = setInterval(async () => {
-        const response = await this.checkIfZenodoHookIsPresent();
-        console.log(response);
+    }, 5000);
 
-        spinner.close();
+    // }
 
-        if (response) {
-          if (response.length > 0) {
-            for (const webhook of response) {
-              if (
-                "config" in webhook &&
-                "events" in webhook &&
-                webhook.events.includes("release") &&
-                "url" in webhook.config &&
-                webhook.config.url.includes(
-                  `${process.env.VUE_APP_ZENODO_SERVER_URL}/hooks/receivers/github/events/?access_token=`
-                )
-              ) {
-                const webhookConfigURL = webhook.config.url;
-                const webhookConfigURLArray = webhookConfigURL.split("access_token=");
-                const webhookConfigURLToken = webhookConfigURLArray[1];
-
-                if (webhookConfigURLToken) {
-                  const newTokenObject = JSON.parse(
-                    JSON.stringify(await this.tokens.getToken("github"))
-                  );
-                  newTokenObject.zenodoHookToken = webhookConfigURLToken;
-
-                  await this.tokens.saveToken("github", newTokenObject);
-                }
-              }
-            }
-          }
-
-          this.validZenodoHookTokenFound = true;
-
-          clearInterval(interval);
-        }
-      }, 5000);
-    }
     this.tableDataRecord = [];
     this.citationDataRecord = [];
     this.tableData = await this.createCodeMetadataFile();
@@ -1062,6 +1062,11 @@ export default {
     }
 
     this.workflow.currentRoute = this.$route.path;
+  },
+  beforeUnmount() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   },
 };
 </script>

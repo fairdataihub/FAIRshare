@@ -39,7 +39,10 @@
                   />
                 </div>
                 <div class="my-2">
-                  <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                  <DialogTitle
+                    as="h3"
+                    class="text-center text-lg font-medium leading-6 text-gray-900"
+                  >
                     {{ localTitle }}
                   </DialogTitle>
 

@@ -371,7 +371,7 @@
               <el-icon><d-arrow-right /></el-icon>
             </button>
             <warning-confirm
-              ref="warningConfirm"
+              ref="warningConfirmSkipUploadToRepo"
               title="Warning"
               @messageConfirmed="skipUploadToRepo"
               confirmButtonText="Yes, I want to skip"
@@ -386,6 +386,16 @@
       </div>
     </div>
     <app-docs-link url="curate-and-share/select-github-repo" position="bottom-4" />
+    <error-confirm
+      ref="errorConfirmNoAdminPermission"
+      title="Invalid permissions"
+      :showCancelButton="false"
+    >
+      <p class="text-center text-base text-gray-500">
+        This repository does not have admin permissions for the currently authenticated user. Please
+        contact the repository owner to grant admin permission to you.
+      </p>
+    </error-confirm>
   </div>
 </template>
 
@@ -431,11 +441,20 @@ export default {
   computed: {},
   methods: {
     selectRepo(event, repoID) {
-      this.repoID = repoID;
-
       if (this.workflow.source.type === "github") {
         this.newVersion = "false";
+
+        console.log(this.workflow.github.fullObject.originalObject.permissions.admin);
+
+        if (!this.workflow.github.fullObject.originalObject.permissions.admin) {
+          console.log("no admin permission");
+          this.$refs.errorConfirmNoAdminPermission.show();
+
+          return;
+        }
       }
+
+      this.repoID = repoID;
 
       if (event && event.detail === 2) {
         this.addMetadata();
@@ -566,7 +585,7 @@ export default {
       this.$router.push(routerPath);
     },
     showRepoUploadWarning() {
-      this.$refs.warningConfirm.show();
+      this.$refs.warningConfirmSkipUploadToRepo.show();
     },
     async skipUploadToRepo() {
       if (this.uploadToRepo === "Yes") {

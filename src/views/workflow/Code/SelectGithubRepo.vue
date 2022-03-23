@@ -86,9 +86,8 @@
           confirmButtonText="Yes, I'm aware of the restrictions"
         >
           <p class="text-center text-base text-gray-500">
-            You do not have the <span class="font-bold">Admin</span> role in this repository.
-            FAIRshare will not be able to setup the connections between Zenodo and GitHub without
-            this role.
+            You do not have the <span class="font-bold">Admin</span> role in this repository. You
+            will not be able to setup the connections between Zenodo and GitHub without this role.
           </p>
         </warning-confirm>
       </div>
