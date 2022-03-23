@@ -447,7 +447,7 @@ export default {
         console.log(this.workflow.github.fullObject.originalObject.permissions.admin);
 
         if (!this.workflow.github.fullObject.originalObject.permissions.admin) {
-          console.log("no admin permission");
+          console.log("No admin permissions on this repo");
           this.$refs.errorConfirmNoAdminPermission.show();
 
           return;

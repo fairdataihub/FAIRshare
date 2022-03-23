@@ -135,7 +135,6 @@ export default {
   emits: ["messageClosed", "messageConfirmed", "messageCancel", "messageOutsideClicked"],
   methods: {
     setIsOpen(val, type) {
-      console.log(type);
       if (!val) {
         this.$emit("messageClosed");
         if (type === "okay") {
