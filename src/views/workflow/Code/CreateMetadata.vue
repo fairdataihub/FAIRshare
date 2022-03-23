@@ -2342,9 +2342,55 @@ export default {
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
               this.showSpinner = true;
-              await this.prefillGithubAuthors();
-              await this.prefillGithubMisc();
-              this.showSpinner = false;
+
+              const tokenObject = await this.tokens.getToken("github");
+              const GithubAccessToken = tokenObject.token;
+
+              const selectedRepo = this.workflow.github.repo;
+
+              let response = "";
+
+              response = await axios
+                .get(`${this.$server_url}/github/repo/file/contents`, {
+                  params: {
+                    access_token: GithubAccessToken,
+                    owner: selectedRepo.split("/")[0],
+                    repo: selectedRepo.split("/")[1],
+                    file_name: "codemeta.json",
+                  },
+                })
+                .then((response) => {
+                  return response.data;
+                })
+                .catch((error) => {
+                  console.error(error);
+                  return "ERROR";
+                });
+
+              if (response !== "NOT_FOUND") {
+                ElNotification({
+                  title: "Info",
+                  message: "Found a previous codemeta.json file. Loading it...",
+                  position: "top-right",
+                  type: "info",
+                });
+
+                const codeMeta = JSON.parse(response);
+                await this.prefillLocalCodeMeta(codeMeta);
+
+                ElNotification({
+                  title: "Success",
+                  message: "Successfully loaded codemeta.json file.",
+                  position: "top-right",
+                  type: "success",
+                });
+
+                this.showSpinner = false;
+              } else {
+                await this.prefillGithubAuthors();
+                await this.prefillGithubMisc();
+                this.showSpinner = false;
+              }
             }
             if (this.workflow.source.type === "local") {
               this.showSpinner = true;

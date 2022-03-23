@@ -23,6 +23,7 @@ from zenodo import (
 )
 from github import (
     uploadFileToGithub,
+    getFileFromRepo,
     getUserRepositories,
     getRepoContributors,
     getRepoContentTree,
@@ -730,6 +731,56 @@ class getRepoContentsTree(Resource):
         repo = args["repo"]
 
         return getRepoContentTree(access_token, owner, repo)
+
+
+@github.route("/repo/file/contents", endpoint="getRepoFileContents")
+class getRepoFileContents(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+            "file_name": "name of file to be read",
+        },
+    )
+    def get(self):
+        """Get the contents of a file in a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+        parser.add_argument(
+            "file_name",
+            type=str,
+            required=True,
+            help="file_name is required. fileName needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+        file_name = args["file_name"]
+
+        return getFileFromRepo(access_token, owner, repo, file_name)
 
 
 ###############################################################################
