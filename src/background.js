@@ -12,10 +12,13 @@ const fs = require("fs-extra");
 const path = require("path");
 const log = require("electron-log");
 
-log.info("starting log");
-
 const USER_PATH = app.getPath("home");
 const CONFIG_STORE_PATH = path.join(USER_PATH, ".fairshare", "config.json");
+
+log.transports.file.resolvePath = () => path.join(USER_PATH, ".fairshare", "logs", "app.log");
+log.transports.console.format = "{h}:{i}:{s} {text}";
+
+log.info("starting log");
 
 const getReleaseChannel = () => {
   const exists = fs.pathExistsSync(CONFIG_STORE_PATH);

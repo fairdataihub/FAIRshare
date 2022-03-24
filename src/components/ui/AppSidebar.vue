@@ -5,7 +5,7 @@
     :class="{
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
-      'debug-screens': environment !== 'production',
+      'debug-screens': environment == 'development',
       'cursor-not-allowed': !datasetStore.sidebarVisible,
     }"
     style="transition: width 0.3s"

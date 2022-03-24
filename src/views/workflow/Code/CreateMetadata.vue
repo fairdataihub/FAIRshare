@@ -564,7 +564,6 @@
                               type="text"
                               placeholder="PRA_2018_73"
                             ></el-input>
-                            {{ step3Form.funding.code }}
                             <form-help-content
                               popoverContent="Code of the grant funding this software (comma separate if multiple)"
                             ></form-help-content>
