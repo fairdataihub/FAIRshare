@@ -8,7 +8,11 @@
       <line-divider> </line-divider>
 
       <p class="py-2 pb-4">
-        We will help you make you research software FAIR by guiding you step-by-step through the
+        Currently, FAIRshare supports making research software FAIR according to the FAIR Biomedical
+        Research Software Practical Guidelines (FAIR-BRSPG) v1.0. To our knowledge, these are the
+        only FAIR guidelines available for biomedical research domain irrespective of the field of
+        research, funding source, etc. Read our dedicated documentation page to find out more We
+        will help you make you research software FAIR by guiding you step-by-step through the
         following process:
       </p>
 
