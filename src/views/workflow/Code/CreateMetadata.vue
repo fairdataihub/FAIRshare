@@ -2408,7 +2408,21 @@ export default {
                 });
 
               if (response !== "ERROR" && response !== "Not Found") {
+                ElNotification({
+                  title: "Info",
+                  message: "Found a previous codemeta.json file. Loading it...",
+                  position: "top-right",
+                  type: "info",
+                });
+
                 await this.prefillFormFromCodeMetaObject(response);
+
+                ElNotification({
+                  title: "Success",
+                  message: "Successfully loaded codemeta.json file.",
+                  position: "top-right",
+                  type: "success",
+                });
               }
 
               this.showSpinner = false;
