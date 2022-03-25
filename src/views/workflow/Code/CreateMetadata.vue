@@ -29,8 +29,9 @@
             <line-divider></line-divider>
 
             <span class="mb-2">
-              We will use this information to automatically include the standard codemeta.json and
-              CITATION.cff file in your dataset.
+              Provide information about your software below. We will use this information to
+              automatically include the standard codemeta.json and CITATION.cff file in your
+              dataset.
             </span>
 
             <div>
