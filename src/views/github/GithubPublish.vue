@@ -206,11 +206,11 @@
         <div v-if="draftReleaseURL !== ''">
           <p class="pb-10 text-center font-medium">
             Your draft release is now on GitHub. You can go in and add additional files or edit
-            items before publishing. <br />
-            You will also be able to directly publish your draft from GitHub.
+            items before publishing the release. <br />
             <br />
             <span class="font-medium text-secondary-500">
-              This will automatically push your release to Zenodo.
+              Once you publish the release from Github, this will automatically push your release to
+              Zenodo as well.
             </span>
           </p>
         </div>

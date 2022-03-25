@@ -82,8 +82,8 @@
           <el-card class="dynamic-card">
             <h4 class="text-base font-bold">Publish dataset</h4>
             <p>
-              You will be requested to publish the dataset and make it accesible on the repository
-              to complete the process
+              You will be prompted to publish the dataset for making it openly accesible on the
+              repository to complete the process
             </p>
           </el-card>
         </el-timeline-item>

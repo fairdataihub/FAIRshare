@@ -4,6 +4,12 @@
     v-loading="loading"
   >
     <div class="flex h-full w-full flex-col items-start justify-start">
+      <span class="text-left text-lg font-medium">
+        Select a FAIR repository to share your research software
+      </span>
+
+      <el-divider class="my-4"> </el-divider>
+
       <div class="w-full">
         <span class="mb-2 w-full">
           Would you like to upload your dataset to a repository through FAIRshare?

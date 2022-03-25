@@ -11,7 +11,8 @@
 
       <div class="flex flex-col">
         <span class="mb-2">
-          Would you like FAIRshare to create the mandatory files codemeta.json and CITATION.cff?
+          Would you like FAIRshare to create the mandatory metadata files codemeta.json and
+          CITATION.cff?
         </span>
 
         <div class="py-1">
@@ -30,8 +31,8 @@
 
             <span class="mb-2">
               Provide information about your software below. We will use this information to
-              automatically include the standard codemeta.json and CITATION.cff file in your
-              dataset.
+              automatically generate and include in your dataset the standard codemeta.json and
+              CITATION.cff metadata files required to make your software FAIR.
             </span>
 
             <div>

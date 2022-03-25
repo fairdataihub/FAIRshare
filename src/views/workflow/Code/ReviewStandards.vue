@@ -2,7 +2,8 @@
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Verify if you have followed standard/best research software development practices
+        Verify if you have followed standard/best research software development practices required
+        to make your software FAIR
       </span>
 
       <el-divider class="my-4"> </el-divider>

@@ -1,10 +1,10 @@
 <template>
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Zenodo connection details </span>
-      <span class="text-left">
+      <span class="text-left text-lg font-medium"> Summary </span>
+      <!-- <span class="text-left">
         We will use this to upload and edit your dataset on your Zenodo account.
-      </span>
+      </span> -->
 
       <el-divider class="my-4"> </el-divider>
 
@@ -111,14 +111,16 @@
       <transition name="fade" mode="out-in" appear>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-            Looks like we already have your Zenodo login details. Click on the 'Start upload' button
-            below.
+            I looks like you have already connected your Zenodo account with FAIRshare. Click on the
+            'Start upload' button below to upload your dataset. Note that this will create a draft
+            of the dataset on Zenodo that is only visible to you. You will be prompted to Publish
+            the dataset and make it openly available after the upload.
           </p>
           <!-- show error message if token is not valid -->
           <div v-else class="flex flex-col items-center justify-center py-10">
             <p class="mb-5">
-              We couldn't find your Zenodo login details. Please click on the button below to
-              connect to your Zenodo account.
+              We couldn't find your Zenodo account details. Please click on the button below to
+              connect to your Zenodo account for uploading your dataset.
             </p>
 
             <ConnectZenodo :statusChangeFunction="showConnection"></ConnectZenodo>

@@ -2,7 +2,28 @@
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">Connect your GitHub account to Zenodo</h1>
-      <h2 class="text-left">Let's see if you GitHub account is already connected to Zenodo.</h2>
+      <h2 class="text-left">
+        The easiest way to publish from GitHub to Zenodo is to leverage the existing linkage between
+        the two platforms. Basically, you can link your GitHub account to Zenodo, and select from
+        Zenodo webpage the GitHub repository you wish to publish on Zenodo. Then, everytime you
+        publish a release on GitHub, it will be automatically deposited on Zenodo. We refer to the
+        <span
+          class="text-url"
+          @click="
+            openWebsite2(
+              'https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content'
+            )
+          "
+        >
+          relevant documentation on GitHub docs</span
+        >
+        for more details.
+        <br />
+        <br />
+        FAIRshare will help you link your GitHub account with Zenodo then create a draft release on
+        GitHub (after adding any requested metadata files to your GitHub repository) that you can
+        publish from FAIRshare or the GitHub webpage to automatically create a deposit on Zenodo.
+      </h2>
 
       <el-divider class="my-2"> </el-divider>
 
@@ -339,6 +360,10 @@ export default {
 
     openWebsite() {
       const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
+
+    openWebsite2(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
 

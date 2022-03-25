@@ -42,8 +42,8 @@
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
-            We couldn't find your GitHub login details. Please click on the button below to connect
-            to your GitHub account.
+            We couldn't find your GitHub account details. Please click on the button below to
+            connect to your GitHub account.
           </p>
 
           <ConnectGithub :statusChangeFunction="showConnection"></ConnectGithub>
