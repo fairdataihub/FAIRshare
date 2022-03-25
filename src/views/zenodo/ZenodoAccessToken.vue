@@ -10,8 +10,9 @@
 
       <div>
         <p class="text=lg mb-5">
-          A list of all the files that we are going to upload to Zenodo is shown below. You can
-          click on any of them to view their contents or open in your file browser.
+          A list of all the files and folders that we are going to upload to Zenodo is shown below.
+          Files that will be created by FAIRshare are highlighted in orange. You can click on any of
+          them to view their contents or open in your file browser.
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>

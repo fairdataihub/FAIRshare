@@ -10,10 +10,20 @@
       <p class="py-2 pb-4">
         Currently, FAIRshare supports making research software FAIR according to the FAIR Biomedical
         Research Software Practical Guidelines (FAIR-BRSPG) v1.0. To our knowledge, these are the
-        only FAIR guidelines available for biomedical research domain irrespective of the field of
-        research, funding source, etc. Read our dedicated documentation page to find out more We
-        will help you make you research software FAIR by guiding you step-by-step through the
-        following process:
+        only FAIR guidelines available for biomedical research software irrespective of the field of
+        research, funding source, etc. Read our
+        <span
+          class="text-url"
+          @click="
+            openWebsite(
+              'https://docs.fairshareapp.io/docs/how-to-fair/how-to-make-research-software-fair'
+            )
+          "
+        >
+          dedicated documentation page</span
+        >
+        to find out more about them. To implement these guidelines, FAIRshare will guide you
+        step-by-step through the following process:
       </p>
 
       <el-timeline>
@@ -109,6 +119,9 @@ export default {
   methods: {
     navigateToWorkflows() {
       this.$router.push({ path: `/datasets/${this.datasetID}` });
+    },
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
   async mounted() {
