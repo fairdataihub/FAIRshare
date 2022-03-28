@@ -14,9 +14,9 @@
       </div>
       <div>
         <el-descriptions :column="3" size="large" border>
-          <el-descriptions-item v-for="item in about" :key="item">
+          <el-descriptions-item v-for="item in about" :key="item" :span="item.span">
             <template #label>
-              <div class="cell-item">{{ item.label }}</div>
+              <div class="cell-item cursor-default">{{ item.label }}</div>
             </template>
             {{ item.value }}
           </el-descriptions-item>
@@ -61,12 +61,16 @@ export default {
     this.datasetStore.setCurrentStep(1);
 
     this.about.push({
-      label: "FAIRshare version",
+      label: "FAIRshare",
       value: app.getVersion(),
       span: 1,
     });
 
-    this.about.push({ label: "Locale", value: app.getLocale(), span: 1 });
+    this.about.push({
+      label: "Locale",
+      value: app.getLocale(),
+      span: 1,
+    });
 
     this.about.push({
       label: "Electron",
@@ -93,7 +97,7 @@ export default {
     });
 
     this.about.push({
-      label: "OS",
+      label: "Operating system",
       value: process.platform,
       span: 1,
     });
@@ -113,7 +117,13 @@ export default {
     this.about.push({
       label: "Application path",
       value: app.getAppPath(),
-      span: 1,
+      span: 3,
+    });
+
+    this.about.push({
+      label: "Application data path",
+      value: app.getPath("appData"),
+      span: 3,
     });
   },
 };

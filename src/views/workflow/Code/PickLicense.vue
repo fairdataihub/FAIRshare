@@ -160,7 +160,7 @@ import { useTokenStore } from "@/store/access.js";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 import axios from "axios";
 
 export default {
@@ -340,6 +340,13 @@ export default {
 
       let response = "";
 
+      ElNotification({
+        title: "Info",
+        message: "Requesting license information from GitHub...",
+        position: "top-right",
+        type: "info",
+      });
+
       response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
           params: {
@@ -353,6 +360,13 @@ export default {
           return response.data;
         })
         .catch((error) => {
+          ElNotification({
+            title: "Error",
+            message: "Something went wrong.",
+            position: "top-right",
+            type: "error",
+          });
+
           console.error(error);
           return "ERROR";
         });
@@ -369,6 +383,13 @@ export default {
                 response.license.spdx_id;
             // this.licenseForm.license = this.dataset.data.Code.questions.license;
             // this.originalLicense = this.licenseForm.license;
+
+            ElNotification({
+              title: "Success",
+              message: "License information found in GitHub",
+              position: "top-right",
+              type: "info",
+            });
           }
         }
       }

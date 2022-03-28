@@ -20,10 +20,11 @@
             )
           "
         >
-          dedicated documentation page</span
-        >
-        to find out more about them. To implement these guidelines, FAIRshare will guide you
-        step-by-step through the following process:
+          dedicated documentation page
+        </span>
+        to find out more about them. <br />
+        To implement these guidelines, FAIRshare will guide you step-by-step through the following
+        process:
       </p>
 
       <el-timeline>
