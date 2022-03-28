@@ -221,10 +221,12 @@
           </p>
         </div>
         <div class="flex space-x-4">
-          <button class="primary-plain-button" @click="openCommitList">
-            <el-icon><fold-icon /></el-icon>
-            View commits
-          </button>
+          <router-link :to="`/datasets`">
+            <button class="primary-plain-button">
+              <el-icon><data-line /></el-icon> Go to the homepage
+            </button>
+          </router-link>
+
           <button class="primary-plain-button" @click="openAllReleases">
             <el-icon><box-icon /></el-icon>
             View all releases
@@ -354,11 +356,6 @@ export default {
     },
     async openRepository() {
       const githubURL = `https://github.com/${this.repoName}`;
-
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
-    },
-    async openCommitList() {
-      const githubURL = `https://github.com/${this.repoName}/commits`;
 
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },

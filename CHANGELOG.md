@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Bug fixes
 
 - Fixed an issue where app log files were not being created in the correct location.
+- Fixed an issue where incorrect file keys were being read from the `codemeta.json` file.
 
 ## v1.1.0 - 2022-03-21
 
