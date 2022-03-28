@@ -32,7 +32,8 @@
       <div class="flex w-full flex-col pt-20" v-if="locationID === 'local'">
         <span class="mb-2">
           Please select the folder where your
-          {{ combineDataTypes }} files are stored.
+          {{ combineDataTypes }} files are stored. It is highly recommended to include the source
+          code files.
         </span>
 
         <el-input
