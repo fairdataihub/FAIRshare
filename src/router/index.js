@@ -81,18 +81,22 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
+    name: "CodeCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
+    name: "CodePickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata/review",
     component: CodeCreateMetadataReview,
+    name: "CodeCreateMetadataReview",
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectDestination",
     component: SelectRepositoryDestination,
+    name: "SelectRepositoryDestination",
   },
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/metadata",

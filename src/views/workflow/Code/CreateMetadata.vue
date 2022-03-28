@@ -2225,9 +2225,11 @@ export default {
       }
 
       this.step3Form.applicationCategory = codeMeta.applicationCategory;
-      codeMeta.keywords.forEach((keyword) => {
-        this.step3Form.keywords.push({ keyword, id: uuidv4() });
-      });
+      if ("keyword" in codeMeta) {
+        codeMeta.keywords.forEach((keyword) => {
+          this.step3Form.keywords.push({ keyword, id: uuidv4() });
+        });
+      }
       if ("funding" in codeMeta) {
         this.step3Form.funding.code = codeMeta.funding;
       }

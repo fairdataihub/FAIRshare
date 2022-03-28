@@ -662,7 +662,12 @@ export default {
             this.workflow.source.type === "local"
           ) {
             this.newVersion = this.workflow.destination[this.repoID].newVersion.toString();
-            this.showSelectZenodoDeposition = true;
+
+            if (this.newVersion === "true") {
+              this.showSelectZenodoDeposition = true;
+            } else {
+              this.showSelectZenodoDeposition = false;
+            }
           } else {
             this.newVersion = "None";
             this.showSelectZenodoDeposition = false;
