@@ -198,12 +198,8 @@
                   repository to the 'ON' position.
                 </li>
 
-                <li>Wait for FAIRshare to notice the change. This may take about 30 seconds.</li>
+                <li>Wait for FAIRshare to notice the change. This may take upto 30 seconds.</li>
               </ul>
-              <p class="mt-2">
-                You will only need to do this once. For any future GitHub repositories, FAIRshare
-                will automatically add the relevant connections for you.
-              </p>
             </div>
           </div>
         </transition>
