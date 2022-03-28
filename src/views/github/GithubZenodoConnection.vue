@@ -198,7 +198,7 @@
                   repository to the 'ON' position.
                 </li>
 
-                <li>Wait for FAIRshare to notice the change. This may take upto 30 seconds.</li>
+                <li>Wait for FAIRshare to notice the change. This may take up to 30 seconds.</li>
               </ul>
             </div>
           </div>
