@@ -111,10 +111,14 @@
       <transition name="fade" mode="out-in" appear>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-            I looks like you have already connected your Zenodo account with FAIRshare. Click on the
-            'Start upload' button below to upload your dataset. Note that this will create a draft
-            of the dataset on Zenodo that is only visible to you. You will be prompted to Publish
-            the dataset and make it openly available after the upload.
+            It looks like you have already connected your Zenodo account with FAIRshare. <br />
+            Click on the 'Start upload' button below to upload your dataset. <br />
+            <span class="text-xs">
+              Note that this will create a draft of the dataset on Zenodo that is only visible to
+              you. <br />
+              You will be prompted to Publish the dataset and make it openly available after the
+              upload.
+            </span>
           </p>
           <!-- show error message if token is not valid -->
           <div v-else class="flex flex-col items-center justify-center py-10">

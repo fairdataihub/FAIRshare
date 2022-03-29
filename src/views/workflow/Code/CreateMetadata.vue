@@ -2225,7 +2225,7 @@ export default {
       }
 
       this.step3Form.applicationCategory = codeMeta.applicationCategory;
-      if ("keyword" in codeMeta) {
+      if ("keywords" in codeMeta) {
         codeMeta.keywords.forEach((keyword) => {
           this.step3Form.keywords.push({ keyword, id: uuidv4() });
         });
