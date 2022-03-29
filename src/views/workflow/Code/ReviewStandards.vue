@@ -12,7 +12,8 @@
         <!-- template start -->
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable high-level best practices for biomedical research software?
+            Have you followed applicable high-level standards and best practices for scientific
+            research software?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -39,7 +40,8 @@
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable language-specific standards and best practices?
+            Have you followed applicable language-specific standards and best practices for your
+            code?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -73,7 +75,8 @@
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Have you followed applicable domain-specific standards and best practices?
+            Have you followed applicable domain-specific standards and best practices for biomedical
+            research software?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -87,21 +90,9 @@
                 research software:
                 <span
                   class="text-url"
-                  @click="openWebsite('https://doi.org/10.1016/j.cels.2018.03.014')"
-                >
-                  Practical Computational Reproducibility in the Life Sciences</span
-                >,
-                <span
-                  class="text-url"
                   @click="openWebsite('https://dx.doi.org/10.12688%2Ff1000research.10750.2')"
                 >
-                  General guidelines for biomedical software development </span
-                >,
-                <span
-                  class="text-url"
-                  @click="openWebsite('https://doi.org/10.3389/fgene.2014.00199')"
-                >
-                  On best practices in the development of bioinformatics software</span
+                  General guidelines for biomedical software development</span
                 >.
               </div>
             </el-collapse-item>
@@ -124,7 +115,10 @@
               </template>
 
               <div class="px-3 py-2">
-                We refer to the following literature:
+                Ensure that the following aspects are documented: inputs and outputs of the
+                software, parameters and data required to run the software, the standards applied,
+                and how to contribute to the software. We refer to the following literature for
+                additional information on documenting your software:
                 <span
                   class="text-url"
                   @click="openWebsite('https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561')"
