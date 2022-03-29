@@ -65,7 +65,7 @@
             <el-icon><postcard-icon /></el-icon>
             <span v-show="sideBarOpen"> About </span>
           </router-link>
-          <div class="sideBarMenuItem !pointer-events-none !mb-0 !pb-0">
+          <div class="sideBarMenuItem !pointer-events-none !mb-0 !pb-0" v-if="sideBarOpen">
             <img src="../../assets/brand/fair-data-innovations-hub-logo.svg" class="w-[150px]" />
           </div>
           <div class="absolute bottom-0 right-3 hidden">

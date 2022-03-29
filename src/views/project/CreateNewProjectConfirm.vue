@@ -7,9 +7,9 @@
 
       <line-divider> </line-divider>
 
-      <div class="flex flex-col items-center justify-center">
+      <div class="flex h-full flex-col items-center justify-center">
         <Vue3Lottie
-          animationLink="https://assets9.lottiefiles.com/packages/lf20_bk87clix.json"
+          animationLink="https://assets6.lottiefiles.com/packages/lf20_qqtavvc0.json"
           :width="200"
           :height="200"
         />
