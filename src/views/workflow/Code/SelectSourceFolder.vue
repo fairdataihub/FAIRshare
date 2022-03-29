@@ -35,8 +35,7 @@
           <span class="font-medium">
             {{ combineDataTypes }}
           </span>
-          files are stored. It is highly recommended to include the source
-          code files.
+          files are stored. It is highly recommended to include the source code files.
         </span>
 
         <el-input
