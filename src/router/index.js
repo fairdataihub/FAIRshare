@@ -36,7 +36,8 @@ import GithubPublish from "../views/github/GithubPublish.vue";
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
 // components required for options that can be skipped
-import LocalNoUpload from "../views/noUpload/LocalNoUpload.vue";
+import LocalNoUploadSummary from "../views/noUpload/LocalNoUploadSummary.vue";
+import LocalNoUploadGenerate from "../views/noUpload/LocalNoUploadGenerate.vue";
 import LocalNoUploadEnd from "../views/noUpload/LocalNoUploadEnd.vue";
 import GithubNoUploadEnd from "../views/noUpload/GithubNoUploadEnd.vue";
 
@@ -146,9 +147,14 @@ const routes = [
     name: "GithubPublish",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/localNoUpload/summary",
+    component: LocalNoUploadSummary,
+    name: "LocalNoUploadSummary",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/generate",
-    component: LocalNoUpload,
-    name: "LocalNoUpload",
+    component: LocalNoUploadGenerate,
+    name: "LocalNoUploadGenerate",
   },
   {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/finalPage",

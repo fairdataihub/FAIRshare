@@ -40,7 +40,7 @@
 
       <div class="flex w-full flex-row justify-center py-2" v-if="showAlert">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/localNoUpload/summary`"
           class="mx-6"
         >
           <button class="primary-plain-button">Back</button>
@@ -61,7 +61,7 @@ import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 import { useDatasetsStore } from "@/store/datasets";
 
 export default {
-  name: "LocalNoUpload",
+  name: "LocalNoUploadGenerate",
   components: { LoadingCubeGrid, LoadingEllipsis },
   data() {
     return {

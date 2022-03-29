@@ -610,10 +610,10 @@ export default {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
         }
         if (this.workflow.source.type === "local") {
-          routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+          routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
         }
       } else {
-        routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+        routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
       }
 
       this.$router.push({ path: routerPath });
