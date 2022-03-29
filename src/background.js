@@ -1,11 +1,13 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, shell } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, shell, Menu } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import axios from "axios";
+
+import template from "./menu";
 
 const fp = require("find-free-port");
 const fs = require("fs-extra");
@@ -147,6 +149,10 @@ const createPyProc = async () => {
       console.error(err);
     });
 };
+
+// Set the default menu of the application
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
 
 async function createWindow() {
   // Create the browser window.
