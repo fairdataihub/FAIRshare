@@ -117,7 +117,8 @@
               <div class="px-3 py-2">
                 Ensure that the following aspects are documented: inputs and outputs of the
                 software, parameters and data required to run the software, the standards applied,
-                and how to contribute to the software. We refer to the following literature:
+                and how to contribute to the software. We refer to the following literature for
+                additional information on documenting your software:
                 <span
                   class="text-url"
                   @click="openWebsite('https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561')"
