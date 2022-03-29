@@ -28,6 +28,7 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
@@ -128,6 +129,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
     component: GithubZenodoConnection,
     name: "GithubZenodoConnection",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/summary",
+    component: GithubSummary,
+    name: "GithubSummary",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/upload",

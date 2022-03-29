@@ -214,10 +214,26 @@
             </span>
           </p>
         </div>
-        <div v-if="publishedReleaseURL !== ''">
-          <p class="pb-10 text-center text-lg font-medium">
+        <div v-if="publishedReleaseURL !== ''" class="pb-10">
+          <p class="pb-5 text-center text-lg font-medium">
             Your release was published successfully. <br />
             You can view it on Zenodo and get your DOI.
+          </p>
+          <p class="max-w-lg text-center text-sm">
+            To increase the FAIRness of your software, we recommend to register it on the
+            <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
+            registry. It is also suggested to publish about your software in a suitable journal such
+            as the Journal of Open Research Software or any other suitable Journal (a list of
+            suitable Journals can be found
+            <span
+              @click="
+                openWebPage(
+                  'https://www.software.ac.uk/which-journals-should-i-publish-my-software'
+                )
+              "
+              class="text-url"
+              >here</span
+            >).
           </p>
         </div>
         <div class="flex space-x-4">
@@ -233,7 +249,7 @@
           </button>
           <button
             class="primary-button"
-            @click="openDraftRelease(draftReleaseURL)"
+            @click="openWebPage(draftReleaseURL)"
             v-if="draftReleaseURL !== ''"
           >
             <el-icon><flag-icon /></el-icon>
@@ -241,7 +257,7 @@
           </button>
           <button
             class="secondary-plain-button"
-            @click="openDraftRelease(publishedReleaseURL)"
+            @click="openWebPage(publishedReleaseURL)"
             v-if="publishedReleaseURL !== ''"
           >
             <el-icon><upload-filled /></el-icon>
@@ -364,8 +380,8 @@ export default {
 
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
-    async openDraftRelease(githubURL) {
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
+    async openWebPage(URL) {
+      window.ipcRenderer.send("open-link-in-browser", URL);
     },
     async viewZenodoRelease() {
       const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;

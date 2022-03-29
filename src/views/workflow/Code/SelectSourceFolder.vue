@@ -32,7 +32,10 @@
       <div class="flex w-full flex-col pt-20" v-if="locationID === 'local'">
         <span class="mb-2">
           Please select the folder where your
-          {{ combineDataTypes }} files are stored. It is highly recommended to include the source
+          <span class="font-medium">
+            {{ combineDataTypes }}
+          </span>
+          files are stored. It is highly recommended to include the source
           code files.
         </span>
 
@@ -123,7 +126,7 @@ export default {
         const dataTypes = this.workflow.type;
 
         if (dataTypes.length === 1) {
-          return dataTypes[0];
+          return dataTypes[0] === "Code" ? "Research Software" : dataTypes[0];
         } else if (dataTypes.length === 2) {
           return `${dataTypes[0]} and ${dataTypes[1]}`;
         } else if (dataTypes.length > 2) {
