@@ -13,7 +13,8 @@
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
             Have you followed applicable high-level standards and best practices for scientific
-            research software?
+            research software? Working from a version control system such as GitHub is especially
+            recommended.
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -105,7 +106,10 @@
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Is your software documentation following applicable standards and best practices?
+            Is your software documentation following applicable standards and best practices? It is
+            especially recommemded that the following aspects are documented: inputs and outputs of
+            the software, parameters and data required to run the software, the standards applied,
+            and how to contribute to the software.
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -115,10 +119,8 @@
               </template>
 
               <div class="px-3 py-2">
-                Ensure that the following aspects are documented: inputs and outputs of the
-                software, parameters and data required to run the software, the standards applied,
-                and how to contribute to the software. We refer to the following literature for
-                additional information on documenting your software:
+                We refer to the following literature for additional information on documenting your
+                software:
                 <span
                   class="text-url"
                   @click="openWebsite('https://dx.doi.org/10.1371%2Fjournal.pcbi.1006561')"
