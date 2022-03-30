@@ -6,6 +6,19 @@
     :before-close="beforeCloseRootLevel"
   >
     <div class="dialog-Container">
+      <p class="pb-2 text-sm" v-if="headers[0].search('Zenodo') !== -1">
+        You will need the
+        <span class="font-semibold">deposit:actions</span>
+        and <span class="font-semibold">deposit:write</span> scopes <br />
+        to access this resource.
+      </p>
+      <p class="pb-2 text-sm" v-if="headers[0].search('GitHub') !== -1">
+        You will need the following scopes on your personal access <br />
+        token:
+        <span class="font-semibold">admin:org_hook</span>,
+        <span class="font-semibold">admin:repo_hook</span>, <span class="font-semibold">repo</span>,
+        <span class="font-semibold">user</span>
+      </p>
       <el-form ref="formRef" :model="userInputs" label-position="top">
         <div class="inputField" v-for="i in this.numInput" :key="i">
           <el-form-item :label="this.headers[i - 1]" :prop="this.headers[i - 1]" required>
@@ -64,7 +77,7 @@ export default {
           "open-link-in-browser",
           "https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github"
         );
-      } else if (header == "Zenodo access token") {
+      } else if (header == "Zenodo token") {
         window.ipcRenderer.send(
           "open-link-in-browser",
           "https://docs.fairshareapp.io/docs/manage-accounts/connect-to-zenodo"
