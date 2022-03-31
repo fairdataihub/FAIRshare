@@ -1,11 +1,11 @@
-# Change Log
+# Changelog
 
 All notable changes to `FAIRshare` will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## v1.2.0 - 2022-03-24
+## v1.2.0 - 2022-03-31
 
 ### Feature additions
 
@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fixed an issue where app log files were not being created in the correct location.
 - Fixed an issue where incorrect file keys were being read from the `codemeta.json` file.
+- Fixed some issues where certain GitHub repositories were not returning a license correctly. This was causing FAIRshare to assume an invalid license existed on the repository.
+- Fixed an issue where an publishing a new version of a Zenodo deposition where no orcids for authors were provided could cause the app to freeze.
 
 ## v1.1.0 - 2022-03-21
 
