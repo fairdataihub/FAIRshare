@@ -15,7 +15,7 @@
           them to view their contents or open the file in your file browser.
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
-          <transition name="fade" mode="out-in" appear>
+          <fade-transition>
             <el-tree-v2 v-if="finishedLoading" :data="fileData" :props="defaultProps">
               <template #default="{ node, data }">
                 <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
@@ -62,7 +62,7 @@
                 :height="150"
               />
             </div>
-          </transition>
+          </fade-transition>
         </div>
         <el-drawer
           v-if="anyfilePreview"
@@ -108,7 +108,7 @@
       </div>
 
       <line-divider></line-divider>
-      <transition name="fade" mode="out-in" appear>
+      <fade-transition>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
             It looks like you have already connected your Zenodo account with FAIRshare. <br />
@@ -131,9 +131,9 @@
           </div>
         </div>
         <LoadingFoldingCube v-else></LoadingFoldingCube>
-      </transition>
+      </fade-transition>
 
-      <transition name="fade" mode="out-in" appear>
+      <fade-transition>
         <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
           <router-link
             :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
@@ -163,7 +163,7 @@
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
         </div>
-      </transition>
+      </fade-transition>
     </div>
   </div>
 </template>
