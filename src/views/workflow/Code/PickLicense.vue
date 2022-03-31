@@ -371,27 +371,35 @@ export default {
           return "ERROR";
         });
 
-      if (response !== "ERROR") {
-        if ("license" in response && response.license != null) {
-          if (
-            "spdx_id" in response.license &&
-            (response.license.spdx_id != null || response.license.spdx_id != "")
-          ) {
-            this.originalLicense =
-              this.licenseForm.license =
-              this.dataset.data.Code.questions.license =
-                response.license.spdx_id;
-            // this.licenseForm.license = this.dataset.data.Code.questions.license;
-            // this.originalLicense = this.licenseForm.license;
+      console.log(response);
 
-            ElNotification({
-              title: "Success",
-              message: "License information found in GitHub",
-              position: "top-right",
-              type: "info",
-            });
-          }
-        }
+      if (
+        response !== "ERROR" &&
+        "license" in response &&
+        response.license != null &&
+        "spdx_id" in response.license &&
+        (response.license.spdx_id != null || response.license.spdx_id != "")
+      ) {
+        this.originalLicense =
+          this.licenseForm.license =
+          this.dataset.data.Code.questions.license =
+            response.license.spdx_id;
+        // this.licenseForm.license = this.dataset.data.Code.questions.license;
+        // this.originalLicense = this.licenseForm.license;
+
+        ElNotification({
+          title: "Success",
+          message: "License information found in GitHub",
+          position: "top-right",
+          type: "info",
+        });
+      } else {
+        ElNotification({
+          title: "Error",
+          message: "Could not find license information in GitHub",
+          position: "top-right",
+          type: "error",
+        });
       }
     },
   },
