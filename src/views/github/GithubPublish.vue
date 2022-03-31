@@ -487,6 +487,8 @@ export default {
           position: "bottom-right",
         });
 
+        this.datasetStore.setCurrentStep(8);
+
         this.workflow.datasetPublished = true;
 
         await this.datasetStore.updateCurrentDataset(this.dataset);

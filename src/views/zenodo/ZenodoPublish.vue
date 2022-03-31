@@ -171,7 +171,7 @@ export default {
       } else {
         this.datasetStore.showProgressBar();
         this.datasetStore.setProgressBarType("zenodo");
-        this.datasetStore.setCurrentStep(7);
+        this.datasetStore.setCurrentStep(8);
 
         this.workflow.datasetPublished = true;
 
