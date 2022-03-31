@@ -56,6 +56,7 @@
         </div>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
   </div>
 </template>
 

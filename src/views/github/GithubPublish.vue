@@ -274,6 +274,7 @@
         </div>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/create-github-release" position="bottom-4" />
   </div>
 </template>
 

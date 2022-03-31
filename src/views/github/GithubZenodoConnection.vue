@@ -110,6 +110,7 @@
         </div>
       </transition>
     </div>
+    <app-docs-link url="curate-and-share/connect-github-zenodo" position="bottom-4" />
   </div>
 </template>
 

@@ -134,6 +134,7 @@
         </div>
       </transition>
     </div>
+    <app-docs-link url="curate-and-share/github-upload-summary" position="bottom-4" />
   </div>
 </template>
 
