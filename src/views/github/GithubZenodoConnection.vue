@@ -155,7 +155,8 @@ export default {
       return loading;
     },
 
-    openWebsite(url) {
+    openWebsite() {
+      const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
       window.ipcRenderer.send("open-link-in-browser", url);
     },
 

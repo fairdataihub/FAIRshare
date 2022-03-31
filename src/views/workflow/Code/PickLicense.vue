@@ -371,8 +371,6 @@ export default {
           return "ERROR";
         });
 
-      console.log(response);
-
       if (
         response !== "ERROR" &&
         "license" in response &&

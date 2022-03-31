@@ -127,10 +127,26 @@ export default {
         })
         .then((response) => {
           this.$track("Zenodo", "Publish deposition", "success");
+
+          if (
+            "newVersion" in this.workflow.destination.zenodo &&
+            this.workflow.destination.zenodo.newVersion === true
+          ) {
+            this.$track("Zenodo", "Publish new version", "success");
+          }
+
           return response.data;
         })
         .catch((error) => {
           this.$track("Zenodo", "Publish deposition", "failed");
+
+          if (
+            "newVersion" in this.workflow.destination.zenodo &&
+            this.workflow.destination.zenodo.newVersion === true
+          ) {
+            this.$track("Zenodo", "Publish new version", "failed");
+          }
+
           console.error(error);
           return "ERROR";
         });
