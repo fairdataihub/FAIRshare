@@ -1722,9 +1722,11 @@ export default {
             }
 
             // validate orcid
-            if (contributor.orcid !== "") {
+            if (contributor.orcid !== "" && contributor.orcid !== undefined) {
               const orcid = contributor.orcid;
+
               let total = 0;
+
               for (let i = 0; i < orcid.length - 1; i++) {
                 const digit = parseInt(orcid.substr(i, 1));
                 if (isNaN(digit)) {

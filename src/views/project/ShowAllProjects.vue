@@ -409,6 +409,7 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
+      // routerPath = `/datasets/${datasetID}/workflow1/localNoUpload/finalPage`;
 
       this.$router.push({ path: routerPath });
     },

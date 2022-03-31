@@ -11,7 +11,8 @@
 
       <div class="flex flex-col">
         <span class="mb-2">
-          Would you like FAIRshare to create the mandatory files codemeta.json and CITATION.cff?
+          Would you like FAIRshare to create the mandatory metadata files codemeta.json and
+          CITATION.cff?
         </span>
 
         <div class="py-1">
@@ -29,8 +30,9 @@
             <line-divider></line-divider>
 
             <span class="mb-2">
-              We will use this information to automatically include the standard codemeta.json and
-              CITATION.cff file in your dataset.
+              Provide information about your software below. We will use this information to
+              automatically generate and include in your dataset the standard codemeta.json and
+              CITATION.cff metadata files required to make your software FAIR.
             </span>
 
             <div>
@@ -564,7 +566,6 @@
                               type="text"
                               placeholder="PRA_2018_73"
                             ></el-input>
-                            {{ step3Form.funding.code }}
                             <form-help-content
                               popoverContent="Code of the grant funding this software (comma separate if multiple)"
                             ></form-help-content>
@@ -2187,7 +2188,7 @@ export default {
         });
       }
     },
-    prefillLocalCodeMeta(codeMeta) {
+    prefillFormFromCodeMetaObject(codeMeta) {
       this.step1Form.name = codeMeta.name;
       this.step1Form.description = codeMeta.description;
       this.step1Form.creationDate = codeMeta.dateCreated;
@@ -2224,9 +2225,11 @@ export default {
       }
 
       this.step3Form.applicationCategory = codeMeta.applicationCategory;
-      codeMeta.keywords.forEach((keyword) => {
-        this.step3Form.keywords.push({ keyword, id: uuidv4() });
-      });
+      if ("keywords" in codeMeta) {
+        codeMeta.keywords.forEach((keyword) => {
+          this.step3Form.keywords.push({ keyword, id: uuidv4() });
+        });
+      }
       if ("funding" in codeMeta) {
         this.step3Form.funding.code = codeMeta.funding;
       }
@@ -2342,9 +2345,55 @@ export default {
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
               this.showSpinner = true;
-              await this.prefillGithubAuthors();
-              await this.prefillGithubMisc();
-              this.showSpinner = false;
+
+              const tokenObject = await this.tokens.getToken("github");
+              const GithubAccessToken = tokenObject.token;
+
+              const selectedRepo = this.workflow.github.repo;
+
+              let response = "";
+
+              response = await axios
+                .get(`${this.$server_url}/github/repo/file/contents`, {
+                  params: {
+                    access_token: GithubAccessToken,
+                    owner: selectedRepo.split("/")[0],
+                    repo: selectedRepo.split("/")[1],
+                    file_name: "codemeta.json",
+                  },
+                })
+                .then((response) => {
+                  return response.data;
+                })
+                .catch((error) => {
+                  console.error(error);
+                  return "ERROR";
+                });
+
+              if (response !== "NOT_FOUND") {
+                ElNotification({
+                  title: "Info",
+                  message: "Found a previous codemeta.json file. Loading it...",
+                  position: "top-right",
+                  type: "info",
+                });
+
+                const codeMeta = JSON.parse(response);
+                await this.prefillFormFromCodeMetaObject(codeMeta);
+
+                ElNotification({
+                  title: "Success",
+                  message: "Successfully loaded codemeta.json file.",
+                  position: "top-right",
+                  type: "success",
+                });
+
+                this.showSpinner = false;
+              } else {
+                await this.prefillGithubAuthors();
+                await this.prefillGithubMisc();
+                this.showSpinner = false;
+              }
             }
             if (this.workflow.source.type === "local") {
               this.showSpinner = true;
@@ -2363,7 +2412,21 @@ export default {
                 });
 
               if (response !== "ERROR" && response !== "Not Found") {
-                await this.prefillLocalCodeMeta(response);
+                ElNotification({
+                  title: "Info",
+                  message: "Found a previous codemeta.json file. Loading it...",
+                  position: "top-right",
+                  type: "info",
+                });
+
+                await this.prefillFormFromCodeMetaObject(response);
+
+                ElNotification({
+                  title: "Success",
+                  message: "Successfully loaded codemeta.json file.",
+                  position: "top-right",
+                  type: "success",
+                });
               }
 
               this.showSpinner = false;

@@ -310,3 +310,33 @@ def getRepoContentTree(access_token, owner, repo):
 
     contentTree = getRepoTree(defaultBranch)
     return json.dumps(contentTree)
+
+
+def getFileFromRepo(access_token, owner, repo, file_name):
+    try:
+        url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_name}"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code != 200:
+            return "NOT_FOUND"
+
+        response = response.json()
+
+        if "content" in response:
+            base64EncodedContent = response["content"]
+            asciiEncoded = base64EncodedContent.encode("ascii")
+            base64Decoded = base64.b64decode(asciiEncoded)
+            asciiFileContent = base64Decoded.decode("ascii")
+
+            return asciiFileContent
+        else:
+            return "NOT_FOUND"
+    except Exception as e:
+        raise e

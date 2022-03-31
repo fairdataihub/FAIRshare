@@ -40,7 +40,7 @@
 
       <div class="flex w-full flex-row justify-center py-2" v-if="showAlert">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/summary`"
           class="mx-6"
         >
           <button class="primary-plain-button">Back</button>

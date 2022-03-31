@@ -27,8 +27,22 @@
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
           :loop="1"
         />
-        <p class="pb-5 text-center">
+        <p class="pb-5 text-center text-lg font-medium">
           Your dataset was successfully published. You can now view it on Zenodo.
+        </p>
+        <p class="max-w-lg pb-5 text-center text-sm">
+          To increase the FAIRness of your software, we recommend to register it on the
+          <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
+          registry. It is also suggested to publish about your software in a suitable journal such
+          as the Journal of Open Research Software or any other suitable Journal (a list of suitable
+          Journals can be found
+          <span
+            @click="
+              openWebPage('https://www.software.ac.uk/which-journals-should-i-publish-my-software')
+            "
+            class="text-url"
+            >here</span
+          >).
         </p>
         <div class="flex space-x-4">
           <router-link :to="`/datasets`" class="">
@@ -42,6 +56,7 @@
         </div>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
   </div>
 </template>
 
@@ -113,10 +128,26 @@ export default {
         })
         .then((response) => {
           this.$track("Zenodo", "Publish deposition", "success");
+
+          if (
+            "newVersion" in this.workflow.destination.zenodo &&
+            this.workflow.destination.zenodo.newVersion === true
+          ) {
+            this.$track("Zenodo", "Publish new version", "success");
+          }
+
           return response.data;
         })
         .catch((error) => {
           this.$track("Zenodo", "Publish deposition", "failed");
+
+          if (
+            "newVersion" in this.workflow.destination.zenodo &&
+            this.workflow.destination.zenodo.newVersion === true
+          ) {
+            this.$track("Zenodo", "Publish new version", "failed");
+          }
+
           console.error(error);
           return "ERROR";
         });
@@ -141,7 +172,7 @@ export default {
       } else {
         this.datasetStore.showProgressBar();
         this.datasetStore.setProgressBarType("zenodo");
-        this.datasetStore.setCurrentStep(7);
+        this.datasetStore.setCurrentStep(8);
 
         this.workflow.datasetPublished = true;
 
@@ -174,6 +205,10 @@ export default {
         "open-link-in-browser",
         `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
       );
+    },
+
+    async openWebPage(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
   async mounted() {

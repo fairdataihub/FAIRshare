@@ -1,7 +1,7 @@
 {
   "name": "fairshare",
-  "version": "1.1.0",
-  "description": "Simplifying data curation for researchers working on COVID-19 research",
+  "version": "1.2.0",
+  "description": "Your one-stop tool for making biomedical research data and software FAIR",
   "private": true,
   "keywords": [
     "fair data",

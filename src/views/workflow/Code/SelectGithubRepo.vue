@@ -10,9 +10,10 @@
 
       <div v-if="ready">
         <div v-if="validTokenAvailable">
-          <p class="my-5 w-full text-center">
-            Pick the GitHub repository you want to use. <br />
-            FAIRshare only supports public GitHub repositories.
+          <p class="my-5 w-full text-center text-base">
+            FAIRshare only supports public GitHub repositories. <br />
+            If your organization repository is not selectable, verify that you hold the
+            <span class="font-bold">admin</span> role for that repository.
           </p>
 
           <div class="py-5">
@@ -41,8 +42,8 @@
         <!-- show error message if token is not valid -->
         <div v-else class="flex flex-col items-center justify-center py-10">
           <p class="mb-5">
-            We couldn't find your GitHub login details. Please click on the button below to connect
-            to your GitHub account.
+            We couldn't find your GitHub account details. Please click on the button below to
+            connect to your GitHub account.
           </p>
 
           <ConnectGithub :statusChangeFunction="showConnection"></ConnectGithub>
@@ -72,36 +73,49 @@
         <button
           class="primary-button"
           :disabled="disableContinue"
-          @click="continueToNextStep"
+          @click="checkPermissions"
           v-if="validTokenAvailable"
         >
           Continue
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
+        <warning-confirm
+          ref="warningConfirm"
+          title="Warning"
+          @messageConfirmed="continueToNextStep"
+          confirmButtonText="Yes, I'm aware of the restrictions"
+        >
+          <p class="text-center text-base text-gray-500">
+            You do not have the <span class="font-bold">Admin</span> role in this repository. You
+            will not be able to setup the connections between Zenodo and GitHub without this role.
+          </p>
+        </warning-confirm>
       </div>
 
       <div v-if="showFilePreview" class="py-5">
         <line-divider />
-        <p class="text=lg my-5">
-          A list of all the files and folders in the selected repository are shown below. Current
-          branch is <b>{{ currentBranch }}</b
-          >.
-        </p>
-        <el-tree-v2 :data="fileData" :props="defaultProps">
-          <template #default="{ node, data }">
-            <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
-            <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
-            <span>{{ node.label }}</span>
+        <div class="px-5">
+          <p class="text=lg my-5">
+            A list of all the files and folders in the selected repository are shown below. Current
+            branch is <b>{{ currentBranch }}</b
+            >.
+          </p>
+          <el-tree-v2 :data="fileData" :props="defaultProps">
+            <template #default="{ node, data }">
+              <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+              <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+              <span>{{ node.label }}</span>
 
-            <button
-              v-if="node.isLeaf"
-              @click="handleNodeClick(data, 'view')"
-              class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
-            >
-              <el-icon><view-icon /></el-icon>
-            </button>
-          </template>
-        </el-tree-v2>
+              <button
+                v-if="node.isLeaf"
+                @click="handleNodeClick(data, 'view')"
+                class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
+              >
+                <el-icon><view-icon /></el-icon>
+              </button>
+            </template>
+          </el-tree-v2>
+        </div>
       </div>
     </div>
     <transition name="fade" mode="out-in" appear>
@@ -222,9 +236,23 @@ export default {
       }
     },
 
+    async checkPermissions() {
+      const repoObject = this.githubRepos.find((repo) => {
+        return repo.value === this.selectedRepo;
+      });
+
+      const permissions = repoObject.originalObject.permissions;
+
+      if (permissions.admin) {
+        this.continueToNextStep();
+      } else {
+        this.$refs.warningConfirm.show();
+      }
+    },
+
     async continueToNextStep() {
       const repoObject = this.githubRepos.find((repo) => {
-        return repo.full_name === this.selectedRepo;
+        return repo.value === this.selectedRepo;
       });
 
       if ("github" in this.workflow) {
@@ -268,7 +296,11 @@ export default {
         this.validTokenAvailable = false;
       } else {
         response.forEach((repo) => {
-          const selectionDisabled = repo.visibility === "private" ? true : false;
+          const visibilityCheck = repo.visibility === "private" ? true : false;
+          const permissionsCheck = repo.permissions.push;
+
+          const selectionDisabled = visibilityCheck || !permissionsCheck;
+
           this.githubRepos.push({
             value: repo.full_name,
             label: repo.full_name,

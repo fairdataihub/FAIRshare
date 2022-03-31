@@ -28,6 +28,7 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
@@ -35,7 +36,8 @@ import GithubPublish from "../views/github/GithubPublish.vue";
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
 // components required for options that can be skipped
-import LocalNoUpload from "../views/noUpload/LocalNoUpload.vue";
+import LocalNoUploadSummary from "../views/noUpload/LocalNoUploadSummary.vue";
+import LocalNoUploadGenerate from "../views/noUpload/LocalNoUploadGenerate.vue";
 import LocalNoUploadEnd from "../views/noUpload/LocalNoUploadEnd.vue";
 import GithubNoUploadEnd from "../views/noUpload/GithubNoUploadEnd.vue";
 
@@ -81,18 +83,22 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
+    name: "CodeCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
+    name: "CodePickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata/review",
     component: CodeCreateMetadataReview,
+    name: "CodeCreateMetadataReview",
   },
   {
     path: "/datasets/:datasetID/:workflowID/selectDestination",
     component: SelectRepositoryDestination,
+    name: "SelectRepositoryDestination",
   },
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/metadata",
@@ -126,6 +132,11 @@ const routes = [
     name: "GithubZenodoConnection",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/github/summary",
+    component: GithubSummary,
+    name: "GithubSummary",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/github/upload",
     component: GithubUpload,
     name: "GithubUpload",
@@ -136,9 +147,14 @@ const routes = [
     name: "GithubPublish",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/localNoUpload/summary",
+    component: LocalNoUploadSummary,
+    name: "LocalNoUploadSummary",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/generate",
-    component: LocalNoUpload,
-    name: "LocalNoUpload",
+    component: LocalNoUploadGenerate,
+    name: "LocalNoUploadGenerate",
   },
   {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/finalPage",

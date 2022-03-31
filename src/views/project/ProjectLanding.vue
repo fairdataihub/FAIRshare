@@ -7,9 +7,27 @@
 
       <line-divider> </line-divider>
 
-      <p class="py-2 pb-4">
-        We will help you make you research software FAIR by guiding you step-by-step through the
-        following process:
+      <p class="pt-2">
+        Currently, FAIRshare supports making research software FAIR according to the FAIR Biomedical
+        Research Software (FAIR-BioRS) guidelines v1.0. To our knowledge, these are the only
+        actionable FAIR guidelines available for biomedical research software irrespective of the
+        field of research, funding source, etc. Read our
+        <span
+          class="text-url"
+          @click="
+            openWebsite(
+              'https://docs.fairshareapp.io/docs/how-to-fair/how-to-make-research-software-fair'
+            )
+          "
+        >
+          dedicated documentation page
+        </span>
+        to find out more about them.
+      </p>
+      <p class="pt-1 pb-4">
+        <br />
+        To implement these guidelines, FAIRshare will guide you step-by-step through the following
+        process:
       </p>
 
       <el-timeline>
@@ -68,8 +86,8 @@
           <el-card class="dynamic-card">
             <h4 class="text-base font-bold">Publish dataset</h4>
             <p>
-              You will be requested to publish the dataset and make it accesible on the repository
-              to complete the process
+              You will be prompted to publish the dataset for making it openly accesible on the
+              repository to complete the process
             </p>
           </el-card>
         </el-timeline-item>
@@ -105,6 +123,9 @@ export default {
   methods: {
     navigateToWorkflows() {
       this.$router.push({ path: `/datasets/${this.datasetID}` });
+    },
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
   async mounted() {

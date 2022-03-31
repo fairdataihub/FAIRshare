@@ -28,10 +28,16 @@
             No worries. You can always come back to this page and let FAIRshare create your release
             for you.
           </p>
-          <button class="primary-button" @click="approveRelease">
-            <el-icon><edit-icon /></el-icon>
-            I changed my mind. Create a release for me
-          </button>
+          <div class="flex items-center justify-center space-x-4">
+            <button class="secondary-plain-button" @click="openRepository">
+              <el-icon><fold-icon /></el-icon>
+              View the repository
+            </button>
+            <button class="primary-button" @click="approveRelease">
+              <el-icon><edit-icon /></el-icon>
+              I changed my mind. Create a release for me
+            </button>
+          </div>
         </div>
 
         <div class="flex w-full flex-col space-x-4 pb-5" v-if="showApprovedInstructions">
@@ -200,32 +206,50 @@
         <div v-if="draftReleaseURL !== ''">
           <p class="pb-10 text-center font-medium">
             Your draft release is now on GitHub. You can go in and add additional files or edit
-            items before publishing. <br />
-            You will also be able to directly publish your draft from GitHub.
+            items before publishing the release. <br />
             <br />
             <span class="font-medium text-secondary-500">
-              This will automatically push your release to Zenodo.
+              Once you publish the release from Github, this will automatically push your release to
+              Zenodo as well.
             </span>
           </p>
         </div>
-        <div v-if="publishedReleaseURL !== ''">
-          <p class="pb-10 text-center text-lg font-medium">
+        <div v-if="publishedReleaseURL !== ''" class="pb-10">
+          <p class="pb-5 text-center text-lg font-medium">
             Your release was published successfully. <br />
             You can view it on Zenodo and get your DOI.
           </p>
+          <p class="max-w-lg text-center text-sm">
+            To increase the FAIRness of your software, we recommend to register it on the
+            <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
+            registry. It is also suggested to publish about your software in a suitable journal such
+            as the Journal of Open Research Software or any other suitable Journal (a list of
+            suitable Journals can be found
+            <span
+              @click="
+                openWebPage(
+                  'https://www.software.ac.uk/which-journals-should-i-publish-my-software'
+                )
+              "
+              class="text-url"
+              >here</span
+            >).
+          </p>
         </div>
         <div class="flex space-x-4">
-          <button class="primary-plain-button" @click="openCommitList">
-            <el-icon><fold-icon /></el-icon>
-            View commits
-          </button>
+          <router-link :to="`/datasets`">
+            <button class="primary-plain-button">
+              <el-icon><data-line /></el-icon> Go to the homepage
+            </button>
+          </router-link>
+
           <button class="primary-plain-button" @click="openAllReleases">
             <el-icon><box-icon /></el-icon>
             View all releases
           </button>
           <button
             class="primary-button"
-            @click="openDraftRelease(draftReleaseURL)"
+            @click="openWebPage(draftReleaseURL)"
             v-if="draftReleaseURL !== ''"
           >
             <el-icon><flag-icon /></el-icon>
@@ -233,7 +257,7 @@
           </button>
           <button
             class="secondary-plain-button"
-            @click="openDraftRelease(publishedReleaseURL)"
+            @click="openWebPage(publishedReleaseURL)"
             v-if="publishedReleaseURL !== ''"
           >
             <el-icon><upload-filled /></el-icon>
@@ -250,6 +274,7 @@
         </div>
       </div>
     </div>
+    <app-docs-link url="curate-and-share/create-github-release" position="bottom-4" />
   </div>
 </template>
 
@@ -346,8 +371,8 @@ export default {
 
       return true;
     },
-    async openCommitList() {
-      const githubURL = `https://github.com/${this.repoName}/commits`;
+    async openRepository() {
+      const githubURL = `https://github.com/${this.repoName}`;
 
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
@@ -356,8 +381,8 @@ export default {
 
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
-    async openDraftRelease(githubURL) {
-      window.ipcRenderer.send("open-link-in-browser", githubURL);
+    async openWebPage(URL) {
+      window.ipcRenderer.send("open-link-in-browser", URL);
     },
     async viewZenodoRelease() {
       const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
@@ -462,6 +487,8 @@ export default {
           type: "success",
           position: "bottom-right",
         });
+
+        this.datasetStore.setCurrentStep(8);
 
         this.workflow.datasetPublished = true;
 

@@ -105,6 +105,14 @@
       "label": "Python"
     },
     {
+      "value": "Python 2",
+      "label": "Python 2"
+    },
+    {
+      "value": "Python 3",
+      "label": "Python 3"
+    },
+    {
       "value": "R",
       "label": "R"
     },

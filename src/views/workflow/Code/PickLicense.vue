@@ -160,7 +160,7 @@ import { useTokenStore } from "@/store/access.js";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 
 import { Icon } from "@iconify/vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 import axios from "axios";
 
 export default {
@@ -340,6 +340,13 @@ export default {
 
       let response = "";
 
+      ElNotification({
+        title: "Info",
+        message: "Requesting license information from GitHub...",
+        position: "top-right",
+        type: "info",
+      });
+
       response = await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
           params: {
@@ -353,24 +360,44 @@ export default {
           return response.data;
         })
         .catch((error) => {
+          ElNotification({
+            title: "Error",
+            message: "Something went wrong.",
+            position: "top-right",
+            type: "error",
+          });
+
           console.error(error);
           return "ERROR";
         });
 
-      if (response !== "ERROR") {
-        if ("license" in response && response.license != null) {
-          if (
-            "spdx_id" in response.license &&
-            (response.license.spdx_id != null || response.license.spdx_id != "")
-          ) {
-            this.originalLicense =
-              this.licenseForm.license =
-              this.dataset.data.Code.questions.license =
-                response.license.spdx_id;
-            // this.licenseForm.license = this.dataset.data.Code.questions.license;
-            // this.originalLicense = this.licenseForm.license;
-          }
-        }
+      if (
+        response !== "ERROR" &&
+        "license" in response &&
+        response.license != null &&
+        "spdx_id" in response.license &&
+        (response.license.spdx_id != null || response.license.spdx_id != "")
+      ) {
+        this.originalLicense =
+          this.licenseForm.license =
+          this.dataset.data.Code.questions.license =
+            response.license.spdx_id;
+        // this.licenseForm.license = this.dataset.data.Code.questions.license;
+        // this.originalLicense = this.licenseForm.license;
+
+        ElNotification({
+          title: "Success",
+          message: "License information found in GitHub",
+          position: "top-right",
+          type: "info",
+        });
+      } else {
+        ElNotification({
+          title: "Error",
+          message: "Could not find license information in GitHub",
+          position: "top-right",
+          type: "error",
+        });
       }
     },
   },

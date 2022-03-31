@@ -19,7 +19,7 @@ export default {
     content: {
       type: String,
       required: false,
-      default: "Learn more about this feature",
+      default: "I need some help with this",
     },
     docs: {
       type: Boolean,

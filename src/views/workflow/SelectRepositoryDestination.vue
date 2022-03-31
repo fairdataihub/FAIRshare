@@ -4,6 +4,12 @@
     v-loading="loading"
   >
     <div class="flex h-full w-full flex-col items-start justify-start">
+      <span class="text-left text-lg font-medium">
+        Select a FAIR repository to share your research software
+      </span>
+
+      <el-divider class="my-4"> </el-divider>
+
       <div class="w-full">
         <span class="mb-2 w-full">
           Would you like to upload your dataset to a repository through FAIRshare?
@@ -371,7 +377,7 @@
               <el-icon><d-arrow-right /></el-icon>
             </button>
             <warning-confirm
-              ref="warningConfirm"
+              ref="warningConfirmSkipUploadToRepo"
               title="Warning"
               @messageConfirmed="skipUploadToRepo"
               confirmButtonText="Yes, I want to skip"
@@ -386,6 +392,16 @@
       </div>
     </div>
     <app-docs-link url="curate-and-share/select-github-repo" position="bottom-4" />
+    <error-confirm
+      ref="errorConfirmNoAdminPermission"
+      title="Invalid permissions"
+      :showCancelButton="false"
+    >
+      <p class="text-center text-base text-gray-500">
+        This repository does not have admin permissions for the currently authenticated user. Please
+        contact the repository owner to grant admin permission to you.
+      </p>
+    </error-confirm>
   </div>
 </template>
 
@@ -431,11 +447,20 @@ export default {
   computed: {},
   methods: {
     selectRepo(event, repoID) {
-      this.repoID = repoID;
-
       if (this.workflow.source.type === "github") {
         this.newVersion = "false";
+
+        console.log(this.workflow.github.fullObject.originalObject.permissions.admin);
+
+        if (!this.workflow.github.fullObject.originalObject.permissions.admin) {
+          console.log("No admin permissions on this repo");
+          this.$refs.errorConfirmNoAdminPermission.show();
+
+          return;
+        }
       }
+
+      this.repoID = repoID;
 
       if (event && event.detail === 2) {
         this.addMetadata();
@@ -566,7 +591,7 @@ export default {
       this.$router.push(routerPath);
     },
     showRepoUploadWarning() {
-      this.$refs.warningConfirm.show();
+      this.$refs.warningConfirmSkipUploadToRepo.show();
     },
     async skipUploadToRepo() {
       if (this.uploadToRepo === "Yes") {
@@ -585,10 +610,10 @@ export default {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
         }
         if (this.workflow.source.type === "local") {
-          routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+          routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
         }
       } else {
-        routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/generate`;
+        routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
       }
 
       this.$router.push({ path: routerPath });
@@ -637,7 +662,12 @@ export default {
             this.workflow.source.type === "local"
           ) {
             this.newVersion = this.workflow.destination[this.repoID].newVersion.toString();
-            this.showSelectZenodoDeposition = true;
+
+            if (this.newVersion === "true") {
+              this.showSelectZenodoDeposition = true;
+            } else {
+              this.showSelectZenodoDeposition = false;
+            }
           } else {
             this.newVersion = "None";
             this.showSelectZenodoDeposition = false;

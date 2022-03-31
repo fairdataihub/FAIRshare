@@ -1,21 +1,26 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, shell } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, shell, Menu } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import axios from "axios";
 
+import template from "./menu";
+
 const fp = require("find-free-port");
 const fs = require("fs-extra");
 const path = require("path");
 const log = require("electron-log");
 
-log.info("starting log");
-
 const USER_PATH = app.getPath("home");
 const CONFIG_STORE_PATH = path.join(USER_PATH, ".fairshare", "config.json");
+
+log.transports.file.resolvePath = () => path.join(USER_PATH, ".fairshare", "logs", "app.log");
+log.transports.console.format = "{h}:{i}:{s} {text}";
+
+log.info("starting log");
 
 const getReleaseChannel = () => {
   const exists = fs.pathExistsSync(CONFIG_STORE_PATH);
@@ -145,6 +150,10 @@ const createPyProc = async () => {
     });
 };
 
+// Set the default menu of the application
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
+
 async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -224,9 +233,10 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+
     if (!process.env.IS_TEST) {
       //uncomment this before build
-      mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools({ mode: "detach" });
     }
     // mainWindow.webContents.openDevTools();
   } else {

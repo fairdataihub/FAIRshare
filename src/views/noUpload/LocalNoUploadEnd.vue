@@ -13,13 +13,18 @@
           later and select a repository to make your dataset completely FAIR.
         </p>
         <div class="flex space-x-4">
-          <router-link :to="`/datasets`" class="">
+          <router-link :to="`/datasets`">
             <button class="primary-plain-button">
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
+          <router-link :to="`/datasets/${datasetID}/${workflowID}/selectDestination`">
+            <button class="secondary-plain-button">
+              <el-icon><upload-filled /></el-icon> Upload to a repository
+            </button>
+          </router-link>
           <button class="primary-button" @click="openFileExplorer">
-            View generated files <el-icon><star-icon /></el-icon>
+            <el-icon><star-icon /></el-icon> View generated files
           </button>
         </div>
       </div>

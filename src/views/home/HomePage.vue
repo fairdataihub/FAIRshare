@@ -3,11 +3,11 @@
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center pt-5 pb-1">
-          <h1 class="text-4xl font-bold text-slate-800 xl:text-5xl">FAIRshare</h1>
+          <img class="w-[350px] xl:w-[400px]" src="../../assets/brand/logo-with-name.png" />
         </div>
-        <div class="mb-1 flex w-full flex-col items-center justify-center pt-2 pb-3">
+        <div class="mb-1 flex w-full flex-col items-center justify-center pt-4 pb-3">
           <h2 class="text-xl font-medium text-slate-700">
-            Make your biomedical research data, and beyond,
+            Make your biomedical research data and software
           </h2>
           <h2 class="text-xl font-medium text-slate-700">
             Findable, Accessible, Interoperable, and Reusable (FAIR)
