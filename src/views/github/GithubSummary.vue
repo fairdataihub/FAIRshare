@@ -8,7 +8,8 @@
       <div>
         <p class="my-2">
           We will be adding some files to your GitHub repository. A preview of what your repository
-          will look like after is shown below:
+          will look like after is shown below (files that will be added by FAIRshare are highlighted
+          in orange):
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
