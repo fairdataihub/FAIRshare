@@ -1,0 +1,33 @@
+# This CITATION.cff file was generated with FAIRshare.
+# Visit https://fairdataihub.org/fairshare to learn more!
+
+abstract: Simplifying the curation and sharing of biomedical research data and software
+  according to applicable FAIR guidelines
+authors:
+- affiliation: FAIR Data Innovations Hub
+  email: ssoundarajan@calmi2.org
+  family-names: Soundarajan
+  given-names: Sanjay
+- affiliation: California Medical Innovations Institute
+  email: bpatel@calmi2.org
+  family-names: Patel
+  given-names: Bhavesh
+  orcid: 0000-0002-0307-262X
+cff-version: 1.2.0
+date-released: '2022-03-31'
+keywords:
+- curation
+- electron
+- fair
+- macos
+- metadata
+- sharing
+- ubuntu
+- windows
+license: MIT
+message: If you use this software, please cite it as below.
+repository-artifact: https://fairdataihub.org/fairshare
+repository-code: https://github.com/fairdataihub/FAIRshare
+title: 'FAIRshare: FAIR data and software sharing made easy'
+type: software
+version: 1.2.0
