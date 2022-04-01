@@ -175,6 +175,19 @@ export default {
               console.log("API version satisfied");
 
               this.loadStores();
+
+              axios
+                .get(`${this.$server_url}/zenodo/env`)
+                .then((response) => {
+                  if (response.data.search("sandbox") === -1) {
+                    this.environment = "production";
+                  } else {
+                    this.environment = "sandbox";
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
             } else {
               // will need to change this to a more user friendly message
               alert("Invalid API version");
@@ -184,19 +197,6 @@ export default {
           .catch((error) => {
             console.error(error);
           });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    axios
-      .get(`${this.$server_url}/zenodo/env`)
-      .then((response) => {
-        if (response.data.search("sandbox") === -1) {
-          this.environment = "production";
-        } else {
-          this.environment = "sandbox";
-        }
       })
       .catch((error) => {
         console.error(error);
