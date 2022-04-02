@@ -5,6 +5,17 @@ All notable changes to `FAIRshare` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## v1.3.0 -
+
+### Feature additions
+
+- Add content here
+
+### Bug fixes
+
+- Fixed an issue where a tool to show the size of the screen was being displayed on the app if the backend server didn't load fast enough.
+- Fixed an issue where buttons provided by Element Plus were being overwritten by Tailwind's css reset.
+
 ## v1.2.0 - 2022-03-31
 
 ### Feature additions
