@@ -88,6 +88,7 @@ export default {
       showAlert: false,
       alertTitle: "",
       alertMessage: "",
+      overwriteCodeMeta: false,
     };
   },
   computed: {
@@ -657,13 +658,17 @@ export default {
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
+          console.log(this.dataset.data.Code.questions.identifier);
           if (
             "metadata" in response &&
             "identifier" in this.dataset.data.Code.questions &&
-            this.dataset.data.Code.questions.identifier !== ""
+            this.dataset.data.Code.questions.identifier == ""
           ) {
             this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
+            this.overwriteCodeMeta = true;
           }
+
+          console.log(this.dataset.data.Code.questions.identifier);
 
           response = await this.createCodeMetadataFile();
           // console.log(response);
@@ -801,6 +806,10 @@ export default {
 
         this.deleteDraftZenodoDeposition();
 
+        if (this.overwriteCodeMeta) {
+          this.dataset.data.Code.questions.identifier = "";
+        }
+
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
 
@@ -809,15 +818,20 @@ export default {
 
         return;
       } else {
-        this.workflow.datasetUploaded = true;
-        this.workflow.datasetPublished = false;
-        this.workflow.generateLicense = false;
+        if (this.overwriteCodeMeta) {
+          this.dataset.data.Code.questions.identifier = "";
+        }
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
+        return;
+        // this.workflow.datasetUploaded = true;
+        // this.workflow.datasetPublished = false;
+        // this.workflow.generateLicense = false;
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
-        this.$router.push({ path: routerPath });
+        // await this.datasetStore.updateCurrentDataset(this.dataset);
+        // await this.datasetStore.syncDatasets();
+
+        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        // this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

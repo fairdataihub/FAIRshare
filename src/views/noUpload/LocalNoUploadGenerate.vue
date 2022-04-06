@@ -154,7 +154,7 @@ export default {
           if (
             "metadata" in response &&
             "identifier" in this.dataset.data.Code.questions &&
-            this.dataset.data.Code.questions.identifier !== ""
+            this.dataset.data.Code.questions.identifier == ""
           ) {
             this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
           }
