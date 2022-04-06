@@ -392,6 +392,29 @@
                         @submit.prevent
                         class="py-4"
                       >
+                        <el-form-item label="Unique identifier">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step3Form.identifier"
+                              type="text"
+                              :placeholder="
+                                greyOutIdentifierInput
+                                  ? 'Auto assigned during upload'
+                                  : '10.151.xxxxx'
+                              "
+                              :disabled="greyOutIdentifierInput"
+                            ></el-input>
+
+                            <form-help-content
+                              popoverContent="An identifier for this dataset if applicable. "
+                            ></form-help-content>
+                          </div>
+                          <p v-if="greyOutIdentifierInput" class="pt-1 text-sm text-gray-500">
+                            An identifier will be automatically assigned to this dataset if you are
+                            uploading files to Zenodo from your system.
+                          </p>
+                        </el-form-item>
+
                         <el-form-item label="Application category">
                           <div class="flex w-full flex-col">
                             <div class="flex w-full flex-row items-center">
@@ -1242,7 +1265,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 3,
       pillTitles: [
         "Basic info",
         "Authors and Contributors",
@@ -1292,6 +1315,7 @@ export default {
         contributors: [],
       },
       step3Form: {
+        identifier: "",
         applicationCategory: "",
         keywords: [],
         funding: {
@@ -1331,6 +1355,7 @@ export default {
       issueTrackerErrorMessage: "",
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
+      greyOutIdentifierInput: false,
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
@@ -1903,6 +1928,7 @@ export default {
         codeForm.authors = this.step2Form.authors;
         codeForm.contributors = this.step2Form.contributors;
 
+        codeForm.identifier = this.step3Form.identifier;
         codeForm.keywords = this.step3Form.keywords;
         codeForm.funding = this.step3Form.funding;
         codeForm.applicationCategory = this.step3Form.applicationCategory;
@@ -2224,6 +2250,7 @@ export default {
         );
       }
 
+      this.step3Form.identifier = codeMeta.identifier;
       this.step3Form.applicationCategory = codeMeta.applicationCategory;
       if ("keywords" in codeMeta) {
         codeMeta.keywords.forEach((keyword) => {
@@ -2269,6 +2296,16 @@ export default {
       }
       this.step7Form.isPartOf = codeMeta.isPartOf;
     },
+    checkIdentifierInput() {
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "local") {
+          this.step3Form.identifier = "";
+          this.greyOutIdentifierInput = true;
+        } else {
+          this.greyOutIdentifierInput = false;
+        }
+      }
+    },
   },
   async mounted() {
     this.$nextTick(async function () {
@@ -2303,6 +2340,7 @@ export default {
           this.step2Form.authors = codeForm.authors;
           this.step2Form.contributors = codeForm.contributors;
 
+          this.step3Form.identifier = codeForm.identifier;
           this.step3Form.keywords = codeForm.keywords;
           this.step3Form.funding = codeForm.funding;
           this.step3Form.applicationCategory = codeForm.applicationCategory;
@@ -2433,6 +2471,7 @@ export default {
             }
           }
         }
+        this.checkIdentifierInput();
       }
     });
   },
