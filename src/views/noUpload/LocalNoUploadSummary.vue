@@ -96,6 +96,12 @@
                 <el-table-column prop="Name" label="Name" />
                 <el-table-column prop="Value" label="Value" class="break-normal" />
               </el-table>
+              <p class="pt-4 text-sm text-zinc-400">
+                # This CITATION.cff file was generated with FAIRshare.
+              </p>
+              <p class="text-sm text-zinc-400">
+                # Visit https://fairdataihub.org/fairshare to learn more!
+              </p>
             </div>
 
             <div v-if="PreviewNewlyCreatedLicenseFile" class="">
@@ -475,6 +481,12 @@ export default {
           switch (parentName) {
             case "keywords":
               customName = "keyword";
+              break;
+            case "authors":
+              customName = "author";
+              break;
+            case "contributors":
+              customName = "contributor";
               break;
             default:
               customName = parentName;

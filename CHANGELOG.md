@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fixed an issue where a tool to show the size of the screen was being displayed on the app if the backend server didn't load fast enough.
 - Fixed an issue where buttons provided by Element Plus were being overwritten by Tailwind's css reset.
+- Fixed an issue where a comment added by the application to the `CITATION.cff` file was not being shown in the UI.
+- Fixed some bugs where the wrong keyword was being displayed when previewing metadata files.
 
 ## v1.2.0 - 2022-03-31
 
