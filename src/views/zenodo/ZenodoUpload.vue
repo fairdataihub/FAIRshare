@@ -822,16 +822,15 @@ export default {
           this.dataset.data.Code.questions.identifier = "";
         }
 
-        return;
-        // this.workflow.datasetUploaded = true;
-        // this.workflow.datasetPublished = false;
-        // this.workflow.generateLicense = false;
+        this.workflow.datasetUploaded = true;
+        this.workflow.datasetPublished = false;
+        this.workflow.generateLicense = false;
 
-        // await this.datasetStore.updateCurrentDataset(this.dataset);
-        // await this.datasetStore.syncDatasets();
+        await this.datasetStore.updateCurrentDataset(this.dataset);
+        await this.datasetStore.syncDatasets();
 
-        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
-        // this.$router.push({ path: routerPath });
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

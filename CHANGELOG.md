@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Feature additions
 
-- Add content here
+- Add support for a user to submit their own unique identifier for a dataset.
 
 ### Bug fixes
 
