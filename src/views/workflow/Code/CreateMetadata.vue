@@ -409,10 +409,18 @@
                               popoverContent="An identifier for this dataset if applicable. "
                             ></form-help-content>
                           </div>
-                          <p v-if="greyOutIdentifierInput" class="pt-1 text-sm text-gray-500">
-                            An identifier will be automatically assigned to this dataset if you are
-                            uploading files to Zenodo from your system.
-                          </p>
+                          <div v-if="greyOutIdentifierInput" class="flex pt-2">
+                            <p class="pr-1 text-sm text-gray-500">
+                              An identifier will be automatically assigned to this dataset when
+                              files are uploaded from your system.
+                            </p>
+                            <p
+                              class="text-url cursor-pointer !text-sm"
+                              @click="editUniqueIdentifier"
+                            >
+                              Click here to override this.
+                            </p>
+                          </div>
                         </el-form-item>
 
                         <el-form-item label="Application category">
@@ -2299,12 +2307,17 @@ export default {
     checkIdentifierInput() {
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "local") {
-          this.step3Form.identifier = "";
-          this.greyOutIdentifierInput = true;
+          if (this.step3Form.identifier === "") {
+            this.greyOutIdentifierInput = true;
+          }
         } else {
           this.greyOutIdentifierInput = false;
         }
       }
+    },
+    editUniqueIdentifier() {
+      this.step3Form.identifier = "";
+      this.greyOutIdentifierInput = false;
     },
   },
   async mounted() {
