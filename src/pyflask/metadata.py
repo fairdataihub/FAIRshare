@@ -51,9 +51,9 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
         if code_data["currentVersion"] != "":
             metadata["version"] = code_data["currentVersion"]
 
-    if "uniqueIdentifier" in code_data:
-        if code_data["uniqueIdentifier"] != "":
-            metadata["identifier"] = code_data["uniqueIdentifier"]
+    if "identifier" in code_data:
+        if code_data["identifier"] != "":
+            metadata["identifier"] = code_data["identifier"]
 
     if "description" in general_data:
         if general_data["description"] != "":
@@ -276,13 +276,13 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
 
                 citationObject["authors"].append(new_author)
 
-    if "uniqueIdentifier" in code_data:
-        if code_data["uniqueIdentifier"] != "":
+    if "identifier" in code_data:
+        if code_data["identifier"] != "":
             citationObject["identifiers"] = []
 
             identifier = {}
             identifier["type"] = "doi"
-            identifier["value"] = code_data["uniqueIdentifier"]
+            identifier["value"] = code_data["identifier"]
             identifier[
                 "description"
             ] = "DOI for this software's record on Zenodo"  # noqa: E501

@@ -88,6 +88,7 @@ export default {
       showAlert: false,
       alertTitle: "",
       alertMessage: "",
+      overwriteCodeMeta: false,
     };
   },
   computed: {
@@ -657,10 +658,17 @@ export default {
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
-          if ("metadata" in response) {
-            this.dataset.data.Code.questions.uniqueIdentifier =
-              response.metadata.prereserve_doi.doi;
+          console.log(this.dataset.data.Code.questions.identifier);
+          if (
+            "metadata" in response &&
+            "identifier" in this.dataset.data.Code.questions &&
+            this.dataset.data.Code.questions.identifier == ""
+          ) {
+            this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
+            this.overwriteCodeMeta = true;
           }
+
+          console.log(this.dataset.data.Code.questions.identifier);
 
           response = await this.createCodeMetadataFile();
           // console.log(response);
@@ -798,6 +806,10 @@ export default {
 
         this.deleteDraftZenodoDeposition();
 
+        if (this.overwriteCodeMeta) {
+          this.dataset.data.Code.questions.identifier = "";
+        }
+
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
 
@@ -806,6 +818,10 @@ export default {
 
         return;
       } else {
+        if (this.overwriteCodeMeta) {
+          this.dataset.data.Code.questions.identifier = "";
+        }
+
         this.workflow.datasetUploaded = true;
         this.workflow.datasetPublished = false;
         this.workflow.generateLicense = false;
