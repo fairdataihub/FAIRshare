@@ -151,7 +151,7 @@ export default {
     });
 
     const client = axios.create({ baseURL: `${this.$server_url}` });
-    axiosRetry(client, { retries: 3 });
+    axiosRetry(client, { retries: 5 });
 
     this.loading = ElLoading.service({
       lock: true,
