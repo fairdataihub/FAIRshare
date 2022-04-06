@@ -151,9 +151,12 @@ export default {
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
-          if ("metadata" in response) {
-            this.dataset.data.Code.questions.uniqueIdentifier =
-              response.metadata.prereserve_doi.doi;
+          if (
+            "metadata" in response &&
+            "identifier" in this.dataset.data.Code.questions &&
+            this.dataset.data.Code.questions.identifier !== ""
+          ) {
+            this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
           }
 
           response = await this.createCodeMetadataFile();
