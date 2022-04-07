@@ -2307,7 +2307,7 @@ export default {
     checkIdentifierInput() {
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "local") {
-          if (this.step3Form.identifier === "") {
+          if (this.step3Form.identifier === "" || this.step3Form.identifier === undefined) {
             this.greyOutIdentifierInput = true;
           }
         } else {
