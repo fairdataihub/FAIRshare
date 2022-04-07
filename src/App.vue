@@ -12,6 +12,24 @@
     </AppContent>
 
     <div
+      class="fixed bottom-4 right-4 flex w-[255px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
+      v-if="showConnectingMessage"
+    >
+      <Vue3Lottie
+        animationLink="https://assets7.lottiefiles.com/packages/lf20_rwvsnibi.json"
+        :width="210"
+        :height="180"
+      />
+      <div
+        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+        @click="closeNotification"
+      >
+        <el-icon><circle-close-filled /></el-icon>
+      </div>
+      <p class="text-center text-sm">FAIRshare is connecting to the backend server...</p>
+    </div>
+
+    <div
       class="fixed bottom-4 right-4 flex w-[230px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
       v-if="showDownloadingMessage"
     >
@@ -66,7 +84,6 @@ import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { ElLoading } from "element-plus";
 import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
@@ -89,6 +106,7 @@ export default {
       tokens: useTokenStore(),
       loading: "",
       environment: "",
+      showConnectingMessage: false,
       showDownloadingMessage: false,
       showRestartMessage: false,
       platform: process.platform,
@@ -109,17 +127,19 @@ export default {
         // Run all the integrations checks
         this.tokens.verifyAllConnections();
 
-        this.loading.close();
+        this.showConnectingMessage = false;
       } catch (error) {
         console.error("Error with loading stores...");
         console.error(error);
-        this.loading.close();
+
+        this.showConnectingMessage = false;
       }
     },
     restartAppForUpdate() {
       window.ipcRenderer.send("restart-fairshare-for-update");
     },
     closeNotification() {
+      this.showConnectingMessage = false;
       this.showDownloadingMessage = false;
       this.showRestartMessage = false;
     },
@@ -151,18 +171,12 @@ export default {
     });
 
     const client = axios.create({ baseURL: `${this.$server_url}` });
-    axiosRetry(client, { retries: 5 });
-
-    this.loading = ElLoading.service({
-      lock: true,
-      text: "Connecting to backend systems and loading data...",
-      background: "rgba(255, 255, 255, 0.95)",
-    });
+    axiosRetry(client, { retries: 10 });
 
     client
       .get("/echo", {
         "axios-retry": {
-          retries: 5,
+          retries: 10,
           retryDelay: axiosRetry.exponentialDelay,
         },
       })
@@ -191,7 +205,8 @@ export default {
             } else {
               // will need to change this to a more user friendly message
               alert("Invalid API version");
-              this.loading.close();
+
+              this.showConnectingMessage = false;
             }
           })
           .catch((error) => {
