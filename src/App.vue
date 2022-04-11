@@ -208,7 +208,7 @@ export default {
     checkForAnnouncements() {
       axios
         .get(
-          "https://raw.githubusercontent.com/fairdataihub/FAIRshare/server-check/meta/announcements.json"
+          `https://raw.githubusercontent.com/fairdataihub/FAIRshare/server-check/meta/announcements.json?timestamp=${new Date().getTime()}`
         )
         .then((response) => {
           const announcements = response.data;
@@ -220,6 +220,7 @@ export default {
             if ("show" in announcement && announcement.show) {
               if (announcement.type === "warning") {
                 this.announcementText = announcement.message;
+
                 this.$refs.appAnnouncement.setTitle(announcement.title);
                 this.$refs.appAnnouncement.show();
               }
