@@ -1,0 +1,17 @@
+{
+  "1.1.0": {
+    "showWarning": false,
+    "message": "Test Message",
+    "type": "warning"
+  },
+  "1.2.0": {
+    "showWarning": false,
+    "message": "Test Message",
+    "type": "warning"
+  },
+  "1.3.0": {
+    "showWarning": true,
+    "message": "Test Message",
+    "type": "warning"
+  }
+}

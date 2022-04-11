@@ -41,6 +41,8 @@ import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
 
+import AppAnnouncement from "./components/dialogs/announcement/AppAnnouncement.vue";
+
 import FadeTransition from "./components/transitions/FadeTransition.vue";
 
 import HelixSpinnerAnimationData from "./assets/lotties/helixSpinner.json";
@@ -73,6 +75,8 @@ app.component("error-confirm", ErrorConfirm);
 app.component("warning-prompt", WarningPrompt);
 
 app.component("general-dialog", GeneralDialog);
+
+app.component("app-announcement", AppAnnouncement);
 
 app.component("fade-transition", FadeTransition);
 

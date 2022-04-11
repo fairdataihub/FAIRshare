@@ -40,6 +40,17 @@
       </p>
     </error-confirm>
 
+    <app-announcement
+      ref="appAnnouncement"
+      title=""
+      :showCancelButton="false"
+      confirmButtonText="Okay"
+    >
+      <p class="text-center text-base text-gray-500">
+        {{ announcementText }}
+      </p>
+    </app-announcement>
+
     <fade-transition>
       <div
         class="fixed bottom-4 right-4 flex w-[255px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
@@ -145,6 +156,7 @@ export default {
       showDownloadingMessage: false,
       showRestartMessage: false,
       platform: process.platform,
+      announcementText: "",
     };
   },
   methods: {
@@ -195,18 +207,20 @@ export default {
     },
     checkForAnnouncements() {
       axios
-        .get("https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/warnings.json")
+        .get(
+          "https://raw.githubusercontent.com/fairdataihub/FAIRshare/server-check/meta/announcements.json"
+        )
         .then((response) => {
-          const warnings = response.data;
+          const announcements = response.data;
           const currentVersion = app.getVersion();
 
-          console.log(warnings, currentVersion);
-          if (warnings.length > 0) {
-            warnings.forEach((warning) => {
-              if (semver.satisfies(currentVersion, warning.version)) {
-                this.$refs.announcement.open(warning.message);
-              }
-            });
+          if (currentVersion in announcements) {
+            const announcement = announcements[currentVersion];
+
+            if (announcement.type === "warning") {
+              this.announcementText = announcement.message;
+              this.$refs.appAnnouncement.show();
+            }
           }
         });
       // const url =
