@@ -325,8 +325,11 @@ app.on("ready", async () => {
   createWindow();
 });
 
-ipcMain.on("check-for-updates", async (_event) => {
+ipcMain.on("check-for-updates", async (_event, channel = "") => {
   // Check for app updates
+  if (channel !== "") {
+    autoUpdater.channel = channel;
+  }
   autoUpdater.checkForUpdatesAndNotify();
 });
 

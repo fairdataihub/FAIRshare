@@ -215,8 +215,6 @@ export default {
         if (currentVersion in announcements) {
           const announcement = announcements[currentVersion];
 
-          console.log(announcement);
-
           if ("show" in announcement && announcement.show) {
             if (announcement.type === "warning") {
               this.announcementText = announcement.message;
