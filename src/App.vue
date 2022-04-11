@@ -206,27 +206,27 @@ export default {
       });
     },
     checkForAnnouncements() {
-      axios
-        .get(
-          `https://raw.githubusercontent.com/fairdataihub/FAIRshare/server-check/meta/announcements.json?timestamp=${new Date().getTime()}`
-        )
-        .then((response) => {
-          const announcements = response.data;
-          const currentVersion = app.getVersion();
+      const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/server-check/meta/announcements.json?timestamp=${new Date().getTime()}`;
+      console.log(url);
+      axios.get(url).then((response) => {
+        const announcements = response.data;
+        const currentVersion = app.getVersion();
 
-          if (currentVersion in announcements) {
-            const announcement = announcements[currentVersion];
+        if (currentVersion in announcements) {
+          const announcement = announcements[currentVersion];
 
-            if ("show" in announcement && announcement.show) {
-              if (announcement.type === "warning") {
-                this.announcementText = announcement.message;
+          console.log(announcement);
 
-                this.$refs.appAnnouncement.setTitle(announcement.title);
-                this.$refs.appAnnouncement.show();
-              }
+          if ("show" in announcement && announcement.show) {
+            if (announcement.type === "warning") {
+              this.announcementText = announcement.message;
+
+              this.$refs.appAnnouncement.setTitle(announcement.title);
+              this.$refs.appAnnouncement.show();
             }
           }
-        });
+        }
+      });
     },
   },
   mounted() {
