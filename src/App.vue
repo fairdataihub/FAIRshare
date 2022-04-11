@@ -217,22 +217,15 @@ export default {
           if (currentVersion in announcements) {
             const announcement = announcements[currentVersion];
 
-            if (announcement.type === "warning") {
-              this.announcementText = announcement.message;
-              this.$refs.appAnnouncement.show();
+            if ("show" in announcement && announcement.show) {
+              if (announcement.type === "warning") {
+                this.announcementText = announcement.message;
+                this.$refs.appAnnouncement.setTitle(announcement.title);
+                this.$refs.appAnnouncement.show();
+              }
             }
           }
         });
-      // const url =
-      //   "https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/warnings.json";
-      // fetch(url).then(function (response) {
-      //   response.text().then(function (text) {
-      //     console.log(text);
-      //     let warning_obj = JSON.parse(text);
-
-      //     console.log(warning_obj, app.getVersion(), "test");
-      //   });
-      // });
     },
   },
   mounted() {
