@@ -164,12 +164,15 @@ export default {
 
         this.showConnectingMessage = false;
 
+        this.checkForAnnouncements();
         window.ipcRenderer.send("check-for-updates");
       } catch (error) {
         console.error("Error with loading stores...");
         console.error(error);
 
         this.showConnectingMessage = false;
+
+        this.checkForAnnouncements();
         window.ipcRenderer.send("check-for-updates");
       }
     },
@@ -189,6 +192,33 @@ export default {
       this.$router.push({
         path: "/contactUs",
       });
+    },
+    checkForAnnouncements() {
+      axios
+        .get("https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/warnings.json")
+        .then((response) => {
+          const warnings = response.data;
+          const currentVersion = app.getVersion();
+
+          console.log(warnings, currentVersion);
+          if (warnings.length > 0) {
+            warnings.forEach((warning) => {
+              if (semver.satisfies(currentVersion, warning.version)) {
+                this.$refs.announcement.open(warning.message);
+              }
+            });
+          }
+        });
+      // const url =
+      //   "https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/warnings.json";
+      // fetch(url).then(function (response) {
+      //   response.text().then(function (text) {
+      //     console.log(text);
+      //     let warning_obj = JSON.parse(text);
+
+      //     console.log(warning_obj, app.getVersion(), "test");
+      //   });
+      // });
     },
   },
   mounted() {
