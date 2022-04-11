@@ -11,68 +11,103 @@
       </router-view>
     </AppContent>
 
-    <div
-      class="fixed bottom-4 right-4 flex w-[255px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
-      v-if="showConnectingMessage"
+    <error-confirm
+      ref="errorConfirmNoBackend"
+      title="Could not connect to backend server"
+      :showCancelButton="false"
+      :preventOutsideClick="true"
+      confirmButtonText="Restart FAIRshare"
+      @messageConfirmed="restartApplication"
     >
-      <Vue3Lottie
-        animationLink="https://assets7.lottiefiles.com/packages/lf20_rwvsnibi.json"
-        :width="210"
-        :height="180"
-      />
-      <div
-        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
-        @click="closeNotification"
-      >
-        <el-icon><circle-close-filled /></el-icon>
-      </div>
-      <p class="text-center text-sm">FAIRshare is connecting to the backend server...</p>
-    </div>
-
-    <div
-      class="fixed bottom-4 right-4 flex w-[230px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
-      v-if="showDownloadingMessage"
-    >
-      <div
-        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
-        @click="closeNotification"
-      >
-        <el-icon><circle-close-filled /></el-icon>
-      </div>
-      <Vue3Lottie
-        animationLink="https://assets5.lottiefiles.com/private_files/lf30_t26law.json"
-        :width="100"
-        :height="100"
-      />
-      <p class="text-center text-sm">FAIRshare is downloading the latest version of the app...</p>
-    </div>
-
-    <div
-      class="fixed bottom-4 right-4 flex w-[250px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-6 py-3 shadow-xl"
-      v-if="showRestartMessage"
-    >
-      <div
-        class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
-        @click="closeNotification"
-      >
-        <el-icon><circle-close-filled /></el-icon>
-      </div>
-      <Vue3Lottie
-        animationLink="https://assets8.lottiefiles.com/packages/lf20_dv9qkzg7.json"
-        :width="50"
-        :height="50"
-      />
-      <p class="py-3 text-center text-sm">
-        {{
-          platform == "darwin"
-            ? "Update downloaded. It will be installed when you close and relaunch the app."
-            : "Restart FAIRshare to install the latest version of the app."
-        }}
+      <p class="text-center text-base text-gray-500">
+        FAIRshare could not connect to the backend server. Please try restarting the application. If
+        the problem persists, please contact us
+        <span class="text-url" @click="goToContactPage">here</span>.
       </p>
-      <button class="primary-plain-button py-1 px-2" @click="restartAppForUpdate">
-        {{ platform == "darwin" ? "Close FAIRshare" : "Restart FAIRshare" }}
-      </button>
-    </div>
+    </error-confirm>
+
+    <error-confirm
+      ref="errorConfirmInvalidAPIVersion"
+      title="Invalid API version"
+      :showCancelButton="false"
+      :preventOutsideClick="true"
+      confirmButtonText="Restart FAIRshare"
+      @messageConfirmed="restartApplication"
+    >
+      <p class="text-center text-base text-gray-500">
+        Invalid app versions were found. Please try restarting the application. If the problem
+        persists, restart your computer and then reinstall FAIRshare.
+      </p>
+    </error-confirm>
+
+    <fade-transition>
+      <div
+        class="fixed bottom-4 right-4 flex w-[255px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
+        v-if="showConnectingMessage"
+      >
+        <Vue3Lottie
+          animationLink="https://assets7.lottiefiles.com/packages/lf20_rwvsnibi.json"
+          :width="210"
+          :height="180"
+        />
+        <div
+          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          @click="closeNotification"
+        >
+          <el-icon><circle-close-filled /></el-icon>
+        </div>
+        <p class="text-center text-sm">FAIRshare is connecting to the backend server...</p>
+      </div>
+    </fade-transition>
+
+    <fade-transition>
+      <div
+        class="fixed bottom-4 right-4 flex w-[230px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 shadow-xl"
+        v-if="showDownloadingMessage"
+      >
+        <div
+          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          @click="closeNotification"
+        >
+          <el-icon><circle-close-filled /></el-icon>
+        </div>
+        <Vue3Lottie
+          animationLink="https://assets5.lottiefiles.com/private_files/lf30_t26law.json"
+          :width="100"
+          :height="100"
+        />
+        <p class="text-center text-sm">FAIRshare is downloading the latest version of the app...</p>
+      </div>
+    </fade-transition>
+
+    <fade-transition>
+      <div
+        class="fixed bottom-4 right-4 flex w-[250px] flex-col items-center justify-center rounded-lg border border-zinc-300 bg-white px-6 py-3 shadow-xl"
+        v-if="showRestartMessage"
+      >
+        <div
+          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          @click="closeNotification"
+        >
+          <el-icon><circle-close-filled /></el-icon>
+        </div>
+        <Vue3Lottie
+          animationLink="https://assets8.lottiefiles.com/packages/lf20_dv9qkzg7.json"
+          :width="50"
+          :height="50"
+        />
+        <p class="py-3 text-center text-sm">
+          {{
+            platform == "darwin"
+              ? "Update downloaded. It will be installed when you close and relaunch the app."
+              : "Restart FAIRshare to install the latest version of the app."
+          }}
+        </p>
+        <button class="primary-plain-button py-1 px-2" @click="restartAppForUpdate">
+          {{ platform == "darwin" ? "Close FAIRshare" : "Restart FAIRshare" }}
+        </button>
+      </div>
+    </fade-transition>
   </div>
 </template>
 
@@ -106,7 +141,7 @@ export default {
       tokens: useTokenStore(),
       loading: "",
       environment: "",
-      showConnectingMessage: false,
+      showConnectingMessage: true,
       showDownloadingMessage: false,
       showRestartMessage: false,
       platform: process.platform,
@@ -128,11 +163,14 @@ export default {
         this.tokens.verifyAllConnections();
 
         this.showConnectingMessage = false;
+
+        window.ipcRenderer.send("check-for-updates");
       } catch (error) {
         console.error("Error with loading stores...");
         console.error(error);
 
         this.showConnectingMessage = false;
+        window.ipcRenderer.send("check-for-updates");
       }
     },
     restartAppForUpdate() {
@@ -142,6 +180,15 @@ export default {
       this.showConnectingMessage = false;
       this.showDownloadingMessage = false;
       this.showRestartMessage = false;
+    },
+    restartApplication() {
+      window.ipcRenderer.send("restart-fairshare");
+    },
+    goToContactPage() {
+      this.$refs.errorConfirmNoBackend.close();
+      this.$router.push({
+        path: "/contactUs",
+      });
     },
   },
   mounted() {
@@ -203,8 +250,7 @@ export default {
                   console.error(error);
                 });
             } else {
-              // will need to change this to a more user friendly message
-              alert("Invalid API version");
+              this.$refs.errorConfirmInvalidAPIVersion.show();
 
               this.showConnectingMessage = false;
             }
@@ -214,6 +260,7 @@ export default {
           });
       })
       .catch((error) => {
+        this.$refs.errorConfirmNoBackend.show();
         console.error(error);
       });
 

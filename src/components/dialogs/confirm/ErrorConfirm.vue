@@ -131,10 +131,19 @@ export default {
       type: Boolean,
       default: true,
     },
+    preventOutsideClick: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ["messageClosed", "messageConfirmed", "messageCancel", "messageOutsideClicked"],
   methods: {
     setIsOpen(val, type) {
+      if (this.preventOutsideClick && type === "outside") {
+        this.$emit("messageOutsideClicked");
+        return;
+      }
       if (!val) {
         this.$emit("messageClosed");
         if (type === "okay") {
@@ -163,6 +172,9 @@ export default {
     },
     show() {
       this.setIsOpen(true, "show");
+    },
+    close() {
+      this.setIsOpen(false, "content");
     },
   },
   mounted() {},

@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Feature additions
 
 - Add support for a user to submit their own unique identifier for a dataset.
+- Switch the server check full screen loading spinner to a card style notification for better usability.
+- Added a way to notify the user if something went wrong with the update process for the backend.
 
 ### Bug fixes
 
