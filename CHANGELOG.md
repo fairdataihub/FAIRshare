@@ -5,6 +5,21 @@ All notable changes to `FAIRshare` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## v1.3.0 -
+
+### Feature additions
+
+- Add support for a user to submit their own unique identifier for a dataset.
+- Switch the server check full screen loading spinner to a card style notification for better usability.
+- Added a way to notify the user if something went wrong with the update process for the backend.
+
+### Bug fixes
+
+- Fixed an issue where a tool to show the size of the screen was being displayed on the app if the backend server didn't load fast enough.
+- Fixed an issue where buttons provided by Element Plus were being overwritten by Tailwind's css reset.
+- Fixed an issue where a comment added by the application to the `CITATION.cff` file was not being shown in the UI.
+- Fixed some bugs where the wrong keyword was being displayed when previewing metadata files.
+
 ## v1.2.0 - 2022-03-31
 
 ### Feature additions

@@ -243,9 +243,6 @@ async function createWindow() {
     createProtocol("app");
     // Load the index.html when not in development
     mainWindow.loadURL("app://./index.html");
-
-    // Check for updates
-    autoUpdater.checkForUpdatesAndNotify();
   }
 }
 
@@ -328,6 +325,14 @@ app.on("ready", async () => {
   createWindow();
 });
 
+ipcMain.on("check-for-updates", async (_event, channel = "") => {
+  // Check for app updates
+  if (channel !== "") {
+    autoUpdater.channel = channel;
+  }
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
 autoUpdater.on("update-available", () => {
   mainWindow.webContents.send("update-available", true);
   log.info("update_available");
@@ -342,6 +347,11 @@ ipcMain.on("open-link-in-browser", async (_event, link) => {
   shell.openExternal(link).then(() => {
     console.log("opened link", link);
   });
+});
+
+ipcMain.on("restart-fairshare", async (_event) => {
+  app.relaunch();
+  app.quit();
 });
 
 ipcMain.on("restart-fairshare-for-update", (_event) => {

@@ -8,7 +8,8 @@
       <div>
         <p class="my-2">
           We will be adding some files to your GitHub repository. A preview of what your repository
-          will look like after is shown below:
+          will look like after is shown below (files that will be added by FAIRshare are highlighted
+          in orange):
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
@@ -94,6 +95,12 @@
                 <el-table-column prop="Name" label="Name" />
                 <el-table-column prop="Value" label="Value" class="break-normal" />
               </el-table>
+              <p class="pt-4 text-sm text-zinc-400">
+                # This CITATION.cff file was generated with FAIRshare.
+              </p>
+              <p class="text-sm text-zinc-400">
+                # Visit https://fairdataihub.org/fairshare to learn more!
+              </p>
             </div>
 
             <div v-if="PreviewNewlyCreatedZenodoFile" class="pb-20">
@@ -294,7 +301,12 @@ export default {
             case "keywords":
               customName = "keyword";
               break;
-
+            case "authors":
+              customName = "author";
+              break;
+            case "contributors":
+              customName = "contributor";
+              break;
             default:
               customName = parentName;
               break;
