@@ -17,38 +17,50 @@
                   application? Beta versions may not yet be stable and may contain bugs but you will
                   be able to preview and test the latest features ahead of time.
                 </p>
-                <div class="flex items-center">
-                  <div
-                    class="flex items-center transition-all"
-                    :class="{
-                      'text-secondary-500': !betaRelease,
-                      'text-secondary-200': betaRelease,
-                    }"
-                  >
-                    <el-icon> <circle-close-filled /> </el-icon>
+                <div class="flex w-full justify-between">
+                  <div class="flex items-center">
+                    <div
+                      class="flex items-center transition-all"
+                      :class="{
+                        'text-secondary-500': !betaRelease,
+                        'text-secondary-200': betaRelease,
+                      }"
+                    >
+                      <el-icon> <circle-close-filled /> </el-icon>
+                    </div>
+                    <el-tooltip :content="betaRelease ? 'Enabled' : 'Disabled'" placement="bottom">
+                      <el-switch
+                        v-model="betaRelease"
+                        class="mx-1"
+                        active-color="#2563eb"
+                        inactive-color="#fdba74"
+                        @change="changeUpdateChannel"
+                      />
+                    </el-tooltip>
+                    <div
+                      class="flex items-center transition-all"
+                      :class="{
+                        'text-primary-200': !betaRelease,
+                        'text-primary-500': betaRelease,
+                      }"
+                    >
+                      <el-icon> <circle-check-filled /> </el-icon>
+                    </div>
                   </div>
-                  <el-tooltip :content="betaRelease ? 'Enabled' : 'Disabled'" placement="bottom">
-                    <el-switch
-                      v-model="betaRelease"
-                      class="mx-1"
-                      active-color="#2563eb"
-                      inactive-color="#fdba74"
-                      @change="changeUpdateChannel"
-                    />
-                  </el-tooltip>
-                  <div
-                    class="flex items-center transition-all"
-                    :class="{
-                      'text-primary-200': !betaRelease,
-                      'text-primary-500': betaRelease,
-                    }"
-                  >
-                    <el-icon> <circle-check-filled /> </el-icon>
-                  </div>
+                  <fade-transition>
+                    <button
+                      class="secondary-plain-button mx-3 px-2 py-0"
+                      @click="checkForUpdates"
+                      v-if="showCheckForUpdates"
+                    >
+                      Check for Updates
+                      <el-icon class="ml-2"><refresh-icon /></el-icon>
+                    </button>
+                  </fade-transition>
                 </div>
                 <p class="mt-2 text-xs text-neutral-500">
-                  Modifying this value will allow you to update to beta versions the next time you
-                  start the app.
+                  Modifying this value will allow you to update to and from beta versions of
+                  FAIRshare at any time.
                 </p>
               </div>
             </div>
@@ -114,10 +126,11 @@ import path from "path";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useConfigStore } from "@/store/config";
+import FadeTransition from "@/components/transitions/FadeTransition.vue";
 
 export default {
   name: "AppSettings",
-  components: {},
+  components: { FadeTransition },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -126,10 +139,12 @@ export default {
       loadingSpinner: false,
       config: {},
       betaRelease: false,
+      showCheckForUpdates: false,
     };
   },
   methods: {
     async changeUpdateChannel(enabled) {
+      this.showCheckForUpdates = true;
       if (enabled) {
         this.config.releaseChannel = "beta";
       } else {
@@ -161,6 +176,10 @@ export default {
           console.error(error);
           return "ERROR";
         });
+    },
+    checkForUpdates() {
+      // Could probably add more logic here to check if there are updates for the channels with semver
+      window.ipcRenderer.send("check-for-updates", this.config.releaseChannel);
     },
   },
   computed: {},

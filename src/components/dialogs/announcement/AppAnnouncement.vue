@@ -27,28 +27,27 @@
             leave-to="opacity-0 scale-95"
           >
             <div
-              class="my-8 ml-[9rem] inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="my-8 ml-[9rem] inline-block w-80 max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <div class="flex flex-col items-center justify-start">
                 <div class="mb-0">
                   <Vue3Lottie
-                    animationLink="https://assets4.lottiefiles.com/packages/lf20_gzlupphk.json"
+                    animationLink="https://assets1.lottiefiles.com/packages/lf20_7ueq9qut.json"
                     :width="100"
                     :height="100"
-                    :loop="1"
                   />
                 </div>
                 <div class="my-2">
                   <DialogTitle
                     as="h3"
-                    class="text-center text-lg font-medium leading-6 text-gray-900"
+                    class="text-center text-xl font-medium leading-6 text-gray-900"
                   >
                     {{ localTitle }}
                   </DialogTitle>
 
                   <div class="mt-2">
                     <slot>
-                      <p class="text-sm text-gray-500">
+                      <p class="text-center text-base text-gray-500">
                         {{ localContent }}
                       </p>
                     </slot>
@@ -87,7 +86,7 @@ import {
 } from "@headlessui/vue";
 
 export default {
-  name: "ErrorConfirm",
+  name: "AppAnnouncement",
   components: {
     Dialog,
     DialogOverlay,
@@ -131,19 +130,10 @@ export default {
       type: Boolean,
       default: true,
     },
-    preventOutsideClick: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
   },
   emits: ["messageClosed", "messageConfirmed", "messageCancel", "messageOutsideClicked"],
   methods: {
     setIsOpen(val, type) {
-      if (this.preventOutsideClick && type === "outside") {
-        this.$emit("messageOutsideClicked");
-        return;
-      }
       if (!val) {
         this.$emit("messageClosed");
         if (type === "okay") {
@@ -172,9 +162,6 @@ export default {
     },
     show() {
       this.setIsOpen(true, "show");
-    },
-    close() {
-      this.setIsOpen(false, "content");
     },
   },
   mounted() {},
