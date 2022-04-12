@@ -54,6 +54,7 @@
                       v-if="showCheckForUpdates"
                     >
                       Check for Updates
+                      <el-icon class="ml-2"><refresh-icon /></el-icon>
                     </button>
                   </fade-transition>
                 </div>
@@ -177,6 +178,7 @@ export default {
         });
     },
     checkForUpdates() {
+      // Could probably add more logic here to check if there are updates for the channels with semver
       window.ipcRenderer.send("check-for-updates", this.config.releaseChannel);
     },
   },

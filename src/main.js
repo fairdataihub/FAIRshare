@@ -116,6 +116,7 @@ import {
   Postcard,
   QuestionFilled,
   Reading,
+  Refresh,
   RemoveFilled,
   Right,
   Select,
@@ -164,6 +165,7 @@ app.component("picture-filled", PictureFilled);
 app.component("postcard-icon", Postcard);
 app.component("question-filled", QuestionFilled);
 app.component("reading-icon", Reading);
+app.component("refresh-icon", Refresh);
 app.component("remove-filled", RemoveFilled);
 app.component("right-icon", Right);
 app.component("select-icon", Select);

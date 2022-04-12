@@ -208,23 +208,28 @@ export default {
     checkForAnnouncements() {
       const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/announcements.json?timestamp=${new Date().getTime()}`;
       console.log(url);
-      axios.get(url).then((response) => {
-        const announcements = response.data;
-        const currentVersion = app.getVersion();
+      axios
+        .get(url)
+        .then((response) => {
+          const announcements = response.data;
+          const currentVersion = app.getVersion();
 
-        if (currentVersion in announcements) {
-          const announcement = announcements[currentVersion];
+          if (currentVersion in announcements) {
+            const announcement = announcements[currentVersion];
 
-          if ("show" in announcement && announcement.show) {
-            if (announcement.type === "warning") {
-              this.announcementText = announcement.message;
+            if ("show" in announcement && announcement.show) {
+              if (announcement.type === "warning") {
+                this.announcementText = announcement.message;
 
-              this.$refs.appAnnouncement.setTitle(announcement.title);
-              this.$refs.appAnnouncement.show();
+                this.$refs.appAnnouncement.setTitle(announcement.title);
+                this.$refs.appAnnouncement.show();
+              }
             }
           }
-        }
-      });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   mounted() {
