@@ -59,8 +59,8 @@
                   </fade-transition>
                 </div>
                 <p class="mt-2 text-xs text-neutral-500">
-                  Modifying this value will allow you to update to beta versions the next time you
-                  start the app.
+                  Modifying this value will allow you to update to and from beta versions of
+                  FAIRshare at any time.
                 </p>
               </div>
             </div>
