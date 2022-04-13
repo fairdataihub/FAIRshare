@@ -166,7 +166,7 @@ export default {
         await this.allDatasets.loadDatasets();
 
         // Load all the access tokens
-        await this.tokens.loadTokens();
+        await this.tokens.loadTokens(this.$server_url);
 
         // Load app config
         await this.config.loadConfig();

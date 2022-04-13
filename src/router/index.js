@@ -32,6 +32,10 @@ import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
+// bio.tools related components
+import BioToolsAccessToken from "../views/biotools/BioToolsAccessToken.vue";
+import BioToolsMetadata from "../views/biotools/BioToolsMetadata.vue";
+
 // integration related components
 import ManageAccount from "../views/manage/ManageAccount.vue";
 
@@ -145,6 +149,16 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/publish",
     component: GithubPublish,
     name: "GithubPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/biotools/login",
+    component: BioToolsAccessToken,
+    name: "BioToolsAccessToken",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/biotools/register",
+    component: BioToolsMetadata,
+    name: "BioToolsMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/summary",

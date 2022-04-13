@@ -49,10 +49,12 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
+    $server_url: "",
   }),
   actions: {
-    async loadTokens() {
+    async loadTokens(server_url) {
       try {
+        this.$server_url = server_url;
         this.accessTokens = await loadFile();
       } catch (error) {
         console.error(error);
@@ -126,6 +128,43 @@ export const useTokenStore = defineStore({
         const token = tokenObject.token;
 
         const response = await this.verifyZenodoToken(token);
+
+        return response;
+      }
+    },
+
+    async verifyBioToolsToken(token) {
+      const config = {
+        method: "get",
+        url: `${this.$server_url}/biotools/user?token=${token}`,
+      };
+
+      const response = await axios(config)
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          return { data: error.response, status: error.response.status };
+        });
+
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        return false;
+      } else {
+        return false;
+      }
+    },
+
+    async verifyBioToolsConnection() {
+      const tokenObject = await this.getToken("biotools");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = await this.verifyBioToolsToken(token);
 
         return response;
       }

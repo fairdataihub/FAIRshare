@@ -38,6 +38,7 @@ import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
 import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
+import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
 
@@ -73,6 +74,7 @@ app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
 
 app.component("warning-prompt", WarningPrompt);
+app.component("login-prompt", LoginPrompt);
 
 app.component("general-dialog", GeneralDialog);
 
@@ -122,6 +124,7 @@ import {
   Select,
   Setting,
   Star,
+  Suitcase,
   Ticket,
   Unlock,
   UploadFilled,
@@ -171,6 +174,7 @@ app.component("right-icon", Right);
 app.component("select-icon", Select);
 app.component("setting-icon", Setting);
 app.component("star-icon", Star);
+app.component("suitcase-icon", Suitcase);
 app.component("ticket-icon", Ticket);
 app.component("unlock-icon", Unlock);
 app.component("upload-filled", UploadFilled);

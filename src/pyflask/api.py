@@ -29,6 +29,7 @@ from github import (
     getRepoContentTree,
     getRepoReleases,
 )
+from biotools import loginToBioTools, getUserDetails
 from metadata import createMetadata, createCitationCFF
 from utilities import (
     foldersPresent,
@@ -111,6 +112,56 @@ class HelloWorld(Resource):
         response = "Server active!"
 
         return response
+
+
+###############################################################################
+# bio.tools operations
+###############################################################################
+
+biotools = api.namespace("biotools", description="bio.tools operations")
+
+
+@biotools.route("/login", endpoint="login")
+class Login(Resource):
+    @biotools.doc(
+        responses={200: "Success"},
+        params={
+            "username": "Username of the account",
+            "password": "Password of the account",
+        },
+    )
+    def post(self):
+        """Login to bio.tools"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("username", type=str, required=True)
+        parser.add_argument("password", type=str, required=True)
+        args = parser.parse_args()
+
+        username = args["username"]
+        password = args["password"]
+
+        return loginToBioTools(username, password)
+
+
+@biotools.route("/user", endpoint="user")
+class User(Resource):
+    @biotools.doc(
+        responses={200: "Success"},
+        params={
+            "token": "Token of the account",
+        },
+    )
+    def get(self):
+        """Get user details"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("token", type=str, required=True)
+        args = parser.parse_args()
+
+        token = args["token"]
+
+        return getUserDetails(token)
 
 
 ###############################################################################
