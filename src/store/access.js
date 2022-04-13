@@ -49,12 +49,17 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
-    $server_url: "",
+    server_url: "",
   }),
+  getters: {
+    getServerUrl: (state) => {
+      return state.server_url;
+    },
+  },
   actions: {
     async loadTokens(server_url) {
       try {
-        this.$server_url = server_url;
+        this.server_url = server_url;
         this.accessTokens = await loadFile();
       } catch (error) {
         console.error(error);
@@ -134,9 +139,14 @@ export const useTokenStore = defineStore({
     },
 
     async verifyBioToolsToken(token) {
+      const url =
+        this.getServerUrl !== undefined
+          ? `${this.getServerUrl}/biotools/user?token=${token}`
+          : `http://127.0.0.1:$7632/biotools/user?token=${token}`;
+
       const config = {
         method: "get",
-        url: `${this.$server_url}/biotools/user?token=${token}`,
+        url,
       };
 
       const response = await axios(config)

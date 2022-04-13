@@ -207,7 +207,7 @@ export default {
     },
     checkForAnnouncements() {
       const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/announcements.json?timestamp=${new Date().getTime()}`;
-      console.log(url);
+
       axios
         .get(url)
         .then((response) => {

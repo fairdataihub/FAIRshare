@@ -29,7 +29,12 @@ from github import (
     getRepoContentTree,
     getRepoReleases,
 )
-from biotools import loginToBioTools, getUserDetails
+from biotools import (
+    loginToBioTools,
+    getUserDetails,
+    validateTool,
+    registerTool,
+)  # noqa E501
 from metadata import createMetadata, createCitationCFF
 from utilities import (
     foldersPresent,
@@ -83,7 +88,7 @@ api = Api(
 
 
 @api.route("/fairshare_server_shutdown", endpoint="shutdown")
-class shutdown(Resource):
+class Shutdown(Resource):
     def post(self):
         func = request.environ.get("werkzeug.server.shutdown")
 
@@ -121,8 +126,15 @@ class HelloWorld(Resource):
 biotools = api.namespace("biotools", description="bio.tools operations")
 
 
-@biotools.route("/login", endpoint="login")
-class Login(Resource):
+@biotools.route("/env", endpoint="BiotoolsURL")
+class BiotoolsURL(Resource):
+    def get(self):
+        """Returns the bio.tools endpoint url. If the response is dev.bio.tools, this corresponds to the testing environment. bio.tools only will correspond to the production environment."""  # noqa: E501
+        return config.BIO_TOOLS_SERVER_URL
+
+
+@biotools.route("/login", endpoint="BioToolsLogin")
+class BioToolsLogin(Resource):
     @biotools.doc(
         responses={200: "Success"},
         params={
@@ -144,8 +156,8 @@ class Login(Resource):
         return loginToBioTools(username, password)
 
 
-@biotools.route("/user", endpoint="user")
-class User(Resource):
+@biotools.route("/user", endpoint="BioToolsUserDetails")
+class BioToolsUserDetails(Resource):
     @biotools.doc(
         responses={200: "Success"},
         params={
@@ -162,6 +174,52 @@ class User(Resource):
         token = args["token"]
 
         return getUserDetails(token)
+
+
+@biotools.route("/tool/validate", endpoint="BioToolsValidate")
+class BioToolsValidate(Resource):
+    @biotools.doc(
+        responses={200: "Success"},
+        params={
+            "token": "Token of the account",
+            "data": "Data to validate",
+        },
+    )
+    def post(self):
+        """Validate data"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("token", type=str, required=True)
+        parser.add_argument("data", type=str, required=True)
+        args = parser.parse_args()
+
+        token = args["token"]
+        data = json.loads(args["data"])
+
+        return validateTool(token, data)
+
+
+@biotools.route("/tool/register", endpoint="BioToolsRegisterTool")
+class BioToolsRegisterTool(Resource):
+    @biotools.doc(
+        responses={200: "Success"},
+        params={
+            "token": "Token of the account",
+            "data": "Data for tool registration",
+        },
+    )
+    def post(self):
+        """Register a new tool"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("token", type=str, required=True)
+        parser.add_argument("data", type=str, required=True)
+        args = parser.parse_args()
+
+        token = args["token"]
+        data = json.loads(args["data"])
+
+        return registerTool(token, data)
 
 
 ###############################################################################

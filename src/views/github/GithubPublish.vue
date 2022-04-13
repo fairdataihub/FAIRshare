@@ -29,9 +29,12 @@
             for you.
           </p>
           <div class="flex items-center justify-center space-x-4">
-            <button class="secondary-plain-button" @click="openRepository">
+            <button class="primary-plain-button" @click="openRepository">
               <el-icon><fold-icon /></el-icon>
               View the repository
+            </button>
+            <button class="secondary-plain-button" @click="navigateToBioToolsPublishing">
+              Register on bio.tools <el-icon><suitcase-icon /></el-icon>
             </button>
             <button class="primary-button" @click="approveRelease">
               <el-icon><edit-icon /></el-icon>
@@ -334,6 +337,13 @@ export default {
         return true;
       }
     },
+    showBioToolsRegister() {
+      if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     async sleep(ms) {
@@ -351,6 +361,9 @@ export default {
         text: "Reading GitHub repository...",
       });
       return loading;
+    },
+    navigateToBioToolsPublishing() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
     },
     validateReleaseForm() {
       if (this.selectedTag === "") {

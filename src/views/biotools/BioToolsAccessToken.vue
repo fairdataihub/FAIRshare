@@ -198,6 +198,7 @@ export default {
               tokenObject.type = "token";
 
               await this.tokenStore.saveToken("biotools", tokenObject);
+              this.$track("Connections", "bio.tools", "connected");
 
               return "valid";
             }
@@ -211,7 +212,7 @@ export default {
       }
     },
     startBioToolsRegistration() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/biotools/register`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/biotools/metadata`;
       this.$router.push({ path: routerPath });
     },
     showErrorMessage(message) {

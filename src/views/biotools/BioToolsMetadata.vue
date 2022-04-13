@@ -53,10 +53,10 @@
                         </div>
                       </el-form-item>
 
-                      <el-form-item label="Persistent biotoolsID">
+                      <el-form-item label="Persistent biotoolsID" prop="biotoolsID">
                         <div class="flex w-full flex-row items-center">
                           <el-input
-                            v-model="step1Form.bioToolsID"
+                            v-model="step1Form.biotoolsID"
                             type="text"
                             placeholder="needle"
                             :disabled="greyOutIdentifierInput"
@@ -66,16 +66,20 @@
                             popoverContent="An identifier for this dataset if applicable. "
                           ></form-help-content>
                         </div>
-                        <div v-if="greyOutIdentifierInput" class="flex pt-2">
+                        <div class="flex pt-2">
                           <p class="pr-1 text-sm text-gray-500">
-                            This identifier will be assigned when registering your software on the
-                            bio.tools platform.
+                            {{
+                              greyOutIdentifierInput
+                                ? "This identifier will be assigned when registering your software on the bio.tools platform."
+                                : "This identifier will be assigned when registering your software on the bio.tools platform."
+                            }}
                           </p>
-                          <p
-                            class="text-url hidden cursor-pointer !text-sm"
-                            @click="editUniqueIdentifier"
-                          >
-                            Click here to override this.
+                          <p class="text-url cursor-pointer !text-sm" @click="editBioToolsID">
+                            {{
+                              greyOutIdentifierInput
+                                ? "Click here to edit the ID."
+                                : "Generate ID from tool name"
+                            }}
                           </p>
                         </div>
                       </el-form-item>
@@ -104,6 +108,64 @@
                           ></form-help-content>
                         </div>
                       </el-form-item>
+
+                      <el-form-item label="Versions">
+                        <draggable
+                          tag="div"
+                          :list="step1Form.versions"
+                          item-key="id"
+                          handle=".handle"
+                          class="w-full"
+                        >
+                          <template #item="{ element }">
+                            <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                              <div class="flex w-11/12 flex-row justify-between">
+                                <el-input
+                                  v-model="element.version"
+                                  type="text"
+                                  placeholder="v2.0.0-alpha, v2.1.0"
+                                  v-on:keyup.enter="addVersion"
+                                  :ref="element.id"
+                                ></el-input>
+                                <div class="mx-2"></div>
+                              </div>
+                              <div class="flex w-1/12 flex-row justify-evenly">
+                                <div
+                                  class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                >
+                                  <Icon icon="ic:outline-drag-indicator" />
+                                </div>
+                                <div
+                                  class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                >
+                                  <el-popconfirm
+                                    title="Are you sure you want to remove this?"
+                                    icon-color="red"
+                                    confirm-button-text="Yes"
+                                    cancel-button-text="No"
+                                    @confirm="deleteVersion(element.id)"
+                                  >
+                                    <template #reference>
+                                      <el-icon><delete-filled /></el-icon>
+                                    </template>
+                                  </el-popconfirm>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                        </draggable>
+                      </el-form-item>
+
+                      <div
+                        class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
+                        @click="addVersion(null, '')"
+                      >
+                        <Icon icon="carbon:add" />
+                        <span> Add a version </span>
+                        <form-help-content
+                          popoverContent="Version information (typically a version number) of the software applicable to this bio.tools entry"
+                        ></form-help-content>
+                      </div>
                     </el-form>
                   </div>
                 </div>
@@ -114,8 +176,10 @@
                   </button>
                   <!-- :plain="!lastStep" -->
                   <button class="primary-button" @click="navigateToStep2FromStep1">
-                    Next
-                    <el-icon><right-icon /></el-icon>
+                    Register on bio.tools
+                    <el-icon>
+                      <d-arrow-right />
+                    </el-icon>
                   </button>
                 </div>
               </div>
@@ -148,13 +212,13 @@
 </template>
 
 <script>
-// import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
 // import { ElNotification } from "element-plus";
 
-// import draggable from "vuedraggable";
+import draggable from "vuedraggable";
 import validator from "validator";
-// import axios from "axios";
+import axios from "axios";
 // import _ from "lodash";
 // import humanparser from "humanparser";
 
@@ -171,8 +235,8 @@ import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 export default {
   name: "BioToolsMetadata",
   components: {
-    // draggable,
-    // Icon,
+    draggable,
+    Icon,
     PillProgressBar,
   },
   data() {
@@ -204,7 +268,7 @@ export default {
 
       step1Form: {
         name: "",
-        bioToolsID: "",
+        biotoolsID: "",
         description: "",
         homepage: "",
         versions: [],
@@ -215,6 +279,13 @@ export default {
             required: true,
             message: "Please enter the name of the software",
             trigger: "blur",
+          },
+        ],
+        biotoolsID: [
+          {
+            required: true,
+            validator: this.biotoolsIDValidator,
+            trigger: "change",
           },
         ],
         description: [
@@ -253,10 +324,12 @@ export default {
     "step1Form.name": {
       handler(val) {
         if (val != "" && val != undefined) {
-          const name = val.replaceAll(" ", "_").toLowerCase();
-          this.step1Form.bioToolsID = name;
+          if (this.greyOutIdentifierInput) {
+            const name = val.replaceAll(" ", "_").toLowerCase();
+            this.step1Form.biotoolsID = name;
+          }
         } else {
-          this.step1Form.bioToolsID = "";
+          this.step1Form.biotoolsID = "";
         }
       },
       deep: true,
@@ -295,9 +368,8 @@ export default {
       this.showSaving = false;
     },
     async prevFormStep() {
-      this.showSavingIcon();
-
       if (this.currentStep - 1 > 0) {
+        this.showSavingIcon();
         this.currentStep--;
       } else {
         this.navigateBack();
@@ -306,10 +378,37 @@ export default {
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
         if (!this.checkInvalidStatus) {
-          this.navigateToSelectDestination();
+          this.navigateToRegister();
         }
       } else {
         this.currentStep++;
+      }
+    },
+
+    editBioToolsID() {
+      this.greyOutIdentifierInput = !this.greyOutIdentifierInput;
+
+      if (this.greyOutIdentifierInput) {
+        const name = this.step1Form.name.replaceAll(" ", "_").toLowerCase();
+        this.step1Form.biotoolsID = name;
+      }
+    },
+
+    biotoolsIDValidator(_rule, value, callback) {
+      const idRegex = /^[a-zA-Z0-9-_~.]+$/;
+
+      if (value === "" || value === undefined) {
+        if (this.greyOutIdentifierInput) {
+          callback();
+        } else {
+          callback(new Error("Please enter a unique identifier"));
+        }
+      } else if (!idRegex.test(value.trim())) {
+        callback(
+          new Error("The biotoolsID can only contain letters, numbers or these characters: . - _ ~")
+        );
+      } else {
+        callback();
       }
     },
 
@@ -333,11 +432,66 @@ export default {
       }
     },
 
-    navigateToStep2FromStep1() {
+    async navigateToStep2FromStep1() {
       this.$refs["s1Form"].validate(async (valid) => {
         if (valid) {
-          await this.saveCurrentEntries();
-          this.setCurrentStep(2);
+          const tokenObject = await this.tokens.getToken("biotools");
+          const token = tokenObject.token;
+          const data = JSON.stringify({
+            name: this.step1Form.name,
+            biotoolsID: this.step1Form.biotoolsID,
+            description: this.step1Form.description,
+            homepage: this.step1Form.homepage,
+            versions: this.filterArrayOfObjects(this.step1Form.versions, "version"),
+          });
+
+          const response = await axios
+            .post(`${this.$server_url}/biotools/tool/validate`, {
+              token,
+              data,
+            })
+            .then((response) => {
+              return response.data;
+            })
+            .catch((error) => {
+              console.error(error);
+              return "ERROR";
+            });
+
+          if (response === "ERROR") {
+            this.$message.error(
+              "An error occurred while validating the tool. Please try again later."
+            );
+
+            this.$track("bio.tools", "Validate tool", "failed");
+            return;
+          } else {
+            if (response.status === "error") {
+              if ("biotoolsID" in response.data) {
+                this.$message.error(
+                  "The tool ID you entered is already registered. bio.tools IDs need to be unique. Please enter a different ID."
+                );
+
+                this.$track("bio.tools", "Validate tool", "failed");
+                return;
+              } else {
+                this.$alert(
+                  JSON.stringify(response.data),
+                  "There were some errors in your submission",
+                  { type: "error" }
+                );
+
+                this.$track("bio.tools", "Validate tool", "failed");
+                return;
+              }
+            }
+            if (response.status === "success") {
+              // Comment out the lines below. Will come back to this when we are adding more fields.
+              // await this.saveCurrentEntries();
+              // this.setCurrentStep(2);
+              this.navigateToRegister();
+            }
+          }
         }
       });
     },
@@ -400,7 +554,24 @@ export default {
         }
       }, 50);
     },
+    addVersion(_event, version = "") {
+      if (this.step1Form.versions.some((el) => el.version === version)) {
+        this.$message.warning("Version already exists.");
+        return;
+      }
 
+      const id = uuidv4();
+      this.step1Form.versions.push({
+        version,
+        id,
+      });
+      this.focusOnElementRef(id);
+    },
+    deleteVersion(id) {
+      this.step1Form.versions = this.step1Form.versions.filter((version) => {
+        return version.id !== id;
+      });
+    },
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
         return element[key] !== "";
@@ -409,67 +580,58 @@ export default {
     async saveCurrentEntries() {
       this.showSavingIcon();
 
-      this.dataset.data.general.questions.name = this.step1Form.name;
-      this.dataset.data.general.questions.description = this.step1Form.description;
-
-      this.step3Form.keywords = this.filterArrayOfObjects(this.step3Form.keywords, "keyword");
-
-      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
-      this.dataset.data.general.questions.authors = this.step2Form.authors;
-      this.dataset.data.general.questions.contributors = this.step2Form.contributors;
-      this.dataset.data.general.questions.funding = this.step3Form.funding;
-      this.dataset.data.general.questions.referencePublication =
-        this.step7Form.referencePublication;
-
-      this.step4Form.relatedLinks = this.filterArrayOfObjects(this.step4Form.relatedLinks, "link");
-
-      this.step5Form.otherSoftwareRequirements = this.filterArrayOfObjects(
-        this.step5Form.otherSoftwareRequirements,
-        "link"
-      );
-
-      if (this.codePresent) {
-        let codeForm = {};
-
-        codeForm.name = this.step1Form.name;
-        codeForm.description = this.step1Form.description;
-        codeForm.creationDate = this.step1Form.creationDate;
-        codeForm.firstReleaseDate = this.step1Form.firstReleaseDate;
-
-        codeForm.authors = this.step2Form.authors;
-        codeForm.contributors = this.step2Form.contributors;
-
-        codeForm.identifier = this.step3Form.identifier;
-        codeForm.keywords = this.step3Form.keywords;
-        codeForm.funding = this.step3Form.funding;
-        codeForm.applicationCategory = this.step3Form.applicationCategory;
-
-        codeForm.codeRepository = this.step4Form.codeRepository;
-        codeForm.continuousIntegration = this.step4Form.continuousIntegration;
-        codeForm.issueTracker = this.step4Form.issueTracker;
-        codeForm.relatedLinks = this.step4Form.relatedLinks;
-
-        codeForm.programmingLanguage = this.step5Form.programmingLanguage;
-        codeForm.runtimePlatform = this.step5Form.runtimePlatform;
-        codeForm.operatingSystem = this.step5Form.operatingSystem;
-        codeForm.otherSoftwareRequirements = this.step5Form.otherSoftwareRequirements;
-
-        codeForm.currentVersion = this.step6Form.currentVersion;
-        codeForm.currentVersionReleaseDate = this.step6Form.currentVersionReleaseDate;
-        codeForm.currentVersionDownloadLink = this.step6Form.currentVersionDownloadLink;
-        codeForm.currentVersionReleaseNotes = this.step6Form.currentVersionReleaseNotes;
-
-        codeForm.referencePublication = this.step7Form.referencePublication;
-        codeForm.developmentStatus = this.step7Form.developmentStatus;
-        codeForm.isPartOf = this.step7Form.isPartOf;
-
-        this.dataset.data.Code.questions = codeForm;
+      if (!("biotools" in this.workflow)) {
+        this.workflow.biotools = {};
       }
+
+      this.workflow.biotools.name = this.step1Form.name;
+      this.workflow.biotools.biotoolsID = this.step1Form.biotoolsID.trim();
+      this.workflow.biotools.description = this.step1Form.description;
+      this.workflow.biotools.homepage = this.step1Form.homepage;
+      this.workflow.biotools.versions = this.filterArrayOfObjects(
+        this.step1Form.versions,
+        "version"
+      );
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
     },
-    async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+    generateDataForBiotools() {
+      let response = {};
+
+      response.name = this.workflow.biotools.name;
+      response.biotoolsID = this.workflow.biotools.biotoolsID;
+      response.description = this.workflow.biotools.description;
+      response.homepage = this.workflow.biotools.homepage;
+
+      if (this.workflow.biotools.versions.length > 0) {
+        response.version = this.workflow.biotools.versions;
+      }
+
+      return JSON.stringify(response);
+    },
+    async registerOnBiotools() {
+      const tokenObject = await this.tokens.getToken("biotools");
+      const token = tokenObject.token;
+
+      const data = this.generateDataForBiotools();
+
+      const response = await axios
+        .post(`${this.$server_url}/biotools/tool/register`, {
+          token,
+          data,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      return response;
+    },
+    async navigateToRegister(_evt, shouldNavigateBack = false) {
       await this.saveCurrentEntries();
 
       if (shouldNavigateBack) {
@@ -479,14 +641,45 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Code/pickLicense`;
+      const response = await this.registerOnBiotools();
 
-      this.$router.push({ path: routerPath });
+      if (response === "ERROR") {
+        this.$message.error(
+          "There was an error while trying to register your tool on bio.tools. Please try again later."
+        );
+
+        this.$track("bio.tools", "Register tool", "failed");
+        return;
+      } else {
+        if (response.status === "error") {
+          this.$alert(JSON.stringify(response.data), "There were some errors in your submission", {
+            type: "error",
+          });
+
+          this.$track("bio.tools", "Register tool", "failed");
+          return;
+        } else {
+          this.$track("bio.tools", "Register tool", "success");
+
+          const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/biotools/review`;
+
+          this.$router.push({ path: routerPath });
+        }
+      }
     },
     navigateBack() {
-      this.$router.push({
-        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/reviewStandards`,
-      });
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "github") {
+          this.$router.push({
+            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/publish`,
+          });
+        }
+        if (this.workflow.source.type === "local") {
+          this.$router.push({
+            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/publish`,
+          });
+        }
+      }
     },
   },
   async mounted() {
@@ -502,11 +695,17 @@ export default {
       this.workflow.currentRoute = this.$route.path;
 
       if (this.codePresent) {
-        if (
-          this.dataset.data.Code.questions &&
-          Object.keys(this.dataset.data.Code.questions).length !== 0
-        ) {
-          // let codeForm = this.dataset.data.Code.questions;
+        if (this.workflow.biotools && Object.keys(this.workflow.biotools).length !== 0) {
+          const toolsForm = this.workflow.biotools;
+
+          this.step1Form.name = toolsForm.name;
+          this.step1Form.biotoolsID = toolsForm.biotoolsID;
+          this.step1Form.description = toolsForm.description;
+          this.step1Form.homepage = toolsForm.homepage;
+          this.step1Form.versions = toolsForm.versions;
+
+          this.addIds(this.step1Form.versions);
+
           // this.step1Form.name = codeForm.name;
           // this.step1Form.description = codeForm.description;
           // this.step1Form.creationDate = codeForm.creationDate;
