@@ -181,7 +181,7 @@
                     )
                   "
                 >
-                  GitHub documentation</span
+                  bio.tools documentation</span
                 >
                 page.
               </p>
@@ -203,6 +203,7 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectBioTools from "@/components/serviceIntegration/ConnectBioTools";
 
 export default {
   name: "ManageAccount",
@@ -210,6 +211,8 @@ export default {
   components: {
     ConnectGithub,
     ConnectZenodo,
+    // eslint-disable-next-line vue/no-unused-components
+    ConnectBioTools,
   },
 
   data() {
@@ -298,7 +301,7 @@ export default {
   @apply flex h-1/5 flex-row items-center justify-start;
 }
 .centering-container {
-  @apply flex h-2/5 items-center justify-center;
+  @apply flex  items-center justify-center;
 }
 .center {
   @apply py-3 pr-3;

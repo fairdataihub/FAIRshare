@@ -181,6 +181,17 @@
                       <d-arrow-right />
                     </el-icon>
                   </button>
+                  <warning-confirm
+                    ref="publishWarningConfirm"
+                    title="Confirm publish"
+                    @messageConfirmed="navigateToRegister"
+                  >
+                    <p class="text-center text-base text-gray-500">
+                      Once your software has been registered on bio.tools, you will not be able to
+                      remove it without the approval of the bio.tools team. Are you sure you want to
+                      continue?
+                    </p>
+                  </warning-confirm>
                 </div>
               </div>
             </div>
@@ -375,6 +386,7 @@ export default {
         this.navigateBack();
       }
     },
+    // To be used when I add the final step
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
         if (!this.checkInvalidStatus) {
@@ -489,7 +501,7 @@ export default {
               // Comment out the lines below. Will come back to this when we are adding more fields.
               // await this.saveCurrentEntries();
               // this.setCurrentStep(2);
-              this.navigateToRegister();
+              this.$refs.publishWarningConfirm.show();
             }
           }
         }
@@ -605,7 +617,10 @@ export default {
       response.homepage = this.workflow.biotools.homepage;
 
       if (this.workflow.biotools.versions.length > 0) {
-        response.version = this.workflow.biotools.versions;
+        response.version = [];
+        this.workflow.biotools.versions.forEach((version) => {
+          response.version.push(version.version);
+        });
       }
 
       return JSON.stringify(response);
