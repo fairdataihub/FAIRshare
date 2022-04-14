@@ -85,7 +85,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(7);
+    this.datasetStore.setCurrentStep(9);
 
     this.workflow.currentRoute = this.$route.path;
   },

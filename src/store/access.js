@@ -139,9 +139,11 @@ export const useTokenStore = defineStore({
     },
 
     async verifyBioToolsToken(token) {
+      const serverURL = this.getServerUrl;
+      console.log(serverURL);
       const url =
-        this.getServerUrl !== undefined
-          ? `${this.getServerUrl}/biotools/user?token=${token}`
+        serverURL !== undefined
+          ? `${serverURL}/biotools/user?token=${token}`
           : `http://127.0.0.1:$7632/biotools/user?token=${token}`;
 
       const config = {

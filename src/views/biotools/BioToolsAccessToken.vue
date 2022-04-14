@@ -36,9 +36,17 @@
               @messageConfirmed="loginSuccess"
             >
               <div w-full>
-                <p class="mb-3 w-full text-left text-base text-gray-500">
+                <p class="mb-1 w-full text-left text-base text-gray-500">
                   Please enter your login information to let us connect your bio.tools account.
                 </p>
+
+                <div
+                  class="hover-underline-animation mb-4 flex w-max cursor-pointer flex-row items-center text-sm text-primary-600"
+                  @click="openWebsite('https://bio.tools/signup')"
+                >
+                  <span class="font-medium"> Register for an account on bio.tools? </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                </div>
 
                 <el-form
                   ref="loginForm"
@@ -68,7 +76,10 @@
                 </el-form>
 
                 <fade-transition>
-                  <p v-if="errorMessage !== ''" class="w-full text-center text-base text-red-600">
+                  <p
+                    v-if="errorMessage !== ''"
+                    class="my-3 w-full text-center text-base text-red-600"
+                  >
                     {{ errorMessage }}
                   </p>
                 </fade-transition>
@@ -96,6 +107,7 @@
         </div>
       </fade-transition>
     </div>
+
     <app-docs-link url="curate-and-share/zenodo-upload-summary" position="bottom-4" />
   </div>
 </template>
@@ -107,12 +119,12 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import axios from "axios";
-
+import { Icon } from "@iconify/vue";
 import { ElLoading } from "element-plus";
 
 export default {
   name: "BioToolsAccessToken",
-  components: { LoadingFoldingCube },
+  components: { LoadingFoldingCube, Icon },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -145,6 +157,9 @@ export default {
         text: "Reading data...",
       });
       return loading;
+    },
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
     },
     navigateBack() {
       if ("uploadToRepo" in this.workflow && this.workflow.uploadToRepo === true) {
@@ -249,7 +264,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(6);
+    this.datasetStore.setCurrentStep(8);
 
     // this.workflow.currentRoute = this.$route.path;
 

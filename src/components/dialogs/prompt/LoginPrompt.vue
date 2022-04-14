@@ -179,7 +179,7 @@ export default {
       if (response === "valid") {
         this.setIsOpen(false, "confirm");
       } else if (response === "invalid") {
-        this.showErrors("Invalid credentials");
+        this.showErrors("Invalid user login credentials");
       }
       this.localDisableConfirmButton = false;
     },
