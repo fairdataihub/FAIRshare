@@ -38,7 +38,7 @@ import BioToolsMetadata from "../views/biotools/BioToolsMetadata.vue";
 import BioToolsReview from "../views/biotools/BioToolsReview.vue";
 
 // integration related components
-import ManageAccount from "../views/manage/ManageAccount.vue";
+import ManageAccount from "../views/accounts/ManageAccount.vue";
 
 // components required for options that can be skipped
 import LocalNoUploadSummary from "../views/noUpload/LocalNoUploadSummary.vue";
