@@ -320,8 +320,8 @@ export default {
       repoSize: 0,
       prerelease: false,
       draftReleaseURL: "",
-      publishedReleaseURL: "l",
-      showFinalInstructions: true,
+      publishedReleaseURL: "",
+      showFinalInstructions: false,
     };
   },
   computed: {

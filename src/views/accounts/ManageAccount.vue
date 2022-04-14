@@ -130,6 +130,67 @@
             </div>
           </div>
         </div>
+
+        <div class="card-container">
+          <div class="image-container">
+            <img src="../../assets/images/biotoolslogo.png" class="image p-6" />
+          </div>
+          <div class="card-container-content">
+            <div class="card-container-status">
+              <div class="centering-container">
+                <span
+                  class="dot"
+                  :class="{
+                    'bg-green-600': connectedToGithub,
+                    'bg-gray-600': !connectedToGithub,
+                  }"
+                ></span>
+              </div>
+
+              <div class="centering-container">
+                <div
+                  class="mr-2"
+                  :class="{
+                    'text-green-600': connectedToGithub,
+                    'text-gray-600': !connectedToGithub,
+                  }"
+                >
+                  {{ githubDetails.status }}
+                </div>
+              </div>
+
+              <div class="centering-container tag-container" v-if="connectedToGithub">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
+                  <el-icon> <user-filled /> </el-icon>
+                  <span class="px-2">
+                    {{ githubDetails.name }}
+                  </span>
+                </el-tag>
+              </div>
+            </div>
+            <div class="centering-container center">
+              <p>
+                Connect your bio.tools account to FAIRshare to allow us to upload register your
+                software directly through FAIRshare. To learn more about connecting FAIRshare to
+                GitHub, please visit the
+                <span
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-bio-tools'
+                    )
+                  "
+                >
+                  GitHub documentation</span
+                >
+                page.
+              </p>
+            </div>
+            <div class="centering-container bottom">
+              <ConnectGithub></ConnectGithub>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <app-docs-link url="manage-accounts/overview" position="bottom-4" />
