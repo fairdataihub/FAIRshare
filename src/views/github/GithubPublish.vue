@@ -239,14 +239,14 @@
             >).
           </p>
         </div>
-        <div class="flex space-x-4">
+        <div class="flex space-x-4 pb-10">
           <router-link :to="`/datasets`">
             <button class="primary-plain-button">
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
 
-          <button class="primary-plain-button" @click="openAllReleases">
+          <button class="primary-plain-button hidden" @click="openAllReleases">
             <el-icon><box-icon /></el-icon>
             View all releases
           </button>
@@ -267,12 +267,17 @@
             View release on GitHub
           </button>
           <button
-            class="primary-button"
+            class="secondary-plain-button"
             @click="viewZenodoRelease"
             v-if="publishedReleaseURL !== ''"
           >
             <el-icon><star-icon /></el-icon>
             View release on Zenodo
+          </button>
+        </div>
+        <div class="flex items-center justify-center">
+          <button class="primary-button blob transition-all" @click="navigateToBioToolsPublishing">
+            <el-icon><suitcase-icon /></el-icon> Register on bio.tools
           </button>
         </div>
       </div>
@@ -315,8 +320,8 @@ export default {
       repoSize: 0,
       prerelease: false,
       draftReleaseURL: "",
-      publishedReleaseURL: "",
-      showFinalInstructions: false,
+      publishedReleaseURL: "l",
+      showFinalInstructions: true,
     };
   },
   computed: {

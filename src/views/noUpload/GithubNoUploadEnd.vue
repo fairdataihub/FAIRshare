@@ -18,9 +18,12 @@
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
-          <button class="primary-button" @click="openRepository">
+          <button class="secondary-plain-button" @click="openRepository">
             <el-icon><fold-icon /></el-icon>
             View repository
+          </button>
+          <button class="primary-button blob transition-all" @click="navigateToBioToolsPublishing">
+            <el-icon><suitcase-icon /></el-icon> Register on bio.tools
           </button>
         </div>
       </div>
@@ -51,7 +54,9 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-
+    navigateToBioToolsPublishing() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
     async openRepository() {
       const githubURL = `https://github.com/${this.dataset.meta.locationPath}`;
       window.ipcRenderer.send("open-link-in-browser", githubURL);

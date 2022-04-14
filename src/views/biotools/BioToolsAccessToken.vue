@@ -81,14 +81,9 @@
 
       <fade-transition>
         <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="validTokenAvailable">
-          <router-link
-            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
-            class=""
-          >
-            <button class="primary-plain-button">
-              <el-icon><d-arrow-left /></el-icon> Back
-            </button>
-          </router-link>
+          <button class="primary-plain-button" @click="navigateBack">
+            <el-icon><d-arrow-left /></el-icon> Back
+          </button>
 
           <button
             class="primary-button"
@@ -150,6 +145,35 @@ export default {
         text: "Reading data...",
       });
       return loading;
+    },
+    navigateBack() {
+      if ("uploadToRepo" in this.workflow && this.workflow.uploadToRepo === true) {
+        if ("source" in this.workflow) {
+          if (this.workflow.source.type === "github") {
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/githubNoUpload/finalPage`,
+            });
+          }
+          if (this.workflow.source.type === "local") {
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/localNoUpload/finalPage`,
+            });
+          }
+        }
+      } else {
+        if ("source" in this.workflow) {
+          if (this.workflow.source.type === "github") {
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/publish`,
+            });
+          }
+          if (this.workflow.source.type === "local") {
+            this.$router.push({
+              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/publish`,
+            });
+          }
+        }
+      }
     },
     showBioToolsConnectionPrompt() {
       this.$refs.loginPrompt.show();

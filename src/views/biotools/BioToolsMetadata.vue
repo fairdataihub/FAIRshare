@@ -668,18 +668,9 @@ export default {
       }
     },
     navigateBack() {
-      if ("source" in this.workflow) {
-        if (this.workflow.source.type === "github") {
-          this.$router.push({
-            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/publish`,
-          });
-        }
-        if (this.workflow.source.type === "local") {
-          this.$router.push({
-            path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/publish`,
-          });
-        }
-      }
+      this.$router.push({
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/biotools/login`,
+      });
     },
   },
   async mounted() {

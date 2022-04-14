@@ -1,12 +1,12 @@
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+  <div class="flex h-full w-full flex-col items-center justify-center p-2 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Final step </span>
       <span class="text-left"> All your requested data has been generated. </span>
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex h-full flex-col items-center justify-center px-10">
+      <div class="flex h-full flex-col items-center justify-center px-6">
         <p class="pb-5 text-center">
           It does not look like you have selected a data repository to upload to. This is not
           recommended if you are trying to make your dataset FAIR. You can come back to this page
@@ -25,6 +25,9 @@
           </router-link>
           <button class="primary-button" @click="openFileExplorer">
             <el-icon><star-icon /></el-icon> View generated files
+          </button>
+          <button class="primary-button blob transition-all" @click="navigateToBioToolsPublishing">
+            <el-icon><suitcase-icon /></el-icon> Register on bio.tools
           </button>
         </div>
       </div>
@@ -57,7 +60,9 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-
+    navigateToBioToolsPublishing() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
     async openFileExplorer() {
       await axios
         .post(`${this.$server_url}/utilities/openfileexplorer`, {
