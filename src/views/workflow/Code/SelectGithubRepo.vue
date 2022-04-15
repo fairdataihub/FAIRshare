@@ -251,6 +251,8 @@ export default {
     },
 
     async continueToNextStep() {
+      this.$track("GitHub", "Repository name", this.selectedRepo);
+
       const repoObject = this.githubRepos.find((repo) => {
         return repo.value === this.selectedRepo;
       });

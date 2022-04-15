@@ -5,20 +5,23 @@ All notable changes to `FAIRshare` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## v1.3.0 -
+## v1.3.0 - 2022-04-15
 
 ### Feature additions
 
-- Add support for a user to submit their own unique identifier for a dataset.
+- Add support for a user to submit their own unique identifier in the `codemeta` for a dataset.
 - Switch the server check full screen loading spinner to a card style notification for better usability.
 - Added a way to notify the user if something went wrong with the update process for the backend.
+- You can now register your software application on [bio.tools](https://bio.tools) directly using FAIRshare. This is a great way to have your application in a public registry.
+- FAIRshare now has badges! Wohoo! When you finish submitting your data you will be prompted with a badge that you can add to your GitHub repository.
 
 ### Bug fixes
 
 - Fixed an issue where a tool to show the size of the screen was being displayed on the app if the backend server didn't load fast enough.
 - Fixed an issue where buttons provided by Element Plus were being overwritten by Tailwind's css reset.
-- Fixed an issue where a comment added by the application to the `CITATION.cff` file was not being shown in the UI.
+- Fixed an issue where a comment added by FAIRshare to the `CITATION.cff` file was not being shown in the UI.
 - Fixed some bugs where the wrong keyword was being displayed when previewing metadata files.
+- Updated some analytics events to better understand who is using our software for future grant applications.
 
 ## v1.2.0 - 2022-03-31
 

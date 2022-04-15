@@ -32,8 +32,13 @@ import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
+// bio.tools related components
+import BioToolsAccessToken from "../views/biotools/BioToolsAccessToken.vue";
+import BioToolsMetadata from "../views/biotools/BioToolsMetadata.vue";
+import BioToolsReview from "../views/biotools/BioToolsReview.vue";
+
 // integration related components
-import ManageAccount from "../views/manage/ManageAccount.vue";
+import ManageAccount from "../views/accounts/ManageAccount.vue";
 
 // components required for options that can be skipped
 import LocalNoUploadSummary from "../views/noUpload/LocalNoUploadSummary.vue";
@@ -145,6 +150,21 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/publish",
     component: GithubPublish,
     name: "GithubPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/biotools/login",
+    component: BioToolsAccessToken,
+    name: "BioToolsAccessToken",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/biotools/metadata",
+    component: BioToolsMetadata,
+    name: "BioToolsMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/biotools/review",
+    component: BioToolsReview,
+    name: "BioToolsReview",
   },
   {
     path: "/datasets/:datasetID/:workflowID/localNoUpload/summary",

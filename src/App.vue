@@ -166,7 +166,7 @@ export default {
         await this.allDatasets.loadDatasets();
 
         // Load all the access tokens
-        await this.tokens.loadTokens();
+        await this.tokens.loadTokens(this.$server_url);
 
         // Load app config
         await this.config.loadConfig();
@@ -207,7 +207,7 @@ export default {
     },
     checkForAnnouncements() {
       const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/announcements.json?timestamp=${new Date().getTime()}`;
-      console.log(url);
+
       axios
         .get(url)
         .then((response) => {

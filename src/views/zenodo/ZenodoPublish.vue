@@ -16,6 +16,13 @@
         </p>
         <div class="flex space-x-4">
           <button class="primary-plain-button" @click="openDraftDataset">View draft</button>
+          <button
+            class="secondary-plain-button"
+            @click="navigateToBioToolsPublishing"
+            v-if="showBioToolsRegister"
+          >
+            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
+          </button>
           <button class="blob primary-button transition-all" @click="publishDeposition">
             Publish <el-icon><star-icon /></el-icon>
           </button>
@@ -50,8 +57,11 @@
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
-          <button class="blob primary-button transition-all" @click="viewDatasetOnZenodo">
+          <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
             View dataset on Zenodo <el-icon><star-icon /></el-icon>
+          </button>
+          <button class="blob primary-button transition-all" @click="navigateToBioToolsPublishing">
+            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
           </button>
         </div>
       </div>
@@ -83,7 +93,15 @@ export default {
       zenodoDatasetID: "",
     };
   },
-  computed: {},
+  computed: {
+    showBioToolsRegister() {
+      if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   methods: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -197,7 +215,6 @@ export default {
         `${process.env.VUE_APP_ZENODO_URL}/record/${this.zenodoDatasetID}`
       );
     },
-
     async openDraftDataset() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
 
@@ -206,7 +223,9 @@ export default {
         `${process.env.VUE_APP_ZENODO_URL}/deposit/${depositionID}`
       );
     },
-
+    navigateToBioToolsPublishing() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
     async openWebPage(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },

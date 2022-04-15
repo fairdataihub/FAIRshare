@@ -130,6 +130,67 @@
             </div>
           </div>
         </div>
+
+        <div class="card-container">
+          <div class="image-container">
+            <img src="../../assets/images/biotoolslogo.png" class="image p-6" />
+          </div>
+          <div class="card-container-content">
+            <div class="card-container-status">
+              <div class="centering-container">
+                <span
+                  class="dot"
+                  :class="{
+                    'bg-green-600': connectedToBioTools,
+                    'bg-gray-600': !connectedToBioTools,
+                  }"
+                ></span>
+              </div>
+
+              <div class="centering-container">
+                <div
+                  class="mr-2"
+                  :class="{
+                    'text-green-600': connectedToBioTools,
+                    'text-gray-600': !connectedToBioTools,
+                  }"
+                >
+                  {{ connectedToBioTools ? "Connected" : "Not Connected" }}
+                </div>
+              </div>
+
+              <div class="centering-container tag-container" v-if="connectedToBioTools">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
+                  <el-icon> <user-filled /> </el-icon>
+                  <span class="px-2">
+                    {{ bioToolsDetails.name }}
+                  </span>
+                </el-tag>
+              </div>
+            </div>
+            <div class="centering-container center">
+              <p>
+                Connect your bio.tools account to FAIRshare to allow us to upload register your
+                software directly through FAIRshare. To learn more about connecting FAIRshare to
+                GitHub, please visit the
+                <span
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-bio-tools'
+                    )
+                  "
+                >
+                  bio.tools documentation</span
+                >
+                page.
+              </p>
+            </div>
+            <div class="centering-container bottom">
+              <ConnectBioTools></ConnectBioTools>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <app-docs-link url="manage-accounts/overview" position="bottom-4" />
@@ -142,6 +203,7 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectBioTools from "@/components/serviceIntegration/ConnectBioTools";
 
 export default {
   name: "ManageAccount",
@@ -149,6 +211,7 @@ export default {
   components: {
     ConnectGithub,
     ConnectZenodo,
+    ConnectBioTools,
   },
 
   data() {
@@ -206,14 +269,24 @@ export default {
     connectedToGithub() {
       return "github" in this.manager.accessTokens;
     },
+    connectedToBioTools() {
+      return "biotools" in this.manager.accessTokens;
+    },
+    bioToolsDetails() {
+      let bioToolsObject = {
+        name: "",
+      };
+      if ("biotools" in this.manager.accessTokens) {
+        bioToolsObject.name = this.manager.accessTokens.biotools.name;
+      }
+      return bioToolsObject;
+    },
   },
 
   async mounted() {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
-
-    console.log(await this.manager.getToken("github"));
 
     await this.manager.loadTokens();
   },
@@ -237,7 +310,7 @@ export default {
   @apply flex h-1/5 flex-row items-center justify-start;
 }
 .centering-container {
-  @apply flex h-2/5 items-center justify-center;
+  @apply flex  items-center justify-center;
 }
 .center {
   @apply py-3 pr-3;
