@@ -38,6 +38,7 @@ import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
 import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
+import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
 
@@ -73,6 +74,7 @@ app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
 
 app.component("warning-prompt", WarningPrompt);
+app.component("login-prompt", LoginPrompt);
 
 app.component("general-dialog", GeneralDialog);
 
@@ -86,10 +88,12 @@ import {
   Back,
   Box,
   ChatDotRound,
+  ChatLineSquare,
   Checked,
   CircleCheckFilled,
   CircleCloseFilled,
   Collection,
+  CopyDocument,
   DArrowLeft,
   DArrowRight,
   DataAnalysis,
@@ -122,6 +126,7 @@ import {
   Select,
   Setting,
   Star,
+  Suitcase,
   Ticket,
   Unlock,
   UploadFilled,
@@ -135,10 +140,12 @@ app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
 app.component("box-icon", Box);
 app.component("chat-dot-round", ChatDotRound);
+app.component("chat-line-square", ChatLineSquare);
 app.component("checked-icon", Checked);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
 app.component("collection-icon", Collection);
+app.component("copy-document", CopyDocument);
 app.component("d-arrow-left", DArrowLeft);
 app.component("d-arrow-right", DArrowRight);
 app.component("data-analysis", DataAnalysis);
@@ -171,6 +178,7 @@ app.component("right-icon", Right);
 app.component("select-icon", Select);
 app.component("setting-icon", Setting);
 app.component("star-icon", Star);
+app.component("suitcase-icon", Suitcase);
 app.component("ticket-icon", Ticket);
 app.component("unlock-icon", Unlock);
 app.component("upload-filled", UploadFilled);

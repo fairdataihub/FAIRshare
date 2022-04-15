@@ -54,6 +54,9 @@ export default {
         {
           description: "Publish dataset",
         },
+        {
+          description: "Register application",
+        },
       ],
     };
   },

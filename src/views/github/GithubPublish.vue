@@ -28,14 +28,23 @@
             No worries. You can always come back to this page and let FAIRshare create your release
             for you.
           </p>
-          <div class="flex items-center justify-center space-x-4">
-            <button class="secondary-plain-button" @click="openRepository">
+          <div class="flex items-center justify-center space-x-4 pb-10">
+            <button class="primary-plain-button" @click="openRepository">
               <el-icon><fold-icon /></el-icon>
               View the repository
             </button>
             <button class="primary-button" @click="approveRelease">
               <el-icon><edit-icon /></el-icon>
               I changed my mind. Create a release for me
+            </button>
+          </div>
+          <div class="flex items-center justify-center space-x-4">
+            <p class="text-base font-semibold">Additional steps:</p>
+            <button class="secondary-plain-button" @click="showBadges">
+              Add a badge to your README <el-icon><chat-line-square /></el-icon>
+            </button>
+            <button class="primary-plain-button" @click="navigateToBioToolsPublishing">
+              Register on bio.tools <el-icon><suitcase-icon /></el-icon>
             </button>
           </div>
         </div>
@@ -236,14 +245,14 @@
             >).
           </p>
         </div>
-        <div class="flex space-x-4">
+        <div class="flex space-x-4 pb-10">
           <router-link :to="`/datasets`">
             <button class="primary-plain-button">
               <el-icon><data-line /></el-icon> Go to the homepage
             </button>
           </router-link>
 
-          <button class="primary-plain-button" @click="openAllReleases">
+          <button class="primary-plain-button hidden" @click="openAllReleases">
             <el-icon><box-icon /></el-icon>
             View all releases
           </button>
@@ -264,7 +273,7 @@
             View release on GitHub
           </button>
           <button
-            class="primary-button"
+            class="secondary-plain-button"
             @click="viewZenodoRelease"
             v-if="publishedReleaseURL !== ''"
           >
@@ -272,7 +281,89 @@
             View release on Zenodo
           </button>
         </div>
+        <div class="flex items-center justify-center space-x-4">
+          <button class="primary-plain-button" @click="showBadges">
+            Add a badge to your README <el-icon><chat-line-square /></el-icon>
+          </button>
+          <button class="primary-button blob transition-all" @click="navigateToBioToolsPublishing">
+            <el-icon><suitcase-icon /></el-icon> Register on bio.tools
+          </button>
+        </div>
       </div>
+
+      <general-dialog
+        ref="showBadgesDialog"
+        title="Add this badge to your GitHub repository readme to showcase your FAIRness"
+      >
+        <div class="mt-4 flex flex-col">
+          <div class="py-2">
+            <img src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="" />
+          </div>
+          <div class="divide-y divide-gray-200">
+            <div class="py-2">
+              <p class="pb-2 text-base font-semibold text-gray-700">Markdown</p>
+              <div
+                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+              >
+                <div
+                  class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
+                >
+                  <code>
+                    [![Curated with
+                    FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-green)](https://fairdataihub.org/fairshare)
+                  </code>
+                </div>
+                <div
+                  class="absolute bottom-2 right-2 rounded-lg bg-transparent opacity-40 transition-all hover:bg-zinc-200 hover:opacity-95"
+                  @click="copyToClipboard('markdown')"
+                >
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="Copy to clipboard"
+                    placement="bottom"
+                  >
+                    <button class="flex items-center justify-center p-1">
+                      <el-icon :size="20"><copy-document /></el-icon>
+                    </button>
+                  </el-tooltip>
+                </div>
+              </div>
+            </div>
+            <div class="py-2">
+              <p class="pb-2 text-base font-semibold text-gray-700">HTML</p>
+              <div
+                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+              >
+                <div
+                  class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
+                >
+                  <code>
+                    &lt;a href="https://fairdataihub.org/fairshare"&gt;&lt;img
+                    src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="Curated
+                    with FAIRshare"/&gt;&lt;/a&gt;
+                  </code>
+                </div>
+                <div
+                  class="absolute bottom-2 right-2 rounded-lg bg-transparent opacity-40 transition-all hover:bg-zinc-200 hover:opacity-95"
+                  @click="copyToClipboard('html')"
+                >
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="Copy to clipboard"
+                    placement="bottom"
+                  >
+                    <button class="flex items-center justify-center p-1">
+                      <el-icon :size="20"><copy-document /></el-icon>
+                    </button>
+                  </el-tooltip>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </general-dialog>
     </div>
     <app-docs-link url="curate-and-share/create-github-release" position="bottom-4" />
   </div>
@@ -334,6 +425,13 @@ export default {
         return true;
       }
     },
+    showBioToolsRegister() {
+      if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     async sleep(ms) {
@@ -351,6 +449,37 @@ export default {
         text: "Reading GitHub repository...",
       });
       return loading;
+    },
+    navigateToBioToolsPublishing() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
+    showBadges() {
+      this.$refs.showBadgesDialog.show();
+    },
+    copyToClipboard(type) {
+      this.$track("Badges", "Curated with FAIRshare", type);
+      if (type === "markdown") {
+        const text = `[![Curated with FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-yellow)](https://fairdataihub.org/fairshare)`;
+        window.ipcRenderer.send("write-to-clipboard", text, "text");
+        this.$notify({
+          title: "Copied to clipboard",
+          message: "Markdown badge code copied to clipboard",
+          type: "success",
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+      if (type === "html") {
+        const html = `<a href="https://fairdataihub.org/fairshare"><img src="https://img.shields.io/badge/Curated%20with-FAIRshare-yellow" alt="Curated with FAIRshare"/></a>`;
+        window.ipcRenderer.send("write-to-clipboard", html, "text");
+        this.$notify({
+          title: "Copied to clipboard",
+          message: "HTML badge code copied to clipboard",
+          type: "success",
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
     },
     validateReleaseForm() {
       if (this.selectedTag === "") {
@@ -392,6 +521,8 @@ export default {
       this.showReleasePrompt = false;
       this.showApprovedInstructions = false;
       this.showDeclinedInstructions = true;
+
+      this.showBadges();
     },
     approveRelease() {
       this.showReleasePrompt = false;
@@ -468,16 +599,27 @@ export default {
 
         this.workflow.datasetPublished = false;
 
+        if (releaseType === "publish") {
+          this.$track("GitHub", "Publish release", "failed");
+          this.$track("GitHub", "Repository name", this.repoName);
+        }
+        if (releaseType === "draft") {
+          this.$track("GitHub", "Draft release", "failed");
+          this.$track("GitHub", "Repository name", this.repoName);
+        }
+
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
       } else {
         this.$track("GitHub", "Repository size", this.repoSize);
         if (releaseType === "publish") {
           this.$track("GitHub", "Publish release", "success");
+          this.$track("GitHub", "Repository name", this.repoName);
           this.publishedReleaseURL = response;
         }
         if (releaseType === "draft") {
           this.$track("GitHub", "Draft release", "success");
+          this.$track("GitHub", "Repository name", this.repoName);
           this.draftReleaseURL = response;
         }
 
@@ -497,6 +639,8 @@ export default {
 
         this.showApprovedInstructions = false;
         this.showFinalInstructions = true;
+
+        this.showBadges();
       }
     },
     async autoGenerateReleaseNotes() {

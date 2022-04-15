@@ -49,10 +49,17 @@ export const useTokenStore = defineStore({
   id: "TokenStore",
   state: () => ({
     accessTokens: {},
+    server_url: "",
   }),
+  getters: {
+    getServerUrl: (state) => {
+      return state.server_url;
+    },
+  },
   actions: {
-    async loadTokens() {
+    async loadTokens(server_url) {
       try {
+        this.server_url = server_url;
         this.accessTokens = await loadFile();
       } catch (error) {
         console.error(error);
@@ -63,6 +70,16 @@ export const useTokenStore = defineStore({
     // save an encrypted version of the token in the store also save it to the file.
     async saveToken(key, tokenObject) {
       tokenObject.token = await encrypt(tokenObject.token);
+      this.accessTokens[key] = tokenObject;
+      await this.syncTokens();
+    },
+
+    async saveUsernamePassword(key, userName, password) {
+      let tokenObject = {
+        name: userName,
+        type: "password",
+      };
+      tokenObject.token = await encrypt(password);
       this.accessTokens[key] = tokenObject;
       await this.syncTokens();
     },
@@ -80,6 +97,43 @@ export const useTokenStore = defineStore({
       if (key in this.accessTokens) {
         const tokenObject = Object.assign({}, this.accessTokens[key]);
         tokenObject.token = await decrypt(this.accessTokens[key].token);
+
+        if (key === "biotools") {
+          const serverURL = this.getServerUrl;
+
+          const url =
+            serverURL !== undefined
+              ? `${serverURL}/biotools/login`
+              : `http://127.0.0.1:7632/biotools/login`;
+          console.log(url);
+
+          const response = await axios
+            .post(url, {
+              username: this.accessTokens[key].name,
+              password: tokenObject.token,
+            })
+            .then(async (response) => {
+              if ("general_errors" in response.data) {
+                return "NO_TOKEN_FOUND";
+              }
+
+              if ("key" in response.data) {
+                const token = response.data.key;
+                return token;
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              return "NO_TOKEN_FOUND";
+            });
+
+          if (response === "NO_TOKEN_FOUND") {
+            return "NO_TOKEN_FOUND";
+          } else {
+            tokenObject.token = response;
+          }
+        }
+
         return tokenObject;
       } else {
         return "NO_TOKEN_FOUND";
@@ -131,6 +185,51 @@ export const useTokenStore = defineStore({
       }
     },
 
+    async verifyBioToolsToken(token) {
+      const serverURL = this.getServerUrl;
+
+      const url =
+        serverURL !== undefined
+          ? `${serverURL}/biotools/user?token=${token}`
+          : `http://127.0.0.1:7632/biotools/user?token=${token}`;
+
+      const config = {
+        method: "get",
+        url,
+      };
+
+      const response = await axios(config)
+        .then((response) => {
+          return { data: response.data, status: response.status };
+        })
+        .catch((error) => {
+          console.error(error);
+          return { data: error.response };
+        });
+
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        return false;
+      } else {
+        return false;
+      }
+    },
+
+    async verifyBioToolsConnection() {
+      const tokenObject = await this.getToken("biotools");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = await this.verifyBioToolsToken(token);
+
+        return response;
+      }
+    },
+
     async verifyGithubTokenByTokenConnection(token) {
       return await axios
         .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/rate_limit`, {
@@ -168,7 +267,7 @@ export const useTokenStore = defineStore({
           return { scope: response.headers["x-oauth-scopes"] };
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "Error Found";
         });
     },

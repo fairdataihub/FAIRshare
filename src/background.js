@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, shell, Menu } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, shell, Menu, clipboard } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
@@ -360,6 +360,35 @@ ipcMain.on("restart-fairshare-for-update", (_event) => {
     const isForceRunAfter = true;
     autoUpdater.quitAndInstall(isSilent, isForceRunAfter);
   });
+});
+
+ipcMain.on("write-to-clipboard", async (_event, data, type) => {
+  if (type === "text") {
+    clipboard.writeText(data);
+  }
+  if (type === "html") {
+    clipboard.writeHTML(data);
+  }
+  if (type === "image") {
+    clipboard.writeImage(data);
+  }
+});
+
+ipcMain.on("read-clipboard-contents", async (_event, type) => {
+  if (type === "text") {
+    const clipboardText = clipboard.readText();
+    mainWindow.webContents.send("read-clipboard-contents-response", clipboardText);
+  }
+
+  if (type === "image") {
+    const clipboardImage = clipboard.readImage();
+    mainWindow.webContents.send("read-clipboard-contents-response", clipboardImage);
+  }
+
+  if (type === "html") {
+    const clipboardHtml = clipboard.readHTML();
+    mainWindow.webContents.send("read-clipboard-contents-response", clipboardHtml);
+  }
 });
 
 // OAuth
