@@ -9,6 +9,7 @@
   "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues",
   "name": "FAIRshare: FAIR data and software sharing made easy",
   "version": "1.3.0",
+  "identifier": "10.5281/zenodo.6369429",
   "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
   "applicationCategory": "Scientific",
   "releaseNotes": "Feature additions:\nAdd support for a user to submit their own unique identifier for a dataset.\nSwitch the server check full screen loading spinner to a card style notification for better usability.\nAdded a way to notify the user if something went wrong with the update process for the backend.\nYou can now register your software application on bio.tools directly using FAIRshare. This is a great way to have your application in a public registry.\nFAIRshare now has a badge! Wohoo! When you finish submitting your data you will be prompted with a badge that you can add to your GitHub repository.\nBug fixes:\nFixed an issue where a tool to show the size of the screen was being displayed on the app if the backend server didn't load fast enough.\nFixed an issue where buttons provided by Element Plus were being overwritten by Tailwind's css reset.\nFixed an issue where a comment added by the application to the CITATION.cff file was not being shown in the UI.\nFixed some bugs where the wrong keyword was being displayed when previewing metadata files.\nUpdated some analytics events to better understand who is using our software for future grant applications.",
