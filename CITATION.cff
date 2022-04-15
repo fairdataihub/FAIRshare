@@ -15,6 +15,10 @@ authors:
   orcid: 0000-0002-0307-262X
 cff-version: 1.2.0
 date-released: '2022-04-15'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.6369429
+    description: DOI for this software's record on Zenodo 
 keywords:
 - curation
 - electron
