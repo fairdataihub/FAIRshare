@@ -436,6 +436,21 @@ Custom styles for all the scrollbars
   border: 3px solid #ffffff;
 }
 
+.badge-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.badge-container::-webkit-scrollbar-track {
+  @apply bg-zinc-100;
+  width: 9px;
+}
+
+.badge-container::-webkit-scrollbar-thumb {
+  @apply bg-zinc-500;
+  border-radius: 15px;
+  border: 5px solid #f4f4f5;
+}
+
 /* ------------------------------------------
 Transition styles for <transition />
 --------------------------------------------- */

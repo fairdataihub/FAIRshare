@@ -6,7 +6,7 @@
 
       <el-divider class="my-4"> </el-divider>
 
-      <div class="flex h-full flex-col items-center justify-center px-10">
+      <div class="flex h-full flex-col items-center justify-center px-2">
         <p class="pb-5 text-center">
           It does not look like you have selected a data repository to upload to. This is not
           recommended if you are trying to make your dataset FAIR. You can come back to this page
@@ -22,10 +22,86 @@
             <el-icon><fold-icon /></el-icon>
             View repository
           </button>
+          <button class="secondary-plain-button" @click="showBadges">
+            <el-icon><chat-line-square /></el-icon> Add a badge to your README
+          </button>
           <button class="primary-button blob transition-all" @click="navigateToBioToolsPublishing">
             <el-icon><suitcase-icon /></el-icon> Register on bio.tools
           </button>
         </div>
+        <general-dialog
+          ref="showBadgesDialog"
+          title="Add this badge to your GitHub repository readme to showcase your FAIRness"
+        >
+          <div class="mt-4 flex flex-col">
+            <div class="py-2">
+              <img src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="" />
+            </div>
+            <div class="divide-y divide-gray-200">
+              <div class="py-2">
+                <p class="pb-2 text-base font-semibold text-gray-700">Markdown</p>
+                <div
+                  class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+                >
+                  <div
+                    class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
+                  >
+                    <code>
+                      [![Curated with
+                      FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-green)](https://fairdataihub.org/fairshare)
+                    </code>
+                  </div>
+                  <div
+                    class="absolute bottom-2 right-2 rounded-lg bg-transparent opacity-40 transition-all hover:bg-zinc-200 hover:opacity-95"
+                    @click="copyToClipboard('markdown')"
+                  >
+                    <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Copy to clipboard"
+                      placement="bottom"
+                    >
+                      <button class="flex items-center justify-center p-1">
+                        <el-icon :size="20"><copy-document /></el-icon>
+                      </button>
+                    </el-tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="py-2">
+                <p class="pb-2 text-base font-semibold text-gray-700">HTML</p>
+                <div
+                  class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+                >
+                  <div
+                    class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
+                  >
+                    <code>
+                      &lt;a href="https://fairdataihub.org/fairshare"&gt;&lt;img
+                      src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="Curated
+                      with FAIRshare"/&gt;&lt;/a&gt;
+                    </code>
+                  </div>
+                  <div
+                    class="absolute bottom-2 right-2 rounded-lg bg-transparent opacity-40 transition-all hover:bg-zinc-200 hover:opacity-95"
+                    @click="copyToClipboard('html')"
+                  >
+                    <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="Copy to clipboard"
+                      placement="bottom"
+                    >
+                      <button class="flex items-center justify-center p-1">
+                        <el-icon :size="20"><copy-document /></el-icon>
+                      </button>
+                    </el-tooltip>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </general-dialog>
       </div>
     </div>
   </div>
@@ -61,6 +137,9 @@ export default {
       const githubURL = `https://github.com/${this.dataset.meta.locationPath}`;
       window.ipcRenderer.send("open-link-in-browser", githubURL);
     },
+    showBadges() {
+      this.$refs.showBadgesDialog.show();
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -71,6 +150,8 @@ export default {
     this.datasetStore.setCurrentStep(7);
 
     this.workflow.currentRoute = this.$route.path;
+
+    this.showBadges();
   },
 };
 </script>

@@ -88,10 +88,12 @@ import {
   Back,
   Box,
   ChatDotRound,
+  ChatLineSquare,
   Checked,
   CircleCheckFilled,
   CircleCloseFilled,
   Collection,
+  CopyDocument,
   DArrowLeft,
   DArrowRight,
   DataAnalysis,
@@ -138,10 +140,12 @@ app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
 app.component("box-icon", Box);
 app.component("chat-dot-round", ChatDotRound);
+app.component("chat-line-square", ChatLineSquare);
 app.component("checked-icon", Checked);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
 app.component("collection-icon", Collection);
+app.component("copy-document", CopyDocument);
 app.component("d-arrow-left", DArrowLeft);
 app.component("d-arrow-right", DArrowRight);
 app.component("data-analysis", DataAnalysis);
