@@ -6,18 +6,16 @@
       <span class="text-left text-lg font-medium">
         Provide information about your research sofware
       </span>
+      <span class="text-left">
+        We will use this information to create an entry on the bio.tools registry for your software.
+      </span>
 
       <line-divider></line-divider>
 
       <transition name="fade" mode="out-in" appear>
         <div>
-          <span class="mb-2">
-            Provide information about your software below. We will use this information to create an
-            entry on the bio.tools registry for your software.
-          </span>
-
           <div>
-            <div class="py-3">
+            <div class="hidden py-3">
               <pill-progress-bar
                 :totalSteps="totalSteps"
                 :currentStep="currentStep"
@@ -218,7 +216,7 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
+    <app-docs-link url="curate-and-share/add-bio-tools-metadata" position="bottom-4" />
   </div>
 </template>
 
@@ -427,8 +425,8 @@ export default {
     descriptionValidator(_rule, value, callback) {
       if (value === "" || value === undefined) {
         callback(new Error("Please enter a description for your software"));
-      } else if (value.length < 10) {
-        callback(new Error("Please enter a description that is at least 10 characters long"));
+      } else if (value.length < 10 || value.length > 1000) {
+        callback(new Error("Please enter a description that is between 10 and 1000 characters"));
       } else {
         callback();
       }
