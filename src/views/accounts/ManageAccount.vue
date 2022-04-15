@@ -141,8 +141,8 @@
                 <span
                   class="dot"
                   :class="{
-                    'bg-green-600': connectedToGithub,
-                    'bg-gray-600': !connectedToGithub,
+                    'bg-green-600': connectedToBioTools,
+                    'bg-gray-600': !connectedToBioTools,
                   }"
                 ></span>
               </div>
@@ -151,19 +151,19 @@
                 <div
                   class="mr-2"
                   :class="{
-                    'text-green-600': connectedToGithub,
-                    'text-gray-600': !connectedToGithub,
+                    'text-green-600': connectedToBioTools,
+                    'text-gray-600': !connectedToBioTools,
                   }"
                 >
-                  {{ githubDetails.status }}
+                  {{ connectedToBioTools ? "Connected" : "Not Connected" }}
                 </div>
               </div>
 
-              <div class="centering-container tag-container" v-if="connectedToGithub">
+              <div class="centering-container tag-container" v-if="connectedToBioTools">
                 <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
                   <el-icon> <user-filled /> </el-icon>
                   <span class="px-2">
-                    {{ githubDetails.name }}
+                    {{ bioToolsDetails.name }}
                   </span>
                 </el-tag>
               </div>
@@ -269,14 +269,24 @@ export default {
     connectedToGithub() {
       return "github" in this.manager.accessTokens;
     },
+    connectedToBioTools() {
+      return "biotools" in this.manager.accessTokens;
+    },
+    bioToolsDetails() {
+      let bioToolsObject = {
+        name: "",
+      };
+      if ("biotools" in this.manager.accessTokens) {
+        bioToolsObject.name = this.manager.accessTokens.biotools.name;
+      }
+      return bioToolsObject;
+    },
   },
 
   async mounted() {
     this.datasetStore.hideProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
-
-    console.log(await this.manager.getToken("github"));
 
     await this.manager.loadTokens();
   },
