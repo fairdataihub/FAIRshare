@@ -440,6 +440,8 @@ export default {
       const folderPath = this.dataset.data.Code.folderPath;
       const repoName = this.workflow.github.repo;
 
+      this.$track("GitHub", "Repository name", repoName);
+
       this.statusMessage = "Getting ready to upload metadata files to GitHub...";
       await this.sleep(300);
 

@@ -457,6 +457,7 @@ export default {
       this.$refs.showBadgesDialog.show();
     },
     copyToClipboard(type) {
+      this.$track("Badges", "Curated with FAIRshare", type);
       if (type === "markdown") {
         const text = `[![Curated with FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-yellow)](https://fairdataihub.org/fairshare)`;
         window.ipcRenderer.send("write-to-clipboard", text, "text");
@@ -598,16 +599,27 @@ export default {
 
         this.workflow.datasetPublished = false;
 
+        if (releaseType === "publish") {
+          this.$track("GitHub", "Publish release", "failed");
+          this.$track("GitHub", "Repository name", this.repoName);
+        }
+        if (releaseType === "draft") {
+          this.$track("GitHub", "Draft release", "failed");
+          this.$track("GitHub", "Repository name", this.repoName);
+        }
+
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
       } else {
         this.$track("GitHub", "Repository size", this.repoSize);
         if (releaseType === "publish") {
           this.$track("GitHub", "Publish release", "success");
+          this.$track("GitHub", "Repository name", this.repoName);
           this.publishedReleaseURL = response;
         }
         if (releaseType === "draft") {
           this.$track("GitHub", "Draft release", "success");
+          this.$track("GitHub", "Repository name", this.repoName);
           this.draftReleaseURL = response;
         }
 

@@ -140,6 +140,31 @@ export default {
     showBadges() {
       this.$refs.showBadgesDialog.show();
     },
+    copyToClipboard(type) {
+      this.$track("Badges", "Curated with FAIRshare", type);
+      if (type === "markdown") {
+        const text = `[![Curated with FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-yellow)](https://fairdataihub.org/fairshare)`;
+        window.ipcRenderer.send("write-to-clipboard", text, "text");
+        this.$notify({
+          title: "Copied to clipboard",
+          message: "Markdown badge code copied to clipboard",
+          type: "success",
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+      if (type === "html") {
+        const html = `<a href="https://fairdataihub.org/fairshare"><img src="https://img.shields.io/badge/Curated%20with-FAIRshare-yellow" alt="Curated with FAIRshare"/></a>`;
+        window.ipcRenderer.send("write-to-clipboard", html, "text");
+        this.$notify({
+          title: "Copied to clipboard",
+          message: "HTML badge code copied to clipboard",
+          type: "success",
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
