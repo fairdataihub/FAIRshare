@@ -84,11 +84,18 @@
 
                       <el-form-item label="Description" prop="description">
                         <div class="flex w-full flex-row items-center">
-                          <el-input
-                            v-model="step1Form.description"
-                            type="textarea"
-                            placeholder="Needle reads two input sequences and uses the Needleman-Wunsch alignment algorithm  to ensure the alignment is optimum, by exploring all possible alignments and choosing the best."
-                          ></el-input>
+                          <div class="relative h-full w-full">
+                            <el-input
+                              v-model="step1Form.description"
+                              type="textarea"
+                              placeholder="Needle reads two input sequences and uses the Needleman-Wunsch alignment algorithm  to ensure the alignment is optimum, by exploring all possible alignments and choosing the best."
+                            ></el-input>
+                            <span
+                              class="pointer-events-none absolute bottom-1 right-2 text-xs font-semibold text-gray-500"
+                            >
+                              {{ descriptionCount }}
+                            </span>
+                          </div>
                           <form-help-content
                             popoverContent="Textual description of the software"
                           ></form-help-content>
@@ -352,7 +359,6 @@ export default {
       }
       return false;
     },
-
     checkInvalidStatus() {
       for (const key in this.invalidStatus) {
         if (this.invalidStatus[key]) {
@@ -360,6 +366,13 @@ export default {
         }
       }
       return false;
+    },
+    descriptionCount() {
+      if (this.step1Form.description != undefined) {
+        return `${this.step1Form.description.length}/1000`;
+      } else {
+        return "";
+      }
     },
   },
   methods: {
