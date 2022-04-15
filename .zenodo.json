@@ -1,1 +1,18 @@
-{"upload_type": "software", "title": "FAIRshare: FAIR data and software sharing made easy", "publication_date": "2022-04-15", "creators": [{"name": "Soundarajan, Sanjay", "affiliation": "FAIR Data Innovations Hub"}, {"name": "Patel, Bhavesh", "affiliation": "California Medical Innovations Institute", "orcid": "0000-0002-0307-262X"}], "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines", "access_right": "open", "license": "MIT", "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"], "version": "1.3.0"}
+{
+  "upload_type": "software",
+  "title": "FAIRshare: FAIR data and software sharing made easy",
+  "publication_date": "2022-04-15",
+  "creators": [
+    { "name": "Soundarajan, Sanjay", "affiliation": "FAIR Data Innovations Hub" },
+    {
+      "name": "Patel, Bhavesh",
+      "affiliation": "California Medical Innovations Institute",
+      "orcid": "0000-0002-0307-262X"
+    }
+  ],
+  "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"],
+  "version": "1.3.0"
+}
