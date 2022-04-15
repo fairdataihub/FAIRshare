@@ -23,68 +23,10 @@
               software.
             </p>
 
-            <button class="primary-button" @click="showBioToolsConnectionPrompt">
+            <!-- <button class="primary-button" @click="showBioToolsConnectionPrompt">
               Connect to bio.tools
-            </button>
-
-            <login-prompt
-              ref="loginPrompt"
-              title="Login to bio.tools"
-              confirmButtonText="Login"
-              :preConfirm="checkUsernameAndPassword"
-              :showErrors="showErrorMessage"
-              @messageConfirmed="loginSuccess"
-            >
-              <div w-full>
-                <p class="mb-1 w-full text-left text-base text-gray-500">
-                  Please enter your login information to let us connect your bio.tools account.
-                </p>
-
-                <div
-                  class="hover-underline-animation mb-4 flex w-max cursor-pointer flex-row items-center text-sm text-primary-600"
-                  @click="openWebsite('https://bio.tools/signup')"
-                >
-                  <span class="font-medium"> Register for an account on bio.tools? </span>
-                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-                </div>
-
-                <el-form
-                  ref="loginForm"
-                  :model="loginForm"
-                  :rules="rules"
-                  label-width="120px"
-                  size="large"
-                >
-                  <el-form-item label="Username" prop="username">
-                    <el-input
-                      v-model="loginForm.username"
-                      placeholder="username@bio.tools"
-                      clearable
-                      class="w-full"
-                    />
-                  </el-form-item>
-
-                  <el-form-item label="Password" prop="password">
-                    <el-input
-                      v-model="loginForm.password"
-                      type="password"
-                      placeholder="**********"
-                      clearable
-                      class="w-full"
-                    />
-                  </el-form-item>
-                </el-form>
-
-                <fade-transition>
-                  <p
-                    v-if="errorMessage !== ''"
-                    class="my-3 w-full text-center text-base text-red-600"
-                  >
-                    {{ errorMessage }}
-                  </p>
-                </fade-transition>
-              </div>
-            </login-prompt>
+            </button> -->
+            <ConnectBioTools :statusChangeFunction="showConnection" />
           </div>
         </div>
         <LoadingFoldingCube v-else></LoadingFoldingCube>
@@ -114,17 +56,16 @@
 
 <script>
 import LoadingFoldingCube from "@/components/spinners/LoadingFoldingCube";
+import ConnectBioTools from "@/components/serviceIntegration/ConnectBioTools";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
-import axios from "axios";
-import { Icon } from "@iconify/vue";
 import { ElLoading } from "element-plus";
 
 export default {
   name: "BioToolsAccessToken",
-  components: { LoadingFoldingCube, Icon },
+  components: { LoadingFoldingCube, ConnectBioTools },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -134,17 +75,6 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       validTokenAvailable: false,
-      errorMessage: "",
-      biotoolsAccessToken: "",
-      loginForm: {
-        username: "",
-        password: "",
-      },
-      rules: {
-        username: [{ required: true, message: "Please enter your username", trigger: "blur" }],
-        password: [{ required: true, message: "Please enter your password", trigger: "blur" }],
-      },
-
       ready: false,
       showContinueSection: false,
       showLoading: false,
@@ -190,72 +120,17 @@ export default {
         }
       }
     },
-    showBioToolsConnectionPrompt() {
-      this.$refs.loginPrompt.show();
-    },
-    loginSuccess() {
-      this.$notify({
-        title: "Success",
-        message: "You have successfully logged in to bio.tools",
-        type: "success",
-        position: "bottom-right",
-      });
-      this.validTokenAvailable = true;
-    },
-    async checkUsernameAndPassword() {
-      if (this.loginForm.username === "" || this.loginForm.password === "") {
-        return "empty";
-      } else {
-        const response = await axios
-          .post(`${this.$server_url}/biotools/login`, {
-            username: this.loginForm.username,
-            password: this.loginForm.password,
-          })
-          .then(async (response) => {
-            if ("general_errors" in response.data) {
-              return "invalid";
-            }
 
-            if ("key" in response.data) {
-              const token = response.data.key;
-              const userDetails = await axios
-                .get(`${this.$server_url}/biotools/user`, {
-                  params: {
-                    token,
-                  },
-                })
-                .then(async (res) => {
-                  if ("email" in res.data) {
-                    return res.data;
-                  }
-                });
-
-              let tokenObject = {};
-
-              tokenObject.token = token;
-              tokenObject.name = userDetails.email;
-              tokenObject.type = "token";
-
-              await this.tokenStore.saveToken("biotools", tokenObject);
-              this.$track("Connections", "bio.tools", "connected");
-
-              return "valid";
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-
-        return response;
-      }
-    },
     startBioToolsRegistration() {
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/biotools/metadata`;
       this.$router.push({ path: routerPath });
     },
-    showErrorMessage(message) {
-      this.errorMessage = message;
+
+    async showConnection(status) {
+      console.log(status);
+      if (status === "connected") {
+        this.validTokenAvailable = true;
+      }
     },
   },
   async mounted() {

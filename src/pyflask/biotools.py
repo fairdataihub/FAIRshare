@@ -39,7 +39,10 @@ def getUserDetails(token):
             headers=headers,
         )
 
-        return response.json()
+        if response.status_code != 200:
+            return "Invalid username", response.status_code
+        else:
+            return response.json()
 
     except Exception as e:
         raise e

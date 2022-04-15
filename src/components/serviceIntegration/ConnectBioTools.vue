@@ -1,48 +1,72 @@
 <template>
   <div>
-    <!-- <el-popover
-      placement="bottom"
-      :hide-after="0"
-      trigger="hover"
-      content="Coming soon..."
-    >
-      <template #reference> -->
-    <div>
-      <button @click="interactWithService('github')" :class="githubDetails.buttonStyle">
-        {{ githubDetails.action }}
+    <fade-transition>
+      <button
+        @click="changeConnectionStatus"
+        :class="{ 'danger-plain-button': connected, 'primary-plain-button': !connected }"
+        v-if="ready"
+      >
+        {{ connected ? "Disconnect from" : "Connect to" }} bio.tools
       </button>
-    </div>
-    <!-- </template>
-    </el-popover> -->
-    <el-dialog
-      width="600px"
-      title="Select an option to connect to GitHub"
-      destroy-on-close
-      v-model="dialogVisible"
-    >
-      <div class="dialog-Container">
-        <div class="inputField">
-          <button class="primary-plain-button w-52" @click="showGithubTokenConnect">
-            Connect with token
-          </button>
-          <button class="primary-plain-button w-52" @click="showGithubOAuthConnect">
-            Connect with username
-          </button>
-        </div>
+      <div v-else>
+        <Vue3Lottie
+          animationLink="https://assets3.lottiefiles.com/packages/lf20_69bpyfie.json"
+          :width="50"
+          :height="50"
+        />
       </div>
-    </el-dialog>
-    <GithubTokenConnection
-      v-if="showTokenConnect"
-      v-model="showTokenConnect"
-      :callback="hideGithubTokenConnect"
-      :onStatusChange="statusChangeFunction"
-    ></GithubTokenConnection>
-    <GithubOAuthConnection
-      v-if="showOAuthConnect"
-      v-model="showOAuthConnect"
-      :callback="hideGithubOAuthConnect"
-      :onStatusChange="statusChangeFunction"
-    ></GithubOAuthConnection>
+    </fade-transition>
+
+    <login-prompt
+      ref="loginPrompt"
+      title="Login to bio.tools"
+      confirmButtonText="Login"
+      :preConfirm="checkUsernameAndPassword"
+      :showErrors="showErrorMessage"
+      @messageConfirmed="loginSuccess"
+    >
+      <div w-full>
+        <p class="mb-1 w-full text-left text-base text-gray-500">
+          Please enter your login information to let us connect your bio.tools account.
+        </p>
+
+        <div
+          class="hover-underline-animation mb-4 flex w-max cursor-pointer flex-row items-center text-sm text-primary-600"
+          @click="openWebsite('https://bio.tools/signup')"
+        >
+          <span class="font-medium"> Register for an account on bio.tools? </span>
+          <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+        </div>
+
+        <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="120px" size="large">
+          <el-form-item label="Username" prop="username">
+            <el-input
+              v-model="loginForm.username"
+              placeholder="username@bio.tools"
+              clearable
+              class="w-full"
+            />
+          </el-form-item>
+
+          <el-form-item label="Password" prop="password">
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              placeholder="**********"
+              clearable
+              class="w-full"
+            />
+          </el-form-item>
+        </el-form>
+
+        <fade-transition>
+          <p v-if="errorMessage !== ''" class="my-3 w-full text-center text-base text-red-600">
+            {{ errorMessage }}
+          </p>
+        </fade-transition>
+      </div>
+    </login-prompt>
+
     <warning-confirm ref="warningConfirm" title="Warning" @messageConfirmed="confirmDeleteToken">
       <p class="text-center text-base text-gray-500">
         Disconnecting will delete the access token stored. Would you like to continue?
@@ -52,19 +76,14 @@
 </template>
 
 <script>
-import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
-import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
-
 import { useTokenStore } from "@/store/access";
-import { ElNotification } from "element-plus";
+
+import axios from "axios";
+import { Icon } from "@iconify/vue";
 
 export default {
-  // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectBioTools",
-  components: {
-    GithubTokenConnection: GithubTokenConnection,
-    GithubOAuthConnection: GithubOAuthConnection,
-  },
+  components: { Icon },
   props: {
     statusChangeFunction: {
       type: Function,
@@ -72,98 +91,128 @@ export default {
       default: () => {},
     },
   },
-  setup() {
-    const manager = useTokenStore();
-    return {
-      manager,
-    };
-  },
   data() {
     return {
-      dialogVisible: false,
-      showTokenConnect: false,
-      showOAuthConnect: false,
+      tokenStore: useTokenStore(),
+      connected: false,
+      ready: false,
+      errorMessage: "",
+      loginForm: {
+        username: "",
+        password: "",
+      },
+      rules: {
+        username: [{ required: true, message: "Please enter your username", trigger: "blur" }],
+        password: [{ required: true, message: "Please enter your password", trigger: "blur" }],
+      },
     };
   },
+  computed: {},
   methods: {
-    // callbacks for cleaning
-    hideGithubTokenConnect() {
-      this.showTokenConnect = false;
-    },
-    hideGithubOAuthConnect() {
-      this.showOAuthConnect = false;
-    },
-    // call child components
-    showGithubTokenConnect() {
-      this.showTokenConnect = true;
-      this.dialogVisible = false;
-    },
-    showGithubOAuthConnect() {
-      this.showOAuthConnect = true;
-      this.dialogVisible = false;
-    },
-    // delete key or add key
-    interactWithService(serviceName) {
-      if (serviceName == "github") {
-        if ("github" in this.manager.accessTokens) {
-          this.$refs.warningConfirm.show();
-        } else {
-          this.dialogVisible = true;
-        }
-      }
-    },
     confirmDeleteToken() {
-      this.deleteToken("github");
+      this.deleteToken("biotools");
     },
-    // delete key and give notification
-    // APIkeyWarning(_key) {
-    //   this.$refs.warningConfirm.show();
-    // },
     async deleteToken(key) {
       let errorFound = false;
       try {
-        await this.manager.deleteToken(key);
-        this.$track("Connections", "GitHub", "disconnected");
+        await this.tokenStore.deleteToken(key);
+        this.$track("Connections", "bio.tools", "disconnected");
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
         console.log(e);
       }
       if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
-          position: "bottom-right",
+        this.$notify({
           duration: 2000,
+          title: "Deleted",
+          text: "Successfully disconnected from bio.tools",
+          type: "success",
+          position: "bottom-right",
         });
+        this.connected = false;
       }
+    },
+    changeConnectionStatus() {
+      if (this.connected) {
+        this.$refs.warningConfirm.show();
+      } else {
+        this.$refs.loginPrompt.show();
+      }
+    },
+    loginSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "You have successfully logged in to bio.tools",
+        type: "success",
+        position: "bottom-right",
+      });
+      this.connected = true;
+    },
+    async checkUsernameAndPassword() {
+      if (this.loginForm.username === "" || this.loginForm.password === "") {
+        return "empty";
+      } else {
+        const response = await axios
+          .post(`${this.$server_url}/biotools/login`, {
+            username: this.loginForm.username,
+            password: this.loginForm.password,
+          })
+          .then(async (response) => {
+            if ("general_errors" in response.data) {
+              return "invalid";
+            }
+
+            if ("key" in response.data) {
+              const token = response.data.key;
+              const userDetails = await axios
+                .get(`${this.$server_url}/biotools/user`, {
+                  params: {
+                    token,
+                  },
+                })
+                .then(async (res) => {
+                  if ("email" in res.data) {
+                    return res.data;
+                  }
+                });
+
+              let tokenObject = {};
+
+              tokenObject.token = this.loginForm.password;
+              tokenObject.name = userDetails.username;
+              tokenObject.type = "password";
+
+              await this.tokenStore.saveToken("biotools", tokenObject);
+              this.$track("Connections", "bio.tools", "connected");
+
+              this.connected = true;
+              this.statusChangeFunction("connected");
+
+              return "valid";
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        return response;
+      }
+    },
+    showErrorMessage(message) {
+      this.errorMessage = message;
     },
   },
-  computed: {
-    // github status for the button
-    githubDetails() {
-      let githubObject = {
-        status: "Not Connected",
-        name: "",
-        action: "Connect to GitHub",
-        buttonStyle: "primary-plain-button",
-      };
-      if ("github" in this.manager.accessTokens) {
-        githubObject.status = "Connected";
-        githubObject.name = this.manager.accessTokens.github.name;
-        githubObject.action = "Disconnect from GitHub";
-        githubObject.buttonStyle = "danger-plain-button";
-      }
-      return githubObject;
-    },
+  async mounted() {
+    const validBioToolsConnection = await this.tokenStore.verifyBioToolsConnection();
+
+    if (validBioToolsConnection) {
+      this.connected = true;
+    } else {
+      this.connected = false;
+    }
+    this.ready = true;
   },
 };
 </script>
-<style scoped>
-.dialog-Container {
-  @apply flex h-32 flex-col items-center justify-center gap-3;
-}
-.inputField {
-  @apply flex gap-6;
-}
-</style>

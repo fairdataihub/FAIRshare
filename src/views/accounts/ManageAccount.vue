@@ -187,7 +187,7 @@
               </p>
             </div>
             <div class="centering-container bottom">
-              <ConnectGithub></ConnectGithub>
+              <ConnectBioTools></ConnectBioTools>
             </div>
           </div>
         </div>
@@ -211,7 +211,6 @@ export default {
   components: {
     ConnectGithub,
     ConnectZenodo,
-    // eslint-disable-next-line vue/no-unused-components
     ConnectBioTools,
   },
 
