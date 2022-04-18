@@ -297,7 +297,7 @@
       >
         <div class="mt-4 flex flex-col">
           <div class="py-2">
-            <img src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="" />
+            <img :src="$fairshare_badge_image_url" alt="" />
           </div>
           <div class="divide-y divide-gray-200">
             <div class="py-2">
@@ -309,8 +309,9 @@
                   class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
                 >
                   <code>
-                    [![Curated with
-                    FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-green)](https://fairdataihub.org/fairshare)
+                    [![{{ $fairshare_badge_text }}]({{
+                      $fairshare_badge_image_url
+                    }})](https://fairdataihub.org/fairshare)
                   </code>
                 </div>
                 <div
@@ -339,9 +340,9 @@
                   class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
                 >
                   <code>
-                    &lt;a href="https://fairdataihub.org/fairshare"&gt;&lt;img
-                    src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="Curated
-                    with FAIRshare"/&gt;&lt;/a&gt;
+                    &lt;a href="https://fairdataihub.org/fairshare"&gt;&lt;img src="{{
+                      $fairshare_badge_image_url
+                    }}" alt="{{ $fairshare_badge_text }}"/&gt;&lt;/a&gt;
                   </code>
                 </div>
                 <div
@@ -459,7 +460,7 @@ export default {
     copyToClipboard(type) {
       this.$track("Badges", "Curated with FAIRshare", type);
       if (type === "markdown") {
-        const text = `[![Curated with FAIRshare](https://img.shields.io/badge/Curated%20with-FAIRshare-green)](https://fairdataihub.org/fairshare)`;
+        const text = `[![${this.$fairshare_badge_text}](${this.$fairshare_badge_image_url})](https://fairdataihub.org/fairshare)`;
         window.ipcRenderer.send("write-to-clipboard", text, "text");
         this.$notify({
           title: "Copied to clipboard",
@@ -470,7 +471,7 @@ export default {
         });
       }
       if (type === "html") {
-        const html = `<a href="https://fairdataihub.org/fairshare"><img src="https://img.shields.io/badge/Curated%20with-FAIRshare-green" alt="Curated with FAIRshare"/></a>`;
+        const html = `<a href="https://fairdataihub.org/fairshare"><img src="${this.$fairshare_badge_image_url}" alt="${this.$fairshare_badge_text}"/></a>`;
         window.ipcRenderer.send("write-to-clipboard", html, "text");
         this.$notify({
           title: "Copied to clipboard",
