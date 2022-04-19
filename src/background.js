@@ -150,6 +150,21 @@ const createPyProc = async () => {
     });
 };
 
+// We should prevent the user from running multiple instances of the app.
+const gotTheLock = app.requestSingleInstanceLock();
+app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (_event, _commandLine, _workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
+}
+
 // Set the default menu of the application
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
@@ -321,8 +336,12 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
-  createPyProc();
-  createWindow();
+
+  // Check if the current app has the lock instance
+  if (gotTheLock) {
+    createPyProc();
+    createWindow();
+  }
 });
 
 ipcMain.on("check-for-updates", async (_event, channel = "") => {
@@ -330,7 +349,7 @@ ipcMain.on("check-for-updates", async (_event, channel = "") => {
   if (channel !== "") {
     autoUpdater.channel = channel;
   }
-  autoUpdater.checkForUpdatesAndNotify();
+  // autoUpdater.checkForUpdatesAndNotify();
 });
 
 autoUpdater.on("update-available", () => {

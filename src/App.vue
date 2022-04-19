@@ -136,7 +136,7 @@ import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
 import { useConfigStore } from "./store/config.js";
 
-const MIN_API_VERSION = "1.3.0";
+const MIN_API_VERSION = "1.3.1";
 
 export default {
   name: "App",
@@ -273,6 +273,9 @@ export default {
         axios
           .get(`${this.$server_url}/api_version`)
           .then((response) => {
+            this.config.setGlobals("minAPIVersion", MIN_API_VERSION);
+            this.config.setGlobals("backendAPIVersion", response.data);
+
             if (semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))) {
               console.log("API version satisfied");
 
