@@ -108,7 +108,13 @@
                       </div>
 
                       <div>
-                        <el-tag v-for="workflow in dataset.dataType" :key="workflow" size="small">
+                        <el-tag
+                          v-for="(workflow, index) in dataset.dataType"
+                          :key="workflow"
+                          size="small"
+                          class="mr-1"
+                          :class="{ '!hidden': index > 1 }"
+                        >
                           {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
@@ -212,19 +218,15 @@
 
                       <div>
                         <el-tag
-                          v-for="workflow in dataset.workflows.workflow1.type"
+                          v-for="(workflow, index) in dataset.workflows.workflow1.type"
                           :key="workflow"
                           size="small"
+                          class="mr-1"
+                          :class="{ '!bg-red-500': index > 0 }"
                         >
                           {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
-                    </div>
-
-                    <div class="hidden flex-wrap">
-                      <el-button @click="PublishNewVersion(dataset)">
-                        publish a new version
-                      </el-button>
                     </div>
                   </div>
                 </div>
@@ -364,9 +366,6 @@ export default {
       } else {
         return `${difference} years`;
       }
-    },
-    PublishNewVersion(dataset) {
-      console.log("publish a new version", dataset);
     },
     selectDataset(event, datasetID) {
       if (datasetID === this.selectedDataset) {

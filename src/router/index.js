@@ -51,6 +51,7 @@ import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";
 import AppAbout from "../views/about/AppAbout.vue";
+import RouteNotFound from "../views/404/RouteNotFound.vue";
 
 const routes = [
   { path: "/", component: HomePage }, // not used for any purpose yet; use `/home` instead
@@ -196,6 +197,9 @@ const routes = [
   { path: "/documentation", component: AppDocumentation },
   { path: "/contactUs", component: ContactUs },
   { path: "/about", component: AppAbout },
+
+  { path: "/404", name: "404", component: RouteNotFound },
+  { path: "/:pathMatch(.*)*", name: "404", component: RouteNotFound },
 ];
 
 export const router = createRouter({
