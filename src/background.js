@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, shell, Menu, clipboard } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, Menu } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
@@ -8,6 +8,8 @@ import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import axios from "axios";
 
 import menuTemplate from "./scripts/menu";
+import "./scripts/utilities";
+import "./scripts/auth";
 
 const fp = require("find-free-port");
 const fs = require("fs-extra");
@@ -91,7 +93,6 @@ const getScriptPath = () => {
   }
 
   if (process.platform === "win32") {
-    log.info(path.join(process.resourcesPath, PY_MODULE + ".exe"));
     return path.join(process.resourcesPath, PY_MODULE + ".exe");
   }
 
@@ -344,14 +345,6 @@ app.on("ready", async () => {
   }
 });
 
-ipcMain.on("check-for-updates", async (_event, channel = "") => {
-  // Check for app updates
-  if (channel !== "") {
-    autoUpdater.channel = channel;
-  }
-  autoUpdater.checkForUpdatesAndNotify();
-});
-
 autoUpdater.on("update-available", () => {
   mainWindow.webContents.send("update-available", true);
   log.info("update_available");
@@ -362,15 +355,12 @@ autoUpdater.on("update-downloaded", () => {
   mainWindow.webContents.send("update-downloaded", true);
 });
 
-ipcMain.on("open-link-in-browser", async (_event, link) => {
-  shell.openExternal(link).then(() => {
-    console.log("opened link", link);
-  });
-});
-
-ipcMain.on("restart-fairshare", async (_event) => {
-  app.relaunch();
-  app.quit();
+ipcMain.on("check-for-updates", async (_event, channel = "") => {
+  // Check for app updates
+  if (channel !== "") {
+    autoUpdater.channel = channel;
+  }
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 ipcMain.on("restart-fairshare-for-update", (_event) => {
@@ -379,192 +369,6 @@ ipcMain.on("restart-fairshare-for-update", (_event) => {
     const isForceRunAfter = true;
     autoUpdater.quitAndInstall(isSilent, isForceRunAfter);
   });
-});
-
-ipcMain.on("write-to-clipboard", async (_event, data, type) => {
-  if (type === "text") {
-    clipboard.writeText(data);
-  }
-  if (type === "html") {
-    clipboard.writeHTML(data);
-  }
-  if (type === "image") {
-    clipboard.writeImage(data);
-  }
-});
-
-ipcMain.on("read-clipboard-contents", async (_event, type) => {
-  if (type === "text") {
-    const clipboardText = clipboard.readText();
-    mainWindow.webContents.send("read-clipboard-contents-response", clipboardText);
-  }
-
-  if (type === "image") {
-    const clipboardImage = clipboard.readImage();
-    mainWindow.webContents.send("read-clipboard-contents-response", clipboardImage);
-  }
-
-  if (type === "html") {
-    const clipboardHtml = clipboard.readHTML();
-    mainWindow.webContents.send("read-clipboard-contents-response", clipboardHtml);
-  }
-});
-
-// OAuth
-//import { useTokenStore } from "./store/access";
-
-const nodeUrl = require("url");
-const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
-const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
-
-function retrieveCode(url) {
-  return new Promise(function (resolve, reject) {
-    let authWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      show: false,
-      "node-integration": false,
-      "web-security": false,
-    });
-    authWindow.loadURL(url, { userAgent: "Chrome" });
-    authWindow.show();
-    authWindow.on("closed", () => {
-      reject(new Error("closed"));
-    });
-
-    function newlink(url) {
-      let parsedURL = nodeUrl.parse(url, true);
-      let query = parsedURL.query;
-      let code = query.code;
-      let error = query.error;
-      console.log("parsed: ", parsedURL);
-      if (error) {
-        reject(error);
-        authWindow.removeAllListeners("closed");
-        setImmediate(function () {
-          authWindow.close();
-        });
-      } else if (code) {
-        resolve(code);
-        authWindow.removeAllListeners("closed");
-        setImmediate(function () {
-          authWindow.close();
-        });
-      }
-    }
-    // probabaly needs to add an additional listener to make zenodo oauth working
-    // see here https://www.electronjs.org/docs/latest/api/web-contents
-    authWindow.webContents.on("will-navigate", (_event, url) => {
-      console.log("will-navigate", url);
-      newlink(url);
-    });
-
-    authWindow.webContents.on("did-get-redirect-request", (_event, _oldUrl, newUrl) => {
-      console.log("did-get-redirect-request");
-      newlink(newUrl);
-    });
-  });
-}
-ipcMain.on("OAuth-Github", async (_event, _test) => {
-  // console.log(test)
-  let success = false;
-  await axios
-    .get("https://github.com/login/oauth/authorize", {
-      params: {
-        client_id: CLIENT_ID,
-        scope: "repo admin:repo_hook admin:org_hook user",
-      },
-    })
-    .then(async (responseCode) => {
-      let authUrl = responseCode.request.res.responseUrl;
-      await retrieveCode(authUrl).then(async (code) => {
-        console.log("code:", code);
-        await axios
-          .post(
-            "https://github.com/login/oauth/access_token",
-            {
-              client_id: CLIENT_ID,
-              client_secret: CLIENT_SECRET,
-              code: code,
-            },
-            {
-              headers: {
-                Accept: "application/json",
-              },
-            }
-          )
-          .then(async (response) => {
-            console.log("response after code: ", response.data.access_token);
-            mainWindow.webContents.send("OAuth-Github-Reply", response.data.access_token);
-            success = true;
-          })
-          .catch((error) => {
-            console.log("request token error: ", error);
-          });
-      });
-    })
-    .catch((error) => {
-      console.log("request code error: ", error);
-    });
-  if (!success) {
-    mainWindow.webContents.send("OAuth-Github-Reply", "failed");
-  }
-  mainWindow.webContents.session.clearStorageData();
-});
-
-ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
-  // console.log(test)
-  // complete this part to make zenodo oauth working
-  // api calls are given at the buttom of your zenodo app page
-  let success = false;
-  const CLIENT_ID_ZENODO = "";
-  const CLIENT_SECRET_ZENODO = "";
-  await axios
-    .get("https://sandbox.zenodo.org/oauth/authorize", {
-      params: {
-        client_id: CLIENT_ID_ZENODO,
-        response_type: "code",
-        redirect_uri: "http://localhost:8080",
-        scope: "deposite:write deposite:actions",
-      },
-    })
-    .then(async (responseCode) => {
-      console.log("code:", responseCode.request.res.responseUrl);
-      let authUrl = responseCode.request.res.responseUrl;
-      await retrieveCode(authUrl).then(async (code) => {
-        console.log("code:", code);
-        await axios
-          .post(
-            "https://sandbox.zenodo.org/oauth/token",
-            {
-              client_id: CLIENT_ID_ZENODO,
-              client_secret: CLIENT_SECRET_ZENODO,
-              grant_type: "authorization_code",
-              code: code,
-            },
-            {
-              headers: {
-                Accept: "application/json",
-              },
-            }
-          )
-          .then(async (response) => {
-            console.log("response after code: ", response.data.access_token);
-            mainWindow.webContents.send("OAuth-Zenodo-Reply", response.data.access_token);
-            success = true;
-          })
-          .catch(() => {
-            console.log("request token error: ");
-          });
-      });
-    })
-    .catch(() => {
-      console.log("request code error: ");
-    });
-  if (!success) {
-    mainWindow.webContents.send("OAuth-Zenodo-Reply", "failed");
-  }
-  mainWindow.webContents.session.clearStorageData();
 });
 
 // Exit cleanly on request from parent process in development mode.
