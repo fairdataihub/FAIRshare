@@ -36,6 +36,9 @@ export const useConfigStore = defineStore({
   id: "ConfigStore",
   state: () => ({
     config: {},
+    globals: {
+      backendAPIVersion: "x.x.x",
+    },
   }),
 
   actions: {
@@ -72,6 +75,16 @@ export const useConfigStore = defineStore({
     },
     async syncConfig() {
       this.writeConfigToFile();
+    },
+    async setGlobals(key, value) {
+      this.globals[key] = value;
+    },
+    async getGlobals(key) {
+      if (this.globals[key]) {
+        return this.globals[key];
+      } else {
+        return "Something went wrong";
+      }
     },
   },
 });

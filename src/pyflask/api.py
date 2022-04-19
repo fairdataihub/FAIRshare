@@ -47,7 +47,7 @@ from utilities import (
     fileExistInFolder,
 )
 
-API_VERSION = "1.3.0"
+API_VERSION = "1.3.1"
 
 
 app = Flask(__name__)
@@ -91,6 +91,7 @@ api = Api(
 class Shutdown(Resource):
     def post(self):
         func = request.environ.get("werkzeug.server.shutdown")
+        api.logger.info("Shutting down server")
 
         if func is None:
             print("Not running with the Werkzeug Server")
@@ -1158,6 +1159,8 @@ if __name__ == "__main__":
     print(
         f"API documentation hosted at http://127.0.0.1:{requested_port}/docs"
     )  # noqa: E501
+
+    api.logger.info("Starting FAIRshare server")
 
     app.run(host="127.0.0.1", port=requested_port)
     # app.run(host="127.0.0.1", port=requested_port, debug=True)
