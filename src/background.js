@@ -7,7 +7,7 @@ import { autoUpdater } from "electron-updater";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import axios from "axios";
 
-import template from "./menu";
+import menuTemplate from "./scripts/menu";
 
 const fp = require("find-free-port");
 const fs = require("fs-extra");
@@ -166,7 +166,7 @@ if (!gotTheLock) {
 }
 
 // Set the default menu of the application
-const menu = Menu.buildFromTemplate(template);
+const menu = Menu.buildFromTemplate(menuTemplate);
 Menu.setApplicationMenu(menu);
 
 async function createWindow() {
@@ -349,7 +349,7 @@ ipcMain.on("check-for-updates", async (_event, channel = "") => {
   if (channel !== "") {
     autoUpdater.channel = channel;
   }
-  // autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 autoUpdater.on("update-available", () => {

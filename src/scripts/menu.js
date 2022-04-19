@@ -1,4 +1,4 @@
-const template = [
+const menuTemplate = [
   {
     label: "Edit",
     submenu: [
@@ -69,7 +69,20 @@ const template = [
     role: "help",
     submenu: [
       {
-        label: "Learn More",
+        label: "View the documentation",
+        click: async () => {
+          const { shell } = require("electron");
+          await shell.openExternal("https://docs.fairshareapp.io");
+        },
+      },
+    ],
+  },
+
+  {
+    role: "help",
+    submenu: [
+      {
+        label: "Learn More about Fairshare",
         click: async () => {
           const { shell } = require("electron");
           await shell.openExternal("https://fairdataihub.org/fairshare");
@@ -79,4 +92,4 @@ const template = [
   },
 ];
 
-export default template;
+export default menuTemplate;
