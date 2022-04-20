@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen w-full flex-row items-center justify-center">
-    <div ref="" class="flex h-full flex-row items-center p-3">
+  <div class="flex h-screen w-full max-w-screen-xl flex-row items-center justify-center">
+    <div class="flex h-full flex-row items-center p-3">
       <div class="flex h-full flex-col overflow-y-auto">
         <span class="text-left text-lg font-medium"> Start the curation process </span>
 
@@ -232,22 +232,25 @@ export default {
       if ("currentRoute" in this.dataset.workflows[workflowID]) {
         if (
           this.dataset.workflows[workflowID].currentRoute != "" &&
-          this.dataset.workflows[workflowID].currentRoute !=
-            `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
+          this.dataset.workflows[workflowID].currentRoute != this.selectDataPath()
         ) {
           this.$refs.infoConfirmContinueCuration.show();
         } else {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+          routerPath = this.selectDataPath();
           this.$router.push({ path: routerPath });
         }
       } else {
-        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+        routerPath = this.selectDataPath();
         this.$router.push({ path: routerPath });
       }
     },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
 
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
