@@ -25,7 +25,8 @@
                   :class="
                     (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                     (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
-                    (node.label == 'LICENSE' && workflow.generateLicense)
+                    (node.label == 'LICENSE' && workflow.generateLicense) ||
+                    (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                       ? 'text-secondary-500'
                       : ''
                   "
@@ -47,7 +48,8 @@
                     v-if="
                       (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                       (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
-                      (node.label == 'LICENSE' && workflow.generateLicense)
+                      (node.label == 'LICENSE' && workflow.generateLicense) ||
+                      (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                     "
                   >
                     <el-icon><download-icon /> </el-icon>
@@ -74,9 +76,22 @@
           :lock-scroll="false"
         >
           <el-scrollbar style="height: calc(100vh - 45px)">
-            <div v-if="PreviewNewlyCreatedMetadataFile" class="pb-20">
+            <div v-if="PreviewNewlyCreatedCodemetaFile" class="pb-20">
               <el-table
                 :data="tableData"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
+              >
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column prop="Value" label="Value" />
+              </el-table>
+            </div>
+
+            <div v-if="PreviewNewlyCreatedOtherMetadataFile" class="pb-20">
+              <el-table
+                :data="otherMetadata"
                 style="width: 100%"
                 row-key="id"
                 border
@@ -209,8 +224,10 @@ export default {
       licenseData: "",
       tableData: [],
       citationData: [],
+      otherMetadata: [],
       tableDataRecord: [],
       citationDataRecord: [],
+      otherMetadataRecord: [],
       fileData: [],
       defaultProps: {
         value: "id",
@@ -220,8 +237,9 @@ export default {
       fileTitle: "",
       showContinueSection: false,
       PreviewNewlyCreatedLicenseFile: false,
-      PreviewNewlyCreatedMetadataFile: false,
+      PreviewNewlyCreatedCodemetaFile: false,
       PreviewNewlyCreatedCitationFile: false,
+      PreviewNewlyCreatedOtherMetadataFile: false,
       drawerModel: true,
       showLoading: false,
       finishedLoading: false,
@@ -247,9 +265,10 @@ export default {
 
     anyfilePreview() {
       if (
-        this.PreviewNewlyCreatedMetadataFile ||
+        this.PreviewNewlyCreatedCodemetaFile ||
         this.PreviewNewlyCreatedLicenseFile ||
-        this.PreviewNewlyCreatedCitationFile
+        this.PreviewNewlyCreatedCitationFile ||
+        this.PreviewNewlyCreatedOtherMetadataFile
       ) {
         return true;
       } else {
@@ -325,6 +344,23 @@ export default {
           return "ERROR";
         });
       return response;
+    },
+    async createOtherMetadataFile() {
+      // const response = await axios
+      //   .post(`${this.$server_url}/metadata/create`, {
+      //     data_types: JSON.stringify(this.workflow.type),
+      //     data_object: JSON.stringify(this.dataset.data),
+      //     virtual_file: true,
+      //   })
+      //   .then((response) => {
+      //     return JSON.parse(response.data);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //     return "ERROR";
+      //   });
+      // return response;
+      return { name: "metadata.json" };
     },
     async createCitationFile() {
       const response = await axios
@@ -403,10 +439,19 @@ export default {
 
       this.tableDataRecord = [];
       this.citationDataRecord = [];
-      this.tableData = await this.createCodeMetadataFile();
-      this.citationData = await this.createCitationFile();
-      this.tableDataRecord = Object.assign({}, this.tableData);
-      this.citationDataRecord = Object.assign({}, this.citationData);
+      this.otherMetadataRecord = [];
+
+      if (this.workflow.generateCodeMeta) {
+        this.tableData = await this.createCodeMetadataFile();
+        this.citationData = await this.createCitationFile();
+        this.tableDataRecord = Object.assign({}, this.tableData);
+        this.citationDataRecord = Object.assign({}, this.citationData);
+      }
+
+      if (this.workflow.generateOtherMetadata) {
+        this.otherMetadata = await this.createOtherMetadataFile();
+        this.otherMetadataRecord = Object.assign({}, this.otherMetadata);
+      }
 
       if (this.codePresent) {
         this.fileData.push(await this.readFolderContents(this.dataset.data.Code.folderPath));
@@ -461,6 +506,7 @@ export default {
       }
 
       this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
+      this.otherMetadata = this.jsonToTableDataRecursive(this.otherMetadata, 1, "ROOT");
 
       this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
 
@@ -474,7 +520,8 @@ export default {
     handleCloseDrawer() {
       this.fileTitle = "";
       this.PreviewNewlyCreatedLicenseFile = false;
-      this.PreviewNewlyCreatedMetadataFile = false;
+      this.PreviewNewlyCreatedCodemetaFile = false;
+      this.PreviewNewlyCreatedOtherMetadataFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
     },
     async handleOpenDrawer(title) {
@@ -494,19 +541,26 @@ export default {
           if (action === "download") {
             this.exportToJson(this.licenseData, "LICENSE");
           }
-        } else if (data.label == "codemeta.json") {
+        } else if (data.label == "codemeta.json" && this.workflow.generateCodeMeta) {
           if (action === "view") {
-            this.PreviewNewlyCreatedMetadataFile = true;
+            this.PreviewNewlyCreatedCodemetaFile = true;
           }
           if (action === "download") {
             this.exportToJson(this.tableDataRecord, "codemeta.json");
           }
-        } else if (data.label == "CITATION.cff") {
+        } else if (data.label == "CITATION.cff" && this.workflow.generateCodeMeta) {
           if (action === "view") {
             this.PreviewNewlyCreatedCitationFile = true;
           }
           if (action === "download") {
             this.exportToJson(this.citationDataRecord, "CITATION.cff");
+          }
+        } else if (data.label == "metadata.json" && this.workflow.generateOtherMetadata) {
+          if (action === "view") {
+            this.PreviewNewlyCreatedOtherMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.otherMetadataRecord, "metadata.json");
           }
         } else if (!data.isDir) {
           await this.openFileExplorer(data.fullpath);
