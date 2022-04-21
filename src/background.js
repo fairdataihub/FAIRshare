@@ -152,19 +152,19 @@ const createPyProc = async () => {
 };
 
 // We should prevent the user from running multiple instances of the app.
-// const gotTheLock = app.requestSingleInstanceLock();
-// app.requestSingleInstanceLock();
-// if (!gotTheLock) {
-//   app.quit();
-// } else {
-//   app.on("second-instance", (_event, _commandLine, _workingDirectory) => {
-//     // Someone tried to run a second instance, we should focus our window.
-//     if (mainWindow) {
-//       if (mainWindow.isMinimized()) mainWindow.restore();
-//       mainWindow.focus();
-//     }
-//   });
-// }
+const gotTheLock = app.requestSingleInstanceLock();
+app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (_event, _commandLine, _workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
+}
 
 // Set the default menu of the application
 const menu = Menu.buildFromTemplate(menuTemplate);
@@ -339,10 +339,10 @@ app.on("ready", async () => {
   }
 
   // Check if the current app has the lock instance
-  // if (gotTheLock) {
-  createPyProc();
-  createWindow();
-  // }
+  if (gotTheLock) {
+    createPyProc();
+    createWindow();
+  }
 });
 
 autoUpdater.on("update-available", () => {
