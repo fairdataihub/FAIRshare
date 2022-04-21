@@ -229,6 +229,12 @@ export default {
   },
   //el-tree-node__content
   computed: {
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
     disableContinue() {
       if (this.validTokenAvailable) {
         return false;
@@ -402,7 +408,11 @@ export default {
       this.tableDataRecord = Object.assign({}, this.tableData);
       this.citationDataRecord = Object.assign({}, this.citationData);
 
-      this.fileData.push(await this.readFolderContents(this.dataset.data.Code.folderPath));
+      if (this.codePresent) {
+        this.fileData.push(await this.readFolderContents(this.dataset.data.Code.folderPath));
+      } else {
+        this.fileData.push(await this.readFolderContents(this.dataset.data.Other.folderPath));
+      }
 
       let root = this.fileData[0];
 
@@ -422,6 +432,17 @@ export default {
           let newObj = {};
           newObj.id = uuidv4();
           newObj.label = "CITATION.cff";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
+
+      if (!root.children.some((el) => el.label === "metadata.json")) {
+        if (this.workflow.generateOtherMetadata) {
+          let newObj = {};
+          newObj.id = uuidv4();
+          newObj.label = "metadata.json";
           newObj.isDir = false;
 
           root.children.push(newObj);

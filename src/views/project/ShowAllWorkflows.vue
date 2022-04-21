@@ -198,6 +198,14 @@ export default {
       let routerPath = "";
       this.workflowID = workflowID;
 
+      // Function to reset on data types. Will have to see if this needs to be moved into a utility function
+      if (this.dataset.workflows[workflowID].type[0] !== "Other") {
+        this.dataset.workflows[workflowID].generateOtherMetadata = false;
+      }
+      if (this.dataset.workflows[workflowID].type[0] !== "Code") {
+        this.dataset.workflows[workflowID].generateCodeMeta = false;
+      }
+
       if (
         "datasetPublished" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].datasetPublished &&

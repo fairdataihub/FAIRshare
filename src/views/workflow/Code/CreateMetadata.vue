@@ -1963,6 +1963,8 @@ export default {
         this.dataset.data.Code.questions = codeForm;
       }
 
+      this.workflow.generateOtherMetadata = false;
+
       if (this.generateCodeMeta === "Yes") {
         this.workflow.generateCodeMeta = true;
       } else {
@@ -1977,7 +1979,7 @@ export default {
 
       if (shouldNavigateBack) {
         this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/selectFolder`,
         });
         return;
       }

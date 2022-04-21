@@ -3,206 +3,770 @@
     class="relative flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
-        Provide information about your research sofware
-      </span>
-      <span class="text-left">
-        We will use this information to create an entry on the bio.tools registry for your software.
-      </span>
+      <span class="text-left text-lg font-medium"> Provide information about your data </span>
 
       <line-divider></line-divider>
 
-      <transition name="fade" mode="out-in" appear>
-        <div>
-          <div>
-            <div class="hidden py-3">
-              <pill-progress-bar
-                :totalSteps="totalSteps"
-                :currentStep="currentStep"
-                @updateCurrentStep="setCurrentStep"
-                :titles="pillTitles"
-              />
-            </div>
-            <div class="py-2">
-              <div v-if="currentStep == 1">
-                <div class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md">
-                  <div class="w-full bg-gray-100 px-4 py-2">
-                    <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                      Basic Information
-                    </span>
-                  </div>
-                  <div class="p-4">
-                    <el-form
-                      :model="step1Form"
-                      :rules="step1FormRules"
-                      label-width="160px"
-                      label-position="top"
-                      size="large"
-                      ref="s1Form"
-                      @submit.prevent
-                      class="py-4"
-                    >
-                      <el-form-item label="Tool name" prop="name">
-                        <div class="flex w-full flex-row items-center">
-                          <el-input v-model="step1Form.name" placeholder="Needle"></el-input>
-                          <form-help-content
-                            popoverContent="Canonical software name assigned by the software developer or service provider"
-                          ></form-help-content>
-                        </div>
-                      </el-form-item>
+      <div class="flex flex-col">
+        <span class="mb-2">
+          Would you like FAIRshare to create the mandatory metadata files metadata.json?
+        </span>
 
-                      <el-form-item label="Persistent biotoolsID" prop="biotoolsID">
-                        <div class="flex w-full flex-row items-center">
-                          <el-input
-                            v-model="step1Form.biotoolsID"
-                            type="text"
-                            placeholder="needle"
-                            :disabled="greyOutIdentifierInput"
-                          ></el-input>
+        <div class="py-1">
+          <el-radio v-model="generateOtherMetadata" label="Yes" size="large"> Yes </el-radio>
+          <el-radio v-model="generateOtherMetadata" label="No" size="large"> No </el-radio>
+          <el-radio
+            v-model="generateOtherMetadata"
+            label="None"
+            size="large"
+            border
+            class="!hidden"
+          >
+            None
+          </el-radio>
+        </div>
+      </div>
 
-                          <form-help-content
-                            popoverContent="An identifier for this dataset if applicable. "
-                          ></form-help-content>
-                        </div>
-                        <div class="flex pt-2">
-                          <p class="pr-1 text-sm text-gray-500">
-                            {{
-                              greyOutIdentifierInput
-                                ? "This identifier will be assigned when registering your software on the bio.tools platform."
-                                : "This identifier will be assigned when registering your software on the bio.tools platform."
-                            }}
-                          </p>
-                          <p class="text-url cursor-pointer !text-sm" @click="editBioToolsID">
-                            {{
-                              greyOutIdentifierInput
-                                ? "Click here to edit the ID."
-                                : "Generate ID from tool name"
-                            }}
-                          </p>
-                        </div>
-                      </el-form-item>
+      <div v-if="generateOtherMetadata !== 'None'">
+        <transition name="fade" mode="out-in" appear>
+          <div v-if="generateOtherMetadata === 'Yes'">
+            <line-divider></line-divider>
 
-                      <el-form-item label="Description" prop="description">
-                        <div class="flex w-full flex-row items-center">
-                          <div class="relative h-full w-full">
+            <span class="mb-2">
+              Provide information about your dataset below. We will use this information to
+              automatically generate and include in your dataset the standard metadata files
+              required to make your dataset FAIR.
+            </span>
+
+            <div>
+              <div class="py-3">
+                <pill-progress-bar
+                  :totalSteps="totalSteps"
+                  :currentStep="currentStep"
+                  @updateCurrentStep="setCurrentStep"
+                  :titles="pillTitles"
+                />
+              </div>
+              <div class="py-2">
+                <div v-if="currentStep == 1">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Basic Information
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step1Form"
+                        :rules="step1FormRules"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s1Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Name" prop="name">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input v-model="step1Form.name" placeholder="My Software"></el-input>
+                            <form-help-content
+                              popoverContent="The name of the software"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Description/abstract" prop="description">
+                          <div class="flex w-full flex-row items-center">
                             <el-input
                               v-model="step1Form.description"
                               type="textarea"
-                              placeholder="Needle reads two input sequences and uses the Needleman-Wunsch alignment algorithm  to ensure the alignment is optimum, by exploring all possible alignments and choosing the best."
+                              placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
                             ></el-input>
-                            <span
-                              class="pointer-events-none absolute bottom-1 right-2 text-xs font-semibold text-gray-500"
-                            >
-                              {{ descriptionCount }}
-                            </span>
+                            <form-help-content
+                              popoverContent="A brief description of the software"
+                            ></form-help-content>
                           </div>
-                          <form-help-content
-                            popoverContent="Textual description of the software"
-                          ></form-help-content>
-                        </div>
-                      </el-form-item>
+                        </el-form-item>
 
-                      <el-form-item label="Homepage URL" prop="homepage">
-                        <div class="flex w-full flex-row items-center">
-                          <el-input
-                            v-model="step1Form.homepage"
-                            placeholder="http://emboss.open-bio.org/rel/rel6/apps/needle.html"
-                          ></el-input>
-                          <form-help-content
-                            popoverContent="Homepage of the software, or some URL that best serves this purpose"
-                          ></form-help-content>
-                        </div>
-                      </el-form-item>
+                        <el-form-item label="Creation date">
+                          <div class="flex w-full flex-row items-center">
+                            <el-date-picker
+                              v-model="step1Form.creationDate"
+                              type="date"
+                              placeholder="Pick a day"
+                              value-format="YYYY-MM-DD"
+                            >
+                            </el-date-picker>
+                            <form-help-content
+                              popoverContent="The date on which the software was first created"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
 
-                      <el-form-item label="Versions">
-                        <draggable
-                          tag="div"
-                          :list="step1Form.versions"
-                          item-key="id"
-                          handle=".handle"
-                          class="w-full"
-                        >
-                          <template #item="{ element }">
-                            <div class="mb-2 flex w-full flex-row justify-between transition-all">
-                              <div class="flex w-11/12 flex-row justify-between">
-                                <el-input
-                                  v-model="element.version"
-                                  type="text"
-                                  placeholder="v2.0.0-alpha, v2.1.0"
-                                  v-on:keyup.enter="addVersion"
-                                  :ref="element.id"
-                                ></el-input>
-                                <div class="mx-2"></div>
-                              </div>
-                              <div class="flex w-1/12 flex-row justify-evenly">
-                                <div
-                                  class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                                >
-                                  <Icon icon="ic:outline-drag-indicator" />
-                                </div>
-                                <div
-                                  class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                                >
-                                  <el-popconfirm
-                                    title="Are you sure you want to remove this?"
-                                    icon-color="red"
-                                    confirm-button-text="Yes"
-                                    cancel-button-text="No"
-                                    @confirm="deleteVersion(element.id)"
-                                  >
-                                    <template #reference>
-                                      <el-icon><delete-filled /></el-icon>
-                                    </template>
-                                  </el-popconfirm>
-                                </div>
-                              </div>
-                            </div>
-                          </template>
-                        </draggable>
-                      </el-form-item>
-
-                      <div
-                        class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
-                        @click="addVersion(null, '')"
-                      >
-                        <Icon icon="carbon:add" />
-                        <span> Add a version </span>
-                        <form-help-content
-                          popoverContent="Version information (typically a version number) of the software applicable to this bio.tools entry"
-                        ></form-help-content>
-                      </div>
-                    </el-form>
+                        <el-form-item label="First release date">
+                          <div class="flex w-full flex-row items-center">
+                            <el-date-picker
+                              v-model="step1Form.firstReleaseDate"
+                              type="date"
+                              placeholder="Pick a day"
+                              value-format="YYYY-MM-DD"
+                            >
+                            </el-date-picker>
+                            <form-help-content
+                              popoverContent="The date on which the software was first released"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button @click="prevFormStep" class="primary-plain-button" size="medium">
+                      <el-icon><back-icon /></el-icon>
+                      Back
+                    </button>
+                    <!-- :plain="!lastStep" -->
+                    <button class="primary-button" @click="navigateToStep2FromStep1">
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
                   </div>
                 </div>
-                <div class="flex w-full justify-center space-x-4 px-5 py-4">
-                  <button @click="prevFormStep" class="primary-plain-button" size="medium">
-                    <el-icon><back-icon /></el-icon>
-                    Back
-                  </button>
-                  <!-- :plain="!lastStep" -->
-                  <button class="primary-button" @click="navigateToStep2FromStep1">
-                    Register on bio.tools
-                    <el-icon>
-                      <d-arrow-right />
-                    </el-icon>
-                  </button>
-                  <warning-confirm
-                    ref="publishWarningConfirm"
-                    title="Confirm publish"
-                    @messageConfirmed="navigateToRegister"
+
+                <div v-if="currentStep == 2">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
-                    <p class="text-center text-base text-gray-500">
-                      Once your software has been registered on bio.tools, you will not be able to
-                      remove it without the approval of the bio.tools team. Are you sure you want to
-                      continue?
-                    </p>
-                  </warning-confirm>
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Authors and Contributors
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step2Form"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s2Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Authors" :error="authorsErrorMessage" required>
+                          <draggable
+                            tag="div"
+                            :list="step2Form.authors"
+                            item-key="id"
+                            handle=".handle"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
+                                  <el-input
+                                    v-model="element.givenName"
+                                    type="text"
+                                    placeholder="Given name"
+                                  ></el-input>
+
+                                  <div class="mx-1"></div>
+
+                                  <el-input
+                                    v-model="element.familyName"
+                                    type="text"
+                                    placeholder="Family name"
+                                  ></el-input>
+
+                                  <div class="mx-2"></div>
+
+                                  <el-input
+                                    v-model="element.affiliation"
+                                    type="text"
+                                    placeholder="Affiliation"
+                                  ></el-input>
+
+                                  <div class="mx-2 flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.email"
+                                      type="text"
+                                      placeholder="E-mail address"
+                                    ></el-input>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                                  </div>
+
+                                  <div class="mx-2 flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.orcid"
+                                      type="text"
+                                      placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                                    ></el-input>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                                  </div>
+                                </div>
+                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      icon-color="red"
+                                      title="Are you sure you want to remove this?"
+                                      @confirm="deleteAuthor(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addAuthor"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add an author
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a developer of the software"
+                          ></form-help-content>
+                        </div>
+
+                        <el-form-item label="Contributors" :error="contributorsErrorMessage">
+                          <draggable
+                            tag="div"
+                            :list="step2Form.contributors"
+                            item-key="id"
+                            handle=".handle"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex flex-row justify-between transition-all">
+                                <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                                  <el-select
+                                    v-model="element.contributorType"
+                                    filterable
+                                    placeholder="Select a contributor type"
+                                  >
+                                    <el-option
+                                      v-for="item in contributorTypes"
+                                      :key="item.value"
+                                      :label="item.label"
+                                      :value="item.value"
+                                    >
+                                    </el-option>
+                                  </el-select>
+                                </div>
+
+                                <div class="flex w-11/12 flex-row justify-between">
+                                  <div class="mr-2 w-1/5">
+                                    <el-input
+                                      v-model="element.givenName"
+                                      type="text"
+                                      placeholder="Given name"
+                                    ></el-input>
+                                  </div>
+
+                                  <div class="mx-2 w-1/5">
+                                    <el-input
+                                      v-model="element.familyName"
+                                      type="text"
+                                      placeholder="Family name"
+                                    ></el-input>
+                                  </div>
+
+                                  <div class="mx-2 w-1/5">
+                                    <el-input
+                                      v-model="element.affiliation"
+                                      type="text"
+                                      placeholder="Affiliation"
+                                    ></el-input>
+                                  </div>
+
+                                  <div class="mx-2 flex w-1/5 flex-col">
+                                    <el-input
+                                      v-model="element.email"
+                                      type="text"
+                                      placeholder="E-mail address"
+                                    ></el-input>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                                  </div>
+
+                                  <div class="mx-2 flex w-1/5 flex-col">
+                                    <el-input
+                                      v-model="element.orcid"
+                                      type="text"
+                                      placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                                    ></el-input>
+                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                                  </div>
+                                </div>
+                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      title="Are you sure you want to remove this?"
+                                      icon-color="red"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      @confirm="deleteContributor(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addContributor"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add a contributor
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
+                          ></form-help-content>
+                        </div>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+                    <!-- :plain="!lastStep" -->
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep3FromStep2"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 3">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Discoverability
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step3Form"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s3Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Unique identifier">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step3Form.identifier"
+                              type="text"
+                              :placeholder="
+                                greyOutIdentifierInput
+                                  ? 'Auto assigned during upload'
+                                  : '10.151.xxxxx'
+                              "
+                              :disabled="greyOutIdentifierInput"
+                            ></el-input>
+
+                            <form-help-content
+                              popoverContent="An identifier for this dataset if applicable. "
+                            ></form-help-content>
+                          </div>
+                          <div v-if="greyOutIdentifierInput" class="flex pt-2">
+                            <p class="pr-1 text-sm text-gray-500">
+                              An identifier will be automatically assigned to this dataset when
+                              files are uploaded from your system.
+                            </p>
+                            <p
+                              class="text-url cursor-pointer !text-sm"
+                              @click="editUniqueIdentifier"
+                            >
+                              Click here to override this.
+                            </p>
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Keywords" required>
+                          <draggable
+                            tag="div"
+                            :list="step3Form.keywords"
+                            item-key="id"
+                            handle=".handle"
+                            class="w-full"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
+                                  <el-input
+                                    v-model="element.keyword"
+                                    type="text"
+                                    placeholder="orbit"
+                                    v-on:keyup.enter="addKeyword"
+                                    :ref="element.id"
+                                  ></el-input>
+                                  <div class="mx-2"></div>
+                                </div>
+                                <div class="flex w-1/12 flex-row justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      title="Are you sure you want to remove this?"
+                                      icon-color="red"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      @confirm="deleteKeyword(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                          <div class="flex w-full flex-row items-center">
+                            <span class="mx-2 text-sm italic text-zinc-600"> Suggestions: </span>
+                            <div class="flex-row">
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="addKeyword(null, 'COVID-19')"
+                                :type="
+                                  step3Form.keywords.some((el) => el.keyword === 'COVID-19')
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                COVID-19
+                              </el-tag>
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="addKeyword(null, 'Machine Learning')"
+                                :type="
+                                  step3Form.keywords.some((el) => el.keyword === 'Machine Learning')
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                Machine Learning
+                              </el-tag>
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="addKeyword(null, 'Artificial Intelligence')"
+                                :type="
+                                  step3Form.keywords.some(
+                                    (el) => el.keyword === 'Artificial Intelligence'
+                                  )
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                Artificial Intelligence
+                              </el-tag>
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="addKeyword(null, 'Infection rate')"
+                                :type="
+                                  step3Form.keywords.some((el) => el.keyword === 'Infection rate')
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                Infection rate
+                              </el-tag>
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="addKeyword(null, 'Mortality prediction')"
+                                :type="
+                                  step3Form.keywords.some(
+                                    (el) => el.keyword === 'Mortality prediction'
+                                  )
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                Mortality prediction
+                              </el-tag>
+                            </div>
+                          </div>
+                        </el-form-item>
+
+                        <div
+                          class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
+                          @click="addKeyword(null, '')"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span> Add a keyword </span>
+                          <form-help-content
+                            popoverContent="Keywords relevant to your software"
+                          ></form-help-content>
+                        </div>
+
+                        <el-form-item label="Funding code">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step3Form.fundingCode"
+                              type="text"
+                              placeholder="PRA_2018_73"
+                            ></el-input>
+                            <form-help-content
+                              popoverContent="Code of the grant funding this software (comma separate if multiple)"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Funding organization">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step3Form.fundingOrganization"
+                              type="text"
+                              placeholder="University of California, San Francisco"
+                            ></el-input>
+                            <form-help-content
+                              popoverContent="The organization funding this software (comma separate if multiple)"
+                            ></form-help-content>
+                          </div>
+                          <div class="flex w-full flex-row items-center">
+                            <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
+                            <div class="flex-row">
+                              <el-tag
+                                class="mx-2 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="
+                                  step3Form.fundingOrganization =
+                                    'National Institutes of Health (NIH)'
+                                "
+                                :type="
+                                  step3Form.fundingOrganization ===
+                                  'National Institutes of Health (NIH)'
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                National Institutes of Health (NIH)
+                              </el-tag>
+                              <el-tag
+                                class="mx-1 cursor-copy transition-all hover:shadow-md"
+                                size="small"
+                                @click="
+                                  step3Form.fundingOrganization =
+                                    'National Science Foundation (NSF)'
+                                "
+                                :type="
+                                  step3Form.fundingOrganization ===
+                                  'National Science Foundation (NSF)'
+                                    ? ''
+                                    : 'info'
+                                "
+                              >
+                                National Science Foundation (NSF)
+                              </el-tag>
+                            </div>
+                          </div>
+                        </el-form-item>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+                    <!-- :plain="!lastStep" -->
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep4FromStep3"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 4">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Additional information
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step4Form"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s7Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Reference publication">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step4Form.referencePublication"
+                              type="text"
+                              placeholder="https://doi.org/10.100/xyz123"
+                            ></el-input>
+                            <form-help-content
+                              popoverContent="Link to the scholarly publication that describes the software"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Development status">
+                          <div class="flex w-full flex-row items-center">
+                            <el-select
+                              v-model="step4Form.developmentStatus"
+                              filterable
+                              placeholder=""
+                              class="w-full"
+                            >
+                              <el-option
+                                v-for="item in repoStatusOptions"
+                                :key="item.value"
+                                :label="item.display_name"
+                                :value="item.value"
+                              >
+                              </el-option>
+                            </el-select>
+                            <form-help-content
+                              popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
+                            ></form-help-content>
+                          </div>
+
+                          <p class="pt-2 text-xs text-gray-500">
+                            {{ developmentStatus }}
+                          </p>
+                        </el-form-item>
+
+                        <el-form-item label="Is part of" :error="isPartOfErrorMessage">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step4Form.isPartOf"
+                              type="url"
+                              placeholder="https://thebiggerframework.org"
+                            ></el-input>
+                            <form-help-content
+                              popoverContent="Link to the project this software is part of"
+                            ></form-help-content>
+                          </div>
+                        </el-form-item>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+                    <!-- :plain="!lastStep" -->
+                    <button
+                      class="primary-button"
+                      @click="nextFormStep"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Continue
+                      <el-icon><d-arrow-right /></el-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </transition>
+          <div v-else>
+            <div class="flex w-full justify-center space-x-4 px-5 py-4">
+              <button class="primary-plain-button" size="medium" @click="saveSkip">
+                <el-icon><back-icon /></el-icon>
+                Back
+              </button>
+
+              <button
+                class="primary-button"
+                :disabled="checkInvalidStatus"
+                @click="showSkipMetadataCreationWarning"
+              >
+                Continue
+                <el-icon><d-arrow-right /></el-icon>
+              </button>
+            </div>
+            <warning-confirm
+              ref="warningConfirm"
+              title="Warning"
+              @messageConfirmed="navigateToSelectDestination"
+              confirmButtonText="Yes, I want to skip"
+            >
+              <p class="text-center text-base text-gray-500">
+                The codemeta.json and CITATION.cff files are highly recommended to make your
+                research software FAIR. Are you sure you want to skip this step?
+              </p>
+            </warning-confirm>
+          </div>
+        </transition>
+      </div>
     </div>
 
     <fade-transition>
@@ -223,20 +787,20 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-bio-tools-metadata" position="bottom-4" />
+    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
   </div>
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
-// import { ElNotification } from "element-plus";
+import { ElNotification } from "element-plus";
 
 import draggable from "vuedraggable";
 import validator from "validator";
 import axios from "axios";
-// import _ from "lodash";
-// import humanparser from "humanparser";
+import _ from "lodash";
+import humanparser from "humanparser";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -244,12 +808,13 @@ import { useTokenStore } from "@/store/access.js";
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
+import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
 export default {
-  name: "OtherCreateMetadata",
+  name: "CodeCreateMetadata",
   components: {
     draggable,
     Icon,
@@ -260,9 +825,9 @@ export default {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
       currentStep: 1,
-      totalSteps: 1,
+      totalSteps: 4,
       pillTitles: [
-        "Summary",
+        "Basic info",
         "Authors and Contributors",
         "Discoverability",
         "Development tools",
@@ -280,14 +845,13 @@ export default {
       programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
-      applicationCategoryOptions: codeMetadataJSON.applicationCategoryOptions,
-
+      repoStatusOptions: repoStatusJSON.repoStatus,
+      generateOtherMetadata: "None",
       step1Form: {
         name: "",
-        biotoolsID: "",
         description: "",
-        homepage: "",
-        versions: [],
+        creationDate: "",
+        firstReleaseDate: "",
       },
       step1FormRules: {
         name: [
@@ -297,29 +861,29 @@ export default {
             trigger: "blur",
           },
         ],
-        biotoolsID: [
-          {
-            required: true,
-            validator: this.biotoolsIDValidator,
-            trigger: "change",
-          },
-        ],
         description: [
           {
             required: true,
-            validator: this.descriptionValidator,
-            trigger: "blur",
-          },
-        ],
-        homepage: [
-          {
-            required: true,
-            validator: this.homepageValidator,
+            message: "Please enter a description",
             trigger: "blur",
           },
         ],
       },
-
+      step2Form: {
+        authors: [],
+        contributors: [],
+      },
+      step3Form: {
+        identifier: "",
+        keywords: [],
+        fundingCode: "",
+        fundingOrganization: "",
+      },
+      step4Form: {
+        referencePublication: "",
+        developmentStatus: "",
+        isPartOf: "",
+      },
       authorsErrorMessage: "",
       contributorsErrorMessage: "",
       isPartOfErrorMessage: "",
@@ -329,7 +893,7 @@ export default {
       issueTrackerErrorMessage: "",
       continuousIntegrationErrorMessage: "",
       codeRepositoryErrorMessage: "",
-      greyOutIdentifierInput: true,
+      greyOutIdentifierInput: false,
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
@@ -337,27 +901,194 @@ export default {
     };
   },
   watch: {
-    "step1Form.name": {
+    "step2Form.authors": {
       handler(val) {
-        if (val != "" && val != undefined) {
-          if (this.greyOutIdentifierInput) {
-            const name = val.replaceAll(" ", "_").toLowerCase();
-            this.step1Form.biotoolsID = name;
+        if (val.length > 0) {
+          for (let author of val) {
+            if (
+              author.givenName === "" ||
+              author.affiliation === "" ||
+              author.affiliation === undefined
+            ) {
+              this.authorsErrorMessage = "First name and Affiliation for each author is mandatory";
+              this.invalidStatus.authors = true;
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
+              break;
+            } else {
+              this.authorsErrorMessage = "";
+              this.invalidStatus.authors = false;
+            }
+
+            // validate orcid
+            if (author.orcid !== "") {
+              const orcid = author.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.authorsErrorMessage = "";
+                this.invalidStatus.authors = false;
+              } else {
+                // console.log("invalid orcid");
+                this.authorsErrorMessage = "ORCID is not valid";
+                if (this.$refs["s2Form"]) {
+                  this.$refs["s2Form"].validate();
+                }
+                this.invalidStatus.authors = true;
+                break;
+              }
+
+              // validate email
+              if (author.email !== "") {
+                const validIdentifier = validator.isEmail(author.email);
+
+                if (!validIdentifier) {
+                  this.authorsErrorMessage = "Email is not valid";
+                  if (this.$refs["s2Form"]) {
+                    this.$refs["s2Form"].validate();
+                  }
+                  this.invalidStatus.authors = true;
+                  break;
+                } else {
+                  this.authorsErrorMessage = "";
+                  this.invalidStatus.authors = false;
+                }
+              }
+            }
           }
         } else {
-          this.step1Form.biotoolsID = "";
+          this.authorsErrorMessage = "";
+          this.invalidStatus.authors = false;
+        }
+      },
+      deep: true,
+    },
+    "step2Form.contributors": {
+      handler(val) {
+        if (val.length > 0) {
+          for (let contributor of val) {
+            if (contributor.givenName === "" || contributor.affiliation === "") {
+              this.contributorsErrorMessage =
+                "Name and Affiliation for each contributor is mandatory";
+              this.invalidStatus.contributors = true;
+              this.$refs.s2Form.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
+            }
+
+            // validate orcid
+            if (contributor.orcid !== "") {
+              const orcid = contributor.orcid;
+              let total = 0;
+              for (let i = 0; i < orcid.length - 1; i++) {
+                const digit = parseInt(orcid.substr(i, 1));
+                if (isNaN(digit)) {
+                  continue;
+                }
+                total = (total + digit) * 2;
+              }
+
+              const remainder = total % 11;
+              const result = (12 - remainder) % 11;
+              const checkDigit = result === 10 ? "X" : String(result);
+
+              if (checkDigit === orcid.substr(-1)) {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              } else {
+                // console.log("invalid orcid");
+                this.contributorsErrorMessage = "ORCID is not valid";
+                this.$refs.s2Form.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              }
+            }
+
+            // validate email
+            if (contributor.email !== "") {
+              const validIdentifier = validator.isEmail(contributor.email);
+
+              if (!validIdentifier) {
+                this.contributorsErrorMessage = "Email is not valid";
+                this.$refs.s2Form.validate();
+                this.invalidStatus.contributors = true;
+                break;
+              } else {
+                this.contributorsErrorMessage = "";
+                this.invalidStatus.contributors = false;
+              }
+            }
+
+            // validate contributor role
+            if (contributor.contributorType === "") {
+              this.contributorsErrorMessage = "Please select contributor type for each contributor";
+              this.invalidStatus.contributors = true;
+              this.$refs.s2Form.validate();
+              break;
+            } else {
+              this.contributorsErrorMessage = "";
+              this.invalidStatus.contributors = false;
+            }
+          }
+        } else {
+          this.contributorsErrorMessage = "";
+          this.invalidStatus.contributors = false;
+        }
+      },
+      deep: true,
+    },
+    "step4Form.isPartOf": {
+      handler(val) {
+        if (val != "" && val != undefined) {
+          const validIdentifier = validator.isURL(val);
+
+          if (!validIdentifier) {
+            this.isPartOfErrorMessage = "Please provide a valid URL";
+            this.$refs.s7Form.validate();
+            this.invalidStatus.isPartOf = true;
+            return;
+          } else {
+            this.isPartOfErrorMessage = "";
+            this.invalidStatus.isPartOf = false;
+          }
+        } else {
+          this.isPartOfErrorMessage = "";
+          this.invalidStatus.isPartOf = false;
         }
       },
       deep: true,
     },
   },
   computed: {
-    //check if code workflow is present
-    codePresent() {
-      if ("type" in this.workflow) {
-        return this.workflow.type.includes("Code");
+    developmentStatus() {
+      const that = this;
+
+      function getStatus(repoStatus) {
+        return that.repoStatusOptions.find((status) => status.value === repoStatus);
       }
-      return false;
+
+      if ("developmentStatus" in this.step4Form && this.step4Form.developmentStatus != "") {
+        const status = this.step4Form.developmentStatus;
+        const returnVal = getStatus(status);
+
+        return returnVal.description;
+      } else {
+        return "";
+      }
     },
     checkInvalidStatus() {
       for (const key in this.invalidStatus) {
@@ -366,13 +1097,6 @@ export default {
         }
       }
       return false;
-    },
-    descriptionCount() {
-      if (this.step1Form.description != undefined) {
-        return `${this.step1Form.description.length}/1000`;
-      } else {
-        return "";
-      }
     },
   },
   methods: {
@@ -390,135 +1114,55 @@ export default {
       this.showSaving = false;
     },
     async prevFormStep() {
+      this.showSavingIcon();
+
       if (this.currentStep - 1 > 0) {
-        this.showSavingIcon();
         this.currentStep--;
       } else {
         this.navigateBack();
       }
     },
-    // To be used when I add the final step
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
         if (!this.checkInvalidStatus) {
-          this.navigateToRegister();
+          this.navigateToSelectDestination();
         }
       } else {
         this.currentStep++;
       }
     },
-
-    editBioToolsID() {
-      this.greyOutIdentifierInput = !this.greyOutIdentifierInput;
-
-      if (this.greyOutIdentifierInput) {
-        const name = this.step1Form.name.replaceAll(" ", "_").toLowerCase();
-        this.step1Form.biotoolsID = name;
-      }
-    },
-
-    biotoolsIDValidator(_rule, value, callback) {
-      const idRegex = /^[a-zA-Z0-9-_~.]+$/;
-
-      if (value === "" || value === undefined) {
-        if (this.greyOutIdentifierInput) {
-          callback();
-        } else {
-          callback(new Error("Please enter a unique identifier"));
-        }
-      } else if (!idRegex.test(value.trim())) {
-        callback(
-          new Error("The biotoolsID can only contain letters, numbers or these characters: . - _ ~")
-        );
+    async saveSkip() {
+      if (this.generateOtherMetadata === "Yes") {
+        this.workflow.generateOtherMetadata = true;
       } else {
-        callback();
+        this.workflow.generateOtherMetadata = false;
       }
-    },
 
-    descriptionValidator(_rule, value, callback) {
-      if (value === "" || value === undefined) {
-        callback(new Error("Please enter a description for your software"));
-      } else if (value.length < 10 || value.length > 1000) {
-        callback(new Error("Please enter a description that is between 10 and 1000 characters"));
-      } else {
-        callback();
-      }
-    },
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
 
-    homepageValidator(_rule, value, callback) {
-      if (value === "" || value === undefined) {
-        callback(new Error("Please enter a URL for your sofware"));
-      } else if (!validator.isURL(value)) {
-        callback(new Error("Please enter a valid URL"));
-      } else {
-        callback();
-      }
+      this.navigateBack();
     },
-
-    async navigateToStep2FromStep1() {
+    showSkipMetadataCreationWarning() {
+      this.$refs.warningConfirm.show();
+    },
+    navigateToStep2FromStep1() {
       this.$refs["s1Form"].validate(async (valid) => {
         if (valid) {
-          const tokenObject = await this.tokens.getToken("biotools");
-          const token = tokenObject.token;
-          const data = JSON.stringify({
-            name: this.step1Form.name,
-            biotoolsID: this.step1Form.biotoolsID,
-            description: this.step1Form.description,
-            homepage: this.step1Form.homepage,
-            versions: this.filterArrayOfObjects(this.step1Form.versions, "version"),
-          });
-
-          const response = await axios
-            .post(`${this.$server_url}/biotools/tool/validate`, {
-              token,
-              data,
-            })
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-              return "ERROR";
-            });
-
-          if (response === "ERROR") {
-            this.$message.error(
-              "An error occurred while validating the tool. Please try again later."
-            );
-
-            this.$track("bio.tools", "Validate tool", "failed");
-            return;
-          } else {
-            if (response.status === "error") {
-              if ("biotoolsID" in response.data) {
-                this.$message.error(
-                  "The tool ID you entered is already registered. bio.tools IDs need to be unique. Please enter a different ID."
-                );
-
-                this.$track("bio.tools", "Validate tool", "failed");
-                return;
-              } else {
-                this.$alert(
-                  JSON.stringify(response.data),
-                  "There were some errors in your submission",
-                  { type: "error" }
-                );
-
-                this.$track("bio.tools", "Validate tool", "failed");
-                return;
-              }
-            }
-            if (response.status === "success") {
-              // Comment out the lines below. Will come back to this when we are adding more fields.
-              // await this.saveCurrentEntries();
-              // this.setCurrentStep(2);
-              this.$refs.publishWarningConfirm.show();
-            }
-          }
+          await this.saveCurrentEntries();
+          this.setCurrentStep(2);
         }
       });
     },
     navigateToStep3FromStep2() {
+      if (this.step2Form.authors.length <= 0) {
+        this.$message({
+          message: "Please add at least one author.",
+          type: "error",
+        });
+        return;
+      }
+
       this.$refs["s2Form"].validate(async (valid) => {
         if (valid) {
           await this.saveCurrentEntries();
@@ -527,34 +1171,18 @@ export default {
       });
     },
     navigateToStep4FromStep3() {
+      if (this.step3Form.keywords.length <= 0) {
+        this.$message({
+          message: "Please add at least one keyword.",
+          type: "error",
+        });
+        return;
+      }
+
       this.$refs["s3Form"].validate(async (valid) => {
         if (valid) {
           await this.saveCurrentEntries();
           this.setCurrentStep(4);
-        }
-      });
-    },
-    navigateToStep5FromStep4() {
-      this.$refs["s4Form"].validate(async (valid) => {
-        if (valid) {
-          await this.saveCurrentEntries();
-          this.setCurrentStep(5);
-        }
-      });
-    },
-    navigateToStep6FromStep5() {
-      this.$refs["s5Form"].validate(async (valid) => {
-        if (valid) {
-          await this.saveCurrentEntries();
-          this.setCurrentStep(6);
-        }
-      });
-    },
-    navigateToStep7FromStep6() {
-      this.$refs["s6Form"].validate(async (valid) => {
-        if (valid) {
-          await this.saveCurrentEntries();
-          this.setCurrentStep(7);
         }
       });
     },
@@ -577,22 +1205,53 @@ export default {
         }
       }, 50);
     },
-    addVersion(_event, version = "") {
-      if (this.step1Form.versions.some((el) => el.version === version)) {
-        this.$message.warning("Version already exists.");
+    addKeyword(_event, keyword = "") {
+      if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
+        this.$message.warning("Keyword already exists.");
         return;
       }
 
       const id = uuidv4();
-      this.step1Form.versions.push({
-        version,
+      this.step3Form.keywords.push({
+        keyword,
         id,
       });
       this.focusOnElementRef(id);
     },
-    deleteVersion(id) {
-      this.step1Form.versions = this.step1Form.versions.filter((version) => {
-        return version.id !== id;
+    deleteKeyword(id) {
+      this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
+        return keyword.id !== id;
+      });
+    },
+    addAuthor() {
+      this.step2Form.authors.push({
+        givenName: "",
+        familyName: "",
+        affiliation: "",
+        email: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteAuthor(id) {
+      this.step2Form.authors = this.step2Form.authors.filter((author) => {
+        return author.id !== id;
+      });
+    },
+    addContributor() {
+      this.step2Form.contributors.push({
+        contributorType: "",
+        givenName: "",
+        familyName: "",
+        affiliation: "",
+        email: "",
+        orcid: "",
+        id: uuidv4(),
+      });
+    },
+    deleteContributor(id) {
+      this.step2Form.contributors = this.step2Form.contributors.filter((contributor) => {
+        return contributor.id !== id;
       });
     },
     filterArrayOfObjects(array, key) {
@@ -603,49 +1262,93 @@ export default {
     async saveCurrentEntries() {
       this.showSavingIcon();
 
-      if (!("biotools" in this.workflow)) {
-        this.dataset.data.Other.questions = {};
-      }
+      this.dataset.data.general.questions.name = this.step1Form.name;
+      this.dataset.data.general.questions.description = this.step1Form.description;
 
-      this.dataset.data.Other.questions.name = this.step1Form.name;
-      this.dataset.data.Other.questions.biotoolsID = this.step1Form.biotoolsID.trim();
-      this.dataset.data.Other.questions.description = this.step1Form.description;
-      this.dataset.data.Other.questions.homepage = this.step1Form.homepage;
-      this.dataset.data.Other.questions.versions = this.filterArrayOfObjects(
-        this.step1Form.versions,
-        "version"
-      );
+      this.step3Form.keywords = this.filterArrayOfObjects(this.step3Form.keywords, "keyword");
+
+      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
+      this.dataset.data.general.questions.authors = this.step2Form.authors;
+      this.dataset.data.general.questions.contributors = this.step2Form.contributors;
+      this.dataset.data.general.questions.fundingCode = this.step3Form.fundingCode;
+      this.dataset.data.general.questions.fundingOrganization = this.step3Form.fundingOrganization;
+      this.dataset.data.general.questions.referencePublication =
+        this.step4Form.referencePublication;
+
+      let otherForm = {};
+
+      otherForm.name = this.step1Form.name;
+      otherForm.description = this.step1Form.description;
+      otherForm.creationDate = this.step1Form.creationDate;
+      otherForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+
+      otherForm.authors = this.step2Form.authors;
+      otherForm.contributors = this.step2Form.contributors;
+
+      otherForm.identifier = this.step3Form.identifier;
+      otherForm.keywords = this.step3Form.keywords;
+      otherForm.fundingCode = this.step3Form.fundingCode;
+      otherForm.fundingOrganization = this.step3Form.fundingOrganization;
+
+      otherForm.referencePublication = this.step4Form.referencePublication;
+      otherForm.developmentStatus = this.step4Form.developmentStatus;
+      otherForm.isPartOf = this.step4Form.isPartOf;
+
+      this.dataset.data.Other.questions = otherForm;
+
+      this.workflow.generateCodeMeta = false;
+
+      if (this.generateOtherMetadata === "Yes") {
+        this.workflow.generateOtherMetadata = true;
+      } else {
+        this.workflow.generateOtherMetadata = false;
+      }
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
     },
-    generateDataForBiotools() {
-      let response = {};
+    async navigateToSelectDestination(_evt, shouldNavigateBack = false) {
+      await this.saveCurrentEntries();
 
-      response.name = this.dataset.data.Other.questions.name;
-      response.biotoolsID = this.dataset.data.Other.questions.biotoolsID;
-      response.description = this.dataset.data.Other.questions.description;
-      response.homepage = this.dataset.data.Other.questions.homepage;
-
-      if (this.dataset.data.Other.questions.versions.length > 0) {
-        response.version = [];
-        this.dataset.data.Other.questions.versions.forEach((version) => {
-          response.version.push(version.version);
+      if (shouldNavigateBack) {
+        this.$router.push({
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/selectFolder`,
         });
+        return;
       }
 
-      return JSON.stringify(response);
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Other/pickLicense`;
+
+      this.$router.push({ path: routerPath });
     },
-    async registerOnBiotools() {
-      const tokenObject = await this.tokens.getToken("biotools");
-      const token = tokenObject.token;
+    navigateBack() {
+      this.$router.push({
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/reviewStandards`,
+      });
+    },
+    async prefillGithubAuthors() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting authors",
+        position: "top-right",
+        type: "info",
+      });
 
-      const data = this.generateDataForBiotools();
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
 
-      const response = await axios
-        .post(`${this.$server_url}/biotools/tool/register`, {
-          token,
-          data,
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${this.$server_url}/github/repo/contributors`, {
+          params: {
+            access_token: GithubAccessToken,
+            owner: selectedRepo.split("/")[0],
+            repo: selectedRepo.split("/")[1],
+          },
         })
         .then((response) => {
           return response.data;
@@ -655,48 +1358,274 @@ export default {
           return "ERROR";
         });
 
-      return response;
-    },
-    async navigateToRegister(_evt, shouldNavigateBack = false) {
-      await this.saveCurrentEntries();
+      let contributors = [];
 
-      if (shouldNavigateBack) {
-        this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectFolder`,
+      if (response != "ERROR") {
+        response.forEach((contributor) => {
+          contributors.push(contributor.login);
         });
-        return;
       }
 
-      const response = await this.registerOnBiotools();
+      let authors = [];
 
-      if (response === "ERROR") {
-        this.$message.error(
-          "There was an error while trying to register your tool on bio.tools. Please try again later."
-        );
+      for (const contributor of contributors) {
+        response = await axios
+          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`, {
+            params: {
+              accept: "application/vnd.github.v3+json",
+            },
+            headers: {
+              Authorization: `Bearer  ${GithubAccessToken}`,
+            },
+          })
+          .then((response) => {
+            const authorObject = {};
 
-        this.$track("bio.tools", "Register tool", "failed");
-        return;
-      } else {
-        if (response.status === "error") {
-          this.$alert(JSON.stringify(response.data), "There were some errors in your submission", {
-            type: "error",
+            if (response.data.name != null) {
+              const parsedNames = humanparser.parseName(response.data.name);
+              if ("lastName" in parsedNames) {
+                authorObject.familyName = parsedNames.lastName;
+              } else {
+                authorObject.familyName = "";
+              }
+              if ("firstName" in parsedNames) {
+                authorObject.givenName = parsedNames.firstName;
+              } else {
+                authorObject.givenName = response.data.name;
+              }
+            }
+
+            if (response.data.email != null) {
+              authorObject.email = response.data.email;
+            }
+
+            if (response.data.company != null) {
+              authorObject.company = response.data.company;
+            }
+
+            if (!_.isEmpty(authorObject)) {
+              authors.push(authorObject);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      authors.forEach((author) => {
+        const authorObject = {
+          givenName: author.givenName,
+          familyName: author.familyName,
+          affiliation: author.company,
+          email: author.email,
+          orcid: "",
+          id: uuidv4(),
+        };
+
+        this.step2Form.authors.push(authorObject);
+      });
+
+      ElNotification({
+        title: "Success",
+        message: "Retrieved authors",
+        position: "top-right",
+        type: "success",
+      });
+    },
+    async prefillGithubMisc() {
+      ElNotification({
+        title: "Info",
+        message: "Requesting repository info",
+        position: "top-right",
+        type: "info",
+      });
+
+      // get a list of contributors for the repo
+      const tokenObject = await this.tokens.getToken("github");
+      const GithubAccessToken = tokenObject.token;
+
+      const selectedRepo = this.workflow.github.repo;
+
+      let response = "";
+
+      response = await axios
+        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
+          params: {
+            accept: "application/vnd.github.v3+json",
+          },
+          headers: {
+            Authorization: `Bearer  ${GithubAccessToken}`,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response != "ERROR") {
+        if (response.html_url != null) {
+          this.step4Form.codeRepository = response.html_url;
+          this.step4Form.issueTracker = `${response.html_url}/issues`;
+        }
+
+        if (response.homepage != null) {
+          this.step4Form.relatedLinks.push({
+            link: response.homepage,
+            id: uuidv4(),
+          });
+        }
+
+        if (response.topics != null && response.topics.length > 0) {
+          response.topics.forEach((topic) => {
+            this.step3Form.keywords.push({
+              keyword: topic,
+              id: uuidv4(),
+            });
+          });
+        }
+
+        if ("created_at" in response) {
+          this.step1Form.creationDate = response.created_at;
+        }
+
+        this.step5Form.currentVersionReleaseDate = new Date().toISOString();
+
+        if (response.description != null) {
+          this.step1Form.description = response.description;
+        }
+
+        const splitRepoNameOwner = selectedRepo.split("/");
+
+        const releaseList = await axios
+          .get(`${this.$server_url}/github/repo/releases`, {
+            params: {
+              access_token: GithubAccessToken,
+              owner: splitRepoNameOwner[0],
+              repo: splitRepoNameOwner[1],
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
           });
 
-          this.$track("bio.tools", "Register tool", "failed");
-          return;
+        if (releaseList !== "ERROR") {
+          if (releaseList.length > 0) {
+            const release = releaseList.slice(-1).pop();
+
+            if ("created_at" in release) {
+              this.step1Form.firstReleaseDate = release.created_at;
+            }
+          }
+        }
+
+        const lanuagesResponse = await axios
+          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`, {
+            params: {
+              accept: "application/vnd.github.v3+json",
+            },
+            headers: {
+              Authorization: `Bearer  ${GithubAccessToken}`,
+            },
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (lanuagesResponse != "ERROR") {
+          const languages = Object.keys(lanuagesResponse);
+          if (languages.length > 0) {
+            this.step4Form.programmingLanguage = languages;
+          }
+        }
+
+        ElNotification({
+          title: "Success",
+          message: "Repository info retrieved",
+          position: "top-right",
+          type: "success",
+        });
+      }
+    },
+    prefillFormFromMetadataObject(otherMetadata) {
+      this.step1Form.name = otherMetadata.name;
+      this.step1Form.description = otherMetadata.description;
+      this.step1Form.creationDate = otherMetadata.dateCreated;
+      this.step1Form.firstReleaseDate = otherMetadata.datePublished;
+
+      this.step2Form.authors = [];
+      otherMetadata.author.forEach(
+        ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
+          this.step2Form.authors.push({
+            givenName,
+            familyName,
+            affiliation: affiliation.name,
+            email,
+            orcid,
+            id: uuidv4(),
+          });
+        }
+      );
+
+      this.step2Form.contributors = [];
+      if ("contributor" in otherMetadata) {
+        otherMetadata.contributor.forEach(
+          ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
+            this.step2Form.contributors.push({
+              givenName,
+              familyName,
+              affiliation: affiliation.name,
+              email,
+              orcid,
+              id: uuidv4(),
+            });
+          }
+        );
+      }
+
+      this.step3Form.identifier = otherMetadata.identifier;
+      if ("keywords" in otherMetadata) {
+        otherMetadata.keywords.forEach((keyword) => {
+          this.step3Form.keywords.push({ keyword, id: uuidv4() });
+        });
+      }
+      if ("fundingCode" in otherMetadata) {
+        this.step3Form.fundingCode = otherMetadata.fundingCode;
+      }
+      if ("fundingOrganization" in otherMetadata) {
+        this.step3Form.fundingOrganization = otherMetadata.fundingOrganization;
+      }
+
+      this.step4Form.referencePublication = otherMetadata.referencePublication;
+      if ("developmentStatus" in otherMetadata) {
+        this.step4Form.developmentStatus = otherMetadata.developmentStatus;
+      }
+      this.step4Form.isPartOf = otherMetadata.isPartOf;
+    },
+    checkIdentifierInput() {
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "local") {
+          if (this.step3Form.identifier === "" || this.step3Form.identifier === undefined) {
+            this.greyOutIdentifierInput = true;
+          }
         } else {
-          this.$track("bio.tools", "Register tool", "success");
-
-          const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/biotools/review`;
-
-          this.$router.push({ path: routerPath });
+          this.greyOutIdentifierInput = false;
         }
       }
     },
-    navigateBack() {
-      this.$router.push({
-        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/biotools/login`,
-      });
+    editUniqueIdentifier() {
+      this.step3Form.identifier = "";
+      this.greyOutIdentifierInput = false;
     },
   },
   async mounted() {
@@ -711,34 +1640,129 @@ export default {
 
       this.workflow.currentRoute = this.$route.path;
 
+      if ("generateOtherMetadata" in this.workflow) {
+        this.generateOtherMetadata = this.workflow.generateOtherMetadata ? "Yes" : "No";
+      } else {
+        this.generateOtherMetadata = "None";
+      }
+
       if (
         this.dataset.data.Other.questions &&
         Object.keys(this.dataset.data.Other.questions).length !== 0
       ) {
-        const otherForm = this.dataset.data.Other.questions;
+        let otherForm = this.dataset.data.Other.questions;
 
         this.step1Form.name = otherForm.name;
-        this.step1Form.biotoolsID = otherForm.biotoolsID;
         this.step1Form.description = otherForm.description;
-        this.step1Form.homepage = otherForm.homepage;
-        this.step1Form.versions = otherForm.versions;
+        this.step1Form.creationDate = otherForm.creationDate;
+        this.step1Form.firstReleaseDate = otherForm.firstReleaseDate;
 
-        this.addIds(this.step1Form.versions);
+        this.step2Form.authors = otherForm.authors;
+        this.step2Form.contributors = otherForm.contributors;
 
-        // this.step1Form.name = codeForm.name;
-        // this.step1Form.description = codeForm.description;
-        // this.step1Form.creationDate = codeForm.creationDate;
-        // this.step1Form.firstReleaseDate = codeForm.firstReleaseDate;
-        // this.initializeEmptyObjects(this.step3Form, this.step3Form.funding);
-        // this.addIds(this.step3Form.keywords);
-        // this.addIds(this.step2Form.authors);
-        // this.addIds(this.step2Form.contributors);
-        // this.addIds(this.step4Form.relatedLinks);
-        // this.addIds(this.step5Form.otherSoftwareRequirements);
+        this.step3Form.identifier = otherForm.identifier;
+        this.step3Form.keywords = otherForm.keywords;
+        this.step3Form.fundingCode = otherForm.fundingCode;
+        this.step3Form.fundingOrganization = otherForm.fundingOrganization;
+
+        this.step4Form.referencePublication = otherForm.referencePublication;
+        this.step4Form.developmentStatus = otherForm.developmentStatus;
+        this.step4Form.isPartOf = otherForm.isPartOf;
+
+        this.addIds(this.step3Form.keywords);
+        this.addIds(this.step2Form.authors);
+        this.addIds(this.step2Form.contributors);
+
+        // this.originalObject.Other = JSON.parse(JSON.stringify(this.otherForm));
       } else {
         this.step1Form.name = this.dataset.name;
         this.step1Form.description = this.dataset.description;
+        // this.originalObject.Other = JSON.parse(JSON.stringify(this.otherForm));
+
+        if ("source" in this.workflow) {
+          if (this.workflow.source.type === "github") {
+            // this.showSpinner = true;
+            // const tokenObject = await this.tokens.getToken("github");
+            // const GithubAccessToken = tokenObject.token;
+            // const selectedRepo = this.workflow.github.repo;
+            // let response = "";
+            // response = await axios
+            //   .get(`${this.$server_url}/github/repo/file/contents`, {
+            //     params: {
+            //       access_token: GithubAccessToken,
+            //       owner: selectedRepo.split("/")[0],
+            //       repo: selectedRepo.split("/")[1],
+            //       file_name: "codemeta.json",
+            //     },
+            //   })
+            //   .then((response) => {
+            //     return response.data;
+            //   })
+            //   .catch((error) => {
+            //     console.error(error);
+            //     return "ERROR";
+            //   });
+            // if (response !== "NOT_FOUND") {
+            //   ElNotification({
+            //     title: "Info",
+            //     message: "Found a previous codemeta.json file. Loading it...",
+            //     position: "top-right",
+            //     type: "info",
+            //   });
+            //   const codeMeta = JSON.parse(response);
+            //   await this.prefillFormFromMetadataObject(codeMeta);
+            //   ElNotification({
+            //     title: "Success",
+            //     message: "Successfully loaded codemeta.json file.",
+            //     position: "top-right",
+            //     type: "success",
+            //   });
+            //   this.showSpinner = false;
+            // } else {
+            //   await this.prefillGithubAuthors();
+            //   await this.prefillGithubMisc();
+            //   this.showSpinner = false;
+            // }
+          }
+          if (this.workflow.source.type === "local") {
+            this.showSpinner = true;
+
+            const response = await axios
+              .post(`${this.$server_url}/utilities/fileexistinfolder`, {
+                folder_path: this.dataset.data.Other.folderPath,
+                file_name: "metadata.json",
+              })
+              .then((response) => {
+                return response.data;
+              })
+              .catch((error) => {
+                console.log(error);
+                return "ERROR";
+              });
+
+            if (response !== "ERROR" && response !== "Not Found") {
+              ElNotification({
+                title: "Info",
+                message: "Found a previous metadata.json file. Loading it...",
+                position: "top-right",
+                type: "info",
+              });
+
+              await this.prefillFormFromMetadataObject(response);
+
+              ElNotification({
+                title: "Success",
+                message: "Successfully loaded metadata.json file.",
+                position: "top-right",
+                type: "success",
+              });
+            }
+
+            this.showSpinner = false;
+          }
+        }
       }
+      this.checkIdentifierInput();
     });
   },
 };

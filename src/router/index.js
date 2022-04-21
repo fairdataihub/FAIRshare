@@ -20,6 +20,7 @@ import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 import OtherSelectSourceFolder from "../views/workflow/Other/SelectSourceFolder.vue";
 import OtherReviewStandards from "../views/workflow/Other/ReviewStandards.vue";
 import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
+import OtherPickLicense from "../views/workflow/Other/PickLicense.vue";
 
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
@@ -113,6 +114,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
     name: "CodePickLicense",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Other/pickLicense",
+    component: OtherPickLicense,
+    name: "OtherPickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata/review",

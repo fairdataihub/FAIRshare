@@ -2,7 +2,7 @@
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Select a license that defines the desired conditions for using your software
+        Select a license that defines the desired conditions for using your dataset
       </span>
 
       <el-divider> </el-divider>
@@ -35,9 +35,9 @@
             >
               <el-option
                 v-for="item in licenseOptions"
-                :key="item.licenseId"
-                :label="item.name"
-                :value="item.licenseId"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -48,18 +48,18 @@
                 <el-tag
                   class="mx-2 cursor-copy transition-all hover:shadow-md"
                   size="small"
-                  @click="pickSuggestedLicense('MIT')"
-                  :type="licenseForm.license === 'MIT' ? '' : 'info'"
+                  @click="pickSuggestedLicense('CC-BY-4.0')"
+                  :type="licenseForm.license === 'CC-BY-4.0' ? '' : 'info'"
                 >
-                  MIT
+                  Creative Commons Attribution 4.0 International
                 </el-tag>
                 <el-tag
                   class="mx-1 cursor-copy transition-all hover:shadow-md"
                   size="small"
-                  @click="pickSuggestedLicense('Apache-2.0')"
-                  :type="licenseForm.license === 'Apache-2.0' ? '' : 'info'"
+                  @click="pickSuggestedLicense('CC-BY-SA-4.0')"
+                  :type="licenseForm.license === 'CC-BY-SA-4.0' ? '' : 'info'"
                 >
-                  Apache-2.0
+                  Creative Commons Attribution Share Alike 4.0 International
                 </el-tag>
               </div>
             </div>
@@ -124,7 +124,7 @@
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/createMetadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/createMetadata`"
           class=""
         >
           <button class="primary-plain-button">
@@ -157,14 +157,14 @@
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
-import licensesJSON from "@/assets/supplementalFiles/licenses.json";
+import licensesJSON from "@/assets/supplementalFiles/otherDataLicenses.json";
 
 import { Icon } from "@iconify/vue";
 import { ElMessage, ElNotification } from "element-plus";
 import axios from "axios";
 
 export default {
-  name: "CodePickLicense",
+  name: "OtherPickLicense",
   components: {
     Icon,
   },
@@ -236,12 +236,11 @@ export default {
       const licenseId = this.licenseForm.license;
 
       //get license object
-      const licenseObject = await this.licenseOptions.find(
-        (license) => license.licenseId === licenseId
-      );
+      const licenseObject = this.licenseOptions[licenseId];
 
-      this.licenseHtmlUrl = licenseObject.reference;
-      this.licenseTitle = licenseObject.name;
+      console.log(licenseObject.url);
+      this.licenseHtmlUrl = licenseObject.url;
+      this.licenseTitle = licenseObject.title;
 
       this.showLicenseDetails = true;
       this.loadingLicenseDetails = true;
@@ -262,27 +261,29 @@ export default {
         const licenseId = this.licenseForm.license;
 
         // get license object
-        const licenseObject = this.licenseOptions.find(
-          (license) => license.licenseId === licenseId
-        );
+        const licenseObject = this.licenseOptions[licenseId];
 
-        const licensejson = licenseObject.detailsUrl;
+        if ("text" in licenseObject) {
+          this.draftLicense = licenseObject.text;
+        } else {
+          const licensejson = licenseObject.detailsUrl;
 
-        const response = await axios
-          .get(`${this.$server_url}/utilities/requestjson`, {
-            params: {
-              url: licensejson,
-            },
-          })
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
+          const response = await axios
+            .get(`${this.$server_url}/utilities/requestjson`, {
+              params: {
+                url: licensejson,
+              },
+            })
+            .then((response) => {
+              return response.data;
+            })
+            .catch((error) => {
+              console.error(error);
+              return "ERROR";
+            });
 
-        this.draftLicense = response.licenseText;
+          this.draftLicense = response.licenseText;
+        }
 
         this.displayLicenseEditor = true;
       } else {
@@ -298,7 +299,7 @@ export default {
         return;
       }
 
-      this.dataset.data.Code.questions.license = this.licenseForm.license;
+      this.dataset.data.Other.questions.license = this.licenseForm.license;
       this.dataset.data.general.questions.license = this.licenseForm.license;
 
       // turn this to false after license is generated at the end of the workflow
@@ -315,7 +316,7 @@ export default {
       this.$refs.licenseForm.validate((valid) => {
         console.log(valid);
         if (valid) {
-          this.dataset.data.Code.questions.license = this.licenseForm.license;
+          this.dataset.data.Other.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;
 
           this.workflow.createLicenseSelect = this.saveLicense;
@@ -376,10 +377,8 @@ export default {
       ) {
         this.originalLicense =
           this.licenseForm.license =
-          this.dataset.data.Code.questions.license =
+          this.dataset.data.Other.questions.license =
             response.license.spdx_id;
-        // this.licenseForm.license = this.dataset.data.Code.questions.license;
-        // this.originalLicense = this.licenseForm.license;
 
         ElNotification({
           title: "Success",
