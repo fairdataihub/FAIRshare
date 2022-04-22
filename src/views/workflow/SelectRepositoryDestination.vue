@@ -5,7 +5,7 @@
   >
     <div class="flex h-full w-full flex-col items-start justify-start">
       <span class="text-left text-lg font-medium">
-        Select a FAIR repository to share your research software
+        Select a FAIR repository to share your {{ combineDataTypes(workflow.type) }}
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -35,7 +35,7 @@
             </span>
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
-            <div class="my-8 grid grid-cols-3 gap-8">
+            <div class="my-8 grid grid-cols-3 gap-8" :class="{ 'grid-cols-2': !codePresent }">
               <div>
                 <div class="flex flex-col items-center justify-center">
                   <div
@@ -82,7 +82,7 @@
                 </el-popover>
               </div>
 
-              <div>
+              <div :class="{ hidden: !codePresent }">
                 <el-popover placement="bottom" trigger="hover" content="Coming soon...">
                   <template #reference>
                     <div>
@@ -318,14 +318,9 @@
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
                 v-if="newVersion === 'false'"
               >
-                <router-link
-                  :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
-                  class=""
-                >
-                  <button class="primary-plain-button">
-                    <el-icon><d-arrow-left /></el-icon> Back
-                  </button>
-                </router-link>
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
 
                 <button
                   class="primary-button"
@@ -346,14 +341,9 @@
                   Object.keys(selectedDeposition.metadata).length !== 0
                 "
               >
-                <router-link
-                  :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`"
-                  class=""
-                >
-                  <button class="primary-plain-button">
-                    <el-icon><d-arrow-left /></el-icon> Back
-                  </button>
-                </router-link>
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
 
                 <button
                   class="primary-button"
@@ -426,7 +416,9 @@ export default {
       dataset: {},
       workflowID: this.$route.params.workflowID,
       datasetID: this.$route.params.datasetID,
-      workflow: {},
+      workflow: {
+        type: ["data"],
+      },
       zenodoToken: "",
       loading: false,
       repoID: "",
@@ -444,8 +436,39 @@ export default {
       validZenodoTokenAvailable: false,
     };
   },
-  computed: {},
+  computed: {
+    codePresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+  },
   methods: {
+    combineDataTypes(dataTypes) {
+      if (dataTypes.length === 1) {
+        switch (dataTypes[0]) {
+          case "Code":
+            return "research software";
+          case "Other":
+            return "other data";
+          default:
+            return dataTypes[0];
+        }
+      } else if (dataTypes.length === 2) {
+        return `${dataTypes[0]} and ${dataTypes[1]}`;
+      } else if (dataTypes.length > 2) {
+        let returnString = "";
+        dataTypes.forEach((type, index) => {
+          if (index === dataTypes.length - 1) {
+            returnString += `and ${type}`;
+          } else {
+            returnString += `${type}, `;
+          }
+        });
+        return returnString;
+      }
+    },
     selectRepo(event, repoID) {
       if (this.workflow.source.type === "github") {
         this.newVersion = "false";
@@ -528,6 +551,17 @@ export default {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
+    navigateBack() {
+      let routerPath = `/datasets/${this.$route.params.datasetID}`;
+
+      if (this.codePresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`;
+      } else {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/pickLicense`;
+      }
+
+      this.$router.push(routerPath);
+    },
     addMetadata(type) {
       this.dataset.destinationSelected = true;
 
@@ -587,8 +621,7 @@ export default {
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/pickLicense`;
-      this.$router.push(routerPath);
+      this.navigateBack();
     },
     showRepoUploadWarning() {
       this.$refs.warningConfirmSkipUploadToRepo.show();
@@ -621,6 +654,7 @@ export default {
   },
   async mounted() {
     this.loading = true;
+    console.log(this.$route);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];

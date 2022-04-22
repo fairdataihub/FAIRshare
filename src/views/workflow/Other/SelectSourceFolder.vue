@@ -2,11 +2,11 @@
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Provide the location of the files you want to include in your research software dataset
+        Provide the location of the files you want to include in your dataset
       </span>
 
       <el-divider class="my-4"> </el-divider>
-      <span class="mb-2"> Where are your research software files located? </span>
+      <span class="mb-2"> Where are your files located? </span>
       <div class="item-center flex justify-center gap-8 pt-8">
         <div
           class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
@@ -17,7 +17,7 @@
           <span class="mx-5 text-lg"> My computer </span>
         </div>
 
-        <div>
+        <div class="hidden">
           <div
             class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
             :class="{ 'selected-location': locationID === 'github' }"
@@ -35,7 +35,7 @@
           <span class="font-medium">
             {{ combineDataTypes }}
           </span>
-          files are stored. It is highly recommended to include the source code files.
+          files are stored. It is highly recommended to include all your data files.
         </span>
 
         <el-input
@@ -89,7 +89,7 @@ import { dialog } from "@electron/remote";
 import { useDatasetsStore } from "@/store/datasets";
 
 export default {
-  name: "CodeSelectSourceFolder",
+  name: "OtherSelectSourceFolder",
   components: {},
   data() {
     return {
@@ -100,7 +100,7 @@ export default {
       datasetID: this.$route.params.datasetID,
       workflowID: this.$route.params.workflowID,
       workflow: {},
-      locationID: "",
+      locationID: "local",
     };
   },
   computed: {
@@ -164,7 +164,7 @@ export default {
       const dataTypes = this.workflow.type;
 
       if (this.locationID === "local") {
-        // At this moment, add the same folder path to all the data types provided
+        // At this moment, add the same folder path to all the data types provided in the workflow
         // subject to change when we separate the data types folder locations.
         dataTypes.forEach((type, _index) => {
           this.dataset.data[type].folderPath = this.folderPath;
@@ -205,10 +205,10 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (this.locationID === "github") {
-        this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/Code/selectGithubRepo`);
+        this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/Other/selectGithubRepo`);
       } else {
         this.$router.push({
-          path: `/datasets/${this.dataset.id}/${this.workflowID}/Code/reviewStandards`,
+          path: `/datasets/${this.dataset.id}/${this.workflowID}/Other/reviewStandards`,
         });
       }
     },

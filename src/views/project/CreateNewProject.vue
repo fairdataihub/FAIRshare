@@ -128,22 +128,25 @@
                     disabled
                   >
                     <div class="flex flex-col items-center">
-                      <document-icon class="my-2 h-12 w-12" />
-                      <span class="text-sm">Document</span>
-                    </div>
-                  </el-checkbox>
-                </template>
-              </el-popover>
-
-              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
-                <template #reference>
-                  <el-checkbox border name="type" class="single-check-box" label="Media" disabled>
-                    <div class="flex flex-col items-center">
                       <video-play class="my-2 h-12 w-12"></video-play>
                       <span class="text-sm">Media</span>
                     </div>
                   </el-checkbox>
                 </template>
+              </el-popover>
+
+              <el-popover placement="top" :hide-after="0" trigger="hover" :width="400">
+                <template #reference>
+                  <el-checkbox border name="type" class="single-check-box" label="Other">
+                    <div class="flex flex-col items-center">
+                      <document-icon class="my-2 h-12 w-12"></document-icon>
+                      <span class="text-sm">Other</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+                <span class="break-normal text-left text-sm">
+                  Any type of data that is not covered by the other categories.
+                </span>
               </el-popover>
             </div>
           </el-checkbox-group>

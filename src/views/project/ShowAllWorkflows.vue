@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen w-full flex-row items-center justify-center">
-    <div ref="" class="flex h-full flex-row items-center p-3">
+  <div class="flex h-screen w-full max-w-screen-xl flex-row items-center justify-center">
+    <div class="flex h-full flex-row items-center p-3">
       <div class="flex h-full flex-col overflow-y-auto">
         <span class="text-left text-lg font-medium"> Start the curation process </span>
 
@@ -113,7 +113,14 @@ export default {
   methods: {
     combineDataTypes(dataTypes) {
       if (dataTypes.length === 1) {
-        return dataTypes[0] === "Code" ? "Research Software" : dataTypes[0];
+        switch (dataTypes[0]) {
+          case "Code":
+            return "Research Software";
+          case "Other":
+            return "Other Data";
+          default:
+            return dataTypes[0];
+        }
       } else if (dataTypes.length === 2) {
         return `${dataTypes[0]} and ${dataTypes[1]}`;
       } else if (dataTypes.length > 2) {
@@ -128,6 +135,19 @@ export default {
         return returnString;
       }
     },
+    selectDataPath() {
+      // We are assuming one data type per workflow
+      const dataType = this.dataset.workflows[this.workflowID].type[0];
+
+      switch (dataType) {
+        case "Code":
+          return `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        case "Other":
+          return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
+        default:
+          return dataType;
+      }
+    },
     async navigateToSelectFolder() {
       this.dataset.workflows[this.workflowID].datasetUploaded = false;
       this.dataset.workflows[this.workflowID].datasetPublished = false;
@@ -135,7 +155,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+      const routerPath = this.selectDataPath();
       this.$router.push({ path: routerPath });
     },
     async localZenodoUploadNoPublishResponse(response) {
@@ -150,7 +170,7 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        routerPath = this.selectDataPath();
         this.$router.push({ path: routerPath });
       }
     },
@@ -160,7 +180,7 @@ export default {
         routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
         this.$router.push({ path: routerPath });
       } else if (response === "cancel") {
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        routerPath = this.selectDataPath();
         this.$router.push({ path: routerPath });
       }
     },
@@ -170,7 +190,7 @@ export default {
         routerPath = this.dataset.workflows[this.workflowID].currentRoute;
         this.$router.push({ path: routerPath });
       } else if (response === "cancel") {
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+        routerPath = this.selectDataPath();
         this.$router.push({ path: routerPath });
       }
     },
@@ -178,8 +198,13 @@ export default {
       let routerPath = "";
       this.workflowID = workflowID;
 
-      // add published checks before the upload ones
-      // This hasn't been done yet since we need to figure out where we want to put them for this specific workflow.
+      // Function to reset on data types. Will have to see if this needs to be moved into a utility function
+      if (this.dataset.workflows[workflowID].type[0] !== "Other") {
+        this.dataset.workflows[workflowID].generateOtherMetadata = false;
+      }
+      if (this.dataset.workflows[workflowID].type[0] !== "Code") {
+        this.dataset.workflows[workflowID].generateCodeMeta = false;
+      }
 
       if (
         "datasetPublished" in this.dataset.workflows[workflowID] &&
@@ -215,40 +240,29 @@ export default {
       if ("currentRoute" in this.dataset.workflows[workflowID]) {
         if (
           this.dataset.workflows[workflowID].currentRoute != "" &&
-          this.dataset.workflows[workflowID].currentRoute !=
-            `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`
+          this.dataset.workflows[workflowID].currentRoute != this.selectDataPath()
         ) {
           this.$refs.infoConfirmContinueCuration.show();
         } else {
-          routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+          routerPath = this.selectDataPath();
           this.$router.push({ path: routerPath });
         }
       } else {
-        routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
+        routerPath = this.selectDataPath();
         this.$router.push({ path: routerPath });
       }
-
-      // if ("datasetUploaded" in this.dataset.workflows[workflowID]) {
-      //   if (this.dataset.workflows[workflowID].datasetUploaded) {
-      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/zenodo/publish`;
-      //   } else {
-      //     routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-      //   }
-      // } else {
-      //   routerPath = `/datasets/${this.datasetID}/${workflowID}/Code/selectFolder`;
-      // }
-      // console.log(routerPath);
-      // this.$router.push({ path: routerPath });
     },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
 
+    this.datasetStore.hideProgressBar();
+    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setCurrentStep(1);
+
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
     }
-
-    this.navigateToCurate("workflow1");
   },
 };
 </script>

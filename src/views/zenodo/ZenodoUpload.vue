@@ -89,6 +89,7 @@ export default {
       alertTitle: "",
       alertMessage: "",
       overwriteCodeMeta: false,
+      overwriteOtherMeta: false,
     };
   },
   computed: {
@@ -497,6 +498,24 @@ export default {
         });
       return response;
     },
+    async createOtherMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create other metadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create other metadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     async createCitationFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/citation/create`, {
@@ -658,7 +677,6 @@ export default {
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
-          console.log(this.dataset.data.Code.questions.identifier);
           if (
             "metadata" in response &&
             "identifier" in this.dataset.data.Code.questions &&
@@ -667,8 +685,6 @@ export default {
             this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
             this.overwriteCodeMeta = true;
           }
-
-          console.log(this.dataset.data.Code.questions.identifier);
 
           response = await this.createCodeMetadataFile();
           // console.log(response);
@@ -686,6 +702,34 @@ export default {
       }
 
       this.percentage = 15;
+      this.indeterminate = false;
+
+      if (this.workflow.generateOtherMetadata) {
+        console.log(this.dataset.data.Other.questions.identifier);
+        if (
+          "metadata" in response &&
+          "identifier" in this.dataset.data.Other.questions &&
+          this.dataset.data.Other.questions.identifier == ""
+        ) {
+          this.dataset.data.Other.questions.identifier = response.metadata.prereserve_doi.doi;
+          this.overwriteOtherMeta = true;
+        }
+
+        response = await this.createOtherMetadataFile();
+        // console.log(response);
+
+        if (response === "ERROR") {
+          this.alertMessage = "There was an error with creating the required metadata.json file";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Created the metadata.json file in the target folder";
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        }
+      }
+
+      this.percentage = 18;
       this.indeterminate = false;
 
       await this.sleep(300);
@@ -809,6 +853,9 @@ export default {
         if (this.overwriteCodeMeta) {
           this.dataset.data.Code.questions.identifier = "";
         }
+        if (this.overwriteOtherMeta) {
+          this.dataset.data.Other.questions.identifier = "";
+        }
 
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
@@ -820,6 +867,9 @@ export default {
       } else {
         if (this.overwriteCodeMeta) {
           this.dataset.data.Code.questions.identifier = "";
+        }
+        if (this.overwriteOtherMeta) {
+          this.dataset.data.Other.questions.identifier = "";
         }
 
         this.workflow.datasetUploaded = true;
