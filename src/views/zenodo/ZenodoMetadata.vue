@@ -69,12 +69,14 @@
                           v-model="element.name"
                           type="text"
                           placeholder="Family name, given names"
+                          class="h-[40px]"
                         ></el-input>
                         <div class="mx-2"></div>
                         <el-input
                           v-model="element.affiliation"
                           type="text"
                           placeholder="Affiliation"
+                          class="h-[40px]"
                         ></el-input>
                         <div class="mx-2"></div>
                         <div class="flex w-full flex-col">

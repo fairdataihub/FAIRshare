@@ -144,6 +144,7 @@
                     <div class="p-4">
                       <el-form
                         :model="step2Form"
+                        :rules="step2FormRules"
                         label-width="160px"
                         label-position="top"
                         size="large"
@@ -151,7 +152,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item label="Authors" :error="authorsErrorMessage" required>
+                        <el-form-item label="Authors" prop="authors">
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
@@ -165,6 +166,7 @@
                                     v-model="element.givenName"
                                     type="text"
                                     placeholder="Given name"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-1"></div>
@@ -173,6 +175,7 @@
                                     v-model="element.familyName"
                                     type="text"
                                     placeholder="Family name"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-2"></div>
@@ -181,6 +184,7 @@
                                     v-model="element.affiliation"
                                     type="text"
                                     placeholder="Affiliation"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-2 flex w-full flex-col">
@@ -385,6 +389,7 @@
                     <div class="p-4">
                       <el-form
                         :model="step3Form"
+                        :rules="step3FormRules"
                         label-width="160px"
                         label-position="top"
                         size="large"
@@ -463,7 +468,7 @@
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Keywords" required>
+                        <el-form-item label="Keywords" prop="keywords">
                           <draggable
                             tag="div"
                             :list="step3Form.keywords"
@@ -827,6 +832,7 @@
                     <div class="p-4">
                       <el-form
                         :model="step5Form"
+                        :rules="step5FormRules"
                         label-width="160px"
                         label-position="top"
                         size="large"
@@ -834,7 +840,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item label="Programming Language" required>
+                        <el-form-item label="Programming Language" prop="programmingLanguage">
                           <div class="flex w-full flex-row items-center">
                             <el-select
                               v-model="step5Form.programmingLanguage"
@@ -1322,6 +1328,15 @@ export default {
         authors: [],
         contributors: [],
       },
+      step2FormRules: {
+        authors: [
+          {
+            required: true,
+            validator: this.authorValidator,
+            trigger: "blur",
+          },
+        ],
+      },
       step3Form: {
         identifier: "",
         applicationCategory: "",
@@ -1330,6 +1345,15 @@ export default {
           code: "",
           organization: "",
         },
+      },
+      step3FormRules: {
+        keywords: [
+          {
+            required: true,
+            validator: this.keywordValidator,
+            trigger: "blur",
+          },
+        ],
       },
       step4Form: {
         codeRepository: "",
@@ -1342,6 +1366,15 @@ export default {
         runtimePlatform: [],
         operatingSystem: [],
         otherSoftwareRequirements: [],
+      },
+      step5FormRules: {
+        programmingLanguage: [
+          {
+            required: true,
+            validator: this.programmingLanguageValidator,
+            trigger: "blur",
+          },
+        ],
       },
       step6Form: {
         currentVersion: "",
@@ -1389,6 +1422,9 @@ export default {
             } else {
               this.authorsErrorMessage = "";
               this.invalidStatus.authors = false;
+              if (this.$refs["s2Form"]) {
+                this.$refs["s2Form"].validate();
+              }
             }
 
             // validate orcid
@@ -1825,6 +1861,21 @@ export default {
         }
       }, 50);
     },
+
+    programmingLanguageValidator(_rule, value, callback) {
+      if ((value === "" || value === undefined) && value.length > 0) {
+        callback(new Error("Please provide at least one programming language"));
+      } else {
+        callback();
+      }
+    },
+    keywordValidator(_rule, value, callback) {
+      if ((value === "" || value === undefined) && value.length > 0) {
+        callback(new Error("Please provide a valid keyword"));
+      } else {
+        callback();
+      }
+    },
     addKeyword(_event, keyword = "") {
       if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
         this.$message.warning("Keyword already exists.");
@@ -1843,6 +1894,75 @@ export default {
         return keyword.id !== id;
       });
     },
+
+    authorValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let author of value) {
+          if (
+            author.givenName === "" ||
+            author.affiliation === "" ||
+            author.affiliation === undefined
+          ) {
+            // this.authorsErrorMessage = "First name and Affiliation for each author is mandatory";
+            // this.invalidStatus.authors = true;
+            // if (this.$refs["s2Form"]) {
+            //   this.$refs["s2Form"].validate();
+            // }
+            // break;
+            callback(new Error("First name and Affiliation for each author is mandatory"));
+            return;
+          }
+
+          // validate orcid
+          if (author.orcid !== "") {
+            const orcid = author.orcid;
+            let total = 0;
+            for (let i = 0; i < orcid.length - 1; i++) {
+              const digit = parseInt(orcid.substr(i, 1));
+              if (isNaN(digit)) {
+                continue;
+              }
+              total = (total + digit) * 2;
+            }
+
+            const remainder = total % 11;
+            const result = (12 - remainder) % 11;
+            const checkDigit = result === 10 ? "X" : String(result);
+
+            if (checkDigit !== orcid.substr(-1)) {
+              // console.log("invalid orcid");
+              // this.authorsErrorMessage = "ORCID is not valid";
+              // if (this.$refs["s2Form"]) {
+              //   this.$refs["s2Form"].validate();
+              // }
+              // this.invalidStatus.authors = true;
+              // break;
+              callback(new Error("ORCID is not valid"));
+            }
+          }
+
+          // validate email
+          if (author.email !== "") {
+            const validIdentifier = validator.isEmail(author.email);
+
+            if (!validIdentifier) {
+              // this.authorsErrorMessage = "Email is not valid";
+              // if (this.$refs["s2Form"]) {
+              //   this.$refs["s2Form"].validate();
+              // }
+              // this.invalidStatus.authors = true;
+              // break;
+              callback(new Error("Email is not valid"));
+              return;
+            }
+          }
+        }
+      } else {
+        callback(new Error("Please provide at least one author"));
+        return;
+      }
+      callback();
+    },
     addAuthor() {
       this.step2Form.authors.push({
         givenName: "",
@@ -1858,6 +1978,7 @@ export default {
         return author.id !== id;
       });
     },
+
     addContributor() {
       this.step2Form.contributors.push({
         contributorType: "",
