@@ -263,6 +263,8 @@ export default {
     if (!this.dataset.workflowConfirmed) {
       this.$router.push({ path: `/datasets/new/${this.dataset.id}/confirm` });
     }
+
+    this.navigateToCurate("workflow1");
   },
 };
 </script>
