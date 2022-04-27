@@ -62,24 +62,28 @@
               </div>
 
               <div>
-                <el-popover placement="bottom" trigger="hover" content="Coming soon...">
-                  <template #reference>
-                    <div>
-                      <div
-                        class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all"
-                        :class="{ 'selected-repo': repoID === 'figshare' }"
-                        @click="selectRepo($event, 'figshare')"
-                      >
-                        <img
-                          src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
-                          alt=""
-                          class="mb-3 h-16 opacity-50"
-                        />
-                        <span class="mx-5 text-lg"> Figshare </span>
-                      </div>
-                    </div>
-                  </template>
-                </el-popover>
+                <div class="flex flex-col items-center justify-center">
+                  <div
+                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                    :class="{ 'selected-repo': repoID === 'figshare' }"
+                    @click="selectRepo($event, 'figshare')"
+                  >
+                    <img
+                      src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
+                      alt=""
+                      class="mb-3 h-16 w-16"
+                    />
+                    <span class="mx-5 text-lg"> Figshare </span>
+                  </div>
+                  <div
+                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                    v-if="repoID === 'figshare'"
+                    @click="openWebsite('https://figshare.com')"
+                  >
+                    <span class="font-medium"> Learn more... </span>
+                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                  </div>
+                </div>
               </div>
 
               <div :class="{ hidden: !codePresent }">
@@ -318,6 +322,7 @@
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
                 v-if="newVersion === 'false'"
               >
+                <!-- zenodo new dataset  -->
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
                 </button>
@@ -332,6 +337,7 @@
                 </button>
               </div>
             </fade-transition>
+
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
@@ -341,6 +347,7 @@
                   Object.keys(selectedDeposition.metadata).length !== 0
                 "
               >
+                <!-- zenodo new version and a deposition has been selected -->
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
                 </button>
@@ -357,6 +364,7 @@
             </fade-transition>
           </div>
           <div v-else class="flex w-full justify-center space-x-4 px-5 py-4">
+            <!-- skip upload to repo -->
             <button class="primary-plain-button" size="medium" @click="saveSkip">
               <el-icon><d-arrow-left /></el-icon>
               Back
@@ -563,6 +571,7 @@ export default {
       this.$router.push(routerPath);
     },
     addMetadata(type) {
+      // run through this for figshare
       this.dataset.destinationSelected = true;
 
       if (!("destination" in this.workflow)) {
