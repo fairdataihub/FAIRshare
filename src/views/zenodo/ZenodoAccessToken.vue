@@ -345,22 +345,23 @@ export default {
         });
       return response;
     },
+    // Other is identical to code endpoint. Not sure if i'll leave it this way. Adding seperate ones for now.
     async createOtherMetadataFile() {
-      // const response = await axios
-      //   .post(`${this.$server_url}/metadata/create`, {
-      //     data_types: JSON.stringify(this.workflow.type),
-      //     data_object: JSON.stringify(this.dataset.data),
-      //     virtual_file: true,
-      //   })
-      //   .then((response) => {
-      //     return JSON.parse(response.data);
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     return "ERROR";
-      //   });
-      // return response;
-      return { name: "metadata.json" };
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: true,
+        })
+        .then((response) => {
+          return JSON.parse(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+      // return { name: "metadata.json" };
     },
     async createCitationFile() {
       const response = await axios
