@@ -617,7 +617,7 @@ export default {
 
       // using the zenodo one here. I don't think this matters since we aren't uploading anything
       // Might change it to its own page later
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
       this.$router.push(routerPath);
     },
     async saveSkip() {
