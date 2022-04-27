@@ -9,12 +9,12 @@
       </span>
 
       <el-form
-        :model="zenodoMetadataForm"
-        :rules="rulesForZenodoMetadataForm"
+        :model="figshareMetadataForm"
+        :rules="rulesForfigshareMetadataForm"
         label-width="150px"
         label-position="right"
         size="large"
-        ref="zmForm"
+        ref="fmForm"
         @submit.prevent
       >
         <el-collapse v-model="activeNames">
@@ -33,7 +33,7 @@
               <el-form-item label="Publication date" prop="publicationDate">
                 <div class="flex flex-col">
                   <el-date-picker
-                    v-model="zenodoMetadataForm.publicationDate"
+                    v-model="figshareMetadataForm.publicationDate"
                     type="date"
                     placeholder="Pick a day"
                     value-format="YYYY-MM-DD"
@@ -47,13 +47,13 @@
               </el-form-item>
 
               <el-form-item label="Title" prop="title">
-                <el-input v-model="zenodoMetadataForm.title" type="text"> </el-input>
+                <el-input v-model="figshareMetadataForm.title" type="text"> </el-input>
               </el-form-item>
 
               <el-form-item label="Authors" prop="authors">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.authors"
+                  :list="figshareMetadataForm.authors"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -129,14 +129,14 @@
                         of your submitted metadata."
                   class="mx-0 w-full"
                 >
-                  <el-input v-model="zenodoMetadataForm.description" type="textarea"></el-input>
+                  <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
                 </VuePopper>
               </el-form-item>
 
               <el-form-item label="Version" prop="version">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.version"
+                    v-model="figshareMetadataForm.version"
                     type="text"
                     placeholder="1.0.4"
                   ></el-input>
@@ -153,7 +153,7 @@
               <el-form-item label="Language">
                 <div class="w-full">
                   <el-select
-                    v-model="zenodoMetadataForm.language"
+                    v-model="figshareMetadataForm.language"
                     filterable
                     placeholder="e.g.: 'eng', 'fr' or 'Polish'"
                     class="w-full"
@@ -185,7 +185,7 @@
               <el-form-item label="Keywords">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.keywords"
+                  :list="figshareMetadataForm.keywords"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -233,7 +233,10 @@
 
               <el-form-item label="Additional Notes">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.additionalNotes" type="textarea"></el-input>
+                  <el-input
+                    v-model="figshareMetadataForm.additionalNotes"
+                    type="textarea"
+                  ></el-input>
                   <p class="pt-1 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
@@ -254,7 +257,7 @@
             <div class="p-4">
               <el-form-item label="Access right" :required="true">
                 <div class="flex flex-col">
-                  <el-radio-group v-model="zenodoMetadataForm.license.accessRight">
+                  <el-radio-group v-model="figshareMetadataForm.license.accessRight">
                     <div class="flex flex-col">
                       <el-radio label="open">
                         <el-icon>
@@ -287,7 +290,7 @@
 
               <el-form-item label="License" prop="license">
                 <el-select
-                  v-model="zenodoMetadataForm.license.licenseName"
+                  v-model="figshareMetadataForm.license.licenseName"
                   filterable
                   disabled
                   placeholder="Select a license"
@@ -350,7 +353,7 @@
               <el-form-item label="Related identifiers" :error="relatedIdentifiersErrorMessage">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.relatedIdentifiers"
+                  :list="figshareMetadataForm.relatedIdentifiers"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -458,7 +461,7 @@
               <el-form-item label="Contributors" prop="contributors">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.contributors"
+                  :list="figshareMetadataForm.contributors"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -558,7 +561,7 @@
               <el-form-item label="References">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.references"
+                  :list="figshareMetadataForm.references"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -624,25 +627,25 @@
             <div class="p-4">
               <el-form-item label="Journal title">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.journal.title" type="text"></el-input>
+                  <el-input v-model="figshareMetadataForm.journal.title" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Volume">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.journal.volume" type="text"></el-input>
+                  <el-input v-model="figshareMetadataForm.journal.volume" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Issue">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.journal.issue" type="text"></el-input>
+                  <el-input v-model="figshareMetadataForm.journal.issue" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Pages">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.journal.pages" type="text"></el-input>
+                  <el-input v-model="figshareMetadataForm.journal.pages" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
@@ -663,20 +666,23 @@
             <div class="p-4">
               <el-form-item label="Conference title">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.conference.title" type="text"></el-input>
+                  <el-input v-model="figshareMetadataForm.conference.title" type="text"></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Acronym">
                 <div class="flex w-full flex-col">
-                  <el-input v-model="zenodoMetadataForm.conference.acronym" type="text"></el-input>
+                  <el-input
+                    v-model="figshareMetadataForm.conference.acronym"
+                    type="text"
+                  ></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
                 </div>
               </el-form-item>
               <el-form-item label="Dates">
                 <div class="flex w-full flex-col">
                   <el-date-picker
-                    v-model="zenodoMetadataForm.conference.dates"
+                    v-model="figshareMetadataForm.conference.dates"
                     type="daterange"
                     range-separator="-"
                     start-placeholder="Start date"
@@ -691,7 +697,7 @@
               <el-form-item label="Place">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.conference.place"
+                    v-model="figshareMetadataForm.conference.place"
                     type="text"
                     placeholder="e.g. city, country"
                   ></el-input>
@@ -701,7 +707,7 @@
               <el-form-item label="Website">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.conference.website"
+                    v-model="figshareMetadataForm.conference.website"
                     type="text"
                     placeholder="e.g. http://zenodo.org"
                   ></el-input>
@@ -711,7 +717,7 @@
               <el-form-item label="Session">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.conference.session"
+                    v-model="figshareMetadataForm.conference.session"
                     type="text"
                     placeholder="e.g. VI"
                   ></el-input>
@@ -723,7 +729,7 @@
               <el-form-item label="Part">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.conference.part"
+                    v-model="figshareMetadataForm.conference.part"
                     type="text"
                     placeholder="e.g. 1"
                   ></el-input>
@@ -751,7 +757,7 @@
               <el-form-item label="Publisher">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.bookReportChapter.publisher"
+                    v-model="figshareMetadataForm.bookReportChapter.publisher"
                     type="text"
                   ></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
@@ -760,7 +766,7 @@
               <el-form-item label="Place">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.bookReportChapter.place"
+                    v-model="figshareMetadataForm.bookReportChapter.place"
                     type="text"
                     placeholder="e.g. city, country"
                   ></el-input>
@@ -770,7 +776,7 @@
               <el-form-item label="ISBN">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.bookReportChapter.isbn"
+                    v-model="figshareMetadataForm.bookReportChapter.isbn"
                     type="text"
                     placeholder="e.g. 0-06-251587-X"
                   ></el-input>
@@ -780,7 +786,7 @@
               <el-form-item label="Book title">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.bookReportChapter.title"
+                    v-model="figshareMetadataForm.bookReportChapter.title"
                     type="text"
                   ></el-input>
                   <p class="pt-2 text-xs text-gray-500">
@@ -791,7 +797,7 @@
               <el-form-item label="Pages">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.bookReportChapter.pages"
+                    v-model="figshareMetadataForm.bookReportChapter.pages"
                     type="text"
                   ></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
@@ -815,7 +821,7 @@
               <el-form-item label="Awarding university">
                 <div class="flex w-full flex-col">
                   <el-input
-                    v-model="zenodoMetadataForm.thesis.awardingUniversity"
+                    v-model="figshareMetadataForm.thesis.awardingUniversity"
                     type="text"
                   ></el-input>
                   <p class="pt-2 text-xs text-gray-500">Optional.</p>
@@ -825,7 +831,7 @@
               <el-form-item label="Supervisors">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.thesis.supervisors"
+                  :list="figshareMetadataForm.thesis.supervisors"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -913,7 +919,7 @@
               <el-form-item label="Subjects" prop="subjects">
                 <draggable
                   tag="div"
-                  :list="zenodoMetadataForm.subjects"
+                  :list="figshareMetadataForm.subjects"
                   item-key="id"
                   handle=".handle"
                   class="w-full"
@@ -1047,10 +1053,10 @@ export default {
       relatedIdentifierRelationships: zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
-      zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
+      figshareMetadataForm: zenodoMetadataOptions.defaultForm,
       relatedIdentifiersErrorMessage: "",
       invalidStatus: {},
-      rulesForZenodoMetadataForm: {
+      rulesForfigshareMetadataForm: {
         publicationDate: [
           {
             required: true,
@@ -1119,8 +1125,8 @@ export default {
       };
     },
     checkInvalidStatus() {
-      if (this.$refs.zmForm) {
-        this.$refs.zmForm.validate();
+      if (this.$refs.fmForm) {
+        this.$refs.fmForm.validate();
       }
 
       if (this.invalidStatus == {}) {
@@ -1171,14 +1177,14 @@ export default {
       callback();
     },
     addSubject() {
-      this.zenodoMetadataForm.subjects.push({
+      this.figshareMetadataForm.subjects.push({
         term: "",
         identifier: "",
         id: uuidv4(),
       });
     },
     deleteSubject(id) {
-      this.zenodoMetadataForm.subjects = this.zenodoMetadataForm.subjects.filter((subject) => {
+      this.figshareMetadataForm.subjects = this.figshareMetadataForm.subjects.filter((subject) => {
         return subject.id !== id;
       });
     },
@@ -1224,7 +1230,7 @@ export default {
       callback();
     },
     addAuthor() {
-      this.zenodoMetadataForm.authors.push({
+      this.figshareMetadataForm.authors.push({
         name: "",
         affiliation: "",
         orcid: "",
@@ -1232,24 +1238,24 @@ export default {
       });
     },
     deleteAuthor(id) {
-      this.zenodoMetadataForm.authors = this.zenodoMetadataForm.authors.filter((author) => {
+      this.figshareMetadataForm.authors = this.figshareMetadataForm.authors.filter((author) => {
         return author.id !== id;
       });
     },
 
     addKeyword() {
-      this.zenodoMetadataForm.keywords.push({
+      this.figshareMetadataForm.keywords.push({
         keyword: "",
         id: uuidv4(),
       });
     },
     deleteKeyword(id) {
-      this.zenodoMetadataForm.keywords = this.zenodoMetadataForm.keywords.filter((keyword) => {
+      this.figshareMetadataForm.keywords = this.figshareMetadataForm.keywords.filter((keyword) => {
         return keyword.id !== id;
       });
     },
     addRelatedIdentifier() {
-      this.zenodoMetadataForm.relatedIdentifiers.push({
+      this.figshareMetadataForm.relatedIdentifiers.push({
         identifier: "",
         relationship: "",
         resourceType: "",
@@ -1257,8 +1263,8 @@ export default {
       });
     },
     deleteRelatedIdentifier(id) {
-      this.zenodoMetadataForm.relatedIdentifiers =
-        this.zenodoMetadataForm.relatedIdentifiers.filter((relatedIdentifier) => {
+      this.figshareMetadataForm.relatedIdentifiers =
+        this.figshareMetadataForm.relatedIdentifiers.filter((relatedIdentifier) => {
           return relatedIdentifier.id !== id;
         });
     },
@@ -1311,7 +1317,7 @@ export default {
       callback();
     },
     addContributor() {
-      this.zenodoMetadataForm.contributors.push({
+      this.figshareMetadataForm.contributors.push({
         contributorType: "",
         name: "",
         affiliation: "",
@@ -1320,29 +1326,29 @@ export default {
       });
     },
     deleteContributor(id) {
-      this.zenodoMetadataForm.contributors = this.zenodoMetadataForm.contributors.filter(
+      this.figshareMetadataForm.contributors = this.figshareMetadataForm.contributors.filter(
         (contributor) => {
           return contributor.id !== id;
         }
       );
-      this.$refs.zmForm.validate();
+      this.$refs.fmForm.validate();
     },
 
     addReference() {
-      this.zenodoMetadataForm.references.push({
+      this.figshareMetadataForm.references.push({
         reference: "",
         id: uuidv4(),
       });
     },
     deleteReference(id) {
-      this.zenodoMetadataForm.references = this.zenodoMetadataForm.references.filter(
+      this.figshareMetadataForm.references = this.figshareMetadataForm.references.filter(
         (reference) => {
           return reference.id !== id;
         }
       );
     },
     addSupervisor() {
-      this.zenodoMetadataForm.thesis.supervisors.push({
+      this.figshareMetadataForm.thesis.supervisors.push({
         name: "",
         affiliation: "",
         orcid: "",
@@ -1350,8 +1356,8 @@ export default {
       });
     },
     deleteSupervisor(id) {
-      this.zenodoMetadataForm.thesis.supervisors =
-        this.zenodoMetadataForm.thesis.supervisors.filter((supervisor) => {
+      this.figshareMetadataForm.thesis.supervisors =
+        this.figshareMetadataForm.thesis.supervisors.filter((supervisor) => {
           return supervisor.name !== id;
         });
     },
@@ -1366,16 +1372,16 @@ export default {
     },
 
     addZenodoMetadata(_evt, shouldNavigateBack = false) {
-      if (this.zenodoMetadataForm.authors.length == 0) {
+      if (this.figshareMetadataForm.authors.length == 0) {
         ElMessage.error("Please add at least one author.");
       }
 
-      if (this.zenodoMetadataForm.publicationDate === "") {
+      if (this.figshareMetadataForm.publicationDate === "") {
         ElMessage.error("Please add a publication date.");
         return;
       }
 
-      if (this.zenodoMetadataForm.license.licenseName === "") {
+      if (this.figshareMetadataForm.license.licenseName === "") {
         ElMessage.error("Please select a license.");
         return;
       }
@@ -1384,7 +1390,7 @@ export default {
 
       this.workflow.expandOptions = [];
 
-      this.workflow.destination.zenodo.questions = this.zenodoMetadataForm;
+      this.workflow.destination.zenodo.questions = this.figshareMetadataForm;
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
@@ -1424,22 +1430,22 @@ export default {
 
         let date = new Date();
 
-        this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        this.figshareMetadataForm.publicationDate = `${date.getFullYear()}-${(date.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
         if ("name" in generalForm) {
-          this.zenodoMetadataForm.title = generalForm.name;
+          this.figshareMetadataForm.title = generalForm.name;
         }
 
         if ("description" in generalForm) {
-          this.zenodoMetadataForm.description = generalForm.description;
+          this.figshareMetadataForm.description = generalForm.description;
         }
 
         if ("keywords" in generalForm) {
-          this.zenodoMetadataForm.keywords = [];
+          this.figshareMetadataForm.keywords = [];
           generalForm.keywords.forEach((element) => {
-            this.zenodoMetadataForm.keywords.push({
+            this.figshareMetadataForm.keywords.push({
               keyword: element.keyword,
               id: uuidv4(),
             });
@@ -1447,7 +1453,7 @@ export default {
         }
 
         if ("license" in generalForm) {
-          this.zenodoMetadataForm.license.licenseName = generalForm.license;
+          this.figshareMetadataForm.license.licenseName = generalForm.license;
         }
 
         if ("authors" in generalForm) {
@@ -1470,7 +1476,7 @@ export default {
             };
             newAuthors.push(newAuthor);
           });
-          this.zenodoMetadataForm.authors = newAuthors;
+          this.figshareMetadataForm.authors = newAuthors;
         }
 
         if ("contributors" in generalForm) {
@@ -1486,7 +1492,7 @@ export default {
             };
             newContributors.push(newContributor);
           });
-          this.zenodoMetadataForm.contributors = newContributors;
+          this.figshareMetadataForm.contributors = newContributors;
 
           this.activeNames.indexOf("contributors") === -1
             ? this.activeNames.push("contributors")
@@ -1497,11 +1503,11 @@ export default {
           "newVersion" in this.workflow.destination.zenodo &&
           this.workflow.destination.zenodo.newVersion
         ) {
-          if (this.zenodoMetadataForm.keywords.length == 0) {
+          if (this.figshareMetadataForm.keywords.length == 0) {
             if ("keywords" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.keywords.forEach(
                 (keyword) => {
-                  this.zenodoMetadataForm.keywords.push({
+                  this.figshareMetadataForm.keywords.push({
                     keyword,
                     id: uuidv4(),
                   });
@@ -1510,11 +1516,11 @@ export default {
             }
           }
 
-          if (this.zenodoMetadataForm.authors.length == 0) {
+          if (this.figshareMetadataForm.authors.length == 0) {
             if ("creators" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.creators.forEach(
                 ({ name, affiliation, orcid }) => {
-                  this.zenodoMetadataForm.authors.push({
+                  this.figshareMetadataForm.authors.push({
                     name,
                     affiliation,
                     orcid,
@@ -1525,11 +1531,11 @@ export default {
             }
           }
 
-          if (this.zenodoMetadataForm.contributors.length == 0) {
+          if (this.figshareMetadataForm.contributors.length == 0) {
             if ("contributors" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
               this.workflow.destination.zenodo.selectedDeposition.metadata.contributors.forEach(
                 ({ name, type, affiliation, orcid }) => {
-                  this.zenodoMetadataForm.contributors.push({
+                  this.figshareMetadataForm.contributors.push({
                     name,
                     contributorType: type,
                     affiliation,
@@ -1546,17 +1552,17 @@ export default {
           }
 
           if ("notes" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.additionalNotes =
+            this.figshareMetadataForm.additionalNotes =
               this.workflow.destination.zenodo.selectedDeposition.metadata.notes;
           }
 
           if (
             "related_identifiers" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
-            this.zenodoMetadataForm.relatedIdentifiers = [];
+            this.figshareMetadataForm.relatedIdentifiers = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.related_identifiers.forEach(
               ({ identifier, relation, resource_type }) => {
-                this.zenodoMetadataForm.relatedIdentifiers.push({
+                this.figshareMetadataForm.relatedIdentifiers.push({
                   identifier,
                   relationship: relation,
                   resourceType: resource_type,
@@ -1571,10 +1577,10 @@ export default {
           }
 
           if ("references" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.references = [];
+            this.figshareMetadataForm.references = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.references.forEach(
               (reference) => {
-                this.zenodoMetadataForm.references.push({
+                this.figshareMetadataForm.references.push({
                   reference,
                   id: uuidv4(),
                 });
@@ -1587,41 +1593,41 @@ export default {
           }
 
           if ("version" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.version =
+            this.figshareMetadataForm.version =
               this.workflow.destination.zenodo.selectedDeposition.metadata.version;
           }
           if ("language" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.language =
+            this.figshareMetadataForm.language =
               this.workflow.destination.zenodo.selectedDeposition.metadata.language;
           }
 
           if ("journal_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.journal.title =
+            this.figshareMetadataForm.journal.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_title;
 
             this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
           if ("journal_volume" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.journal.volume =
+            this.figshareMetadataForm.journal.volume =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_volume;
 
             this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
           if ("journal_issue" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.journal.issue =
+            this.figshareMetadataForm.journal.issue =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_issue;
 
             this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
           if ("journal_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.journal.pages =
+            this.figshareMetadataForm.journal.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_pages;
 
             this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
           }
 
           if ("conference_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.conference.title =
+            this.figshareMetadataForm.conference.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_title;
 
             this.activeNames.indexOf("conference") === -1
@@ -1631,7 +1637,7 @@ export default {
           if (
             "conference_acronym" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
-            this.zenodoMetadataForm.conference.acronym =
+            this.figshareMetadataForm.conference.acronym =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_acronym;
 
             this.activeNames.indexOf("conference") === -1
@@ -1643,11 +1649,11 @@ export default {
           //   "conference_dates" in
           //   this.workflow.destination.zenodo.selectedDeposition.metadata
           // ) {
-          //   this.zenodoMetadataForm.conference.dates =
+          //   this.figshareMetadataForm.conference.dates =
           //     this.workflow.destination.zenodo.selectedDeposition.metadata.conference_dates;
           // }
           if ("conference_place" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.conference.place =
+            this.figshareMetadataForm.conference.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_place;
 
             this.activeNames.indexOf("conference") === -1
@@ -1655,7 +1661,7 @@ export default {
               : null;
           }
           if ("conference_url" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.conference.website =
+            this.figshareMetadataForm.conference.website =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_url;
 
             this.activeNames.indexOf("conference") === -1
@@ -1665,7 +1671,7 @@ export default {
           if (
             "conference_session" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
-            this.zenodoMetadataForm.conference.session =
+            this.figshareMetadataForm.conference.session =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session;
 
             this.activeNames.indexOf("conference") === -1
@@ -1676,7 +1682,7 @@ export default {
             "conference_session_part" in
             this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
-            this.zenodoMetadataForm.conference.part =
+            this.figshareMetadataForm.conference.part =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session_part;
 
             this.activeNames.indexOf("conference") === -1
@@ -1685,7 +1691,7 @@ export default {
           }
 
           if ("imprint_publisher" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.bookReportChapter.publisher =
+            this.figshareMetadataForm.bookReportChapter.publisher =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_publisher;
 
             this.activeNames.indexOf("bookReportChapter") === -1
@@ -1693,7 +1699,7 @@ export default {
               : null;
           }
           if ("imprint_isbn" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.bookReportChapter.isbn =
+            this.figshareMetadataForm.bookReportChapter.isbn =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_isbn;
 
             this.activeNames.indexOf("bookReportChapter") === -1
@@ -1701,7 +1707,7 @@ export default {
               : null;
           }
           if ("imprint_place" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.bookReportChapter.place =
+            this.figshareMetadataForm.bookReportChapter.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_place;
 
             this.activeNames.indexOf("bookReportChapter") === -1
@@ -1709,7 +1715,7 @@ export default {
               : null;
           }
           if ("partof_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.bookReportChapter.title =
+            this.figshareMetadataForm.bookReportChapter.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_title;
 
             this.activeNames.indexOf("bookReportChapter") === -1
@@ -1717,7 +1723,7 @@ export default {
               : null;
           }
           if ("partof_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.bookReportChapter.pages =
+            this.figshareMetadataForm.bookReportChapter.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_pages;
 
             this.activeNames.indexOf("bookReportChapter") === -1
@@ -1726,7 +1732,7 @@ export default {
           }
 
           if ("thesis_university" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.thesis.awardingUniversity =
+            this.figshareMetadataForm.thesis.awardingUniversity =
               this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_university;
 
             this.activeNames.indexOf("thesis") === -1 ? this.activeNames.push("thesis") : null;
@@ -1734,10 +1740,10 @@ export default {
           if (
             "thesis_supervisors" in this.workflow.destination.zenodo.selectedDeposition.metadata
           ) {
-            this.zenodoMetadataForm.thesis.supervisors = [];
+            this.figshareMetadataForm.thesis.supervisors = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_supervisors.forEach(
               ({ name, affiliation, orcid }) => {
-                this.zenodoMetadataForm.thesis.supervisors.push({
+                this.figshareMetadataForm.thesis.supervisors.push({
                   name,
                   affiliation,
                   orcid,
@@ -1750,10 +1756,10 @@ export default {
           }
 
           if ("subjects" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
-            this.zenodoMetadataForm.subjects = [];
+            this.figshareMetadataForm.subjects = [];
             this.workflow.destination.zenodo.selectedDeposition.metadata.subjects.forEach(
               ({ term, identifier }) => {
-                this.zenodoMetadataForm.subjects.push({
+                this.figshareMetadataForm.subjects.push({
                   term,
                   identifier,
                   id: uuidv4(),
@@ -1780,7 +1786,7 @@ export default {
     navigateBack() {
       let newChanges = false;
 
-      if (!_.isEqual(this.originalObject, this.zenodoMetadataForm)) {
+      if (!_.isEqual(this.originalObject, this.figshareMetadataForm)) {
         newChanges = true;
       }
 
@@ -1794,7 +1800,7 @@ export default {
     },
   },
   watch: {
-    "zenodoMetadataForm.relatedIdentifiers": {
+    "figshareMetadataForm.relatedIdentifiers": {
       handler(val) {
         // console.log(val);
         if (val.length === 0) {
@@ -1804,7 +1810,7 @@ export default {
           for (let relatedIdentifier of val) {
             if (relatedIdentifier.identifier === "") {
               this.relatedIdentifiersErrorMessage = "Please provide a related identifier.";
-              this.$refs.zmForm.validate();
+              this.$refs.fmForm.validate();
               this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
@@ -1821,7 +1827,7 @@ export default {
               if (!validIdentifier) {
                 this.relatedIdentifiersErrorMessage =
                   "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
-                this.$refs.zmForm.validate();
+                this.$refs.fmForm.validate();
                 this.invalidStatus.relatedIdentifiers = true;
                 break;
               } else {
@@ -1846,7 +1852,7 @@ export default {
       background: "rgba(0, 0, 0, 0.7)",
     });
 
-    this.zenodoMetadataForm = zenodoMetadataOptions.defaultForm;
+    this.figshareMetadataForm = zenodoMetadataOptions.defaultForm;
 
     this.dataset = JSON.parse(JSON.stringify(await this.datasetStore.getCurrentDataset()));
 
@@ -1873,34 +1879,34 @@ export default {
       Object.keys(this.workflow.destination.zenodo.questions).length !== 0 &&
       !testvar
     ) {
-      this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+      this.figshareMetadataForm = this.workflow.destination.zenodo.questions;
 
-      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.license);
-      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.journal);
-      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.conference);
+      this.initializeEmptyObjects(this.figshareMetadataForm, this.figshareMetadataForm.license);
+      this.initializeEmptyObjects(this.figshareMetadataForm, this.figshareMetadataForm.journal);
+      this.initializeEmptyObjects(this.figshareMetadataForm, this.figshareMetadataForm.conference);
       this.initializeEmptyObjects(
-        this.zenodoMetadataForm,
-        this.zenodoMetadataForm.bookReportChapter
+        this.figshareMetadataForm,
+        this.figshareMetadataForm.bookReportChapter
       );
-      this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.thesis);
+      this.initializeEmptyObjects(this.figshareMetadataForm, this.figshareMetadataForm.thesis);
 
       const generalForm = this.dataset.data.general.questions;
-      this.zenodoMetadataForm.license.licenseName = generalForm.license;
+      this.figshareMetadataForm.license.licenseName = generalForm.license;
 
-      this.addIds(this.zenodoMetadataForm.authors);
-      this.addIds(this.zenodoMetadataForm.keywords);
-      this.addIds(this.zenodoMetadataForm.relatedIdentifiers);
-      this.addIds(this.zenodoMetadataForm.contributors);
-      this.addIds(this.zenodoMetadataForm.references);
-      this.addIds(this.zenodoMetadataForm.thesis.supervisors);
-      this.addIds(this.zenodoMetadataForm.subjects);
+      this.addIds(this.figshareMetadataForm.authors);
+      this.addIds(this.figshareMetadataForm.keywords);
+      this.addIds(this.figshareMetadataForm.relatedIdentifiers);
+      this.addIds(this.figshareMetadataForm.contributors);
+      this.addIds(this.figshareMetadataForm.references);
+      this.addIds(this.figshareMetadataForm.thesis.supervisors);
+      this.addIds(this.figshareMetadataForm.subjects);
       this.loading.close();
 
-      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
+      this.originalObject = JSON.parse(JSON.stringify(this.figshareMetadataForm));
     } else {
       this.prefillZenodoQuestions();
 
-      this.originalObject = JSON.parse(JSON.stringify(this.zenodoMetadataForm));
+      this.originalObject = JSON.parse(JSON.stringify(this.figshareMetadataForm));
 
       this.loading.close();
     }
