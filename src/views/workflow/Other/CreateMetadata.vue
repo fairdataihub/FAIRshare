@@ -147,6 +147,7 @@
                     <div class="p-4">
                       <el-form
                         :model="step2Form"
+                        :rules="step2FormRules"
                         label-width="160px"
                         label-position="top"
                         size="large"
@@ -154,7 +155,7 @@
                         @submit.prevent
                         class="py-4"
                       >
-                        <el-form-item label="Authors" :error="authorsErrorMessage" required>
+                        <el-form-item label="Authors" prop="authors">
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
@@ -168,6 +169,7 @@
                                     v-model="element.givenName"
                                     type="text"
                                     placeholder="Given name"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-1"></div>
@@ -176,6 +178,7 @@
                                     v-model="element.familyName"
                                     type="text"
                                     placeholder="Family name"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-2"></div>
@@ -184,6 +187,7 @@
                                     v-model="element.affiliation"
                                     type="text"
                                     placeholder="Affiliation"
+                                    class="h-[40px]"
                                   ></el-input>
 
                                   <div class="mx-2 flex w-full flex-col">
@@ -244,7 +248,7 @@
                           ></form-help-content>
                         </div>
 
-                        <el-form-item label="Contributors" :error="contributorsErrorMessage">
+                        <el-form-item label="Contributors" prop="contributors">
                           <draggable
                             tag="div"
                             :list="step2Form.contributors"
@@ -388,6 +392,7 @@
                     <div class="p-4">
                       <el-form
                         :model="step3Form"
+                        :rules="step3FormRules"
                         label-width="160px"
                         label-position="top"
                         size="large"
@@ -426,7 +431,7 @@
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Keywords" required>
+                        <el-form-item label="Keywords" prop="keywords">
                           <draggable
                             tag="div"
                             :list="step3Form.keywords"
@@ -873,26 +878,43 @@ export default {
         authors: [],
         contributors: [],
       },
+      step2FormRules: {
+        authors: [
+          {
+            required: true,
+            validator: this.authorValidator,
+            trigger: "blur",
+          },
+        ],
+        contributors: [
+          {
+            required: false,
+            validator: this.contributorValidator,
+            trigger: "blur",
+          },
+        ],
+      },
       step3Form: {
         identifier: "",
         keywords: [],
         fundingCode: "",
         fundingOrganization: "",
       },
+      step3FormRules: {
+        keywords: [
+          {
+            required: true,
+            validator: this.keywordValidator,
+            trigger: "blur",
+          },
+        ],
+      },
       step4Form: {
         referencePublication: "",
         developmentStatus: "",
         isPartOf: "",
       },
-      authorsErrorMessage: "",
-      contributorsErrorMessage: "",
       isPartOfErrorMessage: "",
-      versionErrorMessage: "",
-      currentVersionDownloadLinkErrorMessage: "",
-      relatedLinksErrorMessage: "",
-      issueTrackerErrorMessage: "",
-      continuousIntegrationErrorMessage: "",
-      codeRepositoryErrorMessage: "",
       greyOutIdentifierInput: false,
       invalidStatus: {},
       originalObject: {},
@@ -901,156 +923,6 @@ export default {
     };
   },
   watch: {
-    "step2Form.authors": {
-      handler(val) {
-        if (val.length > 0) {
-          for (let author of val) {
-            if (
-              author.givenName === "" ||
-              author.affiliation === "" ||
-              author.affiliation === undefined
-            ) {
-              this.authorsErrorMessage = "First name and Affiliation for each author is mandatory";
-              this.invalidStatus.authors = true;
-              if (this.$refs["s2Form"]) {
-                this.$refs["s2Form"].validate();
-              }
-              break;
-            } else {
-              this.authorsErrorMessage = "";
-              this.invalidStatus.authors = false;
-            }
-
-            // validate orcid
-            if (author.orcid !== "") {
-              const orcid = author.orcid;
-              let total = 0;
-              for (let i = 0; i < orcid.length - 1; i++) {
-                const digit = parseInt(orcid.substr(i, 1));
-                if (isNaN(digit)) {
-                  continue;
-                }
-                total = (total + digit) * 2;
-              }
-
-              const remainder = total % 11;
-              const result = (12 - remainder) % 11;
-              const checkDigit = result === 10 ? "X" : String(result);
-
-              if (checkDigit === orcid.substr(-1)) {
-                this.authorsErrorMessage = "";
-                this.invalidStatus.authors = false;
-              } else {
-                // console.log("invalid orcid");
-                this.authorsErrorMessage = "ORCID is not valid";
-                if (this.$refs["s2Form"]) {
-                  this.$refs["s2Form"].validate();
-                }
-                this.invalidStatus.authors = true;
-                break;
-              }
-
-              // validate email
-              if (author.email !== "") {
-                const validIdentifier = validator.isEmail(author.email);
-
-                if (!validIdentifier) {
-                  this.authorsErrorMessage = "Email is not valid";
-                  if (this.$refs["s2Form"]) {
-                    this.$refs["s2Form"].validate();
-                  }
-                  this.invalidStatus.authors = true;
-                  break;
-                } else {
-                  this.authorsErrorMessage = "";
-                  this.invalidStatus.authors = false;
-                }
-              }
-            }
-          }
-        } else {
-          this.authorsErrorMessage = "";
-          this.invalidStatus.authors = false;
-        }
-      },
-      deep: true,
-    },
-    "step2Form.contributors": {
-      handler(val) {
-        if (val.length > 0) {
-          for (let contributor of val) {
-            if (contributor.givenName === "" || contributor.affiliation === "") {
-              this.contributorsErrorMessage =
-                "Name and Affiliation for each contributor is mandatory";
-              this.invalidStatus.contributors = true;
-              this.$refs.s2Form.validate();
-              break;
-            } else {
-              this.contributorsErrorMessage = "";
-              this.invalidStatus.contributors = false;
-            }
-
-            // validate orcid
-            if (contributor.orcid !== "") {
-              const orcid = contributor.orcid;
-              let total = 0;
-              for (let i = 0; i < orcid.length - 1; i++) {
-                const digit = parseInt(orcid.substr(i, 1));
-                if (isNaN(digit)) {
-                  continue;
-                }
-                total = (total + digit) * 2;
-              }
-
-              const remainder = total % 11;
-              const result = (12 - remainder) % 11;
-              const checkDigit = result === 10 ? "X" : String(result);
-
-              if (checkDigit === orcid.substr(-1)) {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              } else {
-                // console.log("invalid orcid");
-                this.contributorsErrorMessage = "ORCID is not valid";
-                this.$refs.s2Form.validate();
-                this.invalidStatus.contributors = true;
-                break;
-              }
-            }
-
-            // validate email
-            if (contributor.email !== "") {
-              const validIdentifier = validator.isEmail(contributor.email);
-
-              if (!validIdentifier) {
-                this.contributorsErrorMessage = "Email is not valid";
-                this.$refs.s2Form.validate();
-                this.invalidStatus.contributors = true;
-                break;
-              } else {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              }
-            }
-
-            // validate contributor role
-            if (contributor.contributorType === "") {
-              this.contributorsErrorMessage = "Please select contributor type for each contributor";
-              this.invalidStatus.contributors = true;
-              this.$refs.s2Form.validate();
-              break;
-            } else {
-              this.contributorsErrorMessage = "";
-              this.invalidStatus.contributors = false;
-            }
-          }
-        } else {
-          this.contributorsErrorMessage = "";
-          this.invalidStatus.contributors = false;
-        }
-      },
-      deep: true,
-    },
     "step4Form.isPartOf": {
       handler(val) {
         if (val != "" && val != undefined) {
@@ -1205,6 +1077,14 @@ export default {
         }
       }, 50);
     },
+
+    keywordValidator(_rule, value, callback) {
+      if ((value === "" || value === undefined) && value.length > 0) {
+        callback(new Error("Please provide a valid keyword"));
+      } else {
+        callback();
+      }
+    },
     addKeyword(_event, keyword = "") {
       if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
         this.$message.warning("Keyword already exists.");
@@ -1222,6 +1102,62 @@ export default {
       this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
         return keyword.id !== id;
       });
+      this.$refs["s3Form"].validate();
+    },
+
+    authorValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let author of value) {
+          if (
+            author.givenName === "" ||
+            author.affiliation === "" ||
+            author.affiliation === undefined
+          ) {
+            this.invalidStatus.authors = true;
+            callback(new Error("First name and Affiliation for each author is mandatory"));
+            return;
+          }
+
+          // validate orcid
+          if (author.orcid !== "") {
+            const orcid = author.orcid;
+            let total = 0;
+            for (let i = 0; i < orcid.length - 1; i++) {
+              const digit = parseInt(orcid.substr(i, 1));
+              if (isNaN(digit)) {
+                continue;
+              }
+              total = (total + digit) * 2;
+            }
+
+            const remainder = total % 11;
+            const result = (12 - remainder) % 11;
+            const checkDigit = result === 10 ? "X" : String(result);
+
+            if (checkDigit !== orcid.substr(-1)) {
+              this.invalidStatus.authors = true;
+              callback(new Error("ORCID is not valid"));
+            }
+          }
+
+          // validate email
+          if (author.email !== "") {
+            const validIdentifier = validator.isEmail(author.email);
+
+            if (!validIdentifier) {
+              this.invalidStatus.authors = true;
+              callback(new Error("Email is not valid"));
+              return;
+            }
+          }
+        }
+      } else {
+        this.invalidStatus.authors = true;
+        callback(new Error("Please provide at least one author"));
+        return;
+      }
+      this.invalidStatus.authors = false;
+      callback();
     },
     addAuthor() {
       this.step2Form.authors.push({
@@ -1237,6 +1173,64 @@ export default {
       this.step2Form.authors = this.step2Form.authors.filter((author) => {
         return author.id !== id;
       });
+      this.$refs["s2Form"].validate();
+    },
+
+    contributorValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let contributor of value) {
+          if (
+            contributor.givenName === undefined ||
+            contributor.givenName.trim() === "" ||
+            contributor.affiliation === undefined ||
+            contributor.affiliation.trim() === ""
+          ) {
+            callback(new Error("First name and Affiliation for each contributor is mandatory"));
+            return;
+          }
+
+          // validate orcid
+          if (contributor.orcid !== "") {
+            const orcid = contributor.orcid;
+            let total = 0;
+            for (let i = 0; i < orcid.length - 1; i++) {
+              const digit = parseInt(orcid.substr(i, 1));
+              if (isNaN(digit)) {
+                continue;
+              }
+              total = (total + digit) * 2;
+            }
+
+            const remainder = total % 11;
+            const result = (12 - remainder) % 11;
+            const checkDigit = result === 10 ? "X" : String(result);
+
+            if (checkDigit !== orcid.substr(-1)) {
+              callback(new Error("ORCID is not valid"));
+              return;
+            }
+          }
+
+          // validate email
+          if (contributor.email !== "") {
+            const validIdentifier = validator.isEmail(contributor.email);
+
+            if (!validIdentifier) {
+              callback(new Error("Email is not valid"));
+              return;
+            }
+          }
+
+          if (
+            contributor.contributorType === undefined ||
+            contributor.contributorType.trim() === ""
+          ) {
+            callback(new Error("Contributor type is mandatory"));
+            return;
+          }
+        }
+      }
+      callback();
     },
     addContributor() {
       this.step2Form.contributors.push({
@@ -1253,7 +1247,9 @@ export default {
       this.step2Form.contributors = this.step2Form.contributors.filter((contributor) => {
         return contributor.id !== id;
       });
+      this.$refs["s2Form"].validate();
     },
+
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
         return element[key] !== "";
