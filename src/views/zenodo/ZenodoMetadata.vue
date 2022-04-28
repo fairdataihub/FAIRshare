@@ -312,8 +312,8 @@
                   </el-option>
                 </el-select>
                 <p class="pt-2 text-xs text-gray-500">
-                  Required. Selected license applies to all of your files displayed on the top of
-                  the form. <br />
+                  Required. Selected license applies to all of your files that will be shared on
+                  Zenodo. <br />
                   If you want to upload some of your files under different licenses, please do so in
                   separate uploads. <br />
                   If you cannot find the license you're looking for, include a relevant LICENSE file

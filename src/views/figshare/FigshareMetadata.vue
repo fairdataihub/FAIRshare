@@ -8,6 +8,8 @@
         will use this information to create a Figshare article. Please fill out the following form.
       </span>
 
+      <line-divider class="mb-8"></line-divider>
+
       <el-form
         :model="figshareMetadataForm"
         :rules="rulesFigshareMetadataForm"
@@ -15,16 +17,42 @@
         label-position="right"
         size="large"
         ref="fmForm"
+        class="rounded-lg border-2 border-slate-100 p-4"
         @submit.prevent
       >
         <el-form-item label="Item type" prop="uploadType">
-          <div class="flex flex-col">
-            <el-tree-select v-model="figshareMetadataForm.uploadType" :data="uploadTypeOptions" />
+          <div class="flex w-full flex-col">
+            <el-select v-model="figshareMetadataForm.uploadType" placeholder="Media">
+              <el-option
+                v-for="item in uploadTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+                <div class="flex w-full flex-row items-center justify-start">
+                  <Icon :icon="item.icon" />
+                  <span class="pl-4">{{ item.label }}</span>
+                </div>
+              </el-option>
+            </el-select>
           </div>
         </el-form-item>
 
         <el-form-item label="Title" prop="title">
           <el-input v-model="figshareMetadataForm.title" type="text"> </el-input>
+        </el-form-item>
+
+        <el-form-item label="Description" prop="description">
+          <VuePopper
+            :hover="true"
+            offsetDistance="0"
+            content="Use a description that is easily identifiable. This will
+                        be shown in the dataset selection screen and is not part
+                        of your submitted metadata."
+            class="mx-0 w-full"
+          >
+            <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
+          </VuePopper>
         </el-form-item>
 
         <el-form-item label="Authors" prop="authors">
@@ -165,19 +193,6 @@
           </div>
         </el-form-item>
 
-        <el-form-item label="Description" prop="description">
-          <VuePopper
-            :hover="true"
-            offsetDistance="0"
-            content="Use a description that is easily identifiable. This will
-                        be shown in the dataset selection screen and is not part
-                        of your submitted metadata."
-            class="mx-0 w-full"
-          >
-            <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
-          </VuePopper>
-        </el-form-item>
-
         <el-form-item label="Funding">
           <draggable
             tag="div"
@@ -287,7 +302,6 @@
           <el-select
             v-model="figshareMetadataForm.license.licenseName"
             filterable
-            disabled
             placeholder="Select a license"
             class="w-full"
           >
@@ -300,996 +314,12 @@
             </el-option>
           </el-select>
           <p class="pt-2 text-xs text-gray-500">
-            Required. Selected license applies to all of your files displayed on the top of the
-            form. <br />
+            Required. Selected license applies to all of your files that will be shared on Figshare.
+            <br />
             If you want to upload some of your files under different licenses, please do so in
-            separate uploads. <br />
-            If you cannot find the license you're looking for, include a relevant LICENSE file in
-            your record and choose one of the
-            <span class="italic"> Other </span> licenses available
-            <span class="italic"> (Other (Open), Other (Attribution) </span>, etc.). <br />
-            The supported licenses in the list are harvested from
-            <a
-              href="https://opendefinition.org/"
-              target="_blank"
-              class="text-blue-500 hover:underline"
-            >
-              opendefinition.org
-            </a>
-            and
-            <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
-              spdx.org
-            </a>
-            .
+            separate uploads.
           </p>
         </el-form-item>
-      </el-form>
-
-      <el-form
-        :model="figshareMetadataForm"
-        :rules="rulesFigshareMetadataForm"
-        label-width="150px"
-        label-position="right"
-        size="large"
-        ref="fmForm"
-        @submit.prevent
-      >
-        <el-collapse v-model="activeNames">
-          <el-collapse-item
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-            name="basicInformation"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Basic Information</p>
-                <span class="pr-2 text-gray-400"> required </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Publication date" prop="publicationDate">
-                <div class="flex flex-col">
-                  <el-date-picker
-                    v-model="figshareMetadataForm.publicationDate"
-                    type="date"
-                    placeholder="Pick a day"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                  <p class="pt-1 text-xs text-gray-500">
-                    In case your upload was already published elsewhere, please use the date of
-                    first publication.
-                  </p>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Title" prop="title">
-                <el-input v-model="figshareMetadataForm.title" type="text"> </el-input>
-              </el-form-item>
-
-              <el-form-item label="Authors" prop="authors">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.authors"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.name"
-                          type="text"
-                          placeholder="Family name, given names"
-                          class="h-[40px]"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.affiliation"
-                          type="text"
-                          placeholder="Affiliation"
-                          class="h-[40px]"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                        <div class="flex w-full flex-col">
-                          <el-input
-                            v-model="element.orcid"
-                            type="text"
-                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                        </div>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteAuthor(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addAuthor()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add an author </span>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Description" prop="description">
-                <VuePopper
-                  :hover="true"
-                  offsetDistance="0"
-                  content="Use a description that is easily identifiable. This will
-                        be shown in the dataset selection screen and is not part
-                        of your submitted metadata."
-                  class="mx-0 w-full"
-                >
-                  <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
-                </VuePopper>
-              </el-form-item>
-
-              <el-form-item label="Version" prop="version">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.version"
-                    type="text"
-                    placeholder="1.0.4"
-                  ></el-input>
-                  <p class="pt-1 text-xs text-gray-500">
-                    Optional. Mostly relevant for software and dataset uploads. Any string will be
-                    accepted, but semantically-versioned tag is recommended. <br />
-                    See
-                    <a href="https://semver.org/" target="_blank"> semver.org </a>
-                    for more information on semantic versioning.
-                  </p>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Language">
-                <div class="w-full">
-                  <el-select
-                    v-model="figshareMetadataForm.language"
-                    filterable
-                    placeholder="e.g.: 'eng', 'fr' or 'Polish'"
-                    class="w-full"
-                  >
-                    <el-option
-                      v-for="item in languageOptions"
-                      :key="item.alpha3"
-                      :label="`${item.name} - ${item.alpha3}`"
-                      :value="item.alpha3"
-                    >
-                    </el-option>
-                  </el-select>
-                  <p class="pt-1 text-xs text-gray-500">
-                    Optional. Primary language of the record. Start by typing the language's common
-                    name in English, or its ISO 639 code (two or three-letter code).
-                    <br />
-                    See
-                    <a
-                      href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
-                      target="_blank"
-                    >
-                      ISO 639 language codes list
-                    </a>
-                    for more information.
-                  </p>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Keywords">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.keywords"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input v-model="element.keyword" type="text" placeholder=""></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly">
-                        <div
-                          class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-center justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteKeyword(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addKeyword()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a keyword </span>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Additional Notes">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.additionalNotes"
-                    type="textarea"
-                  ></el-input>
-                  <p class="pt-1 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="license"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">License</p>
-                <span class="pr-2 text-gray-400"> required </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Access right" :required="true">
-                <div class="flex flex-col">
-                  <el-radio-group v-model="figshareMetadataForm.license.accessRight">
-                    <div class="flex flex-col">
-                      <el-radio label="open">
-                        <el-icon>
-                          <unlock-icon />
-                        </el-icon>
-                        Open Access
-                      </el-radio>
-                      <el-radio label="embargoed" disabled>
-                        <el-icon> <remove-filled /> </el-icon> Embargoed Access
-                      </el-radio>
-                      <el-radio label="restricted" disabled>
-                        <el-icon>
-                          <key-icon />
-                        </el-icon>
-                        Restricted Access
-                      </el-radio>
-                      <el-radio label="closed" disabled>
-                        <el-icon>
-                          <lock-icon />
-                        </el-icon>
-                        Closed Access
-                      </el-radio>
-                    </div>
-                  </el-radio-group>
-                  <p class="pt-1 text-xs text-gray-500">
-                    Required. Open access uploads have considerably higher visibility on Zenodo.
-                  </p>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="License" prop="license">
-                <el-select
-                  v-model="figshareMetadataForm.license.licenseName"
-                  filterable
-                  disabled
-                  placeholder="Select a license"
-                  class="w-full"
-                >
-                  <el-option
-                    v-for="item in licenseOptions"
-                    :key="item.licenseId"
-                    :label="item.name"
-                    :value="item.licenseId"
-                  >
-                  </el-option>
-                </el-select>
-                <p class="pt-2 text-xs text-gray-500">
-                  Required. Selected license applies to all of your files displayed on the top of
-                  the form. <br />
-                  If you want to upload some of your files under different licenses, please do so in
-                  separate uploads. <br />
-                  If you cannot find the license you're looking for, include a relevant LICENSE file
-                  in your record and choose one of the
-                  <span class="italic"> Other </span> licenses available
-                  <span class="italic"> (Other (Open), Other (Attribution) </span>, etc.). <br />
-                  The supported licenses in the list are harvested from
-                  <a
-                    href="https://opendefinition.org/"
-                    target="_blank"
-                    class="text-blue-500 hover:underline"
-                  >
-                    opendefinition.org
-                  </a>
-                  and
-                  <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
-                    spdx.org
-                  </a>
-                  .
-                </p>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="relatedIdentifiers"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">
-                  Related/alternate identifiers
-                </p>
-                <span class="pr-2 text-gray-400"> recommended </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <p class="mb-4 text-xs">
-                Specify identifiers of related publications and datasets. Supported identifiers
-                include: DOI and URLs.
-                <br />
-              </p>
-              <el-form-item label="Related identifiers" :error="relatedIdentifiersErrorMessage">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.relatedIdentifiers"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <div class="mx-2 w-6/12">
-                          <el-input
-                            v-model="element.identifier"
-                            type="text"
-                            placeholder="e.g. 10.1234/foobar.56789"
-                          ></el-input>
-                        </div>
-                        <div class="mx-2 flex w-6/12 flex-row justify-evenly">
-                          <el-select
-                            v-model="element.relationship"
-                            filterable
-                            placeholder="Select a relationship"
-                          >
-                            <el-option
-                              v-for="item in relatedIdentifierRelationships"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
-                            </el-option>
-                          </el-select>
-                          <div class="mx-2 block"></div>
-                          <div class="flex flex-col">
-                            <el-select
-                              v-model="element.resourceType"
-                              placeholder="Select a resource type"
-                            >
-                              <el-option-group
-                                v-for="group in relatedIdentifierTypes"
-                                :key="group.label"
-                                :label="group.label"
-                                v-show="group.options"
-                              >
-                                <el-option
-                                  v-for="item in group.options"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value"
-                                >
-                                </el-option>
-                              </el-option-group>
-                            </el-select>
-                            <p class="pt-2 text-xs text-gray-500">
-                              Optional. Resource type of the related identifier.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteRelatedIdentifier(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addRelatedIdentifier()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a related or alternate identifier </span>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="contributors"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Contributors</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Contributors" prop="contributors">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.contributors"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
-                          <el-select
-                            v-model="element.contributorType"
-                            filterable
-                            placeholder="Select a contributor type"
-                          >
-                            <el-option
-                              v-for="item in contributorTypes"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
-                            </el-option>
-                          </el-select>
-                        </div>
-                        <div class="w-3/12">
-                          <el-input
-                            v-model="element.name"
-                            type="text"
-                            placeholder="Family Name, Given Name"
-                          ></el-input>
-                        </div>
-                        <div class="mx-2 w-3/12">
-                          <el-input
-                            v-model="element.affiliation"
-                            type="text"
-                            placeholder="Affiliation"
-                          ></el-input>
-                        </div>
-                        <div class="mx-2 w-3/12">
-                          <div class="flex w-full flex-col">
-                            <el-input
-                              v-model="element.orcid"
-                              type="text"
-                              placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                            ></el-input>
-                            <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteContributor(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addContributor()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a contributor </span>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="references"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">References</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="References">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.references"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.reference"
-                          type="text"
-                          placeholder="e.g.: Cranmer, Kyle et al. (2014). Decouple software associated to arXiv:1401.0080."
-                        ></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteReference(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addReference()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a reference </span>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="journal"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Journal</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Journal title">
-                <div class="flex w-full flex-col">
-                  <el-input v-model="figshareMetadataForm.journal.title" type="text"></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Volume">
-                <div class="flex w-full flex-col">
-                  <el-input v-model="figshareMetadataForm.journal.volume" type="text"></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Issue">
-                <div class="flex w-full flex-col">
-                  <el-input v-model="figshareMetadataForm.journal.issue" type="text"></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Pages">
-                <div class="flex w-full flex-col">
-                  <el-input v-model="figshareMetadataForm.journal.pages" type="text"></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="conference"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Conference</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Conference title">
-                <div class="flex w-full flex-col">
-                  <el-input v-model="figshareMetadataForm.conference.title" type="text"></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Acronym">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.conference.acronym"
-                    type="text"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Dates">
-                <div class="flex w-full flex-col">
-                  <el-date-picker
-                    v-model="figshareMetadataForm.conference.dates"
-                    type="daterange"
-                    range-separator="-"
-                    start-placeholder="Start date"
-                    end-placeholder="End date"
-                    size="large"
-                    value-format="YYYY-MM-DD"
-                  >
-                  </el-date-picker>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Place">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.conference.place"
-                    type="text"
-                    placeholder="e.g. city, country"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Website">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.conference.website"
-                    type="text"
-                    placeholder="e.g. http://zenodo.org"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Session">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.conference.session"
-                    type="text"
-                    placeholder="e.g. VI"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">
-                    Optional. Number of session within the conference.
-                  </p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Part">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.conference.part"
-                    type="text"
-                    placeholder="e.g. 1"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">
-                    Optional. Number of part within a session.
-                  </p>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="bookReportChapter"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Book/Report/Chapter</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <p class="mb-4 text-sm">For parts of books and reports. <br /></p>
-              <el-form-item label="Publisher">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.bookReportChapter.publisher"
-                    type="text"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Place">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.bookReportChapter.place"
-                    type="text"
-                    placeholder="e.g. city, country"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="ISBN">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.bookReportChapter.isbn"
-                    type="text"
-                    placeholder="e.g. 0-06-251587-X"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Book title">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.bookReportChapter.title"
-                    type="text"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">
-                    Optional. Title of the book or report which this upload is part of.
-                  </p>
-                </div>
-              </el-form-item>
-              <el-form-item label="Pages">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.bookReportChapter.pages"
-                    type="text"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="thesis"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Thesis</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <el-form-item label="Awarding university">
-                <div class="flex w-full flex-col">
-                  <el-input
-                    v-model="figshareMetadataForm.thesis.awardingUniversity"
-                    type="text"
-                  ></el-input>
-                  <p class="pt-2 text-xs text-gray-500">Optional.</p>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Supervisors">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.thesis.supervisors"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input
-                          v-model="element.name"
-                          type="text"
-                          placeholder="Family name, given names"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.affiliation"
-                          type="text"
-                          placeholder="Affiliation"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                        <div class="flex w-full flex-col">
-                          <el-input
-                            v-model="element.orcid"
-                            type="text"
-                            placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                          ></el-input>
-                          <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                        </div>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteSupervisor(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addSupervisor()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a supervisor </span>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-
-          <el-collapse-item
-            name="subjects"
-            class="zenodo-collapse-item my-1 border-2 border-gray-100"
-          >
-            <template #title>
-              <div class="flex w-full flex-row items-center justify-between font-inter">
-                <p class="px-4 text-sm font-semibold text-blue-500">Subjects</p>
-                <span class="pr-2 text-gray-400"> optional </span>
-              </div>
-            </template>
-
-            <div class="p-4">
-              <p class="mb-4 text-xs">
-                Specify subjects from a taxonomy or controlled vocabulary. Each term must be
-                uniquely identified (e.g. a URL). For free form text, use the keywords field in
-                basic information section.
-                <br />
-              </p>
-              <el-form-item label="Subjects" prop="subjects">
-                <draggable
-                  tag="div"
-                  :list="figshareMetadataForm.subjects"
-                  item-key="id"
-                  handle=".handle"
-                  class="w-full"
-                >
-                  <template #item="{ element }">
-                    <div class="mb-2 flex flex-row justify-between transition-all">
-                      <div class="flex w-11/12 flex-row justify-between">
-                        <el-input v-model="element.term" type="text" placeholder="Term"></el-input>
-                        <div class="mx-2"></div>
-                        <el-input
-                          v-model="element.identifier"
-                          type="text"
-                          placeholder="Identifier"
-                        ></el-input>
-                        <div class="mx-2"></div>
-                      </div>
-                      <div class="flex w-1/12 flex-row justify-evenly pt-4">
-                        <div
-                          class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
-                        >
-                          <Icon icon="ic:outline-drag-indicator" />
-                        </div>
-                        <div class="flex items-start justify-center text-gray-500 transition-all">
-                          <el-popconfirm
-                            title="Are you sure you want to remove this?"
-                            icon-color="red"
-                            confirm-button-text="Yes"
-                            cancel-button-text="No"
-                            @confirm="deleteSubject(element.id)"
-                          >
-                            <template #reference>
-                              <el-icon class="cursor-pointer hover:text-gray-800">
-                                <delete-filled />
-                              </el-icon>
-                            </template>
-                          </el-popconfirm>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </draggable>
-
-                <div
-                  class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-                  @click="addSubject()"
-                >
-                  <Icon icon="carbon:add" />
-                  <span> Add a subject </span>
-                </div>
-              </el-form-item>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
       </el-form>
 
       <div class="flex w-full flex-row justify-center space-x-4 py-6">
@@ -1297,7 +327,7 @@
           <el-icon><d-arrow-left /></el-icon> Back
         </button>
 
-        <button class="primary-button" @click="addZenodoMetadata" :disabled="checkInvalidStatus">
+        <button class="primary-button" @click="addFigshareMetadata" :disabled="checkInvalidStatus">
           Continue <el-icon> <d-arrow-right /> </el-icon>
         </button>
 
@@ -1337,17 +367,13 @@ import { Icon } from "@iconify/vue";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import semver from "semver";
-import doiRegex from "doi-regex";
 import { ElMessage } from "element-plus";
 import validator from "validator";
 
 import _ from "lodash";
 
 import { useDatasetsStore } from "@/store/datasets";
-import licensesJSON from "@/assets/supplementalFiles/licenses.json";
-import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
-import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
   name: "FigshareMetadata",
@@ -1365,15 +391,12 @@ export default {
       savingSpinner: true,
       activeNames: [],
       drag: true,
-      licenseOptions: licensesJSON.licenses,
-      languageOptions: languagesJSON.languages,
+      licenseOptions: figshareMetadataOptions.licenseOptions,
       relatedIdentifierRelationships: figshareMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: figshareMetadataOptions.relatedIdentifierTypes,
-      contributorTypes: contributorTypesJSON.contributorTypes,
       figshareMetadataForm: figshareMetadataOptions.defaultForm,
       categoryOptions: figshareMetadataOptions.categoryOptions,
       uploadTypeOptions: figshareMetadataOptions.uploadType,
-      relatedIdentifiersErrorMessage: "",
       invalidStatus: {},
       rulesFigshareMetadataForm: {
         publicationDate: [
@@ -1703,7 +726,7 @@ export default {
       }
     },
 
-    addZenodoMetadata(_evt, shouldNavigateBack = false) {
+    addFigshareMetadata(_evt, shouldNavigateBack = false) {
       if (this.figshareMetadataForm.authors.length == 0) {
         ElMessage.error("Please add at least one author.");
       }
@@ -2107,7 +1130,7 @@ export default {
     confirmNavigateBackSave(response) {
       if (response == "ok") {
         // save changes
-        this.addZenodoMetadata(true, true);
+        this.addFigshareMetadata(true, true);
       } else if (response == "cancel") {
         // don't save changes
         this.$router.push({
@@ -2131,51 +1154,7 @@ export default {
       }
     },
   },
-  watch: {
-    "figshareMetadataForm.relatedIdentifiers": {
-      handler(val) {
-        // console.log(val);
-        if (val.length === 0) {
-          this.relatedIdentifiersErrorMessage = "";
-          this.invalidStatus.relatedIdentifiers = false;
-        } else {
-          for (let relatedIdentifier of val) {
-            if (relatedIdentifier.identifier === "") {
-              this.relatedIdentifiersErrorMessage = "Please provide a related identifier.";
-              this.$refs.fmForm.validate();
-              this.invalidStatus.relatedIdentifiers = true;
-              break;
-            } else if (relatedIdentifier.identifier != "") {
-              console.log(doiRegex().test(relatedIdentifier.identifier));
-              let validIdentifier = false;
-
-              if (
-                doiRegex().test(relatedIdentifier.identifier) ||
-                validator.isURL(relatedIdentifier.identifier)
-              ) {
-                validIdentifier = true;
-              }
-
-              if (!validIdentifier) {
-                this.relatedIdentifiersErrorMessage =
-                  "Please provide a valid identifier. Your identifier has to be either a DOI or URL";
-                this.$refs.fmForm.validate();
-                this.invalidStatus.relatedIdentifiers = true;
-                break;
-              } else {
-                this.relatedIdentifiersErrorMessage = "";
-                this.invalidStatus.relatedIdentifiers = false;
-              }
-            } else {
-              this.relatedIdentifiersErrorMessage = "";
-              this.invalidStatus.relatedIdentifiers = false;
-            }
-          }
-        }
-      },
-      deep: true,
-    },
-  },
+  watch: {},
   async mounted() {
     this.loading = this.$loading({
       lock: true,

@@ -273,8 +273,8 @@
         "description": "",
         "version": "",
         "language": "",
-        "funding": [],
         "keywords": [],
+        "funding": [],
         "additionalNotes": "",
         "license": {
             "accessRight": "open",
@@ -322,51 +322,63 @@
     "uploadType": [
         {
             "value": "figure",
-            "label": "Figure"
+            "label": "Figure",
+            "icon": "akar-icons:image"
         },
         {
             "value": "media",
-            "label": "Media"
+            "label": "Media",
+            "icon": "carbon:media-library"
         },
         {
             "value": "dataset",
-            "label": "Dataset"
+            "label": "Dataset",
+            "icon": "material-symbols:dataset"
         },
         {
             "value": "poster",
-            "label": "Poster"
+            "label": "Poster",
+            "icon": "heroicons-outline:presentation-chart-bar"
         },
         {
             "value": "journal contribution",
-            "label": "Journal contribution"
+            "label": "Journal contribution",
+            "icon": "bi:journal-album"
         },
         {
             "value": "presentation",
-            "label": "Presentation"
+            "label": "Presentation",
+            "icon": "carbon:group-presentation"
         },
         {
             "value": "software",
-            "label": "Software"
+            "label": "Software",
+            "icon": "eos-icons:software"
         },
         {
             "value": "thesis",
-            "label": "Thesis"
+            "label": "Thesis",
+            "icon": "bi:journal-medical"
         },
         {
             "value": "online resource",
-            "label": "Online resource"
+            "label": "Online resource",
+            "icon": "mdi:web"
         },
         {
             "value": "preprint",
-            "label": "Preprint"
+            "label": "Preprint",
+            "icon": "bi:journal-text"
         },
         {
             "value": "book",
-            "label": "Book"
+            "label": "Book",
+            "icon": "fa-solid:journal-whills"
         },
         {
             "value": "conference contribution",
-            "label": "Conference contribution"
+            "label": "Conference contribution",
+            "icon": "bi:journal-richtext"
         }
     ],
     "categoryOptions": [
@@ -437,6 +449,106 @@
                     ]
                 }
             ]
+        }
+    ],
+    "licenseOptions": [
+        {
+            "id": 0,
+            "reference": "https://spdx.org/licenses/CC-BY-4.0.html",
+            "isDeprecatedLicenseId": false,
+            "detailsUrl": "https://spdx.org/licenses/CC-BY-4.0.json",
+            "referenceNumber": 121,
+            "name": "Creative Commons Attribution 4.0 International",
+            "licenseId": "CC-BY-4.0",
+            "seeAlso": [
+                "https://creativecommons.org/licenses/by/4.0/legalcode"
+            ],
+            "isOsiApproved": false,
+            "isFsfLibre": true
+        },
+        {
+            "id": 1,
+            "reference": "https://spdx.org/licenses/CC0-1.0.html",
+            "isDeprecatedLicenseId": false,
+            "detailsUrl": "https://spdx.org/licenses/CC0-1.0.json",
+            "referenceNumber": 269,
+            "name": "Creative Commons Zero v1.0 Universal",
+            "licenseId": "CC0-1.0",
+            "seeAlso": [
+                "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
+            ],
+            "isOsiApproved": false,
+            "isFsfLibre": true
+        },
+        {
+            "id": 2,
+            "reference": "https://spdx.org/licenses/MIT.html",
+            "isDeprecatedLicenseId": false,
+            "detailsUrl": "https://spdx.org/licenses/MIT.json",
+            "referenceNumber": 165,
+            "name": "MIT License",
+            "licenseId": "MIT",
+            "seeAlso": [
+                "https://opensource.org/licenses/MIT"
+            ],
+            "isOsiApproved": true,
+            "isFsfLibre": true
+        },
+        {
+            "id": 3,
+            "reference": "https://spdx.org/licenses/GPL-1.0.html",
+            "isDeprecatedLicenseId": true,
+            "detailsUrl": "https://spdx.org/licenses/GPL-1.0.json",
+            "referenceNumber": 352,
+            "name": "GNU General Public License v1.0 only",
+            "licenseId": "GPL-1.0",
+            "seeAlso": [
+                "https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"
+            ],
+            "isOsiApproved": false
+        },
+        {
+            "id": 4,
+            "reference": "https://spdx.org/licenses/GPL-2.0+.html",
+            "isDeprecatedLicenseId": true,
+            "detailsUrl": "https://spdx.org/licenses/GPL-2.0+.json",
+            "referenceNumber": 97,
+            "name": "GNU General Public License v2.0 or later",
+            "licenseId": "GPL-2.0+",
+            "seeAlso": [
+                "https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html",
+                "https://opensource.org/licenses/GPL-2.0"
+            ],
+            "isOsiApproved": true
+        },
+        {
+            "id": 5,
+            "reference": "https://spdx.org/licenses/GPL-3.0+.html",
+            "isDeprecatedLicenseId": true,
+            "detailsUrl": "https://spdx.org/licenses/GPL-3.0+.json",
+            "referenceNumber": 158,
+            "name": "GNU General Public License v3.0 or later",
+            "licenseId": "GPL-3.0+",
+            "seeAlso": [
+                "https://www.gnu.org/licenses/gpl-3.0-standalone.html",
+                "https://opensource.org/licenses/GPL-3.0"
+            ],
+            "isOsiApproved": true
+        },
+        {
+            "id": 6,
+            "reference": "https://spdx.org/licenses/Apache-2.0.html",
+            "isDeprecatedLicenseId": false,
+            "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json",
+            "referenceNumber": 312,
+            "name": "Apache License 2.0",
+            "licenseId": "Apache-2.0",
+            "seeAlso": [
+                "https://www.apache.org/licenses/LICENSE-2.0",
+                "https://opensource.org/licenses/Apache-2.0"
+            ],
+            "isOsiApproved": true,
+            "isFsfLibre": true
         }
     ]
 }
