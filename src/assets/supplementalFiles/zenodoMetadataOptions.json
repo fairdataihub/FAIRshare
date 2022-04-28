@@ -263,6 +263,7 @@
     }
   ],
   "defaultForm": {
+    "uploadType": "Other",
     "publicationDate": "",
     "title": "",
     "authors": [{}],
@@ -313,5 +314,147 @@
       "supervisors": []
     },
     "subjects": []
-  }
+  },
+  "uploadType": [
+    {
+      "value": "publication",
+      "label": "Publication",
+      "children": [
+        {
+          "value": "annotationcollection",
+          "label": "Annotation collection"
+        },
+        {
+          "value": "book",
+          "label": "Book"
+        },
+        {
+          "value": "section",
+          "label": "Book section"
+        },
+        {
+          "value": "conferencepaper",
+          "label": "Conference paper"
+        },
+        {
+          "value": "datamanagementplan",
+          "label": "Data management plan"
+        },
+        {
+          "value": "article",
+          "label": "Journal article"
+        },
+        {
+          "value": "patent",
+          "label": "Patent"
+        },
+        {
+          "value": "preprint",
+          "label": "Preprint"
+        },
+        {
+          "value": "deliverable",
+          "label": "Project deliverable"
+        },
+        {
+          "value": "milestone",
+          "label": "Project milestone"
+        },
+        {
+          "value": "proposal",
+          "label": "Proposal"
+        },
+        {
+          "value": "report",
+          "label": "Report"
+        },
+        {
+          "value": "softwaredocumentation",
+          "label": "Software documentation"
+        },
+        {
+          "value": "taxonomictreatment",
+          "label": "Taxonomic treatment"
+        },
+        {
+          "value": "technicalnote",
+          "label": "Technical note"
+        },
+        {
+          "value": "thesis",
+          "label": "Thesis"
+        },
+        {
+          "value": "workingpaper",
+          "label": "Working paper"
+        },
+        {
+          "value": "p_other",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "value": "poster",
+      "label": "Poster"
+    },
+    {
+      "value": "presentation",
+      "label": "Presentation"
+    },
+    {
+      "value": "dataset",
+      "label": "Dataset"
+    },
+    {
+      "value": "image",
+      "label": "Image",
+      "children": [
+        {
+          "value": "diagram",
+          "label": "Diagram"
+        },
+        {
+          "value": "drawing",
+          "label": "Drawing"
+        },
+        {
+          "value": "figure",
+          "label": "Figure"
+        },
+        {
+          "value": "photo",
+          "label": "Photo"
+        },
+        {
+          "value": "plot",
+          "label": "Plot"
+        },
+        {
+          "value": "i_other",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "value": "video",
+      "label": "Video/Audio"
+    },
+    {
+      "value": "software",
+      "label": "Software"
+    },
+    {
+      "value": "lesson",
+      "label": "Lesson"
+    },
+    {
+      "value": "physicalobject",
+      "label": "Physical object"
+    },
+    {
+      "value": "other",
+      "label": "Other"
+    }
+  ]
 }

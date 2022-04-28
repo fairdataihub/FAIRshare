@@ -345,7 +345,7 @@ export default {
         });
       return response;
     },
-    // Other is identical to code endpoint. Not sure if i'll leave it this way. Adding seperate ones for now.
+    // Other is identical to code endpoint. Not sure if i'll leave it this way. Adding separate ones for now.
     async createOtherMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
