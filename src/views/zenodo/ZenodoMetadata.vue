@@ -30,6 +30,16 @@
             </template>
 
             <div class="p-4">
+              <el-form-item label="Upload type" prop="uploadType">
+                <div class="flex flex-col">
+                  <el-tree-select
+                    v-model="zenodoMetadataForm.uploadType"
+                    :data="uploadTypeOptions"
+                    :disabled="disableUploadType"
+                  />
+                </div>
+              </el-form-item>
+
               <el-form-item label="Publication date" prop="publicationDate">
                 <div class="flex flex-col">
                   <el-date-picker
@@ -1044,13 +1054,22 @@ export default {
       drag: true,
       licenseOptions: licensesJSON.licenses,
       languageOptions: languagesJSON.languages,
+      uploadTypeOptions: zenodoMetadataOptions.uploadType,
       relatedIdentifierRelationships: zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
       relatedIdentifiersErrorMessage: "",
       invalidStatus: {},
+      disableUploadType: false,
       rulesForZenodoMetadataForm: {
+        uploadType: [
+          {
+            required: true,
+            message: "Please select an upload type",
+            trigger: "blur",
+          },
+        ],
         publicationDate: [
           {
             required: true,
@@ -1298,7 +1317,6 @@ export default {
             }
           }
 
-          console.log(contributor.contributorType, "+", contributor);
           if (
             contributor.contributorType === undefined ||
             contributor.contributorType.trim() === ""
@@ -1414,6 +1432,18 @@ export default {
 
       //validate first
     },
+    pickUploadType() {
+      this.disableUploadType = true;
+      if ("type" in this.workflow) {
+        if (this.workflow.type.includes("Code")) {
+          this.zenodoMetadataForm.uploadType = "software";
+          this.disableUploadType = true;
+        } else if (this.workflow.type.includes("Other")) {
+          this.zenodoMetadataForm.uploadType = "other";
+          this.disableUploadType = false;
+        }
+      }
+    },
     prefillZenodoQuestions() {
       if (
         "questions" in this.dataset.data.general &&
@@ -1427,6 +1457,8 @@ export default {
         this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(date.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+
+        this.pickUploadType();
 
         if ("name" in generalForm) {
           this.zenodoMetadataForm.title = generalForm.name;
@@ -1866,14 +1898,16 @@ export default {
       this.workflow.expandOptions = [];
     }
 
-    const testvar = true;
-
     if (
-      this.workflow.destination.zenodo.questions &&
-      Object.keys(this.workflow.destination.zenodo.questions).length !== 0 &&
-      !testvar
+      "zenodo" in this.workflow.destination &&
+      "questions" in this.workflow.destination.zenodo &&
+      Object.keys(this.workflow.destination.zenodo.questions).length !== 0
     ) {
       this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+
+      if (!("uploadType" in this.zenodoMetadataForm)) {
+        this.pickUploadType();
+      }
 
       this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.license);
       this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.journal);

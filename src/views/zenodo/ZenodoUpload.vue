@@ -129,7 +129,44 @@ export default {
       const zenodoMetadata = this.workflow.destination.zenodo.questions;
       let metadata = {};
 
-      metadata.upload_type = "software";
+      if ("uploadType" in zenodoMetadata) {
+        const publicationTypes = [
+          "annotationcollection",
+          "book",
+          "section",
+          "conferencepaper",
+          "datamanagementplan",
+          "article",
+          "patent",
+          "preprint",
+          "deliverable",
+          "milestone",
+          "proposal",
+          "report",
+          "softwaredocumentation",
+          "taxonomictreatment",
+          "technicalnote",
+          "thesis",
+          "workingpaper",
+          "p_other",
+        ];
+        const imageTypes = ["plot", "figure", "diagram", "drawing", "photo", "i_other"];
+
+        if (publicationTypes.includes(zenodoMetadata.upload_type)) {
+          metadata.upload_type = "publication";
+          metadata.publication_type =
+            zenodoMetadata.upload_type === "p_other" ? "other" : zenodoMetadata.upload_type;
+        } else if (imageTypes.includes(zenodoMetadata.upload_type)) {
+          metadata.upload_type = "image";
+          metadata.image_type =
+            zenodoMetadata.upload_type === "i_other" ? "other" : zenodoMetadata.upload_type;
+        } else {
+          metadata.upload_type = zenodoMetadata.upload_type;
+        }
+      } else {
+        metadata.upload_type = "other";
+      }
+
       metadata.prereserve_doi = true;
 
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
@@ -555,7 +592,6 @@ export default {
         });
       return response;
     },
-
     async uploadWorkflow() {
       let response = {};
 
