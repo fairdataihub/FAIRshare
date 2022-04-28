@@ -1,0 +1,441 @@
+{
+    "relatedIdentifierRelationships": [
+        {
+            "value": "isCitedBy",
+            "label": "cites this upload"
+        },
+        {
+            "value": "cites",
+            "label": "is cited by this upload"
+        },
+        {
+            "value": "isSupplementTo",
+            "label": "is supplemented by this upload"
+        },
+        {
+            "value": "isSupplementedBy",
+            "label": "is a supplement to this upload"
+        },
+        {
+            "value": "references",
+            "label": "is referenced by this upload"
+        },
+        {
+            "value": "isReferencedBy",
+            "label": "references this upload"
+        },
+        {
+            "value": "isPublishedIn",
+            "label": "published this upload"
+        },
+        {
+            "value": "isNewVersionOf",
+            "label": "is previous version of this upload"
+        },
+        {
+            "value": "isPreviousVersionOf",
+            "label": "is new version of this upload"
+        },
+        {
+            "value": "isContinuedBy",
+            "label": "continues this upload"
+        },
+        {
+            "value": "continues",
+            "label": "is continued by this upload"
+        },
+        {
+            "value": "isDescribedBy",
+            "label": "describes this upload"
+        },
+        {
+            "value": "describes",
+            "label": "is described by this upload"
+        },
+        {
+            "value": "isPartOf",
+            "label": "has this upload as part"
+        },
+        {
+            "value": "hasPart",
+            "label": "is part of this upload"
+        },
+        {
+            "value": "isReviewedBy",
+            "label": "reviews this upload"
+        },
+        {
+            "value": "reviews",
+            "label": "is reviewed by this upload"
+        },
+        {
+            "value": "isDocumentedBy",
+            "label": "documents this upload"
+        },
+        {
+            "value": "documents",
+            "label": "is documented by this upload"
+        },
+        {
+            "value": "compiles",
+            "label": "is compiled/created by this upload"
+        },
+        {
+            "value": "isCompiledBy",
+            "label": "compiled/created this upload"
+        },
+        {
+            "value": "isDerivedFrom",
+            "label": "is the source this upload is derived from"
+        },
+        {
+            "value": "isSourceOf",
+            "label": "has this upload as its source"
+        },
+        {
+            "value": "requires",
+            "label": "is required by this upload"
+        },
+        {
+            "value": "isRequiredBy",
+            "label": "requires this upload"
+        },
+        {
+            "value": "isObsoletedBy",
+            "label": "replaces this upload"
+        },
+        {
+            "value": "obsoletes",
+            "label": "is replaced by this upload"
+        },
+        {
+            "value": "isIdenticalTo",
+            "label": "is identical to this upload"
+        },
+        {
+            "value": "isAlternateIdentifier",
+            "label": "is an alternate identifier of this upload"
+        }
+    ],
+    "relatedIdentifierTypes": [
+        {
+            "label": "Publication",
+            "options": [
+                {
+                    "value": "publication-annotationcollection",
+                    "label": "Annotation collection"
+                },
+                {
+                    "value": "publication-book",
+                    "label": "Book"
+                },
+                {
+                    "value": "publication-section",
+                    "label": "Book section"
+                },
+                {
+                    "value": "publication-conferencepaper",
+                    "label": "Conference paper"
+                },
+                {
+                    "value": "publication-datamanagementplan",
+                    "label": "Data management plan"
+                },
+                {
+                    "value": "publication-article",
+                    "label": "Journal article"
+                },
+                {
+                    "value": "publication-other",
+                    "label": "Other"
+                },
+                {
+                    "value": "publication-patent",
+                    "label": "Patent"
+                },
+                {
+                    "value": "publication-preprint",
+                    "label": "Preprint"
+                },
+                {
+                    "value": "publication-deliverable",
+                    "label": "Project deliverable"
+                },
+                {
+                    "value": "publication-milestone",
+                    "label": "Project milestone"
+                },
+                {
+                    "value": "publication-proposal",
+                    "label": "Proposal"
+                },
+                {
+                    "value": "publication-report",
+                    "label": "Report"
+                },
+                {
+                    "value": "publication-softwaredocumentation",
+                    "label": "Software documentation"
+                },
+                {
+                    "value": "publication-taxonomictreatment",
+                    "label": "Taxonomic treatment"
+                },
+                {
+                    "value": "publication-technicalnote",
+                    "label": "Technical note"
+                },
+                {
+                    "value": "publication-thesis",
+                    "label": "Thesis"
+                },
+                {
+                    "value": "publication-workingpaper",
+                    "label": "Working paper"
+                }
+            ]
+        },
+        {
+            "label": "Image",
+            "options": [
+                {
+                    "value": "image-diagram",
+                    "label": "Diagram"
+                },
+                {
+                    "value": "image-drawing",
+                    "label": "Drawing"
+                },
+                {
+                    "value": "image-figure",
+                    "label": "Figure"
+                },
+                {
+                    "value": "image-other",
+                    "label": "Other"
+                },
+                {
+                    "value": "image-photo",
+                    "label": "Photo"
+                },
+                {
+                    "value": "image-plot",
+                    "label": "Plot"
+                }
+            ]
+        },
+        {
+            "label": "",
+            "options": [
+                {
+                    "value": "dataset",
+                    "label": "Dataset"
+                },
+                {
+                    "value": "lesson",
+                    "label": "Lesson"
+                },
+                {
+                    "value": "other",
+                    "label": "Other"
+                },
+                {
+                    "value": "physicalobject",
+                    "label": "Physical object"
+                },
+                {
+                    "value": "poster",
+                    "label": "Poster"
+                },
+                {
+                    "value": "presentation",
+                    "label": "Presentation"
+                },
+                {
+                    "value": "software",
+                    "label": "Software"
+                },
+                {
+                    "value": "video",
+                    "label": "Video/Audio"
+                }
+            ]
+        }
+    ],
+    "defaultForm": {
+        "uploadType": "dataset",
+        "publicationDate": "",
+        "title": "",
+        "categories": [],
+        "authors": [
+            {}
+        ],
+        "description": "",
+        "version": "",
+        "language": "",
+        "keywords": [],
+        "additionalNotes": "",
+        "license": {
+            "accessRight": "open",
+            "licenseName": "",
+            "embargoDate": "",
+            "conditions": ""
+        },
+        "grants": [
+            {
+                "grantInstitution": "",
+                "grantName": ""
+            }
+        ],
+        "relatedIdentifiers": [],
+        "contributors": [],
+        "references": [],
+        "journal": {
+            "title": "",
+            "volume": "",
+            "issue": "",
+            "pages": ""
+        },
+        "conference": {
+            "title": "",
+            "acronym": "",
+            "dates": "",
+            "place": "",
+            "website": "",
+            "session": "",
+            "part": ""
+        },
+        "bookReportChapter": {
+            "publisher": "",
+            "place": "",
+            "isbn": "",
+            "title": "",
+            "pages": ""
+        },
+        "thesis": {
+            "awardingUniversity": "",
+            "supervisors": []
+        },
+        "subjects": []
+    },
+    "uploadType": [
+        {
+            "value": "figure",
+            "label": "Figure"
+        },
+        {
+            "value": "media",
+            "label": "Media"
+        },
+        {
+            "value": "dataset",
+            "label": "Dataset"
+        },
+        {
+            "value": "poster",
+            "label": "Poster"
+        },
+        {
+            "value": "journal contribution",
+            "label": "Journal contribution"
+        },
+        {
+            "value": "presentation",
+            "label": "Presentation"
+        },
+        {
+            "value": "software",
+            "label": "Software"
+        },
+        {
+            "value": "thesis",
+            "label": "Thesis"
+        },
+        {
+            "value": "online resource",
+            "label": "Online resource"
+        },
+        {
+            "value": "preprint",
+            "label": "Preprint"
+        },
+        {
+            "value": "book",
+            "label": "Book"
+        },
+        {
+            "value": "conference contribution",
+            "label": "Conference contribution"
+        }
+    ],
+    "categoryOptions": [
+        {
+            "value": "1",
+            "label": "Level one 1",
+            "children": [
+                {
+                    "value": "1-1",
+                    "label": "Level two 1-1",
+                    "children": [
+                        {
+                            "value": "1-1-1",
+                            "label": "Level three 1-1-1"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "value": "2",
+            "label": "Level one 2",
+            "children": [
+                {
+                    "value": "2-1",
+                    "label": "Level two 2-1",
+                    "children": [
+                        {
+                            "value": "2-1-1",
+                            "label": "Level three 2-1-1"
+                        }
+                    ]
+                },
+                {
+                    "value": "2-2",
+                    "label": "Level two 2-2",
+                    "children": [
+                        {
+                            "value": "2-2-1",
+                            "label": "Level three 2-2-1"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "value": "3",
+            "label": "Level one 3",
+            "children": [
+                {
+                    "value": "3-1",
+                    "label": "Level two 3-1",
+                    "children": [
+                        {
+                            "value": "3-1-1",
+                            "label": "Level three 3-1-1"
+                        }
+                    ]
+                },
+                {
+                    "value": "3-2",
+                    "label": "Level two 3-2",
+                    "children": [
+                        {
+                            "value": "3-2-1",
+                            "label": "Level three 3-2-1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

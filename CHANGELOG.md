@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Feature additions
 
 - Added support for other data types to be curated through FAIRshare.
+- Added support for the ability to select `Upload type` for Zenodo.
 
 ### Bug fixes
 

@@ -105,6 +105,17 @@
                             <span class="pr-2 pl-1 text-sm"> Zenodo </span>
                           </div>
                         </el-tooltip>
+                        <el-tooltip
+                          effect="dark"
+                          content="This dataset will be made FAIR using the Figshare repository"
+                          placement="bottom"
+                          v-if="dataset.meta.destination === 'figshare'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="clarity:upload-cloud-line" />
+                            <span class="pr-2 pl-1 text-sm"> Figshare </span>
+                          </div>
+                        </el-tooltip>
                       </div>
 
                       <div>

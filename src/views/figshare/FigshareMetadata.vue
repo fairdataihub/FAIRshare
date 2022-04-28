@@ -10,7 +10,231 @@
 
       <el-form
         :model="figshareMetadataForm"
-        :rules="rulesForfigshareMetadataForm"
+        :rules="rulesFigshareMetadataForm"
+        label-width="150px"
+        label-position="right"
+        size="large"
+        ref="fmForm"
+        @submit.prevent
+      >
+        <el-form-item label="Item type" prop="uploadType">
+          <div class="flex flex-col">
+            <el-tree-select
+              v-model="figshareMetadataForm.uploadType"
+              :data="uploadTypeOptions"
+              :disabled="disableUploadType"
+            />
+          </div>
+        </el-form-item>
+
+        <el-form-item label="Title" prop="title">
+          <el-input v-model="figshareMetadataForm.title" type="text"> </el-input>
+        </el-form-item>
+
+        <el-form-item label="Authors" prop="authors">
+          <draggable tag="div" :list="figshareMetadataForm.authors" item-key="id" handle=".handle">
+            <template #item="{ element }">
+              <div class="mb-2 flex flex-row justify-between transition-all">
+                <div class="flex w-11/12 flex-row justify-between">
+                  <el-input
+                    v-model="element.givenName"
+                    type="text"
+                    placeholder="Given name"
+                    class="h-[40px]"
+                  ></el-input>
+
+                  <div class="mx-1"></div>
+
+                  <el-input
+                    v-model="element.familyName"
+                    type="text"
+                    placeholder="Family name"
+                    class="h-[40px]"
+                  ></el-input>
+
+                  <div class="mx-2"></div>
+
+                  <div class="mx-2 flex w-full flex-col">
+                    <el-input
+                      v-model="element.email"
+                      type="text"
+                      placeholder="E-mail address"
+                    ></el-input>
+                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                  </div>
+
+                  <div class="mx-2 flex w-full flex-col">
+                    <el-input
+                      v-model="element.orcid"
+                      type="text"
+                      placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
+                    ></el-input>
+                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                  </div>
+                </div>
+                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
+                  <div
+                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                  >
+                    <Icon icon="ic:outline-drag-indicator" />
+                  </div>
+                  <div
+                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                  >
+                    <el-popconfirm
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      icon-color="red"
+                      title="Are you sure you want to remove this?"
+                      @confirm="deleteAuthor(element.id)"
+                    >
+                      <template #reference>
+                        <el-icon><delete-filled /></el-icon>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
+
+          <div
+            class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+            @click="addAuthor"
+          >
+            <Icon icon="carbon:add" />
+            <span class="text-primary-600 hover:text-primary-500"> Add an author </span>
+            <form-help-content popoverContent="Add a developer of the software"></form-help-content>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="Categories">
+          <el-tree-select
+            v-model="figshareMetadataForm.categories"
+            :data="categoryOptions"
+            multiple
+            clearable
+            filterable
+            show-checkbox
+            class="w-full"
+          />
+        </el-form-item>
+
+        <el-form-item label="Keywords">
+          <draggable
+            tag="div"
+            :list="figshareMetadataForm.keywords"
+            item-key="id"
+            handle=".handle"
+            class="w-full"
+          >
+            <template #item="{ element }">
+              <div class="mb-2 flex flex-row justify-between transition-all">
+                <div class="flex w-11/12 flex-row justify-between">
+                  <el-input v-model="element.keyword" type="text" placeholder=""></el-input>
+                  <div class="mx-2"></div>
+                </div>
+                <div class="flex w-1/12 flex-row justify-evenly">
+                  <div
+                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                  >
+                    <Icon icon="ic:outline-drag-indicator" />
+                  </div>
+                  <div class="flex items-center justify-center text-gray-500 transition-all">
+                    <el-popconfirm
+                      title="Are you sure you want to remove this?"
+                      icon-color="red"
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      @confirm="deleteKeyword(element.id)"
+                    >
+                      <template #reference>
+                        <el-icon class="cursor-pointer hover:text-gray-800">
+                          <delete-filled />
+                        </el-icon>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
+
+          <div
+            class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
+            @click="addKeyword()"
+          >
+            <Icon icon="carbon:add" />
+            <span> Add a keyword </span>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="Funding">
+          <draggable
+            tag="div"
+            :list="figshareMetadataForm.funding"
+            item-key="id"
+            handle=".handle"
+            class="w-full"
+          >
+            <template #item="{ element }">
+              <div class="mb-2 flex flex-row justify-between transition-all">
+                <div class="flex w-11/12 flex-row justify-between">
+                  <el-input v-model="element.keyword" type="text" placeholder=""></el-input>
+                  <div class="mx-2"></div>
+                </div>
+                <div class="flex w-1/12 flex-row justify-evenly">
+                  <div
+                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                  >
+                    <Icon icon="ic:outline-drag-indicator" />
+                  </div>
+                  <div class="flex items-center justify-center text-gray-500 transition-all">
+                    <el-popconfirm
+                      title="Are you sure you want to remove this?"
+                      icon-color="red"
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      @confirm="deleteKeyword(element.id)"
+                    >
+                      <template #reference>
+                        <el-icon class="cursor-pointer hover:text-gray-800">
+                          <delete-filled />
+                        </el-icon>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
+
+          <div
+            class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
+            @click="addKeyword()"
+          >
+            <Icon icon="carbon:add" />
+            <span> Add a keyword </span>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="Description" prop="description">
+          <VuePopper
+            :hover="true"
+            offsetDistance="0"
+            content="Use a description that is easily identifiable. This will
+                        be shown in the dataset selection screen and is not part
+                        of your submitted metadata."
+            class="mx-0 w-full"
+          >
+            <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
+          </VuePopper>
+        </el-form-item>
+      </el-form>
+
+      <el-form
+        :model="figshareMetadataForm"
+        :rules="rulesFigshareMetadataForm"
         label-width="150px"
         label-position="right"
         size="large"
@@ -1029,7 +1253,7 @@ import _ from "lodash";
 import { useDatasetsStore } from "@/store/datasets";
 import licensesJSON from "@/assets/supplementalFiles/licenses.json";
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
-import zenodoMetadataOptions from "@/assets/supplementalFiles/zenodoMetadataOptions.json";
+import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 import languagesJSON from "@/assets/supplementalFiles/zenodoLanguages.json";
 
 export default {
@@ -1050,13 +1274,15 @@ export default {
       drag: true,
       licenseOptions: licensesJSON.licenses,
       languageOptions: languagesJSON.languages,
-      relatedIdentifierRelationships: zenodoMetadataOptions.relatedIdentifierRelationships,
-      relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
+      relatedIdentifierRelationships: figshareMetadataOptions.relatedIdentifierRelationships,
+      relatedIdentifierTypes: figshareMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
-      figshareMetadataForm: zenodoMetadataOptions.defaultForm,
+      figshareMetadataForm: figshareMetadataOptions.defaultForm,
+      categoryOptions: figshareMetadataOptions.categoryOptions,
+      uploadTypeOptions: figshareMetadataOptions.uploadType,
       relatedIdentifiersErrorMessage: "",
       invalidStatus: {},
-      rulesForfigshareMetadataForm: {
+      rulesFigshareMetadataForm: {
         publicationDate: [
           {
             required: true,
@@ -1852,7 +2078,7 @@ export default {
       background: "rgba(0, 0, 0, 0.7)",
     });
 
-    this.figshareMetadataForm = zenodoMetadataOptions.defaultForm;
+    this.figshareMetadataForm = figshareMetadataOptions.defaultForm;
 
     this.dataset = JSON.parse(JSON.stringify(await this.datasetStore.getCurrentDataset()));
 
