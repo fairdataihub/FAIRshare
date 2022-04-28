@@ -1,554 +1,454 @@
 {
-    "relatedIdentifierRelationships": [
-        {
-            "value": "isCitedBy",
-            "label": "cites this upload"
-        },
-        {
-            "value": "cites",
-            "label": "is cited by this upload"
-        },
-        {
-            "value": "isSupplementTo",
-            "label": "is supplemented by this upload"
-        },
-        {
-            "value": "isSupplementedBy",
-            "label": "is a supplement to this upload"
-        },
-        {
-            "value": "references",
-            "label": "is referenced by this upload"
-        },
-        {
-            "value": "isReferencedBy",
-            "label": "references this upload"
-        },
-        {
-            "value": "isPublishedIn",
-            "label": "published this upload"
-        },
-        {
-            "value": "isNewVersionOf",
-            "label": "is previous version of this upload"
-        },
-        {
-            "value": "isPreviousVersionOf",
-            "label": "is new version of this upload"
-        },
-        {
-            "value": "isContinuedBy",
-            "label": "continues this upload"
-        },
-        {
-            "value": "continues",
-            "label": "is continued by this upload"
-        },
-        {
-            "value": "isDescribedBy",
-            "label": "describes this upload"
-        },
-        {
-            "value": "describes",
-            "label": "is described by this upload"
-        },
-        {
-            "value": "isPartOf",
-            "label": "has this upload as part"
-        },
-        {
-            "value": "hasPart",
-            "label": "is part of this upload"
-        },
-        {
-            "value": "isReviewedBy",
-            "label": "reviews this upload"
-        },
-        {
-            "value": "reviews",
-            "label": "is reviewed by this upload"
-        },
-        {
-            "value": "isDocumentedBy",
-            "label": "documents this upload"
-        },
-        {
-            "value": "documents",
-            "label": "is documented by this upload"
-        },
-        {
-            "value": "compiles",
-            "label": "is compiled/created by this upload"
-        },
-        {
-            "value": "isCompiledBy",
-            "label": "compiled/created this upload"
-        },
-        {
-            "value": "isDerivedFrom",
-            "label": "is the source this upload is derived from"
-        },
-        {
-            "value": "isSourceOf",
-            "label": "has this upload as its source"
-        },
-        {
-            "value": "requires",
-            "label": "is required by this upload"
-        },
-        {
-            "value": "isRequiredBy",
-            "label": "requires this upload"
-        },
-        {
-            "value": "isObsoletedBy",
-            "label": "replaces this upload"
-        },
-        {
-            "value": "obsoletes",
-            "label": "is replaced by this upload"
-        },
-        {
-            "value": "isIdenticalTo",
-            "label": "is identical to this upload"
-        },
-        {
-            "value": "isAlternateIdentifier",
-            "label": "is an alternate identifier of this upload"
-        }
-    ],
-    "relatedIdentifierTypes": [
-        {
-            "label": "Publication",
-            "options": [
-                {
-                    "value": "publication-annotationcollection",
-                    "label": "Annotation collection"
-                },
-                {
-                    "value": "publication-book",
-                    "label": "Book"
-                },
-                {
-                    "value": "publication-section",
-                    "label": "Book section"
-                },
-                {
-                    "value": "publication-conferencepaper",
-                    "label": "Conference paper"
-                },
-                {
-                    "value": "publication-datamanagementplan",
-                    "label": "Data management plan"
-                },
-                {
-                    "value": "publication-article",
-                    "label": "Journal article"
-                },
-                {
-                    "value": "publication-other",
-                    "label": "Other"
-                },
-                {
-                    "value": "publication-patent",
-                    "label": "Patent"
-                },
-                {
-                    "value": "publication-preprint",
-                    "label": "Preprint"
-                },
-                {
-                    "value": "publication-deliverable",
-                    "label": "Project deliverable"
-                },
-                {
-                    "value": "publication-milestone",
-                    "label": "Project milestone"
-                },
-                {
-                    "value": "publication-proposal",
-                    "label": "Proposal"
-                },
-                {
-                    "value": "publication-report",
-                    "label": "Report"
-                },
-                {
-                    "value": "publication-softwaredocumentation",
-                    "label": "Software documentation"
-                },
-                {
-                    "value": "publication-taxonomictreatment",
-                    "label": "Taxonomic treatment"
-                },
-                {
-                    "value": "publication-technicalnote",
-                    "label": "Technical note"
-                },
-                {
-                    "value": "publication-thesis",
-                    "label": "Thesis"
-                },
-                {
-                    "value": "publication-workingpaper",
-                    "label": "Working paper"
-                }
-            ]
-        },
-        {
-            "label": "Image",
-            "options": [
-                {
-                    "value": "image-diagram",
-                    "label": "Diagram"
-                },
-                {
-                    "value": "image-drawing",
-                    "label": "Drawing"
-                },
-                {
-                    "value": "image-figure",
-                    "label": "Figure"
-                },
-                {
-                    "value": "image-other",
-                    "label": "Other"
-                },
-                {
-                    "value": "image-photo",
-                    "label": "Photo"
-                },
-                {
-                    "value": "image-plot",
-                    "label": "Plot"
-                }
-            ]
-        },
-        {
-            "label": "",
-            "options": [
-                {
-                    "value": "dataset",
-                    "label": "Dataset"
-                },
-                {
-                    "value": "lesson",
-                    "label": "Lesson"
-                },
-                {
-                    "value": "other",
-                    "label": "Other"
-                },
-                {
-                    "value": "physicalobject",
-                    "label": "Physical object"
-                },
-                {
-                    "value": "poster",
-                    "label": "Poster"
-                },
-                {
-                    "value": "presentation",
-                    "label": "Presentation"
-                },
-                {
-                    "value": "software",
-                    "label": "Software"
-                },
-                {
-                    "value": "video",
-                    "label": "Video/Audio"
-                }
-            ]
-        }
-    ],
-    "defaultForm": {
-        "uploadType": "dataset",
-        "publicationDate": "",
-        "title": "",
-        "categories": [],
-        "authors": [
-            {}
-        ],
-        "description": "",
-        "version": "",
-        "language": "",
-        "keywords": [],
-        "funding": [],
-        "additionalNotes": "",
-        "license": {
-            "accessRight": "open",
-            "licenseName": "",
-            "embargoDate": "",
-            "conditions": ""
-        },
-        "grants": [
-            {
-                "grantInstitution": "",
-                "grantName": ""
-            }
-        ],
-        "relatedIdentifiers": [],
-        "contributors": [],
-        "references": [],
-        "journal": {
-            "title": "",
-            "volume": "",
-            "issue": "",
-            "pages": ""
-        },
-        "conference": {
-            "title": "",
-            "acronym": "",
-            "dates": "",
-            "place": "",
-            "website": "",
-            "session": "",
-            "part": ""
-        },
-        "bookReportChapter": {
-            "publisher": "",
-            "place": "",
-            "isbn": "",
-            "title": "",
-            "pages": ""
-        },
-        "thesis": {
-            "awardingUniversity": "",
-            "supervisors": []
-        },
-        "subjects": []
+  "relatedIdentifierRelationships": [
+    {
+      "value": "isCitedBy",
+      "label": "cites this upload"
     },
-    "uploadType": [
+    {
+      "value": "cites",
+      "label": "is cited by this upload"
+    },
+    {
+      "value": "isSupplementTo",
+      "label": "is supplemented by this upload"
+    },
+    {
+      "value": "isSupplementedBy",
+      "label": "is a supplement to this upload"
+    },
+    {
+      "value": "references",
+      "label": "is referenced by this upload"
+    },
+    {
+      "value": "isReferencedBy",
+      "label": "references this upload"
+    },
+    {
+      "value": "isPublishedIn",
+      "label": "published this upload"
+    },
+    {
+      "value": "isNewVersionOf",
+      "label": "is previous version of this upload"
+    },
+    {
+      "value": "isPreviousVersionOf",
+      "label": "is new version of this upload"
+    },
+    {
+      "value": "isContinuedBy",
+      "label": "continues this upload"
+    },
+    {
+      "value": "continues",
+      "label": "is continued by this upload"
+    },
+    {
+      "value": "isDescribedBy",
+      "label": "describes this upload"
+    },
+    {
+      "value": "describes",
+      "label": "is described by this upload"
+    },
+    {
+      "value": "isPartOf",
+      "label": "has this upload as part"
+    },
+    {
+      "value": "hasPart",
+      "label": "is part of this upload"
+    },
+    {
+      "value": "isReviewedBy",
+      "label": "reviews this upload"
+    },
+    {
+      "value": "reviews",
+      "label": "is reviewed by this upload"
+    },
+    {
+      "value": "isDocumentedBy",
+      "label": "documents this upload"
+    },
+    {
+      "value": "documents",
+      "label": "is documented by this upload"
+    },
+    {
+      "value": "compiles",
+      "label": "is compiled/created by this upload"
+    },
+    {
+      "value": "isCompiledBy",
+      "label": "compiled/created this upload"
+    },
+    {
+      "value": "isDerivedFrom",
+      "label": "is the source this upload is derived from"
+    },
+    {
+      "value": "isSourceOf",
+      "label": "has this upload as its source"
+    },
+    {
+      "value": "requires",
+      "label": "is required by this upload"
+    },
+    {
+      "value": "isRequiredBy",
+      "label": "requires this upload"
+    },
+    {
+      "value": "isObsoletedBy",
+      "label": "replaces this upload"
+    },
+    {
+      "value": "obsoletes",
+      "label": "is replaced by this upload"
+    },
+    {
+      "value": "isIdenticalTo",
+      "label": "is identical to this upload"
+    },
+    {
+      "value": "isAlternateIdentifier",
+      "label": "is an alternate identifier of this upload"
+    }
+  ],
+  "relatedIdentifierTypes": [
+    {
+      "label": "Publication",
+      "options": [
         {
-            "value": "figure",
-            "label": "Figure",
-            "icon": "akar-icons:image"
+          "value": "publication-annotationcollection",
+          "label": "Annotation collection"
         },
         {
-            "value": "media",
-            "label": "Media",
-            "icon": "carbon:media-library"
+          "value": "publication-book",
+          "label": "Book"
         },
         {
-            "value": "dataset",
-            "label": "Dataset",
-            "icon": "material-symbols:dataset"
+          "value": "publication-section",
+          "label": "Book section"
         },
         {
-            "value": "poster",
-            "label": "Poster",
-            "icon": "heroicons-outline:presentation-chart-bar"
+          "value": "publication-conferencepaper",
+          "label": "Conference paper"
         },
         {
-            "value": "journal contribution",
-            "label": "Journal contribution",
-            "icon": "bi:journal-album"
+          "value": "publication-datamanagementplan",
+          "label": "Data management plan"
         },
         {
-            "value": "presentation",
-            "label": "Presentation",
-            "icon": "carbon:group-presentation"
+          "value": "publication-article",
+          "label": "Journal article"
         },
         {
-            "value": "software",
-            "label": "Software",
-            "icon": "eos-icons:software"
+          "value": "publication-other",
+          "label": "Other"
         },
         {
-            "value": "thesis",
-            "label": "Thesis",
-            "icon": "bi:journal-medical"
+          "value": "publication-patent",
+          "label": "Patent"
         },
         {
-            "value": "online resource",
-            "label": "Online resource",
-            "icon": "mdi:web"
+          "value": "publication-preprint",
+          "label": "Preprint"
         },
         {
-            "value": "preprint",
-            "label": "Preprint",
-            "icon": "bi:journal-text"
+          "value": "publication-deliverable",
+          "label": "Project deliverable"
         },
         {
-            "value": "book",
-            "label": "Book",
-            "icon": "fa-solid:journal-whills"
+          "value": "publication-milestone",
+          "label": "Project milestone"
         },
         {
-            "value": "conference contribution",
-            "label": "Conference contribution",
-            "icon": "bi:journal-richtext"
+          "value": "publication-proposal",
+          "label": "Proposal"
+        },
+        {
+          "value": "publication-report",
+          "label": "Report"
+        },
+        {
+          "value": "publication-softwaredocumentation",
+          "label": "Software documentation"
+        },
+        {
+          "value": "publication-taxonomictreatment",
+          "label": "Taxonomic treatment"
+        },
+        {
+          "value": "publication-technicalnote",
+          "label": "Technical note"
+        },
+        {
+          "value": "publication-thesis",
+          "label": "Thesis"
+        },
+        {
+          "value": "publication-workingpaper",
+          "label": "Working paper"
         }
+      ]
+    },
+    {
+      "label": "Image",
+      "options": [
+        {
+          "value": "image-diagram",
+          "label": "Diagram"
+        },
+        {
+          "value": "image-drawing",
+          "label": "Drawing"
+        },
+        {
+          "value": "image-figure",
+          "label": "Figure"
+        },
+        {
+          "value": "image-other",
+          "label": "Other"
+        },
+        {
+          "value": "image-photo",
+          "label": "Photo"
+        },
+        {
+          "value": "image-plot",
+          "label": "Plot"
+        }
+      ]
+    },
+    {
+      "label": "",
+      "options": [
+        {
+          "value": "dataset",
+          "label": "Dataset"
+        },
+        {
+          "value": "lesson",
+          "label": "Lesson"
+        },
+        {
+          "value": "other",
+          "label": "Other"
+        },
+        {
+          "value": "physicalobject",
+          "label": "Physical object"
+        },
+        {
+          "value": "poster",
+          "label": "Poster"
+        },
+        {
+          "value": "presentation",
+          "label": "Presentation"
+        },
+        {
+          "value": "software",
+          "label": "Software"
+        },
+        {
+          "value": "video",
+          "label": "Video/Audio"
+        }
+      ]
+    }
+  ],
+  "defaultForm": {
+    "uploadType": "dataset",
+    "publicationDate": "",
+    "title": "",
+    "categories": [],
+    "authors": [
+      {}
     ],
-    "categoryOptions": [
-        {
-            "value": "1",
-            "label": "Level one 1",
-            "children": [
-                {
-                    "value": "1-1",
-                    "label": "Level two 1-1",
-                    "children": [
-                        {
-                            "value": "1-1-1",
-                            "label": "Level three 1-1-1"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "value": "2",
-            "label": "Level one 2",
-            "children": [
-                {
-                    "value": "2-1",
-                    "label": "Level two 2-1",
-                    "children": [
-                        {
-                            "value": "2-1-1",
-                            "label": "Level three 2-1-1"
-                        }
-                    ]
-                },
-                {
-                    "value": "2-2",
-                    "label": "Level two 2-2",
-                    "children": [
-                        {
-                            "value": "2-2-1",
-                            "label": "Level three 2-2-1"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "value": "3",
-            "label": "Level one 3",
-            "children": [
-                {
-                    "value": "3-1",
-                    "label": "Level two 3-1",
-                    "children": [
-                        {
-                            "value": "3-1-1",
-                            "label": "Level three 3-1-1"
-                        }
-                    ]
-                },
-                {
-                    "value": "3-2",
-                    "label": "Level two 3-2",
-                    "children": [
-                        {
-                            "value": "3-2-1",
-                            "label": "Level three 3-2-1"
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "licenseOptions": [
-        {
-            "id": 0,
-            "reference": "https://spdx.org/licenses/CC-BY-4.0.html",
-            "isDeprecatedLicenseId": false,
-            "detailsUrl": "https://spdx.org/licenses/CC-BY-4.0.json",
-            "referenceNumber": 121,
-            "name": "Creative Commons Attribution 4.0 International",
-            "licenseId": "CC-BY-4.0",
-            "seeAlso": [
-                "https://creativecommons.org/licenses/by/4.0/legalcode"
-            ],
-            "isOsiApproved": false,
-            "isFsfLibre": true
-        },
-        {
-            "id": 1,
-            "reference": "https://spdx.org/licenses/CC0-1.0.html",
-            "isDeprecatedLicenseId": false,
-            "detailsUrl": "https://spdx.org/licenses/CC0-1.0.json",
-            "referenceNumber": 269,
-            "name": "Creative Commons Zero v1.0 Universal",
-            "licenseId": "CC0-1.0",
-            "seeAlso": [
-                "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
-            ],
-            "isOsiApproved": false,
-            "isFsfLibre": true
-        },
-        {
-            "id": 2,
-            "reference": "https://spdx.org/licenses/MIT.html",
-            "isDeprecatedLicenseId": false,
-            "detailsUrl": "https://spdx.org/licenses/MIT.json",
-            "referenceNumber": 165,
-            "name": "MIT License",
-            "licenseId": "MIT",
-            "seeAlso": [
-                "https://opensource.org/licenses/MIT"
-            ],
-            "isOsiApproved": true,
-            "isFsfLibre": true
-        },
-        {
-            "id": 3,
-            "reference": "https://spdx.org/licenses/GPL-1.0.html",
-            "isDeprecatedLicenseId": true,
-            "detailsUrl": "https://spdx.org/licenses/GPL-1.0.json",
-            "referenceNumber": 352,
-            "name": "GNU General Public License v1.0 only",
-            "licenseId": "GPL-1.0",
-            "seeAlso": [
-                "https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"
-            ],
-            "isOsiApproved": false
-        },
-        {
-            "id": 4,
-            "reference": "https://spdx.org/licenses/GPL-2.0+.html",
-            "isDeprecatedLicenseId": true,
-            "detailsUrl": "https://spdx.org/licenses/GPL-2.0+.json",
-            "referenceNumber": 97,
-            "name": "GNU General Public License v2.0 or later",
-            "licenseId": "GPL-2.0+",
-            "seeAlso": [
-                "https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html",
-                "https://opensource.org/licenses/GPL-2.0"
-            ],
-            "isOsiApproved": true
-        },
-        {
-            "id": 5,
-            "reference": "https://spdx.org/licenses/GPL-3.0+.html",
-            "isDeprecatedLicenseId": true,
-            "detailsUrl": "https://spdx.org/licenses/GPL-3.0+.json",
-            "referenceNumber": 158,
-            "name": "GNU General Public License v3.0 or later",
-            "licenseId": "GPL-3.0+",
-            "seeAlso": [
-                "https://www.gnu.org/licenses/gpl-3.0-standalone.html",
-                "https://opensource.org/licenses/GPL-3.0"
-            ],
-            "isOsiApproved": true
-        },
-        {
-            "id": 6,
-            "reference": "https://spdx.org/licenses/Apache-2.0.html",
-            "isDeprecatedLicenseId": false,
-            "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json",
-            "referenceNumber": 312,
-            "name": "Apache License 2.0",
-            "licenseId": "Apache-2.0",
-            "seeAlso": [
-                "https://www.apache.org/licenses/LICENSE-2.0",
-                "https://opensource.org/licenses/Apache-2.0"
-            ],
-            "isOsiApproved": true,
-            "isFsfLibre": true
-        }
+    "description": "",
+    "version": "",
+    "language": "",
+    "keywords": [],
+    "funding": [],
+    "additionalNotes": "",
+    "license": {
+      "accessRight": "open",
+      "licenseName": "",
+      "embargoDate": "",
+      "conditions": ""
+    },
+    "grants": [
+      {
+        "value": "1-1-1",
+        "label": "Level three 1-1-1"
+      }
     ]
+  },
+  "uploadType": [
+    {
+      "value": "figure",
+      "label": "Figure",
+      "icon": "akar-icons:image"
+    },
+    {
+      "value": "media",
+      "label": "Media",
+      "icon": "carbon:media-library"
+    },
+    {
+      "value": "dataset",
+      "label": "Dataset",
+      "icon": "material-symbols:dataset"
+    },
+    {
+      "value": "poster",
+      "label": "Poster",
+      "icon": "heroicons-outline:presentation-chart-bar"
+    },
+    {
+      "value": "journal contribution",
+      "label": "Journal contribution",
+      "icon": "bi:journal-album"
+    },
+    {
+      "value": "presentation",
+      "label": "Presentation",
+      "icon": "carbon:group-presentation"
+    },
+    {
+      "value": "software",
+      "label": "Software",
+      "icon": "eos-icons:software"
+    },
+    {
+      "value": "thesis",
+      "label": "Thesis",
+      "icon": "bi:journal-medical"
+    },
+    {
+      "value": "online resource",
+      "label": "Online resource",
+      "icon": "mdi:web"
+    },
+    {
+      "value": "preprint",
+      "label": "Preprint",
+      "icon": "bi:journal-text"
+    },
+    {
+      "value": "book",
+      "label": "Book",
+      "icon": "fa-solid:journal-whills"
+    },
+    {
+      "value": "conference contribution",
+      "label": "Conference contribution",
+      "icon": "bi:journal-richtext"
+    }
+  ],
+  "licenseOptions": [
+    {
+      "id": 0,
+      "reference": "https://spdx.org/licenses/CC-BY-4.0.html",
+      "isDeprecatedLicenseId": false,
+      "detailsUrl": "https://spdx.org/licenses/CC-BY-4.0.json",
+      "referenceNumber": 121,
+      "name": "Creative Commons Attribution 4.0 International",
+      "licenseId": "CC-BY-4.0",
+      "seeAlso": [
+        "https://creativecommons.org/licenses/by/4.0/legalcode"
+      ],
+      "isOsiApproved": false,
+      "isFsfLibre": true
+    },
+    {
+      "id": 1,
+      "reference": "https://spdx.org/licenses/CC0-1.0.html",
+      "isDeprecatedLicenseId": false,
+      "detailsUrl": "https://spdx.org/licenses/CC0-1.0.json",
+      "referenceNumber": 269,
+      "name": "Creative Commons Zero v1.0 Universal",
+      "licenseId": "CC0-1.0",
+      "seeAlso": [
+        "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
+      ],
+      "isOsiApproved": false,
+      "isFsfLibre": true
+    },
+    {
+      "id": 2,
+      "reference": "https://spdx.org/licenses/MIT.html",
+      "isDeprecatedLicenseId": false,
+      "detailsUrl": "https://spdx.org/licenses/MIT.json",
+      "referenceNumber": 165,
+      "name": "MIT License",
+      "licenseId": "MIT",
+      "seeAlso": [
+        "https://opensource.org/licenses/MIT"
+      ],
+      "isOsiApproved": true,
+      "isFsfLibre": true
+    },
+    {
+      "id": 3,
+      "reference": "https://spdx.org/licenses/GPL-1.0.html",
+      "isDeprecatedLicenseId": true,
+      "detailsUrl": "https://spdx.org/licenses/GPL-1.0.json",
+      "referenceNumber": 352,
+      "name": "GNU General Public License v1.0 only",
+      "licenseId": "GPL-1.0",
+      "seeAlso": [
+        "https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"
+      ],
+      "isOsiApproved": false
+    },
+    {
+      "id": 4,
+      "reference": "https://spdx.org/licenses/GPL-2.0+.html",
+      "isDeprecatedLicenseId": true,
+      "detailsUrl": "https://spdx.org/licenses/GPL-2.0+.json",
+      "referenceNumber": 97,
+      "name": "GNU General Public License v2.0 or later",
+      "licenseId": "GPL-2.0+",
+      "seeAlso": [
+        "https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html",
+        "https://opensource.org/licenses/GPL-2.0"
+      ],
+      "isOsiApproved": true
+    },
+    {
+      "id": 5,
+      "reference": "https://spdx.org/licenses/GPL-3.0+.html",
+      "isDeprecatedLicenseId": true,
+      "detailsUrl": "https://spdx.org/licenses/GPL-3.0+.json",
+      "referenceNumber": 158,
+      "name": "GNU General Public License v3.0 or later",
+      "licenseId": "GPL-3.0+",
+      "seeAlso": [
+        "https://www.gnu.org/licenses/gpl-3.0-standalone.html",
+        "https://opensource.org/licenses/GPL-3.0"
+      ],
+      "isOsiApproved": true
+    },
+    {
+      "id": 6,
+      "reference": "https://spdx.org/licenses/Apache-2.0.html",
+      "isDeprecatedLicenseId": false,
+      "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json",
+      "referenceNumber": 312,
+      "name": "Apache License 2.0",
+      "licenseId": "Apache-2.0",
+      "seeAlso": [
+        "https://www.apache.org/licenses/LICENSE-2.0",
+        "https://opensource.org/licenses/Apache-2.0"
+      ],
+      "isOsiApproved": true,
+      "isFsfLibre": true
+    }
+  ]
 }
