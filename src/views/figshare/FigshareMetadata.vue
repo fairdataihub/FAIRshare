@@ -11,7 +11,7 @@
       <el-form
         :model="figshareMetadataForm"
         :rules="rulesFigshareMetadataForm"
-        label-width="150px"
+        label-width="130px"
         label-position="right"
         size="large"
         ref="fmForm"
@@ -19,11 +19,7 @@
       >
         <el-form-item label="Item type" prop="uploadType">
           <div class="flex flex-col">
-            <el-tree-select
-              v-model="figshareMetadataForm.uploadType"
-              :data="uploadTypeOptions"
-              :disabled="disableUploadType"
-            />
+            <el-tree-select v-model="figshareMetadataForm.uploadType" :data="uploadTypeOptions" />
           </div>
         </el-form-item>
 
@@ -169,6 +165,19 @@
           </div>
         </el-form-item>
 
+        <el-form-item label="Description" prop="description">
+          <VuePopper
+            :hover="true"
+            offsetDistance="0"
+            content="Use a description that is easily identifiable. This will
+                        be shown in the dataset selection screen and is not part
+                        of your submitted metadata."
+            class="mx-0 w-full"
+          >
+            <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
+          </VuePopper>
+        </el-form-item>
+
         <el-form-item label="Funding">
           <draggable
             tag="div"
@@ -180,7 +189,7 @@
             <template #item="{ element }">
               <div class="mb-2 flex flex-row justify-between transition-all">
                 <div class="flex w-11/12 flex-row justify-between">
-                  <el-input v-model="element.keyword" type="text" placeholder=""></el-input>
+                  <el-input v-model="element.funding" type="text" placeholder=""></el-input>
                   <div class="mx-2"></div>
                 </div>
                 <div class="flex w-1/12 flex-row justify-evenly">
@@ -195,7 +204,7 @@
                       icon-color="red"
                       confirm-button-text="Yes"
                       cancel-button-text="No"
-                      @confirm="deleteKeyword(element.id)"
+                      @confirm="deleteFunding(element.id)"
                     >
                       <template #reference>
                         <el-icon class="cursor-pointer hover:text-gray-800">
@@ -211,24 +220,108 @@
 
           <div
             class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
-            @click="addKeyword()"
+            @click="addFunding()"
           >
             <Icon icon="carbon:add" />
-            <span> Add a keyword </span>
+            <span>
+              Add {{ figshareMetadataForm.funding.length >= 1 ? "another" : "a" }} grant
+            </span>
           </div>
         </el-form-item>
 
-        <el-form-item label="Description" prop="description">
-          <VuePopper
-            :hover="true"
-            offsetDistance="0"
-            content="Use a description that is easily identifiable. This will
-                        be shown in the dataset selection screen and is not part
-                        of your submitted metadata."
-            class="mx-0 w-full"
+        <!-- filter this for urls and DOIs. -->
+        <el-form-item label="References">
+          <draggable
+            tag="div"
+            :list="figshareMetadataForm.references"
+            item-key="id"
+            handle=".handle"
+            class="w-full"
           >
-            <el-input v-model="figshareMetadataForm.description" type="textarea"></el-input>
-          </VuePopper>
+            <template #item="{ element }">
+              <div class="mb-2 flex flex-row justify-between transition-all">
+                <div class="flex w-11/12 flex-row justify-between">
+                  <el-input
+                    v-model="element.reference"
+                    type="text"
+                    placeholder="e.g.: Cranmer, Kyle et al. (2014). Decouple software associated to arXiv:1401.0080."
+                  ></el-input>
+                  <div class="mx-2"></div>
+                </div>
+                <div class="flex w-1/12 flex-row justify-evenly pt-4">
+                  <div
+                    class="handle flex items-start justify-center text-gray-400 hover:text-gray-700"
+                  >
+                    <Icon icon="ic:outline-drag-indicator" />
+                  </div>
+                  <div class="flex items-start justify-center text-gray-500 transition-all">
+                    <el-popconfirm
+                      title="Are you sure you want to remove this?"
+                      icon-color="red"
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      @confirm="deleteReference(element.id)"
+                    >
+                      <template #reference>
+                        <el-icon class="cursor-pointer hover:text-gray-800">
+                          <delete-filled />
+                        </el-icon>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
+
+          <div
+            class="flex w-max cursor-pointer items-center text-gray-500 hover:text-black"
+            @click="addReference()"
+          >
+            <Icon icon="carbon:add" />
+            <span> Add a reference </span>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="License" prop="license">
+          <el-select
+            v-model="figshareMetadataForm.license.licenseName"
+            filterable
+            disabled
+            placeholder="Select a license"
+            class="w-full"
+          >
+            <el-option
+              v-for="item in licenseOptions"
+              :key="item.licenseId"
+              :label="item.name"
+              :value="item.licenseId"
+            >
+            </el-option>
+          </el-select>
+          <p class="pt-2 text-xs text-gray-500">
+            Required. Selected license applies to all of your files displayed on the top of the
+            form. <br />
+            If you want to upload some of your files under different licenses, please do so in
+            separate uploads. <br />
+            If you cannot find the license you're looking for, include a relevant LICENSE file in
+            your record and choose one of the
+            <span class="italic"> Other </span> licenses available
+            <span class="italic"> (Other (Open), Other (Attribution) </span>, etc.). <br />
+            The supported licenses in the list are harvested from
+            <a
+              href="https://opendefinition.org/"
+              target="_blank"
+              class="text-blue-500 hover:underline"
+            >
+              opendefinition.org
+            </a>
+            and
+            <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
+              spdx.org
+            </a>
+            .
+          </p>
         </el-form-item>
       </el-form>
 
@@ -1480,6 +1573,19 @@ export default {
         return keyword.id !== id;
       });
     },
+
+    addFunding() {
+      this.figshareMetadataForm.funding.push({
+        funding: "",
+        id: uuidv4(),
+      });
+    },
+    deleteFunding(id) {
+      this.figshareMetadataForm.funding = this.figshareMetadataForm.funding.filter((funding) => {
+        return funding.id !== id;
+      });
+    },
+
     addRelatedIdentifier() {
       this.figshareMetadataForm.relatedIdentifiers.push({
         identifier: "",
