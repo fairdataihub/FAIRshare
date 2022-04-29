@@ -70,19 +70,14 @@ const menuTemplate = [
     submenu: [
       {
         label: "View the documentation",
+        accelerator: "F1",
         click: async () => {
           const { shell } = require("electron");
           await shell.openExternal("https://docs.fairshareapp.io");
         },
       },
-    ],
-  },
-
-  {
-    role: "help",
-    submenu: [
       {
-        label: "Learn More about Fairshare",
+        label: "Learn more about Fairshare",
         click: async () => {
           const { shell } = require("electron");
           await shell.openExternal("https://fairdataihub.org/fairshare");
