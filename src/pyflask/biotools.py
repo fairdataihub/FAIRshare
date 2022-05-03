@@ -1,6 +1,7 @@
-import requests
 import json
+
 import config
+import requests
 
 
 def loginToBioTools(username, password):
@@ -64,7 +65,7 @@ def validateTool(token, data):
             "POST",
             f"{config.BIO_TOOLS_SERVER_URL}/tool/validate",
             headers=headers,
-            data=data,  # noqa E501
+            data=data,
         )
 
         returnObject = {

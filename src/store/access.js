@@ -105,7 +105,6 @@ export const useTokenStore = defineStore({
             serverURL !== undefined
               ? `${serverURL}/biotools/login`
               : `http://127.0.0.1:7632/biotools/login`;
-          console.log(url);
 
           const response = await axios
             .post(url, {
@@ -225,6 +224,42 @@ export const useTokenStore = defineStore({
         const token = tokenObject.token;
 
         const response = await this.verifyBioToolsToken(token);
+
+        return response;
+      }
+    },
+
+    async verifyFigshareToken(token) {
+      const config = {
+        method: "get",
+        url: `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`,
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      };
+
+      return await axios(config)
+        .then(async (response) => {
+          if (response.status === 200) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .catch((_error) => {
+          return false;
+        });
+    },
+
+    async verifyFigshareConnection() {
+      const tokenObject = await this.getToken("figshare");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = await this.verifyFigshareToken(token);
 
         return response;
       }

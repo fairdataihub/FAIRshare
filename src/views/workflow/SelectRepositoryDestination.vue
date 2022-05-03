@@ -320,6 +320,27 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-if="repoID === 'figshare'"
+              >
+                <!-- zenodo new dataset  -->
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
+
+                <button
+                  class="primary-button"
+                  @click="addMetadata"
+                  :disabled="repoID === ''"
+                  id="continue"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
                 v-if="newVersion === 'false'"
               >
                 <!-- zenodo new dataset  -->

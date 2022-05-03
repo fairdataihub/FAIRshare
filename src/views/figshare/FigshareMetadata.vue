@@ -138,6 +138,7 @@
           <el-tree-select
             v-model="figshareMetadataForm.categories"
             :data="categoryOptions"
+            :filter-node-method="categoriesFilterMethod"
             multiple
             clearable
             filterable
@@ -512,6 +513,15 @@ export default {
         }
       }, 50);
     },
+    filterArrayOfObjects(array, key) {
+      return array.filter((element) => {
+        return element[key] !== "";
+      });
+    },
+
+    categoriesFilterMethod(value, data) {
+      return data.label.toLowerCase().includes(value.toLowerCase());
+    },
 
     authorValidator(_rule, value, callback) {
       if (value.length > 0) {
@@ -623,6 +633,19 @@ export default {
           this.workflow = this.dataset.workflows[this.workflowID];
 
           this.workflow.expandOptions = [];
+
+          this.figshareMetadataForm.keywords = this.filterArrayOfObjects(
+            this.figshareMetadataForm.keywords,
+            "keyword"
+          );
+          this.figshareMetadataForm.funding = this.filterArrayOfObjects(
+            this.figshareMetadataForm.funding,
+            "funding"
+          );
+          this.figshareMetadataForm.references = this.filterArrayOfObjects(
+            this.figshareMetadataForm.references,
+            "reference"
+          );
 
           this.workflow.destination.figshare.questions = this.figshareMetadataForm;
           this.datasetStore.updateCurrentDataset(this.dataset);

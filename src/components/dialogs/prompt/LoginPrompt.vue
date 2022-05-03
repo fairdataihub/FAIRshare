@@ -174,8 +174,6 @@ export default {
       this.showErrors("");
       const response = await this.preConfirm();
 
-      console.log(response);
-
       if (response === "valid") {
         this.setIsOpen(false, "confirm");
       } else if (response === "invalid") {
