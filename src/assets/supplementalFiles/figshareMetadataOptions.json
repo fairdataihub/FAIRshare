@@ -267,25 +267,16 @@
     "publicationDate": "",
     "title": "",
     "categories": [],
-    "authors": [{}],
+    "authors": [],
     "description": "",
-    "version": "",
-    "language": "",
     "keywords": [],
     "funding": [],
-    "additionalNotes": "",
     "license": {
       "accessRight": "open",
       "licenseName": "",
       "embargoDate": "",
       "conditions": ""
-    },
-    "grants": [
-      {
-        "value": "1-1-1",
-        "label": "Level three 1-1-1"
-      }
-    ]
+    }
   },
   "uploadType": [
     {
@@ -358,7 +349,9 @@
       "referenceNumber": 121,
       "name": "Creative Commons Attribution 4.0 International",
       "licenseId": "CC-BY-4.0",
-      "seeAlso": ["https://creativecommons.org/licenses/by/4.0/legalcode"],
+      "seeAlso": [
+        "https://creativecommons.org/licenses/by/4.0/legalcode"
+      ],
       "isOsiApproved": false,
       "isFsfLibre": true
     },
@@ -370,7 +363,9 @@
       "referenceNumber": 269,
       "name": "Creative Commons Zero v1.0 Universal",
       "licenseId": "CC0-1.0",
-      "seeAlso": ["https://creativecommons.org/publicdomain/zero/1.0/legalcode"],
+      "seeAlso": [
+        "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
+      ],
       "isOsiApproved": false,
       "isFsfLibre": true
     },
@@ -382,7 +377,9 @@
       "referenceNumber": 165,
       "name": "MIT License",
       "licenseId": "MIT",
-      "seeAlso": ["https://opensource.org/licenses/MIT"],
+      "seeAlso": [
+        "https://opensource.org/licenses/MIT"
+      ],
       "isOsiApproved": true,
       "isFsfLibre": true
     },
@@ -394,7 +391,9 @@
       "referenceNumber": 352,
       "name": "GNU General Public License v1.0 only",
       "licenseId": "GPL-1.0",
-      "seeAlso": ["https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"],
+      "seeAlso": [
+        "https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"
+      ],
       "isOsiApproved": false
     },
     {
