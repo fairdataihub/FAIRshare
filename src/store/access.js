@@ -7,8 +7,10 @@ import { defineStore } from "pinia";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 
+const FILE_NAME =
+  process.env.NODE_ENV === "development" ? "accessTokens-dev.json" : "accessTokens.json";
 const USER_PATH = app.getPath("home");
-const TOKEN_STORE_PATH = path.join(USER_PATH, ".fairshare", "accessTokens.json");
+const TOKEN_STORE_PATH = path.join(USER_PATH, ".fairshare", FILE_NAME);
 
 // will change to use an actual secret key
 const SECRET_KEY = process.env.VUE_APP_ENCRYPTION_KEY;
