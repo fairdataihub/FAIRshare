@@ -104,20 +104,22 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    async createZenodoDeposition() {
-      this.statusMessage = "Creating an empty dataset on Zenodo";
+    async createFigshareDeposition() {
+      // ALL OF THIS NEEDS TO CHANGE. WILL CREATE THE DEPOSITION WITH METADATA. GET LIST OF ALL AUTHORS. DELETE FIRST AUTHOR. THEN UPLOAD
+
+      this.statusMessage = "Creating an empty dataset on Figshare";
       await this.sleep(300);
-      // return "ERROR";
+
       return axios
-        .post(`${this.$server_url}/zenodo/deposition`, {
-          access_token: this.zenodoToken,
+        .post(`${this.$server_url}/figshare/deposition`, {
+          access_token: this.figshareToken,
         })
         .then((response) => {
-          this.$track("Zenodo", "Create empty deposition", "success");
+          this.$track("Figshare", "Create empty deposition", "success");
           return response.data;
         })
         .catch((error) => {
-          this.$track("Zenodo", "Create empty deposition", "failed");
+          this.$track("Figshare", "Create empty deposition", "failed");
           console.error(error);
           return "ERROR";
         });
@@ -387,7 +389,7 @@ export default {
 
       return axios
         .post(`${this.$server_url}/zenodo/deposition/metadata`, {
-          access_token: this.zenodoToken,
+          access_token: this.figshareToken,
           deposition_id: this.workflow.destination.zenodo.deposition_id,
           metadata: metadataObject,
         })
@@ -420,7 +422,7 @@ export default {
 
       const response = await axios
         .post(`${this.$server_url}/zenodo/deposition/files/upload`, {
-          access_token: this.zenodoToken,
+          access_token: this.figshareToken,
           bucket_url: bucket_url,
           file_path: file_path,
         })
@@ -595,8 +597,8 @@ export default {
     async uploadWorkflow() {
       let response = {};
 
-      if (this.workflow.destination.zenodo.newVersion) {
-        this.statusMessage = "Creating a new version of the Zenodo Deposition";
+      if (this.workflow.destination.figshare.newVersion) {
+        this.statusMessage = "Creating a new version of the Figshare article";
 
         await this.sleep(300);
 
@@ -606,7 +608,7 @@ export default {
 
         res = await axios
           .post(`${this.$server_url}/zenodo/deposition/newversion`, {
-            access_token: this.zenodoToken,
+            access_token: this.figshareToken,
             deposition_id: original_deposition_id,
           })
           .then((response) => {
@@ -635,7 +637,7 @@ export default {
         res = await axios
           .get(`${this.$server_url}/zenodo/deposition`, {
             params: {
-              access_token: this.zenodoToken,
+              access_token: this.figshareToken,
               deposition_id,
             },
           })
@@ -668,7 +670,7 @@ export default {
           await axios
             .delete(`${this.$server_url}/zenodo/deposition/files`, {
               data: {
-                access_token: this.zenodoToken,
+                access_token: this.figshareToken,
                 deposition_id,
                 file_id: file.id,
               },
@@ -684,13 +686,13 @@ export default {
 
         this.statusMessage = "Succeeded in removing all old pre-existing files";
       } else {
-        response = await this.createZenodoDeposition();
+        response = await this.createFigshareDeposition();
 
         if (response === "ERROR") {
           this.alertMessage = "There was an error creating the deposition";
           return "FAIL";
         } else {
-          this.statusMessage = "Empty deposition created on Zenodo";
+          this.statusMessage = "Empty item created on Figshare";
         }
 
         this.percentage = 10;
@@ -849,11 +851,11 @@ export default {
     },
     async deleteDraftZenodoDeposition() {
       if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(this.zenodoToken, this.workflow.destination.zenodo.deposition_id);
+        console.log(this.figshareToken, this.workflow.destination.zenodo.deposition_id);
         const response = await axios
           .delete(`${this.$server_url}/zenodo/deposition`, {
             data: {
-              access_token: this.zenodoToken,
+              access_token: this.figshareToken,
               deposition_id: this.workflow.destination.zenodo.deposition_id,
             },
           })
@@ -869,7 +871,7 @@ export default {
       }
       return "NO_DEPOSITION_FOUND";
     },
-    async runZenodoUpload() {
+    async runFigshareUpload() {
       this.datasetStore.hideSidebar();
 
       this.statusMessage = "Preparing backend services...";
@@ -920,7 +922,7 @@ export default {
       }
     },
     async retryUpload() {
-      this.runZenodoUpload();
+      this.runFigshareUpload();
     },
   },
   async mounted() {
@@ -935,12 +937,10 @@ export default {
     // this.workflow.currentRoute = this.$route.path;
 
     const tokenObject = await this.tokens.getToken("zenodo");
-    this.zenodoToken = tokenObject.token;
-    console.log(this.zenodoToken);
+    this.figshareToken = tokenObject.token;
+    console.log(this.figshareToken);
 
-    this.runZenodoUpload();
+    this.runFigshareUpload();
   },
 };
 </script>
-
-<style lang="postcss" scoped></style>
