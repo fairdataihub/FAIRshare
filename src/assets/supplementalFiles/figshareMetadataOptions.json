@@ -343,54 +343,62 @@
   ],
   "licenseOptions": [
     {
-      "id": 0,
+      "id": 1,
       "reference": "https://spdx.org/licenses/CC-BY-4.0.html",
       "isDeprecatedLicenseId": false,
       "detailsUrl": "https://spdx.org/licenses/CC-BY-4.0.json",
       "referenceNumber": 121,
       "name": "Creative Commons Attribution 4.0 International",
       "licenseId": "CC-BY-4.0",
-      "seeAlso": ["https://creativecommons.org/licenses/by/4.0/legalcode"],
+      "seeAlso": [
+        "https://creativecommons.org/licenses/by/4.0/legalcode"
+      ],
       "isOsiApproved": false,
       "isFsfLibre": true
     },
     {
-      "id": 1,
+      "id": 2,
       "reference": "https://spdx.org/licenses/CC0-1.0.html",
       "isDeprecatedLicenseId": false,
       "detailsUrl": "https://spdx.org/licenses/CC0-1.0.json",
       "referenceNumber": 269,
       "name": "Creative Commons Zero v1.0 Universal",
       "licenseId": "CC0-1.0",
-      "seeAlso": ["https://creativecommons.org/publicdomain/zero/1.0/legalcode"],
+      "seeAlso": [
+        "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
+      ],
       "isOsiApproved": false,
       "isFsfLibre": true
     },
     {
-      "id": 2,
+      "id": 3,
       "reference": "https://spdx.org/licenses/MIT.html",
       "isDeprecatedLicenseId": false,
       "detailsUrl": "https://spdx.org/licenses/MIT.json",
       "referenceNumber": 165,
       "name": "MIT License",
       "licenseId": "MIT",
-      "seeAlso": ["https://opensource.org/licenses/MIT"],
+      "seeAlso": [
+        "https://opensource.org/licenses/MIT"
+      ],
       "isOsiApproved": true,
       "isFsfLibre": true
     },
     {
-      "id": 3,
+      "id": 4,
       "reference": "https://spdx.org/licenses/GPL-1.0.html",
       "isDeprecatedLicenseId": true,
       "detailsUrl": "https://spdx.org/licenses/GPL-1.0.json",
       "referenceNumber": 352,
       "name": "GNU General Public License v1.0 only",
       "licenseId": "GPL-1.0",
-      "seeAlso": ["https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"],
+      "seeAlso": [
+        "https://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html"
+      ],
       "isOsiApproved": false
     },
     {
-      "id": 4,
+      "id": 5,
       "reference": "https://spdx.org/licenses/GPL-2.0+.html",
       "isDeprecatedLicenseId": true,
       "detailsUrl": "https://spdx.org/licenses/GPL-2.0+.json",
@@ -404,7 +412,7 @@
       "isOsiApproved": true
     },
     {
-      "id": 5,
+      "id": 6,
       "reference": "https://spdx.org/licenses/GPL-3.0+.html",
       "isDeprecatedLicenseId": true,
       "detailsUrl": "https://spdx.org/licenses/GPL-3.0+.json",
@@ -418,7 +426,7 @@
       "isOsiApproved": true
     },
     {
-      "id": 6,
+      "id": 7,
       "reference": "https://spdx.org/licenses/Apache-2.0.html",
       "isDeprecatedLicenseId": false,
       "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json",

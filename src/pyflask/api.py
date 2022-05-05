@@ -39,6 +39,7 @@ from zenodo import (
     removeFileFromZenodoDeposition,
     uploadFileToZenodoDeposition,
 )
+from figshare import createNewFigshareItem
 
 API_VERSION = "1.4.0"
 
@@ -291,6 +292,47 @@ class CreateCitationCFF(Resource):
         virtual_file = args["virtual_file"]
 
         return createCitationCFF(data_types, data, virtual_file)
+
+
+###############################################################################
+# Figshare operations
+###############################################################################
+
+figshare = api.namespace("figshare", description="Figshare operations")
+
+
+@figshare.route("/item", endpoint="FigshareCreateItem")
+class FigshareCreateItem(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "metadata": "json string with metadata to add to the item",
+        },
+    )
+    def post(self):
+        """Add metadata to a figshare item"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "metadata",
+            type=str,
+            required=True,
+            help="metadata is required. metadata needs to be a json string",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        metadata = json.loads(args["metadata"])
+
+        return createNewFigshareItem(access_token, metadata)
 
 
 ###############################################################################

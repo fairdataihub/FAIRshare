@@ -55,7 +55,6 @@
 
 <script>
 import axios from "axios";
-import dayjs from "dayjs";
 import path from "path";
 import fs from "fs-extra";
 import klawSync from "klaw-sync";
@@ -67,6 +66,7 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import ignoreFilesJSON from "@/assets/supplementalFiles/ignoreFilesList.json";
+import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 
 export default {
   name: "FigshareUpload",
@@ -90,6 +90,7 @@ export default {
       alertMessage: "",
       overwriteCodeMeta: false,
       overwriteOtherMeta: false,
+      licenseOptions: figshareMetadataOptions.licenseOptions,
     };
   },
   computed: {
@@ -105,13 +106,90 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async createFigshareDeposition() {
-      // ALL OF THIS NEEDS TO CHANGE. WILL CREATE THE DEPOSITION WITH METADATA. GET LIST OF ALL AUTHORS. DELETE FIRST AUTHOR. THEN UPLOAD
+      this.statusMessage = "Creating a metadata object for the Figshare deposition";
+      await this.sleep(300);
 
-      this.statusMessage = "Creating an empty dataset on Figshare";
+      const figshareMetadata = this.workflow.destination.figshare.questions;
+      let metadata = {};
+
+      if ("uploadType" in figshareMetadata && figshareMetadata.uploadType != "") {
+        metadata.defined_type = figshareMetadata.uploadType;
+      }
+
+      if ("title" in figshareMetadata && figshareMetadata.title != "") {
+        metadata.title = figshareMetadata.title;
+      }
+
+      if ("description" in figshareMetadata && figshareMetadata.description != "") {
+        metadata.description = figshareMetadata.description;
+      }
+
+      if ("authors" in figshareMetadata) {
+        metadata.authors = [];
+        figshareMetadata.authors.forEach((author) => {
+          const creatorObject = {};
+
+          creatorObject.first_name = author.givenName;
+          creatorObject.last_name = author.affiliation;
+
+          if (author.orcid !== "") {
+            creatorObject.orcid = author.orcid;
+          }
+
+          metadata.authors.push(creatorObject);
+        });
+      }
+
+      if ("categories" in figshareMetadata && figshareMetadata.categories.length > 0) {
+        metadata.categories = figshareMetadata.categories;
+      }
+
+      if ("keywords" in figshareMetadata && figshareMetadata.keywords.length > 0) {
+        metadata.keywords = [];
+        figshareMetadata.keywords.forEach((keyword) => {
+          metadata.keywords.push(keyword.keyword);
+        });
+      }
+
+      if ("references" in figshareMetadata && figshareMetadata.references.length > 0) {
+        metadata.references = [];
+        figshareMetadata.references.forEach((reference) => {
+          metadata.references.push(reference.reference);
+        });
+      }
+
+      if ("funding" in figshareMetadata) {
+        metadata.funding_list = [];
+        figshareMetadata.funding_list.forEach((funder) => {
+          const funderObject = {};
+
+          funderObject.title = funder;
+
+          metadata.funding_list.push(funderObject);
+        });
+      }
+
+      if ("license" in figshareMetadata) {
+        if ("licenseName" in figshareMetadata.license) {
+          const licenseObject = await this.licenseOptions.find(
+            (license) => license.licenseId === figshareMetadata.license.licenseName
+          );
+
+          metadata.license = licenseObject.id;
+        }
+      }
+
+      this.statusMessage = "Created a metadata object successfully";
+      await this.sleep(300);
+
+      this.percentage = 10;
+      this.indeterminate = false;
+
+      this.statusMessage = "Creating an article shell on Figshare";
       await this.sleep(300);
 
       return axios
-        .post(`${this.$server_url}/figshare/deposition`, {
+        .post(`${this.$server_url}/figshare/item`, {
           access_token: this.figshareToken,
         })
         .then((response) => {
@@ -124,298 +202,7 @@ export default {
           return "ERROR";
         });
     },
-    async addMetadaToZenodoDeposition() {
-      this.statusMessage = "Adding metadata to Zenodo";
-      await this.sleep(300);
 
-      const zenodoMetadata = this.workflow.destination.zenodo.questions;
-      let metadata = {};
-
-      if ("uploadType" in zenodoMetadata) {
-        const publicationTypes = [
-          "annotationcollection",
-          "book",
-          "section",
-          "conferencepaper",
-          "datamanagementplan",
-          "article",
-          "patent",
-          "preprint",
-          "deliverable",
-          "milestone",
-          "proposal",
-          "report",
-          "softwaredocumentation",
-          "taxonomictreatment",
-          "technicalnote",
-          "thesis",
-          "workingpaper",
-          "p_other",
-        ];
-        const imageTypes = ["plot", "figure", "diagram", "drawing", "photo", "i_other"];
-
-        if (publicationTypes.includes(zenodoMetadata.upload_type)) {
-          metadata.upload_type = "publication";
-          metadata.publication_type =
-            zenodoMetadata.upload_type === "p_other" ? "other" : zenodoMetadata.upload_type;
-        } else if (imageTypes.includes(zenodoMetadata.upload_type)) {
-          metadata.upload_type = "image";
-          metadata.image_type =
-            zenodoMetadata.upload_type === "i_other" ? "other" : zenodoMetadata.upload_type;
-        } else {
-          metadata.upload_type = zenodoMetadata.upload_type;
-        }
-      } else {
-        metadata.upload_type = "other";
-      }
-
-      metadata.prereserve_doi = true;
-
-      if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
-        metadata.title = zenodoMetadata.title;
-      }
-      if ("publicationDate" in zenodoMetadata && zenodoMetadata.publicationDate != "") {
-        metadata.publication_date = zenodoMetadata.publicationDate;
-      }
-
-      if ("authors" in zenodoMetadata) {
-        metadata.creators = [];
-        zenodoMetadata.authors.forEach((author) => {
-          const creatorObject = {};
-
-          creatorObject.name = author.name;
-          creatorObject.affiliation = author.affiliation;
-
-          if (author.orcid !== "") {
-            creatorObject.orcid = author.orcid;
-          }
-
-          metadata.creators.push(creatorObject);
-        });
-      }
-
-      if ("description" in zenodoMetadata && zenodoMetadata.description != "") {
-        metadata.description = zenodoMetadata.description;
-      }
-      if ("license" in zenodoMetadata) {
-        if ("accessRight" in zenodoMetadata.license) {
-          metadata.access_right = zenodoMetadata.license.accessRight;
-        }
-        if ("licenseName" in zenodoMetadata.license) {
-          metadata.license = zenodoMetadata.license.licenseName;
-        }
-      }
-
-      if ("keywords" in zenodoMetadata) {
-        if (zenodoMetadata.keywords.length > 0) {
-          metadata.keywords = [];
-          zenodoMetadata.keywords.forEach((keyword) => {
-            metadata.keywords.push(keyword.keyword);
-          });
-        }
-      }
-
-      if ("version" in zenodoMetadata && zenodoMetadata.version !== "") {
-        metadata.version = zenodoMetadata.version;
-      }
-
-      if ("language" in zenodoMetadata && zenodoMetadata.language !== "") {
-        metadata.language = zenodoMetadata.language;
-      }
-
-      if ("additionalNotes" in zenodoMetadata && zenodoMetadata.additionalNotes != "") {
-        metadata.notes = zenodoMetadata.additionalNotes;
-      }
-
-      if ("relatedIdentifiers" in zenodoMetadata) {
-        if (zenodoMetadata.relatedIdentifiers.length > 0) {
-          metadata.related_identifiers = [];
-          zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
-            metadata.related_identifiers.push({
-              relation: relatedIdentifier.relationship,
-              identifier: relatedIdentifier.identifier,
-              resource_type: relatedIdentifier.resourceType,
-            });
-          });
-        }
-      }
-
-      if ("contributors" in zenodoMetadata) {
-        if (zenodoMetadata.contributors.length > 0) {
-          metadata.contributors = [];
-          zenodoMetadata.contributors.forEach((contributor) => {
-            const contributorObject = {};
-
-            contributorObject.name = contributor.name;
-            contributorObject.affiliation = contributor.affiliation;
-            contributorObject.type = contributor.contributorType;
-
-            if (contributor.orcid !== "") {
-              contributorObject.orcid = contributor.orcid;
-            }
-
-            metadata.contributors.push(contributorObject);
-          });
-        }
-      }
-
-      if ("references" in zenodoMetadata) {
-        if (zenodoMetadata.references.length > 0) {
-          metadata.references = [];
-          zenodoMetadata.references.forEach((reference) => {
-            metadata.references.push(reference.reference);
-          });
-        }
-      }
-
-      if ("journal" in zenodoMetadata) {
-        if ("title" in zenodoMetadata.journal && zenodoMetadata.journal.title !== "") {
-          metadata.journal_title = zenodoMetadata.journal.title;
-        }
-        if ("volume" in zenodoMetadata.journal && zenodoMetadata.journal.volume !== "") {
-          metadata.journal_volume = zenodoMetadata.journal.volume;
-        }
-        if ("issue" in zenodoMetadata.journal && zenodoMetadata.journal.issue !== "") {
-          metadata.journal_issue = zenodoMetadata.journal.issue;
-        }
-        if ("pages" in zenodoMetadata.journal && zenodoMetadata.journal.pages !== "") {
-          metadata.journal_pages = zenodoMetadata.journal.pages;
-        }
-      }
-
-      if ("conference" in zenodoMetadata) {
-        if ("title" in zenodoMetadata.conference && zenodoMetadata.conference.title !== "") {
-          metadata.conference_title = zenodoMetadata.conference.title;
-        }
-        if ("acronym" in zenodoMetadata.conference && zenodoMetadata.conference.acronym !== "") {
-          metadata.conference_acronym = zenodoMetadata.conference.acronym;
-        }
-
-        if ("dates" in zenodoMetadata.conference) {
-          if (zenodoMetadata.conference.dates.length === 2) {
-            metadata.conference_dates =
-              dayjs(zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
-              " - " +
-              dayjs(zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY");
-          }
-        }
-
-        if ("place" in zenodoMetadata.conference && zenodoMetadata.conference.place !== "") {
-          metadata.conference_place = zenodoMetadata.conference.place;
-        }
-        if ("url" in zenodoMetadata.conference && zenodoMetadata.conference.url !== "") {
-          metadata.conference_url = zenodoMetadata.conference.url;
-        }
-        if ("session" in zenodoMetadata.conference && zenodoMetadata.conference.session !== "") {
-          metadata.conference_session = zenodoMetadata.conference.session;
-        }
-        if ("part" in zenodoMetadata.conference && zenodoMetadata.conference.part !== "") {
-          metadata.conference_session_part = zenodoMetadata.conference.part;
-        }
-      }
-
-      if ("bookReportChapter" in zenodoMetadata) {
-        if (
-          "publisher" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.publisher !== ""
-        ) {
-          metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
-        }
-        if (
-          "isbn" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.isbn !== ""
-        ) {
-          metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
-        }
-        if (
-          "place" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.place !== ""
-        ) {
-          metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
-        }
-        if (
-          "title" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.title !== ""
-        ) {
-          metadata.partof_title = zenodoMetadata.bookReportChapter.title;
-        }
-        if (
-          "pages" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.pages !== ""
-        ) {
-          metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
-        }
-      }
-
-      if ("thesis" in zenodoMetadata) {
-        if (
-          "awardingUniversity" in zenodoMetadata.thesis &&
-          zenodoMetadata.thesis.awardingUniversity !== ""
-        ) {
-          metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
-        }
-
-        if (
-          "supervisors" in zenodoMetadata.thesis &&
-          zenodoMetadata.thesis.supervisors.length > 0
-        ) {
-          metadata.thesis_supervisors = [];
-          zenodoMetadata.thesis.supervisors.forEach(({ name, affiliation, orcid }) => {
-            metadata.thesis_supervisors.push({
-              name,
-              affiliation,
-              orcid,
-            });
-          });
-        }
-      }
-
-      if ("subjects" in zenodoMetadata && zenodoMetadata.subjects.length > 0) {
-        metadata.subjects = [];
-        zenodoMetadata.subjects.forEach((subject) => {
-          metadata.subjects.push({
-            term: subject.term,
-            identifier: subject.identifier,
-            scheme: "url",
-          });
-        });
-      }
-
-      console.log(metadata);
-
-      const metadataObject = JSON.stringify({
-        metadata: metadata,
-      });
-
-      return axios
-        .post(`${this.$server_url}/zenodo/deposition/metadata`, {
-          access_token: this.figshareToken,
-          deposition_id: this.workflow.destination.zenodo.deposition_id,
-          metadata: metadataObject,
-        })
-        .then((response) => {
-          console.log(response);
-          if ("status" in response.data && response.data.status != 200) {
-            if ("errors" in response.data) {
-              response.data.errors.forEach((error) => {
-                this.errorMessage += `${error.field} - ${error.message} \n`;
-              });
-            }
-            this.alertTitle = "Metadata error";
-            this.alertMessage = "Could not add your metadata to the dataset. Please try again.";
-            this.$track("Zenodo", "Add metadata to Zenodo deposition", "failed");
-            return "ERROR";
-          } else {
-            this.$track("Zenodo", "Add metadata to Zenodo deposition", "success");
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          this.$track("Zenodo", "Add metadata to Zenodo deposition", "failed");
-          console.error(error);
-          return "ERROR";
-        });
-    },
     async uploadToZenodo(bucket_url, file_path) {
       this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
       await this.sleep(100);
@@ -689,24 +476,21 @@ export default {
         response = await this.createFigshareDeposition();
 
         if (response === "ERROR") {
-          this.alertMessage = "There was an error creating the deposition";
+          this.alertMessage = "There was an error with creating the deposition on Figshare";
           return "FAIL";
         } else {
-          this.statusMessage = "Empty item created on Figshare";
+          this.statusMessage = "Article shell created on Figshare";
         }
 
-        this.percentage = 10;
+        this.percentage = 20;
         this.indeterminate = false;
       }
 
       await this.sleep(300);
 
-      this.workflow.destination.zenodo.status.depositionCreated = true;
+      this.workflow.destination.figshare.status.depositionCreated = true;
 
-      this.workflow.destination.zenodo.bucket = response.links.bucket;
-      this.workflow.destination.zenodo.deposition_id = response.id;
-      this.workflow.destination.zenodo.originalDeposition = response;
-      this.workflow.destination.zenodo.deposition = response;
+      this.workflow.destination.figshare.article_id = response;
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();

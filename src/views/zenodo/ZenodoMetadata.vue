@@ -1840,7 +1840,6 @@ export default {
               this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
-              console.log(doiRegex().test(relatedIdentifier.identifier));
               let validIdentifier = false;
 
               if (
