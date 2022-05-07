@@ -186,7 +186,7 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
     parts = response["parts"]
 
-    # Read the file and start seperating it into partitions
+    # Read the file and start separating it into partitions
     # upload each partition individually
 
     with open(file_path, "rb") as stream:
