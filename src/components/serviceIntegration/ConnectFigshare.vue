@@ -178,6 +178,12 @@ export default {
               tokenObject.type = "token";
 
               await this.tokenStore.saveToken("figshare", tokenObject);
+
+              // WILL NEED TO COME BACK TO THIS. Can't have returns be read in a prop function.
+              // calling the hide and notification methods directly from this component for now.
+              this.loginSuccess();
+              this.$refs.loginPrompt.hide();
+
               return "valid";
             } else {
               return "invalid";

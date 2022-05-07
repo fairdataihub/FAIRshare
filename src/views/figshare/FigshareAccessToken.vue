@@ -88,33 +88,9 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
     navigateBack() {
-      if ("uploadToRepo" in this.workflow && this.workflow.uploadToRepo === true) {
-        if ("source" in this.workflow) {
-          if (this.workflow.source.type === "github") {
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/githubNoUpload/finalPage`,
-            });
-          }
-          if (this.workflow.source.type === "local") {
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/localNoUpload/finalPage`,
-            });
-          }
-        }
-      } else {
-        if ("source" in this.workflow) {
-          if (this.workflow.source.type === "github") {
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/publish`,
-            });
-          }
-          if (this.workflow.source.type === "local") {
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/publish`,
-            });
-          }
-        }
-      }
+      this.$router.push({
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/metadata`,
+      });
     },
 
     uploadToFigshare() {

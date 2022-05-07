@@ -173,7 +173,6 @@ export default {
       this.localDisableConfirmButton = true;
       this.showErrors("");
       const response = await this.preConfirm();
-
       if (response === "valid") {
         this.setIsOpen(false, "confirm");
       } else if (response === "invalid") {
@@ -206,6 +205,9 @@ export default {
     },
     show() {
       this.setIsOpen(true, "show");
+    },
+    hide() {
+      this.setIsOpen(false, "hide");
     },
   },
   mounted() {},

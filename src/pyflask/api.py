@@ -6,6 +6,7 @@ import sys
 
 import config
 from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
+from figshare import createNewFigshareItem, uploadFileToFigshare, deleteFigshareArticle
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
@@ -39,7 +40,6 @@ from zenodo import (
     removeFileFromZenodoDeposition,
     uploadFileToZenodoDeposition,
 )
-from figshare import createNewFigshareItem
 
 API_VERSION = "1.4.0"
 
@@ -301,8 +301,8 @@ class CreateCitationCFF(Resource):
 figshare = api.namespace("figshare", description="Figshare operations")
 
 
-@figshare.route("/item", endpoint="FigshareCreateItem")
-class FigshareCreateItem(Resource):
+@figshare.route("/item", endpoint="FigshareItem")
+class FigshareItem(Resource):
     @figshare.doc(
         responses={200: "Success", 401: "Authentication error"},
         params={
@@ -311,7 +311,7 @@ class FigshareCreateItem(Resource):
         },
     )
     def post(self):
-        """Add metadata to a figshare item"""
+        """Create a new figshare article and add metadata. Returns the figshare article id."""  # noqa: E501
         parser = reqparse.RequestParser()
 
         parser.add_argument(
@@ -330,9 +330,82 @@ class FigshareCreateItem(Resource):
         args = parser.parse_args()
 
         access_token = args["access_token"]
-        metadata = json.loads(args["metadata"])
+        metadata = args["metadata"]
 
         return createNewFigshareItem(access_token, metadata)
+
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "article_id": "article id for the item",
+        },
+    )
+    def delete(self):
+        """Delete a zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+
+        return deleteFigshareArticle(access_token, article_id)
+
+
+@figshare.route("/item/files/upload", endpoint="FigshareFileUpload")
+class FigshareFileUpload(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "article_id": "figshare article id",
+            "file_path": "path to the file to upload",
+        },
+    )
+    def post(self):
+        """Upload file to Figshare"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. file_path needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+        file_path = args["file_path"]
+
+        return uploadFileToFigshare(access_token, article_id, file_path)
 
 
 ###############################################################################
@@ -351,6 +424,32 @@ class zenodoURL(Resource):
 
 @zenodo.route("/deposition", endpoint="zenodoDeposition")
 class zenodoDeposition(Resource):
+    @zenodo.doc(
+        responses={
+            200: "Success",
+            401: "Authentication error",
+            400: "Bad request",
+        },
+        params={"access_token": "Zenodo access token required with every request."},
+    )
+    def post(self):
+        """Create a new empty Zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+
+        response = createNewZenodoDeposition(access_token)
+        return response
+
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
         params={
@@ -383,6 +482,13 @@ class zenodoDeposition(Resource):
         response = getAZenodoDeposition(access_token, deposition_id)
         return response
 
+    @zenodo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "Zenodo deposition id. For new versions the new deposit id is required",  # noqa: E501
+        },
+    )
     def delete(self):
         """Delete a zenodo deposition"""
         parser = reqparse.RequestParser()
@@ -430,35 +536,6 @@ class zenodoGetAll(Resource):
         access_token = args["access_token"]
 
         response = getAllZenodoDepositions(access_token)
-        return response
-
-
-@zenodo.route("/deposition", endpoint="zenodoCreateNew")
-class zenodoCreateNew(Resource):
-    @zenodo.doc(
-        responses={
-            200: "Success",
-            401: "Authentication error",
-            400: "Bad request",
-        },
-        params={"access_token": "Zenodo access token required with every request."},
-    )
-    def post(self):
-        """Create a new empty Zenodo deposition"""
-        parser = reqparse.RequestParser()
-
-        parser.add_argument(
-            "access_token",
-            type=str,
-            required=True,
-            help="access_token is required. accessToken needs to be of type str",
-        )
-
-        args = parser.parse_args()
-
-        access_token = args["access_token"]
-
-        response = createNewZenodoDeposition(access_token)
         return response
 
 

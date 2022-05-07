@@ -255,7 +255,7 @@
         </el-form-item>
 
         <!-- filter this for urls and DOIs. -->
-        <el-form-item label="References">
+        <el-form-item label="References" prop="references">
           <draggable
             tag="div"
             :list="figshareMetadataForm.references"
@@ -269,7 +269,7 @@
                   <el-input
                     v-model="element.reference"
                     type="text"
-                    placeholder="e.g.: Cranmer, Kyle et al. (2014). Decouple software associated to arXiv:1401.0080."
+                    placeholder="http://fairdataihub.org"
                   ></el-input>
                   <div class="mx-2"></div>
                 </div>
@@ -314,6 +314,7 @@
           <el-select
             v-model="figshareMetadataForm.license.licenseName"
             filterable
+            disabled
             placeholder="Select a license"
             class="w-full"
           >
@@ -381,6 +382,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ElMessage } from "element-plus";
 
 import _ from "lodash";
+import validator from "validator";
 
 import { useDatasetsStore } from "@/store/datasets";
 import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
@@ -443,24 +445,10 @@ export default {
             trigger: "change",
           },
         ],
-        version: [
+        references: [
           {
             required: false,
-            validator: this.versionValidator,
-            trigger: "blur",
-          },
-        ],
-        contributors: [
-          {
-            required: false,
-            validator: this.contributorValidator,
-            trigger: "blur",
-          },
-        ],
-        subjects: [
-          {
-            required: false,
-            validator: this.subjectValidator,
+            validator: this.referencesValidator,
             trigger: "blur",
           },
         ],
@@ -526,8 +514,13 @@ export default {
     authorValidator(_rule, value, callback) {
       if (value.length > 0) {
         for (let author of value) {
-          if (author.givenName === undefined || author.givenName.trim() === "") {
-            callback(new Error("First name for each author is mandatory"));
+          if (
+            author.givenName === undefined ||
+            author.givenName.trim() === "" ||
+            author.familyName === undefined ||
+            author.familyName.trim() === ""
+          ) {
+            callback(new Error("First name and last name for each author is mandatory"));
             return;
           }
 
@@ -604,6 +597,29 @@ export default {
       });
     },
 
+    referencesValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let reference of value) {
+          // validate reference
+          if (reference.reference !== "") {
+            const validIdentifier = validator.isURL(reference.reference);
+
+            if (!validIdentifier) {
+              this.invalidStatus.references = true;
+              callback(new Error("Only URLs are allowed for references"));
+              return;
+            }
+          }
+        }
+        this.invalidStatus.references = false;
+        callback();
+        return;
+      } else {
+        this.invalidStatus.references = false;
+        callback();
+        return;
+      }
+    },
     addReference() {
       this.figshareMetadataForm.references.push({
         reference: "",

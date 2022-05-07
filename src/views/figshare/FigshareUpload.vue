@@ -1,9 +1,9 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Uploading your data to Zenodo </span>
+      <span class="text-left text-lg font-medium"> Uploading your data to Figshare </span>
       <span class="text-left">
-        This one is on us. FAIRshare is creating a Zenodo record for you and uploading all your
+        This one is on us. FAIRshare is creating a Figshare record for you and uploading all your
         files with the relevant metadata.
       </span>
 
@@ -41,7 +41,7 @@
 
       <div class="flex w-full flex-row justify-center py-2" v-if="showAlert">
         <router-link
-          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+          :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/metadata`"
           class="mx-6"
         >
           <button class="primary-plain-button">Back</button>
@@ -106,6 +106,7 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     async createFigshareDeposition() {
+      this.errorMessage = "";
       this.statusMessage = "Creating a metadata object for the Figshare deposition";
       await this.sleep(300);
 
@@ -130,7 +131,11 @@ export default {
           const creatorObject = {};
 
           creatorObject.first_name = author.givenName;
-          creatorObject.last_name = author.affiliation;
+          creatorObject.last_name = author.familyName;
+
+          if (author.email != "") {
+            creatorObject.email = author.email;
+          }
 
           if (author.orcid !== "") {
             creatorObject.orcid = author.orcid;
@@ -160,10 +165,10 @@ export default {
 
       if ("funding" in figshareMetadata) {
         metadata.funding_list = [];
-        figshareMetadata.funding_list.forEach((funder) => {
+        figshareMetadata.funding.forEach((funder) => {
           const funderObject = {};
 
-          funderObject.title = funder;
+          funderObject.title = funder.funding;
 
           metadata.funding_list.push(funderObject);
         });
@@ -188,9 +193,12 @@ export default {
       this.statusMessage = "Creating an article shell on Figshare";
       await this.sleep(300);
 
+      metadata = JSON.stringify(metadata);
+
       return axios
         .post(`${this.$server_url}/figshare/item`, {
           access_token: this.figshareToken,
+          metadata,
         })
         .then((response) => {
           this.$track("Figshare", "Create empty deposition", "success");
@@ -203,27 +211,27 @@ export default {
         });
     },
 
-    async uploadToZenodo(bucket_url, file_path) {
-      this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
+    async uploadToFigshare(article_id, file_path) {
+      this.statusMessage = `Uploading ${path.basename(file_path)} to Figshare`;
       await this.sleep(100);
 
       const response = await axios
-        .post(`${this.$server_url}/zenodo/deposition/files/upload`, {
+        .post(`${this.$server_url}/figshare/item/files/upload`, {
           access_token: this.figshareToken,
-          bucket_url: bucket_url,
-          file_path: file_path,
+          article_id,
+          file_path,
         })
         .then((response) => {
-          this.$track("Zenodo", "Uploaded file to Zenodo", "success");
+          this.$track("Figshare", "Uploaded file to Figshare", "success");
           return response.data;
         })
         .catch((error) => {
-          this.$track("Zenodo", "Uploaded file to Zenodo", "failed");
+          this.$track("Figshare", "Uploaded file to Figshare", "failed");
           console.error(error);
           return "ERROR";
         });
 
-      this.statusMessage = `Uploaded ${path.basename(file_path)} to Zenodo successfully`;
+      this.statusMessage = `Uploaded ${path.basename(file_path)} to Figshare successfully`;
       await this.sleep(300);
       return response;
     },
@@ -232,7 +240,6 @@ export default {
       await this.sleep(300);
 
       const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-      // console.log(folderPath);
 
       const response = await axios
         .post(`${this.$server_url}/utilities/checkforfolders`, {
@@ -262,15 +269,13 @@ export default {
             return "ERROR";
           });
 
-        // console.log(zippedPath);
-
         this.statusMessage =
-          "Created a zipped folder successfully. Getting ready to upload to Zenodo";
+          "Created a zipped folder successfully. Getting ready to upload to Figshare";
         await this.sleep(300);
 
-        await this.uploadToZenodo(this.workflow.destination.zenodo.bucket, zippedPath);
+        await this.uploadToFigshare(this.workflow.destination.figshare.article_id, zippedPath);
       } else {
-        this.statusMessage = "Getting ready to upload to Zenodo";
+        this.statusMessage = "Getting ready to upload to Figshare";
         await this.sleep(300);
 
         const contents = fs.readdirSync(folderPath);
@@ -279,13 +284,13 @@ export default {
           // skip file if it is a commonly ignored file
 
           if (ignoreFilesJSON.commonFilesToIgnore.includes(file)) {
-            this.percentage = ((index + 1) / contents.length) * 75 + 25;
+            this.percentage = ((index + 1) / contents.length) * 75 + 20;
             this.percentage = Math.round(this.percentage);
             continue;
           }
 
-          const response = await this.uploadToZenodo(
-            this.workflow.destination.zenodo.bucket,
+          const response = await this.uploadToFigshare(
+            this.workflow.destination.figshare.article_id,
             path.join(folderPath, file)
           );
 
@@ -297,7 +302,7 @@ export default {
           this.percentage = Math.round(this.percentage);
         }
 
-        this.statusMessage = "Uploaded all files to Zenodo successfully";
+        this.statusMessage = "Uploaded all files to Figshare successfully";
         await this.sleep(300);
       }
 
@@ -475,8 +480,11 @@ export default {
       } else {
         response = await this.createFigshareDeposition();
 
-        if (response === "ERROR") {
+        response = JSON.parse(response);
+
+        if ("status" in response && response.status === "ERROR") {
           this.alertMessage = "There was an error with creating the deposition on Figshare";
+          this.errorMessage = response.message;
           return "FAIL";
         } else {
           this.statusMessage = "Article shell created on Figshare";
@@ -490,7 +498,10 @@ export default {
 
       this.workflow.destination.figshare.status.depositionCreated = true;
 
-      this.workflow.destination.figshare.article_id = response;
+      const responseObject = response;
+
+      this.workflow.destination.figshare.article_id = responseObject.article_id;
+      this.workflow.destination.figshare.doi = responseObject.doi;
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
@@ -504,7 +515,7 @@ export default {
             "identifier" in this.dataset.data.Code.questions &&
             this.dataset.data.Code.questions.identifier == ""
           ) {
-            this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
+            this.dataset.data.Code.questions.identifier = responseObject.doi;
             this.overwriteCodeMeta = true;
           }
 
@@ -533,7 +544,7 @@ export default {
           "identifier" in this.dataset.data.Other.questions &&
           this.dataset.data.Other.questions.identifier == ""
         ) {
-          this.dataset.data.Other.questions.identifier = response.metadata.prereserve_doi.doi;
+          this.dataset.data.Other.questions.identifier = responseObject.doi;
           this.overwriteOtherMeta = true;
         }
 
@@ -559,7 +570,6 @@ export default {
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the CITATION.cff file";
@@ -586,28 +596,16 @@ export default {
         }
       }
 
-      response = await this.addMetadaToZenodoDeposition();
-
-      if (response === "ERROR") {
-        this.alertMessage = "There was an error when adding metadata to the deposition";
-        return "FAIL";
-      } else {
-        console.log(response);
-        this.statusMessage = "Metadata successfully added to the Zenodo deposition";
-      }
-
-      this.percentage = 25;
+      this.percentage = 20;
       this.indeterminate = false;
-
-      this.workflow.destination.zenodo.status.metadataAdded = true;
 
       await this.sleep(300);
 
       response = await this.checkForFoldersAndUpload();
 
       if (response === "ERROR") {
-        this.$track("Zenodo", "Dataset uploaded", "failed");
-        this.alertMessage = "There was an error with uploading files to the Zenodo deposition";
+        this.$track("Figshare", "Dataset uploaded", "failed");
+        this.alertMessage = "There was an error with uploading files to Figshare";
         return "FAIL";
       } else {
         const files = klawSync(this.dataset.data[this.workflow.type[0]].folderPath, {
@@ -620,27 +618,26 @@ export default {
           totalSize += file.stats.size;
         }
 
-        this.$track("Zenodo", "Files uploaded size", totalSize);
+        this.$track("Figshare", "Files uploaded size", totalSize);
 
-        this.$track("Zenodo", "Files uploaded", files.length);
+        this.$track("Figshare", "Files uploaded", files.length);
 
-        this.$track("Zenodo", "Dataset uploaded", "success");
+        this.$track("Figshare", "Dataset uploaded", "success");
 
-        this.statusMessage = "Uploaded all files to Zenodo successfully.";
+        this.statusMessage = "Uploaded all files to Figshare successfully.";
       }
 
-      this.workflow.destination.zenodo.status.filesUploaded = true;
+      this.workflow.destination.figshare.status.filesUploaded = true;
 
       return "SUCCESS";
     },
-    async deleteDraftZenodoDeposition() {
-      if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(this.figshareToken, this.workflow.destination.zenodo.deposition_id);
+    async deleteDraftFigshareArticle() {
+      if ("article_id" in this.workflow.destination.figshare) {
         const response = await axios
-          .delete(`${this.$server_url}/zenodo/deposition`, {
+          .delete(`${this.$server_url}/figshare/item`, {
             data: {
               access_token: this.figshareToken,
-              deposition_id: this.workflow.destination.zenodo.deposition_id,
+              article_id: this.workflow.destination.figshare.article_id,
             },
           })
           .then((response) => {
@@ -670,7 +667,7 @@ export default {
         this.progressStatus = "exception";
         this.showAlert = true;
 
-        this.deleteDraftZenodoDeposition();
+        this.deleteDraftFigshareArticle();
 
         if (this.overwriteCodeMeta) {
           this.dataset.data.Code.questions.identifier = "";
@@ -701,7 +698,7 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
         this.$router.push({ path: routerPath });
       }
     },
@@ -720,9 +717,8 @@ export default {
     // not saving this page since it will start a random upload when saving progress
     // this.workflow.currentRoute = this.$route.path;
 
-    const tokenObject = await this.tokens.getToken("zenodo");
+    const tokenObject = await this.tokens.getToken("figshare");
     this.figshareToken = tokenObject.token;
-    console.log(this.figshareToken);
 
     this.runFigshareUpload();
   },
