@@ -5490,7 +5490,7 @@ commander@2.9.0:
   dependencies:
     graceful-readlink ">= 1.0.0"
 
-commander@7, commander@^7.2.0:
+commander@7, commander@7.2.0, commander@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
   integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
@@ -6926,6 +6926,15 @@ detective@^5.2.0:
     acorn-node "^1.6.1"
     defined "^1.0.0"
     minimist "^1.1.1"
+
+devmoji@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/devmoji/-/devmoji-2.3.0.tgz#5cc3764c59899802bcbecd19afeb9a22c0626b89"
+  integrity sha512-ErQdYUsE7tKxqDzQzRos6fKWaRIFUOJvMkQODq9iYDI3o5X6nxD78XEdGNYaW5AaJW4uxj+XQTkCuJkV86Qg6g==
+  dependencies:
+    chalk "^4.1.1"
+    commander "7.2.0"
+    ts-interface-checker "1.0.0"
 
 didyoumean@^1.2.2:
   version "1.2.2"
@@ -15172,6 +15181,11 @@ truncate-utf8-bytes@^1.0.0:
   integrity sha1-QFkjkJWS1W94pYGENLC3hInKXys=
   dependencies:
     utf8-byte-length "^1.0.1"
+
+ts-interface-checker@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ts-interface-checker/-/ts-interface-checker-1.0.0.tgz#2c637389f24566e0bf7db8e4482bad1db7d3bd87"
+  integrity sha512-yUeWbFBDiwPodNqrqpvQpGWheL6PvNu2/pVAb9yy2vzdkkflCgwVA4U2akByPCXzYTum3/5/nB92yKuiLpSo/Q==
 
 ts-node@^10.7.0:
   version "10.7.0"
