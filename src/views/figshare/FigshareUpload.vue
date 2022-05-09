@@ -25,12 +25,18 @@
           show-icon
         >
         </el-alert>
-        <div class="flex flex-row items-center justify-start py-3" v-else>
+        <div class="flex flex-row items-start justify-start py-3" v-else>
           <LoadingCubeGrid class="h-5 w-5" v-if="percentage !== 100"></LoadingCubeGrid>
-          <p class="pl-4">
-            {{ statusMessage }}
-            <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
-          </p>
+          <div class="flex flex-col items-start">
+            <p class="pl-4">
+              {{ statusMessage }}
+              <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
+            </p>
+            <p class="whitespace-pre pl-4 text-sm">
+              {{ subStatusMessage }}
+              <LoadingEllipsis v-if="subStatusMessage !== ' '"></LoadingEllipsis>
+            </p>
+          </div>
         </div>
         <div class="pt-2 pl-2" v-if="errorMessage != ''">
           <p style="white-space: pre-line">
@@ -84,6 +90,7 @@ export default {
       progressStatus: "",
       figshareToken: "",
       statusMessage: "some status message here",
+      subStatusMessage: " ",
       errorMessage: "",
       showAlert: false,
       alertTitle: "",
@@ -210,10 +217,31 @@ export default {
           return "ERROR";
         });
     },
+    async checkUploadStatus() {
+      const response = await axios
+        .get(`${this.$server_url}/figshare/item/files/upload`, {})
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
 
+      if (response !== "" || response !== "ERROR") {
+        this.subStatusMessage = response;
+      }
+
+      return;
+    },
     async uploadToFigshare(article_id, file_path) {
       this.statusMessage = `Uploading ${path.basename(file_path)} to Figshare`;
       await this.sleep(100);
+
+      this.subStatusMessage = " ";
+      let interval = setInterval(() => {
+        this.checkUploadStatus();
+      }, 500);
 
       const response = await axios
         .post(`${this.$server_url}/figshare/item/files/upload`, {
@@ -230,6 +258,9 @@ export default {
           console.error(error);
           return "ERROR";
         });
+
+      clearInterval(interval);
+      this.subStatusMessage = " ";
 
       this.statusMessage = `Uploaded ${path.basename(file_path)} to Figshare successfully`;
       await this.sleep(300);
@@ -698,8 +729,12 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-        this.$router.push({ path: routerPath });
+        /**
+         * TODO: Enable this when we have a way to publish the dataset
+         */
+
+        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
+        // this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

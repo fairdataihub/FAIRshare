@@ -6,7 +6,12 @@ import sys
 
 import config
 from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
-from figshare import createNewFigshareItem, uploadFileToFigshare, deleteFigshareArticle
+from figshare import (
+    createNewFigshareItem,
+    deleteFigshareArticle,
+    getFigshareFileUploadStatus,
+    uploadFileToFigshare,
+)
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
@@ -406,6 +411,15 @@ class FigshareFileUpload(Resource):
         file_path = args["file_path"]
 
         return uploadFileToFigshare(access_token, article_id, file_path)
+
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={},
+    )
+    def get(self):
+        """Get file upload status"""
+
+        return getFigshareFileUploadStatus()
 
 
 ###############################################################################

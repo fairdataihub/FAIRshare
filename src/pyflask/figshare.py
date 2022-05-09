@@ -5,6 +5,8 @@ import os
 import config
 import requests
 
+UPLOAD_STATUS = ""
+
 
 def createNewFigshareItem(access_token, data):
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles"
@@ -89,10 +91,14 @@ def deleteFigshareArticle(access_token, article_id):
 
 
 def uploadFileToFigshare(access_token, article_id, file_path):
+    global UPLOAD_STATUS
+
     file_name = os.path.basename(file_path)
 
     # get a list of all the files in the article.
     # If a file with the same name already exists, replace it
+
+    UPLOAD_STATUS = "Checking if file already exists on Figshare"
 
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/files"
 
@@ -107,6 +113,8 @@ def uploadFileToFigshare(access_token, article_id, file_path):
         response = response.json()
         for file in response:
             if file["name"] == file_name:
+                UPLOAD_STATUS = "REmoving existing file on figshare"
+
                 url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/files/{file['id']}"  # noqa: E501
 
                 payload = {}
@@ -119,6 +127,7 @@ def uploadFileToFigshare(access_token, article_id, file_path):
                 )
 
                 if response.status_code != 204:
+                    UPLOAD_STATUS = ""
                     return json.dumps(
                         {
                             "status": "ERROR",
@@ -126,11 +135,14 @@ def uploadFileToFigshare(access_token, article_id, file_path):
                         }
                     )
     else:
+        UPLOAD_STATUS = ""
         return json.dumps(
             {"status": "ERROR", "message": "Could not read files in article"}
         )
 
     # Get the md5 sum and file size in bytes
+
+    UPLOAD_STATUS = "Getting file size and md5 checksum"
 
     md5_hash = hashlib.md5()
     md5_sum = ""
@@ -144,6 +156,9 @@ def uploadFileToFigshare(access_token, article_id, file_path):
     file_size = os.path.getsize(file_path)
 
     # Create the file imprint on figshare.
+
+    UPLOAD_STATUS = "Creating file shell on Figshare"
+
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/files"
 
     payload = json.dumps({"name": file_name, "md5": md5_sum, "size": file_size})
@@ -162,6 +177,8 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
     # Get the upload path and the number of file parts to push up
 
+    UPLOAD_STATUS = "Getting upload path from Figshare"
+
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/files/{file_id}"
 
     payload = {}
@@ -174,6 +191,8 @@ def uploadFileToFigshare(access_token, article_id, file_path):
     response = response.json()
 
     upload_url = response["upload_url"]
+
+    UPLOAD_STATUS = "Getting number of file partitions from Figshare"
 
     payload = {}
     headers = {
@@ -191,6 +210,7 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
     with open(file_path, "rb") as stream:
         for part in parts:
+            UPLOAD_STATUS = f"Uploading file partition {part['partNo']} of {len(parts)}"
 
             url = f"{upload_url}/{part['partNo']}"
 
@@ -210,6 +230,8 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
     # Signal to figshare that the upload is complete for the file
 
+    UPLOAD_STATUS = "Signaling completion of file upload"
+
     payload = json.dumps({})
     headers = {
         "Authorization": f"token {access_token}",
@@ -219,9 +241,15 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
+    UPLOAD_STATUS = ""
+
     if response.status_code == 202:
         return json.dumps({"status": "SUCCESS", "message": ""})
     else:
         return json.dumps(
             {"status": "ERROR", "message": "Could not confirm file upload completion"}
         )
+
+
+def getFigshareFileUploadStatus():
+    return UPLOAD_STATUS
