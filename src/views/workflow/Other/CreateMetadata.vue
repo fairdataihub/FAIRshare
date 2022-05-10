@@ -1078,10 +1078,20 @@ export default {
       }, 50);
     },
 
-    keywordValidator(_rule, value, callback) {
-      if ((value === "" || value === undefined) && value.length > 0) {
+    keywordValidator(_rule, array, callback) {
+      if ((array === "" || array === undefined) && array.length > 0) {
+        this.invalidStatus.keywords = true;
         callback(new Error("Please provide a valid keyword"));
       } else {
+        for (let item of array) {
+          if (item.keyword.trim() === "") {
+            this.invalidStatus.keywords = true;
+            callback(new Error("Please provide a valid keyword"));
+            return;
+          }
+        }
+
+        this.invalidStatus.keywords = false;
         callback();
       }
     },
