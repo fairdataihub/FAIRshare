@@ -35,7 +35,10 @@
             </span>
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
-            <div class="my-8 grid grid-cols-3 gap-8" :class="{ 'grid-cols-2': !codePresent }">
+            <div
+              class="my-8 grid grid-cols-3 gap-8"
+              :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
+            >
               <div>
                 <div class="flex flex-col items-center justify-center">
                   <div
@@ -61,11 +64,13 @@
                 </div>
               </div>
 
-              <div>
+              <div v-show="showFigshare">
                 <div class="flex flex-col items-center justify-center">
                   <div
                     class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-                    :class="{ 'selected-repo': repoID === 'figshare' }"
+                    :class="{
+                      'selected-repo': repoID === 'figshare',
+                    }"
                     @click="selectRepo($event, 'figshare')"
                   >
                     <img
@@ -321,7 +326,7 @@
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
                 id="repo-is-figshare"
-                v-if="repoID === 'figshare'"
+                v-if="repoID === 'figshare' && showFigshare"
               >
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
@@ -426,6 +431,7 @@
 </template>
 
 <script>
+import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -464,6 +470,9 @@ export default {
       newVersion: "",
       loadingSpinner: false,
       validZenodoTokenAvailable: false,
+      disableFigshare: false,
+      showFigshare: false,
+      figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
     };
   },
   computed: {
@@ -682,6 +691,21 @@ export default {
 
       this.$router.push({ path: routerPath });
     },
+    async shouldShowFigshare() {
+      if ("license" in this.dataset.data.general.questions) {
+        const licenseObject = await this.figshareLicenseOptions.find(
+          (license) => license.licenseId === this.dataset.data.general.questions.license
+        );
+
+        if (licenseObject === undefined) {
+          this.showFigshare = false;
+        } else {
+          this.showFigshare = true;
+        }
+      } else {
+        this.showFigshare = false;
+      }
+    },
   },
   async mounted() {
     this.loading = true;
@@ -689,6 +713,8 @@ export default {
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.shouldShowFigshare();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
