@@ -253,3 +253,24 @@ def uploadFileToFigshare(access_token, article_id, file_path):
 
 def getFigshareFileUploadStatus():
     return UPLOAD_STATUS
+
+
+def publishFigshareArticle(access_token, article_id):
+    url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/publish"
+
+    payload = {}
+    headers = {
+        "Authorization": f"token {access_token}",
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    if response.status_code == 201:
+        response = response.json()
+
+        if "location" in response:
+            return response["location"]
+        else:
+            return "ERROR"
+    else:
+        return "ERROR"

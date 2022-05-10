@@ -36,6 +36,7 @@ import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 import FigshareMetadata from "../views/figshare/FigshareMetadata.vue";
 import FigshareAccessToken from "../views/figshare/FigshareAccessToken.vue";
 import FigshareUpload from "../views/figshare/FigshareUpload.vue";
+import FigsharePublish from "../views/figshare/FigsharePublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
@@ -175,6 +176,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
     name: "ZenodoPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/publish",
+    component: FigsharePublish,
+    name: "FigsharePublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",

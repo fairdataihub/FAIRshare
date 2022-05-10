@@ -11,6 +11,7 @@ from figshare import (
     deleteFigshareArticle,
     getFigshareFileUploadStatus,
     uploadFileToFigshare,
+    publishFigshareArticle,
 )
 from flask import Flask, request
 from flask_cors import CORS
@@ -369,6 +370,40 @@ class FigshareItem(Resource):
         article_id = args["article_id"]
 
         return deleteFigshareArticle(access_token, article_id)
+
+
+@figshare.route("/item/publish", endpoint="FigsharePublish")
+class FigsharePublish(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Figshare access token required with every request",
+            "article_id": "article id for the item",
+        },
+    )
+    def post(self):
+        """Publish a Figshare article"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+
+        return publishFigshareArticle(access_token, article_id)
 
 
 @figshare.route("/item/files/upload", endpoint="FigshareFileUpload")
