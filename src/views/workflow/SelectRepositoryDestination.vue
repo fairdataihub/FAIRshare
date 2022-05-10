@@ -320,9 +320,9 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                id="repo-is-figshare"
                 v-if="repoID === 'figshare'"
               >
-                <!-- zenodo new dataset  -->
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
                 </button>
@@ -341,7 +341,8 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
-                v-if="newVersion === 'false'"
+                v-if="newVersion === 'false' && repoID === 'zenodo'"
+                id="zenodo-new-version-false"
               >
                 <!-- zenodo new dataset  -->
                 <button class="primary-plain-button" @click="navigateBack">

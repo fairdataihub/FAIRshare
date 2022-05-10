@@ -407,9 +407,9 @@ export default {
 
       // Some endpoints to help when testing sub-routes
 
-      // routerPath = `/datasets/${datasetID}`;
+      routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
-      // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
+      routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
@@ -419,7 +419,7 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/Other/pickLicense`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
-      routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
+      // routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/githubNoUpload/finalPage`;
