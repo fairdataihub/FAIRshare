@@ -33,7 +33,7 @@
       </fade-transition>
 
       <fade-transition>
-        <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="validTokenAvailable">
+        <div class="flex w-full flex-row justify-center space-x-4 py-2">
           <button class="primary-plain-button" @click="navigateBack">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>
