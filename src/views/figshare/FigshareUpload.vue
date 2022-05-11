@@ -686,6 +686,10 @@ export default {
     async runFigshareUpload() {
       this.datasetStore.hideSidebar();
 
+      this.indeterminate = true;
+      this.progressStatus = "";
+      this.showAlert = false;
+
       this.statusMessage = "Preparing backend services...";
       await this.sleep(300);
 
