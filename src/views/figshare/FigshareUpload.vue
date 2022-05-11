@@ -687,6 +687,7 @@ export default {
       this.datasetStore.hideSidebar();
 
       this.indeterminate = true;
+      this.percentage = 0;
       this.progressStatus = "";
       this.showAlert = false;
 
