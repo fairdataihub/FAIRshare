@@ -31,7 +31,7 @@
     "electron:dev:serve": "vue-cli-service electron:serve",
     "postinstall": "husky install && electron-builder install-app-deps ",
     "postuninstall": "electron-builder install-app-deps",
-    "dev": "vue-cli-service electron:serve",
+    "dev": "yarn electron:serve",
     "commit": "cz"
   },
   "lint-staged": {
