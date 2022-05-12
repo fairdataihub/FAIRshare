@@ -2021,10 +2021,10 @@
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
   integrity sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==
 
-"@iconify/vue@3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@iconify/vue/-/vue-3.1.4.tgz#b6336afe0fe1d44093038f11a69585607db983ca"
-  integrity sha512-oJm0VPl1fhlsbBX9tBeAbtmZ5iHCxCkVQdCi81lxdA3cqc9yqBlCloqObX93/YWNM5N8j/j0Efk6iSwsihOoNA==
+"@iconify/vue@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify/vue/-/vue-3.2.1.tgz#bd8a2f1213ba8775d4b7a7a8ba895e53ae2f4dfc"
+  integrity sha512-c4R6ZgFo1JrJ8aPMMgOPgfU7lBswihMGR+yWe/P4ZukC3kTkeT4+lkt9Pc/itVFMkwva/S/7u9YofmYv57fnNQ==
 
 "@jamiemagee/osv-offline-db@1.1.4":
   version "1.1.4"
