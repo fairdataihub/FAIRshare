@@ -15919,10 +15919,10 @@ vue3-lottie@2.1.0:
   dependencies:
     lottie-web "^5.8.1"
 
-vue3-popper@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/vue3-popper/-/vue3-popper-1.4.1.tgz#4fb4c67928acff0f671709a07ae7af6723f8e6c5"
-  integrity sha512-pmct5vumtvbK8MmUs4oFY+3Al1glU34QXWcIPK4WJhRo/Kp85kxD0j70cNofNBqHYwhY5D7xJ6Yhkwf/5x9w7Q==
+vue3-popper@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/vue3-popper/-/vue3-popper-1.4.2.tgz#2a15d92e3787c34d335efe3a61fd12ca960bbda1"
+  integrity sha512-nc5vM//AJ8/DyNetjrrgkkLv7aKVdSsljvqlQ1tWhAV2lgA8tkn8xE6icDd0/kBt0Yo5Li8Pftf0H0C/hNmu1Q==
   dependencies:
     "@popperjs/core" "^2.9.2"
     debounce "^1.2.1"
