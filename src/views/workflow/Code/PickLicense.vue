@@ -177,10 +177,6 @@ export default {
       workflowID: this.$route.params.workflowID,
       dataset: {},
       workflow: {},
-      questions: [
-        "Is the data being curated in accordance with the standards?",
-        "Is the data being curated in accordance with the standards?",
-      ],
       licenseForm: {
         license: "",
       },

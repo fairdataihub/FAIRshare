@@ -113,9 +113,17 @@ export default {
             });
           }
           if (this.workflow.source.type === "local") {
-            this.$router.push({
-              path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/publish`,
-            });
+            this.workflow.destination.name;
+            if ("name" in this.workflow.destination) {
+              const destination = this.workflow.destination.name;
+              this.$router.push({
+                path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/${destination}/publish`,
+              });
+            } else {
+              this.$router.push({
+                path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}`,
+              });
+            }
           }
         }
       }

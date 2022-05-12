@@ -52,7 +52,7 @@
       </div>
 
       <div class="flex w-full flex-row justify-center space-x-4 py-2 pt-8">
-        <router-link :to="`/datasets/${datasetID}/landing`" class="">
+        <router-link :to="`/datasets/${datasetID}`" class="">
           <button class="primary-plain-button">
             <el-icon><d-arrow-left /></el-icon> Back
           </button>

@@ -1,9 +1,9 @@
-from __future__ import print_function
-import config
-import requests
 import json
 import os
 import time
+
+import config
+import requests
 
 
 def getAZenodoDeposition(access_token, deposition_id):
@@ -28,7 +28,7 @@ def getAllZenodoDepositions(access_token):
         parameters = {"access_token": access_token}
         r = requests.get(
             f"{config.ZENODO_SERVER_URL}/deposit/depositions",
-            params=parameters,  # noqa: E501
+            params=parameters,
         )
         return r.json()
     except Exception as e:
@@ -59,9 +59,7 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
         if os.path.exists(file_path) and os.path.isfile(file_path):
             pass
         else:
-            raise Exception(
-                "Error: Could not find a file at the path provided."
-            )  # noqa: E501
+            raise Exception("Error: Could not find a file at the path provided.")
 
         params = {"access_token": access_token}
         filename = os.path.basename(file_path)
@@ -168,9 +166,7 @@ def removeFileFromZenodoDeposition(access_token, deposition_id, file_id):
         payload = {}
         headers = {}
 
-        response = requests.request(
-            "DELETE", url, headers=headers, data=payload
-        )  # noqa: E501
+        response = requests.request("DELETE", url, headers=headers, data=payload)
 
         if response.status_code == 204:
             return "Delete successful"

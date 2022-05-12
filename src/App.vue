@@ -62,12 +62,14 @@
           :height="180"
         />
         <div
-          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          class="absolute top-2 right-2 hidden cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
           @click="closeNotification"
         >
           <el-icon><circle-close-filled /></el-icon>
         </div>
-        <p class="text-center text-sm">FAIRshare is connecting to the backend server...</p>
+        <p class="text-center text-sm">
+          FAIRshare is connecting to the backend server <LoadingEllipsis />
+        </p>
       </div>
     </fade-transition>
 
@@ -126,6 +128,8 @@
 import AppSidebar from "./components/ui/AppSidebar.vue";
 import AppContent from "./components/ui/AppContent.vue";
 
+import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
+
 import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
@@ -136,13 +140,14 @@ import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
 import { useConfigStore } from "./store/config.js";
 
-const MIN_API_VERSION = "1.3.0";
+const MIN_API_VERSION = "1.4.0";
 
 export default {
   name: "App",
   components: {
     AppSidebar,
     AppContent,
+    LoadingEllipsis,
   },
   data() {
     return {
@@ -273,6 +278,9 @@ export default {
         axios
           .get(`${this.$server_url}/api_version`)
           .then((response) => {
+            this.config.setGlobals("minAPIVersion", MIN_API_VERSION);
+            this.config.setGlobals("backendAPIVersion", response.data);
+
             if (semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))) {
               console.log("API version satisfied");
 

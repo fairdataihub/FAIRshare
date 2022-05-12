@@ -16,6 +16,12 @@ import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
 import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
 import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 
+// Other metadata related components
+import OtherSelectSourceFolder from "../views/workflow/Other/SelectSourceFolder.vue";
+import OtherReviewStandards from "../views/workflow/Other/ReviewStandards.vue";
+import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
+import OtherPickLicense from "../views/workflow/Other/PickLicense.vue";
+
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
 
@@ -25,6 +31,12 @@ import ZenodoMetadataReview from "../views/zenodo/ZenodoMetadataReview.vue";
 import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
+
+// figshare related components
+import FigshareMetadata from "../views/figshare/FigshareMetadata.vue";
+import FigshareAccessToken from "../views/figshare/FigshareAccessToken.vue";
+import FigshareUpload from "../views/figshare/FigshareUpload.vue";
+import FigsharePublish from "../views/figshare/FigsharePublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
@@ -51,6 +63,7 @@ import AppSettings from "../views/settings/AppSettings.vue";
 import AppDocumentation from "../views/documentation/AppDocumentation.vue";
 import ContactUs from "../views/contact/ContactUs.vue";
 import AppAbout from "../views/about/AppAbout.vue";
+import RouteNotFound from "../views/404/RouteNotFound.vue";
 
 const routes = [
   { path: "/", component: HomePage }, // not used for any purpose yet; use `/home` instead
@@ -78,6 +91,10 @@ const routes = [
     component: CodeSelectSourceFolder,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Other/selectFolder",
+    component: OtherSelectSourceFolder,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/selectGithubRepo",
     component: CodeSelectGithubRepo,
   },
@@ -86,14 +103,28 @@ const routes = [
     component: CodeReviewStandards,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Other/reviewStandards",
+    component: OtherReviewStandards,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
     name: "CodeCreateMetadata",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Other/createMetadata",
+    component: OtherCreateMetadata,
+    name: "OtherCreateMetadata",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
     name: "CodePickLicense",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Other/pickLicense",
+    component: OtherPickLicense,
+    name: "OtherPickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata/review",
@@ -111,6 +142,11 @@ const routes = [
     name: "ZenodoMetadata",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/figshare/metadata",
+    component: FigshareMetadata,
+    name: "FigshareMetadata",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/zenodo/review",
     component: ZenodoMetadataReview,
     name: "ZenodoMetadataReview",
@@ -121,15 +157,30 @@ const routes = [
     name: "ZenodoAccessToken",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/figshare/accessToken",
+    component: FigshareAccessToken,
+    name: "FigshareAccessToken",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/zenodo/upload",
     component: ZenodoUpload,
     name: "ZenodoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/upload",
+    component: FigshareUpload,
+    name: "FigshareUpload",
   },
 
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
     name: "ZenodoPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/publish",
+    component: FigsharePublish,
+    name: "FigsharePublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
@@ -186,16 +237,16 @@ const routes = [
     component: GithubNoUploadEnd,
     name: "GithubNoUploadEnd",
   },
-  {
-    path: "/datasets/:datasetID/:workflowID/figshare/metadata",
-    name: "FigshareMetadata",
-  },
+
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
   { path: "/manageAccount", component: ManageAccount },
   { path: "/settings", component: AppSettings },
   { path: "/documentation", component: AppDocumentation },
   { path: "/contactUs", component: ContactUs },
   { path: "/about", component: AppAbout },
+
+  { path: "/404", name: "404", component: RouteNotFound },
+  { path: "/:pathMatch(.*)*", name: "404", component: RouteNotFound },
 ];
 
 export const router = createRouter({

@@ -172,7 +172,7 @@
               <p>
                 Connect your bio.tools account to FAIRshare to allow us to upload register your
                 software directly through FAIRshare. To learn more about connecting FAIRshare to
-                GitHub, please visit the
+                bio.tools, please visit the
                 <span
                   class="text-url"
                   @click="
@@ -191,6 +191,67 @@
             </div>
           </div>
         </div>
+
+        <div class="card-container">
+          <div class="image-container">
+            <img src="../../assets/images/figsharelogo.png" class="image p-6" />
+          </div>
+          <div class="card-container-content">
+            <div class="card-container-status">
+              <div class="centering-container">
+                <span
+                  class="dot"
+                  :class="{
+                    'bg-green-600': connectedToFigshare,
+                    'bg-gray-600': !connectedToFigshare,
+                  }"
+                ></span>
+              </div>
+
+              <div class="centering-container">
+                <div
+                  class="mr-2"
+                  :class="{
+                    'text-green-600': connectedToFigshare,
+                    'text-gray-600': !connectedToFigshare,
+                  }"
+                >
+                  {{ connectedToFigshare ? "Connected" : "Not Connected" }}
+                </div>
+              </div>
+
+              <div class="centering-container tag-container" v-if="connectedToFigshare">
+                <el-tag type="success" effect="plain" class="border-green-400 text-green-600">
+                  <el-icon> <user-filled /> </el-icon>
+                  <span class="px-2">
+                    {{ figshareDetails.name }}
+                  </span>
+                </el-tag>
+              </div>
+            </div>
+            <div class="centering-container center">
+              <p>
+                Connect your Figshare account to FAIRshare to allow us to upload register your
+                software directly through FAIRshare. To learn more about connecting FAIRshare to
+                Figshare, please visit the
+                <span
+                  class="text-url"
+                  @click="
+                    openWebsite(
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-bio-tools'
+                    )
+                  "
+                >
+                  Figshare documentation</span
+                >
+                page.
+              </p>
+            </div>
+            <div class="centering-container bottom">
+              <ConnectFigshare></ConnectFigshare>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <app-docs-link url="manage-accounts/overview" position="bottom-4" />
@@ -203,6 +264,7 @@ import { useDatasetsStore } from "@/store/datasets";
 
 import ConnectGithub from "@/components/serviceIntegration/ConnectGithub";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectFigshare from "@/components/serviceIntegration/ConnectFigshare";
 import ConnectBioTools from "@/components/serviceIntegration/ConnectBioTools";
 
 export default {
@@ -211,6 +273,7 @@ export default {
   components: {
     ConnectGithub,
     ConnectZenodo,
+    ConnectFigshare,
     ConnectBioTools,
   },
 
@@ -269,9 +332,6 @@ export default {
     connectedToGithub() {
       return "github" in this.manager.accessTokens;
     },
-    connectedToBioTools() {
-      return "biotools" in this.manager.accessTokens;
-    },
     bioToolsDetails() {
       let bioToolsObject = {
         name: "",
@@ -280,6 +340,21 @@ export default {
         bioToolsObject.name = this.manager.accessTokens.biotools.name;
       }
       return bioToolsObject;
+    },
+    connectedToBioTools() {
+      return "biotools" in this.manager.accessTokens;
+    },
+    figshareDetails() {
+      let figshareObject = {
+        name: "",
+      };
+      if ("figshare" in this.manager.accessTokens) {
+        figshareObject.name = this.manager.accessTokens.figshare.name;
+      }
+      return figshareObject;
+    },
+    connectedToFigshare() {
+      return "figshare" in this.manager.accessTokens;
     },
   },
 
