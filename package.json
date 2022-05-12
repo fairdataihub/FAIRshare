@@ -75,7 +75,7 @@
     "lodash": "4.17.21",
     "marked": "4.0.12",
     "mousetrap": "1.6.5",
-    "pinia": "2.0.9",
+    "pinia": "2.0.14",
     "ps-tree": "1.2.0",
     "semver": "7.3.5",
     "universal-analytics": "0.5.3",
