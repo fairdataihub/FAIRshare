@@ -12,5 +12,5 @@ jobs:
     - uses: actions/first-interaction@v1
       with:
         repo-token: ${{ secrets.BOT_ACTIONS }}
-        issue-message: 'Hey **#** welcome to this repo. Thank you for submitting an issue. A maintainer will submit a response to your inquiry soon. '
-        pr-message: 'Thank you for taking your time and effort for your contribution, we truly value it. :tada: A maintainer will soon be on this PR to provide some comments or merge your changes.'
+        issue-message: 'Hey! Thank you for using FAIRshare and submitting an issue. Your feedback is extremely valuable to us! A maintainer will submit a response to your inquiry soon.'
+        pr-message: 'Thank you for taking your time and effort for your contribution, we truly value it. :tada: A maintainer will soon be on this PR to provide some comments or merge your changes. In the meantime please ensure that your changes follow our [`Contrubuting Guidelines`](https://github.com/fairdataihub/FAIRshare/blob/main/CONTRIBUTING.md).'
