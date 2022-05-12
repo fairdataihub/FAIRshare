@@ -7,8 +7,10 @@ import { defineStore } from "pinia";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 
+const FILE_NAME =
+  process.env.NODE_ENV === "development" ? "accessTokens-dev.json" : "accessTokens.json";
 const USER_PATH = app.getPath("home");
-const TOKEN_STORE_PATH = path.join(USER_PATH, ".fairshare", "accessTokens.json");
+const TOKEN_STORE_PATH = path.join(USER_PATH, ".fairshare", FILE_NAME);
 
 // will change to use an actual secret key
 const SECRET_KEY = process.env.VUE_APP_ENCRYPTION_KEY;
@@ -105,7 +107,6 @@ export const useTokenStore = defineStore({
             serverURL !== undefined
               ? `${serverURL}/biotools/login`
               : `http://127.0.0.1:7632/biotools/login`;
-          console.log(url);
 
           const response = await axios
             .post(url, {
@@ -225,6 +226,42 @@ export const useTokenStore = defineStore({
         const token = tokenObject.token;
 
         const response = await this.verifyBioToolsToken(token);
+
+        return response;
+      }
+    },
+
+    async verifyFigshareToken(token) {
+      const config = {
+        method: "get",
+        url: `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`,
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      };
+
+      return await axios(config)
+        .then(async (response) => {
+          if (response.status === 200) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .catch((_error) => {
+          return false;
+        });
+    },
+
+    async verifyFigshareConnection() {
+      const tokenObject = await this.getToken("figshare");
+
+      if (tokenObject === "NO_TOKEN_FOUND") {
+        return false;
+      } else {
+        const token = tokenObject.token;
+
+        const response = await this.verifyFigshareToken(token);
 
         return response;
       }

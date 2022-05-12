@@ -1,6 +1,6 @@
-from __future__ import print_function
 import json
 import os
+
 import yaml
 
 
@@ -11,9 +11,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     }
 
     if "license" in code_data:
-        metadata["license"] = (
-            "https://spdx.org/licenses/" + code_data["license"]
-        )  # noqa: E501
+        metadata["license"] = "https://spdx.org/licenses/" + code_data["license"]
 
     if "codeRepository" in code_data:
         if code_data["codeRepository"] != "":
@@ -82,9 +80,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
     if "referencePublication" in general_data:
         if general_data["referencePublication"] != "":
-            metadata["referencePublication"] = general_data[
-                "referencePublication"
-            ]  # noqa: E501
+            metadata["referencePublication"] = general_data["referencePublication"]
 
     if "funding" in general_data:
         if "organization" in general_data["funding"]:
@@ -92,9 +88,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 metadata["funder"] = {}
 
                 metadata["funder"]["@type"] = "Organization"
-                metadata["funder"]["@name"] = general_data["funding"][
-                    "organization"
-                ]  # noqa: E501
+                metadata["funder"]["@name"] = general_data["funding"]["organization"]
 
     if "keywords" in general_data:
         if len(general_data["keywords"]) > 0:
@@ -140,9 +134,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
                 if "orcid" in item:
                     if item["orcid"] != "":
-                        new_author["@id"] = (
-                            "https://orcid.org/" + item["orcid"]
-                        )  # noqa: E501
+                        new_author["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_author["givenName"] = item["givenName"]
@@ -174,9 +166,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
                 if "orcid" in item:
                     if item["orcid"] != "":
-                        new_contributor["@id"] = (
-                            "https://orcid.org/" + item["orcid"]
-                        )  # noqa: E501
+                        new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
 
                 if "givenName" in item:
                     new_contributor["givenName"] = item["givenName"]
@@ -192,12 +182,8 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 if "affiliation" in item:
                     if item["affiliation"] != "":
                         new_contributor["affiliation"] = {}
-                        new_contributor["affiliation"][
-                            "@type"
-                        ] = "Organization"  # noqa: E501
-                        new_contributor["affiliation"]["name"] = item[
-                            "affiliation"
-                        ]  # noqa: E501
+                        new_contributor["affiliation"]["@type"] = "Organization"
+                        new_contributor["affiliation"]["name"] = item["affiliation"]
 
                 metadata["contributor"].append(new_contributor)
 
@@ -212,6 +198,145 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
         f.write(json.dumps(metadata))
+
+    return True
+
+
+def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
+    metadata = {}
+
+    if "license" in other_data:
+        metadata["license"] = other_data["license"]
+
+    if "creationDate" in other_data:
+        if other_data["creationDate"] != "":
+            metadata["dateCreated"] = other_data["creationDate"]
+
+    if "firstReleaseDate" in other_data:
+        if other_data["firstReleaseDate"] != "":
+            metadata["dateCreated"] = other_data["firstReleaseDate"]
+
+    if "name" in other_data:
+        if other_data["name"] != "":
+            metadata["name"] = other_data["name"]
+
+    if "identifier" in other_data:
+        if other_data["identifier"] != "":
+            metadata["identifier"] = other_data["identifier"]
+
+    if "description" in other_data:
+        if other_data["description"] != "":
+            metadata["description"] = other_data["description"]
+
+    if "fundingCode" in other_data:
+        if other_data["fundingCode"] != "":
+            metadata["fundingCode"] = other_data["fundingCode"]
+
+    if "fundingOrganization" in other_data:
+        if other_data["fundingOrganization"] != "":
+            metadata["fundingOrganization"] = other_data["fundingOrganization"]
+
+    if "developmentStatus" in other_data:
+        if other_data["developmentStatus"] != "":
+            metadata["developmentStatus"] = other_data["developmentStatus"]
+
+    if "isPartOf" in other_data:
+        if other_data["isPartOf"] != "":
+            metadata["isPartOf"] = other_data["isPartOf"]
+
+    if "referencePublication" in other_data:
+        if other_data["referencePublication"] != "":
+            metadata["referencePublication"] = other_data["referencePublication"]
+
+    if "keywords" in other_data:
+        if len(other_data["keywords"]) > 0:
+            metadata["keywords"] = []
+
+            for item in other_data["keywords"]:
+                metadata["keywords"].append(item["keyword"])
+
+    if "relatedLinks" in other_data:
+        if len(other_data["relatedLinks"]) > 0:
+            metadata["relatedLink"] = []
+
+            for item in other_data["relatedLinks"]:
+                metadata["relatedLink"].append(item["link"])
+
+    if "authors" in other_data:
+        if len(other_data["authors"]) > 0:
+            metadata["author"] = []
+
+            for item in other_data["authors"]:
+                new_author = {}
+
+                new_author["@type"] = "Person"
+
+                if "orcid" in item:
+                    if item["orcid"] != "":
+                        new_author["@id"] = "https://orcid.org/" + item["orcid"]
+
+                if "givenName" in item:
+                    new_author["givenName"] = item["givenName"]
+
+                if "familyName" in item:
+                    if item["familyName"] != "":
+                        new_author["familyName"] = item["familyName"]
+
+                if "email" in item:
+                    if item["email"] != "":
+                        new_author["email"] = item["email"]
+
+                if "affiliation" in item:
+                    if item["affiliation"] != "":
+                        new_author["affiliation"] = {}
+                        new_author["affiliation"]["@type"] = "Organization"
+                        new_author["affiliation"]["name"] = item["affiliation"]
+
+                metadata["author"].append(new_author)
+
+    if "contributors" in other_data:
+        if len(other_data["contributors"]) > 0:
+            metadata["contributor"] = []
+
+            for item in other_data["contributors"]:
+                new_contributor = {}
+
+                new_contributor["@type"] = "Person"
+
+                if "orcid" in item:
+                    if item["orcid"] != "":
+                        new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+
+                if "givenName" in item:
+                    new_contributor["givenName"] = item["givenName"]
+
+                if "familyName" in item:
+                    if item["familyName"] != "":
+                        new_contributor["familyName"] = item["familyName"]
+
+                if "email" in item:
+                    if item["email"] != "":
+                        new_contributor["email"] = item["email"]
+
+                if "affiliation" in item:
+                    if item["affiliation"] != "":
+                        new_contributor["affiliation"] = {}
+                        new_contributor["affiliation"]["@type"] = "Organization"
+                        new_contributor["affiliation"]["name"] = item["affiliation"]
+
+                metadata["contributor"].append(new_contributor)
+
+    # return the code metadata object if virtual is set to true
+    if virtual_file:
+        return json.dumps(metadata)
+
+    # If the folder doesn't exist (for some weird reason), create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    # Create the metadata file
+    with open(os.path.join(folder_path, "metadata.json"), "w") as f:
+        f.write(json.dumps(metadata))
     return True
 
 
@@ -225,6 +350,18 @@ def createMetadata(data_types, data, virtual_file):
                 folder_path = data["Code"]["folderPath"]
             result = createCodeMetadata(
                 code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
+
+        if "Other" in data_types:
+            other_data = data["Other"]["questions"]
+            general_data = data["general"]["questions"]
+            folder_path = ""
+            if "folderPath" in data["Other"]:
+                folder_path = data["Other"]["folderPath"]
+            result = createOtherMetadata(
+                other_data, general_data, folder_path, virtual_file
             )
             if virtual_file:
                 return result
@@ -244,9 +381,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
         if general_data["name"] != "":
             citationObject["title"] = general_data["name"]
 
-    citationObject[
-        "message"
-    ] = "If you use this software, please cite it as below."  # noqa: E501
+    citationObject["message"] = "If you use this software, please cite it as below."
     citationObject["type"] = "software"
 
     if "authors" in general_data:
@@ -283,9 +418,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
             identifier = {}
             identifier["type"] = "doi"
             identifier["value"] = code_data["identifier"]
-            identifier[
-                "description"
-            ] = "DOI for this software's record on Zenodo"  # noqa: E501
+            identifier["description"] = "DOI for this software's record on Zenodo"
 
             citationObject["identifiers"].append(identifier)
 
@@ -323,9 +456,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
 
     if "currentVersionReleaseDate" in code_data:
         if code_data["currentVersionReleaseDate"] != "":
-            citationObject["date-released"] = code_data[
-                "currentVersionReleaseDate"
-            ]  # noqa: E501
+            citationObject["date-released"] = code_data["currentVersionReleaseDate"]
 
     # return the CITATION.cff object if virtual is set to true
     if virtual_file:

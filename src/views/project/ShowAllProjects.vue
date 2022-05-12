@@ -105,10 +105,27 @@
                             <span class="pr-2 pl-1 text-sm"> Zenodo </span>
                           </div>
                         </el-tooltip>
+                        <el-tooltip
+                          effect="dark"
+                          content="This dataset will be made FAIR using the Figshare repository"
+                          placement="bottom"
+                          v-if="dataset.meta.destination === 'figshare'"
+                        >
+                          <div class="flex items-center">
+                            <Icon icon="clarity:upload-cloud-line" />
+                            <span class="pr-2 pl-1 text-sm"> Figshare </span>
+                          </div>
+                        </el-tooltip>
                       </div>
 
                       <div>
-                        <el-tag v-for="workflow in dataset.dataType" :key="workflow" size="small">
+                        <el-tag
+                          v-for="(workflow, index) in dataset.dataType"
+                          :key="workflow"
+                          size="small"
+                          class="mr-1"
+                          :class="{ '!hidden': index > 1 }"
+                        >
                           {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
@@ -212,19 +229,15 @@
 
                       <div>
                         <el-tag
-                          v-for="workflow in dataset.workflows.workflow1.type"
+                          v-for="(workflow, index) in dataset.workflows.workflow1.type"
                           :key="workflow"
                           size="small"
+                          class="mr-1"
+                          :class="{ '!bg-red-500': index > 0 }"
                         >
                           {{ workflow === "Code" ? "Research software" : workflow }}
                         </el-tag>
                       </div>
-                    </div>
-
-                    <div class="hidden flex-wrap">
-                      <el-button @click="PublishNewVersion(dataset)">
-                        publish a new version
-                      </el-button>
                     </div>
                   </div>
                 </div>
@@ -365,9 +378,6 @@ export default {
         return `${difference} years`;
       }
     },
-    PublishNewVersion(dataset) {
-      console.log("publish a new version", dataset);
-    },
     selectDataset(event, datasetID) {
       if (datasetID === this.selectedDataset) {
         this.selectedDataset = "";
@@ -397,7 +407,7 @@ export default {
 
       // Some endpoints to help when testing sub-routes
 
-      // routerPath = `/datasets/${datasetID}`;
+      routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
       // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
@@ -405,8 +415,12 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Other/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/Other/pickLicense`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
+      // routerPath = `/datasets/${datasetID}/workflow1/figshare/publish`;
+      // routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/githubNoUpload/finalPage`;

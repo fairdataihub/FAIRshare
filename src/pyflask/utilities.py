@@ -1,11 +1,11 @@
-from __future__ import print_function
-import os
 import json
-import shutil
-import requests
+import os
 import platform
+import shutil
 import subprocess
 import uuid
+
+import requests
 
 
 def foldersPresent(folder_path):
@@ -26,9 +26,7 @@ def foldersPresent(folder_path):
 def zipFolder(folder_path):
     try:
         home_path = os.path.expanduser("~")
-        fairshare_folder_path = os.path.join(
-            home_path, ".fairshare", "dataset"
-        )  # noqa: E501
+        fairshare_folder_path = os.path.join(home_path, ".fairshare", "dataset")
 
         if not os.path.exists(fairshare_folder_path):
             os.makedirs(fairshare_folder_path)
@@ -111,7 +109,7 @@ def readFolderContents(dir):
                     "isDir": "",
                     "children": [],
                     "fullpath": "",
-                }  # noqa: E501
+                }
                 fileFullName = os.path.join(dir, filename)
                 if os.path.isdir(fileFullName):
                     newDic["label"] = filename
@@ -131,7 +129,7 @@ def readFolderContents(dir):
             "children": dfs(dir),
             "fullPath": dir,
             "isDir": True,
-        }  # noqa: E501
+        }
         return root
     except Exception as e:
         raise e

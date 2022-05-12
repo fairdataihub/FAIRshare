@@ -30,11 +30,17 @@
             </template>
 
             <div class="p-4">
-              <el-form-item
-                label="Publication date"
-                :required="true"
-                :error="publicationDateErrorMessage"
-              >
+              <el-form-item label="Upload type" prop="uploadType">
+                <div class="flex flex-col">
+                  <el-tree-select
+                    v-model="zenodoMetadataForm.uploadType"
+                    :data="uploadTypeOptions"
+                    :disabled="disableUploadType"
+                  />
+                </div>
+              </el-form-item>
+
+              <el-form-item label="Publication date" prop="publicationDate">
                 <div class="flex flex-col">
                   <el-date-picker
                     v-model="zenodoMetadataForm.publicationDate"
@@ -50,11 +56,11 @@
                 </div>
               </el-form-item>
 
-              <el-form-item label="Title" prop="title" :error="titleErrorMessage" :required="true">
+              <el-form-item label="Title" prop="title">
                 <el-input v-model="zenodoMetadataForm.title" type="text"> </el-input>
               </el-form-item>
 
-              <el-form-item label="Authors" :error="authorsErrorMessage" :required="true">
+              <el-form-item label="Authors" prop="authors">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.authors"
@@ -69,12 +75,14 @@
                           v-model="element.name"
                           type="text"
                           placeholder="Family name, given names"
+                          class="h-[40px]"
                         ></el-input>
                         <div class="mx-2"></div>
                         <el-input
                           v-model="element.affiliation"
                           type="text"
                           placeholder="Affiliation"
+                          class="h-[40px]"
                         ></el-input>
                         <div class="mx-2"></div>
                         <div class="flex w-full flex-col">
@@ -122,7 +130,7 @@
                 </div>
               </el-form-item>
 
-              <el-form-item label="Description" :error="descriptionErrorMessage" :required="true">
+              <el-form-item label="Description" prop="description">
                 <VuePopper
                   :hover="true"
                   offsetDistance="0"
@@ -135,7 +143,7 @@
                 </VuePopper>
               </el-form-item>
 
-              <el-form-item label="Version" :error="versionErrorMessage">
+              <el-form-item label="Version" prop="version">
                 <div class="flex w-full flex-col">
                   <el-input
                     v-model="zenodoMetadataForm.version"
@@ -304,8 +312,8 @@
                   </el-option>
                 </el-select>
                 <p class="pt-2 text-xs text-gray-500">
-                  Required. Selected license applies to all of your files displayed on the top of
-                  the form. <br />
+                  Required. Selected license applies to all of your files that will be shared on
+                  Zenodo. <br />
                   If you want to upload some of your files under different licenses, please do so in
                   separate uploads. <br />
                   If you cannot find the license you're looking for, include a relevant LICENSE file
@@ -457,11 +465,7 @@
             </template>
 
             <div class="p-4">
-              <el-form-item
-                label="Contributors"
-                :required="false"
-                :error="contributorsErrorMessage"
-              >
+              <el-form-item label="Contributors" prop="contributors">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.contributors"
@@ -472,6 +476,21 @@
                   <template #item="{ element }">
                     <div class="mb-2 flex flex-row justify-between transition-all">
                       <div class="flex w-11/12 flex-row justify-between">
+                        <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
+                          <el-select
+                            v-model="element.contributorType"
+                            filterable
+                            placeholder="Select a contributor type"
+                          >
+                            <el-option
+                              v-for="item in contributorTypes"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value"
+                            >
+                            </el-option>
+                          </el-select>
+                        </div>
                         <div class="w-3/12">
                           <el-input
                             v-model="element.name"
@@ -495,21 +514,6 @@
                             ></el-input>
                             <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
                           </div>
-                        </div>
-                        <div class="mx-2 md:w-2/12 lg:w-3/12 xl:w-max">
-                          <el-select
-                            v-model="element.contributorType"
-                            filterable
-                            placeholder="Select a contributor type"
-                          >
-                            <el-option
-                              v-for="item in contributorTypes"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
-                            </el-option>
-                          </el-select>
                         </div>
                       </div>
                       <div class="flex w-1/12 flex-row justify-evenly pt-4">
@@ -916,7 +920,7 @@
                 basic information section.
                 <br />
               </p>
-              <el-form-item label="Subjects" :error="subjectsErrorMessage" :required="false">
+              <el-form-item label="Subjects" prop="subjects">
                 <draggable
                   tag="div"
                   :list="zenodoMetadataForm.subjects"
@@ -1050,24 +1054,40 @@ export default {
       drag: true,
       licenseOptions: licensesJSON.licenses,
       languageOptions: languagesJSON.languages,
+      uploadTypeOptions: zenodoMetadataOptions.uploadType,
       relatedIdentifierRelationships: zenodoMetadataOptions.relatedIdentifierRelationships,
       relatedIdentifierTypes: zenodoMetadataOptions.relatedIdentifierTypes,
       contributorTypes: contributorTypesJSON.contributorTypes,
       zenodoMetadataForm: zenodoMetadataOptions.defaultForm,
-      authorsErrorMessage: "",
-      contributorsErrorMessage: "",
-      subjectsErrorMessage: "",
-      titleErrorMessage: "",
-      descriptionErrorMessage: "",
-      publicationDateErrorMessage: "",
-      versionErrorMessage: "",
       relatedIdentifiersErrorMessage: "",
       invalidStatus: {},
+      disableUploadType: false,
       rulesForZenodoMetadataForm: {
+        uploadType: [
+          {
+            required: true,
+            message: "Please select an upload type",
+            trigger: "blur",
+          },
+        ],
+        publicationDate: [
+          {
+            required: true,
+            message: "Publication date is required",
+            trigger: "blur",
+          },
+        ],
         title: [
           {
             required: true,
             message: "Required.",
+            trigger: "blur",
+          },
+        ],
+        authors: [
+          {
+            required: true,
+            validator: this.authorValidator,
             trigger: "blur",
           },
         ],
@@ -1083,6 +1103,27 @@ export default {
             required: true,
             message: "Required. Selected license applies to all of your files in the dataset.",
             trigger: "change",
+          },
+        ],
+        version: [
+          {
+            required: false,
+            validator: this.versionValidator,
+            trigger: "blur",
+          },
+        ],
+        contributors: [
+          {
+            required: false,
+            validator: this.contributorValidator,
+            trigger: "blur",
+          },
+        ],
+        subjects: [
+          {
+            required: false,
+            validator: this.subjectValidator,
+            trigger: "blur",
           },
         ],
       },
@@ -1125,6 +1166,29 @@ export default {
         root[obj] = {};
       }
     },
+
+    subjectValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let subject of value) {
+          if (subject.term === undefined || subject.term.trim() === "") {
+            callback(new Error("Please provide a valid and identifiable subject"));
+            return;
+          }
+
+          const validIdentifier = validator.isURL(subject.identifier);
+
+          if (!validIdentifier) {
+            callback(
+              new Error(
+                "Please provide a valid identifier. Your identifier has to be in the form of a URL"
+              )
+            );
+            return;
+          }
+        }
+      }
+      callback();
+    },
     addSubject() {
       this.zenodoMetadataForm.subjects.push({
         term: "",
@@ -1136,6 +1200,47 @@ export default {
       this.zenodoMetadataForm.subjects = this.zenodoMetadataForm.subjects.filter((subject) => {
         return subject.id !== id;
       });
+    },
+
+    authorValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let author of value) {
+          if (
+            author.name === undefined ||
+            author.name.trim() === "" ||
+            author.affiliation === undefined ||
+            author.affiliation.trim() === ""
+          ) {
+            callback(new Error("Name and Affiliation for each author is mandatory"));
+            return;
+          }
+
+          // validate orcid
+          if (author.orcid !== "") {
+            const orcid = author.orcid;
+            let total = 0;
+            for (let i = 0; i < orcid.length - 1; i++) {
+              const digit = parseInt(orcid.substr(i, 1));
+              if (isNaN(digit)) {
+                continue;
+              }
+              total = (total + digit) * 2;
+            }
+
+            const remainder = total % 11;
+            const result = (12 - remainder) % 11;
+            const checkDigit = result === 10 ? "X" : String(result);
+
+            if (checkDigit !== orcid.substr(-1)) {
+              callback(new Error("ORCID is not valid"));
+            }
+          }
+        }
+      } else {
+        callback(new Error("Please provide at least one author"));
+        return;
+      }
+      callback();
     },
     addAuthor() {
       this.zenodoMetadataForm.authors.push({
@@ -1150,6 +1255,7 @@ export default {
         return author.id !== id;
       });
     },
+
     addKeyword() {
       this.zenodoMetadataForm.keywords.push({
         keyword: "",
@@ -1175,6 +1281,53 @@ export default {
           return relatedIdentifier.id !== id;
         });
     },
+
+    contributorValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let contributor of value) {
+          if (
+            contributor.name === undefined ||
+            contributor.name.trim() === "" ||
+            contributor.affiliation === undefined ||
+            contributor.affiliation.trim() === ""
+          ) {
+            callback(new Error("Name and Affiliation for each contributor is mandatory"));
+            return;
+          }
+
+          // validate orcid
+          if (contributor.orcid !== "") {
+            const orcid = contributor.orcid;
+            let total = 0;
+            for (let i = 0; i < orcid.length - 1; i++) {
+              const digit = parseInt(orcid.substr(i, 1));
+              if (isNaN(digit)) {
+                continue;
+              }
+              total = (total + digit) * 2;
+            }
+
+            const remainder = total % 11;
+            const result = (12 - remainder) % 11;
+            const checkDigit = result === 10 ? "X" : String(result);
+
+            if (checkDigit !== orcid.substr(-1)) {
+              callback(new Error("ORCID is not valid"));
+              return;
+            }
+          }
+
+          if (
+            contributor.contributorType === undefined ||
+            contributor.contributorType.trim() === ""
+          ) {
+            callback(new Error("Contributor type is mandatory"));
+            return;
+          }
+        }
+      }
+      callback();
+    },
     addContributor() {
       this.zenodoMetadataForm.contributors.push({
         contributorType: "",
@@ -1190,7 +1343,9 @@ export default {
           return contributor.id !== id;
         }
       );
+      this.$refs.zmForm.validate();
     },
+
     addReference() {
       this.zenodoMetadataForm.references.push({
         reference: "",
@@ -1218,6 +1373,16 @@ export default {
           return supervisor.name !== id;
         });
     },
+
+    versionValidator(_rule, value, callback) {
+      if (value != "" && semver.valid(semver.coerce(value)) === null) {
+        callback(new Error("Please provide a valid version number"));
+        return;
+      } else {
+        callback();
+      }
+    },
+
     addZenodoMetadata(_evt, shouldNavigateBack = false) {
       if (this.zenodoMetadataForm.authors.length == 0) {
         ElMessage.error("Please add at least one author.");
@@ -1267,6 +1432,18 @@ export default {
 
       //validate first
     },
+    pickUploadType() {
+      this.disableUploadType = true;
+      if ("type" in this.workflow) {
+        if (this.workflow.type.includes("Code")) {
+          this.zenodoMetadataForm.uploadType = "software";
+          this.disableUploadType = true;
+        } else if (this.workflow.type.includes("Other")) {
+          this.zenodoMetadataForm.uploadType = "other";
+          this.disableUploadType = false;
+        }
+      }
+    },
     prefillZenodoQuestions() {
       if (
         "questions" in this.dataset.data.general &&
@@ -1280,6 +1457,8 @@ export default {
         this.zenodoMetadataForm.publicationDate = `${date.getFullYear()}-${(date.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+
+        this.pickUploadType();
 
         if ("name" in generalForm) {
           this.zenodoMetadataForm.title = generalForm.name;
@@ -1647,186 +1826,6 @@ export default {
     },
   },
   watch: {
-    "zenodoMetadataForm.authors": {
-      handler(val) {
-        if (val.length === 0) {
-          this.authorsErrorMessage = "Please provide at least one author.";
-          this.invalidStatus.authors = true;
-          this.$refs.zmForm.validate();
-          return;
-        } else {
-          this.authorsErrorMessage = ""; //clear error message
-          this.invalidStatus.authors = false;
-        }
-
-        if (val.length > 0) {
-          for (let author of val) {
-            if (author.name === "" || author.affiliation === "") {
-              // console.log("author error");
-              this.authorsErrorMessage = "Name and Affiliation for each author is mandatory";
-              this.invalidStatus.authors = true;
-              this.$refs.zmForm.validate();
-              break;
-            } else {
-              this.authorsErrorMessage = "";
-              this.invalidStatus.authors = false;
-            }
-
-            // validate orcid
-            if (author.orcid !== "") {
-              const orcid = author.orcid;
-              let total = 0;
-              for (let i = 0; i < orcid.length - 1; i++) {
-                const digit = parseInt(orcid.substr(i, 1));
-                // console.log(digit);
-                if (isNaN(digit)) {
-                  continue;
-                }
-                total = (total + digit) * 2;
-              }
-
-              const remainder = total % 11;
-              const result = (12 - remainder) % 11;
-              const checkDigit = result === 10 ? "X" : String(result);
-
-              if (checkDigit === orcid.substr(-1)) {
-                this.authorsErrorMessage = "";
-                this.invalidStatus.authors = false;
-              } else {
-                // console.log("invalid orcid");
-                this.authorsErrorMessage = "ORCID is not valid";
-                this.$refs.zmForm.validate();
-                this.invalidStatus.authors = true;
-                break;
-              }
-            }
-          }
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.contributors": {
-      handler(val) {
-        if (val.length > 0) {
-          for (let contributor of val) {
-            if (contributor.name === "" || contributor.affiliation === "") {
-              // console.log("contributor error");
-              this.contributorsErrorMessage =
-                "Name and Affiliation for each contributor is mandatory";
-              this.$refs.zmForm.validate();
-              this.invalidStatus.contributors = true;
-              break;
-            } else {
-              this.contributorsErrorMessage = "";
-              this.invalidStatus.contributors = false;
-            }
-
-            // validate orcid
-            if (contributor.orcid !== "" && contributor.orcid !== undefined) {
-              const orcid = contributor.orcid;
-
-              let total = 0;
-
-              for (let i = 0; i < orcid.length - 1; i++) {
-                const digit = parseInt(orcid.substr(i, 1));
-                if (isNaN(digit)) {
-                  continue;
-                }
-                total = (total + digit) * 2;
-              }
-
-              const remainder = total % 11;
-              const result = (12 - remainder) % 11;
-              const checkDigit = result === 10 ? "X" : String(result);
-
-              if (checkDigit === orcid.substr(-1)) {
-                this.contributorsErrorMessage = "";
-                this.invalidStatus.contributors = false;
-              } else {
-                // console.log("invalid orcid");
-                this.contributorsErrorMessage = "ORCID is not valid";
-                this.$refs.zmForm.validate();
-                this.invalidStatus.contributors = true;
-                break;
-              }
-            }
-          }
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.publicationDate": {
-      handler(val) {
-        if (val === "" || val === null) {
-          this.publicationDateErrorMessage = "Please provide the date of publication.";
-          this.$refs.zmForm.validate();
-          this.invalidStatus.publicationDate = true;
-          return;
-        } else {
-          this.publicationDateErrorMessage = "";
-          this.invalidStatus.publicationDate = false;
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.title": {
-      handler(val) {
-        if (val === "") {
-          this.titleErrorMessage = "Please provide a valid and descriptive title.";
-          this.$refs.zmForm.validate();
-          this.invalidStatus.title = true;
-          return;
-        } else {
-          this.titleErrorMessage = "";
-          this.invalidStatus.title = false;
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.license": {
-      handler(val) {
-        const value = val.licensename;
-        if (value === "" || val === null) {
-          // this.titleErrorMessage =
-          ("Please provide a valid and descriptive title.");
-          this.$refs.zmForm.validate();
-          this.invalidStatus.license = true;
-          return;
-        } else {
-          // this.titleErrorMessage = "";
-          this.invalidStatus.license = false;
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.description": {
-      handler(val) {
-        if (val === "") {
-          this.descriptionErrorMessage = "Please provide a valid and identifiable description.";
-          this.$refs.zmForm.validate();
-          this.invalidStatus.description = true;
-          return;
-        } else {
-          this.descriptionErrorMessage = "";
-          this.invalidStatus.description = false;
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.version": {
-      handler(val) {
-        if (val != "" && semver.valid(val) === null) {
-          this.versionErrorMessage = "Please provide a valid version number.";
-          this.$refs.zmForm.validate();
-          this.invalidStatus.version = true;
-          return;
-        } else {
-          this.versionErrorMessage = "";
-          this.invalidStatus.version = false;
-        }
-      },
-      deep: true,
-    },
     "zenodoMetadataForm.relatedIdentifiers": {
       handler(val) {
         // console.log(val);
@@ -1841,7 +1840,6 @@ export default {
               this.invalidStatus.relatedIdentifiers = true;
               break;
             } else if (relatedIdentifier.identifier != "") {
-              console.log(doiRegex().test(relatedIdentifier.identifier));
               let validIdentifier = false;
 
               if (
@@ -1866,37 +1864,6 @@ export default {
               this.invalidStatus.relatedIdentifiers = false;
             }
           }
-        }
-      },
-      deep: true,
-    },
-    "zenodoMetadataForm.subjects": {
-      handler(val) {
-        if (val.length > 0) {
-          for (let subject of val) {
-            if (subject.term === "") {
-              this.subjectsErrorMessage = "Please provide a valid and identifiable subject.";
-              this.$refs.zmForm.validate();
-              this.invalidStatus.subjects = true;
-              break;
-            } else {
-              const validIdentifier = validator.isURL(subject.identifier);
-
-              if (!validIdentifier) {
-                this.subjectsErrorMessage =
-                  "Please provide a valid identifier. Your identifier has to be in the form of a URL";
-                this.$refs.zmForm.validate();
-                this.invalidStatus.subjects = true;
-                break;
-              } else {
-                this.subjectsErrorMessage = "";
-                this.invalidStatus.subjects = false;
-              }
-            }
-          }
-        } else {
-          this.subjectsErrorMessage = "";
-          this.invalidStatus.subjects = false;
         }
       },
       deep: true,
@@ -1930,14 +1897,16 @@ export default {
       this.workflow.expandOptions = [];
     }
 
-    const testvar = true;
-
     if (
-      this.workflow.destination.zenodo.questions &&
-      Object.keys(this.workflow.destination.zenodo.questions).length !== 0 &&
-      !testvar
+      "zenodo" in this.workflow.destination &&
+      "questions" in this.workflow.destination.zenodo &&
+      Object.keys(this.workflow.destination.zenodo.questions).length !== 0
     ) {
       this.zenodoMetadataForm = this.workflow.destination.zenodo.questions;
+
+      if (!("uploadType" in this.zenodoMetadataForm)) {
+        this.pickUploadType();
+      }
 
       this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.license);
       this.initializeEmptyObjects(this.zenodoMetadataForm, this.zenodoMetadataForm.journal);

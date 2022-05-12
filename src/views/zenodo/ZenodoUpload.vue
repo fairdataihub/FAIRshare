@@ -89,6 +89,7 @@ export default {
       alertTitle: "",
       alertMessage: "",
       overwriteCodeMeta: false,
+      overwriteOtherMeta: false,
     };
   },
   computed: {
@@ -128,7 +129,44 @@ export default {
       const zenodoMetadata = this.workflow.destination.zenodo.questions;
       let metadata = {};
 
-      metadata.upload_type = "software";
+      if ("uploadType" in zenodoMetadata) {
+        const publicationTypes = [
+          "annotationcollection",
+          "book",
+          "section",
+          "conferencepaper",
+          "datamanagementplan",
+          "article",
+          "patent",
+          "preprint",
+          "deliverable",
+          "milestone",
+          "proposal",
+          "report",
+          "softwaredocumentation",
+          "taxonomictreatment",
+          "technicalnote",
+          "thesis",
+          "workingpaper",
+          "p_other",
+        ];
+        const imageTypes = ["plot", "figure", "diagram", "drawing", "photo", "i_other"];
+
+        if (publicationTypes.includes(zenodoMetadata.upload_type)) {
+          metadata.upload_type = "publication";
+          metadata.publication_type =
+            zenodoMetadata.upload_type === "p_other" ? "other" : zenodoMetadata.upload_type;
+        } else if (imageTypes.includes(zenodoMetadata.upload_type)) {
+          metadata.upload_type = "image";
+          metadata.image_type =
+            zenodoMetadata.upload_type === "i_other" ? "other" : zenodoMetadata.upload_type;
+        } else {
+          metadata.upload_type = zenodoMetadata.upload_type;
+        }
+      } else {
+        metadata.upload_type = "other";
+      }
+
       metadata.prereserve_doi = true;
 
       if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
@@ -497,6 +535,24 @@ export default {
         });
       return response;
     },
+    async createOtherMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create other metadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create other metadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     async createCitationFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/citation/create`, {
@@ -536,7 +592,6 @@ export default {
         });
       return response;
     },
-
     async uploadWorkflow() {
       let response = {};
 
@@ -658,7 +713,6 @@ export default {
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
-          console.log(this.dataset.data.Code.questions.identifier);
           if (
             "metadata" in response &&
             "identifier" in this.dataset.data.Code.questions &&
@@ -667,8 +721,6 @@ export default {
             this.dataset.data.Code.questions.identifier = response.metadata.prereserve_doi.doi;
             this.overwriteCodeMeta = true;
           }
-
-          console.log(this.dataset.data.Code.questions.identifier);
 
           response = await this.createCodeMetadataFile();
           // console.log(response);
@@ -686,6 +738,34 @@ export default {
       }
 
       this.percentage = 15;
+      this.indeterminate = false;
+
+      if (this.workflow.generateOtherMetadata) {
+        console.log(this.dataset.data.Other.questions.identifier);
+        if (
+          "metadata" in response &&
+          "identifier" in this.dataset.data.Other.questions &&
+          this.dataset.data.Other.questions.identifier == ""
+        ) {
+          this.dataset.data.Other.questions.identifier = response.metadata.prereserve_doi.doi;
+          this.overwriteOtherMeta = true;
+        }
+
+        response = await this.createOtherMetadataFile();
+        // console.log(response);
+
+        if (response === "ERROR") {
+          this.alertMessage = "There was an error with creating the required metadata.json file";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Created the metadata.json file in the target folder";
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        }
+      }
+
+      this.percentage = 18;
       this.indeterminate = false;
 
       await this.sleep(300);
@@ -792,6 +872,11 @@ export default {
     async runZenodoUpload() {
       this.datasetStore.hideSidebar();
 
+      this.indeterminate = true;
+      this.percentage = 0;
+      this.progressStatus = "";
+      this.showAlert = false;
+
       this.statusMessage = "Preparing backend services...";
       await this.sleep(300);
 
@@ -809,6 +894,9 @@ export default {
         if (this.overwriteCodeMeta) {
           this.dataset.data.Code.questions.identifier = "";
         }
+        if (this.overwriteOtherMeta) {
+          this.dataset.data.Other.questions.identifier = "";
+        }
 
         this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
@@ -820,6 +908,9 @@ export default {
       } else {
         if (this.overwriteCodeMeta) {
           this.dataset.data.Code.questions.identifier = "";
+        }
+        if (this.overwriteOtherMeta) {
+          this.dataset.data.Other.questions.identifier = "";
         }
 
         this.workflow.datasetUploaded = true;

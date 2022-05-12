@@ -60,6 +60,8 @@ let app = createApp(App);
 // global variables for use in the app
 app.config.globalProperties.$server_url = `http://127.0.0.1:${getGlobal("PYPORT")}`;
 app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
+app.config.globalProperties.$fairshare_badge_text = `Curated with FAIRshare`;
+app.config.globalProperties.$fairshare_badge_image_url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg`;
 
 // register components globally
 app.component("VuePopper", Popper);

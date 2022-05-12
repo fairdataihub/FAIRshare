@@ -38,6 +38,7 @@
 
 <script>
 import { useDatasetsStore } from "@/store/datasets";
+import { useConfigStore } from "@/store/config";
 import { app } from "@electron/remote";
 
 export default {
@@ -46,6 +47,7 @@ export default {
   data() {
     return {
       datasetStore: useDatasetsStore(),
+      configStore: useConfigStore(),
       about: [],
     };
   },
@@ -73,14 +75,20 @@ export default {
     });
 
     this.about.push({
-      label: "Electron",
-      value: process.versions.electron,
+      label: "Operating system",
+      value: process.platform,
       span: 1,
     });
 
     this.about.push({
       label: "Node.js",
       value: process.versions.node,
+      span: 1,
+    });
+
+    this.about.push({
+      label: "Electron",
+      value: process.versions.electron,
       span: 1,
     });
 
@@ -97,12 +105,6 @@ export default {
     });
 
     this.about.push({
-      label: "Operating system",
-      value: process.platform,
-      span: 1,
-    });
-
-    this.about.push({
       label: "pid",
       value: process.pid,
       span: 1,
@@ -112,6 +114,18 @@ export default {
       label: "ppid",
       value: process.ppid,
       span: 1,
+    });
+
+    this.about.push({
+      label: "Current API version",
+      value: await this.configStore.getGlobals("backendAPIVersion"),
+      span: 1,
+    });
+
+    this.about.push({
+      label: "Minimum API version",
+      value: await this.configStore.getGlobals("minAPIVersion"),
+      span: 2,
     });
 
     this.about.push({
@@ -128,5 +142,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

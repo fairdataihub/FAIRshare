@@ -5,11 +5,10 @@ module.exports = {
       nodeIntegration: true,
       preload: { preload: "src/preload.js" },
       builderOptions: {
-        // afterPack: "./scripts/postbuild.js",
         appId: "com.fairdataihub.fairshare",
         productName: "FAIRshare",
         asar: true,
-        afterSign: "./scripts/notarize.js",
+        afterSign: "./build-scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
         win: {
