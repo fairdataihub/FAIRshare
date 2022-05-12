@@ -32,6 +32,12 @@ import ZenodoAccessToken from "../views/zenodo/ZenodoAccessToken.vue";
 import ZenodoUpload from "../views/zenodo/ZenodoUpload.vue";
 import ZenodoPublish from "../views/zenodo/ZenodoPublish.vue";
 
+// figshare related components
+import FigshareMetadata from "../views/figshare/FigshareMetadata.vue";
+import FigshareAccessToken from "../views/figshare/FigshareAccessToken.vue";
+import FigshareUpload from "../views/figshare/FigshareUpload.vue";
+import FigsharePublish from "../views/figshare/FigsharePublish.vue";
+
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
 import GithubSummary from "../views/github/GithubSummary.vue";
@@ -136,6 +142,11 @@ const routes = [
     name: "ZenodoMetadata",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/figshare/metadata",
+    component: FigshareMetadata,
+    name: "FigshareMetadata",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/zenodo/review",
     component: ZenodoMetadataReview,
     name: "ZenodoMetadataReview",
@@ -146,15 +157,30 @@ const routes = [
     name: "ZenodoAccessToken",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/figshare/accessToken",
+    component: FigshareAccessToken,
+    name: "FigshareAccessToken",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/zenodo/upload",
     component: ZenodoUpload,
     name: "ZenodoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/upload",
+    component: FigshareUpload,
+    name: "FigshareUpload",
   },
 
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
     component: ZenodoPublish,
     name: "ZenodoPublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/figshare/publish",
+    component: FigsharePublish,
+    name: "FigsharePublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
@@ -211,10 +237,7 @@ const routes = [
     component: GithubNoUploadEnd,
     name: "GithubNoUploadEnd",
   },
-  {
-    path: "/datasets/:datasetID/:workflowID/figshare/metadata",
-    name: "FigshareMetadata",
-  },
+
   { path: "/datasets/:datasetID", component: ShowAllWorkflows },
   { path: "/manageAccount", component: ManageAccount },
   { path: "/settings", component: AppSettings },

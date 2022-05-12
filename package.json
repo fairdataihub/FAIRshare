@@ -18,8 +18,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lint-es": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write",
+    "lint-es": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|vue)\"",
+    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|vue|json)\" --write",
     "python:clean": "yarn gulp clean-pre-python-build",
     "python:build": "yarn gulp clean-pre-python-build && python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
     "python:dev": "python ./src/pyflask/api.py 7632",
@@ -31,11 +31,11 @@
     "electron:dev:serve": "vue-cli-service electron:serve",
     "postinstall": "husky install && electron-builder install-app-deps ",
     "postuninstall": "electron-builder install-app-deps",
-    "dev": "vue-cli-service electron:serve",
+    "dev": "yarn electron:serve",
     "commit": "cz"
   },
   "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx}": [
+    "./src/**/*.{ts,js,jsx,tsx,vue}": [
       "yarn lint-es --fix",
       "yarn format"
     ]
@@ -105,6 +105,7 @@
     "copyfiles": "^2.4.1",
     "cz-conventional-changelog": "3.3.0",
     "del": "^6.0.0",
+    "devmoji": "2.3.0",
     "dotenv": "^10.0.0",
     "electron": "^17.4.0",
     "electron-devtools-installer": "^3.1.0",
@@ -122,6 +123,7 @@
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.8",
+    "renovate": "32.33.1",
     "tailwindcss": "^3.0.7",
     "tailwindcss-debug-screens": "^2.1.0",
     "vue-cli-plugin-electron-builder": "~2.1.1"

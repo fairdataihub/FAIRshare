@@ -35,7 +35,10 @@
             </span>
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
-            <div class="my-8 grid grid-cols-3 gap-8" :class="{ 'grid-cols-2': !codePresent }">
+            <div
+              class="my-8 grid grid-cols-3 gap-8"
+              :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
+            >
               <div>
                 <div class="flex flex-col items-center justify-center">
                   <div
@@ -61,25 +64,31 @@
                 </div>
               </div>
 
-              <div>
-                <el-popover placement="bottom" trigger="hover" content="Coming soon...">
-                  <template #reference>
-                    <div>
-                      <div
-                        class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all"
-                        :class="{ 'selected-repo': repoID === 'figshare' }"
-                        @click="selectRepo($event, 'figshare')"
-                      >
-                        <img
-                          src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
-                          alt=""
-                          class="mb-3 h-16 opacity-50"
-                        />
-                        <span class="mx-5 text-lg"> Figshare </span>
-                      </div>
-                    </div>
-                  </template>
-                </el-popover>
+              <div v-show="showFigshare">
+                <div class="flex flex-col items-center justify-center">
+                  <div
+                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                    :class="{
+                      'selected-repo': repoID === 'figshare',
+                    }"
+                    @click="selectRepo($event, 'figshare')"
+                  >
+                    <img
+                      src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
+                      alt=""
+                      class="mb-3 h-16 w-16"
+                    />
+                    <span class="mx-5 text-lg"> Figshare </span>
+                  </div>
+                  <div
+                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                    v-if="repoID === 'figshare'"
+                    @click="openWebsite('https://figshare.com')"
+                  >
+                    <span class="font-medium"> Learn more... </span>
+                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                  </div>
+                </div>
               </div>
 
               <div :class="{ hidden: !codePresent }">
@@ -316,7 +325,8 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
-                v-if="newVersion === 'false'"
+                id="repo-is-figshare"
+                v-if="repoID === 'figshare' && showFigshare"
               >
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
@@ -332,6 +342,29 @@
                 </button>
               </div>
             </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-if="newVersion === 'false' && repoID === 'zenodo'"
+                id="zenodo-new-version-false"
+              >
+                <!-- zenodo new dataset  -->
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
+
+                <button
+                  class="primary-button"
+                  @click="addMetadata"
+                  :disabled="repoID === ''"
+                  id="continue"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
+
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
@@ -341,6 +374,7 @@
                   Object.keys(selectedDeposition.metadata).length !== 0
                 "
               >
+                <!-- zenodo new version and a deposition has been selected -->
                 <button class="primary-plain-button" @click="navigateBack">
                   <el-icon><d-arrow-left /></el-icon> Back
                 </button>
@@ -357,6 +391,7 @@
             </fade-transition>
           </div>
           <div v-else class="flex w-full justify-center space-x-4 px-5 py-4">
+            <!-- skip upload to repo -->
             <button class="primary-plain-button" size="medium" @click="saveSkip">
               <el-icon><d-arrow-left /></el-icon>
               Back
@@ -396,6 +431,7 @@
 </template>
 
 <script>
+import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -434,6 +470,9 @@ export default {
       newVersion: "",
       loadingSpinner: false,
       validZenodoTokenAvailable: false,
+      disableFigshare: false,
+      showFigshare: false,
+      figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
     };
   },
   computed: {
@@ -563,6 +602,7 @@ export default {
       this.$router.push(routerPath);
     },
     addMetadata(type) {
+      // run through this for figshare
       this.dataset.destinationSelected = true;
 
       if (!("destination" in this.workflow)) {
@@ -608,7 +648,7 @@ export default {
 
       // using the zenodo one here. I don't think this matters since we aren't uploading anything
       // Might change it to its own page later
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/metadata`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
       this.$router.push(routerPath);
     },
     async saveSkip() {
@@ -651,6 +691,21 @@ export default {
 
       this.$router.push({ path: routerPath });
     },
+    async shouldShowFigshare() {
+      if ("license" in this.dataset.data.general.questions) {
+        const licenseObject = await this.figshareLicenseOptions.find(
+          (license) => license.licenseId === this.dataset.data.general.questions.license
+        );
+
+        if (licenseObject === undefined) {
+          this.showFigshare = false;
+        } else {
+          this.showFigshare = true;
+        }
+      } else {
+        this.showFigshare = false;
+      }
+    },
   },
   async mounted() {
     this.loading = true;
@@ -658,6 +713,8 @@ export default {
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.shouldShowFigshare();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;

@@ -1,50 +1,50 @@
-from __future__ import print_function
-import config
 import json
 import logging
 import logging.handlers
 import os
 import sys
 
+import config
+from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
+from figshare import (
+    createNewFigshareItem,
+    deleteFigshareArticle,
+    getFigshareFileUploadStatus,
+    uploadFileToFigshare,
+    publishFigshareArticle,
+)
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
-
-from zenodo import (
-    getAZenodoDeposition,
-    getAllZenodoDepositions,
-    createNewZenodoDeposition,
-    uploadFileToZenodoDeposition,
-    addMetadataToZenodoDeposition,
-    publishZenodoDeposition,
-    deleteZenodoDeposition,
-    createNewZenodoDepositionVersion,
-    removeFileFromZenodoDeposition,
-)
 from github import (
-    uploadFileToGithub,
     getFileFromRepo,
-    getUserRepositories,
-    getRepoContributors,
     getRepoContentTree,
+    getRepoContributors,
     getRepoReleases,
+    getUserRepositories,
+    uploadFileToGithub,
 )
-from biotools import (
-    loginToBioTools,
-    getUserDetails,
-    validateTool,
-    registerTool,
-)  # noqa E501
-from metadata import createMetadata, createCitationCFF
+from metadata import createCitationCFF, createMetadata
 from utilities import (
-    foldersPresent,
-    zipFolder,
-    deleteFile,
-    requestJSON,
     createFile,
+    deleteFile,
+    fileExistInFolder,
+    foldersPresent,
     openFileExplorer,
     readFolderContents,
-    fileExistInFolder,
+    requestJSON,
+    zipFolder,
+)
+from zenodo import (
+    addMetadataToZenodoDeposition,
+    createNewZenodoDeposition,
+    createNewZenodoDepositionVersion,
+    deleteZenodoDeposition,
+    getAllZenodoDepositions,
+    getAZenodoDeposition,
+    publishZenodoDeposition,
+    removeFileFromZenodoDeposition,
+    uploadFileToZenodoDeposition,
 )
 
 API_VERSION = "1.4.0"
@@ -56,7 +56,7 @@ app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 CORS(app)
 
 # configure root logger
-LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".fairshare", "logs")  # noqa: E501
+LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".fairshare", "logs")
 LOG_FILENAME = "api.log"
 LOG_PATH = os.path.join(LOG_FOLDER, LOG_FILENAME)
 
@@ -70,7 +70,7 @@ handler = logging.handlers.RotatingFileHandler(
 
 # create logging formatter
 logFormatter = logging.Formatter(
-    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",  # noqa: E501
+    fmt="%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 handler.setFormatter(logFormatter)
@@ -248,12 +248,12 @@ class CreateMetadata(Resource):
         parser.add_argument(
             "data_object",
             type=str,
-            help="Complete data object to create metadata",  # noqa: E501
+            help="Complete data object to create metadata",
         )
         parser.add_argument(
             "virtual_file",
             type=bool,
-            help="Parameter to generate a virtual file",  # noqa: E501
+            help="Parameter to generate a virtual file",
         )
 
         args = parser.parse_args()
@@ -283,12 +283,12 @@ class CreateCitationCFF(Resource):
         parser.add_argument(
             "data_object",
             type=str,
-            help="Complete data object to create metadata",  # noqa: E501
+            help="Complete data object to create metadata",
         )
         parser.add_argument(
             "virtual_file",
             type=bool,
-            help="Parameter to generate a virtual file",  # noqa: E501
+            help="Parameter to generate a virtual file",
         )
 
         args = parser.parse_args()
@@ -298,6 +298,163 @@ class CreateCitationCFF(Resource):
         virtual_file = args["virtual_file"]
 
         return createCitationCFF(data_types, data, virtual_file)
+
+
+###############################################################################
+# Figshare operations
+###############################################################################
+
+figshare = api.namespace("figshare", description="Figshare operations")
+
+
+@figshare.route("/item", endpoint="FigshareItem")
+class FigshareItem(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "metadata": "json string with metadata to add to the item",
+        },
+    )
+    def post(self):
+        """Create a new figshare article and add metadata. Returns the figshare article id."""  # noqa: E501
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "metadata",
+            type=str,
+            required=True,
+            help="metadata is required. metadata needs to be a json string",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        metadata = args["metadata"]
+
+        return createNewFigshareItem(access_token, metadata)
+
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "article_id": "article id for the item",
+        },
+    )
+    def delete(self):
+        """Delete a zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+
+        return deleteFigshareArticle(access_token, article_id)
+
+
+@figshare.route("/item/publish", endpoint="FigsharePublish")
+class FigsharePublish(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Figshare access token required with every request",
+            "article_id": "article id for the item",
+        },
+    )
+    def post(self):
+        """Publish a Figshare article"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+
+        return publishFigshareArticle(access_token, article_id)
+
+
+@figshare.route("/item/files/upload", endpoint="FigshareFileUpload")
+class FigshareFileUpload(Resource):
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "figshare access token required with every request.",
+            "article_id": "figshare article id",
+            "file_path": "path to the file to upload",
+        },
+    )
+    def post(self):
+        """Upload file to Figshare"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "article_id",
+            type=str,
+            required=True,
+            help="article_id is required. article_id needs to be of type str",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. file_path needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        article_id = args["article_id"]
+        file_path = args["file_path"]
+
+        return uploadFileToFigshare(access_token, article_id, file_path)
+
+    @figshare.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={},
+    )
+    def get(self):
+        """Get file upload status"""
+
+        return getFigshareFileUploadStatus()
 
 
 ###############################################################################
@@ -317,6 +474,32 @@ class zenodoURL(Resource):
 @zenodo.route("/deposition", endpoint="zenodoDeposition")
 class zenodoDeposition(Resource):
     @zenodo.doc(
+        responses={
+            200: "Success",
+            401: "Authentication error",
+            400: "Bad request",
+        },
+        params={"access_token": "Zenodo access token required with every request."},
+    )
+    def post(self):
+        """Create a new empty Zenodo deposition"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+
+        response = createNewZenodoDeposition(access_token)
+        return response
+
+    @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
         params={
             "access_token": "Zenodo access token required with every request.",
@@ -331,13 +514,13 @@ class zenodoDeposition(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -348,6 +531,13 @@ class zenodoDeposition(Resource):
         response = getAZenodoDeposition(access_token, deposition_id)
         return response
 
+    @zenodo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "Zenodo access token required with every request.",
+            "deposition_id": "Zenodo deposition id. For new versions the new deposit id is required",  # noqa: E501
+        },
+    )
     def delete(self):
         """Delete a zenodo deposition"""
         parser = reqparse.RequestParser()
@@ -356,13 +546,13 @@ class zenodoDeposition(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -377,9 +567,7 @@ class zenodoDeposition(Resource):
 class zenodoGetAll(Resource):
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
-        params={
-            "access_token": "Zenodo access token required with every request."
-        },  # noqa: E501
+        params={"access_token": "Zenodo access token required with every request."},
     )
     def get(self):
         """Get a list of all the Zenodo depositions"""
@@ -389,7 +577,7 @@ class zenodoGetAll(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -397,37 +585,6 @@ class zenodoGetAll(Resource):
         access_token = args["access_token"]
 
         response = getAllZenodoDepositions(access_token)
-        return response
-
-
-@zenodo.route("/deposition", endpoint="zenodoCreateNew")
-class zenodoCreateNew(Resource):
-    @zenodo.doc(
-        responses={
-            200: "Success",
-            401: "Authentication error",
-            400: "Bad request",
-        },  # noqa: E501
-        params={
-            "access_token": "Zenodo access token required with every request."
-        },  # noqa: E501
-    )
-    def post(self):
-        """Create a new empty Zenodo deposition"""
-        parser = reqparse.RequestParser()
-
-        parser.add_argument(
-            "access_token",
-            type=str,
-            required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
-        )
-
-        args = parser.parse_args()
-
-        access_token = args["access_token"]
-
-        response = createNewZenodoDeposition(access_token)
         return response
 
 
@@ -449,7 +606,7 @@ class zenodoUploadFile(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "bucket_url",
@@ -470,9 +627,7 @@ class zenodoUploadFile(Resource):
         bucket_url = args["bucket_url"]
         file_path = args["file_path"]
 
-        return uploadFileToZenodoDeposition(
-            access_token, bucket_url, file_path
-        )  # noqa: E501
+        return uploadFileToZenodoDeposition(access_token, bucket_url, file_path)
 
 
 @zenodo.route("/deposition/metadata", endpoint="zenodoAddMetadata")
@@ -493,13 +648,13 @@ class zenodoAddMetadata(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
         parser.add_argument(
             "metadata",
@@ -514,9 +669,7 @@ class zenodoAddMetadata(Resource):
         deposition_id = args["deposition_id"]
         metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(
-            access_token, deposition_id, metadata
-        )  # noqa: E501
+        return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
 
 
 @zenodo.route("/deposition/publish", endpoint="zenodoPublish")
@@ -536,13 +689,13 @@ class zenodoPublish(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -571,19 +724,19 @@ class zenodoDeleteFile(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
         parser.add_argument(
             "file_id",
             type=str,
             required=True,
-            help="file_id is required. file_id needs to be of type str",  # noqa: E501
+            help="file_id is required. file_id needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -592,9 +745,7 @@ class zenodoDeleteFile(Resource):
         deposition_id = args["deposition_id"]
         file_id = args["file_id"]
 
-        return removeFileFromZenodoDeposition(
-            access_token, deposition_id, file_id
-        )  # noqa: E501
+        return removeFileFromZenodoDeposition(access_token, deposition_id, file_id)
 
 
 @zenodo.route("/deposition/newversion", endpoint="zenodoNewVersion")
@@ -614,13 +765,13 @@ class zenodoNewVersion(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
-            help="deposition_id is required. deposition_id needs to be of type str",  # noqa: E501
+            help="deposition_id is required. deposition_id needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -658,7 +809,7 @@ class uploadToGithub(Resource):
             "file_path",
             type=str,
             required=True,
-            help="file path of file to upload. file_path needs to be of type str",  # noqa: E501
+            help="file path of file to upload. file_path needs to be of type str",
         )
         parser.add_argument(
             "file_name",
@@ -670,7 +821,7 @@ class uploadToGithub(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa: E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "repo_name",
@@ -686,9 +837,7 @@ class uploadToGithub(Resource):
         file_path = args["file_path"]
         repo_name = args["repo_name"]
 
-        return uploadFileToGithub(
-            access_token, file_name, file_path, repo_name
-        )  # noqa: E501
+        return uploadFileToGithub(access_token, file_name, file_path, repo_name)
 
 
 @github.route("/user/repos", endpoint="GetAllRepos")
@@ -707,7 +856,7 @@ class GetAllRepos(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+            help="access_token is required. accessToken needs to be of type str",
         )
 
         args = parser.parse_args()
@@ -735,7 +884,7 @@ class GetAllContributorsForRepo(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "owner",
@@ -777,7 +926,7 @@ class GetAllReleasesForRepo(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "owner",
@@ -819,7 +968,7 @@ class getRepoContentsTree(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "owner",
@@ -862,7 +1011,7 @@ class getRepoFileContents(Resource):
             "access_token",
             type=str,
             required=True,
-            help="access_token is required. accessToken needs to be of type str",  # noqa E501
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "owner",
@@ -898,9 +1047,7 @@ class getRepoFileContents(Resource):
 ###############################################################################
 
 
-utilities = api.namespace(
-    "utilities", description="utilities for random tasks"
-)  # noqa: E501
+utilities = api.namespace("utilities", description="utilities for random tasks")
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -1013,7 +1160,7 @@ class CreateFile(Resource):
             "file_name": "name of the file to generate",
             "folder_path": "folder path to generate files in",
             "file_content": "content of the file. Will be string",
-            "content_type": "content type to determine what it is written with",  # noqa: E501
+            "content_type": "content type to determine what it is written with",
         },
     )
     def post(self):
@@ -1156,9 +1303,7 @@ if __name__ == "__main__":
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
-    print(
-        f"API documentation hosted at http://127.0.0.1:{requested_port}/docs"
-    )  # noqa: E501
+    print(f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
 
     api.logger.info("Starting FAIRshare server")
 

@@ -1,8 +1,8 @@
-from __future__ import print_function
-import requests
-import json
 import base64
+import json
 import uuid
+
+import requests
 
 
 def uploadFileToGithub(access_token, file_name, file_path, repo_name):
