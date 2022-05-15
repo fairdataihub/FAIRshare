@@ -7084,10 +7084,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-doi-regex@0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.10.tgz#4725718d78aab2e99a254d940fca1b17bde96df9"
-  integrity sha512-WSDYQKJZ+D7NX8+dQqlt6ouoqkehFY83Hs52b7wYammrVDuoTnABbopD3dCAr0TWpue9pQZah97Rxk+tqMcUUg==
+doi-regex@0.1.12:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.12.tgz#27a5f2f9545fd6d96756eef652dcc9dba79059b8"
+  integrity sha512-RbstgsJTdymKjn+LYUU6kqFMM2Fj+c8jPVo/tFE2/COnZA/jvlIUpyvr3GNu8SBEOly5MQXmMC883Addr4MvrQ==
 
 dom-converter@^0.2.0:
   version "0.2.0"
