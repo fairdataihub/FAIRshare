@@ -63,7 +63,7 @@
     "doi-regex": "0.1.10",
     "dompurify": "2.3.5",
     "electron-data-holder": "1.0.1",
-    "electron-log": "4.4.4",
+    "electron-log": "4.4.7",
     "electron-updater": "4.6.1",
     "element-plus": "2.1.11",
     "find-free-port": "2.0.0",
