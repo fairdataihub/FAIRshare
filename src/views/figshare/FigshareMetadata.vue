@@ -410,13 +410,6 @@ export default {
       uploadTypeOptions: figshareMetadataOptions.uploadType,
       invalidStatus: {},
       rulesFigshareMetadataForm: {
-        publicationDate: [
-          {
-            required: true,
-            message: "Publication date is required",
-            trigger: "blur",
-          },
-        ],
         title: [
           {
             required: true,
