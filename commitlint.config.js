@@ -11,7 +11,7 @@ const types = [
   "test",
 ];
 
-const scopes = ["app", "library", "backend", "authentication", "settings"];
+const scopes = ["app", "library", "backend", "authentication", "settings", "deps"];
 
 module.exports = {
   extends: ["@commitlint/config-conventional"],
