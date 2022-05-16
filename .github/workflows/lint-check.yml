@@ -38,7 +38,7 @@ jobs:
         with:
           prettier: true
           prettier_extensions: "css,html,js,json,jsx,md,sass,scss,ts,tsx,vue"
-          commit_message: "style: 🎨 code style issues with ${linter}"
+          commit_message: "style: 🎨 fix code style issues with ${linter}"
           auto_fix: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           git_email: "fairdataihub@gmail.com"
@@ -57,7 +57,7 @@ jobs:
         with:
           black: true
           auto_fix: true
-          commit_message: "style: 🎨 code style issues with ${linter}"
+          commit_message: "style: 🎨 fix code style issues with ${linter}"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           git_email: "fairdataihub@gmail.com"
           git_name: "fairdataihub-bot"
