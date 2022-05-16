@@ -2045,10 +2045,10 @@
     got "11.8.3"
     luxon "2.3.2"
 
-"@kangc/v-md-editor@2.3.13":
-  version "2.3.13"
-  resolved "https://registry.yarnpkg.com/@kangc/v-md-editor/-/v-md-editor-2.3.13.tgz#730168cbf09815d8e6961bafd5cb5a17c459185f"
-  integrity sha512-NE8yHwWdg+JRCemilWOYzj1rqYAKhBIfxklG6T95JuOoRXnYaH2nmwzaqTOz2kU8ZmrOpD2gc5O59hZR0DWA7Q==
+"@kangc/v-md-editor@2.3.15":
+  version "2.3.15"
+  resolved "https://registry.yarnpkg.com/@kangc/v-md-editor/-/v-md-editor-2.3.15.tgz#2d005eb64cfc5748688df2fedec7ad9f92ddcdd7"
+  integrity sha512-tPsBJd4YwJSZK3+mbeBu9Iol9Zi3BboNr1QbDfsxVQ/4hlMgEpMT+vj3/e5FNwgBx50RIphU0j9qNLK+dgFmqA==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@vuepress/markdown" "^1.8.2"
@@ -2057,7 +2057,7 @@
     highlight.js "^10.7.2"
     insert-text-at-cursor "^0.3.0"
     katex "^0.13.11"
-    markdown-it "^12.0.6"
+    markdown-it "^12.3.2"
     markdown-it-attrs "^4.0.0"
     markdown-it-container "^3.0.0"
     mermaid "^8.10.1"
@@ -10985,7 +10985,7 @@ markdown-it@13.0.0:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-markdown-it@^12.0.6:
+markdown-it@^12.3.2:
   version "12.3.2"
   resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-12.3.2.tgz#bf92ac92283fe983fe4de8ff8abfb5ad72cd0c90"
   integrity sha512-TchMembfxfNVpHkbtriWltGWc+m3xszaRD0CZup7GFFhzIgQqxIfn3eGj1yZpfuflzPvfkt611B2Q/Bsk1YnGg==
