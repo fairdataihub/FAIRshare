@@ -864,6 +864,10 @@
                               popoverContent="All programming languages used in this software. Select from the suggested list or type your own."
                             ></form-help-content>
                           </div>
+                          <p class="pt-2 text-xs text-zinc-600">
+                            Press <code>'Enter'</code> after typing to add a programming language
+                            that is not in the list.
+                          </p>
                         </el-form-item>
 
                         <el-form-item label="Runtime platform">
