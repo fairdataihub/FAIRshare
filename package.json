@@ -35,7 +35,7 @@
     "commit": "cz"
   },
   "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx,vue}": [
+    "./src/**/*.{ts,js,jsx,tsx,vue,json}": [
       "yarn lint-es --fix",
       "yarn format"
     ]
