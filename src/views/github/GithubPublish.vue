@@ -31,7 +31,7 @@
           <div class="flex items-center justify-center space-x-4 pb-10">
             <button class="primary-plain-button" @click="openRepository">
               <el-icon><fold-icon /></el-icon>
-              View the repository
+              View the GitHub repository
             </button>
             <button class="primary-button" @click="approveRelease">
               <el-icon><edit-icon /></el-icon>

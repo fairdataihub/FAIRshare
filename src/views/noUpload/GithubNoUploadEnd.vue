@@ -8,9 +8,9 @@
 
       <div class="flex h-full flex-col items-center justify-center px-2">
         <p class="pb-5 text-center">
-          It does not look like you have selected a data repository to upload to. This is not
-          recommended if you are trying to make your dataset FAIR. You can come back to this page
-          later and select a repository to make your dataset completely FAIR.
+          It does not look like you have selected a data repository to upload your files to. This is
+          not recommended if you are trying to make your dataset FAIR. You can come back to this
+          page later and select a data sharing repository to make your dataset completely FAIR.
         </p>
         <div class="flex space-x-4">
           <router-link :to="`/datasets`" class="">
@@ -20,7 +20,7 @@
           </router-link>
           <button class="secondary-plain-button" @click="openRepository">
             <el-icon><fold-icon /></el-icon>
-            View repository
+            View GitHub repository
           </button>
           <button class="secondary-plain-button" @click="showBadges">
             <el-icon><chat-line-square /></el-icon> Add a badge to your README
