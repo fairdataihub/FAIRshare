@@ -30,6 +30,19 @@
           </button>
         </div>
       </div>
+      <p class="break-normal text-center text-sm text-gray-500">
+        To learn more about the permissions required by FAIRshare from your GitHub account
+        <span
+          class="text-url"
+          @click="
+            openWebsite(
+              'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github#scopes'
+            )
+          "
+        >
+          visit our documentation.
+        </span>
+      </p>
     </el-dialog>
     <GithubTokenConnection
       v-if="showTokenConnect"
@@ -86,6 +99,9 @@ export default {
     };
   },
   methods: {
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
     // callbacks for cleaning
     hideGithubTokenConnect() {
       this.showTokenConnect = false;
