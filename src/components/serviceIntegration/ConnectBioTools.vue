@@ -109,6 +109,9 @@ export default {
   },
   computed: {},
   methods: {
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
     confirmDeleteToken() {
       this.deleteToken("biotools");
     },
