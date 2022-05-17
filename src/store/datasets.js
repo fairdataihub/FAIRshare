@@ -195,6 +195,8 @@ export const useDatasetsStore = defineStore({
       //   this.writeDatasetsToFile();
       // }
 
+      this.writeDatasetsToFile(); // write the datasets to file
+
       return;
     },
   },
