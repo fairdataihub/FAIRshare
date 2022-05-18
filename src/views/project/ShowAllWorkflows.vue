@@ -474,21 +474,6 @@ export default {
         detail: this.getSource(workflowID),
         type: "",
       });
-      // this.codeObject.source = this.getSource(workflowID);
-
-      let license = "";
-
-      if ("license" in this.dataset.data.Code.questions) {
-        license = this.getLicenseName(this.dataset.data.Code.questions.license, "Code");
-      } else {
-        license = "";
-      }
-      this.codeObject.data.push({
-        status: license,
-        task: "License",
-        detail: license,
-        type: "",
-      });
 
       let generateStatus = "";
 
@@ -501,6 +486,20 @@ export default {
         status: generateStatus,
         task: "Metadata",
         detail: "codemeta.json | CITATION.cff",
+        type: "",
+      });
+
+      let license = "";
+
+      if ("license" in this.dataset.data.Code.questions) {
+        license = this.getLicenseName(this.dataset.data.Code.questions.license, "Code");
+      } else {
+        license = "";
+      }
+      this.codeObject.data.push({
+        status: license,
+        task: "License",
+        detail: license,
         type: "",
       });
 
@@ -600,21 +599,6 @@ export default {
         detail: this.getSource(workflowID),
         type: "",
       });
-      // this.otherObject.source = this.getSource(workflowID);
-
-      let license = "";
-
-      if ("license" in this.dataset.data.Other.questions) {
-        license = this.getLicenseName(this.dataset.data.Other.questions.license, "Other");
-      } else {
-        license = "";
-      }
-      this.otherObject.data.push({
-        status: license,
-        task: "License",
-        detail: license,
-        type: "",
-      });
 
       let generateStatus = "";
 
@@ -627,6 +611,20 @@ export default {
         status: generateStatus,
         task: "Metadata",
         detail: "metadata.json",
+        type: "",
+      });
+
+      let license = "";
+
+      if ("license" in this.dataset.data.Other.questions) {
+        license = this.getLicenseName(this.dataset.data.Other.questions.license, "Other");
+      } else {
+        license = "";
+      }
+      this.otherObject.data.push({
+        status: license,
+        task: "License",
+        detail: license,
         type: "",
       });
 
