@@ -62,7 +62,7 @@
                   class="text-url"
                   @click="openWebsite('https://google.github.io/styleguide/Rguide.html')"
                 >
-                  Google’s R Style Guide</span
+                  Google's R Style Guide</span
                 >
                 for R programs.
               </div>
