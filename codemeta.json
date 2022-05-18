@@ -1,1 +1,48 @@
-{"@context": "https://doi.org/10.5063/schema/codemeta-2.0", "@type": "SoftwareSourceCode", "license": "https://spdx.org/licenses/MIT", "codeRepository": "https://github.com/fairdataihub/FAIRshare", "dateCreated": "2022-03-19T00:12:42Z", "dateModified": "2022-05-18", "downloadUrl": "https://fairdataihub.org/fairshare", "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues", "name": "FAIRshare: FAIR data and software sharing made easy", "version": "1.3.1", "identifier": "https://doi.org/10.5281/zenodo.6369429", "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines", "applicationCategory": "Scientific", "releaseNotes": "Bug Fixes\nFixed an issue where the codemeta.json had an incorrect key for the first release date.", "funding": "U01AI150741", "developmentStatus": "active", "isPartOf": "https://fairdataihub.org", "referencePublication": "https://doi.org/10.1101/2022.04.18.488694", "funder": {"@type": "Organization", "@name": "National Institutes of Health (NIH)"}, "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"], "programmingLanguage": ["Vue", "Python", "JavaScript", "CSS", "HTML"], "operatingSystem": ["Windows 11", "Windows 10", "Big Sur (macOS 11)", "Catalina (macOS 10.15)", "Ubuntu"], "relatedLink": ["https://fairdataihub.org/fairshare", "https://docs.fairshareapp.io"], "author": [{"@type": "Person", "givenName": "Sanjay", "familyName": "Soundarajan", "email": "ssoundarajan@calmi2.org", "affiliation": {"@type": "Organization", "name": "FAIR Data Innovations Hub"}}, {"@type": "Person", "@id": "https://orcid.org/0000-0002-0307-262X", "givenName": "Bhavesh", "familyName": "Patel", "email": "bpatel@calmi2.org", "affiliation": {"@type": "Organization", "name": "California Medical Innovations Institute"}}]}
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/fairdataihub/FAIRshare",
+  "dateCreated": "2022-03-19T00:12:42Z",
+  "dateModified": "2022-05-18",
+  "downloadUrl": "https://fairdataihub.org/fairshare",
+  "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues",
+  "name": "FAIRshare: FAIR data and software sharing made easy",
+  "version": "1.3.1",
+  "identifier": "https://doi.org/10.5281/zenodo.6369429",
+  "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
+  "applicationCategory": "Scientific",
+  "releaseNotes": "Bug Fixes\nFixed an issue where the codemeta.json had an incorrect key for the first release date.",
+  "funding": "U01AI150741",
+  "developmentStatus": "active",
+  "isPartOf": "https://fairdataihub.org",
+  "referencePublication": "https://doi.org/10.1101/2022.04.18.488694",
+  "funder": { "@type": "Organization", "@name": "National Institutes of Health (NIH)" },
+  "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"],
+  "programmingLanguage": ["Vue", "Python", "JavaScript", "CSS", "HTML"],
+  "operatingSystem": [
+    "Windows 11",
+    "Windows 10",
+    "Big Sur (macOS 11)",
+    "Catalina (macOS 10.15)",
+    "Ubuntu"
+  ],
+  "relatedLink": ["https://fairdataihub.org/fairshare", "https://docs.fairshareapp.io"],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Sanjay",
+      "familyName": "Soundarajan",
+      "email": "ssoundarajan@calmi2.org",
+      "affiliation": { "@type": "Organization", "name": "FAIR Data Innovations Hub" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0002-0307-262X",
+      "givenName": "Bhavesh",
+      "familyName": "Patel",
+      "email": "bpatel@calmi2.org",
+      "affiliation": { "@type": "Organization", "name": "California Medical Innovations Institute" }
+    }
+  ]
+}
