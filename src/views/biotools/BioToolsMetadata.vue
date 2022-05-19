@@ -564,7 +564,7 @@ export default {
       });
     },
     initializeEmptyObjects(root, obj) {
-      if (typeof obj === "undefined") {
+      if (obj === undefined) {
         root[obj] = {};
       }
     },

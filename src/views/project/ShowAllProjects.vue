@@ -442,6 +442,10 @@ export default {
     // filter datasets in progress
     let datasetsInProgressIDs = [];
     for (const key in datasets) {
+      if (key === "version") {
+        continue;
+      }
+
       if ("workflows" in datasets[key]) {
         for (const workflow in datasets[key].workflows) {
           if (!("datasetPublished" in datasets[key].workflows[workflow])) {
@@ -468,6 +472,9 @@ export default {
     // get list of all IDs
     let datasetIDs = [];
     for (const key in datasets) {
+      if (key === "version") {
+        continue;
+      }
       datasetIDs.push(key);
     }
     // get the difference of array of datasetIds

@@ -12,7 +12,7 @@
     "zenodo",
     "github"
   ],
-  "author": "Fair Data Innovations Hub <info@fairdataihub.org> (https://fairdataihub.org)",
+  "author": "Fair Data Innovations Hub  (https://fairdataihub.org)",
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",

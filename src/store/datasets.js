@@ -4,6 +4,7 @@ import fs from "fs-extra";
 import path from "path";
 import { app } from "@electron/remote";
 import { defineStore } from "pinia";
+import semver from "semver";
 
 // const USER_PATH = app.getPath("userData");
 // const DATASETS_STORE_PATH = path.join(
@@ -78,6 +79,8 @@ export const useDatasetsStore = defineStore({
       try {
         const datasets = await loadFile();
         this.datasets = datasets;
+
+        await this.upgradeSavedDatasets();
       } catch (error) {
         console.error(error);
       }
@@ -85,6 +88,7 @@ export const useDatasetsStore = defineStore({
     async loadandReturnDatasets() {
       try {
         const datasets = await loadFile();
+
         return datasets;
       } catch (error) {
         return {};
@@ -161,6 +165,39 @@ export const useDatasetsStore = defineStore({
     async hideSidebar() {
       console.log("Hiding Sidebar");
       this.sidebarVisible = false;
+    },
+
+    /**
+     * Function to upgrade the datasets store to the latest version
+     * @returns {Promise<void>}
+     */
+
+    async upgradeSavedDatasets() {
+      if (!("version" in this.datasets)) {
+        this.datasets.version = semver.clean("1.3.0");
+      }
+
+      /**
+       * Adding code to upgrade datasets incrementally here. This is to ensure
+       * that the save datasets are not broken if the user upgrades the app.
+       *
+       * Refer to https://www.npmjs.com/package/semver for semver syntax
+       */
+
+      // if (semver.satisfies(this.datasets.version, "1.3.x")) {
+      //   console.log("Upgrading datasets to 1.4.0");
+
+      //   for (let datsset of this.datasets) {
+      //     // do something with this
+      //   }
+
+      //   this.datasets.version = semver.clean("1.4.0");
+      //   this.writeDatasetsToFile();
+      // }
+
+      this.writeDatasetsToFile(); // write the datasets to file
+
+      return;
     },
   },
 });

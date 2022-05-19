@@ -4,9 +4,10 @@
       <h1 class="pb-1 text-left text-lg font-medium">Connect your GitHub account to Zenodo</h1>
       <p class="text-left">
         The easiest way to publish from GitHub to Zenodo is to leverage the existing linkage between
-        the two platforms. Basically, you can link your GitHub account to Zenodo, and select from
-        Zenodo webpage the GitHub repository you wish to publish on Zenodo. Then, everytime you
-        publish a release on GitHub, it will be automatically deposited on Zenodo. We refer to the
+        the two platforms. Basically, you can link your GitHub account to Zenodo, and select
+        directly from Zenodo, the GitHub repository you wish to publish on Zenodo. Then, everytime
+        you publish a release on GitHub, it will be automatically deposited on Zenodo. We refer to
+        the
         <span
           class="text-url"
           @click="
@@ -75,7 +76,9 @@
                   </button>
                 </div>
 
-                <li>Authenticate with GitHub and wait for your list of repositories to show up.</li>
+                <li>
+                  Authenticate with GitHub and wait for your list of GitHub repositories to show up.
+                </li>
 
                 <li>
                   Toggle the switch for the
