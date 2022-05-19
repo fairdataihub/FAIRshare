@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The `Curated with FAIRshare` badge has a new url that we can support better.
 - Update Zenodo metadata text to better fit the context of the form.
 
+## v1.3.1 - 2022-05-18
+
+### Bug Fixes
+
+- Fixed an issue where the codemeta.json had an incorrect key for the first release date.
+
 ## v1.3.0 - 2022-04-15
 
 ### Feature additions

@@ -624,8 +624,6 @@ export default {
         if (res === "ERROR") {
           this.alertMessage = "There was an error with creating a new version";
           return "FAIL";
-        } else {
-          this.statusMessage = "A new version of the Zenodo deposition was created";
         }
 
         this.statusMessage = "Requesting new Zenodo deposition version data";

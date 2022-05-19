@@ -27,7 +27,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
     if "firstReleaseDate" in code_data:
         if code_data["firstReleaseDate"] != "":
-            metadata["dateCreated"] = code_data["firstReleaseDate"]
+            metadata["datePublished"] = code_data["firstReleaseDate"]
 
     if "currentVersionReleaseDate" in code_data:
         if code_data["currentVersionReleaseDate"] != "":
@@ -197,7 +197,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
-        f.write(json.dumps(metadata))
+        f.write(json.dumps(metadata, indent=4))
 
     return True
 
@@ -336,7 +336,7 @@ def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
 
     # Create the metadata file
     with open(os.path.join(folder_path, "metadata.json"), "w") as f:
-        f.write(json.dumps(metadata))
+        f.write(json.dumps(metadata, indent=4))
     return True
 
 
