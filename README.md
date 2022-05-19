@@ -3,6 +3,9 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6369429.svg)](https://doi.org/10.5281/zenodo.6369429)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:javascript)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:python)
 [![Curated with FAIRshare](https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg)](https://fairdataihub.org/fairshare)
 
 <!-- HEADER -->
