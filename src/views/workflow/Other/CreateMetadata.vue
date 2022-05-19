@@ -1064,7 +1064,7 @@ export default {
       });
     },
     initializeEmptyObjects(root, obj) {
-      if (typeof obj === "undefined") {
+      if (obj === undefined) {
         root[obj] = {};
       }
     },
@@ -1375,7 +1375,7 @@ export default {
       let authors = [];
 
       for (const contributor of contributors) {
-        response = await axios
+        await axios
           .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`, {
             params: {
               accept: "application/vnd.github.v3+json",
