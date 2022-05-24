@@ -193,9 +193,7 @@ async function createWindow() {
     },
   });
 
-  ///// splash screen
-  // remove this section if not good.
-  // Also remove from the copy-files script from package.json
+  // splash screen
 
   const splash = new BrowserWindow({
     width: 500,
@@ -211,7 +209,8 @@ async function createWindow() {
   });
   splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
 
-  ///// splash screen end
+  // splash screen end
+
   mainWindow.once("ready-to-show", () => {
     setTimeout(function () {
       splash.close();
@@ -253,7 +252,8 @@ async function createWindow() {
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
 
     if (!process.env.IS_TEST) {
-      //uncomment this before build
+      console.log("Opening dev tools");
+
       mainWindow.webContents.openDevTools({ mode: "detach" });
     }
     // mainWindow.webContents.openDevTools();
