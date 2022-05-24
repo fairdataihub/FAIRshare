@@ -111,7 +111,7 @@ export default {
           title: "3. Share resulting dataset on a suitable repository",
           subtitle:
             "Upload your dataset conveniently in a few click to a suitable FAIR data repository",
-          lottieURL: "https://assets10.lottiefiles.com/packages/lf20_komemhfl.json",
+          lottieURL: "https://assets9.lottiefiles.com/packages/lf20_t4rx36wr.json",
           lottieWidth: 250,
           lottieHeight: 250,
         },
