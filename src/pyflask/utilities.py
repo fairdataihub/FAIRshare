@@ -33,12 +33,10 @@ def zipFolder(folder_path):
 
         zip_path = os.path.join(fairshare_folder_path, "dataset")
 
-        if os.path.exists(zip_path + ".zip"):
-            os.remove(zip_path + ".zip")
+        if os.path.exists(f"{zip_path}.zip"):
+            os.remove(f"{zip_path}.zip")
 
-        zipped_path = shutil.make_archive(zip_path, "zip", folder_path)
-
-        return zipped_path
+        return shutil.make_archive(zip_path, "zip", folder_path)
     except Exception as e:
         raise e
 
@@ -85,7 +83,7 @@ def createFile(folder_path, file_name, file_content, content_type):
 def openFileExplorer(file_path):
     try:
         if platform.system() == "Windows":
-            subprocess.Popen(r"explorer /select," + str(file_path))
+            subprocess.Popen(f"explorer /select,{str(file_path)}")
         elif platform.system() == "Darwin":
             subprocess.Popen(["open", file_path])
         else:
@@ -115,11 +113,10 @@ def readFolderContents(dir):
                     newDic["label"] = filename
                     newDic["isDir"] = True
                     newDic["children"] = dfs(fileFullName)
-                    newDic["fullpath"] = fileFullName
                 else:
                     newDic["label"] = filename
                     newDic["isDir"] = False
-                    newDic["fullpath"] = fileFullName
+                newDic["fullpath"] = fileFullName
                 result.append(newDic)
             return result
 

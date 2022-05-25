@@ -19,59 +19,58 @@ def createNewFigshareItem(access_token, data):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response.status_code == 201:
-        response = response.json()
-        article_id = response["entity_id"]
-
-        url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/authors"
-
-        payload = {}
-        headers = {
-            "Authorization": f"token {access_token}",
-        }
-
-        response = requests.request("GET", url, headers=headers, data=payload)
-
-        response = response.json()
-
-        if len(response) > 0:
-            figshare_author = response[0]
-            figshare_author_id = figshare_author["id"]
-
-            url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/authors/{figshare_author_id}"  # noqa: E501
-
-            payload = {}
-            headers = {
-                "Authorization": f"token {access_token}",
-            }
-
-            response = requests.request("DELETE", url, headers=headers, data=payload)
-
-            if response.status_code != 204:
-                return {"status": "ERROR", "message": "Could not delete default author"}
-
-        url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/reserve_doi"
-
-        payload = {}
-        headers = {
-            "Authorization": f"token {access_token}",
-        }
-
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        if response.status_code == 200:
-            response = response.json()
-
-            doi = response["doi"]
-
-            return json.dumps({"doi": doi, "article_id": article_id})
-        else:
-            return {"status": "ERROR", "message": "Could not create DOI"}
-    else:
+    if response.status_code != 201:
         return {
             "status": "ERROR",
             "message": response.json()["message"],
         }
+    response = response.json()
+    article_id = response["entity_id"]
+
+    url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/authors"
+
+    payload = {}
+    headers = {
+        "Authorization": f"token {access_token}",
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    response = response.json()
+
+    if len(response) > 0:
+        figshare_author = response[0]
+        figshare_author_id = figshare_author["id"]
+
+        url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/authors/{figshare_author_id}"  # noqa: E501
+
+        payload = {}
+        headers = {
+            "Authorization": f"token {access_token}",
+        }
+
+        response = requests.request("DELETE", url, headers=headers, data=payload)
+
+        if response.status_code != 204:
+            return {"status": "ERROR", "message": "Could not delete default author"}
+
+    url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/reserve_doi"
+
+    payload = {}
+    headers = {
+        "Authorization": f"token {access_token}",
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        response = response.json()
+
+        doi = response["doi"]
+
+        return json.dumps({"doi": doi, "article_id": article_id})
+    else:
+        return {"status": "ERROR", "message": "Could not create DOI"}
 
 
 def deleteFigshareArticle(access_token, article_id):
@@ -84,10 +83,7 @@ def deleteFigshareArticle(access_token, article_id):
 
     response = requests.request("DELETE", url, headers=headers, data=payload)
 
-    if response.status_code == 204:
-        return "SUCCESS"
-    else:
-        return "ERROR"
+    return "SUCCESS" if response.status_code == 204 else "ERROR"
 
 
 def uploadFileToFigshare(access_token, article_id, file_path):
@@ -265,12 +261,8 @@ def publishFigshareArticle(access_token, article_id):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response.status_code == 201:
-        response = response.json()
-
-        if "location" in response:
-            return response["location"]
-        else:
-            return "ERROR"
-    else:
+    if response.status_code != 201:
         return "ERROR"
+    response = response.json()
+
+    return response["location"] if "location" in response else "ERROR"
