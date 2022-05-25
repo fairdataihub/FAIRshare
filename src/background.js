@@ -57,14 +57,12 @@ autoUpdater.logger.transports.file.level = "info";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 require("@electron/remote/main").initialize();
-// require("@electron/remote/main").enable(webContents);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
-// const PY_DIST_FOLDER = "pyflaskdist";
 const PY_FOLDER = "pyflask";
 const PY_MODULE = "api";
 let mainWindow;
@@ -256,7 +254,6 @@ async function createWindow() {
 
       mainWindow.webContents.openDevTools({ mode: "detach" });
     }
-    // mainWindow.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
@@ -270,7 +267,7 @@ const exitPyProc = async (main_pid) => {
 
   await killAllPreviousProcesses();
 
-  if ((process.platform == "darwin") | (process.platform == "linux")) {
+  if (process.platform == "darwin" || process.platform == "linux") {
     pyProc.kill();
     return new Promise(function (resolve) {
       resolve();
@@ -302,10 +299,6 @@ const exitPyProc = async (main_pid) => {
     });
   }
 };
-
-// app.on("will-quit", () => {
-//   exitPyProc();
-// });
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -413,8 +406,6 @@ function retrieveCode(url) {
       let code = query.code;
       let error = query.error;
 
-      //   console.log("parsed: ", parsedURL);
-
       if (error) {
         reject(error);
         authWindow.removeAllListeners("closed");
@@ -447,7 +438,6 @@ function retrieveCode(url) {
 }
 
 ipcMain.on("OAuth-Github", async (_event, _test) => {
-  // console.log(test)
   let success = false;
 
   await axios
@@ -461,7 +451,6 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
       let authUrl = responseCode.request.res.responseUrl;
 
       await retrieveCode(authUrl).then(async (code) => {
-        // console.log("code:", code);
         await axios
           .post(
             "https://github.com/login/oauth/access_token",
@@ -477,8 +466,6 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
             }
           )
           .then(async (response) => {
-            // console.log("response after code: ", response.data.access_token);
-
             mainWindow.webContents.send("OAuth-Github-Reply", response.data.access_token);
             success = true;
           })
@@ -498,7 +485,6 @@ ipcMain.on("OAuth-Github", async (_event, _test) => {
 });
 
 ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
-  // console.log(test)
   // complete this part to make zenodo oauth working
   // api calls are given at the buttom of your zenodo app page
   let success = false;
@@ -535,8 +521,6 @@ ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
             }
           )
           .then(async (response) => {
-            // console.log("response after code: ", response.data.access_token);
-
             mainWindow.webContents.send("OAuth-Zenodo-Reply", response.data.access_token);
             success = true;
           })
