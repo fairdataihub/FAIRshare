@@ -68,19 +68,11 @@ def validateTool(token, data):
             data=data,
         )
 
-        returnObject = {
-            "status": "",
-            "data": {},
+        return {
+            "status": "error" if response.status_code != 200 else "success",
+            "data": response.json(),
         }
 
-        if response.status_code != 200:
-            returnObject["status"] = "error"
-            returnObject["data"] = response.json()
-        else:
-            returnObject["status"] = "success"
-            returnObject["data"] = response.json()
-
-        return returnObject
 
     except Exception as e:
         raise e
@@ -104,19 +96,11 @@ def registerTool(token, data):
             data=data,
         )
 
-        returnObject = {
-            "status": "",
-            "data": {},
+        return {
+            "status": "error" if response.status_code != 201 else "success",
+            "data": response.json(),
         }
 
-        if response.status_code != 201:
-            returnObject["status"] = "error"
-            returnObject["data"] = response.json()
-        else:
-            returnObject["status"] = "success"
-            returnObject["data"] = response.json()
-
-        return returnObject
 
     except Exception as e:
         raise e
