@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="container mt-2">Current App Path: {{ appPath }}</div> -->
   <div class="flex flex-row bg-white">
     <AppSidebar :environment="environment"></AppSidebar>
 
@@ -249,19 +248,17 @@ export default {
       }
     });
 
-    // disable the refresh button on macOS
-    Mousetrap.bind("command+r", function () {
+    function disableReload() {
       if (process.env.NODE_ENV !== "development") {
         return false;
       }
-    });
+    }
+
+    // disable the refresh button on macOS
+    Mousetrap.bind("command+r", disableReload);
 
     // disable the refresh button on Windows
-    Mousetrap.bind("ctrl+r", function () {
-      if (process.env.NODE_ENV !== "development") {
-        return false;
-      }
-    });
+    Mousetrap.bind("ctrl+r", disableReload);
 
     const client = axios.create({ baseURL: `${this.$server_url}` });
     axiosRetry(client, { retries: 10 });
@@ -273,15 +270,17 @@ export default {
           retryDelay: axiosRetry.exponentialDelay,
         },
       })
-      .then((response) => {
-        console.log(`Server Status: ${response.data}`);
+      .then((echo_response) => {
+        console.log(`Server Status: ${echo_response.data}`);
         axios
           .get(`${this.$server_url}/api_version`)
-          .then((response) => {
+          .then((api_version_response) => {
             this.config.setGlobals("minAPIVersion", MIN_API_VERSION);
-            this.config.setGlobals("backendAPIVersion", response.data);
+            this.config.setGlobals("backendAPIVersion", api_version_response.data);
 
-            if (semver.lte(semver.clean(MIN_API_VERSION), semver.clean(response.data))) {
+            if (
+              semver.lte(semver.clean(MIN_API_VERSION), semver.clean(api_version_response.data))
+            ) {
               console.log("API version satisfied");
 
               this.loadStores();
