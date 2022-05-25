@@ -2,12 +2,17 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6369429.svg)](https://doi.org/10.5281/zenodo.6369429)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:javascript)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:python)
-[![CodeFactor](https://www.codefactor.io/repository/github/fairdataihub/fairshare/badge)](https://www.codefactor.io/repository/github/fairdataihub/fairshare)
-[![Curated with FAIRshare](https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg)](https://fairdataihub.org/fairshare)
+[![DOI][zenodo-shield]][zenodo-url]
+[![Total alerts][lgtm-alerts-shield]][lgtm-alerts-url]
+[![Language grade: JavaScript][lgtm-javascript-shield]][lgtm-javascript-url]
+[![Language grade: Python][lgtm-python-shield]][lgtm-python-url]
+[![CodeFactor][codefactor-shield]][codefactor-url]
+[![Maintainability Rating][maintainability-shield]][sonarcloud-url]
+[![Security Rating][security-shield]][sonarcloud-url]
+[![Vulnerabilities][vulnerabilities-shield]][sonarcloud-url]
+[![Technical Debt][technical-debt-shield]][sonarcloud-url]
+[![Storybook][storybook-shield]][storybook-url]
+[![Curated with FAIRshare][fairshare-shield]][fairshare-url]
 
 <!-- HEADER -->
 <br />
@@ -94,3 +99,22 @@ FAIRshare uses Google Analytics to track user interactions with the application.
 [issues-url]: https://github.com/fairdataihub/FAIRshare/issues
 [license-shield]: https://img.shields.io/github/license/fairdataihub/FAIRshare.svg?style=flat-square
 [license-url]: https://github.com/fairdataihub/FAIRshare/blob/main/LICENSE
+[zenodo-shield]: https://zenodo.org/badge/DOI/10.5281/zenodo.6369429.svg
+[zenodo-url]: https://doi.org/10.5281/zenodo.6369429
+[lgtm-alerts-shield]: https://img.shields.io/lgtm/alerts/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18
+[lgtm-alerts-url]: https://lgtm.com/projects/g/fairdataihub/FAIRshare/alerts/
+[lgtm-javascript-shield]: https://img.shields.io/lgtm/grade/javascript/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18
+[lgtm-javascript-url]: https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:javascript
+[lgtm-python-shield]: https://img.shields.io/lgtm/grade/python/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18
+[lgtm-python-url]: https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:python
+[codefactor-shield]: https://www.codefactor.io/repository/github/fairdataihub/fairshare/badge
+[codefactor-url]: https://www.codefactor.io/repository/github/fairdataihub/fairshare
+[technical-debt-shield]: https://sonarcloud.io/api/project_badges/measure?project=fairdataihub_FAIRshare&metric=sqale_index
+[maintainability-shield]: https://sonarcloud.io/api/project_badges/measure?project=fairdataihub_FAIRshare&metric=sqale_rating
+[security-shield]: https://sonarcloud.io/api/project_badges/measure?project=fairdataihub_FAIRshare&metric=security_rating
+[vulnerabilities-shield]: https://sonarcloud.io/api/project_badges/measure?project=fairdataihub_FAIRshare&metric=vulnerabilities
+[sonarcloud-url]: https://sonarcloud.io/summary/new_code?id=fairdataihub_FAIRshare
+[storybook-shield]: https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg
+[storybook-url]: https://628e928cd2515a004ad2f0b7-jmdpzjjikc.chromatic.com/
+[fairshare-shield]: https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg
+[fairshare-url]: https://fairdataihub.org/fairshare
