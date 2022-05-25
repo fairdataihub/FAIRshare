@@ -88,6 +88,7 @@ import {
 export default {
   name: "AppAnnouncement",
   components: {
+    // eslint-disable-next-line vue/no-reserved-component-names
     Dialog,
     DialogOverlay,
     DialogTitle,

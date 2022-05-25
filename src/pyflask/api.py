@@ -115,9 +115,7 @@ class HelloWorld(Resource):
     def get(self):
         """Returns a simple 'Server Active' message"""
 
-        response = "Server active!"
-
-        return response
+        return "Server active!"
 
 
 ###############################################################################
@@ -496,8 +494,7 @@ class zenodoDeposition(Resource):
 
         access_token = args["access_token"]
 
-        response = createNewZenodoDeposition(access_token)
-        return response
+        return createNewZenodoDeposition(access_token)
 
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -528,8 +525,7 @@ class zenodoDeposition(Resource):
         access_token = args["access_token"]
         deposition_id = args["deposition_id"]
 
-        response = getAZenodoDeposition(access_token, deposition_id)
-        return response
+        return getAZenodoDeposition(access_token, deposition_id)
 
     @zenodo.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -584,8 +580,7 @@ class zenodoGetAll(Resource):
 
         access_token = args["access_token"]
 
-        response = getAllZenodoDepositions(access_token)
-        return response
+        return getAllZenodoDepositions(access_token)
 
 
 @zenodo.route("/deposition/files/upload", endpoint="zenodoUploadFile")
@@ -1199,10 +1194,6 @@ class CreateFile(Resource):
         file_content = args["file_content"]
         content_type = args["content_type"]
 
-        if content_type == "text":
-            # No need to do anything
-            pass
-
         if content_type == "json":
             # This might not be necessary but adding
             # this in case there are some weird json inconsistencies.
@@ -1294,12 +1285,7 @@ class FileExistInFolder(Resource):
 # Using 7632 since it spells SODA lol.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
-    requested_port = 5000  # default port to run on
-
-    # Check for a port override
-    if len(sys.argv) > 1:
-        requested_port = int(sys.argv[1])
-
+    requested_port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")

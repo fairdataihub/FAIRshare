@@ -56,9 +56,7 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
     # Upload a file to a Zenodo deposition
 
     try:
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            pass
-        else:
+        if not os.path.exists(file_path) or not os.path.isfile(file_path):
             raise Exception("Error: Could not find a file at the path provided.")
 
         params = {"access_token": access_token}
@@ -66,9 +64,7 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
 
         with open(file_path, "rb") as fileContent:
             r = requests.put(
-                "%s/%s" % (bucket_url, filename),
-                data=fileContent,
-                params=params,
+                f"{bucket_url}/{filename}", data=fileContent, params=params
             )
 
         # Adding a sleep function to avoid hitting the rate limit
@@ -126,11 +122,7 @@ def deleteZenodoDeposition(access_token, deposition_id):
         )
         statusCode = r.status_code
 
-        if statusCode == 204:
-            return "Delete successful"
-        else:
-            return "Delete failed"
-
+        return "Delete successful" if statusCode == 204 else "Delete failed"
     except Exception as e:
         raise e
 
@@ -149,9 +141,7 @@ def createNewZenodoDepositionVersion(access_token, deposition_id):
         latest_draft_url = (response.json())["links"]["latest_draft"]
         last_slash = latest_draft_url.rfind("/") + 1
 
-        new_version_id = latest_draft_url[last_slash:]
-
-        return new_version_id
+        return latest_draft_url[last_slash:]
 
     except Exception as e:
         raise e

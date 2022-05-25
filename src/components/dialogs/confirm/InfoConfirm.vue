@@ -89,6 +89,7 @@ import {
 export default {
   name: "InfoConfirm",
   components: {
+    // eslint-disable-next-line vue/no-reserved-component-names
     Dialog,
     DialogOverlay,
     DialogTitle,

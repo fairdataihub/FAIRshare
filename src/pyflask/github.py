@@ -301,10 +301,7 @@ def getRepoContentTree(access_token, owner, repo):
         response = requests.request("GET", url, headers=headers, data=payload)
 
         res = response.json()
-        if "default_branch" in res:
-            return res["default_branch"]
-        else:
-            return "master"
+        return res["default_branch"] if "default_branch" in res else "master"
 
     defaultBranch = getDefaultBranch()
 
@@ -329,14 +326,11 @@ def getFileFromRepo(access_token, owner, repo, file_name):
 
         response = response.json()
 
-        if "content" in response:
-            base64EncodedContent = response["content"]
-            asciiEncoded = base64EncodedContent.encode("ascii")
-            base64Decoded = base64.b64decode(asciiEncoded)
-            asciiFileContent = base64Decoded.decode("ascii")
-
-            return asciiFileContent
-        else:
+        if "content" not in response:
             return "NOT_FOUND"
+        base64EncodedContent = response["content"]
+        asciiEncoded = base64EncodedContent.encode("ascii")
+        base64Decoded = base64.b64decode(asciiEncoded)
+        return base64Decoded.decode("ascii")
     except Exception as e:
         raise e
