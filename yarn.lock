@@ -1050,7 +1050,7 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/core@^7.1.0", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.13.16", "@babel/core@^7.18.2":
+"@babel/core@7.18.2", "@babel/core@^7.1.0", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.13.16":
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.18.2.tgz#87b2fcd7cce9becaa7f5acebdc4f09f3dd19d876"
   integrity sha512-A8pri1YJiC5UnkdrWcmfZTJTV85b4UXTAfImGmCfYmax4TR9Cw8sDS0MOk++Gp2mE/BefVJ5nwy5yzqNJbP/DQ==
@@ -3642,7 +3642,7 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
-"@storybook/addon-actions@6.5.5", "@storybook/addon-actions@^6.5.5":
+"@storybook/addon-actions@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-6.5.5.tgz#c88dc6196bc7e31cbdb7c59d4121db49b526f118"
   integrity sha512-COWx1w9rAoiFumWZxwc8sD6G4sL3UfKxrcKByl0CYQlp/UArmgzb1m4ezBxR7Tlca8qpxVDG6jF6Vj1WVQB10g==
@@ -3738,7 +3738,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/addon-essentials@^6.5.5":
+"@storybook/addon-essentials@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-essentials/-/addon-essentials-6.5.5.tgz#125e5ad7a1b8a112c06f2e17de24b55ac1f1f01b"
   integrity sha512-2w8jAIDbrc4/X9/HgVMh1ODsDHbXG7QFFF186UPPDIcCHoNb/3HZk9YSi0Rv7O3VcY4PyKWbTsbmmTzbT8QSbA==
@@ -3759,7 +3759,7 @@
     regenerator-runtime "^0.13.7"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-interactions@^6.5.5":
+"@storybook/addon-interactions@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-interactions/-/addon-interactions-6.5.5.tgz#fab0995d8ff8ae5fa333fe7e4f051e4f7316a3f0"
   integrity sha512-V7igk2P/KTDMXKJafA4HMhtq0MErvjYWPrY6ifjptcuJhuykQIdRlvEtfIlN9cKOVb0yw9gktXB3Gpujb6xW5Q==
@@ -3780,7 +3780,7 @@
     polished "^4.2.2"
     ts-dedent "^2.2.0"
 
-"@storybook/addon-links@^6.5.5":
+"@storybook/addon-links@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.5.5.tgz#1f5aeac63f526f7cf802d2921fe3ff7013213a8b"
   integrity sha512-0UrlCtlhZouM7KREgEnLqvW0jfJfg9rXs9AcVBSrpvh8NL0OM9D9K1zqN+prxKcmTzWAmCU+9QXVZNTnyLrhEQ==
@@ -3909,7 +3909,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/builder-webpack4@6.5.5", "@storybook/builder-webpack4@^6.5.5":
+"@storybook/builder-webpack4@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/builder-webpack4/-/builder-webpack4-6.5.5.tgz#1886753564a627b5194f26c46f853e5a55da77dc"
   integrity sha512-KjvfnzIyeEWGZtdROjwAlGvF8Tsi2NqjVsHiw7t8kRMdB+5ermIEYbwuezFa4le0sOhJSgsszV602wurgjtVPQ==
@@ -3962,7 +3962,7 @@
     webpack-hot-middleware "^2.25.1"
     webpack-virtual-modules "^0.2.2"
 
-"@storybook/builder-webpack5@^6.5.5":
+"@storybook/builder-webpack5@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/builder-webpack5/-/builder-webpack5-6.5.5.tgz#d56e785ab94343fa61fd84ec00bcb173d5b1fa70"
   integrity sha512-vDAWlMcJY4q6r43AhVEqn3OYbyFYGgCWMfn8atq+OeDQeGjD+GnRPoAURpAc5pVCTTMXz9yI0bVsGfFBWCnibQ==
@@ -4294,7 +4294,7 @@
     core-js "^3.8.2"
     global "^4.4.0"
 
-"@storybook/manager-webpack4@6.5.5", "@storybook/manager-webpack4@^6.5.5":
+"@storybook/manager-webpack4@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/manager-webpack4/-/manager-webpack4-6.5.5.tgz#c82ad9f117427e2caaf37d93f45d395f9ad57818"
   integrity sha512-STYy20qj1QR+Pb7AIfx+S5SGzsoLzFTDFePoRzQ+8BGEN/jme7eqZqcMC4gPaD5c2toUOChoF69EWpLiZqiqLA==
@@ -4335,7 +4335,7 @@
     webpack-dev-middleware "^3.7.3"
     webpack-virtual-modules "^0.2.2"
 
-"@storybook/manager-webpack5@^6.5.5":
+"@storybook/manager-webpack5@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/manager-webpack5/-/manager-webpack5-6.5.5.tgz#0076fd3a128a9dc39d257784c1a72c4f24c3b644"
   integrity sha512-rb3pFPTqxTLwphgJUPFwRohtSFjNBXBtCKjzppuKmZW4zhp9d8LwXhc3uMhdXiTLP6O5BEZaj20PYpuJmA9hng==
@@ -4502,7 +4502,7 @@
     read-pkg-up "^7.0.1"
     regenerator-runtime "^0.13.7"
 
-"@storybook/testing-library@^0.0.11":
+"@storybook/testing-library@0.0.11":
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/@storybook/testing-library/-/testing-library-0.0.11.tgz#c07a3b5a76049ea9f9e66c557b506c2b061a93d6"
   integrity sha512-8KbKx3s1e+uF3oWlPdyXRpZa6xtCsCHtXh1nCTisMA6P5YcSDaCg59NXIOVIQCAwKvjRomlqMJH8JL1WyOzeVg==
@@ -4540,7 +4540,7 @@
     regenerator-runtime "^0.13.7"
     resolve-from "^5.0.0"
 
-"@storybook/vue3@^6.5.5":
+"@storybook/vue3@6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@storybook/vue3/-/vue3-6.5.5.tgz#d9da71def5ad3e89fa016d762e41c072da8e7770"
   integrity sha512-0XtJhnc4+A50sV/FMuXOe1XNNWOu0o1KXQ6PZM/+HZZ2XBUqcCRQd+m+QAf2e2xcXTs5YYw3969s37N328afFw==
@@ -6958,7 +6958,7 @@ babel-eslint@10.1.0:
     eslint-visitor-keys "^1.0.0"
     resolve "^1.12.0"
 
-babel-loader@^8.0.0, babel-loader@^8.2.2, babel-loader@^8.2.5:
+babel-loader@8.2.5, babel-loader@^8.0.0, babel-loader@^8.2.2:
   version "8.2.5"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.5.tgz#d45f585e654d5a5d90f5350a779d7647c5ed512e"
   integrity sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==
@@ -20304,7 +20304,7 @@ vue-inbrowser-compiler-utils@^4.44.23:
     camelcase "^5.3.1"
     vue-inbrowser-compiler-demi "^4.44.23"
 
-vue-loader@^16.4.1, vue-loader@^16.8.3:
+vue-loader@16.8.3, vue-loader@^16.4.1:
   version "16.8.3"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.8.3.tgz#d43e675def5ba9345d6c7f05914c13d861997087"
   integrity sha512-7vKN45IxsKxe5GcVCbc2qFU5aWzyiLrYJyUuMz4BQLKctCj/fmCa0w6fGiiQ2cLFetNcek1ppGJQDCup0c1hpA==
