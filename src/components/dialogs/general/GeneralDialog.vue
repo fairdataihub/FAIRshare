@@ -96,6 +96,7 @@ import {
 export default {
   name: "GeneralDialog",
   components: {
+    // eslint-disable-next-line vue/no-reserved-component-names
     Dialog,
     DialogOverlay,
     DialogTitle,
