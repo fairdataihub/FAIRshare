@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added support for other data types to be curated through FAIRshare.
 - Added support for the ability to select `Upload type` for Zenodo.
+- Storybook integration has been added for components used within FAIRshare. View the [library](https://www.chromatic.com/library?appId=628e928cd2515a004ad2f0b7) and the [storybook](https://628e928cd2515a004ad2f0b7-jmdpzjjikc.chromatic.com/).
 
 ### Bug fixes
 
