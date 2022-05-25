@@ -6,6 +6,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:javascript)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/fairdataihub/FAIRshare.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fairdataihub/FAIRshare/context:python)
+[![CodeFactor](https://www.codefactor.io/repository/github/fairdataihub/fairshare/badge)](https://www.codefactor.io/repository/github/fairdataihub/fairshare)
 [![Curated with FAIRshare](https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg)](https://fairdataihub.org/fairshare)
 
 <!-- HEADER -->
