@@ -63,7 +63,9 @@ def uploadFileToZenodoDeposition(access_token, bucket_url, file_path):
         filename = os.path.basename(file_path)
 
         with open(file_path, "rb") as fileContent:
-            r = requests.put(f"{bucket_url}/{filename}", data=fileContent, params=params)
+            r = requests.put(
+                f"{bucket_url}/{filename}", data=fileContent, params=params
+            )
 
         # Adding a sleep function to avoid hitting the rate limit
         time.sleep(1.5)

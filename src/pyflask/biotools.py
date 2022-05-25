@@ -73,7 +73,6 @@ def validateTool(token, data):
             "data": response.json(),
         }
 
-
     except Exception as e:
         raise e
 
@@ -100,7 +99,6 @@ def registerTool(token, data):
             "status": "error" if response.status_code != 201 else "success",
             "data": response.json(),
         }
-
 
     except Exception as e:
         raise e

@@ -55,10 +55,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     if "description" in general_data and general_data["description"] != "":
         metadata["description"] = general_data["description"]
 
-    if (
-        "applicationCategory" in code_data
-        and code_data["applicationCategory"] != ""
-    ):
+    if "applicationCategory" in code_data and code_data["applicationCategory"] != "":
         metadata["applicationCategory"] = code_data["applicationCategory"]
 
     if (
@@ -74,10 +71,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     ):
         metadata["funding"] = general_data["funding"]["code"]
 
-    if (
-        "developmentStatus" in code_data
-        and code_data["developmentStatus"] != ""
-    ):
+    if "developmentStatus" in code_data and code_data["developmentStatus"] != "":
         metadata["developmentStatus"] = code_data["developmentStatus"]
 
     if "isPartOf" in code_data and code_data["isPartOf"] != "":
@@ -101,22 +95,13 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     if "keywords" in general_data and len(general_data["keywords"]) > 0:
         metadata["keywords"] = [item["keyword"] for item in general_data["keywords"]]
 
-    if (
-        "programmingLanguage" in code_data
-        and len(code_data["programmingLanguage"]) > 0
-    ):
+    if "programmingLanguage" in code_data and len(code_data["programmingLanguage"]) > 0:
         metadata["programmingLanguage"] = code_data["programmingLanguage"]
 
-    if (
-        "runtimePlatform" in code_data
-        and len(code_data["runtimePlatform"]) > 0
-    ):
+    if "runtimePlatform" in code_data and len(code_data["runtimePlatform"]) > 0:
         metadata["runtimePlatform"] = code_data["runtimePlatform"]
 
-    if (
-        "operatingSystem" in code_data
-        and len(code_data["operatingSystem"]) > 0
-    ):
+    if "operatingSystem" in code_data and len(code_data["operatingSystem"]) > 0:
         metadata["operatingSystem"] = code_data["operatingSystem"]
 
     if (
@@ -158,10 +143,7 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
             metadata["author"].append(new_author)
 
-    if (
-        "contributors" in general_data
-        and len(general_data["contributors"]) > 0
-    ):
+    if "contributors" in general_data and len(general_data["contributors"]) > 0:
         metadata["contributor"] = []
 
         for item in general_data["contributors"]:
