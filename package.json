@@ -32,7 +32,9 @@
     "postinstall": "husky install && electron-builder install-app-deps ",
     "postuninstall": "electron-builder install-app-deps",
     "dev": "yarn electron:serve",
-    "commit": "cz"
+    "commit": "cz",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "lint-staged": {
     "./src/**/*.{ts,js,jsx,tsx,vue,json}": [
@@ -88,10 +90,22 @@
     "vuedraggable": "4.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.2",
     "@babel/eslint-parser": "7.17.0",
     "@commitlint/cli": "17.0.0",
     "@commitlint/config-conventional": "17.0.0",
     "@iconify/vue": "3.2.1",
+    "@storybook/addon-actions": "^6.5.5",
+    "@storybook/addon-essentials": "^6.5.5",
+    "@storybook/addon-interactions": "^6.5.5",
+    "@storybook/addon-links": "^6.5.5",
+    "@storybook/addon-postcss": "2.0.0",
+    "@storybook/builder-webpack4": "^6.5.5",
+    "@storybook/builder-webpack5": "^6.5.5",
+    "@storybook/manager-webpack4": "^6.5.5",
+    "@storybook/manager-webpack5": "^6.5.5",
+    "@storybook/testing-library": "^0.0.11",
+    "@storybook/vue3": "^6.5.5",
     "@tailwindcss/forms": "0.5.2",
     "@tailwindcss/line-clamp": "0.4.0",
     "@tailwindcss/typography": "0.5.2",
@@ -101,6 +115,8 @@
     "@vue/compiler-sfc": "3.2.33",
     "autoprefixer": "10.4.7",
     "babel-eslint": "10.1.0",
+    "babel-loader": "^8.2.5",
+    "chromatic": "6.5.4",
     "commitizen": "4.2.4",
     "concurrently": "7.2.0",
     "copyfiles": "2.4.1",
@@ -114,6 +130,7 @@
     "eslint": "8.16.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-storybook": "0.5.12",
     "eslint-plugin-vue": "9.0.1",
     "gulp": "4.0.2",
     "gulp-copy": "4.0.1",
@@ -127,7 +144,8 @@
     "renovate": "32.55.1",
     "tailwindcss": "3.0.24",
     "tailwindcss-debug-screens": "2.2.1",
-    "vue-cli-plugin-electron-builder": "2.1.1"
+    "vue-cli-plugin-electron-builder": "2.1.1",
+    "vue-loader": "^16.8.3"
   },
   "browserslist": [
     "> 1%",
