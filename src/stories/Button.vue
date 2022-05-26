@@ -1,14 +1,25 @@
 <template>
-  <button type="button" :class="classes" @click="onClick" :style="style">{{ label }}</button>
+  <button type="button" :class="classes" @click="onClick" :disabled="disabled">
+    <Icon v-if="showIcon" icon="ic:baseline-auto-fix-high" class="mx-2 h-5 w-5" /> {{ label }}
+  </button>
 </template>
 
 <script>
 import "./button.css";
+import "./assets/index.css";
 import { reactive, computed } from "vue";
+import { Icon } from "@iconify/vue";
+
+/**
+ *  All the buttons used in FAIRshare are showcased here. They are all styled with the same base styles.
+ *
+ *  The style of the button is handled by CSS classes at the moment. I should replace it with a importable component.
+ *
+ */
 
 export default {
   name: "my-button",
-
+  components: { Icon },
   props: {
     label: {
       type: String,
@@ -18,14 +29,25 @@ export default {
       type: Boolean,
       default: false,
     },
-    size: {
-      type: String,
-      validator: function (value) {
-        return ["small", "medium", "large"].indexOf(value) !== -1;
-      },
+    secondary: {
+      type: Boolean,
+      default: false,
     },
-    backgroundColor: {
-      type: String,
+    danger: {
+      type: Boolean,
+      default: false,
+    },
+    plain: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    showIcon: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -35,13 +57,12 @@ export default {
     props = reactive(props);
     return {
       classes: computed(() => ({
-        "storybook-button": true,
-        "storybook-button--primary": props.primary,
-        "storybook-button--secondary": !props.primary,
-        [`storybook-button--${props.size || "medium"}`]: true,
-      })),
-      style: computed(() => ({
-        backgroundColor: props.backgroundColor,
+        "primary-button": props.primary && !props.plain,
+        "primary-plain-button": props.primary && props.plain,
+        "secondary-button": props.secondary && !props.plain,
+        "secondary-plain-button": props.secondary && props.plain,
+        "danger-button": props.danger && !props.plain,
+        "danger-plain-button": props.danger && props.plain,
       })),
       onClick() {
         emit("click");
