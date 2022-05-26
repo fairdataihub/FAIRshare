@@ -86,7 +86,7 @@
     "vue": "3.2.33",
     "vue-router": "4.0.15",
     "vue3-lottie": "2.1.0",
-    "vue3-popper": "1.4.2",
+    "vue3-popper": "1.5.0",
     "vuedraggable": "4.1.0"
   },
   "devDependencies": {
