@@ -134,6 +134,9 @@
                   <Icon icon="ic:baseline-auto-fix-high" class="mx-2 h-5 w-5" />
                   Auto generate release notes
                 </button>
+                <button class="primary-button">
+                  <Icon icon="ic:baseline-auto-fix-high" class="mx-2 h-5 w-5" /> Primary Button
+                </button>
               </div>
               <div class="px-3">
                 <v-md-editor
