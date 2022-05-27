@@ -60,7 +60,7 @@ csrf.init_app(app)
 
 # full if you want to see all the details
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}})
 
 # configure root logger
 LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".fairshare", "logs")
