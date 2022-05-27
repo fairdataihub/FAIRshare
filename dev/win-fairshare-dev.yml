@@ -46,3 +46,5 @@ dependencies:
       - urllib3==1.26.7
       - werkzeug==2.0.2
       - pyyaml==6.0
+      - flask-wtf==1.0.1
+      - wtforms==3.0.1

@@ -4,6 +4,8 @@ import logging.handlers
 import os
 import sys
 
+from flask_wtf.csrf import CSRFProtect
+
 import config
 from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
 from figshare import (
@@ -51,6 +53,11 @@ API_VERSION = "1.4.0"
 
 
 app = Flask(__name__)
+
+csrf = CSRFProtect()
+csrf.init_app(app)
+
+
 # full if you want to see all the details
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 CORS(app)
