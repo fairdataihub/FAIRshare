@@ -154,7 +154,7 @@
                     Optional. Mostly relevant for software and dataset uploads. Any string will be
                     accepted, but semantically-versioned tag is recommended. <br />
                     See
-                    <a href="https://semver.org/" target="_blank"> semver.org </a>
+                    <a href="https://semver.org/" target="_blank" rel="noopener"> semver.org </a>
                     for more information on semantic versioning.
                   </p>
                 </div>
@@ -184,6 +184,7 @@
                     <a
                       href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
                       target="_blank"
+                      rel="noopener"
                     >
                       ISO 639 language codes list
                     </a>
@@ -324,12 +325,18 @@
                   <a
                     href="https://opendefinition.org/"
                     target="_blank"
+                    rel="noopener"
                     class="text-blue-500 hover:underline"
                   >
                     opendefinition.org
                   </a>
                   and
-                  <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
+                  <a
+                    href="https://spdx.org/"
+                    target="_blank"
+                    rel="noopener"
+                    class="text-blue-500 hover:underline"
+                  >
                     spdx.org
                   </a>
                   .
