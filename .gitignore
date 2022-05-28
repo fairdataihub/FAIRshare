@@ -35,3 +35,4 @@ api.spec
 .env.production
 src/assets/css/tailwind.css
 jupyter/dnt.fdih
+out

@@ -18,8 +18,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lint-es": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|vue)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|vue|json)\" --write",
+    "lint-es": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|mjs|tsx|vue)\"",
+    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|mjs|tsx|vue|json)\" --write",
     "python:clean": "yarn gulp clean-pre-python-build",
     "python:build": "yarn gulp clean-pre-python-build && python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
     "python:dev": "python ./src/pyflask/api.py 7632",
@@ -34,10 +34,14 @@
     "dev": "yarn electron:serve",
     "commit": "cz",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "pre-test": "yarn python:build && yarn electron:build",
+    "test": "yarn pre-test && npx playwright test",
+    "test-only": " npx playwright test",
+    "test:update-screenshot": "npx playwright test --update-snapshots"
   },
   "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx,vue,json}": [
+    "./src/**/*.{ts,js,mjs,jsx,tsx,vue,json}": [
       "yarn lint-es --fix",
       "yarn format"
     ]
@@ -95,6 +99,7 @@
     "@commitlint/cli": "17.0.0",
     "@commitlint/config-conventional": "17.0.0",
     "@iconify/vue": "3.2.1",
+    "@playwright/test": "1.22.2",
     "@storybook/addon-actions": "6.5.5",
     "@storybook/addon-essentials": "6.5.5",
     "@storybook/addon-interactions": "6.5.5",
@@ -113,6 +118,7 @@
     "@vue/cli-plugin-eslint": "5.0.4",
     "@vue/cli-service": "5.0.4",
     "@vue/compiler-sfc": "3.2.36",
+    "asar": "3.1.0",
     "autoprefixer": "10.4.7",
     "babel-eslint": "10.1.0",
     "babel-loader": "8.2.5",
@@ -127,6 +133,7 @@
     "electron": "18.2.4",
     "electron-devtools-installer": "3.2.0",
     "electron-notarize": "1.2.1",
+    "electron-playwright-helpers": "1.1.1",
     "eslint": "8.16.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
@@ -137,7 +144,10 @@
     "gulp-postcss": "9.0.1",
     "gulp-rename": "2.0.0",
     "husky": "8.0.1",
+    "jimp": "0.16.1",
     "lint-staged": "12.4.2",
+    "playwright": "1.22.2",
+    "playwright-core": "1.22.2",
     "postcss": "8.4.14",
     "prettier": "2.6.2",
     "prettier-plugin-tailwindcss": "0.1.11",
@@ -146,7 +156,8 @@
     "tailwindcss": "3.0.24",
     "tailwindcss-debug-screens": "2.2.1",
     "vue-cli-plugin-electron-builder": "2.1.1",
-    "vue-loader": "17.0.0"
+    "vue-loader": "17.0.0",
+    "xvfb-maybe": "0.2.1"
   },
   "browserslist": [
     "> 1%",

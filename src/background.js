@@ -192,28 +192,35 @@ async function createWindow() {
   });
 
   // splash screen
+  let splash;
 
-  const splash = new BrowserWindow({
-    width: 500,
-    height: 500,
-    frame: false,
-    show: true,
-    icon: __dirname + "/assets/app-icons/Icon.png",
-    alwaysOnTop: true,
-    transparent: true,
-    hasShadow: false,
-    resizable: false,
-    movable: false,
-  });
-  splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
+  if (process.env.CI !== "e2e") {
+    splash = new BrowserWindow({
+      width: 500,
+      height: 500,
+      frame: false,
+      show: true,
+      icon: __dirname + "/assets/app-icons/Icon.png",
+      alwaysOnTop: true,
+      transparent: true,
+      hasShadow: false,
+      resizable: false,
+      movable: false,
+    });
+    splash.loadURL(path.join("file://", __dirname, "/splash-screen.html"));
+  }
 
   // splash screen end
 
   mainWindow.once("ready-to-show", () => {
-    setTimeout(function () {
-      splash.close();
+    if (process.env.CI !== "e2e") {
+      setTimeout(function () {
+        splash.close();
+        mainWindow.show();
+      }, 500);
+    } else {
       mainWindow.show();
-    }, 500);
+    }
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -355,6 +362,10 @@ ipcMain.on("check-for-updates", async (_event, channel = "") => {
   if (channel !== "") {
     autoUpdater.channel = channel;
   }
+  if (process.env.CI === "e2e") {
+    return;
+  }
+
   autoUpdater.checkForUpdatesAndNotify();
 });
 

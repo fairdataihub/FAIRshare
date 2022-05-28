@@ -46,6 +46,12 @@ gulp.task("copy-python", function () {
   return gulp.src(["./src/pyflask/**/*"]).pipe(gulp.dest("./dist_electron/pyflask"));
 });
 
+gulp.task("copy-win-unpacked", function () {
+  console.log("Copying dist_electron/win-unpacked folder to out folder...");
+
+  return gulp.src(["./dist_electron/win-unpacked/**/*"]).pipe(gulp.dest("./out"));
+});
+
 gulp.task("copy-splash-screen", function () {
   console.log("Copying splash screen to dist_electron folder ...");
 

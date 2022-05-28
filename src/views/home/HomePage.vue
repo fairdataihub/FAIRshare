@@ -47,7 +47,11 @@
             Read the documentation
           </button>
 
-          <button class="primary-plain-button text-base" @click="startCuratingProject">
+          <button
+            class="primary-plain-button text-base"
+            @click="startCuratingProject"
+            id="getting-started"
+          >
             Getting started
             <el-icon class="icon-animate"> <d-arrow-right /> </el-icon>
           </button>
