@@ -69,6 +69,23 @@ test.beforeAll(async () => {
 
 test.afterAll(async () => {
   await electronApp.close();
+
+  console.log("Killing all python processes");
+
+  const portRange = 100;
+
+  // kill all previous python processes that could be running.
+  let promisesArray = [];
+
+  // create a loop of 100
+  for (let i = 0; i < portRange; i++) {
+    promisesArray.push(
+      axios.post(`http://127.0.0.1:${startingPort + i}/fairshare_server_shutdown`, {})
+    );
+  }
+
+  // wait for all the promises to resolve
+  await Promise.allSettled(promisesArray);
 });
 
 let page;
@@ -84,16 +101,17 @@ test("renders the first page", async () => {
   );
 });
 
-test(`"Getting started" button exists`, async () => {
-  expect(await page.$("#getting-started")).toBeTruthy();
-});
-
-// test("click the button to open new window", async () => {
-//   await page.click("#new-window");
-//   const newPage = await electronApp.waitForEvent("window");
-//   expect(newPage).toBeTruthy();
-//   page = newPage;
+// test(`"Getting started" button exists`, async () => {
+//   console.log("Checking for Getting Started button");
+//   expect(await page.$("#getting-started")).toBeTruthy();
 // });
+
+test("click the button to open new window", async () => {
+  await page.click("#getting-started");
+  const newPage = await electronApp.waitForEvent("window");
+  expect(newPage).toBeTruthy();
+  page = newPage;
+});
 
 // test("window 2 has correct title", async () => {
 //   const title = await page.title();
