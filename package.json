@@ -92,7 +92,7 @@
   "devDependencies": {
     "@babel/core": "7.18.2",
     "@babel/eslint-parser": "7.17.0",
-    "@commitlint/cli": "17.0.0",
+    "@commitlint/cli": "17.0.1",
     "@commitlint/config-conventional": "17.0.0",
     "@iconify/vue": "3.2.1",
     "@storybook/addon-actions": "6.5.5",
