@@ -327,7 +327,7 @@ export default {
 
       switch (dataType) {
         case "Code":
-          return `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+          return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
           return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
         default:

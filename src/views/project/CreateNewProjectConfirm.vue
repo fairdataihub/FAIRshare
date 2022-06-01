@@ -72,7 +72,7 @@ export default {
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
 
-      this.$router.push({ path: `/datasets/${this.datasetID}/landing` });
+      this.$router.push({ path: `/datasets/${this.datasetID}` });
     },
   },
   async mounted() {
