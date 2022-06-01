@@ -19,7 +19,7 @@
 
     <login-prompt
       ref="loginPrompt"
-      title="Login to bio.tools"
+      title="Login to Figshare"
       confirmButtonText="Login"
       :preConfirm="checkUsernameAndPassword"
       :showErrors="showErrorMessage"
@@ -116,6 +116,9 @@ export default {
   },
   computed: {},
   methods: {
+    openWebsite(url) {
+      window.ipcRenderer.send("open-link-in-browser", url);
+    },
     confirmDeleteToken() {
       this.deleteToken("figshare");
     },
@@ -196,52 +199,6 @@ export default {
           });
 
         console.log(response);
-
-        // const response = await axios
-        //   .post(`${this.$server_url}/biotools/login`, {
-        //     username: this.loginForm.username,
-        //     password: this.loginForm.password,
-        //   })
-        //   .then(async (response) => {
-        //     if ("general_errors" in response.data) {
-        //       return "invalid";
-        //     }
-
-        //     if ("key" in response.data) {
-        //       const token = response.data.key;
-        //       const userDetails = await axios
-        //         .get(`${this.$server_url}/biotools/user`, {
-        //           params: {
-        //             token,
-        //           },
-        //         })
-        //         .then(async (res) => {
-        //           if ("email" in res.data) {
-        //             return res.data;
-        //           }
-        //         });
-
-        //       let tokenObject = {};
-
-        //       tokenObject.token = this.loginForm.password;
-        //       tokenObject.name = userDetails.username;
-        //       tokenObject.type = "password";
-
-        //       await this.tokenStore.saveToken("biotools", tokenObject);
-        //       this.$track("Connections", "bio.tools", "connected");
-
-        //       this.connected = true;
-        //       this.statusChangeFunction("connected");
-
-        //       return "valid";
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //     return "ERROR";
-        //   });
-
-        // return response;
       }
     },
     showErrorMessage(message) {

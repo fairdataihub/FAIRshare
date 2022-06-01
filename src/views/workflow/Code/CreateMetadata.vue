@@ -92,6 +92,7 @@
                             <el-date-picker
                               v-model="step1Form.creationDate"
                               type="date"
+                              size="large"
                               placeholder="Pick a day"
                               value-format="YYYY-MM-DD"
                             >
@@ -107,6 +108,7 @@
                             <el-date-picker
                               v-model="step1Form.firstReleaseDate"
                               type="date"
+                              size="large"
                               placeholder="Pick a day"
                               value-format="YYYY-MM-DD"
                             >
@@ -613,7 +615,7 @@
                             <el-input
                               v-model="step3Form.funding.organization"
                               type="text"
-                              placeholder="University of California, San Francisco"
+                              placeholder="National Institutes of Health"
                             ></el-input>
                             <form-help-content
                               popoverContent="The organization funding this software (comma separate if multiple)"
