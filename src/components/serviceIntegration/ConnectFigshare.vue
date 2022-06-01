@@ -189,6 +189,8 @@ export default {
               this.loginSuccess();
               this.$refs.loginPrompt.hide();
 
+              this.statusChangeFunction("connected");
+
               return "valid";
             } else {
               return "invalid";
