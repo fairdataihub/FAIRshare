@@ -70,7 +70,7 @@ def createNewFigshareItem(access_token, data):
 
         return json.dumps({"doi": doi, "article_id": article_id})
     else:
-        return {"status": "ERROR", "message": "Could not create DOI"}
+        return json.dumps({"status": "ERROR", "message": "Could not create DOI"})
 
 
 def deleteFigshareArticle(access_token, article_id):

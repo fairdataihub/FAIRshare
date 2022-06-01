@@ -177,7 +177,7 @@
                   class="text-url"
                   @click="
                     openWebsite(
-                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-figshare'
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-bio-tools'
                     )
                   "
                 >
@@ -238,7 +238,7 @@
                   class="text-url"
                   @click="
                     openWebsite(
-                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-bio-tools'
+                      'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-figshare'
                     )
                   "
                 >
