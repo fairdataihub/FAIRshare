@@ -5,6 +5,7 @@ package-lock.json
 
 # local env files
 .env.local
+env.local
 .env.*.local
 
 # Log files
@@ -33,5 +34,6 @@ api.spec
 *.ipynb
 .env
 .env.production
+env.production
 src/assets/css/tailwind.css
 jupyter/dnt.fdih

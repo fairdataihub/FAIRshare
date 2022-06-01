@@ -470,7 +470,7 @@ export default {
 
       this.codeObject.data.push({
         status: this.getSource(workflowID),
-        task: "Source",
+        task: "Select data files",
         detail: this.getSource(workflowID),
         type: "",
       });
@@ -484,7 +484,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Metadata",
+        task: "Provide metadata",
         detail: "codemeta.json | CITATION.cff",
         type: "",
       });
@@ -498,7 +498,7 @@ export default {
       }
       this.codeObject.data.push({
         status: license,
-        task: "License",
+        task: "Select a license",
         detail: license,
         type: "",
       });
@@ -515,7 +515,7 @@ export default {
       }
       this.codeObject.data.push({
         status: destination,
-        task: "Destination",
+        task: "Select repository",
         detail: destination,
         type: "",
       });
@@ -527,7 +527,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Uploaded",
+        task: "Upload dataset",
         detail: "",
         type: "",
       });
@@ -539,7 +539,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Published",
+        task: "Publish dataset",
         detail: "",
         type: "",
       });

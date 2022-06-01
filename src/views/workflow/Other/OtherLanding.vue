@@ -9,9 +9,9 @@
 
       <p class="pt-2">
         Currently, FAIRshare supports making research software FAIR according to the FAIR Biomedical
-        Research Software (FAIR-BioRS) guidelines v1.0. To our knowledge, these are the only
-        actionable FAIR guidelines available for biomedical research software irrespective of the
-        field of research, funding source, etc. Read our
+        Research Software (FAIR-BioRS) guidelines. To our knowledge, these are the only actionable
+        FAIR guidelines available for biomedical research software irrespective of the field of
+        research, funding source, etc. Read our
         <span
           class="text-url"
           @click="
@@ -20,8 +20,8 @@
             )
           "
         >
-          dedicated documentation page
-        </span>
+          dedicated documentation page</span
+        >
         to find out more about them.
       </p>
       <p class="pt-1 pb-4">
