@@ -160,9 +160,11 @@ export default {
       if (this.loginForm.token === "" || this.loginForm.name === "") {
         return "empty";
       } else {
+        const url = `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`;
+        console.log("figshare auth url: ", url);
         const config = {
           method: "get",
-          url: `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`,
+          url,
           headers: {
             Authorization: `token ${this.loginForm.token}`,
           },

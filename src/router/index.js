@@ -9,6 +9,7 @@ import ShowAllWorkflows from "../views/project/ShowAllWorkflows.vue";
 import ProjectLanding from "../views/project/ProjectLanding.vue";
 
 // Code metadata related components
+import CodeLanding from "../views/workflow/Code/CodeLanding.vue";
 import CodeSelectSourceFolder from "../views/workflow/Code/SelectSourceFolder.vue";
 import CodeCreateMetadata from "../views/workflow/Code/CreateMetadata.vue";
 import CodeCreateMetadataReview from "../views/workflow/Code/CreateMetadataReview.vue";
@@ -85,6 +86,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/landing",
     component: ProjectLanding,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Code/landing",
+    component: CodeLanding,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
