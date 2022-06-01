@@ -509,8 +509,6 @@ export default {
       } else {
         response = await this.createFigshareDeposition();
 
-        response = JSON.parse(response);
-
         if ("status" in response && response.status === "ERROR") {
           this.alertMessage = "There was an error with creating the deposition on Figshare";
           this.errorMessage = response.message;

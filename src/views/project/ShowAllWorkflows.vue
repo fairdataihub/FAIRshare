@@ -54,6 +54,10 @@
               </div>
             </div>
 
+            <div class="flex justify-start">
+              <span class="text-md font-medium text-zinc-600">Summary of progress</span>
+            </div>
+
             <line-divider></line-divider>
 
             <div
@@ -67,9 +71,18 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== '' && scope.row.status !== false"
+                      v-if="scope.row.status !== 'invalid' && scope.row.status !== false"
                     />
-                    <Icon icon="charm:circle-cross" class="text-orange-500" v-else />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="Details">
@@ -141,9 +154,18 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== '' && scope.row.status !== false"
+                      v-if="scope.row.status !== 'invalid' && scope.row.status !== false"
                     />
-                    <Icon icon="charm:circle-cross" class="text-orange-500" v-else />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="Details">
@@ -460,6 +482,12 @@ export default {
 
       const workflow = this.dataset.workflows[workflowID];
 
+      let codeMetadata = {};
+
+      if ("Code" in this.dataset.data) {
+        codeMetadata = this.dataset.data.Code;
+      }
+
       this.codeObject.data = [];
 
       this.codeObject.show = true;
@@ -474,6 +502,37 @@ export default {
         detail: this.getSource(workflowID),
         type: "",
       });
+
+      if ("standards" in codeMetadata) {
+        let invalid = false;
+        for (let question of Object.keys(codeMetadata.standards)) {
+          if (codeMetadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.codeObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.codeObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.codeObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
 
       let generateStatus = "";
 
@@ -585,6 +644,12 @@ export default {
 
       const workflow = this.dataset.workflows[workflowID];
 
+      let otherMetadata = {};
+
+      if ("Other" in this.dataset.data) {
+        otherMetadata = this.dataset.data.Other;
+      }
+
       this.otherObject.data = [];
 
       this.otherObject.show = true;
@@ -599,6 +664,37 @@ export default {
         detail: this.getSource(workflowID),
         type: "",
       });
+
+      if ("standards" in otherMetadata) {
+        let invalid = false;
+        for (let question of Object.keys(otherMetadata.standards)) {
+          if (otherMetadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.otherObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.otherObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.otherObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
 
       let generateStatus = "";
 
