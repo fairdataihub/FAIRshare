@@ -11,6 +11,7 @@ module.exports = {
         afterSign: "./build-scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
+        fileAssociations: ["fairshare"],
         win: {
           target: "nsis",
           icon: "./src/assets/app-icons/Icon.ico",
