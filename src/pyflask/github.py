@@ -27,9 +27,9 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
     try:
         baseFileContent = open(file_path, "r").read()
 
-        asciiEncoded = baseFileContent.encode("ascii")
+        asciiEncoded = baseFileContent.encode()
         base64Encoded = base64.b64encode(asciiEncoded)
-        base64FileContent = base64Encoded.decode("ascii")
+        base64FileContent = base64Encoded.decode()
 
         payload = {}
 

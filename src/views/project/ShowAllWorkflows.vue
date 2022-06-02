@@ -311,6 +311,8 @@ export default {
 
         if (source === "local") {
           return this.dataset.data[workflow.type[0]].folderPath;
+        } else if (source === "github") {
+          return `@${workflow.github.repo}`;
         } else {
           return "";
         }
