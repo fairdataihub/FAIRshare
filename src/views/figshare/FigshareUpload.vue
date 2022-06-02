@@ -225,7 +225,7 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-          return "ERROR";
+          return JSON.stringify({ status: "ERROR", message: "error" });
         });
 
       if (response !== "" || response !== "ERROR") {
@@ -508,6 +508,8 @@ export default {
         this.statusMessage = "Succeeded in removing all old pre-existing files";
       } else {
         response = await this.createFigshareDeposition();
+
+        response = JSON.parse(response);
 
         if ("status" in response && response.status === "ERROR") {
           this.alertMessage = "There was an error with creating the deposition on Figshare";
