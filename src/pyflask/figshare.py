@@ -166,6 +166,15 @@ def uploadFileToFigshare(access_token, article_id, file_path):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     response = response.json()
+
+    if "location" not in response:
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": f"Could not get file location: {json.dumps(response)}",
+            }  # noqa: E501
+        )
+
     file_location = response["location"]
 
     last_slash_position = file_location.rfind("/")

@@ -732,12 +732,8 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        /**
-         * TODO: Enable this when we have a way to publish the dataset
-         */
-
-        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-        // this.$router.push({ path: routerPath });
+        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
+        this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {
