@@ -28,9 +28,7 @@
                       : ''
                   "
                 >
-                  <span>
-                    {{ node.label }}
-                  </span>
+                  <span> {{ node.label }} </span>
                   <button
                     v-if="node.isLeaf"
                     @click="handleNodeClick(data, 'view')"
