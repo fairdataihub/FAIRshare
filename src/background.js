@@ -60,7 +60,7 @@ require("@electron/remote/main").initialize();
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } },
+  { scheme: "fairshare", privileges: { secure: true, standard: true } },
 ]);
 
 const PY_FOLDER = "pyflask";
@@ -255,9 +255,9 @@ async function createWindow() {
       mainWindow.webContents.openDevTools({ mode: "detach" });
     }
   } else {
-    createProtocol("app");
+    createProtocol("fairshare");
     // Load the index.html when not in development
-    mainWindow.loadURL("app://./index.html");
+    mainWindow.loadURL("fairshare://./index.html");
   }
 }
 

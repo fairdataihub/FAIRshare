@@ -4,6 +4,7 @@ module.exports = {
       externals: ["electron-log"],
       nodeIntegration: true,
       preload: { preload: "src/preload.js" },
+      customFileProtocol: "fairshare://./",
       builderOptions: {
         appId: "com.fairdataihub.fairshare",
         productName: "FAIRshare",
@@ -11,7 +12,7 @@ module.exports = {
         afterSign: "./build-scripts/notarize.js",
         generateUpdatesFilesForAllChannels: true,
         files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
-        fileAssociations: ["fairshare"],
+        fileAssociations: { ext: ["fairshare"] },
         win: {
           target: "nsis",
           icon: "./src/assets/app-icons/Icon.ico",
