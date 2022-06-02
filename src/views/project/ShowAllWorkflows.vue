@@ -71,7 +71,11 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== 'invalid' && scope.row.status !== false"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
                     />
                     <Icon
                       icon="carbon:warning-alt"
@@ -154,7 +158,11 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== 'invalid' && scope.row.status !== false"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
                     />
                     <Icon
                       icon="carbon:warning-alt"
