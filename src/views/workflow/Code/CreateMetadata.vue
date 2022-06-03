@@ -4,7 +4,7 @@
   >
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium">
-        Provide information about your research sofware
+        Provide information about your research software
       </span>
 
       <line-divider></line-divider>
@@ -63,7 +63,7 @@
                         size="large"
                         ref="s1Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Software name" prop="name">
                           <div class="flex w-full flex-row items-center">
@@ -79,7 +79,7 @@
                             <el-input
                               v-model="step1Form.description"
                               type="textarea"
-                              placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
+                              placeholder="My Software computes orbit propagation. It has been used in the NASA Spacecraft Orbit Propagation Center."
                             ></el-input>
                             <form-help-content
                               popoverContent="A brief description of the software"
@@ -152,7 +152,7 @@
                         size="large"
                         ref="s2Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Authors" prop="authors">
                           <draggable
@@ -397,7 +397,7 @@
                         size="large"
                         ref="s3Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Unique identifier">
                           <div class="flex w-full flex-row items-center">
@@ -422,10 +422,23 @@
                               files are uploaded from your system.
                             </p>
                             <p
-                              class="text-url cursor-pointer !text-sm"
+                              class="text-url flex cursor-pointer items-end !text-xs"
                               @click="editUniqueIdentifier"
                             >
                               Click here to override this.
+                            </p>
+                          </div>
+                          <div v-else class="flex pt-2">
+                            <p class="pr-1 text-sm text-gray-500">
+                              Please provide an identifier that is unique to this version of the
+                              dataset.
+                            </p>
+                            <p
+                              class="text-url flex cursor-pointer items-end !text-xs"
+                              @click="revertToAutoAssignUniqueIdentifier"
+                              v-if="localSource"
+                            >
+                              Click here to let FAIRshare assign an identifier.
                             </p>
                           </div>
                         </el-form-item>
@@ -701,7 +714,7 @@
                         size="large"
                         ref="s4Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Code repository" :error="codeRepositoryErrorMessage">
                           <div class="flex w-full flex-row items-center">
@@ -840,7 +853,7 @@
                         size="large"
                         ref="s5Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Programming Language" prop="programmingLanguage">
                           <div class="flex w-full flex-row items-center">
@@ -1019,7 +1032,7 @@
                         size="large"
                         ref="s6Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Current version">
                           <div class="flex w-full flex-row items-center">
@@ -1118,7 +1131,7 @@
                         size="large"
                         ref="s7Form"
                         @submit.prevent
-                        class="py-4"
+                        class="code-metadata-form py-4"
                       >
                         <el-form-item label="Reference publication">
                           <div class="flex w-full flex-row items-center">
@@ -1411,6 +1424,7 @@ export default {
       originalObject: {},
       showSaving: false,
       showSpinner: false,
+      localSource: false,
     };
   },
   watch: {
@@ -2215,7 +2229,7 @@ export default {
           }
         }
 
-        const lanuagesResponse = await axios
+        const languagesResponse = await axios
           .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`, {
             params: {
               accept: "application/vnd.github.v3+json",
@@ -2232,8 +2246,8 @@ export default {
             return "ERROR";
           });
 
-        if (lanuagesResponse != "ERROR") {
-          const languages = Object.keys(lanuagesResponse);
+        if (languagesResponse != "ERROR") {
+          const languages = Object.keys(languagesResponse);
           if (languages.length > 0) {
             this.step5Form.programmingLanguage = languages;
           }
@@ -2334,15 +2348,21 @@ export default {
         if (this.workflow.source.type === "local") {
           if (this.step3Form.identifier === "" || this.step3Form.identifier === undefined) {
             this.greyOutIdentifierInput = true;
+            this.localSource = true;
           }
         } else {
           this.greyOutIdentifierInput = false;
+          this.localSource = false;
         }
       }
     },
     editUniqueIdentifier() {
       this.step3Form.identifier = "";
       this.greyOutIdentifierInput = false;
+    },
+    revertToAutoAssignUniqueIdentifier() {
+      this.step3Form.identifier = "";
+      this.greyOutIdentifierInput = true;
     },
   },
   async mounted() {
