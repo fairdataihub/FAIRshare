@@ -144,7 +144,6 @@
             :filter-node-method="categoriesFilterMethod"
             class="w-full"
           />
-          <!-- <pre>{{ categoryOptions }}</pre> -->
         </el-form-item>
 
         <el-form-item label="Keywords">
