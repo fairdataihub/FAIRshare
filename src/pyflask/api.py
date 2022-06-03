@@ -53,6 +53,10 @@ API_VERSION = "1.4.0"
 app = Flask(__name__)
 # full if you want to see all the details
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"
+
+SECRET_KEY = os.urandom(32)
+app.config["SECRET_KEY"] = SECRET_KEY
+
 CORS(app)
 
 # configure root logger

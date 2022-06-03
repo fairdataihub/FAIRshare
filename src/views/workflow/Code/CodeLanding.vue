@@ -98,7 +98,7 @@
           <el-button type="danger" plain> Cancel </el-button>
         </router-link>
 
-        <button class="primary-button" @click="navigateToWorkflows" ref="continueButton">
+        <button class="primary-button" @click="navigateToSelectFolder" ref="continueButton">
           Let's go
           <el-icon> <d-arrow-right /> </el-icon>
         </button>
@@ -112,26 +112,38 @@ import { useDatasetsStore } from "@/store/datasets";
 import gsap from "gsap";
 
 export default {
-  name: "ProjectLanding",
+  name: "CodeLanding",
   data() {
     return {
       datasetStore: useDatasetsStore(),
       dataset: {},
       datasetID: this.$route.params.datasetID,
+      workflowID: this.$route.params.workflowID,
     };
   },
   methods: {
-    navigateToWorkflows() {
-      this.$router.push({ path: `/datasets/${this.datasetID}` });
+    navigateToSelectFolder() {
+      this.$router.push({
+        path: `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`,
+      });
     },
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
   },
   async mounted() {
-    this.datasetStore.hideProgressBar();
+    this.dataset = await this.datasetStore.getCurrentDataset();
+
+    this.workflow = this.dataset.workflows[this.workflowID];
+
+    this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
     this.datasetStore.setCurrentStep(1);
+
+    this.workflow.fairListShown = true;
+
+    this.datasetStore.updateCurrentDataset(this.dataset);
+    this.datasetStore.syncDatasets();
 
     gsap.fromTo(
       ".el-timeline-item",
@@ -149,5 +161,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

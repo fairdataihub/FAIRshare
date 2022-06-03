@@ -70,7 +70,7 @@ def createNewFigshareItem(access_token, data):
 
         return json.dumps({"doi": doi, "article_id": article_id})
     else:
-        return {"status": "ERROR", "message": "Could not create DOI"}
+        return json.dumps({"status": "ERROR", "message": "Could not create DOI"})
 
 
 def deleteFigshareArticle(access_token, article_id):
@@ -166,6 +166,15 @@ def uploadFileToFigshare(access_token, article_id, file_path):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     response = response.json()
+
+    if "location" not in response:
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": f"Could not get file location: {json.dumps(response)}",
+            }  # noqa: E501
+        )
+
     file_location = response["location"]
 
     last_slash_position = file_location.rfind("/")
@@ -262,7 +271,29 @@ def publishFigshareArticle(access_token, article_id):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     if response.status_code != 201:
-        return "ERROR"
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": "Could not publish article",
+                "details": [response.json()]["message"],
+            }
+        )
+
     response = response.json()
 
-    return response["location"] if "location" in response else "ERROR"
+    if "location" in response:
+        return json.dumps(
+            {
+                "status": "SUCCESS",
+                "message": response["location"],
+                "details": "",
+            }
+        )
+    else:
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": "Could not publish article",
+                "details": "",
+            }
+        )

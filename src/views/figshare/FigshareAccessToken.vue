@@ -10,8 +10,19 @@
 
       <fade-transition>
         <div v-if="ready">
+          <div class="flex justify-center pt-3 pb-1" v-if="validTokenAvailable">
+            <Vue3Lottie
+              animationLink="https://assets9.lottiefiles.com/packages/lf20_0jomt6wm.json"
+              :width="100"
+              :height="100"
+              :loop="1"
+            />
+          </div>
+
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
-            It looks like you have already connected your Figshare account with FAIRshare. <br />
+            <span class="text-lg">
+              It looks like you have already connected your Figshare account with FAIRshare. <br />
+            </span>
             Click on the 'Continue' button below to start the upload process of your dataset.
             <br />
           </p>
