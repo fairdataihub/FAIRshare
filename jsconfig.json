@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "jsx": "preserve"
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules"]

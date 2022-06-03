@@ -134,7 +134,7 @@
           </div>
         </el-form-item>
 
-        <el-form-item label="Categories">
+        <el-form-item label="Categories" prop="categories">
           <el-tree-select
             v-model="figshareMetadataForm.categories"
             :data="categoryOptions"
@@ -443,6 +443,13 @@ export default {
             required: false,
             validator: this.referencesValidator,
             trigger: "blur",
+          },
+        ],
+        categories: [
+          {
+            required: true,
+            message: "Required. Select at least one category.",
+            trigger: "change",
           },
         ],
       },
