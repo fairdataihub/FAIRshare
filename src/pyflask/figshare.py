@@ -271,7 +271,29 @@ def publishFigshareArticle(access_token, article_id):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     if response.status_code != 201:
-        return "ERROR"
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": "Could not publish article",
+                "details": [response.json()]["message"],
+            }
+        )
+
     response = response.json()
 
-    return response["location"] if "location" in response else "ERROR"
+    if "location" in response:
+        return json.dumps(
+            {
+                "status": "SUCCESS",
+                "message": response["location"],
+                "details": "",
+            }
+        )
+    else:
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": "Could not publish article",
+                "details": "",
+            }
+        )

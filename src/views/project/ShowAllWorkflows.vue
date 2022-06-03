@@ -220,17 +220,16 @@
           </p>
         </info-confirm>
         <info-confirm
-          ref="infoConfirmLocalZenodoUploadNoPublish"
+          ref="infoConfirmLocalUploadNoPublish"
           title="You haven't published this dataset yet"
-          @messageConfirmed="localZenodoUploadNoPublishResponse('ok')"
-          @messageCancel="localZenodoUploadNoPublishResponse('cancel')"
+          @messageConfirmed="localUploadNoPublishResponse('ok')"
+          @messageCancel="localUploadNoPublishResponse('cancel')"
           confirmButtonText="I want to publish"
           cancelButtonText="I want to upload my data again"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you have already uploaded this dataset to Zenodo but you haven't published
-            it yet. Would you like to publish this now or create a new upload for this specific
-            workflow?
+            It looks like you have already uploaded this dataset but you haven't published it yet.
+            Would you like to publish this now or create a new upload for this specific workflow?
           </p>
         </info-confirm>
         <info-confirm
@@ -376,10 +375,11 @@ export default {
       const routerPath = this.selectDataPath();
       this.$router.push({ path: routerPath });
     },
-    async localZenodoUploadNoPublishResponse(response) {
+    async localUploadNoPublishResponse(response) {
       let routerPath = "";
       if (response === "ok") {
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        const workflow = this.dataset.workflows[this.workflowID];
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${workflow.destination.name}/publish`;
         this.$router.push({ path: routerPath });
       } else if (response === "cancel") {
         this.dataset.workflows[this.workflowID].datasetUploaded = false;
@@ -441,7 +441,7 @@ export default {
         "source" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].source.type === "local"
       ) {
-        this.$refs.infoConfirmLocalZenodoUploadNoPublish.show();
+        this.$refs.infoConfirmLocalUploadNoPublish.show();
         return;
       }
 
