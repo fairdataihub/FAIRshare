@@ -275,7 +275,7 @@ def publishFigshareArticle(access_token, article_id):
             {
                 "status": "ERROR",
                 "message": "Could not publish article",
-                "details": [response.json()]["message"],
+                "details": (response.json())["message"],
             }
         )
 

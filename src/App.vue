@@ -245,8 +245,8 @@ export default {
       let retriesSuccess = false;
       const timeout = 1000;
 
-      // retry request 10 times with a 1 second delay
-      for (let i = 0; i < 10 && !retriesSuccess; i++) {
+      // retry request 30 times with a 1 second delay
+      for (let i = 0; i < 30 && !retriesSuccess; i++) {
         console.log(`Retry ${i}...`);
         axios.get(`${this.$server_url}/api_version`).then((echo_response) => {
           console.log(`Server Status: ${echo_response.data}`);
