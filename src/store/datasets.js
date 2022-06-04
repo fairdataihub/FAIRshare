@@ -68,7 +68,14 @@ export const useDatasetsStore = defineStore({
   }),
   getters: {
     datasetCount: function () {
-      return Object.keys(this.datasets).length;
+      const keys = Object.keys(this.datasets);
+      let datasetCount = keys.length;
+
+      if (keys.includes("version")) {
+        return datasetCount - 1;
+      } else {
+        return datasetCount;
+      }
     },
     // getAllDatasets() {
     //   return this.datasets;
