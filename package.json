@@ -41,8 +41,7 @@
     "./src/**/*.{ts,js,jsx,tsx,vue,json}": [
       "yarn lint-es --fix",
       "yarn format"
-    ],
-    "*.js": "eslint --cache --fix"
+    ]
   },
   "config": {
     "commitizen": {
