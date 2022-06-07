@@ -132,7 +132,6 @@ import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 import { app } from "@electron/remote";
 import semver from "semver";
 import axios from "axios";
-import axiosRetry from "axios-retry";
 import Mousetrap from "mousetrap";
 
 import { useDatasetsStore } from "./store/datasets";
@@ -235,8 +234,67 @@ export default {
           console.error(error);
         });
     },
+    async checkForBackend() {
+      /**
+       * TODO: Make this into a composable
+       *
+       * @param {*} ms - milliseconds to wait
+       */
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      let retriesSuccess = false;
+      const timeout = 1000;
+
+      // retry request 30 times with a 1 second delay
+      for (let i = 0; i < 30 && !retriesSuccess; i++) {
+        console.log(`Retry ${i}...`);
+        axios.get(`${this.$server_url}/api_version`).then((echo_response) => {
+          console.log(`Server Status: ${echo_response.data}`);
+          axios
+            .get(`${this.$server_url}/api_version`)
+            .then((api_version_response) => {
+              this.config.setGlobals("minAPIVersion", MIN_API_VERSION);
+              this.config.setGlobals("backendAPIVersion", api_version_response.data);
+
+              if (
+                semver.lte(semver.clean(MIN_API_VERSION), semver.clean(api_version_response.data))
+              ) {
+                console.log("API version satisfied");
+
+                this.loadStores();
+
+                retriesSuccess = true;
+
+                axios
+                  .get(`${this.$server_url}/zenodo/env`)
+                  .then((response) => {
+                    if (response.data.search("sandbox") === -1) {
+                      this.environment = "production";
+                    } else {
+                      this.environment = "sandbox";
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              } else {
+                this.$refs.errorConfirmInvalidAPIVersion.show();
+
+                retriesSuccess = false;
+
+                this.showConnectingMessage = false;
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              retriesSuccess = false;
+            });
+        });
+        await sleep(timeout);
+      }
+    },
   },
-  mounted() {
+  async mounted() {
     this.$track("App Launched", "OS", process.platform);
     this.$track("App Launched", "Version", app.getVersion());
     this.$track("App Launched", "Arch", process.arch);
@@ -260,57 +318,7 @@ export default {
     // disable the refresh button on Windows
     Mousetrap.bind("ctrl+r", disableReload);
 
-    const client = axios.create({ baseURL: `${this.$server_url}` });
-    axiosRetry(client, { retries: 10 });
-
-    client
-      .get("/echo", {
-        "axios-retry": {
-          retries: 10,
-          retryDelay: axiosRetry.exponentialDelay,
-        },
-      })
-      .then((echo_response) => {
-        console.log(`Server Status: ${echo_response.data}`);
-        axios
-          .get(`${this.$server_url}/api_version`)
-          .then((api_version_response) => {
-            this.config.setGlobals("minAPIVersion", MIN_API_VERSION);
-            this.config.setGlobals("backendAPIVersion", api_version_response.data);
-
-            if (
-              semver.lte(semver.clean(MIN_API_VERSION), semver.clean(api_version_response.data))
-            ) {
-              console.log("API version satisfied");
-
-              this.loadStores();
-
-              axios
-                .get(`${this.$server_url}/zenodo/env`)
-                .then((response) => {
-                  if (response.data.search("sandbox") === -1) {
-                    this.environment = "production";
-                  } else {
-                    this.environment = "sandbox";
-                  }
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            } else {
-              this.$refs.errorConfirmInvalidAPIVersion.show();
-
-              this.showConnectingMessage = false;
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        this.$refs.errorConfirmNoBackend.show();
-        console.error(error);
-      });
+    this.checkForBackend();
 
     window.ipcRenderer.on("update-available", (_e, _arg) => {
       this.showDownloadingMessage = true;
