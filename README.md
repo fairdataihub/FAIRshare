@@ -115,6 +115,6 @@ FAIRshare uses Google Analytics to track user interactions with the application.
 [vulnerabilities-shield]: https://sonarcloud.io/api/project_badges/measure?project=fairdataihub_FAIRshare&metric=vulnerabilities
 [sonarcloud-url]: https://sonarcloud.io/summary/new_code?id=fairdataihub_FAIRshare
 [storybook-shield]: https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg
-[storybook-url]: https://628e928cd2515a004ad2f0b7-jmdpzjjikc.chromatic.com/
+[storybook-url]: https://main--628e928cd2515a004ad2f0b7.chromatic.com/
 [fairshare-shield]: https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg
 [fairshare-url]: https://fairdataihub.org/fairshare

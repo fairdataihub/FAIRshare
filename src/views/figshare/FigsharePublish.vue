@@ -35,7 +35,7 @@
           :loop="1"
         />
         <p class="pb-5 text-center text-lg font-medium">
-          Your dataset was successfully published. You can now view it on Zenodo.
+          Your dataset was successfully published. You can now view it on Figshare.
         </p>
         <p class="max-w-lg pb-5 text-center text-sm">
           To increase the FAIRness of your software, we recommend to register it on the
@@ -108,7 +108,7 @@ export default {
     },
     async updateForNewVersion() {
       const response = await axios
-        .get(`${this.$server_url}/zenodo/depositions`, {
+        .get(`${this.$server_url}/figshare/depositions`, {
           params: {
             access_token: this.figshareToken,
           },
@@ -127,8 +127,8 @@ export default {
 
       const selectedDeposition = filteredDepositions[0];
 
-      this.workflow.destination.zenodo.selectedDeposition = selectedDeposition;
-      this.workflow.destination.zenodo.newVersion = true;
+      this.workflow.destination.figshare.selectedDeposition = selectedDeposition;
+      this.workflow.destination.figshare.newVersion = true;
     },
     async publishDeposition() {
       const article_id = this.workflow.destination.figshare.article_id;
@@ -140,11 +140,18 @@ export default {
       });
 
       const response = await axios
-        .post(`${this.$server_url}/zenodo/item/publish`, {
+        .post(`${this.$server_url}/figshare/item/publish`, {
           access_token: this.figshareToken,
           article_id: article_id,
         })
         .then((response) => {
+          response = JSON.parse(response.data);
+
+          if ("status" in response && response.status === "ERROR") {
+            console.error(response.message, response.details);
+            return "ERROR";
+          }
+
           this.$track("Figshare", "Publish deposition", "success");
 
           if (
@@ -154,7 +161,7 @@ export default {
             this.$track("Figshare", "Publish new version", "success");
           }
 
-          return response.data;
+          return response;
         })
         .catch((error) => {
           this.$track("Figshare", "Publish deposition", "failed");
@@ -179,6 +186,8 @@ export default {
       // this.zenodoDatasetID = response.id;
       // console.log(this.zenodoDatasetID);
 
+      console.log(response);
+
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
 
@@ -193,7 +202,7 @@ export default {
         this.datasetStore.setCurrentStep(8);
 
         this.workflow.datasetPublished = true;
-        this.workflow.destination.figshare.location = response;
+        this.workflow.destination.figshare.location = response.message; //doi is being sent in the message key for now
 
         this.published = true;
 
@@ -214,13 +223,9 @@ export default {
       loading.close();
     },
     async viewDatasetOnFigshare() {
-      /**
-       * TODO: this one will have to be updated when we figure out what the published URL is
-       */
-      // window.ipcRenderer.send(
-      //   "open-link-in-browser",
-      //   `${process.env.VUE_APP_ZENODO_URL}/record/${this.zenodoDatasetID}`
-      // );
+      const doi = this.workflow.destination.figshare.doi;
+
+      window.ipcRenderer.send("open-link-in-browser", `https://dx.doi.org/${doi}`);
     },
     async openDraftDataset() {
       const article_id = this.workflow.destination.figshare.article_id;

@@ -54,12 +54,15 @@ API_VERSION = "1.4.0"
 
 app = Flask(__name__)
 
-csrf = CSRFProtect()
-csrf.init_app(app)
-
+SECRET_KEY = os.urandom(32)
+app.config["SECRET_KEY"] = SECRET_KEY
 
 # full if you want to see all the details
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"
+
+csrf = CSRFProtect()
+csrf.init_app(app)
+
 CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}})
 
 # configure root logger

@@ -378,6 +378,14 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   background-color: var(--el-button-bg-color);
 }
 
+.code-metadata-form > .el-form-item {
+  @apply mb-2;
+}
+
+.code-metadata-form > .el-form-item > .el-form-item__label {
+  @apply mb-0 flex items-end justify-end;
+}
+
 .v-md-editor__tooltip {
   @apply flex items-center justify-center font-inter;
 }

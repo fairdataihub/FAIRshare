@@ -302,10 +302,15 @@ export default {
       this.dataset.data.Other.questions.license = this.licenseForm.license;
       this.dataset.data.general.questions.license = this.licenseForm.license;
 
-      // turn this to false after license is generated at the end of the workflow
-      this.workflow.generateLicense = true;
       this.workflow.createLicenseSelect = this.saveLicense;
-      this.workflow.licenseText = this.draftLicense;
+
+      if (this.saveLicense === "Yes") {
+        this.workflow.generateLicense = true;
+        this.workflow.licenseText = this.draftLicense;
+      } else {
+        this.workflow.generateLicense = false;
+        this.workflow.licenseText = "";
+      }
 
       this.datasetStore.updateCurrentDataset(this.dataset);
       this.datasetStore.syncDatasets();
@@ -320,6 +325,14 @@ export default {
           this.dataset.data.general.questions.license = this.licenseForm.license;
 
           this.workflow.createLicenseSelect = this.saveLicense;
+
+          if (this.saveLicense === "Yes") {
+            this.workflow.generateLicense = true;
+            this.workflow.licenseText = this.draftLicense;
+          } else {
+            this.workflow.generateLicense = false;
+            this.workflow.licenseText = "";
+          }
 
           this.datasetStore.updateCurrentDataset(this.dataset);
           this.datasetStore.syncDatasets();

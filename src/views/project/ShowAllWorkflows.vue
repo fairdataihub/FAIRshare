@@ -54,6 +54,10 @@
               </div>
             </div>
 
+            <div class="flex justify-start">
+              <span class="text-md font-medium text-zinc-600">Summary of progress</span>
+            </div>
+
             <line-divider></line-divider>
 
             <div
@@ -67,9 +71,22 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== '' && scope.row.status !== false"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
                     />
-                    <Icon icon="charm:circle-cross" class="text-orange-500" v-else />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="Details">
@@ -141,9 +158,22 @@
                     <Icon
                       icon="bi:check-circle"
                       class="text-green-500"
-                      v-if="scope.row.status !== '' && scope.row.status !== false"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
                     />
-                    <Icon icon="charm:circle-cross" class="text-orange-500" v-else />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="Details">
@@ -190,17 +220,16 @@
           </p>
         </info-confirm>
         <info-confirm
-          ref="infoConfirmLocalZenodoUploadNoPublish"
+          ref="infoConfirmLocalUploadNoPublish"
           title="You haven't published this dataset yet"
-          @messageConfirmed="localZenodoUploadNoPublishResponse('ok')"
-          @messageCancel="localZenodoUploadNoPublishResponse('cancel')"
+          @messageConfirmed="localUploadNoPublishResponse('ok')"
+          @messageCancel="localUploadNoPublishResponse('cancel')"
           confirmButtonText="I want to publish"
           cancelButtonText="I want to upload my data again"
         >
           <p class="text-center text-base text-gray-500">
-            It looks like you have already uploaded this dataset to Zenodo but you haven't published
-            it yet. Would you like to publish this now or create a new upload for this specific
-            workflow?
+            It looks like you have already uploaded this dataset but you haven't published it yet.
+            Would you like to publish this now or create a new upload for this specific workflow?
           </p>
         </info-confirm>
         <info-confirm
@@ -281,6 +310,8 @@ export default {
 
         if (source === "local") {
           return this.dataset.data[workflow.type[0]].folderPath;
+        } else if (source === "github") {
+          return `@${workflow.github.repo}`;
         } else {
           return "";
         }
@@ -327,7 +358,7 @@ export default {
 
       switch (dataType) {
         case "Code":
-          return `/datasets/${this.datasetID}/${this.workflowID}/Code/selectFolder`;
+          return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
           return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
         default:
@@ -344,10 +375,11 @@ export default {
       const routerPath = this.selectDataPath();
       this.$router.push({ path: routerPath });
     },
-    async localZenodoUploadNoPublishResponse(response) {
+    async localUploadNoPublishResponse(response) {
       let routerPath = "";
       if (response === "ok") {
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/publish`;
+        const workflow = this.dataset.workflows[this.workflowID];
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${workflow.destination.name}/publish`;
         this.$router.push({ path: routerPath });
       } else if (response === "cancel") {
         this.dataset.workflows[this.workflowID].datasetUploaded = false;
@@ -409,7 +441,7 @@ export default {
         "source" in this.dataset.workflows[workflowID] &&
         this.dataset.workflows[workflowID].source.type === "local"
       ) {
-        this.$refs.infoConfirmLocalZenodoUploadNoPublish.show();
+        this.$refs.infoConfirmLocalUploadNoPublish.show();
         return;
       }
 
@@ -460,6 +492,12 @@ export default {
 
       const workflow = this.dataset.workflows[workflowID];
 
+      let codeMetadata = {};
+
+      if ("Code" in this.dataset.data) {
+        codeMetadata = this.dataset.data.Code;
+      }
+
       this.codeObject.data = [];
 
       this.codeObject.show = true;
@@ -470,10 +508,41 @@ export default {
 
       this.codeObject.data.push({
         status: this.getSource(workflowID),
-        task: "Source",
+        task: "Select data files",
         detail: this.getSource(workflowID),
         type: "",
       });
+
+      if ("standards" in codeMetadata) {
+        let invalid = false;
+        for (let question of Object.keys(codeMetadata.standards)) {
+          if (codeMetadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.codeObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.codeObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.codeObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
 
       let generateStatus = "";
 
@@ -484,7 +553,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Metadata",
+        task: "Provide metadata",
         detail: "codemeta.json | CITATION.cff",
         type: "",
       });
@@ -498,7 +567,7 @@ export default {
       }
       this.codeObject.data.push({
         status: license,
-        task: "License",
+        task: "Select a license",
         detail: license,
         type: "",
       });
@@ -515,7 +584,7 @@ export default {
       }
       this.codeObject.data.push({
         status: destination,
-        task: "Destination",
+        task: "Select repository",
         detail: destination,
         type: "",
       });
@@ -527,7 +596,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Uploaded",
+        task: "Upload dataset",
         detail: "",
         type: "",
       });
@@ -539,7 +608,7 @@ export default {
       }
       this.codeObject.data.push({
         status: generateStatus,
-        task: "Published",
+        task: "Publish dataset",
         detail: "",
         type: "",
       });
@@ -585,6 +654,12 @@ export default {
 
       const workflow = this.dataset.workflows[workflowID];
 
+      let otherMetadata = {};
+
+      if ("Other" in this.dataset.data) {
+        otherMetadata = this.dataset.data.Other;
+      }
+
       this.otherObject.data = [];
 
       this.otherObject.show = true;
@@ -599,6 +674,37 @@ export default {
         detail: this.getSource(workflowID),
         type: "",
       });
+
+      if ("standards" in otherMetadata) {
+        let invalid = false;
+        for (let question of Object.keys(otherMetadata.standards)) {
+          if (otherMetadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.otherObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.otherObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.otherObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
 
       let generateStatus = "";
 

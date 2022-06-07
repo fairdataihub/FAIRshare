@@ -6,9 +6,9 @@ import CreateNewProject from "../views/project/CreateNewProject.vue";
 import CreateNewProjectConfirm from "../views/project/CreateNewProjectConfirm.vue";
 import EditProject from "../views/project/EditProject.vue";
 import ShowAllWorkflows from "../views/project/ShowAllWorkflows.vue";
-import ProjectLanding from "../views/project/ProjectLanding.vue";
 
 // Code metadata related components
+import CodeLanding from "../views/workflow/Code/CodeLanding.vue";
 import CodeSelectSourceFolder from "../views/workflow/Code/SelectSourceFolder.vue";
 import CodeCreateMetadata from "../views/workflow/Code/CreateMetadata.vue";
 import CodeCreateMetadataReview from "../views/workflow/Code/CreateMetadataReview.vue";
@@ -17,6 +17,7 @@ import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
 import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 
 // Other metadata related components
+import OtherLanding from "../views/workflow/Other/OtherLanding.vue";
 import OtherSelectSourceFolder from "../views/workflow/Other/SelectSourceFolder.vue";
 import OtherReviewStandards from "../views/workflow/Other/ReviewStandards.vue";
 import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
@@ -83,8 +84,12 @@ const routes = [
     component: EditProject,
   },
   {
-    path: "/datasets/:datasetID/landing",
-    component: ProjectLanding,
+    path: "/datasets/:datasetID/:workflowID/Code/landing",
+    component: CodeLanding,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Other/landing",
+    component: OtherLanding,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",

@@ -17,13 +17,39 @@
           </p>
 
           <div class="py-5">
-            <el-select-v2
+            <el-select
+              v-model="selectedRepo"
+              placeholder="Select a repository"
+              @change="showGithubRepoContents('change')"
+              size="large"
+              class="w-full"
+              filterable
+            >
+              <el-option
+                v-for="repo in githubRepos"
+                :key="repo.label"
+                :label="repo.label"
+                :value="repo.value"
+                :disabled="repo.visibility !== 'public'"
+              >
+                <el-tag
+                  class="min-w-[60px] text-center"
+                  :type="repo.visibility === 'public' ? '' : 'warning'"
+                  size="small"
+                >
+                  {{ repo.visibility }}
+                </el-tag>
+                <span class="mx-2 text-sm">{{ repo.label }}</span>
+              </el-option>
+            </el-select>
+
+            <!-- THIS IS AN ISSUE WITH VUE: https://github.com/vuejs/core/pull/6025 -->
+            <!-- <el-select-v2
               v-model="selectedRepo"
               filterable
               :options="githubRepos"
               placeholder="Please select"
-              popper-class="github-repo-select"
-              @change="showGithubRepoContents('change')"
+              @visible-change="showGithubRepoContents('change')"
               size="large"
               class="w-full"
             >
@@ -36,7 +62,7 @@
                 >
                 <span class="mx-2">{{ item.label }}</span>
               </template>
-            </el-select-v2>
+            </el-select-v2> -->
           </div>
         </div>
         <!-- show error message if token is not valid -->
