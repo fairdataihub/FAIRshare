@@ -1493,7 +1493,7 @@ export default {
           });
         }
 
-        if ("created_at" in response) {
+        if (typeof response === "object" && "created_at" in response) {
           this.step1Form.creationDate = response.created_at;
         }
 

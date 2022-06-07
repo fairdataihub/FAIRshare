@@ -45,7 +45,7 @@
                 <template #reference>
                   <el-checkbox
                     border
-                    name="type1"
+                    name="type"
                     class="single-check-box transition-all"
                     label="Research software"
                   >
@@ -107,15 +107,23 @@
             </div>
 
             <div class="flex gap-8">
-              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
+              <el-popover placement="top" :hide-after="0" trigger="hover" :width="400">
                 <template #reference>
-                  <el-checkbox border name="type" class="single-check-box" label="Genomic" disabled>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="NextGenHighThroughputSequencing"
+                  >
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />
                       <span class="text-sm">Genomic</span>
                     </div>
                   </el-checkbox>
                 </template>
+                <span class="break-normal text-left text-sm">
+                  Next generation high-throughput sequencing data, such as Illumina or PacBio.
+                </span>
               </el-popover>
 
               <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">

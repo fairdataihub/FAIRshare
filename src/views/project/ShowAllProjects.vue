@@ -126,7 +126,7 @@
                           class="mr-1"
                           :class="{ '!hidden': index > 1 }"
                         >
-                          {{ workflow === "Code" ? "Research software" : workflow }}
+                          {{ replaceDataType(workflow) }}
                         </el-tag>
                       </div>
                     </div>
@@ -235,7 +235,7 @@
                           class="mr-1"
                           :class="{ '!bg-red-500': index > 0 }"
                         >
-                          {{ workflow === "Code" ? "Research software" : workflow }}
+                          {{ replaceDataType(workflow) }}
                         </el-tag>
                       </div>
                     </div>
@@ -309,8 +309,18 @@ export default {
       datasetsPublished: [],
     };
   },
-  computed: {},
+
   methods: {
+    replaceDataType(dataType) {
+      switch (dataType) {
+        case "Code":
+          return "Research Software";
+        case "NextGenHighThroughputSequencing":
+          return "NextGen High Throughput Sequencing";
+        default:
+          return dataType;
+      }
+    },
     shortDate(date) {
       return dayjs(date).format("MMM DD");
     },
@@ -320,7 +330,7 @@ export default {
     dateDifference(date) {
       const now = dayjs();
 
-      let difference = "";
+      let difference = 0;
 
       difference = now.diff(date, "second");
 

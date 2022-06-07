@@ -92,7 +92,7 @@ export const useDatasetsStore = defineStore({
         console.error(error);
       }
     },
-    async loadandReturnDatasets() {
+    async loadAndReturnDatasets() {
       try {
         const datasets = await loadFile();
 
@@ -109,7 +109,7 @@ export const useDatasetsStore = defineStore({
       try {
         this.datasets[datasetID] = dataset;
         this.currentDataset = dataset;
-        this.writeDatasetsToFile();
+        await this.writeDatasetsToFile();
       } catch (error) {
         console.log(error);
       }
@@ -117,7 +117,7 @@ export const useDatasetsStore = defineStore({
     async deleteDataset(datasetID) {
       try {
         delete this.datasets[datasetID];
-        this.writeDatasetsToFile();
+        await this.writeDatasetsToFile();
       } catch (error) {
         console.log(error);
       }
@@ -125,7 +125,7 @@ export const useDatasetsStore = defineStore({
     async syncDatasets() {
       const datasetID = this.currentDataset.id;
       this.datasets[datasetID] = this.currentDataset;
-      this.writeDatasetsToFile();
+      await this.writeDatasetsToFile();
     },
     async updateCurrentDataset(dataset) {
       try {
@@ -148,7 +148,7 @@ export const useDatasetsStore = defineStore({
       }
     },
     async getAllDatasets() {
-      return this.loadandReturnDatasets();
+      return this.loadAndReturnDatasets();
     },
     async getProgressBar() {
       return this.progressBar;
@@ -202,7 +202,7 @@ export const useDatasetsStore = defineStore({
       //   this.writeDatasetsToFile();
       // }
 
-      this.writeDatasetsToFile(); // write the datasets to file
+      await this.writeDatasetsToFile(); // write the datasets to file
 
       return;
     },

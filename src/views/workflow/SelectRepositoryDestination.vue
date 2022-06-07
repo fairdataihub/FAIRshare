@@ -621,7 +621,9 @@ export default {
         //do nothing
         this.workflow.destination.name = this.repoID;
       } else {
-        // warn the user that they are changing repos (add a sweetalert or something)
+        /**
+         * TODO warn the user that they are changing repos(add a sweetalert or something)
+         * */
         this.workflow.destination.name = this.repoID;
       }
 

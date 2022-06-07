@@ -113,7 +113,6 @@ export default {
             });
           }
           if (this.workflow.source.type === "local") {
-            this.workflow.destination.name;
             if ("name" in this.workflow.destination) {
               const destination = this.workflow.destination.name;
               this.$router.push({

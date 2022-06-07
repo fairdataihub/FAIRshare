@@ -88,6 +88,7 @@
               </fade-transition>
               <iframe
                 sandbox
+                title="Preview license"
                 :src="licenseHtmlUrl"
                 class="h-full w-full transition-all"
                 :class="loading ? 'opacity-0' : 'opacity-100'"
@@ -382,6 +383,7 @@ export default {
         });
 
       if (
+        typeof response === "object" &&
         response !== "ERROR" &&
         "license" in response &&
         response.license != null &&

@@ -13,7 +13,7 @@
       <div class="flex w-full flex-col items-center justify-center pt-5">
         <div class="card-container">
           <div class="image-container">
-            <img src="../../assets/images/zenodologo.png" class="image" />
+            <img src="../../assets/images/zenodologo.png" class="image" alt="zenodo logo" />
           </div>
           <div class="card-container-content">
             <div class="card-container-status">
@@ -73,7 +73,7 @@
 
         <div class="card-container">
           <div class="image-container">
-            <img src="../../assets/images/githublogo.jpeg" class="image" />
+            <img src="../../assets/images/githublogo.jpeg" class="image" alt="GitHub logo" />
           </div>
           <div class="card-container-content">
             <div class="card-container-status">
@@ -133,7 +133,11 @@
 
         <div class="card-container">
           <div class="image-container">
-            <img src="../../assets/images/biotoolslogo.png" class="image p-6" />
+            <img
+              src="../../assets/images/biotoolslogo.png"
+              class="image p-6"
+              alt="bio.tools logo"
+            />
           </div>
           <div class="card-container-content">
             <div class="card-container-status">
@@ -194,7 +198,7 @@
 
         <div class="card-container">
           <div class="image-container">
-            <img src="../../assets/images/figsharelogo.png" class="image p-6" />
+            <img src="../../assets/images/figsharelogo.png" class="image p-6" alt="figshare logo" />
           </div>
           <div class="card-container-content">
             <div class="card-container-status">

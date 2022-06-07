@@ -200,6 +200,7 @@ export default {
       if (response !== "ERROR" && response.length > 0) {
         for (const webhook of response) {
           if (
+            typeof webhook === "object" &&
             "config" in webhook &&
             "events" in webhook &&
             webhook.events.includes("release") &&
