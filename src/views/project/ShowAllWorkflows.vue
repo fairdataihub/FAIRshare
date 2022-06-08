@@ -206,6 +206,95 @@
               </button>
             </div>
           </div>
+
+          <div
+            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            v-if="nextGenHighThruObject.show"
+          >
+            <div
+              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              @click="nextGenHighThruObject.minimize = !nextGenHighThruObject.minimize"
+            >
+              <Icon icon="bi:arrows-expand" height="20" />
+            </div>
+
+            <div class="flex flex-row items-center pb-2">
+              <Icon icon="clarity:dna-line" height="45" />
+              <div class="ml-2 flex w-full flex-col">
+                <span class="text-base">
+                  {{ nextGenHighThruObject.title }}
+                </span>
+
+                <span class="text-sm" v-show="nextGenHighThruObject.name != ''">
+                  {{ nextGenHighThruObject.name }}
+                </span>
+              </div>
+            </div>
+
+            <line-divider></line-divider>
+
+            <div
+              class="flex flex-col transition-all"
+              :class="{
+                'max-h-0': nextGenHighThruObject.minimize,
+                'max-h-screen': !nextGenHighThruObject.minimize,
+              }"
+            >
+              <el-table :data="nextGenHighThruObject.data" stripe style="width: 100%">
+                <el-table-column prop="task" label="Task" />
+                <el-table-column label="Status">
+                  <template #default="scope">
+                    <Icon
+                      icon="bi:check-circle"
+                      class="text-green-500"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
+                    />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
+                  </template>
+                </el-table-column>
+                <el-table-column label="Details">
+                  <template #default="scope">
+                    <span v-if="scope.row.type !== 'doi'">
+                      {{ scope.row.detail }}
+                    </span>
+                    <a
+                      v-else
+                      :href="`https://doi.org/${scope.row.detail}`"
+                      target="_blank"
+                      class="text-url"
+                      rel="noopener noreferrer"
+                    >
+                      {{ scope.row.detail }}
+                    </a>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+            <div class="mt-4 flex items-center justify-end px-2 py-2">
+              <button
+                class="primary-button"
+                @click="navigateToCurate(nextGenHighThruObject.workflowID)"
+                ref="continueButton"
+              >
+                Curate {{ nextGenHighThruObject.title }}
+                <el-icon><arrow-right-bold /></el-icon>
+              </button>
+            </div>
+          </div>
         </div>
 
         <info-confirm
@@ -287,6 +376,7 @@ export default {
       workflowID: "",
       codeObject: { data: [] },
       otherObject: { data: [] },
+      nextGenHighThruObject: { data: [] },
       codeLicensesOptions: codeLicensesJSON.licenses,
       otherLicensesOptions: otherLicensesJSON.licenses,
     };
@@ -361,6 +451,8 @@ export default {
           return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
           return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
+        case "NextGenHighThroughputSequencing":
+          return `/datasets/${this.datasetID}/${this.workflowID}/NextGenHighThroughputSequencing/selectFolder`;
         default:
           return dataType;
       }
@@ -794,9 +886,159 @@ export default {
         type: "doi",
       });
     },
+    generateNextGenHighThruObject() {
+      this.nextGenHighThruObject.show = false;
+      this.nextGenHighThruObject.minimize = false;
+
+      const allWorkflows = Object.keys(this.dataset.workflows);
+
+      const workflowPresent = allWorkflows.some(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "NextGenHighThroughputSequencing"
+      );
+
+      if (!workflowPresent) {
+        return;
+      }
+
+      const workflowID = allWorkflows.find(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "NextGenHighThroughputSequencing"
+      );
+
+      this.nextGenHighThruObject.workflowID = workflowID;
+
+      const workflow = this.dataset.workflows[workflowID];
+
+      let metadata = {};
+
+      if ("NextGenHighThroughputSequencing" in this.dataset.data) {
+        metadata = this.dataset.data.NextGenHighThroughputSequencing;
+      }
+
+      this.nextGenHighThruObject.data = [];
+
+      this.nextGenHighThruObject.show = true;
+      this.nextGenHighThruObject.title = "High-throughput Sequencing Data";
+      if ("name" in this.dataset.data.NextGenHighThroughputSequencing.questions) {
+        this.nextGenHighThruObject.name =
+          this.dataset.data.NextGenHighThroughputSequencing.questions.name;
+      }
+
+      this.nextGenHighThruObject.data.push({
+        status: this.getSource(workflowID),
+        task: "Source",
+        detail: this.getSource(workflowID),
+        type: "",
+      });
+
+      if ("standards" in metadata) {
+        let invalid = false;
+        for (let question of Object.keys(metadata.standards)) {
+          if (metadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.nextGenHighThruObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.nextGenHighThruObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.nextGenHighThruObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
+
+      let generateStatus = "";
+
+      if (workflow.generateNextGenHighThroughputSequencingMetadata) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.nextGenHighThruObject.data.push({
+        status: generateStatus,
+        task: "Metadata",
+        detail: "metadata.json",
+        type: "",
+      });
+
+      let destination = "";
+      if (
+        "uploadToRepo" in workflow &&
+        "destination" in workflow &&
+        "name" in workflow.destination
+      ) {
+        destination = this.repoFullName(workflow.destination.name);
+      } else {
+        destination = "";
+      }
+      this.nextGenHighThruObject.data.push({
+        status: destination,
+        task: "Destination",
+        detail: destination,
+        type: "",
+      });
+
+      if (workflow.datasetUploaded) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.nextGenHighThruObject.data.push({
+        status: generateStatus,
+        task: "Uploaded",
+        detail: "",
+        type: "",
+      });
+
+      if (workflow.datasetPublished) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.nextGenHighThruObject.data.push({
+        status: generateStatus,
+        task: "Published",
+        detail: "",
+        type: "",
+      });
+
+      let doi = "";
+      if (
+        "destination" in workflow &&
+        "name" in workflow.destination &&
+        workflow.destination[workflow.destination.name] != null &&
+        workflow.destination[workflow.destination.name] != undefined &&
+        "doi" in workflow.destination[workflow.destination.name]
+      ) {
+        doi = workflow.destination[workflow.destination.name].doi;
+      } else {
+        doi = "";
+      }
+      this.nextGenHighThruObject.data.push({
+        status: doi,
+        task: "Last generated DOI",
+        detail: doi,
+        type: "doi",
+      });
+    },
     generateStatusObjects() {
       this.generateCodeObject();
       this.generateOtherObject();
+      this.generateNextGenHighThruObject();
     },
   },
 

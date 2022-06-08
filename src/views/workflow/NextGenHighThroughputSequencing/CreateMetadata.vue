@@ -819,7 +819,7 @@ import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
 export default {
-  name: "OtherCreateMetadata",
+  name: "NextGenHighThroughputSequencingCreateMetadata",
   components: {
     draggable,
     Icon,
@@ -832,7 +832,7 @@ export default {
       currentStep: 1,
       totalSteps: 4,
       pillTitles: [
-        "Basic info",
+        "Study",
         "Authors and Contributors",
         "Discoverability",
         "Development tools",

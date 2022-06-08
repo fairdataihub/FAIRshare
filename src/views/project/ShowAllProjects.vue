@@ -316,7 +316,7 @@ export default {
         case "Code":
           return "Research Software";
         case "NextGenHighThroughputSequencing":
-          return "NextGen High Throughput Sequencing";
+          return "Next Gen High Throughput Sequencing";
         default:
           return dataType;
       }

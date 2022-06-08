@@ -23,6 +23,11 @@ import OtherReviewStandards from "../views/workflow/Other/ReviewStandards.vue";
 import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
 import OtherPickLicense from "../views/workflow/Other/PickLicense.vue";
 
+// NextGenHighThroughputSequencing metadata related components
+import NextGenHighThroughputSequencingSelectSourceFolder from "../views/workflow/NextGenHighThroughputSequencing/SelectSourceFolder.vue";
+import NextGenHighThroughputSequencingReviewStandards from "../views/workflow/NextGenHighThroughputSequencing/ReviewStandards.vue";
+import NextGenHighThroughputSequencingCreateMetadata from "../views/workflow/NextGenHighThroughputSequencing/CreateMetadata.vue";
+
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
 
@@ -100,6 +105,10 @@ const routes = [
     component: OtherSelectSourceFolder,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/selectFolder",
+    component: NextGenHighThroughputSequencingSelectSourceFolder,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/selectGithubRepo",
     component: CodeSelectGithubRepo,
   },
@@ -112,6 +121,10 @@ const routes = [
     component: OtherReviewStandards,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/reviewStandards",
+    component: NextGenHighThroughputSequencingReviewStandards,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
     name: "CodeCreateMetadata",
@@ -120,6 +133,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Other/createMetadata",
     component: OtherCreateMetadata,
     name: "OtherCreateMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/createMetadata",
+    component: NextGenHighThroughputSequencingCreateMetadata,
+    name: "NextGenHighThroughputSequencingCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
