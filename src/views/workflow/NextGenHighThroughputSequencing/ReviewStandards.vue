@@ -292,7 +292,7 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setProgressBarType("geo");
     this.datasetStore.setCurrentStep(2);
 
     this.workflow.currentRoute = this.$route.path;

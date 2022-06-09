@@ -63,7 +63,7 @@
                         size="large"
                         ref="s1Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Software name" prop="name">
                           <div class="flex w-full flex-row items-center">
@@ -152,7 +152,7 @@
                         size="large"
                         ref="s2Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Authors" prop="authors">
                           <draggable
@@ -397,7 +397,7 @@
                         size="large"
                         ref="s3Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Unique identifier">
                           <div class="flex w-full flex-row items-center">
@@ -714,7 +714,7 @@
                         size="large"
                         ref="s4Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Code repository" :error="codeRepositoryErrorMessage">
                           <div class="flex w-full flex-row items-center">
@@ -853,7 +853,7 @@
                         size="large"
                         ref="s5Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Programming Language" prop="programmingLanguage">
                           <div class="flex w-full flex-row items-center">
@@ -1032,7 +1032,7 @@
                         size="large"
                         ref="s6Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Current version">
                           <div class="flex w-full flex-row items-center">
@@ -1131,7 +1131,7 @@
                         size="large"
                         ref="s7Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Reference publication">
                           <div class="flex w-full flex-row items-center">

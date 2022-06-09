@@ -4,20 +4,20 @@ import logging.handlers
 import os
 import sys
 
-from flask_wtf.csrf import CSRFProtect
-
 import config
 from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
 from figshare import (
     createNewFigshareItem,
     deleteFigshareArticle,
     getFigshareFileUploadStatus,
-    uploadFileToFigshare,
     publishFigshareArticle,
+    uploadFileToFigshare,
 )
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
+
+# from flask_wtf.csrf import CSRFProtect
 from github import (
     getFileFromRepo,
     getRepoContentTree,
@@ -60,8 +60,9 @@ app.config["SECRET_KEY"] = SECRET_KEY
 # full if you want to see all the details
 app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 
-csrf = CSRFProtect()
-csrf.init_app(app)
+# TODO - fix this
+# csrf = CSRFProtect()
+# csrf.init_app(app)
 
 CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}})
 

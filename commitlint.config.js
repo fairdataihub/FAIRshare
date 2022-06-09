@@ -9,6 +9,7 @@ const types = [
   "revert",
   "style",
   "test",
+  "wip",
 ];
 
 const scopes = ["app", "library", "backend", "authentication", "settings", "deps"];

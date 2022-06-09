@@ -3,33 +3,48 @@
     class="relative flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Provide information about your data </span>
+      <span class="text-left text-lg font-medium">
+        Provide information about your high-throughput data
+      </span>
 
-      <line-divider></line-divider>
+      <div class="hidden">
+        <line-divider></line-divider>
+        <div class="flex flex-col">
+          <span class="mb-2">
+            Would you like FAIRshare to create the mandatory metadata files metadata.json?
+          </span>
 
-      <div class="flex flex-col">
-        <span class="mb-2">
-          Would you like FAIRshare to create the mandatory metadata files metadata.json?
-        </span>
-
-        <div class="py-1">
-          <el-radio v-model="generateOtherMetadata" label="Yes" size="large"> Yes </el-radio>
-          <el-radio v-model="generateOtherMetadata" label="No" size="large"> No </el-radio>
-          <el-radio
-            v-model="generateOtherMetadata"
-            label="None"
-            size="large"
-            border
-            class="!hidden"
-          >
-            None
-          </el-radio>
+          <div class="py-1">
+            <el-radio
+              v-model="generateNextGenHighThroughputSequencingMetadata"
+              label="Yes"
+              size="large"
+            >
+              Yes
+            </el-radio>
+            <el-radio
+              v-model="generateNextGenHighThroughputSequencingMetadata"
+              label="No"
+              size="large"
+            >
+              No
+            </el-radio>
+            <el-radio
+              v-model="generateNextGenHighThroughputSequencingMetadata"
+              label="None"
+              size="large"
+              border
+              class="!hidden"
+            >
+              None
+            </el-radio>
+          </div>
         </div>
       </div>
 
-      <div v-if="generateOtherMetadata !== 'None'">
+      <div v-if="generateNextGenHighThroughputSequencingMetadata !== 'None'">
         <transition name="fade" mode="out-in" appear>
-          <div v-if="generateOtherMetadata === 'Yes'">
+          <div v-if="generateNextGenHighThroughputSequencingMetadata === 'Yes'">
             <line-divider></line-divider>
 
             <span class="mb-2">
@@ -66,59 +81,97 @@
                         size="large"
                         ref="s1Form"
                         @submit.prevent
-                        class="py-4"
+                        class="metadata-form py-4"
                       >
-                        <el-form-item label="Name" prop="name">
+                        <el-form-item label="Study" prop="study">
                           <div class="flex w-full flex-row items-center">
-                            <el-input v-model="step1Form.name" placeholder="My Software"></el-input>
-                            <form-help-content
-                              popoverContent="The name of the software"
-                            ></form-help-content>
+                            <el-input v-model="step1Form.study" placeholder="GSE131369"></el-input>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Description/abstract" prop="description">
+                        <el-form-item label="Title" prop="title">
                           <div class="flex w-full flex-row items-center">
                             <el-input
-                              v-model="step1Form.description"
-                              type="textarea"
-                              placeholder="My Software computes orbit propogation. It has been used in the NASA Spacecraft Orbit Propogation Center."
+                              v-model="step1Form.title"
+                              placeholder="Decoding the Protein Composition of Whole Nucleosomes with Nuc-MS"
                             ></el-input>
-                            <form-help-content
-                              popoverContent="A brief description of the software"
-                            ></form-help-content>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Creation date">
+                        <el-form-item label="Summary(abstract)" prop="summary">
                           <div class="flex w-full flex-row items-center">
-                            <el-date-picker
-                              v-model="step1Form.creationDate"
-                              type="date"
-                              placeholder="Pick a day"
-                              value-format="YYYY-MM-DD"
-                            >
-                            </el-date-picker>
-                            <form-help-content
-                              popoverContent="The date on which the software was first created"
-                            ></form-help-content>
+                            <el-input
+                              v-model="step1Form.summary"
+                              type="textarea"
+                              placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
+                            ></el-input>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="First release date">
+                        <el-form-item label="Experimental design" prop="title">
                           <div class="flex w-full flex-row items-center">
-                            <el-date-picker
-                              v-model="step1Form.firstReleaseDate"
-                              type="date"
-                              placeholder="Pick a day"
-                              value-format="YYYY-MM-DD"
-                            >
-                            </el-date-picker>
-                            <form-help-content
-                              popoverContent="The date on which the software was first released"
-                            ></form-help-content>
+                            <el-input
+                              v-model="step1Form.experimentalDesign"
+                              type="textarea"
+                              placeholder="Intestinal GCs of the RedMUC298trTg mice were isolated by Fluorescence-activated cell sorting (FACS) according to the presence or absence of mCherry signal and analyzed using scRNAseq."
+                            ></el-input>
                           </div>
                         </el-form-item>
+
+                        <el-form-item label="Contributors">
+                          <draggable
+                            tag="div"
+                            :list="step1Form.contributors"
+                            item-key="id"
+                            handle=".handle"
+                            class="w-full"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
+                                  <el-input
+                                    v-model="element.contributor"
+                                    type="text"
+                                    placeholder="First name, Initials, Last name"
+                                    v-on:keyup.enter="addContributor"
+                                    :ref="element.id"
+                                  ></el-input>
+                                  <div class="mx-2"></div>
+                                </div>
+                                <div class="flex w-1/12 flex-row justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      title="Are you sure you want to remove this?"
+                                      icon-color="red"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      @confirm="deleteContributor(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
+                          @click="addContributor(null, '')"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span> Add a Contributor </span>
+                        </div>
                       </el-form>
                     </div>
                   </div>
@@ -153,208 +206,87 @@
                         size="large"
                         ref="s2Form"
                         @submit.prevent
-                        class="py-4"
+                        class="metadata-form py-4"
                       >
-                        <el-form-item label="Authors" prop="authors">
-                          <draggable
-                            tag="div"
-                            :list="step2Form.authors"
-                            item-key="id"
-                            handle=".handle"
-                          >
-                            <template #item="{ element }">
-                              <div class="mb-2 flex flex-row justify-between transition-all">
-                                <div class="flex w-11/12 flex-row justify-between">
-                                  <el-input
-                                    v-model="element.givenName"
-                                    type="text"
-                                    placeholder="Given name"
-                                    class="h-[40px]"
-                                  ></el-input>
-
-                                  <div class="mx-1"></div>
-
-                                  <el-input
-                                    v-model="element.familyName"
-                                    type="text"
-                                    placeholder="Family name"
-                                    class="h-[40px]"
-                                  ></el-input>
-
-                                  <div class="mx-2"></div>
-
-                                  <el-input
-                                    v-model="element.affiliation"
-                                    type="text"
-                                    placeholder="Affiliation"
-                                    class="h-[40px]"
-                                  ></el-input>
-
-                                  <div class="mx-2 flex w-full flex-col">
-                                    <el-input
-                                      v-model="element.email"
-                                      type="text"
-                                      placeholder="E-mail address"
-                                    ></el-input>
-                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                                  </div>
-
-                                  <div class="mx-2 flex w-full flex-col">
-                                    <el-input
-                                      v-model="element.orcid"
-                                      type="text"
-                                      placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
-                                    ></el-input>
-                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                                  </div>
-                                </div>
-                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
-                                  <div
-                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                                  >
-                                    <Icon icon="ic:outline-drag-indicator" />
-                                  </div>
-                                  <div
-                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                                  >
-                                    <el-popconfirm
-                                      confirm-button-text="Yes"
-                                      cancel-button-text="No"
-                                      icon-color="red"
-                                      title="Are you sure you want to remove this?"
-                                      @confirm="deleteAuthor(element.id)"
-                                    >
-                                      <template #reference>
-                                        <el-icon><delete-filled /></el-icon>
-                                      </template>
-                                    </el-popconfirm>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>
-                          </draggable>
+                        <el-form-item label="Growth protocol">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.growthProtocol"
+                              type="textarea"
+                              placeholder="C3H 10T1/2 mesenchymal cells were maintained in DMEM supplemented with 10% fetal bovine serum (FBS) and antibiotics in humidified atmosphere with 5% CO2 at 37C"
+                            />
+                          </div>
                         </el-form-item>
 
-                        <div
-                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                          @click="addAuthor"
-                        >
-                          <Icon icon="carbon:add" />
-                          <span class="text-primary-600 hover:text-primary-500">
-                            Add an author
-                          </span>
-                          <form-help-content
-                            popoverContent="Add a developer of the software"
-                          ></form-help-content>
-                        </div>
-
-                        <el-form-item label="Contributors" prop="contributors">
-                          <draggable
-                            tag="div"
-                            :list="step2Form.contributors"
-                            item-key="id"
-                            handle=".handle"
-                          >
-                            <template #item="{ element }">
-                              <div class="mb-2 flex flex-row justify-between transition-all">
-                                <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
-                                  <el-select
-                                    v-model="element.contributorType"
-                                    filterable
-                                    placeholder="Select a contributor type"
-                                  >
-                                    <el-option
-                                      v-for="item in contributorTypes"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value"
-                                    >
-                                    </el-option>
-                                  </el-select>
-                                </div>
-
-                                <div class="flex w-11/12 flex-row justify-between">
-                                  <div class="mr-2 w-1/5">
-                                    <el-input
-                                      v-model="element.givenName"
-                                      type="text"
-                                      placeholder="Given name"
-                                    ></el-input>
-                                  </div>
-
-                                  <div class="mx-2 w-1/5">
-                                    <el-input
-                                      v-model="element.familyName"
-                                      type="text"
-                                      placeholder="Family name"
-                                    ></el-input>
-                                  </div>
-
-                                  <div class="mx-2 w-1/5">
-                                    <el-input
-                                      v-model="element.affiliation"
-                                      type="text"
-                                      placeholder="Affiliation"
-                                    ></el-input>
-                                  </div>
-
-                                  <div class="mx-2 flex w-1/5 flex-col">
-                                    <el-input
-                                      v-model="element.email"
-                                      type="text"
-                                      placeholder="E-mail address"
-                                    ></el-input>
-                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                                  </div>
-
-                                  <div class="mx-2 flex w-1/5 flex-col">
-                                    <el-input
-                                      v-model="element.orcid"
-                                      type="text"
-                                      placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                                    ></el-input>
-                                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                                  </div>
-                                </div>
-                                <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
-                                  <div
-                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                                  >
-                                    <Icon icon="ic:outline-drag-indicator" />
-                                  </div>
-                                  <div
-                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                                  >
-                                    <el-popconfirm
-                                      title="Are you sure you want to remove this?"
-                                      icon-color="red"
-                                      confirm-button-text="Yes"
-                                      cancel-button-text="No"
-                                      @confirm="deleteContributor(element.id)"
-                                    >
-                                      <template #reference>
-                                        <el-icon><delete-filled /></el-icon>
-                                      </template>
-                                    </el-popconfirm>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>
-                          </draggable>
+                        <el-form-item label="Treatment protocol">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.treatmentProtocol"
+                              type="textarea"
+                              placeholder="Adipogenic differentiation was induced by treatment of 2-day post confluent cells (designated day 0, D0) with 10ug/ml insulin (Sigma), 1uM dexamethasone (Sigma), and 0.5mM isobutylmethylxanthine (Sigma) in the presence of 10% FBS until day 2. Cells were then fed with DMEM supplemented with 10% FBS and 10ug/ml insulin for 2 days, after which they were fed every other day with DMEM containing 10% FBS"
+                            />
+                          </div>
                         </el-form-item>
 
-                        <div
-                          class="flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
-                          @click="addContributor"
-                        >
-                          <Icon icon="carbon:add" />
-                          <span class="text-primary-600 hover:text-primary-500">
-                            Add a contributor
-                          </span>
-                          <form-help-content
-                            popoverContent="Add a person who contributed to the software.  This can range from project managers, editors, sponsors, data curators, and other contributors."
-                          ></form-help-content>
-                        </div>
+                        <el-form-item label="Extract protocol">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.extractProtocol"
+                              type="textarea"
+                              placeholder="RNA was harvested using Rneasy mini plus kit (Qiagen). 1.3 ug of total RNA was used for the construction of sequencing libraries."
+                            />
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Library construction protocol">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.libraryConstructionProtocol"
+                              type="textarea"
+                              placeholder="RNA libraries for RNA-seq were prepared using SMARTER mRNA-Seq Library Prep Kit following manufacturer's protocols."
+                            />
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Library strategy">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.libraryStrategy"
+                              type="textarea"
+                              placeholder="RNA-seq"
+                            />
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Data processing steps">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.dataProcessingSteps"
+                              type="textarea"
+                              placeholder="CLC Genomics Workbench v 11.0.1"
+                            />
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Genome build/assembly">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.genomeBuild"
+                              type="textarea"
+                              placeholder="mm10"
+                            />
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item label="Processed data files format and content">
+                          <div class="flex w-full flex-row items-center">
+                            <el-input
+                              v-model="step2Form.processedDataFilesFormat"
+                              type="textarea"
+                              placeholder="tab-delimited text files include RPKM values for each Sample"
+                            />
+                          </div>
+                        </el-form-item>
                       </el-form>
                     </div>
                   </div>
@@ -398,229 +330,183 @@
                         size="large"
                         ref="s3Form"
                         @submit.prevent
-                        class="py-4"
+                        class="metadata-form py-4"
                       >
-                        <el-form-item label="Unique identifier">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step3Form.identifier"
-                              type="text"
-                              :placeholder="
-                                greyOutIdentifierInput
-                                  ? 'Auto assigned during upload'
-                                  : '10.151.xxxxx'
-                              "
-                              :disabled="greyOutIdentifierInput"
-                            ></el-input>
+                        <div v-for="(sample, id) in step3Form" :key="id" class="flex flex-col">
+                          <p class="m-2">{{ sample.libraryName }}</p>
+                          <div class="mb-2 flex flex-row justify-between transition-all">
+                            <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                              <el-select
+                                v-model="sample.contributorType"
+                                filterable
+                                placeholder="Select a contributor type"
+                              >
+                                <el-option
+                                  v-for="item in contributorTypes"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value"
+                                >
+                                </el-option>
+                              </el-select>
+                            </div>
 
-                            <form-help-content
-                              popoverContent="An identifier for this dataset if applicable. "
-                            ></form-help-content>
-                          </div>
-                          <div v-if="greyOutIdentifierInput" class="flex pt-2">
-                            <p class="pr-1 text-sm text-gray-500">
-                              An identifier will be automatically assigned to this dataset when
-                              files are uploaded from your system.
-                            </p>
-                            <p
-                              class="text-url cursor-pointer !text-sm"
-                              @click="editUniqueIdentifier"
-                            >
-                              Click here to override this.
-                            </p>
-                          </div>
-                        </el-form-item>
-
-                        <el-form-item label="Keywords" prop="keywords">
-                          <draggable
-                            tag="div"
-                            :list="step3Form.keywords"
-                            item-key="id"
-                            handle=".handle"
-                            class="w-full"
-                          >
-                            <template #item="{ element }">
-                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
-                                <div class="flex w-11/12 flex-row justify-between">
-                                  <el-input
-                                    v-model="element.keyword"
-                                    type="text"
-                                    placeholder="orbit"
-                                    v-on:keyup.enter="addKeyword"
-                                    :ref="element.id"
-                                  ></el-input>
-                                  <div class="mx-2"></div>
-                                </div>
-                                <div class="flex w-1/12 flex-row justify-evenly">
-                                  <div
-                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                                  >
-                                    <Icon icon="ic:outline-drag-indicator" />
-                                  </div>
-                                  <div
-                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                                  >
-                                    <el-popconfirm
-                                      title="Are you sure you want to remove this?"
-                                      icon-color="red"
-                                      confirm-button-text="Yes"
-                                      cancel-button-text="No"
-                                      @confirm="deleteKeyword(element.id)"
-                                    >
-                                      <template #reference>
-                                        <el-icon><delete-filled /></el-icon>
-                                      </template>
-                                    </el-popconfirm>
-                                  </div>
-                                </div>
+                            <div class="flex w-11/12 flex-row justify-between">
+                              <div class="mr-2 w-1/5">
+                                <el-input
+                                  v-model="sample.givenName"
+                                  type="text"
+                                  placeholder="Given name"
+                                ></el-input>
                               </div>
-                            </template>
-                          </draggable>
-                          <div class="flex w-full flex-row items-center">
-                            <span class="mx-2 text-sm italic text-zinc-600"> Suggestions: </span>
-                            <div class="flex-row">
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="addKeyword(null, 'COVID-19')"
-                                :type="
-                                  step3Form.keywords.some((el) => el.keyword === 'COVID-19')
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                COVID-19
-                              </el-tag>
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="addKeyword(null, 'Machine Learning')"
-                                :type="
-                                  step3Form.keywords.some((el) => el.keyword === 'Machine Learning')
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                Machine Learning
-                              </el-tag>
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="addKeyword(null, 'Artificial Intelligence')"
-                                :type="
-                                  step3Form.keywords.some(
-                                    (el) => el.keyword === 'Artificial Intelligence'
-                                  )
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                Artificial Intelligence
-                              </el-tag>
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="addKeyword(null, 'Infection rate')"
-                                :type="
-                                  step3Form.keywords.some((el) => el.keyword === 'Infection rate')
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                Infection rate
-                              </el-tag>
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="addKeyword(null, 'Mortality prediction')"
-                                :type="
-                                  step3Form.keywords.some(
-                                    (el) => el.keyword === 'Mortality prediction'
-                                  )
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                Mortality prediction
-                              </el-tag>
-                            </div>
-                          </div>
-                        </el-form-item>
 
-                        <div
-                          class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
-                          @click="addKeyword(null, '')"
-                        >
-                          <Icon icon="carbon:add" />
-                          <span> Add a keyword </span>
-                          <form-help-content
-                            popoverContent="Keywords relevant to your software"
-                          ></form-help-content>
+                              <div class="mx-2 w-1/5">
+                                <el-input
+                                  v-model="sample.familyName"
+                                  type="text"
+                                  placeholder="Family name"
+                                ></el-input>
+                              </div>
+
+                              <div class="mx-2 w-1/5">
+                                <el-input
+                                  v-model="sample.affiliation"
+                                  type="text"
+                                  placeholder="Affiliation"
+                                ></el-input>
+                              </div>
+
+                              <div class="mx-2 flex w-1/5 flex-col">
+                                <el-input
+                                  v-model="sample.email"
+                                  type="text"
+                                  placeholder="E-mail address"
+                                ></el-input>
+                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                              </div>
+
+                              <div class="mx-2 flex w-1/5 flex-col">
+                                <el-input
+                                  v-model="sample.orcid"
+                                  type="text"
+                                  placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                                ></el-input>
+                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                              </div>
+                            </div>
+                            <!-- <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
+                              <div
+                                class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                              >
+                                <Icon icon="ic:outline-drag-indicator" />
+                              </div>
+                              <div
+                                class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                              >
+                                <el-popconfirm
+                                  title="Are you sure you want to remove this?"
+                                  icon-color="red"
+                                  confirm-button-text="Yes"
+                                  cancel-button-text="No"
+                                  @confirm="deleteContributor(element.id)"
+                                >
+                                  <template #reference>
+                                    <el-icon><delete-filled /></el-icon>
+                                  </template>
+                                </el-popconfirm>
+                              </div>
+                            </div> -->
+                          </div>
+                          <div class="mb-2 flex flex-row justify-between transition-all">
+                            <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                              <el-select
+                                v-model="sample.contributorType"
+                                filterable
+                                placeholder="Select a contributor type"
+                              >
+                                <el-option
+                                  v-for="item in contributorTypes"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value"
+                                >
+                                </el-option>
+                              </el-select>
+                            </div>
+
+                            <div class="flex w-11/12 flex-row justify-between">
+                              <div class="mr-2 w-1/5">
+                                <el-input
+                                  v-model="sample.givenName"
+                                  type="text"
+                                  placeholder="Given name"
+                                ></el-input>
+                              </div>
+
+                              <div class="mx-2 w-1/5">
+                                <el-input
+                                  v-model="sample.familyName"
+                                  type="text"
+                                  placeholder="Family name"
+                                ></el-input>
+                              </div>
+
+                              <div class="mx-2 w-1/5">
+                                <el-input
+                                  v-model="sample.affiliation"
+                                  type="text"
+                                  placeholder="Affiliation"
+                                ></el-input>
+                              </div>
+
+                              <div class="mx-2 flex w-1/5 flex-col">
+                                <el-input
+                                  v-model="sample.email"
+                                  type="text"
+                                  placeholder="E-mail address"
+                                ></el-input>
+                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                              </div>
+
+                              <div class="mx-2 flex w-1/5 flex-col">
+                                <el-input
+                                  v-model="sample.orcid"
+                                  type="text"
+                                  placeholder="ORCID (e.g. 0000-0002-1825-0097)"
+                                ></el-input>
+                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                              </div>
+                            </div>
+                            <!-- <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
+                              <div
+                                class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                              >
+                                <Icon icon="ic:outline-drag-indicator" />
+                              </div>
+                              <div
+                                class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                              >
+                                <el-popconfirm
+                                  title="Are you sure you want to remove this?"
+                                  icon-color="red"
+                                  confirm-button-text="Yes"
+                                  cancel-button-text="No"
+                                  @confirm="deleteContributor(element.id)"
+                                >
+                                  <template #reference>
+                                    <el-icon><delete-filled /></el-icon>
+                                  </template>
+                                </el-popconfirm>
+                              </div>
+                            </div> -->
+                          </div>
+
+                          <line-divider></line-divider>
                         </div>
-
-                        <el-form-item label="Funding code">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step3Form.fundingCode"
-                              type="text"
-                              placeholder="PRA_2018_73"
-                            ></el-input>
-                            <form-help-content
-                              popoverContent="Code of the grant funding this software (comma separate if multiple)"
-                            ></form-help-content>
-                          </div>
-                        </el-form-item>
-
-                        <el-form-item label="Funding organization">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step3Form.fundingOrganization"
-                              type="text"
-                              placeholder="University of California, San Francisco"
-                            ></el-input>
-                            <form-help-content
-                              popoverContent="The organization funding this software (comma separate if multiple)"
-                            ></form-help-content>
-                          </div>
-                          <div class="flex w-full flex-row items-center">
-                            <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
-                            <div class="flex-row">
-                              <el-tag
-                                class="mx-2 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="
-                                  step3Form.fundingOrganization =
-                                    'National Institutes of Health (NIH)'
-                                "
-                                :type="
-                                  step3Form.fundingOrganization ===
-                                  'National Institutes of Health (NIH)'
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                National Institutes of Health (NIH)
-                              </el-tag>
-                              <el-tag
-                                class="mx-1 cursor-copy transition-all hover:shadow-md"
-                                size="small"
-                                @click="
-                                  step3Form.fundingOrganization =
-                                    'National Science Foundation (NSF)'
-                                "
-                                :type="
-                                  step3Form.fundingOrganization ===
-                                  'National Science Foundation (NSF)'
-                                    ? ''
-                                    : 'info'
-                                "
-                              >
-                                National Science Foundation (NSF)
-                              </el-tag>
-                            </div>
-                          </div>
-                        </el-form-item>
                       </el-form>
+                      <div class="m-2 flex w-full justify-center">
+                        <button class="primary-plain-button">Add a Sample</button>
+                      </div>
                     </div>
                   </div>
                   <div class="flex w-full justify-center space-x-4 px-5 py-4">
@@ -799,13 +685,11 @@
 <script>
 import { Icon } from "@iconify/vue";
 import { v4 as uuidv4 } from "uuid";
-import { ElNotification } from "element-plus";
+// import { ElNotification } from "element-plus";
 
 import draggable from "vuedraggable";
 import validator from "validator";
-import axios from "axios";
-import _ from "lodash";
-import humanparser from "humanparser";
+// import axios from "axios";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -829,12 +713,12 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 3,
       totalSteps: 4,
       pillTitles: [
         "Study",
-        "Authors and Contributors",
-        "Discoverability",
+        "Protocols",
+        "Samples",
         "Development tools",
         "Run-time environment",
         "Current version of the software",
@@ -851,64 +735,74 @@ export default {
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
-      generateOtherMetadata: "None",
+      generateNextGenHighThroughputSequencingMetadata: "Yes",
       step1Form: {
-        name: "",
-        description: "",
-        creationDate: "",
-        firstReleaseDate: "",
+        study: "",
+        title: "",
+        summary: "",
+        experimentalDesign: "",
+        contributors: [],
+        supplementaryFile: "",
       },
       step1FormRules: {
-        name: [
+        study: [
           {
             required: true,
-            message: "Please enter the name of the software",
+            message: "Please enter the name or ID of the study",
             trigger: "blur",
           },
         ],
-        description: [
+        title: [
           {
             required: true,
-            message: "Please enter a description",
+            message: "Please enter a unique title for the study",
+            trigger: "blur",
+          },
+        ],
+        summary: [
+          {
+            required: true,
+            message: "Please enter a summary of the study",
             trigger: "blur",
           },
         ],
       },
       step2Form: {
-        authors: [],
-        contributors: [],
+        growthProtocol: "",
+        treatmentProtocol: "",
+        extractProtocol: "",
+        libraryConstructionProtocol: "",
+        libraryStrategy: "",
+        dataProcessingSteps: "",
+        genomeBuild: "",
+        processedDataFilesFormat: "",
       },
-      step2FormRules: {
-        authors: [
-          {
-            required: true,
-            validator: this.authorValidator,
-            trigger: "blur",
-          },
-        ],
-        contributors: [
-          {
-            required: false,
-            validator: this.contributorValidator,
-            trigger: "blur",
-          },
-        ],
-      },
-      step3Form: {
-        identifier: "",
-        keywords: [],
-        fundingCode: "",
-        fundingOrganization: "",
-      },
-      step3FormRules: {
-        keywords: [
-          {
-            required: true,
-            validator: this.keywordValidator,
-            trigger: "blur",
-          },
-        ],
-      },
+      step2FormRules: {},
+      step3Form: [
+        {
+          libraryName: "name 1",
+          title: "",
+          organism: "",
+          molecule: "",
+          singleOrPairedEnd: "",
+          instrumentModel: "",
+          description: "",
+          processedDataFiles: [],
+          rawFiles: [],
+        },
+        {
+          libraryName: "name 2",
+          title: "",
+          organism: "",
+          molecule: "",
+          singleOrPairedEnd: "",
+          instrumentModel: "",
+          description: "",
+          processedDataFiles: [],
+          rawFiles: [],
+        },
+      ],
+      step3FormRules: {},
       step4Form: {
         referencePublication: "",
         developmentStatus: "",
@@ -1004,10 +898,10 @@ export default {
       }
     },
     async saveSkip() {
-      if (this.generateOtherMetadata === "Yes") {
-        this.workflow.generateOtherMetadata = true;
+      if (this.generateNextGenHighThroughputSequencingMetadata === "Yes") {
+        this.workflow.generateNextGenHighThroughputSequencingMetadata = true;
       } else {
-        this.workflow.generateOtherMetadata = false;
+        this.workflow.generateNextGenHighThroughputSequencingMetadata = false;
       }
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
@@ -1027,14 +921,6 @@ export default {
       });
     },
     navigateToStep3FromStep2() {
-      if (this.step2Form.authors.length <= 0) {
-        this.$message({
-          message: "Please add at least one author.",
-          type: "error",
-        });
-        return;
-      }
-
       this.$refs["s2Form"].validate(async (valid) => {
         if (valid) {
           await this.saveCurrentEntries();
@@ -1113,6 +999,26 @@ export default {
         return keyword.id !== id;
       });
       this.$refs["s3Form"].validate();
+    },
+
+    addContributor(_event, contributor = "") {
+      if (this.step1Form.contributors.some((el) => el.contributor === contributor)) {
+        this.$message.warning("This contributor already exists.");
+        return;
+      }
+
+      const id = uuidv4();
+      this.step1Form.contributors.push({
+        contributor,
+        id,
+      });
+      this.focusOnElementRef(id);
+    },
+    deleteContributor(id) {
+      this.step1Form.contributors = this.step1Form.contributors.filter((contributor) => {
+        return contributor.id !== id;
+      });
+      this.$refs["s1Form"].validate();
     },
 
     authorValidator(_rule, value, callback) {
@@ -1242,23 +1148,6 @@ export default {
       }
       callback();
     },
-    addContributor() {
-      this.step2Form.contributors.push({
-        contributorType: "",
-        givenName: "",
-        familyName: "",
-        affiliation: "",
-        email: "",
-        orcid: "",
-        id: uuidv4(),
-      });
-    },
-    deleteContributor(id) {
-      this.step2Form.contributors = this.step2Form.contributors.filter((contributor) => {
-        return contributor.id !== id;
-      });
-      this.$refs["s2Form"].validate();
-    },
 
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
@@ -1281,33 +1170,33 @@ export default {
       this.dataset.data.general.questions.referencePublication =
         this.step4Form.referencePublication;
 
-      let otherForm = {};
+      let nghtsForm = {};
 
-      otherForm.name = this.step1Form.name;
-      otherForm.description = this.step1Form.description;
-      otherForm.creationDate = this.step1Form.creationDate;
-      otherForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+      nghtsForm.name = this.step1Form.name;
+      nghtsForm.description = this.step1Form.description;
+      nghtsForm.creationDate = this.step1Form.creationDate;
+      nghtsForm.firstReleaseDate = this.step1Form.firstReleaseDate;
 
-      otherForm.authors = this.step2Form.authors;
-      otherForm.contributors = this.step2Form.contributors;
+      nghtsForm.authors = this.step2Form.authors;
+      nghtsForm.contributors = this.step2Form.contributors;
 
-      otherForm.identifier = this.step3Form.identifier;
-      otherForm.keywords = this.step3Form.keywords;
-      otherForm.fundingCode = this.step3Form.fundingCode;
-      otherForm.fundingOrganization = this.step3Form.fundingOrganization;
+      nghtsForm.identifier = this.step3Form.identifier;
+      nghtsForm.keywords = this.step3Form.keywords;
+      nghtsForm.fundingCode = this.step3Form.fundingCode;
+      nghtsForm.fundingOrganization = this.step3Form.fundingOrganization;
 
-      otherForm.referencePublication = this.step4Form.referencePublication;
-      otherForm.developmentStatus = this.step4Form.developmentStatus;
-      otherForm.isPartOf = this.step4Form.isPartOf;
+      nghtsForm.referencePublication = this.step4Form.referencePublication;
+      nghtsForm.developmentStatus = this.step4Form.developmentStatus;
+      nghtsForm.isPartOf = this.step4Form.isPartOf;
 
-      this.dataset.data.Other.questions = otherForm;
+      this.dataset.data.NextGenHighThroughputSequencing.questions = nghtsForm;
 
       this.workflow.generateCodeMeta = false;
 
-      if (this.generateOtherMetadata === "Yes") {
-        this.workflow.generateOtherMetadata = true;
+      if (this.generateNextGenHighThroughputSequencingMetadata === "Yes") {
+        this.workflow.generateNextGenHighThroughputSequencingMetadata = true;
       } else {
-        this.workflow.generateOtherMetadata = false;
+        this.workflow.generateNextGenHighThroughputSequencingMetadata = false;
       }
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
@@ -1318,259 +1207,29 @@ export default {
 
       if (shouldNavigateBack) {
         this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/selectFolder`,
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/selectFolder`,
         });
         return;
       }
 
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/Other/pickLicense`;
+      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/NextGenHighThroughputSequencing/pickLicense`;
 
       this.$router.push({ path: routerPath });
     },
     navigateBack() {
       this.$router.push({
-        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/reviewStandards`,
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/reviewStandards`,
       });
     },
-    async prefillGithubAuthors() {
-      ElNotification({
-        title: "Info",
-        message: "Requesting authors",
-        position: "top-right",
-        type: "info",
-      });
 
-      // get a list of contributors for the repo
-      const tokenObject = await this.tokens.getToken("github");
-      const GithubAccessToken = tokenObject.token;
-
-      const selectedRepo = this.workflow.github.repo;
-
-      let response = "";
-
-      response = await axios
-        .get(`${this.$server_url}/github/repo/contributors`, {
-          params: {
-            access_token: GithubAccessToken,
-            owner: selectedRepo.split("/")[0],
-            repo: selectedRepo.split("/")[1],
-          },
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      let contributors = [];
-
-      if (response != "ERROR") {
-        response.forEach((contributor) => {
-          contributors.push(contributor.login);
-        });
-      }
-
-      let authors = [];
-
-      for (const contributor of contributors) {
-        await axios
-          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/users/${contributor}`, {
-            params: {
-              accept: "application/vnd.github.v3+json",
-            },
-            headers: {
-              Authorization: `Bearer  ${GithubAccessToken}`,
-            },
-          })
-          .then((response) => {
-            const authorObject = {};
-
-            if (response.data.name != null) {
-              const parsedNames = humanparser.parseName(response.data.name);
-              if ("lastName" in parsedNames) {
-                authorObject.familyName = parsedNames.lastName;
-              } else {
-                authorObject.familyName = "";
-              }
-              if ("firstName" in parsedNames) {
-                authorObject.givenName = parsedNames.firstName;
-              } else {
-                authorObject.givenName = response.data.name;
-              }
-            }
-
-            if (response.data.email != null) {
-              authorObject.email = response.data.email;
-            }
-
-            if (response.data.company != null) {
-              authorObject.company = response.data.company;
-            }
-
-            if (!_.isEmpty(authorObject)) {
-              authors.push(authorObject);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-
-      authors.forEach((author) => {
-        const authorObject = {
-          givenName: author.givenName,
-          familyName: author.familyName,
-          affiliation: author.company,
-          email: author.email,
-          orcid: "",
-          id: uuidv4(),
-        };
-
-        this.step2Form.authors.push(authorObject);
-      });
-
-      ElNotification({
-        title: "Success",
-        message: "Retrieved authors",
-        position: "top-right",
-        type: "success",
-      });
-    },
-    async prefillGithubMisc() {
-      ElNotification({
-        title: "Info",
-        message: "Requesting repository info",
-        position: "top-right",
-        type: "info",
-      });
-
-      // get a list of contributors for the repo
-      const tokenObject = await this.tokens.getToken("github");
-      const GithubAccessToken = tokenObject.token;
-
-      const selectedRepo = this.workflow.github.repo;
-
-      let response = "";
-
-      response = await axios
-        .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}`, {
-          params: {
-            accept: "application/vnd.github.v3+json",
-          },
-          headers: {
-            Authorization: `Bearer  ${GithubAccessToken}`,
-          },
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return "ERROR";
-        });
-
-      if (response != "ERROR") {
-        if (response.html_url != null) {
-          this.step4Form.codeRepository = response.html_url;
-          this.step4Form.issueTracker = `${response.html_url}/issues`;
-        }
-
-        if (response.homepage != null) {
-          this.step4Form.relatedLinks.push({
-            link: response.homepage,
-            id: uuidv4(),
-          });
-        }
-
-        if (response.topics != null && response.topics.length > 0) {
-          response.topics.forEach((topic) => {
-            this.step3Form.keywords.push({
-              keyword: topic,
-              id: uuidv4(),
-            });
-          });
-        }
-
-        if (typeof response === "object" && "created_at" in response) {
-          this.step1Form.creationDate = response.created_at;
-        }
-
-        this.step5Form.currentVersionReleaseDate = new Date().toISOString();
-
-        if (response.description != null) {
-          this.step1Form.description = response.description;
-        }
-
-        const splitRepoNameOwner = selectedRepo.split("/");
-
-        const releaseList = await axios
-          .get(`${this.$server_url}/github/repo/releases`, {
-            params: {
-              access_token: GithubAccessToken,
-              owner: splitRepoNameOwner[0],
-              repo: splitRepoNameOwner[1],
-            },
-          })
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-
-        if (releaseList !== "ERROR") {
-          if (releaseList.length > 0) {
-            const release = releaseList.slice(-1).pop();
-
-            if ("created_at" in release) {
-              this.step1Form.firstReleaseDate = release.created_at;
-            }
-          }
-        }
-
-        const lanuagesResponse = await axios
-          .get(`${process.env.VUE_APP_GITHUB_SERVER_URL}/repos/${selectedRepo}/languages`, {
-            params: {
-              accept: "application/vnd.github.v3+json",
-            },
-            headers: {
-              Authorization: `Bearer  ${GithubAccessToken}`,
-            },
-          })
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-
-        if (lanuagesResponse != "ERROR") {
-          const languages = Object.keys(lanuagesResponse);
-          if (languages.length > 0) {
-            this.step4Form.programmingLanguage = languages;
-          }
-        }
-
-        ElNotification({
-          title: "Success",
-          message: "Repository info retrieved",
-          position: "top-right",
-          type: "success",
-        });
-      }
-    },
-    prefillFormFromMetadataObject(otherMetadata) {
-      this.step1Form.name = otherMetadata.name;
-      this.step1Form.description = otherMetadata.description;
-      this.step1Form.creationDate = otherMetadata.dateCreated;
-      this.step1Form.firstReleaseDate = otherMetadata.datePublished;
+    prefillFormFromMetadataObject(nghtsMetadata) {
+      this.step1Form.name = nghtsMetadata.name;
+      this.step1Form.description = nghtsMetadata.description;
+      this.step1Form.creationDate = nghtsMetadata.dateCreated;
+      this.step1Form.firstReleaseDate = nghtsMetadata.datePublished;
 
       this.step2Form.authors = [];
-      otherMetadata.author.forEach(
+      nghtsMetadata.author.forEach(
         ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
           this.step2Form.authors.push({
             givenName,
@@ -1584,8 +1243,8 @@ export default {
       );
 
       this.step2Form.contributors = [];
-      if ("contributor" in otherMetadata) {
-        otherMetadata.contributor.forEach(
+      if ("contributor" in nghtsMetadata) {
+        nghtsMetadata.contributor.forEach(
           ({ givenName = "", familyName = "", email = "", affiliation = "", orcid = "" }) => {
             this.step2Form.contributors.push({
               givenName,
@@ -1599,36 +1258,26 @@ export default {
         );
       }
 
-      this.step3Form.identifier = otherMetadata.identifier;
-      if ("keywords" in otherMetadata) {
-        otherMetadata.keywords.forEach((keyword) => {
+      this.step3Form.identifier = nghtsMetadata.identifier;
+      if ("keywords" in nghtsMetadata) {
+        nghtsMetadata.keywords.forEach((keyword) => {
           this.step3Form.keywords.push({ keyword, id: uuidv4() });
         });
       }
-      if ("fundingCode" in otherMetadata) {
-        this.step3Form.fundingCode = otherMetadata.fundingCode;
+      if ("fundingCode" in nghtsMetadata) {
+        this.step3Form.fundingCode = nghtsMetadata.fundingCode;
       }
-      if ("fundingOrganization" in otherMetadata) {
-        this.step3Form.fundingOrganization = otherMetadata.fundingOrganization;
+      if ("fundingOrganization" in nghtsMetadata) {
+        this.step3Form.fundingOrganization = nghtsMetadata.fundingOrganization;
       }
 
-      this.step4Form.referencePublication = otherMetadata.referencePublication;
-      if ("developmentStatus" in otherMetadata) {
-        this.step4Form.developmentStatus = otherMetadata.developmentStatus;
+      this.step4Form.referencePublication = nghtsMetadata.referencePublication;
+      if ("developmentStatus" in nghtsMetadata) {
+        this.step4Form.developmentStatus = nghtsMetadata.developmentStatus;
       }
-      this.step4Form.isPartOf = otherMetadata.isPartOf;
+      this.step4Form.isPartOf = nghtsMetadata.isPartOf;
     },
-    checkIdentifierInput() {
-      if ("source" in this.workflow) {
-        if (this.workflow.source.type === "local") {
-          if (this.step3Form.identifier === "" || this.step3Form.identifier === undefined) {
-            this.greyOutIdentifierInput = true;
-          }
-        } else {
-          this.greyOutIdentifierInput = false;
-        }
-      }
-    },
+
     editUniqueIdentifier() {
       this.step3Form.identifier = "";
       this.greyOutIdentifierInput = false;
@@ -1641,134 +1290,90 @@ export default {
       this.workflow = this.dataset.workflows[this.workflowID];
 
       this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setProgressBarType("geo");
       this.datasetStore.setCurrentStep(3);
 
       this.workflow.currentRoute = this.$route.path;
 
-      if ("generateOtherMetadata" in this.workflow) {
-        this.generateOtherMetadata = this.workflow.generateOtherMetadata ? "Yes" : "No";
-      } else {
-        this.generateOtherMetadata = "None";
-      }
+      /**
+       * TODO: Will need to enable this when we figure out how to read in metadata files
+       * */
+      // if ("generateNextGenHighThroughputSequencingMetadata" in this.workflow) {
+      //   this.generateNextGenHighThroughputSequencingMetadata = this.workflow
+      //     .generateNextGenHighThroughputSequencingMetadata
+      //     ? "Yes"
+      //     : "No";
+      // } else {
+      //   this.generateNextGenHighThroughputSequencingMetadata = "None";
+      // }
 
       if (
-        this.dataset.data.Other.questions &&
-        Object.keys(this.dataset.data.Other.questions).length !== 0
+        this.dataset.data.NextGenHighThroughputSequencing.questions &&
+        Object.keys(this.dataset.data.NextGenHighThroughputSequencing.questions).length !== 0
       ) {
-        let otherForm = this.dataset.data.Other.questions;
+        let nghtsForm = this.dataset.data.NextGenHighThroughputSequencing.questions;
 
-        this.step1Form.name = otherForm.name;
-        this.step1Form.description = otherForm.description;
-        this.step1Form.creationDate = otherForm.creationDate;
-        this.step1Form.firstReleaseDate = otherForm.firstReleaseDate;
+        this.step1Form.name = nghtsForm.name;
+        this.step1Form.description = nghtsForm.description;
+        this.step1Form.creationDate = nghtsForm.creationDate;
+        this.step1Form.firstReleaseDate = nghtsForm.firstReleaseDate;
 
-        this.step2Form.authors = otherForm.authors;
-        this.step2Form.contributors = otherForm.contributors;
+        this.step2Form.authors = nghtsForm.authors;
+        this.step2Form.contributors = nghtsForm.contributors;
 
-        this.step3Form.identifier = otherForm.identifier;
-        this.step3Form.keywords = otherForm.keywords;
-        this.step3Form.fundingCode = otherForm.fundingCode;
-        this.step3Form.fundingOrganization = otherForm.fundingOrganization;
+        this.step3Form.identifier = nghtsForm.identifier;
+        this.step3Form.keywords = nghtsForm.keywords;
+        this.step3Form.fundingCode = nghtsForm.fundingCode;
+        this.step3Form.fundingOrganization = nghtsForm.fundingOrganization;
 
-        this.step4Form.referencePublication = otherForm.referencePublication;
-        this.step4Form.developmentStatus = otherForm.developmentStatus;
-        this.step4Form.isPartOf = otherForm.isPartOf;
+        this.step4Form.referencePublication = nghtsForm.referencePublication;
+        this.step4Form.developmentStatus = nghtsForm.developmentStatus;
+        this.step4Form.isPartOf = nghtsForm.isPartOf;
 
         this.addIds(this.step3Form.keywords);
         this.addIds(this.step2Form.authors);
         this.addIds(this.step2Form.contributors);
-
-        // this.originalObject.Other = JSON.parse(JSON.stringify(this.otherForm));
       } else {
-        this.step1Form.name = this.dataset.name;
-        this.step1Form.description = this.dataset.description;
-        // this.originalObject.Other = JSON.parse(JSON.stringify(this.otherForm));
+        this.step1Form.title = this.dataset.name;
+        this.step1Form.summary = this.dataset.description;
 
         if ("source" in this.workflow) {
-          if (this.workflow.source.type === "github") {
+          if (this.workflow.source.type === "local") {
+            /**
+             * TODO: Will need to enable this when we figure out how to read in metadata files
+             */
             // this.showSpinner = true;
-            // const tokenObject = await this.tokens.getToken("github");
-            // const GithubAccessToken = tokenObject.token;
-            // const selectedRepo = this.workflow.github.repo;
-            // let response = "";
-            // response = await axios
-            //   .get(`${this.$server_url}/github/repo/file/contents`, {
-            //     params: {
-            //       access_token: GithubAccessToken,
-            //       owner: selectedRepo.split("/")[0],
-            //       repo: selectedRepo.split("/")[1],
-            //       file_name: "codemeta.json",
-            //     },
+            // const response = await axios
+            //   .post(`${this.$server_url}/utilities/fileexistinfolder`, {
+            //     folder_path: this.dataset.data.NextGenHighThroughputSequencing.folderPath,
+            //     file_name: "metadata.json",
             //   })
             //   .then((response) => {
             //     return response.data;
             //   })
             //   .catch((error) => {
-            //     console.error(error);
+            //     console.log(error);
             //     return "ERROR";
             //   });
-            // if (response !== "NOT_FOUND") {
+            // if (response !== "ERROR" && response !== "Not Found") {
             //   ElNotification({
             //     title: "Info",
-            //     message: "Found a previous codemeta.json file. Loading it...",
+            //     message: "Found a previous metadata.json file. Loading it...",
             //     position: "top-right",
             //     type: "info",
             //   });
-            //   const codeMeta = JSON.parse(response);
-            //   await this.prefillFormFromMetadataObject(codeMeta);
+            //   await this.prefillFormFromMetadataObject(response);
             //   ElNotification({
             //     title: "Success",
-            //     message: "Successfully loaded codemeta.json file.",
+            //     message: "Successfully loaded metadata.json file.",
             //     position: "top-right",
             //     type: "success",
             //   });
-            //   this.showSpinner = false;
-            // } else {
-            //   await this.prefillGithubAuthors();
-            //   await this.prefillGithubMisc();
-            //   this.showSpinner = false;
             // }
-          }
-          if (this.workflow.source.type === "local") {
-            this.showSpinner = true;
-
-            const response = await axios
-              .post(`${this.$server_url}/utilities/fileexistinfolder`, {
-                folder_path: this.dataset.data.Other.folderPath,
-                file_name: "metadata.json",
-              })
-              .then((response) => {
-                return response.data;
-              })
-              .catch((error) => {
-                console.log(error);
-                return "ERROR";
-              });
-
-            if (response !== "ERROR" && response !== "Not Found") {
-              ElNotification({
-                title: "Info",
-                message: "Found a previous metadata.json file. Loading it...",
-                position: "top-right",
-                type: "info",
-              });
-
-              await this.prefillFormFromMetadataObject(response);
-
-              ElNotification({
-                title: "Success",
-                message: "Successfully loaded metadata.json file.",
-                position: "top-right",
-                type: "success",
-              });
-            }
-
-            this.showSpinner = false;
+            // this.showSpinner = false;
           }
         }
       }
-      this.checkIdentifierInput();
     });
   },
 };

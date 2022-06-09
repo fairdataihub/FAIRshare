@@ -8,7 +8,21 @@
       class="pt-3"
     >
       <el-step
-        v-for="step in steps"
+        v-for="step in zenodoSteps"
+        :key="step.description"
+        :description="step.description"
+      ></el-step>
+    </el-steps>
+
+    <el-steps
+      :active="progressBar.currentStep"
+      align-center
+      finish-status="success"
+      v-if="progressBar.type === 'geo'"
+      class="pt-3"
+    >
+      <el-step
+        v-for="step in nihGeoSteps"
         :key="step.description"
         :description="step.description"
       ></el-step>
@@ -32,7 +46,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       progressBar: {},
-      steps: [
+      zenodoSteps: [
         {
           description: "Select data files",
         },
@@ -56,6 +70,23 @@ export default {
         },
         {
           description: "Register application",
+        },
+      ],
+      nihGeoSteps: [
+        {
+          description: "Select data files",
+        },
+        {
+          description: "Review standards",
+        },
+        {
+          description: "Provide metadata",
+        },
+        {
+          description: "Select repository",
+        },
+        {
+          description: "Upload dataset",
         },
       ],
     };
