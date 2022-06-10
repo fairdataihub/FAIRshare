@@ -69,7 +69,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Basic Information
+                        Study
                       </span>
                     </div>
                     <div class="p-4">
@@ -194,7 +194,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Authors and Contributors
+                        Protocols
                       </span>
                     </div>
                     <div class="p-4">
@@ -318,7 +318,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Discoverability
+                        Samples
                       </span>
                     </div>
                     <div class="p-4">
@@ -332,177 +332,108 @@
                         @submit.prevent
                         class="metadata-form py-4"
                       >
-                        <div v-for="(sample, id) in step3Form" :key="id" class="flex flex-col">
-                          <p class="m-2">{{ sample.libraryName }}</p>
-                          <div class="mb-2 flex flex-row justify-between transition-all">
-                            <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
+                        <div v-for="(sample, id) in step3Form" :key="id" class="flex flex-col px-2">
+                          <p class="">{{ sample.libraryName }}</p>
+
+                          <el-input
+                            v-model="sample.title"
+                            type="text"
+                            placeholder="Title"
+                          ></el-input>
+
+                          <div class="h-[10px] w-full"></div>
+
+                          <el-input
+                            v-model="sample.description"
+                            type="textarea"
+                            placeholder="Description"
+                          ></el-input>
+
+                          <div class="h-[10px] w-full"></div>
+
+                          <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                            <div class="mr-2 w-4/12">
+                              <el-input
+                                v-model="sample.organism"
+                                type="text"
+                                placeholder="Organism"
+                              ></el-input>
+                            </div>
+
+                            <div class="mx-2 w-3/12">
+                              <el-input
+                                v-model="sample.molecule"
+                                type="text"
+                                placeholder="Molecule"
+                              ></el-input>
+                            </div>
+
+                            <div class="mx-2 w-3/12 xl:w-2/12">
                               <el-select
-                                v-model="sample.contributorType"
+                                v-model="sample.singleOrPairedEnd"
                                 filterable
-                                placeholder="Select a contributor type"
+                                placeholder="Single or paired end"
+                              >
+                                <el-option label="single" value="single"> </el-option>
+                                <el-option label="paired-end" value="paired-end"> </el-option>
+                              </el-select>
+                            </div>
+
+                            <div class="mx-2 w-3/12 xl:w-auto">
+                              <el-select
+                                v-model="sample.instrumentModel"
+                                filterable
+                                placeholder="Instrument Model"
                               >
                                 <el-option
-                                  v-for="item in contributorTypes"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value"
+                                  v-for="item in instrumentModelOptions"
+                                  :key="item"
+                                  :label="item"
+                                  :value="item"
                                 >
                                 </el-option>
                               </el-select>
                             </div>
-
-                            <div class="flex w-11/12 flex-row justify-between">
-                              <div class="mr-2 w-1/5">
-                                <el-input
-                                  v-model="sample.givenName"
-                                  type="text"
-                                  placeholder="Given name"
-                                ></el-input>
-                              </div>
-
-                              <div class="mx-2 w-1/5">
-                                <el-input
-                                  v-model="sample.familyName"
-                                  type="text"
-                                  placeholder="Family name"
-                                ></el-input>
-                              </div>
-
-                              <div class="mx-2 w-1/5">
-                                <el-input
-                                  v-model="sample.affiliation"
-                                  type="text"
-                                  placeholder="Affiliation"
-                                ></el-input>
-                              </div>
-
-                              <div class="mx-2 flex w-1/5 flex-col">
-                                <el-input
-                                  v-model="sample.email"
-                                  type="text"
-                                  placeholder="E-mail address"
-                                ></el-input>
-                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                              </div>
-
-                              <div class="mx-2 flex w-1/5 flex-col">
-                                <el-input
-                                  v-model="sample.orcid"
-                                  type="text"
-                                  placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                                ></el-input>
-                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                              </div>
-                            </div>
-                            <!-- <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
-                              <div
-                                class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                              >
-                                <Icon icon="ic:outline-drag-indicator" />
-                              </div>
-                              <div
-                                class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                              >
-                                <el-popconfirm
-                                  title="Are you sure you want to remove this?"
-                                  icon-color="red"
-                                  confirm-button-text="Yes"
-                                  cancel-button-text="No"
-                                  @confirm="deleteContributor(element.id)"
-                                >
-                                  <template #reference>
-                                    <el-icon><delete-filled /></el-icon>
-                                  </template>
-                                </el-popconfirm>
-                              </div>
-                            </div> -->
                           </div>
-                          <div class="mb-2 flex flex-row justify-between transition-all">
-                            <div class="mx-2 md:w-2/12 lg:w-1/5 xl:w-max">
-                              <el-select
-                                v-model="sample.contributorType"
-                                filterable
-                                placeholder="Select a contributor type"
-                              >
-                                <el-option
-                                  v-for="item in contributorTypes"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value"
-                                >
-                                </el-option>
-                              </el-select>
-                            </div>
 
-                            <div class="flex w-11/12 flex-row justify-between">
-                              <div class="mr-2 w-1/5">
-                                <el-input
-                                  v-model="sample.givenName"
-                                  type="text"
-                                  placeholder="Given name"
-                                ></el-input>
-                              </div>
+                          <line-divider class="my-2" type="dashed"></line-divider>
 
-                              <div class="mx-2 w-1/5">
-                                <el-input
-                                  v-model="sample.familyName"
-                                  type="text"
-                                  placeholder="Family name"
-                                ></el-input>
-                              </div>
+                          <p class="">Sample Characteristics</p>
+                          <span class="mb-4 text-xs">
+                            One of 'tissue', 'cell line' or 'cell type' fields is required.
+                          </span>
 
-                              <div class="mx-2 w-1/5">
-                                <el-input
-                                  v-model="sample.affiliation"
-                                  type="text"
-                                  placeholder="Affiliation"
-                                ></el-input>
-                              </div>
-
-                              <div class="mx-2 flex w-1/5 flex-col">
-                                <el-input
-                                  v-model="sample.email"
-                                  type="text"
-                                  placeholder="E-mail address"
-                                ></el-input>
-                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                              </div>
-
-                              <div class="mx-2 flex w-1/5 flex-col">
-                                <el-input
-                                  v-model="sample.orcid"
-                                  type="text"
-                                  placeholder="ORCID (e.g. 0000-0002-1825-0097)"
-                                ></el-input>
-                                <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
-                              </div>
-                            </div>
-                            <!-- <div class="flex w-1/12 flex-row items-start justify-evenly py-4">
-                              <div
-                                class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
-                              >
-                                <Icon icon="ic:outline-drag-indicator" />
-                              </div>
-                              <div
-                                class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
-                              >
-                                <el-popconfirm
-                                  title="Are you sure you want to remove this?"
-                                  icon-color="red"
-                                  confirm-button-text="Yes"
-                                  cancel-button-text="No"
-                                  @confirm="deleteContributor(element.id)"
-                                >
-                                  <template #reference>
-                                    <el-icon><delete-filled /></el-icon>
-                                  </template>
-                                </el-popconfirm>
-                              </div>
-                            </div> -->
+                          <div class="flex w-full flex-row justify-start">
+                            <button class="primary-plain-button" @click="openAddFieldPrompt">
+                              Add a field
+                              <el-icon><circle-plus /></el-icon>
+                            </button>
                           </div>
 
                           <line-divider></line-divider>
                         </div>
+                        <add-prompt
+                          ref="addCharacteristicPrompt"
+                          title="Add a sample characteristic"
+                          confirmButtonText="Add this field"
+                          :confirmDisabled="disableConfirm"
+                          @messageConfirmed="deleteProject"
+                        >
+                          <div w-full>
+                            <p class="mb-3 text-sm">
+                              Please select or enter the name of the field you would like to add.
+                              This field will be added to all samples.
+                            </p>
+
+                            <el-autocomplete
+                              v-model="customFieldName"
+                              :fetch-suggestions="customFieldNameSearch"
+                              clearable
+                              class="w-full"
+                              placeholder="Enter a field name"
+                            />
+                          </div>
+                        </add-prompt>
                       </el-form>
                       <div class="m-2 flex w-full justify-center">
                         <button class="primary-plain-button">Add a Sample</button>
@@ -699,6 +630,7 @@ import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
 import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
 import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
+import nextGenSequencingJSON from "@/assets/supplementalFiles/nextGenSequencing.json";
 
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
@@ -714,16 +646,8 @@ export default {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
       currentStep: 3,
-      totalSteps: 4,
-      pillTitles: [
-        "Study",
-        "Protocols",
-        "Samples",
-        "Development tools",
-        "Run-time environment",
-        "Current version of the software",
-        "Additional Info",
-      ],
+      totalSteps: 3,
+      pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
       workflowID: this.$route.params.workflowID,
@@ -735,6 +659,7 @@ export default {
       runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
+      instrumentModelOptions: nextGenSequencingJSON.instrumentModelOptions,
       generateNextGenHighThroughputSequencingMetadata: "Yes",
       step1Form: {
         study: "",
@@ -789,6 +714,7 @@ export default {
           description: "",
           processedDataFiles: [],
           rawFiles: [],
+          characteristics: {},
         },
         {
           libraryName: "name 2",
@@ -800,6 +726,7 @@ export default {
           description: "",
           processedDataFiles: [],
           rawFiles: [],
+          characteristics: {},
         },
       ],
       step3FormRules: {},
@@ -809,11 +736,12 @@ export default {
         isPartOf: "",
       },
       isPartOfErrorMessage: "",
-      greyOutIdentifierInput: false,
+
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
       showSpinner: false,
+      customFieldName: "",
     };
   },
   watch: {
@@ -1154,6 +1082,40 @@ export default {
         return element[key] !== "";
       });
     },
+
+    openAddFieldPrompt() {
+      this.$refs.addCharacteristicPrompt.show();
+    },
+
+    customFieldNameSearch(query, cb) {
+      const fieldValues = [
+        "tissue",
+        "cell line",
+        "cell type",
+        "strain",
+        "genotype",
+        "developmental stage",
+        "sex",
+        "treatment",
+        "time",
+        "disease state",
+        "tumor stage",
+        "ChIP antibody",
+      ];
+
+      let results;
+
+      if (query) {
+        results = fieldValues.filter((element) => {
+          return element.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+      } else {
+        results = fieldValues;
+      }
+
+      cb(results);
+    },
+
     async saveCurrentEntries() {
       this.showSavingIcon();
 
@@ -1276,11 +1238,6 @@ export default {
         this.step4Form.developmentStatus = nghtsMetadata.developmentStatus;
       }
       this.step4Form.isPartOf = nghtsMetadata.isPartOf;
-    },
-
-    editUniqueIdentifier() {
-      this.step3Form.identifier = "";
-      this.greyOutIdentifierInput = false;
     },
   },
   async mounted() {

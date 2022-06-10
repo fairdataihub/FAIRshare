@@ -39,6 +39,7 @@ import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
+import AddPrompt from "./components/dialogs/prompt/AddPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
 
@@ -77,6 +78,7 @@ app.component("error-confirm", ErrorConfirm);
 
 app.component("warning-prompt", WarningPrompt);
 app.component("login-prompt", LoginPrompt);
+app.component("add-prompt", AddPrompt);
 
 app.component("general-dialog", GeneralDialog);
 
@@ -94,6 +96,7 @@ import {
   Checked,
   CircleCheckFilled,
   CircleCloseFilled,
+  CirclePlus,
   Collection,
   CopyDocument,
   DArrowLeft,
@@ -146,6 +149,7 @@ app.component("chat-line-square", ChatLineSquare);
 app.component("checked-icon", Checked);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
+app.component("circle-plus", CirclePlus);
 app.component("collection-icon", Collection);
 app.component("copy-document", CopyDocument);
 app.component("d-arrow-left", DArrowLeft);
