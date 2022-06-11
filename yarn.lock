@@ -10004,10 +10004,10 @@ doctypes@^1.1.0:
   resolved "https://registry.yarnpkg.com/doctypes/-/doctypes-1.1.0.tgz#ea80b106a87538774e8a3a4a5afe293de489e0a9"
   integrity sha1-6oCxBqh1OHdOijpKWv4pPeSJ4Kk=
 
-doi-regex@0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.12.tgz#27a5f2f9545fd6d96756eef652dcc9dba79059b8"
-  integrity sha512-RbstgsJTdymKjn+LYUU6kqFMM2Fj+c8jPVo/tFE2/COnZA/jvlIUpyvr3GNu8SBEOly5MQXmMC883Addr4MvrQ==
+doi-regex@0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.13.tgz#fb021f4126a96cfaa2321d62843f998e9d361e0c"
+  integrity sha512-ZDqScsVsQfq2oanvnOPUUyDTxsRYhdNUC5q75FE7DhKpVlXQLGexj11+78gxz0DwBiUdB0VRT5ggtw+zg9KHpQ==
 
 dom-accessibility-api@^0.5.9:
   version "0.5.14"
