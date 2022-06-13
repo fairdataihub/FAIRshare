@@ -403,8 +403,21 @@
                             One of 'tissue', 'cell line' or 'cell type' fields is required.
                           </span>
 
+                          <pre>{{ sample }}</pre>
+
+                          <div
+                            class="flex w-full flex-row justify-between"
+                            v-for="(_item, key, index) in sample.characteristics"
+                            :key="index"
+                          >
+                            <p>
+                              {{ key }}
+                            </p>
+                            <el-input v-model="sample.characteristics[key]" type="text" />
+                          </div>
+
                           <div class="flex w-full flex-row justify-start">
-                            <button class="primary-plain-button" @click="openAddFieldPrompt">
+                            <button class="primary-plain-button" @click="openAddFieldPrompt(id)">
                               Add a field
                               <el-icon><circle-plus /></el-icon>
                             </button>
@@ -416,6 +429,8 @@
                           ref="addCharacteristicPrompt"
                           title="Add a sample characteristic"
                           confirmButtonText="Add this field"
+                          :confirmDisabled="disableCustomCharacteristic"
+                          @messageConfirmed="addCustomCharacteristic"
                         >
                           <div w-full>
                             <p class="mb-3 text-sm">
@@ -494,28 +509,12 @@
 
                         <el-form-item label="Development status">
                           <div class="flex w-full flex-row items-center">
-                            <el-select
-                              v-model="step4Form.developmentStatus"
-                              filterable
-                              placeholder=""
-                              class="w-full"
-                            >
-                              <el-option
-                                v-for="item in repoStatusOptions"
-                                :key="item.value"
-                                :label="item.display_name"
-                                :value="item.value"
-                              >
-                              </el-option>
-                            </el-select>
                             <form-help-content
                               popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
                             ></form-help-content>
                           </div>
 
-                          <p class="pt-2 text-xs text-gray-500">
-                            {{ developmentStatus }}
-                          </p>
+                          <p class="pt-2 text-xs text-gray-500"></p>
                         </el-form-item>
 
                         <el-form-item label="Is part of" :error="isPartOfErrorMessage">
@@ -731,7 +730,7 @@ export default {
       step3FormRules: {},
       step4Form: {
         referencePublication: "",
-        developmentStatus: "",
+
         isPartOf: "",
       },
       isPartOfErrorMessage: "",
@@ -740,6 +739,7 @@ export default {
       originalObject: {},
       showSaving: false,
       showSpinner: false,
+      sampleID: "",
       customFieldName: "",
     };
   },
@@ -767,22 +767,6 @@ export default {
     },
   },
   computed: {
-    developmentStatus() {
-      const that = this;
-
-      function getStatus(repoStatus) {
-        return that.repoStatusOptions.find((status) => status.value === repoStatus);
-      }
-
-      if ("developmentStatus" in this.step4Form && this.step4Form.developmentStatus != "") {
-        const status = this.step4Form.developmentStatus;
-        const returnVal = getStatus(status);
-
-        return returnVal.description;
-      } else {
-        return "";
-      }
-    },
     checkInvalidStatus() {
       for (const key in this.invalidStatus) {
         if (this.invalidStatus[key]) {
@@ -790,6 +774,9 @@ export default {
         }
       }
       return false;
+    },
+    disableCustomCharacteristic() {
+      return this.customFieldName.trim() === "";
     },
   },
   methods: {
@@ -891,43 +878,6 @@ export default {
       }, 50);
     },
 
-    keywordValidator(_rule, array, callback) {
-      if ((array === "" || array === undefined) && array.length > 0) {
-        this.invalidStatus.keywords = true;
-        callback(new Error("Please provide a valid keyword"));
-      } else {
-        for (let item of array) {
-          if (item.keyword.trim() === "") {
-            this.invalidStatus.keywords = true;
-            callback(new Error("Please provide a valid keyword"));
-            return;
-          }
-        }
-
-        this.invalidStatus.keywords = false;
-        callback();
-      }
-    },
-    addKeyword(_event, keyword = "") {
-      if (this.step3Form.keywords.some((el) => el.keyword === keyword)) {
-        this.$message.warning("Keyword already exists.");
-        return;
-      }
-
-      const id = uuidv4();
-      this.step3Form.keywords.push({
-        keyword,
-        id,
-      });
-      this.focusOnElementRef(id);
-    },
-    deleteKeyword(id) {
-      this.step3Form.keywords = this.step3Form.keywords.filter((keyword) => {
-        return keyword.id !== id;
-      });
-      this.$refs["s3Form"].validate();
-    },
-
     addContributor(_event, contributor = "") {
       if (this.step1Form.contributors.some((el) => el.contributor === contributor)) {
         this.$message.warning("This contributor already exists.");
@@ -948,141 +898,14 @@ export default {
       this.$refs["s1Form"].validate();
     },
 
-    authorValidator(_rule, value, callback) {
-      if (value.length > 0) {
-        for (let author of value) {
-          if (
-            author.givenName === "" ||
-            author.affiliation === "" ||
-            author.affiliation === undefined
-          ) {
-            this.invalidStatus.authors = true;
-            callback(new Error("First name and Affiliation for each author is mandatory"));
-            return;
-          }
-
-          // validate orcid
-          if (author.orcid !== "") {
-            const orcid = author.orcid;
-            let total = 0;
-            for (let i = 0; i < orcid.length - 1; i++) {
-              const digit = parseInt(orcid.substr(i, 1));
-              if (isNaN(digit)) {
-                continue;
-              }
-              total = (total + digit) * 2;
-            }
-
-            const remainder = total % 11;
-            const result = (12 - remainder) % 11;
-            const checkDigit = result === 10 ? "X" : String(result);
-
-            if (checkDigit !== orcid.substr(-1)) {
-              this.invalidStatus.authors = true;
-              callback(new Error("ORCID is not valid"));
-            }
-          }
-
-          // validate email
-          if (author.email !== "") {
-            const validIdentifier = validator.isEmail(author.email);
-
-            if (!validIdentifier) {
-              this.invalidStatus.authors = true;
-              callback(new Error("Email is not valid"));
-              return;
-            }
-          }
-        }
-      } else {
-        this.invalidStatus.authors = true;
-        callback(new Error("Please provide at least one author"));
-        return;
-      }
-      this.invalidStatus.authors = false;
-      callback();
-    },
-    addAuthor() {
-      this.step2Form.authors.push({
-        givenName: "",
-        familyName: "",
-        affiliation: "",
-        email: "",
-        orcid: "",
-        id: uuidv4(),
-      });
-    },
-    deleteAuthor(id) {
-      this.step2Form.authors = this.step2Form.authors.filter((author) => {
-        return author.id !== id;
-      });
-      this.$refs["s2Form"].validate();
-    },
-
-    contributorValidator(_rule, value, callback) {
-      if (value.length > 0) {
-        for (let contributor of value) {
-          if (
-            contributor.givenName === undefined ||
-            contributor.givenName.trim() === "" ||
-            contributor.affiliation === undefined ||
-            contributor.affiliation.trim() === ""
-          ) {
-            callback(new Error("First name and Affiliation for each contributor is mandatory"));
-            return;
-          }
-
-          // validate orcid
-          if (contributor.orcid !== "") {
-            const orcid = contributor.orcid;
-            let total = 0;
-            for (let i = 0; i < orcid.length - 1; i++) {
-              const digit = parseInt(orcid.substr(i, 1));
-              if (isNaN(digit)) {
-                continue;
-              }
-              total = (total + digit) * 2;
-            }
-
-            const remainder = total % 11;
-            const result = (12 - remainder) % 11;
-            const checkDigit = result === 10 ? "X" : String(result);
-
-            if (checkDigit !== orcid.substr(-1)) {
-              callback(new Error("ORCID is not valid"));
-              return;
-            }
-          }
-
-          // validate email
-          if (contributor.email !== "") {
-            const validIdentifier = validator.isEmail(contributor.email);
-
-            if (!validIdentifier) {
-              callback(new Error("Email is not valid"));
-              return;
-            }
-          }
-
-          if (
-            contributor.contributorType === undefined ||
-            contributor.contributorType.trim() === ""
-          ) {
-            callback(new Error("Contributor type is mandatory"));
-            return;
-          }
-        }
-      }
-      callback();
-    },
-
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
         return element[key] !== "";
       });
     },
 
-    openAddFieldPrompt() {
+    openAddFieldPrompt(id) {
+      this.sampleID = id;
       this.$refs.addCharacteristicPrompt.show();
     },
 
@@ -1097,9 +920,22 @@ export default {
         results = this.customFieldOptions;
       }
 
-      console.log(results);
-
       cb(results);
+    },
+
+    addCustomCharacteristic() {
+      const customFieldName = this.customFieldName;
+
+      if (customFieldName in this.step3Form[0].characteristics) {
+        this.$message.error("This field already exists.");
+        return;
+      }
+
+      for (let sample of this.step3Form) {
+        sample.characteristics[customFieldName] = "";
+      }
+
+      this.customFieldName = "";
     },
 
     async saveCurrentEntries() {
@@ -1134,7 +970,7 @@ export default {
       nghtsForm.fundingOrganization = this.step3Form.fundingOrganization;
 
       nghtsForm.referencePublication = this.step4Form.referencePublication;
-      nghtsForm.developmentStatus = this.step4Form.developmentStatus;
+
       nghtsForm.isPartOf = this.step4Form.isPartOf;
 
       this.dataset.data.NextGenHighThroughputSequencing.questions = nghtsForm;
@@ -1220,9 +1056,7 @@ export default {
       }
 
       this.step4Form.referencePublication = nghtsMetadata.referencePublication;
-      if ("developmentStatus" in nghtsMetadata) {
-        this.step4Form.developmentStatus = nghtsMetadata.developmentStatus;
-      }
+
       this.step4Form.isPartOf = nghtsMetadata.isPartOf;
     },
   },
@@ -1270,7 +1104,7 @@ export default {
         this.step3Form.fundingOrganization = nghtsForm.fundingOrganization;
 
         this.step4Form.referencePublication = nghtsForm.referencePublication;
-        this.step4Form.developmentStatus = nghtsForm.developmentStatus;
+
         this.step4Form.isPartOf = nghtsForm.isPartOf;
 
         this.addIds(this.step3Form.keywords);
