@@ -1,17 +1,41 @@
 {
-  "customFields": [
-    "tissue",
-    "cell line",
-    "cell type",
-    "strain",
-    "genotype",
-    "developmental stage",
-    "sex",
-    "treatment",
-    "time",
-    "disease state",
-    "tumor stage",
-    "ChIP antibody"
+  "customFieldOptions": [
+    {
+      "value": "tissue"
+    },
+    {
+      "value": "cell line"
+    },
+    {
+      "value": "cell type"
+    },
+    {
+      "value": "strain"
+    },
+    {
+      "value": "genotype"
+    },
+    {
+      "value": "developmental stage"
+    },
+    {
+      "value": "sex"
+    },
+    {
+      "value": "treatment"
+    },
+    {
+      "value": "time"
+    },
+    {
+      "value": "disease state"
+    },
+    {
+      "value": "tumor stage"
+    },
+    {
+      "value": "ChIP antibody"
+    }
   ],
   "instrumentModelOptions": [
     "Illumina Genome Analyzer IIx",

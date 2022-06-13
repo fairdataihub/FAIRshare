@@ -416,8 +416,6 @@
                           ref="addCharacteristicPrompt"
                           title="Add a sample characteristic"
                           confirmButtonText="Add this field"
-                          :confirmDisabled="disableConfirm"
-                          @messageConfirmed="deleteProject"
                         >
                           <div w-full>
                             <p class="mb-3 text-sm">
@@ -660,6 +658,7 @@ export default {
       operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
       repoStatusOptions: repoStatusJSON.repoStatus,
       instrumentModelOptions: nextGenSequencingJSON.instrumentModelOptions,
+      customFieldOptions: nextGenSequencingJSON.customFieldOptions,
       generateNextGenHighThroughputSequencingMetadata: "Yes",
       step1Form: {
         study: "",
@@ -1088,30 +1087,17 @@ export default {
     },
 
     customFieldNameSearch(query, cb) {
-      const fieldValues = [
-        "tissue",
-        "cell line",
-        "cell type",
-        "strain",
-        "genotype",
-        "developmental stage",
-        "sex",
-        "treatment",
-        "time",
-        "disease state",
-        "tumor stage",
-        "ChIP antibody",
-      ];
-
       let results;
 
       if (query) {
-        results = fieldValues.filter((element) => {
-          return element.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        results = this.customFieldOptions.filter((element) => {
+          return element.value.toLowerCase().indexOf(query.toLowerCase()) === 0;
         });
       } else {
-        results = fieldValues;
+        results = this.customFieldOptions;
       }
+
+      console.log(results);
 
       cb(results);
     },
