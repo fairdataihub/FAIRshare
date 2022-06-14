@@ -396,24 +396,31 @@
                             </div>
                           </div>
 
-                          <line-divider class="my-2" type="dashed"></line-divider>
+                          <line-divider class="my-2" type="dashed" />
 
                           <p class="">Sample Characteristics</p>
                           <span class="mb-4 text-xs">
                             One of 'tissue', 'cell line' or 'cell type' fields is required.
                           </span>
 
-                          <pre>{{ sample }}</pre>
-
                           <div
-                            class="flex w-full flex-row justify-between"
+                            class="flex w-full flex-col justify-between pb-4"
                             v-for="(_item, key, index) in sample.characteristics"
                             :key="index"
                           >
-                            <p>
+                            <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
                               {{ key }}
-                            </p>
-                            <el-input v-model="sample.characteristics[key]" type="text" />
+                            </label>
+
+                            <div class="flex items-center justify-between">
+                              <el-input v-model="sample.characteristics[key]" type="text" />
+                              <div
+                                class="ml-2 rounded-md p-2 hover:cursor-pointer hover:bg-slate-200"
+                                @click="deleteCustomField(key)"
+                              >
+                                <el-icon><delete-filled /></el-icon>
+                              </div>
+                            </div>
                           </div>
 
                           <div class="flex w-full flex-row justify-start">
@@ -421,6 +428,19 @@
                               Add a field
                               <el-icon><circle-plus /></el-icon>
                             </button>
+                          </div>
+
+                          <line-divider class="my-4" type="dashed" />
+
+                          <div class="flex flex-col">
+                            <p class="my-2">Add your raw files</p>
+
+                            <el-tree-select
+                              v-model="sample.rawFiles"
+                              :data="getFilteredFolderContents(sample.id)"
+                              multiple
+                              show-checkbox
+                            />
                           </div>
 
                           <line-divider></line-divider>
@@ -617,7 +637,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import draggable from "vuedraggable";
 import validator from "validator";
-// import axios from "axios";
+import axios from "axios";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -703,6 +723,7 @@ export default {
       step2FormRules: {},
       step3Form: [
         {
+          id: uuidv4(),
           libraryName: "name 1",
           title: "",
           organism: "",
@@ -712,9 +733,13 @@ export default {
           description: "",
           processedDataFiles: [],
           rawFiles: [],
-          characteristics: {},
+          characteristics: {
+            tissue: "",
+            "developmental stage": "",
+          },
         },
         {
+          id: uuidv4(),
           libraryName: "name 2",
           title: "",
           organism: "",
@@ -724,7 +749,10 @@ export default {
           description: "",
           processedDataFiles: [],
           rawFiles: [],
-          characteristics: {},
+          characteristics: {
+            tissue: "",
+            "developmental stage": "",
+          },
         },
       ],
       step3FormRules: {},
@@ -741,6 +769,18 @@ export default {
       showSpinner: false,
       sampleID: "",
       customFieldName: "",
+      folderContents: [
+        {
+          value: "1",
+          label: "Level one 1",
+          children: [
+            {
+              value: "1-1",
+              label: "Level two 1-1",
+            },
+          ],
+        },
+      ],
     };
   },
   watch: {
@@ -908,7 +948,6 @@ export default {
       this.sampleID = id;
       this.$refs.addCharacteristicPrompt.show();
     },
-
     customFieldNameSearch(query, cb) {
       let results;
 
@@ -922,11 +961,10 @@ export default {
 
       cb(results);
     },
-
     addCustomCharacteristic() {
-      const customFieldName = this.customFieldName;
+      const customFieldName = this.customFieldName.trim();
 
-      if (customFieldName in this.step3Form[0].characteristics) {
+      if (customFieldName.toLocaleLowerCase() in this.step3Form[0].characteristics) {
         this.$message.error("This field already exists.");
         return;
       }
@@ -936,6 +974,21 @@ export default {
       }
 
       this.customFieldName = "";
+    },
+    deleteCustomField(key) {
+      /**
+       * TODO: Add a confirmation dialog
+       */
+
+      if (key in this.step3Form[0].characteristics) {
+        for (let sample of this.step3Form) {
+          delete sample.characteristics[key];
+        }
+      }
+    },
+
+    getFilteredFolderContents(_index) {
+      return this.folderContents;
     },
 
     async saveCurrentEntries() {
@@ -1149,6 +1202,17 @@ export default {
             // }
             // this.showSpinner = false;
           }
+        }
+      }
+      if ("source" in this.workflow) {
+        if (this.workflow.source.type === "local") {
+          const response = await axios.post(`${this.$server_url}/utilities/readfoldercontents`, {
+            folder_path: this.dataset.data.NextGenHighThroughputSequencing.folderPath,
+          });
+
+          console.log(response.data);
+
+          this.folderContents = response.data.children;
         }
       }
     });

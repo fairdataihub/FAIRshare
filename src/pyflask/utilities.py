@@ -95,7 +95,6 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
-
     try:
 
         def dfs(dir):
@@ -117,6 +116,7 @@ def readFolderContents(dir):
                     newDic["label"] = filename
                     newDic["isDir"] = False
                 newDic["fullpath"] = fileFullName
+                newDic["value"] = fileFullName  # I don't know if this is needed
                 result.append(newDic)
             return result
 
@@ -125,6 +125,7 @@ def readFolderContents(dir):
             "label": dir,
             "children": dfs(dir),
             "fullPath": dir,
+            "value": dir,
             "isDir": True,
         }
         return root

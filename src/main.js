@@ -1,11 +1,19 @@
 import { getGlobal } from "@electron/remote";
+
 import { createApp } from "vue";
-import App from "./App.vue";
 import { router } from "./router";
-import ElementPlus from "element-plus";
+
 import { createPinia } from "pinia";
+
+import App from "./App.vue";
+
+import ElementPlus from "element-plus";
+import { ElCollapseTransition } from "element-plus";
+
 import Popper from "vue3-popper";
+
 import Vue3Lottie from "vue3-lottie";
+
 import VMdEditor from "@kangc/v-md-editor";
 
 import analytics from "./plugins/analytics";
@@ -66,6 +74,8 @@ app.config.globalProperties.$fairshare_badge_image_url = `https://raw.githubuser
 
 // register components globally
 app.component("VuePopper", Popper);
+
+app.component("el-collapse-transition", ElCollapseTransition);
 
 app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
