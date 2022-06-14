@@ -435,9 +435,12 @@
                           <div class="flex flex-col">
                             <p class="my-2">Add your raw files</p>
 
+                            <pre>{{ filteredFolderContents }}</pre>
+
                             <el-tree-select
                               v-model="sample.rawFiles"
-                              :data="getFilteredFolderContents(sample.id)"
+                              :data="filteredFolderContents"
+                              @focus="getFilteredFolderContents(id)"
                               multiple
                               show-checkbox
                             />
@@ -769,14 +772,30 @@ export default {
       showSpinner: false,
       sampleID: "",
       customFieldName: "",
-      folderContents: [
+      filteredFolderContents: [
         {
           value: "1",
           label: "Level one 1",
+          isDir: true,
           children: [
             {
               value: "1-1",
               label: "Level two 1-1",
+              isDir: false,
+            },
+          ],
+        },
+      ],
+      folderContents: [
+        {
+          value: "1",
+          label: "Level one 1",
+          isDir: true,
+          children: [
+            {
+              value: "1-1",
+              label: "Level two 1-1",
+              isDir: false,
             },
           ],
         },
@@ -987,8 +1006,42 @@ export default {
       }
     },
 
-    getFilteredFolderContents(_index) {
-      return this.folderContents;
+    getFilteredFolderContents(index) {
+      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
+
+      console.log(newFolderContents);
+      let alreadyAddedFiles = [];
+
+      for (let i = 0; i < this.step3Form.length; i++) {
+        if (i !== index) {
+          alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
+        }
+      }
+
+      console.log(alreadyAddedFiles);
+
+      //recurse through the folder contents
+      function recurse(folderContents) {
+        for (let i = 0; i < folderContents.length; i++) {
+          if (folderContents[i].isDir) {
+            recurse(folderContents[i].children);
+          } else {
+            if (i !== index) {
+              if (alreadyAddedFiles.includes(folderContents[i].value)) {
+                folderContents.disabled = true;
+              } else {
+                folderContents.disabled = false;
+              }
+            }
+          }
+        }
+      }
+
+      recurse(newFolderContents);
+
+      this.filteredFolderContents = newFolderContents;
+
+      return;
     },
 
     async saveCurrentEntries() {
