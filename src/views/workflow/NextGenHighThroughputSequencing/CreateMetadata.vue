@@ -435,12 +435,22 @@
                           <div class="flex flex-col">
                             <p class="my-2">Add your raw files</p>
 
-                            <pre>{{ filteredFolderContents }}</pre>
-
                             <el-tree-select
                               v-model="sample.rawFiles"
-                              :data="filteredFolderContents"
-                              @focus="getFilteredFolderContents(id)"
+                              :data="sample.filteredRawFilesFolderContents"
+                              @visible-change="getFilteredRawFilesFolderContents(id)"
+                              multiple
+                              show-checkbox
+                            />
+                          </div>
+
+                          <div class="flex flex-col">
+                            <p class="my-2">Add your processed files</p>
+
+                            <el-tree-select
+                              v-model="sample.processedDataFiles"
+                              :data="sample.filteredProcessedDataFilesFolderContents"
+                              @visible-change="getFilteredProcessedDataFilesFolderContents(id)"
                               multiple
                               show-checkbox
                             />
@@ -740,6 +750,8 @@ export default {
             tissue: "",
             "developmental stage": "",
           },
+          filteredRawFilesFolderContents: [],
+          filteredProcessedDataFilesFolderContents: [],
         },
         {
           id: uuidv4(),
@@ -756,6 +768,8 @@ export default {
             tissue: "",
             "developmental stage": "",
           },
+          filteredRawFilesFolderContents: [],
+          filteredProcessedDataFilesFolderContents: [],
         },
       ],
       step3FormRules: {},
@@ -772,7 +786,7 @@ export default {
       showSpinner: false,
       sampleID: "",
       customFieldName: "",
-      filteredFolderContents: [
+      filteredRawFilesFolderContents: [
         {
           value: "1",
           label: "Level one 1",
@@ -1006,19 +1020,17 @@ export default {
       }
     },
 
-    getFilteredFolderContents(index) {
-      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
-
-      console.log(newFolderContents);
+    getFilteredRawFilesFolderContents(index) {
       let alreadyAddedFiles = [];
 
+      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
+
       for (let i = 0; i < this.step3Form.length; i++) {
+        alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
         if (i !== index) {
           alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
         }
       }
-
-      console.log(alreadyAddedFiles);
 
       //recurse through the folder contents
       function recurse(folderContents) {
@@ -1026,12 +1038,10 @@ export default {
           if (folderContents[i].isDir) {
             recurse(folderContents[i].children);
           } else {
-            if (i !== index) {
-              if (alreadyAddedFiles.includes(folderContents[i].value)) {
-                folderContents.disabled = true;
-              } else {
-                folderContents.disabled = false;
-              }
+            if (alreadyAddedFiles.includes(folderContents[i].value)) {
+              folderContents[i].disabled = true;
+            } else {
+              folderContents[i].disabled = false;
             }
           }
         }
@@ -1039,7 +1049,41 @@ export default {
 
       recurse(newFolderContents);
 
-      this.filteredFolderContents = newFolderContents;
+      this.step3Form[index].filteredRawFilesFolderContents = newFolderContents;
+
+      return;
+    },
+
+    getFilteredProcessedDataFilesFolderContents(index) {
+      let alreadyAddedFiles = [];
+
+      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
+
+      for (let i = 0; i < this.step3Form.length; i++) {
+        alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
+        if (i !== index) {
+          alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
+        }
+      }
+
+      //recurse through the folder contents
+      function recurse(folderContents) {
+        for (let i = 0; i < folderContents.length; i++) {
+          if (folderContents[i].isDir) {
+            recurse(folderContents[i].children);
+          } else {
+            if (alreadyAddedFiles.includes(folderContents[i].value)) {
+              folderContents[i].disabled = true;
+            } else {
+              folderContents[i].disabled = false;
+            }
+          }
+        }
+      }
+
+      recurse(newFolderContents);
+
+      this.step3Form[index].filteredProcessedDataFilesFolderContents = newFolderContents;
 
       return;
     },
