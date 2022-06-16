@@ -124,6 +124,7 @@
                             :list="step1Form.contributors"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">
@@ -316,7 +317,7 @@
                   <div
                     class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
                   >
-                    <div class="w-full bg-gray-100 px-4 py-2">
+                    <div class="w-full bg-gray-50 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
                         Samples
                       </span>
@@ -332,132 +333,212 @@
                         @submit.prevent
                         class="metadata-form py-4"
                       >
-                        <div v-for="(sample, id) in step3Form" :key="id" class="flex flex-col px-2">
-                          <p class="">{{ sample.libraryName }}</p>
+                        <draggable
+                          tag="div"
+                          :list="step3Form"
+                          item-key="id"
+                          handle=".handle"
+                          :animation="200"
+                          @start="minimizeAllSamples"
+                        >
+                          <template #item="{ element }">
+                            <div class="flex flex-col px-2">
+                              <div class="flex flex-row items-center justify-between">
+                                <div class="flex w-full flex-row justify-start">
+                                  <div
+                                    class="mr-2 rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                    @click="element.isExpanded = !element.isExpanded"
+                                  >
+                                    <Icon
+                                      icon="dashicons:arrow-right-alt2"
+                                      width="20"
+                                      height="20"
+                                      class="transition-all"
+                                      :class="{
+                                        'rotate-90': element.isExpanded,
+                                        'rotate-0': !element.isExpanded,
+                                      }"
+                                    />
+                                  </div>
 
-                          <el-input
-                            v-model="sample.title"
-                            type="text"
-                            placeholder="Title"
-                          ></el-input>
+                                  <p class="">{{ element.libraryName }}</p>
+                                </div>
 
-                          <div class="h-[10px] w-full"></div>
-
-                          <el-input
-                            v-model="sample.description"
-                            type="textarea"
-                            placeholder="Description"
-                          ></el-input>
-
-                          <div class="h-[10px] w-full"></div>
-
-                          <div class="mb-2 flex w-full flex-row justify-between transition-all">
-                            <div class="mr-2 w-4/12">
-                              <el-input
-                                v-model="sample.organism"
-                                type="text"
-                                placeholder="Organism"
-                              ></el-input>
-                            </div>
-
-                            <div class="mx-2 w-3/12">
-                              <el-input
-                                v-model="sample.molecule"
-                                type="text"
-                                placeholder="Molecule"
-                              ></el-input>
-                            </div>
-
-                            <div class="mx-2 w-3/12 xl:w-2/12">
-                              <el-select
-                                v-model="sample.singleOrPairedEnd"
-                                filterable
-                                placeholder="Single or paired end"
-                              >
-                                <el-option label="single" value="single"> </el-option>
-                                <el-option label="paired-end" value="paired-end"> </el-option>
-                              </el-select>
-                            </div>
-
-                            <div class="mx-2 w-3/12 xl:w-auto">
-                              <el-select
-                                v-model="sample.instrumentModel"
-                                filterable
-                                placeholder="Instrument Model"
-                              >
-                                <el-option
-                                  v-for="item in instrumentModelOptions"
-                                  :key="item"
-                                  :label="item"
-                                  :value="item"
-                                >
-                                </el-option>
-                              </el-select>
-                            </div>
-                          </div>
-
-                          <line-divider class="my-2" type="dashed" />
-
-                          <p class="">Sample Characteristics</p>
-                          <span class="mb-4 text-xs">
-                            One of 'tissue', 'cell line' or 'cell type' fields is required.
-                          </span>
-
-                          <div
-                            class="flex w-full flex-col justify-between pb-4"
-                            v-for="(_item, key, index) in sample.characteristics"
-                            :key="index"
-                          >
-                            <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                              {{ key }}
-                            </label>
-
-                            <div class="flex items-center justify-between">
-                              <el-input v-model="sample.characteristics[key]" type="text" />
-                              <div
-                                class="ml-2 rounded-md p-2 hover:cursor-pointer hover:bg-slate-200"
-                                @click="deleteCustomField(key)"
-                              >
-                                <el-icon><delete-filled /></el-icon>
+                                <div class="flex w-1/12 flex-row justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      title="Are you sure you want to remove this?"
+                                      icon-color="red"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      @confirm="deleteOtherSoftwareRequirements(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
                               </div>
+
+                              <el-collapse-transition>
+                                <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                                  <el-input
+                                    v-model="element.title"
+                                    type="text"
+                                    placeholder="Title"
+                                    class="mb-2"
+                                  ></el-input>
+
+                                  <el-input
+                                    v-model="element.description"
+                                    type="textarea"
+                                    placeholder="Description"
+                                    class="mb-2"
+                                  ></el-input>
+
+                                  <div
+                                    class="mb-2 flex w-full flex-row justify-between transition-all"
+                                  >
+                                    <div class="mr-2 w-4/12">
+                                      <el-select
+                                        v-model="element.organism"
+                                        filterable
+                                        remote
+                                        reserve-keyword
+                                        placeholder="Organism"
+                                        :remote-method="loadTaxonomy"
+                                        :loading="loading"
+                                      >
+                                        <el-option
+                                          v-for="item in organismOptions"
+                                          :key="item.value"
+                                          :label="item.label"
+                                          :value="item.value"
+                                        />
+                                      </el-select>
+                                    </div>
+
+                                    <div class="mx-2 w-3/12">
+                                      <el-input
+                                        v-model="element.molecule"
+                                        type="text"
+                                        placeholder="Molecule"
+                                      ></el-input>
+                                    </div>
+
+                                    <div class="mx-2 w-3/12 xl:w-2/12">
+                                      <el-select
+                                        v-model="element.singleOrPairedEnd"
+                                        filterable
+                                        placeholder="Single or paired end"
+                                      >
+                                        <el-option label="single" value="single"> </el-option>
+                                        <el-option label="paired-end" value="paired-end">
+                                        </el-option>
+                                      </el-select>
+                                    </div>
+
+                                    <div class="mx-2 w-3/12 xl:w-auto">
+                                      <el-select
+                                        v-model="element.instrumentModel"
+                                        filterable
+                                        placeholder="Instrument Model"
+                                      >
+                                        <el-option
+                                          v-for="item in instrumentModelOptions"
+                                          :key="item"
+                                          :label="item"
+                                          :value="item"
+                                        >
+                                        </el-option>
+                                      </el-select>
+                                    </div>
+                                  </div>
+
+                                  <line-divider class="my-2" type="dashed" />
+
+                                  <p class="">Sample Characteristics</p>
+                                  <span class="mb-4 text-xs">
+                                    One of 'tissue', 'cell line' or 'cell type' fields is required.
+                                  </span>
+
+                                  <div
+                                    class="flex w-full flex-col justify-between pb-4"
+                                    v-for="(_item, key, index) in element.characteristics"
+                                    :key="index"
+                                  >
+                                    <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                      {{ key }}
+                                    </label>
+
+                                    <div class="flex items-center justify-between">
+                                      <el-input
+                                        v-model="element.characteristics[key]"
+                                        type="text"
+                                      />
+                                      <div
+                                        class="ml-2 rounded-md p-2 hover:cursor-pointer hover:bg-slate-200"
+                                        @click="deleteCustomField(key)"
+                                      >
+                                        <el-icon><delete-filled /></el-icon>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="flex w-full flex-row justify-start">
+                                    <button
+                                      class="primary-plain-button"
+                                      @click="openAddFieldPrompt(id)"
+                                    >
+                                      Add a field
+                                      <el-icon><circle-plus /></el-icon>
+                                    </button>
+                                  </div>
+
+                                  <line-divider class="my-4" type="dashed" />
+
+                                  <div class="flex flex-col">
+                                    <p class="my-2">Add your raw files</p>
+
+                                    <el-tree-select
+                                      v-model="element.rawFiles"
+                                      :data="element.filteredRawFilesFolderContents"
+                                      @visible-change="
+                                        getFilteredRawFilesFolderContents(element.id)
+                                      "
+                                      multiple
+                                      show-checkbox
+                                    />
+                                  </div>
+
+                                  <div class="flex flex-col">
+                                    <p class="my-2">Add your processed files</p>
+
+                                    <el-tree-select
+                                      v-model="element.processedDataFiles"
+                                      :data="element.filteredProcessedDataFilesFolderContents"
+                                      @visible-change="
+                                        getFilteredProcessedDataFilesFolderContents(element.id)
+                                      "
+                                      multiple
+                                      show-checkbox
+                                    />
+                                  </div>
+                                </div>
+                              </el-collapse-transition>
+
+                              <line-divider></line-divider>
                             </div>
-                          </div>
-
-                          <div class="flex w-full flex-row justify-start">
-                            <button class="primary-plain-button" @click="openAddFieldPrompt(id)">
-                              Add a field
-                              <el-icon><circle-plus /></el-icon>
-                            </button>
-                          </div>
-
-                          <line-divider class="my-4" type="dashed" />
-
-                          <div class="flex flex-col">
-                            <p class="my-2">Add your raw files</p>
-
-                            <el-tree-select
-                              v-model="sample.rawFiles"
-                              :data="sample.filteredRawFilesFolderContents"
-                              @visible-change="getFilteredRawFilesFolderContents(id)"
-                              multiple
-                              show-checkbox
-                            />
-                          </div>
-
-                          <div class="flex flex-col">
-                            <p class="my-2">Add your processed files</p>
-
-                            <el-tree-select
-                              v-model="sample.processedDataFiles"
-                              :data="sample.filteredProcessedDataFilesFolderContents"
-                              @visible-change="getFilteredProcessedDataFilesFolderContents(id)"
-                              multiple
-                              show-checkbox
-                            />
-                          </div>
-
-                          <line-divider></line-divider>
-                        </div>
+                          </template>
+                        </draggable>
                         <add-prompt
                           ref="addCharacteristicPrompt"
                           title="Add a sample characteristic"
@@ -734,6 +815,7 @@ export default {
         processedDataFilesFormat: "",
       },
       step2FormRules: {},
+
       step3Form: [
         {
           id: uuidv4(),
@@ -752,6 +834,7 @@ export default {
           },
           filteredRawFilesFolderContents: [],
           filteredProcessedDataFilesFolderContents: [],
+          isExpanded: true,
         },
         {
           id: uuidv4(),
@@ -770,8 +853,10 @@ export default {
           },
           filteredRawFilesFolderContents: [],
           filteredProcessedDataFilesFolderContents: [],
+          isExpanded: true,
         },
       ],
+
       step3FormRules: {},
       step4Form: {
         referencePublication: "",
@@ -786,20 +871,6 @@ export default {
       showSpinner: false,
       sampleID: "",
       customFieldName: "",
-      filteredRawFilesFolderContents: [
-        {
-          value: "1",
-          label: "Level one 1",
-          isDir: true,
-          children: [
-            {
-              value: "1-1",
-              label: "Level two 1-1",
-              isDir: false,
-            },
-          ],
-        },
-      ],
       folderContents: [
         {
           value: "1",
@@ -814,6 +885,7 @@ export default {
           ],
         },
       ],
+      organismOptions: [],
     };
   },
   watch: {
@@ -1020,14 +1092,14 @@ export default {
       }
     },
 
-    getFilteredRawFilesFolderContents(index) {
+    getFilteredRawFilesFolderContents(id) {
       let alreadyAddedFiles = [];
 
       const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
 
       for (let i = 0; i < this.step3Form.length; i++) {
         alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
-        if (i !== index) {
+        if (this.step3Form[i].id !== id) {
           alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
         }
       }
@@ -1049,19 +1121,24 @@ export default {
 
       recurse(newFolderContents);
 
-      this.step3Form[index].filteredRawFilesFolderContents = newFolderContents;
+      let sample = this.step3Form.find((element) => {
+        return element.id === id;
+      });
+
+      console.log(sample, id);
+
+      sample.filteredRawFilesFolderContents = newFolderContents;
 
       return;
     },
-
-    getFilteredProcessedDataFilesFolderContents(index) {
+    getFilteredProcessedDataFilesFolderContents(id) {
       let alreadyAddedFiles = [];
 
       const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
 
       for (let i = 0; i < this.step3Form.length; i++) {
         alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
-        if (i !== index) {
+        if (this.step3Form[i].id !== id) {
           alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
         }
       }
@@ -1083,9 +1160,68 @@ export default {
 
       recurse(newFolderContents);
 
-      this.step3Form[index].filteredProcessedDataFilesFolderContents = newFolderContents;
+      let sample = this.step3Form.find((element) => {
+        return element.id === id;
+      });
+
+      sample.filteredProcessedDataFilesFolderContents = newFolderContents;
 
       return;
+    },
+
+    async loadTaxonomy(query) {
+      if (query) {
+        this.loading = true;
+        this.organismOptions = [];
+
+        try {
+          const response = await axios.get(
+            `https://rest.ensembl.org/taxonomy/id/${query}?simple=0`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.status === 200) {
+            const res = response.data;
+
+            if ("children" in res) {
+              this.organismOptions = res.children.map((child) => {
+                return {
+                  value: child.scientific_name,
+                  label: child.scientific_name,
+                };
+              });
+            }
+
+            if (res.scientific_name) {
+              this.organismOptions = [
+                {
+                  value: res.scientific_name,
+                  label: res.scientific_name,
+                },
+                ...this.organismOptions,
+              ];
+            }
+
+            this.loading = false;
+          }
+        } catch (error) {
+          this.organismOptions = [];
+          this.loading = false;
+          return;
+        }
+      } else {
+        this.organismOptions = [];
+      }
+    },
+
+    minimizeAllSamples() {
+      this.step3Form.map((sample) => {
+        sample.isExpanded = false;
+      });
     },
 
     async saveCurrentEntries() {
@@ -1306,8 +1442,6 @@ export default {
           const response = await axios.post(`${this.$server_url}/utilities/readfoldercontents`, {
             folder_path: this.dataset.data.NextGenHighThroughputSequencing.folderPath,
           });
-
-          console.log(response.data);
 
           this.folderContents = response.data.children;
         }

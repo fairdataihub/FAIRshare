@@ -119,6 +119,7 @@
                           tag="div"
                           :list="step1Form.versions"
                           item-key="id"
+                          :animation="200"
                           handle=".handle"
                           class="w-full"
                         >

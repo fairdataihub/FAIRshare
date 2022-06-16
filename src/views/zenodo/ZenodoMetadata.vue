@@ -66,6 +66,7 @@
                   :list="zenodoMetadataForm.authors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -199,6 +200,7 @@
                   :list="zenodoMetadataForm.keywords"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -370,6 +372,7 @@
                   :list="zenodoMetadataForm.relatedIdentifiers"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -478,6 +481,7 @@
                   :list="zenodoMetadataForm.contributors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -579,6 +583,7 @@
                   item-key="id"
                   handle=".handle"
                   class="w-full"
+                  :animation="200"
                 >
                   <template #item="{ element }">
                     <div class="mb-2 flex flex-row justify-between transition-all">
@@ -845,6 +850,7 @@
                   :list="zenodoMetadataForm.thesis.supervisors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -933,6 +939,7 @@
                   :list="zenodoMetadataForm.subjects"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">

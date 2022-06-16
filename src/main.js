@@ -98,6 +98,7 @@ app.component("fade-transition", FadeTransition);
 
 // import and register icons globally
 import {
+  ArrowRight,
   ArrowRightBold,
   Back,
   Box,
@@ -151,6 +152,7 @@ import {
   View,
 } from "@element-plus/icons-vue";
 
+app.component("arrow-right", ArrowRight);
 app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
 app.component("box-icon", Box);

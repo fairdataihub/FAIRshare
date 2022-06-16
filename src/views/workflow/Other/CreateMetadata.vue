@@ -159,6 +159,7 @@
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
+                            :animation="200"
                             item-key="id"
                             handle=".handle"
                           >
@@ -253,6 +254,7 @@
                             tag="div"
                             :list="step2Form.contributors"
                             item-key="id"
+                            :animation="200"
                             handle=".handle"
                           >
                             <template #item="{ element }">
@@ -437,6 +439,7 @@
                             :list="step3Form.keywords"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">

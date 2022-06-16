@@ -56,7 +56,13 @@
         </el-form-item>
 
         <el-form-item label="Authors" prop="authors">
-          <draggable tag="div" :list="figshareMetadataForm.authors" item-key="id" handle=".handle">
+          <draggable
+            tag="div"
+            :list="figshareMetadataForm.authors"
+            item-key="id"
+            handle=".handle"
+            :animation="200"
+          >
             <template #item="{ element }">
               <div class="mb-2 flex flex-row justify-between transition-all">
                 <div class="flex w-11/12 flex-row justify-between">
@@ -152,6 +158,7 @@
             :list="figshareMetadataForm.keywords"
             item-key="id"
             handle=".handle"
+            :animation="200"
             class="w-full"
           >
             <template #item="{ element }">
@@ -207,6 +214,7 @@
             tag="div"
             :list="figshareMetadataForm.funding"
             item-key="id"
+            :animation="200"
             handle=".handle"
             class="w-full"
           >
@@ -259,6 +267,7 @@
             tag="div"
             :list="figshareMetadataForm.references"
             item-key="id"
+            :animation="200"
             handle=".handle"
             class="w-full"
           >
