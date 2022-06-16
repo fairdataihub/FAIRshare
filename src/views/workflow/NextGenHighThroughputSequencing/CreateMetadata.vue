@@ -346,7 +346,7 @@
                               <div class="flex flex-row items-center justify-between">
                                 <div class="flex w-full flex-row justify-start">
                                   <div
-                                    class="mr-2 rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                    class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
                                     @click="element.isExpanded = !element.isExpanded"
                                   >
                                     <Icon
@@ -361,7 +361,7 @@
                                     />
                                   </div>
 
-                                  <span class="">{{ element.libraryName }}</span>
+                                  <span class="flex items-center"> {{ element.libraryName }} </span>
 
                                   <div
                                     class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
