@@ -361,29 +361,25 @@
                                     />
                                   </div>
 
-                                  <p class="">{{ element.libraryName }}</p>
+                                  <span class="">{{ element.libraryName }}</span>
+
+                                  <div
+                                    class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  >
+                                    <el-icon><edit-pen /></el-icon>
+                                  </div>
                                 </div>
 
                                 <div class="flex w-1/12 flex-row justify-evenly">
                                   <div
-                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                    class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
                                   >
                                     <Icon icon="ic:outline-drag-indicator" />
                                   </div>
                                   <div
-                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                    class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
                                   >
-                                    <el-popconfirm
-                                      title="Are you sure you want to remove this?"
-                                      icon-color="red"
-                                      confirm-button-text="Yes"
-                                      cancel-button-text="No"
-                                      @confirm="deleteOtherSoftwareRequirements(element.id)"
-                                    >
-                                      <template #reference>
-                                        <el-icon><delete-filled /></el-icon>
-                                      </template>
-                                    </el-popconfirm>
+                                    <el-icon><delete-filled /></el-icon>
                                   </div>
                                 </div>
                               </div>
@@ -485,7 +481,7 @@
                                         type="text"
                                       />
                                       <div
-                                        class="ml-2 rounded-md p-2 hover:cursor-pointer hover:bg-slate-200"
+                                        class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
                                         @click="deleteCustomField(key)"
                                       >
                                         <el-icon><delete-filled /></el-icon>
