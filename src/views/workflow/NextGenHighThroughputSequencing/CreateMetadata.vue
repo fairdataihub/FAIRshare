@@ -47,12 +47,6 @@
           <div v-if="generateNextGenHighThroughputSequencingMetadata === 'Yes'">
             <line-divider></line-divider>
 
-            <span class="mb-2">
-              Provide information about your dataset below. We will use this information to
-              automatically generate and include in your dataset the standard metadata files
-              required to make your dataset FAIR.
-            </span>
-
             <div>
               <div class="py-3">
                 <pill-progress-bar
@@ -62,6 +56,19 @@
                   :titles="pillTitles"
                 />
               </div>
+
+              <div class="mt-3 mb-1">
+                <span v-if="currentStep === 3">
+                  Add some information about your samples below. We will use this information to
+                  automatically generate the required metadata files needed for your dataset.
+                </span>
+                <span v-else>
+                  Provide information about your dataset below. We will use this information to
+                  automatically generate and include in your dataset the standard metadata files
+                  required to make your dataset FAIR.
+                </span>
+              </div>
+
               <div class="py-2">
                 <div v-if="currentStep == 1">
                   <div
@@ -314,102 +321,118 @@
                 </div>
 
                 <div v-if="currentStep == 3">
-                  <div
-                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
-                  >
-                    <div class="w-full bg-gray-50 px-4 py-2">
-                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Samples
-                      </span>
-                    </div>
-                    <div class="p-4">
-                      <el-form
-                        :model="step3Form"
-                        :rules="step3FormRules"
-                        label-width="160px"
-                        label-position="top"
-                        size="large"
-                        ref="s3Form"
-                        @submit.prevent
-                        class="metadata-form py-4"
+                  <div class="px-4 pb-4 pt-2">
+                    <el-form
+                      :model="step3Form"
+                      :rules="step3FormRules"
+                      label-width="160px"
+                      label-position="top"
+                      size="large"
+                      ref="s3Form"
+                      @submit.prevent
+                      class="metadata-form pb-4"
+                    >
+                      <draggable
+                        tag="div"
+                        :list="step3Form"
+                        item-key="id"
+                        handle=".handle"
+                        :animation="200"
+                        @start="minimizeAllSamples"
                       >
-                        <draggable
-                          tag="div"
-                          :list="step3Form"
-                          item-key="id"
-                          handle=".handle"
-                          :animation="200"
-                          @start="minimizeAllSamples"
-                        >
-                          <template #item="{ element }">
-                            <div class="flex flex-col px-2">
-                              <div class="flex flex-row items-center justify-between">
-                                <div class="flex w-full flex-row justify-start">
-                                  <div
-                                    class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
-                                    @click="element.isExpanded = !element.isExpanded"
-                                  >
-                                    <Icon
-                                      icon="dashicons:arrow-right-alt2"
-                                      width="20"
-                                      height="20"
-                                      class="transition-all"
-                                      :class="{
-                                        'rotate-90': element.isExpanded,
-                                        'rotate-0': !element.isExpanded,
-                                      }"
-                                    />
-                                  </div>
-
-                                  <span class="flex items-center"> {{ element.libraryName }} </span>
-
-                                  <div
-                                    class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                  >
-                                    <el-icon><edit-pen /></el-icon>
-                                  </div>
+                        <template #item="{ element }">
+                          <div
+                            class="form-card-content mb-4 flex flex-col rounded-lg border-2 border-slate-100 shadow-md"
+                          >
+                            <div
+                              class="flex w-full flex-row items-center justify-between bg-gray-50 px-4 py-2"
+                              @click="element.isExpanded = !element.isExpanded"
+                            >
+                              <div class="flex w-full flex-row justify-start">
+                                <div
+                                  class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                  @click.stop="element.isExpanded = !element.isExpanded"
+                                >
+                                  <Icon
+                                    icon="dashicons:arrow-right-alt2"
+                                    width="20"
+                                    height="20"
+                                    class="transition-all"
+                                    :class="{
+                                      'rotate-90': element.isExpanded,
+                                      'rotate-0': !element.isExpanded,
+                                    }"
+                                  />
                                 </div>
 
-                                <div class="flex w-1/12 flex-row justify-evenly">
-                                  <div
-                                    class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                  >
-                                    <Icon icon="ic:outline-drag-indicator" />
-                                  </div>
-                                  <div
-                                    class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                  >
-                                    <el-icon><delete-filled /></el-icon>
-                                  </div>
+                                <span class="flex items-center"> {{ element.libraryName }} </span>
+
+                                <div
+                                  class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="editLibraryName(element.id)"
+                                >
+                                  <el-icon><edit-pen /></el-icon>
                                 </div>
                               </div>
 
-                              <el-collapse-transition>
-                                <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                              <div class="flex w-1/12 flex-row justify-evenly">
+                                <div
+                                  class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                >
+                                  <Icon icon="ic:outline-drag-indicator" />
+                                </div>
+                                <div
+                                  class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="showRemoveSampleConfirm(element.id)"
+                                >
+                                  <el-icon><delete-filled /></el-icon>
+                                </div>
+                              </div>
+                            </div>
+
+                            <el-collapse-transition>
+                              <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Title
+                                  </label>
+
                                   <el-input
                                     v-model="element.title"
                                     type="text"
                                     placeholder="Title"
-                                    class="mb-2"
-                                  ></el-input>
+                                  />
+                                </div>
 
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Description
+                                  </label>
                                   <el-input
                                     v-model="element.description"
                                     type="textarea"
                                     placeholder="Description"
                                     class="mb-2"
-                                  ></el-input>
+                                  />
+                                </div>
 
-                                  <div
-                                    class="mb-2 flex w-full flex-row justify-between transition-all"
-                                  >
-                                    <div class="mr-2 w-4/12">
+                                <div
+                                  class="mb-2 flex w-full flex-row justify-between transition-all"
+                                >
+                                  <div class="mr-2 w-4/12 xl:w-3/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Organism
+                                      </label>
                                       <el-select
                                         v-model="element.organism"
                                         filterable
                                         remote
                                         reserve-keyword
                                         placeholder="Organism"
+                                        class="w-full"
                                         :remote-method="loadTaxonomy"
                                         :loading="loading"
                                       >
@@ -421,19 +444,34 @@
                                         />
                                       </el-select>
                                     </div>
+                                  </div>
 
-                                    <div class="mx-2 w-3/12">
+                                  <div class="mx-2 w-3/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Molecule
+                                      </label>
                                       <el-input
                                         v-model="element.molecule"
                                         type="text"
                                         placeholder="Molecule"
                                       ></el-input>
                                     </div>
+                                  </div>
 
-                                    <div class="mx-2 w-3/12 xl:w-2/12">
+                                  <div class="mx-2 w-3/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Single or paired end
+                                      </label>
                                       <el-select
                                         v-model="element.singleOrPairedEnd"
                                         filterable
+                                        class="w-full"
                                         placeholder="Single or paired end"
                                       >
                                         <el-option label="single" value="single"> </el-option>
@@ -441,11 +479,19 @@
                                         </el-option>
                                       </el-select>
                                     </div>
+                                  </div>
 
-                                    <div class="mx-2 w-3/12 xl:w-auto">
+                                  <div class="mx-2 w-2/12 xl:w-3/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Instrument Model
+                                      </label>
                                       <el-select
                                         v-model="element.instrumentModel"
                                         filterable
+                                        class="w-full"
                                         placeholder="Instrument Model"
                                       >
                                         <el-option
@@ -458,111 +504,171 @@
                                       </el-select>
                                     </div>
                                   </div>
+                                </div>
 
-                                  <line-divider class="my-2" type="dashed" />
+                                <line-divider class="my-2" type="dashed" />
 
-                                  <p class="">Sample Characteristics</p>
-                                  <span class="mb-4 text-xs">
-                                    One of 'tissue', 'cell line' or 'cell type' fields is required.
-                                  </span>
+                                <p class="">Sample Characteristics</p>
+                                <span class="mb-4 text-xs">
+                                  One of 'tissue', 'cell line' or 'cell type' fields is required.
+                                </span>
 
-                                  <div
-                                    class="flex w-full flex-col justify-between pb-4"
-                                    v-for="(_item, key, index) in element.characteristics"
-                                    :key="index"
-                                  >
-                                    <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                                      {{ key }}
-                                    </label>
+                                <div
+                                  class="flex w-full flex-col justify-between pb-4"
+                                  v-for="(_item, key, index) in element.characteristics"
+                                  :key="index"
+                                >
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    {{ key }}
+                                  </label>
 
-                                    <div class="flex items-center justify-between">
-                                      <el-input
-                                        v-model="element.characteristics[key]"
-                                        type="text"
-                                      />
-                                      <div
-                                        class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                        @click="deleteCustomField(key)"
-                                      >
-                                        <el-icon><delete-filled /></el-icon>
-                                      </div>
+                                  <div class="flex items-center justify-between">
+                                    <el-input v-model="element.characteristics[key]" type="text" />
+                                    <div
+                                      class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                      @click="showCustomFieldDeleteConfirm(key)"
+                                    >
+                                      <el-icon><delete-filled /></el-icon>
                                     </div>
                                   </div>
-
-                                  <div class="flex w-full flex-row justify-start">
-                                    <button
-                                      class="primary-plain-button"
-                                      @click="openAddFieldPrompt(id)"
-                                    >
-                                      Add a field
-                                      <el-icon><circle-plus /></el-icon>
-                                    </button>
-                                  </div>
-
-                                  <line-divider class="my-4" type="dashed" />
-
-                                  <div class="flex flex-col">
-                                    <p class="my-2">Add your raw files</p>
-
-                                    <el-tree-select
-                                      v-model="element.rawFiles"
-                                      :data="element.filteredRawFilesFolderContents"
-                                      @visible-change="
-                                        getFilteredRawFilesFolderContents(element.id)
-                                      "
-                                      multiple
-                                      show-checkbox
-                                    />
-                                  </div>
-
-                                  <div class="flex flex-col">
-                                    <p class="my-2">Add your processed files</p>
-
-                                    <el-tree-select
-                                      v-model="element.processedDataFiles"
-                                      :data="element.filteredProcessedDataFilesFolderContents"
-                                      @visible-change="
-                                        getFilteredProcessedDataFilesFolderContents(element.id)
-                                      "
-                                      multiple
-                                      show-checkbox
-                                    />
-                                  </div>
                                 </div>
-                              </el-collapse-transition>
 
-                              <line-divider></line-divider>
-                            </div>
-                          </template>
-                        </draggable>
-                        <add-prompt
-                          ref="addCharacteristicPrompt"
-                          title="Add a sample characteristic"
-                          confirmButtonText="Add this field"
-                          :confirmDisabled="disableCustomCharacteristic"
-                          @messageConfirmed="addCustomCharacteristic"
-                        >
-                          <div w-full>
-                            <p class="mb-3 text-sm">
-                              Please select or enter the name of the field you would like to add.
-                              This field will be added to all samples.
-                            </p>
+                                <div class="flex w-full flex-row justify-start">
+                                  <button
+                                    class="primary-plain-button"
+                                    @click="openAddFieldPrompt(id)"
+                                  >
+                                    Add a field
+                                    <el-icon><circle-plus /></el-icon>
+                                  </button>
+                                </div>
 
-                            <el-autocomplete
-                              v-model="customFieldName"
-                              :fetch-suggestions="customFieldNameSearch"
-                              clearable
-                              class="w-full"
-                              placeholder="Enter a field name"
-                            />
+                                <line-divider class="my-4" type="dashed" />
+
+                                <div class="flex flex-col">
+                                  <p class="my-2">Add your raw files</p>
+
+                                  <el-tree-select
+                                    v-model="element.rawFiles"
+                                    :data="element.filteredRawFilesFolderContents"
+                                    @visible-change="getFilteredRawFilesFolderContents(element.id)"
+                                    multiple
+                                    show-checkbox
+                                  />
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <p class="my-2">Add your processed files</p>
+
+                                  <el-tree-select
+                                    v-model="element.processedDataFiles"
+                                    :data="element.filteredProcessedDataFilesFolderContents"
+                                    @visible-change="
+                                      getFilteredProcessedDataFilesFolderContents(element.id)
+                                    "
+                                    multiple
+                                    show-checkbox
+                                  />
+                                </div>
+                              </div>
+                            </el-collapse-transition>
                           </div>
-                        </add-prompt>
-                      </el-form>
-                      <div class="m-2 flex w-full justify-center">
-                        <button class="primary-plain-button">Add a Sample</button>
-                      </div>
+                        </template>
+                      </draggable>
+
+                      <add-prompt
+                        ref="addCharacteristicPrompt"
+                        title="Add a sample characteristic"
+                        confirmButtonText="Add this field"
+                        :confirmDisabled="disableCustomCharacteristic"
+                        @messageConfirmed="addCustomCharacteristic"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">
+                            Please select or enter the name of the field you would like to add. This
+                            field will be added to all samples.
+                          </p>
+
+                          <el-autocomplete
+                            v-model="customFieldName"
+                            :fetch-suggestions="customFieldNameSearch"
+                            clearable
+                            class="w-full"
+                            placeholder="Enter a field name"
+                          />
+                        </div>
+                      </add-prompt>
+
+                      <edit-prompt
+                        ref="editLibraryNamePrompt"
+                        title="Edit library name"
+                        confirmButtonText="Save"
+                        :confirmDisabled="disableEditLibraryNameSaveButton"
+                        @messageConfirmed="saveUpdatedLibraryName"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">
+                            Please enter the new library name for this sample.
+                          </p>
+
+                          <el-input
+                            v-model="sampleName"
+                            clearable
+                            class="w-full"
+                            placeholder="Enter a field name"
+                          />
+                        </div>
+                      </edit-prompt>
+
+                      <warning-confirm
+                        ref="removeSampleConfirm"
+                        title="Warning"
+                        @messageConfirmed="confirmedRemoveSample"
+                      >
+                        <p class="text-center text-base text-gray-500">
+                          Are you sure you want to remove this sample? This action cannot be undone.
+                        </p>
+                      </warning-confirm>
+
+                      <warning-confirm
+                        ref="removeCustomFieldConfirm"
+                        title="Warning"
+                        @messageConfirmed="confirmedRemoveCustomField"
+                      >
+                        <p class="text-center text-base text-gray-500">
+                          Are you sure you want to remove this field from all samples? This action
+                          cannot be undone.
+                        </p>
+                      </warning-confirm>
+                    </el-form>
+                    <div class="m-2 flex w-full justify-center">
+                      <button class="primary-plain-button" @click="showAddSamplePrompt">
+                        Add a Sample
+                      </button>
+
+                      <add-prompt
+                        ref="addSamplePrompt"
+                        title="Add a sample"
+                        confirmButtonText="Add this sample"
+                        :confirmDisabled="disableEditLibraryNameSaveButton"
+                        @messageConfirmed="addSampleConfirmed"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">
+                            Please select or enter the name of the sample you would like to add.
+                          </p>
+
+                          <el-input
+                            v-model="sampleName"
+                            clearable
+                            class="w-full"
+                            placeholder="Enter a library name for your sample"
+                          />
+                        </div>
+                      </add-prompt>
                     </div>
                   </div>
+
                   <div class="flex w-full justify-center space-x-4 px-5 py-4">
                     <button
                       @click="prevFormStep"
@@ -866,6 +972,7 @@ export default {
       showSaving: false,
       showSpinner: false,
       sampleID: "",
+      sampleName: "",
       customFieldName: "",
       folderContents: [
         {
@@ -918,6 +1025,19 @@ export default {
     },
     disableCustomCharacteristic() {
       return this.customFieldName.trim() === "";
+    },
+    disableEditLibraryNameSaveButton() {
+      if (this.sampleName.trim() === "") {
+        return true;
+      }
+
+      for (const sample of this.step3Form) {
+        if (sample.libraryName === this.sampleName.trim()) {
+          return true;
+        }
+      }
+
+      return false;
     },
   },
   methods: {
@@ -1045,8 +1165,39 @@ export default {
       });
     },
 
-    openAddFieldPrompt(id) {
-      this.sampleID = id;
+    showAddSamplePrompt() {
+      this.sampleName = "";
+      this.$refs.addSamplePrompt.show();
+    },
+
+    addSampleConfirmed() {
+      let newSampleObject = {
+        id: uuidv4(),
+        libraryName: this.sampleName,
+        title: "",
+        organism: "",
+        molecule: "",
+        singleOrPairedEnd: "",
+        instrumentModel: "",
+        description: "",
+        characteristics: {},
+        processedDataFiles: [],
+        rawFiles: [],
+        filteredRawFilesFolderContents: [],
+        filteredProcessedDataFilesFolderContents: [],
+        isExpanded: true,
+      };
+
+      if (this.step3Form.length > 0) {
+        for (const key in this.step3Form[0].characteristics) {
+          newSampleObject.characteristics[key] = "";
+        }
+      }
+
+      this.step3Form.push(newSampleObject);
+    },
+
+    openAddFieldPrompt() {
       this.$refs.addCharacteristicPrompt.show();
     },
     customFieldNameSearch(query, cb) {
@@ -1076,11 +1227,12 @@ export default {
 
       this.customFieldName = "";
     },
-    deleteCustomField(key) {
-      /**
-       * TODO: Add a confirmation dialog
-       */
-
+    showCustomFieldDeleteConfirm(key) {
+      this.customFieldName = key;
+      this.$refs.removeCustomFieldConfirm.show();
+    },
+    confirmedRemoveCustomField() {
+      const key = this.customFieldName;
       if (key in this.step3Form[0].characteristics) {
         for (let sample of this.step3Form) {
           delete sample.characteristics[key];
@@ -1217,6 +1369,36 @@ export default {
     minimizeAllSamples() {
       this.step3Form.map((sample) => {
         sample.isExpanded = false;
+      });
+    },
+
+    editLibraryName(id) {
+      let sample = this.step3Form.find((element) => {
+        return element.id === id;
+      });
+
+      this.sampleID = id;
+      this.sampleName = sample.libraryName;
+      this.$refs.editLibraryNamePrompt.show();
+    },
+
+    saveUpdatedLibraryName() {
+      let sample = this.step3Form.find((element) => {
+        return element.id === this.sampleID;
+      });
+
+      sample.libraryName = this.sampleName;
+    },
+
+    showRemoveSampleConfirm(id) {
+      this.sampleID = id;
+      this.$refs.removeSampleConfirm.show();
+    },
+    confirmedRemoveSample() {
+      const id = this.sampleID;
+
+      this.step3Form = this.step3Form.filter((sample) => {
+        return sample.id !== id;
       });
     },
 

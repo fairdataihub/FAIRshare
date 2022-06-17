@@ -48,6 +48,7 @@ import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
 import AddPrompt from "./components/dialogs/prompt/AddPrompt.vue";
+import EditPrompt from "./components/dialogs/prompt/EditPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
 
@@ -89,6 +90,7 @@ app.component("error-confirm", ErrorConfirm);
 app.component("warning-prompt", WarningPrompt);
 app.component("login-prompt", LoginPrompt);
 app.component("add-prompt", AddPrompt);
+app.component("edit-prompt", EditPrompt);
 
 app.component("general-dialog", GeneralDialog);
 
