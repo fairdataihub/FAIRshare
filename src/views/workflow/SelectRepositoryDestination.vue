@@ -36,31 +36,30 @@
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
             <div
+              v-show="codePresent"
               class="my-8 grid grid-cols-3 gap-8"
               :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
             >
-              <div>
-                <div class="flex flex-col items-center justify-center">
-                  <div
-                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-                    :class="{ 'selected-repo': repoID === 'zenodo' }"
-                    @click="selectRepo($event, 'zenodo')"
-                  >
-                    <img
-                      src="https://api.iconify.design/simple-icons/zenodo.svg"
-                      alt=""
-                      class="mb-3 h-16 w-16"
-                    />
-                    <span class="mx-5 text-lg"> Zenodo </span>
-                  </div>
-                  <div
-                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
-                    v-if="repoID === 'zenodo'"
-                    @click="openWebsite('https://zenodo.org')"
-                  >
-                    <span class="font-medium"> Learn more... </span>
-                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-                  </div>
+              <div class="flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{ 'selected-repo': repoID === 'zenodo' }"
+                  @click="selectRepo($event, 'zenodo')"
+                >
+                  <img
+                    src="https://api.iconify.design/simple-icons/zenodo.svg"
+                    alt=""
+                    class="mb-3 h-16 w-16"
+                  />
+                  <span class="mx-5 text-lg"> Zenodo </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'zenodo'"
+                  @click="openWebsite('https://zenodo.org')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
                 </div>
               </div>
 
@@ -112,6 +111,33 @@
                     </div>
                   </template>
                 </el-popover>
+              </div>
+            </div>
+
+            <div v-show="showGeo" class="my-8 grid grid-cols-1 gap-8">
+              <div class="flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{
+                    'selected-repo': repoID === 'ncbigeo',
+                  }"
+                  @click="selectRepo($event, 'ncbigeo')"
+                >
+                  <img
+                    src="https://www.ncbi.nlm.nih.gov/geo/img/geo_main.gif"
+                    alt=""
+                    class="mb-3 h-auto w-full"
+                  />
+                  <span class="mx-5 text-lg"> NCBI GEO </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'ncbigeo'"
+                  @click="openWebsite('https://www.ncbi.nlm.nih.gov/geo/')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                </div>
               </div>
             </div>
 
@@ -389,6 +415,27 @@
                 </button>
               </div>
             </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-show="nextGenHighThroughputSequencingPresent"
+              >
+                <!-- ncbi geo selected -->
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
+
+                <button
+                  class="primary-button"
+                  @click="saveSelectedVersionDetails"
+                  :disabled="repoID === ''"
+                  id="continueNewVersion"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
           </div>
           <div v-else class="flex w-full justify-center space-x-4 px-5 py-4">
             <!-- skip upload to repo -->
@@ -473,12 +520,19 @@ export default {
       disableFigshare: false,
       showFigshare: false,
       figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
+      showGeo: false,
     };
   },
   computed: {
     codePresent() {
       if ("type" in this.workflow) {
         return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+    nextGenHighThroughputSequencingPresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("NextGenHighThroughputSequencing");
       }
       return false;
     },
@@ -595,6 +649,8 @@ export default {
 
       if (this.codePresent) {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`;
+      } else if (this.nextGenHighThroughputSequencingPresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/createMetadata`;
       } else {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/pickLicense`;
       }
@@ -691,6 +747,11 @@ export default {
         routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
       }
 
+      // This should override the previous route but might need to refactor in the future
+      if (this.nextGenHighThroughputSequencingPresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/review`;
+      }
+
       this.$router.push({ path: routerPath });
     },
     async shouldShowFigshare() {
@@ -708,6 +769,13 @@ export default {
         this.showFigshare = false;
       }
     },
+    async shouldShowGeo() {
+      if ("NextGenHighThroughputSequencing" in this.dataset.data) {
+        this.showGeo = true;
+      } else {
+        this.showGeo = false;
+      }
+    },
   },
   async mounted() {
     this.loading = true;
@@ -717,6 +785,7 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.shouldShowFigshare();
+    this.shouldShowGeo();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;

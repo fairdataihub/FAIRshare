@@ -682,85 +682,6 @@
                     <!-- :plain="!lastStep" -->
                     <button
                       class="primary-button"
-                      @click="navigateToStep4FromStep3"
-                      :disabled="checkInvalidStatus"
-                    >
-                      Next
-                      <el-icon><right-icon /></el-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div v-if="currentStep == 4">
-                  <div
-                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
-                  >
-                    <div class="w-full bg-gray-100 px-4 py-2">
-                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Additional information
-                      </span>
-                    </div>
-                    <div class="p-4">
-                      <el-form
-                        :model="step4Form"
-                        label-width="160px"
-                        label-position="top"
-                        size="large"
-                        ref="s7Form"
-                        @submit.prevent
-                        class="py-4"
-                      >
-                        <el-form-item label="Reference publication">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step4Form.referencePublication"
-                              type="text"
-                              placeholder="https://doi.org/10.100/xyz123"
-                            ></el-input>
-                            <form-help-content
-                              popoverContent="Link to the scholarly publication that describes the software"
-                            ></form-help-content>
-                          </div>
-                        </el-form-item>
-
-                        <el-form-item label="Development status">
-                          <div class="flex w-full flex-row items-center">
-                            <form-help-content
-                              popoverContent="The current development status of this software. Select one to see the definition. See <a class='text-url' onclick='window.ipcRenderer.send(`open-link-in-browser`, `http://www.repostatus.org`)'> http://www.repostatus.org/ </a> for more details."
-                            ></form-help-content>
-                          </div>
-
-                          <p class="pt-2 text-xs text-gray-500"></p>
-                        </el-form-item>
-
-                        <el-form-item label="Is part of" :error="isPartOfErrorMessage">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
-                              v-model="step4Form.isPartOf"
-                              type="url"
-                              placeholder="https://thebiggerframework.org"
-                            ></el-input>
-                            <form-help-content
-                              popoverContent="Link to the project this software is part of"
-                            ></form-help-content>
-                          </div>
-                        </el-form-item>
-                      </el-form>
-                    </div>
-                  </div>
-                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
-                    <button
-                      @click="prevFormStep"
-                      class="secondary-plain-button"
-                      size="medium"
-                      :disabled="checkInvalidStatus"
-                    >
-                      <el-icon><back-icon /></el-icon>
-                      Previous
-                    </button>
-                    <!-- :plain="!lastStep" -->
-                    <button
-                      class="primary-button"
                       @click="nextFormStep"
                       :disabled="checkInvalidStatus"
                     >
@@ -832,7 +753,7 @@ import { v4 as uuidv4 } from "uuid";
 // import { ElNotification } from "element-plus";
 
 import draggable from "vuedraggable";
-import validator from "validator";
+// import validator from "validator";
 import axios from "axios";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -917,7 +838,6 @@ export default {
         processedDataFilesFormat: "",
       },
       step2FormRules: {},
-
       step3Form: [
         {
           id: uuidv4(),
@@ -991,29 +911,7 @@ export default {
       organismOptions: [],
     };
   },
-  watch: {
-    "step4Form.isPartOf": {
-      handler(val) {
-        if (val != "" && val != undefined) {
-          const validIdentifier = validator.isURL(val);
-
-          if (!validIdentifier) {
-            this.isPartOfErrorMessage = "Please provide a valid URL";
-            this.$refs.s7Form.validate();
-            this.invalidStatus.isPartOf = true;
-            return;
-          } else {
-            this.isPartOfErrorMessage = "";
-            this.invalidStatus.isPartOf = false;
-          }
-        } else {
-          this.isPartOfErrorMessage = "";
-          this.invalidStatus.isPartOf = false;
-        }
-      },
-      deep: true,
-    },
-  },
+  watch: {},
   computed: {
     checkInvalidStatus() {
       for (const key in this.invalidStatus) {
@@ -1100,22 +998,6 @@ export default {
         if (valid) {
           await this.saveCurrentEntries();
           this.setCurrentStep(3);
-        }
-      });
-    },
-    navigateToStep4FromStep3() {
-      if (this.step3Form.keywords.length <= 0) {
-        this.$message({
-          message: "Please add at least one keyword.",
-          type: "error",
-        });
-        return;
-      }
-
-      this.$refs["s3Form"].validate(async (valid) => {
-        if (valid) {
-          await this.saveCurrentEntries();
-          this.setCurrentStep(4);
         }
       });
     },
@@ -1405,47 +1287,45 @@ export default {
     async saveCurrentEntries() {
       this.showSavingIcon();
 
-      this.dataset.data.general.questions.name = this.step1Form.name;
-      this.dataset.data.general.questions.description = this.step1Form.description;
+      this.dataset.data.general.questions.name = this.step1Form.title;
+      this.dataset.data.general.questions.description = this.step1Form.summary;
 
-      this.step3Form.keywords = this.filterArrayOfObjects(this.step3Form.keywords, "keyword");
+      this.step1Form.contributors = this.filterArrayOfObjects(
+        this.step1Form.contributors,
+        "contributor"
+      );
 
-      this.dataset.data.general.questions.keywords = this.step3Form.keywords;
-      this.dataset.data.general.questions.authors = this.step2Form.authors;
-      this.dataset.data.general.questions.contributors = this.step2Form.contributors;
-      this.dataset.data.general.questions.fundingCode = this.step3Form.fundingCode;
-      this.dataset.data.general.questions.fundingOrganization = this.step3Form.fundingOrganization;
-      this.dataset.data.general.questions.referencePublication =
-        this.step4Form.referencePublication;
+      this.dataset.data.general.questions.authors = this.step1Form.contributors;
 
       let nghtsForm = {};
 
-      nghtsForm.name = this.step1Form.name;
-      nghtsForm.description = this.step1Form.description;
-      nghtsForm.creationDate = this.step1Form.creationDate;
-      nghtsForm.firstReleaseDate = this.step1Form.firstReleaseDate;
+      nghtsForm.study = this.step1Form.study;
+      nghtsForm.title = this.step1Form.title;
+      nghtsForm.summary = this.step1Form.summary;
+      nghtsForm.experimentalDesign = this.step1Form.experimentalDesign;
+      nghtsForm.contributors = this.step1Form.contributors;
+      nghtsForm.supplementaryFile = this.step1Form.supplementaryFile;
 
-      nghtsForm.authors = this.step2Form.authors;
-      nghtsForm.contributors = this.step2Form.contributors;
+      nghtsForm.growthProtocol = this.step2Form.growthProtocol;
+      nghtsForm.treatmentProtocol = this.step2Form.treatmentProtocol;
+      nghtsForm.extractProtocol = this.step2Form.extractProtocol;
+      nghtsForm.libraryConstructionProtocol = this.step2Form.libraryConstructionProtocol;
+      nghtsForm.libraryStrategy = this.step2Form.libraryStrategy;
+      nghtsForm.dataProcessingSteps = this.step2Form.dataProcessingSteps;
+      nghtsForm.genomeBuild = this.step2Form.genomeBuild;
+      nghtsForm.processedDataFilesFormat = this.step2Form.processedDataFilesFormat;
 
-      nghtsForm.identifier = this.step3Form.identifier;
-      nghtsForm.keywords = this.step3Form.keywords;
-      nghtsForm.fundingCode = this.step3Form.fundingCode;
-      nghtsForm.fundingOrganization = this.step3Form.fundingOrganization;
-
-      nghtsForm.referencePublication = this.step4Form.referencePublication;
-
-      nghtsForm.isPartOf = this.step4Form.isPartOf;
+      nghtsForm.samples = this.step3Form;
 
       this.dataset.data.NextGenHighThroughputSequencing.questions = nghtsForm;
 
-      this.workflow.generateCodeMeta = false;
+      this.workflow.generateNextGenHighThroughputSequencingMetadata = true;
 
-      if (this.generateNextGenHighThroughputSequencingMetadata === "Yes") {
-        this.workflow.generateNextGenHighThroughputSequencingMetadata = true;
-      } else {
-        this.workflow.generateNextGenHighThroughputSequencingMetadata = false;
-      }
+      // if (this.generateNextGenHighThroughputSequencingMetadata === "Yes") {
+      //   this.workflow.generateNextGenHighThroughputSequencingMetadata = true;
+      // } else {
+      //   this.workflow.generateNextGenHighThroughputSequencingMetadata = false;
+      // }
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
@@ -1460,7 +1340,7 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/NextGenHighThroughputSequencing/pickLicense`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`;
 
       this.$router.push({ path: routerPath });
     },
