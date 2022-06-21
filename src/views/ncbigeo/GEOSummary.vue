@@ -92,7 +92,7 @@
       <fade-transition>
         <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
           <router-link
-            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`"
             class=""
           >
             <button class="primary-plain-button">
@@ -105,11 +105,11 @@
             View files ready for upload
           </button>
 
-          <button class="primary-button" @click="navigateToUploadToGEO" v-if="uploadToGEO">
+          <button class="primary-button" @click="navigateToUploadToGEO(false)" v-if="uploadToGEO">
             Start upload
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
-          <button class="primary-button" @click="navigateToGEOGenerate" v-else>
+          <button class="primary-button" @click="navigateToUploadToGEO(true)" v-else>
             Generate at folder location
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
@@ -469,17 +469,18 @@ export default {
         return false;
       }
     },
-    async navigateToUploadToGEO() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/upload`;
+    /**
+     * Uploads the dataset to GEO
+     * TODO: handle skip upload
+     * @param {boolean} _skipUpload
+     * @returns {Promise<void>}
+     */
+    async navigateToUploadToGEO(_skipUpload = false) {
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/ncbigeo/upload`;
       if (this.uploadToGEO) {
         this.$router.push({ path: routerPath });
       } else {
-        const zenodoToken = this.zenodoAccessToken;
-        const res = await this.checkToken(zenodoToken);
-
-        if (res) {
-          this.$router.push({ path: routerPath });
-        }
+        this.$router.push({ path: routerPath });
       }
     },
   },

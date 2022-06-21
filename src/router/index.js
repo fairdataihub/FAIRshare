@@ -57,6 +57,7 @@ import BioToolsReview from "../views/biotools/BioToolsReview.vue";
 
 // ncbi geo related components
 import GEOSummary from "../views/ncbigeo/GEOSummary.vue";
+import GEOUpload from "../views/ncbigeo/GEOUpload.vue";
 
 // integration related components
 import ManageAccount from "../views/accounts/ManageAccount.vue";
@@ -196,6 +197,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/figshare/upload",
     component: FigshareUpload,
     name: "FigshareUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/upload",
+    component: GEOUpload,
+    name: "GEOUpload",
   },
 
   {
