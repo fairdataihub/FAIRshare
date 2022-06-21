@@ -1,10 +1,9 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Uploading your data to Figshare </span>
+      <span class="text-left text-lg font-medium"> Generating your final dataset </span>
       <span class="text-left">
-        This one is on us. FAIRshare is creating a Figshare record for you and uploading all your
-        files with the relevant metadata.
+        This one is on us. FAIRshare is generating all the relevant metadata files and o
       </span>
 
       <el-divider class="my-4"> </el-divider>
@@ -681,7 +680,45 @@ export default {
       }
       return "NO_DEPOSITION_FOUND";
     },
-    async runFigshareUpload() {
+    async createGeoMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create geoMetadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create geoMetadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async generateWorkflow() {
+      let response = {};
+
+      this.statusMessage = "Getting ready to generate the required metadata files";
+
+      await this.sleep(300);
+
+      response = await this.createGeoMetadataFile();
+
+      if (response === "ERROR") {
+        this.alertMessage = "There was an error with creating the geoMetadata.xlsx file";
+        return "FAIL";
+      } else {
+        this.statusMessage = "Created the geoMetadata.xlsx file in the target folder";
+      }
+
+      console.log(response);
+
+      return "SUCCESS";
+    },
+    async runGeoGenerate() {
       this.datasetStore.hideSidebar();
 
       this.indeterminate = true;
@@ -692,52 +729,58 @@ export default {
       this.statusMessage = "Preparing backend services...";
       await this.sleep(300);
 
-      let response = await this.uploadWorkflow();
+      let response = await this.generateWorkflow();
 
-      this.datasetStore.showSidebar();
+      console.log(response);
 
-      if (response === "FAIL") {
-        this.indeterminate = true;
-        this.progressStatus = "exception";
-        this.showAlert = true;
+      return;
 
-        this.deleteDraftFigshareArticle();
+      // let response = await this.uploadWorkflow();
 
-        if (this.overwriteCodeMeta) {
-          this.dataset.data.Code.questions.identifier = "";
-        }
-        if (this.overwriteOtherMeta) {
-          this.dataset.data.Other.questions.identifier = "";
-        }
+      // this.datasetStore.showSidebar();
 
-        this.workflow.datasetUploaded = false;
-        this.workflow.datasetPublished = false;
+      // if (response === "FAIL") {
+      //   this.indeterminate = true;
+      //   this.progressStatus = "exception";
+      //   this.showAlert = true;
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
+      //   this.deleteDraftFigshareArticle();
 
-        return;
-      } else {
-        if (this.overwriteCodeMeta) {
-          this.dataset.data.Code.questions.identifier = "";
-        }
-        if (this.overwriteOtherMeta) {
-          this.dataset.data.Other.questions.identifier = "";
-        }
+      //   if (this.overwriteCodeMeta) {
+      //     this.dataset.data.Code.questions.identifier = "";
+      //   }
+      //   if (this.overwriteOtherMeta) {
+      //     this.dataset.data.Other.questions.identifier = "";
+      //   }
 
-        this.workflow.datasetUploaded = true;
-        this.workflow.datasetPublished = false;
-        this.workflow.generateLicense = false;
+      //   this.workflow.datasetUploaded = false;
+      //   this.workflow.datasetPublished = false;
 
-        await this.datasetStore.updateCurrentDataset(this.dataset);
-        await this.datasetStore.syncDatasets();
+      //   await this.datasetStore.updateCurrentDataset(this.dataset);
+      //   await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-        this.$router.push({ path: routerPath });
-      }
+      //   return;
+      // } else {
+      //   if (this.overwriteCodeMeta) {
+      //     this.dataset.data.Code.questions.identifier = "";
+      //   }
+      //   if (this.overwriteOtherMeta) {
+      //     this.dataset.data.Other.questions.identifier = "";
+      //   }
+
+      //   this.workflow.datasetUploaded = true;
+      //   this.workflow.datasetPublished = false;
+      //   this.workflow.generateLicense = false;
+
+      //   await this.datasetStore.updateCurrentDataset(this.dataset);
+      //   await this.datasetStore.syncDatasets();
+
+      // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
+      // this.$router.push({ path: routerPath });
+      // }
     },
     async retryUpload() {
-      this.runFigshareUpload();
+      this.runGeoGenerate();
     },
   },
   async mounted() {
@@ -751,10 +794,7 @@ export default {
     // not saving this page since it will start a random upload when saving progress
     // this.workflow.currentRoute = this.$route.path;
 
-    const tokenObject = await this.tokens.getToken("figshare");
-    this.figshareToken = tokenObject.token;
-
-    this.runFigshareUpload();
+    this.runGeoGenerate();
   },
 };
 </script>
