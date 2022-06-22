@@ -48,3 +48,4 @@ dependencies:
       - pyyaml==6.0
       - flask-wtf==1.0.1
       - wtforms==3.0.1
+      - XlsxWriter==3.0.3

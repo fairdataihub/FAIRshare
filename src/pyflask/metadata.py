@@ -2,6 +2,7 @@ import json
 import os
 
 import yaml
+import xlsxwriter
 
 
 def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
@@ -320,37 +321,6 @@ def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
     return True
 
 
-def createMetadata(data_types, data, virtual_file):
-    try:
-        if "Code" in data_types:
-            code_data = data["Code"]["questions"]
-            general_data = data["general"]["questions"]
-            folder_path = ""
-            if "folderPath" in data["Code"]:
-                folder_path = data["Code"]["folderPath"]
-            result = createCodeMetadata(
-                code_data, general_data, folder_path, virtual_file
-            )
-            if virtual_file:
-                return result
-
-        if "Other" in data_types:
-            other_data = data["Other"]["questions"]
-            general_data = data["general"]["questions"]
-            folder_path = ""
-            if "folderPath" in data["Other"]:
-                folder_path = data["Other"]["folderPath"]
-            result = createOtherMetadata(
-                other_data, general_data, folder_path, virtual_file
-            )
-            if virtual_file:
-                return result
-
-        return "SUCCESS"
-    except Exception as e:
-        raise e
-
-
 def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
     # Create the citation file
     citationObject = {
@@ -482,6 +452,435 @@ def createCitationCFF(data_types, data, virtual_file):
             )
             if virtual_file:
                 return result
+
+        return "SUCCESS"
+    except Exception as e:
+        raise e
+
+
+def createNextGenHighThroughputSequencingMetadata(metadata):
+    homeFolderPath = os.path.expanduser("~")
+    tempFolderPath = os.path.join(homeFolderPath, ".fairshare", "temp")
+    metadataFilePath = os.path.join(tempFolderPath, "geoMetadata.xlsx")
+
+    os.makedirs(tempFolderPath, exist_ok=True)
+
+    if os.path.exists(metadataFilePath):
+        os.remove(metadataFilePath)
+
+    workbook = xlsxwriter.Workbook(metadataFilePath)
+
+    header_text_cell_format = workbook.add_format(
+        {"bold": True, "font_name": "Arial", "font_size": 10}
+    )
+    red_text_cell_format = workbook.add_format(
+        {"bold": True, "font_name": "Arial", "font_size": 10, "font_color": "red"}
+    )
+    comment_text_cell_format = workbook.add_format(
+        {
+            "bold": True,
+            "font_name": "Arial",
+            "font_size": 10,
+            "bg_color": "#DBDBDB",
+            "font_color": "#305496",
+        }
+    )
+
+    blue_header_text_cell_format = workbook.add_format(
+        {
+            "bold": True,
+            "font_name": "Arial",
+            "font_size": 10,
+            "bg_color": "#BDD7EE",
+            "font_color": "#833C0C",
+        }
+    )
+    default_text_cell_format = workbook.add_format(
+        {"font_name": "Arial", "font_size": 10}
+    )
+
+    blue_heading_cell_format = workbook.add_format(
+        {"bold": True, "font_name": "Arial", "font_size": 10, "bg_color": "#BDD7EE"}
+    )
+    green_heading_cell_format = workbook.add_format(
+        {"bold": True, "font_name": "Arial", "font_size": 10, "bg_color": "#E2EFDA"}
+    )
+
+    comment_row_format = workbook.add_format({"bg_color": "#DBDBDB"})
+
+    comment_text_cell_format.set_bottom()
+    comment_text_cell_format.set_top()
+
+    comment_row_format.set_bottom()
+    comment_row_format.set_top()
+
+    worksheet = workbook.add_worksheet()
+
+    column = 0
+    row = 0
+
+    worksheet.write(row, column, "STUDY", header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["study"], red_text_cell_format)
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# This section describes the overall study.",
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# Information provided in this section will be displayed in a GEO Series (GSE record) on public web pages.",  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.write(row, column, "title", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["title"])
+
+    row += 1
+
+    worksheet.write(row, column, "summary (abstract)", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["summary"])
+
+    row += 1
+
+    worksheet.write(row, column, "experimental design", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["experimentalDesign"])
+
+    for item in metadata["contributors"]:
+        row += 1
+
+        worksheet.write(row, column, "contributor", blue_header_text_cell_format)
+        worksheet.write(row, column + 1, item["contributor"])
+
+    row += 1
+
+    worksheet.write(row, column, "supplementary file", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["supplementaryFile"])
+
+    row += 4  # 3 rows of empty space
+
+    worksheet.write(row, column, "SAMPLES", header_text_cell_format)
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# Information provided in this section will be displayed in GEO Samples (GSM records) on public web pages.",  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# A GEO Sample record will be created from each row in this section.",
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# Biological replicates of the same sample: If provided, should be listed on different rows and titled accordingly (biol rep 1, biol rep 2, and so on).",  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        '# Technical replicates, eg, the same libraries were run in different lanes of a flow cell or sequenced multiple times: If provided, list all raw files in the same row, adding more "raw file" columns as needed to accommodate all raw files.',  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.write(row, column, "library name", blue_heading_cell_format)
+    worksheet.write(row, column + 1, "title", blue_heading_cell_format)
+    worksheet.write(row, column + 2, "organism", blue_heading_cell_format)
+
+    i = 0
+
+    for key in metadata["samples"][0]["characteristics"]:
+        worksheet.write(row, column + 3 + i, key, green_heading_cell_format)
+        i += 1
+
+    column = column + 3 + i  # reset the column index to 0 for the next section
+
+    worksheet.write(row, column + 0, "molecule", blue_heading_cell_format)
+    worksheet.write(row, column + 1, "single or paired-end", blue_heading_cell_format)
+    worksheet.write(row, column + 2, "instrument model", blue_heading_cell_format)
+    worksheet.write(row, column + 3, "description", blue_heading_cell_format)
+
+    max_processed_files = 0
+    max_raw_files = 0
+
+    for sample in metadata["samples"]:
+        if len(sample["processedDataFiles"]) > max_processed_files:
+            max_processed_files = len(sample["processedDataFiles"])
+        if len(sample["rawFiles"]) > max_raw_files:
+            max_raw_files = len(sample["rawFiles"])
+
+    i = 0
+
+    processedDataFilesIndex = column + 4 + i
+
+    while i < max_processed_files:
+        worksheet.write(
+            row, column + 4 + i, "processed data file", green_heading_cell_format
+        )
+        i += 1
+
+    rawFilesIndex = column = (
+        column + 4 + i
+    )  # reset the column index to 0 for the next section
+
+    i = 0
+
+    while i < max_raw_files:
+        worksheet.write(row, column + i, "raw file", green_heading_cell_format)
+        i += 1
+
+    for sample in metadata["samples"]:
+        row += 1
+        column = 0  # reset the column index to 0 for the next section
+
+        worksheet.write(row, column, sample["libraryName"], default_text_cell_format)
+        worksheet.write(row, column + 1, sample["title"], default_text_cell_format)
+        worksheet.write(row, column + 2, sample["organism"], default_text_cell_format)
+
+        i = 0
+
+        for key in sample["characteristics"]:
+            worksheet.write(
+                row,
+                column + 3 + i,
+                sample["characteristics"][key],
+                default_text_cell_format,
+            )
+            i += 1
+
+        column = column + 3 + i  # reset the column index to 0 for the next section
+
+        worksheet.write(row, column + 0, sample["molecule"], default_text_cell_format)
+        worksheet.write(
+            row, column + 1, sample["singleOrPairedEnd"], default_text_cell_format
+        )
+        worksheet.write(
+            row, column + 2, sample["instrumentModel"], default_text_cell_format
+        )
+        worksheet.write(
+            row, column + 3, sample["description"], default_text_cell_format
+        )
+
+        for (i, processedDataFile) in enumerate(sample["processedDataFiles"]):
+            worksheet.write(
+                row,
+                processedDataFilesIndex + i,
+                os.path.basename(processedDataFile),
+                default_text_cell_format,
+            )
+
+        for (i, rawFile) in enumerate(sample["rawFiles"]):
+            worksheet.write(
+                row,
+                rawFilesIndex + i,
+                os.path.basename(rawFile),
+                default_text_cell_format,
+            )
+
+    row += 3  # 2 rows of empty space
+    column = 0  # reset the column index to 0 for the next section
+
+    worksheet.write(row, column, "PROTOCOLS", header_text_cell_format)
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# Information provided in this section will appear in each GEO Sample (GSM record). These fields can be moved to the above SAMPLES section in order to provide different information for different samples.",  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        "# Please ensure that the annotations are relevant to the SAMPLES above (not to the samples from a previous submission).",  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.write(row, column, "growth protocol", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["growthProtocol"])
+
+    row += 1
+
+    worksheet.write(row, column, "treatment protocol", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["treatmentProtocol"])
+
+    row += 1
+
+    worksheet.write(row, column, "extract protocol", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["extractProtocol"])
+
+    row += 1
+
+    worksheet.write(
+        row, column, "library construction protocol", blue_header_text_cell_format
+    )
+    worksheet.write(row, column + 1, metadata["libraryConstructionProtocol"])
+
+    row += 1
+
+    worksheet.write(row, column, "library strategy", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["libraryStrategy"])
+
+    row += 1
+
+    worksheet.write(row, column, "", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, "")
+
+    row += 1
+
+    worksheet.write(row, column, "data processing step", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["dataProcessingSteps"])
+
+    row += 1
+
+    worksheet.write(row, column, "genome build/assembly", blue_header_text_cell_format)
+    worksheet.write(row, column + 1, metadata["genomeBuild"])
+
+    row += 1
+
+    worksheet.write(
+        row,
+        column,
+        "processed data files format and content",
+        blue_header_text_cell_format,
+    )
+    worksheet.write(row, column + 1, metadata["processedDataFilesFormat"])
+
+    row += 3  # 2 rows of empty space
+
+    worksheet.write(row, column, "PAIRED-END EXPERIMENTS", header_text_cell_format)
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        '# If "paired-end" experiments are included, list the files for each paired-end run in a row. Each row will become one sequencing run on a GEO Sample (GSM record).',  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        '# Single-cell data: If applicable, list index files (I1, I2, etc.) in "file name 3", "file name 4" columns.',  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    worksheet.set_row(row, cell_format=comment_row_format)
+    worksheet.write(
+        row,
+        column,
+        '# Please make sure all raw files listed here are also listed in the "raw file" columns in the above SAMPLES section.',  # noqa: E501
+        comment_text_cell_format,
+    )
+
+    row += 1
+
+    max_raw_files = 0
+
+    for sample in metadata["samples"]:
+        if sample["singleOrPairedEnd"] == "paired-end":
+            if len(sample["rawFiles"]) > max_raw_files:
+                max_raw_files = len(sample["rawFiles"])
+
+    i = 0
+
+    while i < max_raw_files:
+        worksheet.write(row, column + i, f"file name {i + 1}", blue_heading_cell_format)
+        i += 1
+
+    for sample in metadata["samples"]:
+        if sample["singleOrPairedEnd"] == "paired-end":
+            row += 1
+            column = 0
+
+            for (i, rawFile) in enumerate(sample["rawFiles"]):
+                worksheet.write(
+                    row, column + i, os.path.basename(rawFile), default_text_cell_format
+                )
+
+    workbook.close()
+
+
+def createMetadata(data_types, data, virtual_file):
+    try:
+        if "Code" in data_types:
+            code_data = data["Code"]["questions"]
+            general_data = data["general"]["questions"]
+            folder_path = ""
+            if "folderPath" in data["Code"]:
+                folder_path = data["Code"]["folderPath"]
+            result = createCodeMetadata(
+                code_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
+
+        if "Other" in data_types:
+            other_data = data["Other"]["questions"]
+            general_data = data["general"]["questions"]
+            folder_path = ""
+            if "folderPath" in data["Other"]:
+                folder_path = data["Other"]["folderPath"]
+            result = createOtherMetadata(
+                other_data, general_data, folder_path, virtual_file
+            )
+            if virtual_file:
+                return result
+
+        if "NextGenHighThroughputSequencing" in data_types:
+            next_gen_high_throughput_sequencing_data = data[
+                "NextGenHighThroughputSequencing"
+            ]["questions"]
+
+            result = createNextGenHighThroughputSequencingMetadata(
+                next_gen_high_throughput_sequencing_data
+            )
 
         return "SUCCESS"
     except Exception as e:

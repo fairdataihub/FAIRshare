@@ -428,7 +428,7 @@
 
                 <button
                   class="primary-button"
-                  @click="saveSelectedVersionDetails"
+                  @click="addMetadata"
                   :disabled="repoID === ''"
                   id="continueNewVersion"
                 >
