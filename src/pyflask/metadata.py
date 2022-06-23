@@ -545,28 +545,32 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
     row += 1
 
     worksheet.write(row, column, "title", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["title"])
+    worksheet.write(row, column + 1, metadata["title"], default_text_cell_format)
 
     row += 1
 
     worksheet.write(row, column, "summary (abstract)", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["summary"])
+    worksheet.write(row, column + 1, metadata["summary"], default_text_cell_format)
 
     row += 1
 
     worksheet.write(row, column, "experimental design", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["experimentalDesign"])
+    worksheet.write(
+        row, column + 1, metadata["experimentalDesign"], default_text_cell_format
+    )
 
     for item in metadata["contributors"]:
         row += 1
 
         worksheet.write(row, column, "contributor", blue_header_text_cell_format)
-        worksheet.write(row, column + 1, item["contributor"])
+        worksheet.write(row, column + 1, item["contributor"], default_text_cell_format)
 
     row += 1
 
     worksheet.write(row, column, "supplementary file", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["supplementaryFile"])
+    worksheet.write(
+        row, column + 1, metadata["supplementaryFile"], default_text_cell_format
+    )
 
     row += 4  # 3 rows of empty space
 

@@ -698,6 +698,22 @@ export default {
         });
       return response;
     },
+    async createGeoCheckSumsFile() {
+      const response = await axios
+        .post(`${this.$server_url}/ncbigeo/checksums`, {
+          data_object: JSON.stringify(this.dataset.data.NextGenHighThroughputSequencing.questions),
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create geoChecksums", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create geoChecksums", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     async generateWorkflow() {
       let response = {};
 
@@ -711,7 +727,20 @@ export default {
         this.alertMessage = "There was an error with creating the geoMetadata.xlsx file";
         return "FAIL";
       } else {
-        this.statusMessage = "Created the geoMetadata.xlsx file in the target folder";
+        this.statusMessage = "Created the geoMetadata.xlsx file";
+      }
+
+      await this.sleep(300);
+
+      this.statusMessage = "Calculating the checksums for all raw files";
+
+      response = await this.createGeoCheckSumsFile();
+
+      if (response === "ERROR") {
+        this.statusMessage = "There was an error with creating the geoChecksums.xlsx file";
+        return "FAIL";
+      } else {
+        this.statusMessage = "Created the geoChecksums.xlsx file";
       }
 
       console.log(response);

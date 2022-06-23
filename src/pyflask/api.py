@@ -48,6 +48,7 @@ from zenodo import (
     removeFileFromZenodoDeposition,
     uploadFileToZenodoDeposition,
 )
+from geo import generateGeoChecksums
 
 API_VERSION = "1.4.0"
 
@@ -1046,6 +1047,40 @@ class getRepoFileContents(Resource):
         file_name = args["file_name"]
 
         return getFileFromRepo(access_token, owner, repo, file_name)
+
+
+###############################################################################
+# NCBI GEO
+###############################################################################
+
+
+ncbigeo = api.namespace("ncbigeo", description="NCBI GEO")
+
+
+@ncbigeo.route("/checksums", endpoint="GenerateGeoChecksums")
+class GenerateGeoChecksums(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "data_object": "data object to be checksummed",
+        },
+    )
+    def post(self):
+        """Generate checksums for a data object"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "data_object",
+            type=str,
+            required=True,
+            help="data_object is required. dataObject needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        data_object = json.loads(args["data_object"])
+
+        return generateGeoChecksums(data_object)
 
 
 ###############################################################################

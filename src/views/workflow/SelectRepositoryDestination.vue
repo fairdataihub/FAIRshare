@@ -428,9 +428,9 @@
 
                 <button
                   class="primary-button"
-                  @click="addMetadata"
+                  @click="addMetadata('ncbigeo')"
                   :disabled="repoID === ''"
-                  id="continueNewVersion"
+                  id="geo-continue"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
@@ -706,7 +706,14 @@ export default {
 
       // using the zenodo one here. I don't think this matters since we aren't uploading anything
       // Might change it to its own page later
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
+      let routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
+
+      if (type === "ncbigeo") {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/review`;
+      }
+
+      console.log(routerPath);
+
       this.$router.push(routerPath);
     },
     async saveSkip() {

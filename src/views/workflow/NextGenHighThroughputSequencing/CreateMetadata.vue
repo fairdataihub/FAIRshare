@@ -779,7 +779,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 3,
+      currentStep: 1,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -1340,7 +1340,7 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/selectDestination`;
+      const routerPath = `/datasets/${this.$route.params.datasetID}/${this.workflowID}/selectDestination`;
 
       this.$router.push({ path: routerPath });
     },
@@ -1434,26 +1434,25 @@ export default {
       ) {
         let nghtsForm = this.dataset.data.NextGenHighThroughputSequencing.questions;
 
-        this.step1Form.name = nghtsForm.name;
-        this.step1Form.description = nghtsForm.description;
-        this.step1Form.creationDate = nghtsForm.creationDate;
-        this.step1Form.firstReleaseDate = nghtsForm.firstReleaseDate;
+        this.step1Form.study = nghtsForm.study;
+        this.step1Form.title = nghtsForm.title;
+        this.step1Form.summary = nghtsForm.summary;
+        this.step1Form.experimentalDesign = nghtsForm.experimentalDesign;
+        this.step1Form.contributors = nghtsForm.contributors;
+        this.step1Form.supplementaryFile = nghtsForm.supplementaryFile;
 
-        this.step2Form.authors = nghtsForm.authors;
-        this.step2Form.contributors = nghtsForm.contributors;
+        this.step2Form.growthProtocol = nghtsForm.growthProtocol;
+        this.step2Form.treatmentProtocol = nghtsForm.treatmentProtocol;
+        this.step2Form.extractProtocol = nghtsForm.extractProtocol;
+        this.step2Form.libraryConstructionProtocol = nghtsForm.libraryConstructionProtocol;
+        this.step2Form.libraryStrategy = nghtsForm.libraryStrategy;
+        this.step2Form.dataProcessingSteps = nghtsForm.dataProcessingSteps;
+        this.step2Form.genomeBuild = nghtsForm.genomeBuild;
+        this.step2Form.processedDataFilesFormat = nghtsForm.processedDataFilesFormat;
 
-        this.step3Form.identifier = nghtsForm.identifier;
-        this.step3Form.keywords = nghtsForm.keywords;
-        this.step3Form.fundingCode = nghtsForm.fundingCode;
-        this.step3Form.fundingOrganization = nghtsForm.fundingOrganization;
+        this.step3Form = nghtsForm.samples;
 
-        this.step4Form.referencePublication = nghtsForm.referencePublication;
-
-        this.step4Form.isPartOf = nghtsForm.isPartOf;
-
-        this.addIds(this.step3Form.keywords);
-        this.addIds(this.step2Form.authors);
-        this.addIds(this.step2Form.contributors);
+        this.addIds(this.step1Form.contributors);
       } else {
         this.step1Form.title = this.dataset.name;
         this.step1Form.summary = this.dataset.description;
