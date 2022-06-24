@@ -97,31 +97,44 @@
                         </el-form-item>
 
                         <el-form-item label="Title" prop="title">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step1Form.title"
                               placeholder="Decoding the Protein Composition of Whole Nucleosomes with Nuc-MS"
                             ></el-input>
+                            <span class="mt-2 px-1 text-xs text-slate-600">
+                              A unique title that describes the whole study
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Summary(abstract)" prop="summary">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step1Form.summary"
                               type="textarea"
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
                             ></el-input>
+                            <span class="mt-2 px-1 text-xs text-slate-600">
+                              Thorough description of the goals and objectives of this study. A
+                              working abstract from the associated manuscript may be suitable.
+                              Include as much text as necessary.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Experimental design" prop="title">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step1Form.experimentalDesign"
                               type="textarea"
                               placeholder="Intestinal GCs of the RedMUC298trTg mice were isolated by Fluorescence-activated cell sorting (FACS) according to the presence or absence of mCherry signal and analyzed using scRNAseq."
                             ></el-input>
+                            <span class="mt-2 px-1 text-xs text-slate-600">
+                              Describe the SAMPLES. Include what types of Samples are analyzed, if
+                              replicates are included, are there control and/or reference Samples,
+                              etc.
+                            </span>
                           </div>
                         </el-form-item>
 
@@ -180,6 +193,26 @@
                           <Icon icon="carbon:add" />
                           <span> Add a Contributor </span>
                         </div>
+
+                        <el-form-item label="Supplementary files" prop="supplementaryFiles">
+                          <div class="flex flex-col">
+                            <el-tree-select
+                              v-model="step1Form.supplementaryFiles"
+                              :data="step1Form.filteredSupplementaryFilesFolderContents"
+                              @visible-change="getSupplementaryFilesFolderContents"
+                              multiple
+                              clearable
+                              class="w-full"
+                            />
+                            <span class="mt-2 px-1 text-xs text-slate-600">
+                              Optional. If you submit a processed data file corresponding to
+                              *multiple* Samples, include the processed file here. For example:
+                              FPKMs_allsamples.txt The file should have unique column names that
+                              match unique descriptors in metadata SAMPLES (for example, "library
+                              name" descriptors). An exception would be single-cell submissions.
+                            </span>
+                          </div>
+                        </el-form-item>
                       </el-form>
                     </div>
                   </div>
@@ -217,82 +250,128 @@
                         class="metadata-form py-4"
                       >
                         <el-form-item label="Growth protocol">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.growthProtocol"
                               type="textarea"
                               placeholder="C3H 10T1/2 mesenchymal cells were maintained in DMEM supplemented with 10% fetal bovine serum (FBS) and antibiotics in humidified atmosphere with 5% CO2 at 37C"
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              Optional. Describe the conditions used to grow or maintain organisms
+                              or cells prior to extract preparation
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Treatment protocol">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.treatmentProtocol"
                               type="textarea"
                               placeholder="Adipogenic differentiation was induced by treatment of 2-day post confluent cells (designated day 0, D0) with 10ug/ml insulin (Sigma), 1uM dexamethasone (Sigma), and 0.5mM isobutylmethylxanthine (Sigma) in the presence of 10% FBS until day 2. Cells were then fed with DMEM supplemented with 10% FBS and 10ug/ml insulin for 2 days, after which they were fed every other day with DMEM containing 10% FBS"
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              Optional. Describe the treatments applied to the biological material
+                              prior to extract preparation.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Extract protocol">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.extractProtocol"
                               type="textarea"
                               placeholder="RNA was harvested using Rneasy mini plus kit (Qiagen). 1.3 ug of total RNA was used for the construction of sequencing libraries."
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              Describe the protocols used to extract and prepare the material to be
+                              sequenced.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Library construction protocol">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.libraryConstructionProtocol"
                               type="textarea"
                               placeholder="RNA libraries for RNA-seq were prepared using SMARTER mRNA-Seq Library Prep Kit following manufacturer's protocols."
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              Describe the library construction protocol.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Library strategy">
-                          <div class="flex w-full flex-row items-center">
-                            <el-input
+                          <div class="flex w-full flex-col items-start">
+                            <el-select
                               v-model="step2Form.libraryStrategy"
-                              type="textarea"
-                              placeholder="RNA-seq"
-                            />
+                              filterable
+                              class="w-full"
+                              placeholder="Molecule"
+                            >
+                              <el-option
+                                v-for="item in libraryStrategyOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item"
+                              >
+                              </el-option>
+                            </el-select>
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              A Sequence Read Archive-specific field that describes the sequencing
+                              technique for each library.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Data processing steps">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.dataProcessingSteps"
                               type="textarea"
                               placeholder="CLC Genomics Workbench v 11.0.1"
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              Provide details of how processed data files were generated. Steps may
+                              include:<br />
+                              Base-calling software, version, parameters;<br />
+                              Data filtering steps;<br />
+                              Read alignment software, version, parameters;<br />
+                              Additional processing software (e.g., peak-calling, abundance
+                              measurement), version, parameters;<br />
+                              etc.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Genome build/assembly">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.genomeBuild"
                               type="textarea"
                               placeholder="mm10"
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              UCSC or NCBI genome build number (e.g., hg18, mm9, human NCBI genome
+                              build 36, etc...), or reference sequence used for read alignment.
+                            </span>
                           </div>
                         </el-form-item>
 
                         <el-form-item label="Processed data files format and content">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.processedDataFilesFormat"
                               type="textarea"
                               placeholder="tab-delimited text files include RPKM values for each Sample"
                             />
+                            <span class="mt-1 px-1 text-xs text-slate-600">
+                              For each processed data file type, provide a description of the format
+                              and content.
+                            </span>
                           </div>
                         </el-form-item>
                       </el-form>
@@ -402,6 +481,10 @@
                                     type="text"
                                     placeholder="Title"
                                   />
+                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                    Unique title that describes the Sample. We suggest the
+                                    convention: [biomaterial] [condition(s)] [replicate number]
+                                  </span>
                                 </div>
 
                                 <div class="mb-4 flex flex-col">
@@ -414,6 +497,15 @@
                                     placeholder="Description"
                                     class="mb-2"
                                   />
+                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                    Optional. Additional information not provided in the other
+                                    fields, or broad descriptions that cannot be easily dissected
+                                    into other fields. <br />
+                                    OR <br />
+                                    If you submit a matrix containing processed data for multiple
+                                    Samples (e.g., counts.txt for all RNA-Seq samples), list the
+                                    matrix column names here.
+                                  </span>
                                 </div>
 
                                 <div
@@ -443,6 +535,9 @@
                                           :value="item.value"
                                         />
                                       </el-select>
+                                      <span class="mt-1 px-1 text-xs text-slate-600">
+                                        Organisms from which the sequences was derived.
+                                      </span>
                                     </div>
                                   </div>
 
@@ -453,11 +548,24 @@
                                       >
                                         Molecule
                                       </label>
-                                      <el-input
+                                      <el-select
                                         v-model="element.molecule"
-                                        type="text"
+                                        filterable
+                                        class="w-full"
                                         placeholder="Molecule"
-                                      ></el-input>
+                                      >
+                                        <el-option
+                                          v-for="item in moleculeOptions"
+                                          :key="item"
+                                          :label="item"
+                                          :value="item"
+                                        >
+                                        </el-option>
+                                      </el-select>
+                                      <span class="mt-1 px-1 text-xs text-slate-600">
+                                        Type of molecule that was extracted from the biological
+                                        material.
+                                      </span>
                                     </div>
                                   </div>
 
@@ -553,8 +661,12 @@
                                     :data="element.filteredRawFilesFolderContents"
                                     @visible-change="getFilteredRawFilesFolderContents(element.id)"
                                     multiple
+                                    clearable
                                     show-checkbox
                                   />
+                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                    Files containing the raw data.
+                                  </span>
                                 </div>
 
                                 <div class="mb-4 flex flex-col">
@@ -567,8 +679,13 @@
                                       getFilteredProcessedDataFilesFolderContents(element.id)
                                     "
                                     multiple
+                                    clearable
                                     show-checkbox
                                   />
+                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                    Files containing the processed data. The same processed file may
+                                    be listed for multiple Samples.
+                                  </span>
                                 </div>
                               </div>
                             </el-collapse-transition>
@@ -761,9 +878,6 @@ import { useTokenStore } from "@/store/access.js";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
-import contributorTypesJSON from "@/assets/supplementalFiles/contributorTypes.json";
-import repoStatusJSON from "@/assets/supplementalFiles/repoStatus.json";
-import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 import nextGenSequencingJSON from "@/assets/supplementalFiles/nextGenSequencing.json";
 
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
@@ -779,7 +893,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 2,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -788,13 +902,10 @@ export default {
       workflow: {},
       loading: false,
       interval: null,
-      contributorTypes: contributorTypesJSON.contributorTypes,
-      programmingLanguageOptions: codeMetadataJSON.programmingLanguageOptions,
-      runtimePlatformOptions: codeMetadataJSON.runtimePlatformOptions,
-      operatingSystemOptions: codeMetadataJSON.operatingSystemOptions,
-      repoStatusOptions: repoStatusJSON.repoStatus,
       instrumentModelOptions: nextGenSequencingJSON.instrumentModelOptions,
       customFieldOptions: nextGenSequencingJSON.customFieldOptions,
+      moleculeOptions: nextGenSequencingJSON.moleculeOptions,
+      libraryStrategyOptions: nextGenSequencingJSON.libraryStrategyOptions,
       generateNextGenHighThroughputSequencingMetadata: "Yes",
       step1Form: {
         study: "",
@@ -802,7 +913,8 @@ export default {
         summary: "",
         experimentalDesign: "",
         contributors: [],
-        supplementaryFile: "",
+        supplementaryFiles: [],
+        filteredSupplementaryFilesFolderContents: [],
       },
       step1FormRules: {
         study: [
@@ -1168,9 +1280,6 @@ export default {
 
       for (let i = 0; i < this.step3Form.length; i++) {
         alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
-        if (this.step3Form[i].id !== id) {
-          alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
-        }
       }
 
       //recurse through the folder contents
@@ -1195,6 +1304,36 @@ export default {
       });
 
       sample.filteredProcessedDataFilesFolderContents = newFolderContents;
+
+      return;
+    },
+    getSupplementaryFilesFolderContents() {
+      let alreadyAddedFiles = [];
+
+      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
+
+      for (let i = 0; i < this.step3Form.length; i++) {
+        alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
+      }
+
+      //recurse through the folder contents
+      function recurse(folderContents) {
+        for (let i = 0; i < folderContents.length; i++) {
+          if (folderContents[i].isDir) {
+            recurse(folderContents[i].children);
+          } else {
+            if (alreadyAddedFiles.includes(folderContents[i].value)) {
+              folderContents[i].disabled = true;
+            } else {
+              folderContents[i].disabled = false;
+            }
+          }
+        }
+      }
+
+      recurse(newFolderContents);
+
+      this.step1Form.filteredSupplementaryFilesFolderContents = newFolderContents;
 
       return;
     },
@@ -1304,7 +1443,7 @@ export default {
       nghtsForm.summary = this.step1Form.summary;
       nghtsForm.experimentalDesign = this.step1Form.experimentalDesign;
       nghtsForm.contributors = this.step1Form.contributors;
-      nghtsForm.supplementaryFile = this.step1Form.supplementaryFile;
+      nghtsForm.supplementaryFiles = this.step1Form.supplementaryFiles;
 
       nghtsForm.growthProtocol = this.step2Form.growthProtocol;
       nghtsForm.treatmentProtocol = this.step2Form.treatmentProtocol;
@@ -1439,7 +1578,7 @@ export default {
         this.step1Form.summary = nghtsForm.summary;
         this.step1Form.experimentalDesign = nghtsForm.experimentalDesign;
         this.step1Form.contributors = nghtsForm.contributors;
-        this.step1Form.supplementaryFile = nghtsForm.supplementaryFile;
+        this.step1Form.supplementaryFiles = nghtsForm.supplementaryFiles;
 
         this.step2Form.growthProtocol = nghtsForm.growthProtocol;
         this.step2Form.treatmentProtocol = nghtsForm.treatmentProtocol;

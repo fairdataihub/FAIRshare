@@ -22,7 +22,7 @@
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|vue|json)\" --write",
     "python:clean": "yarn gulp clean-pre-python-build",
     "python:build": "yarn gulp clean-pre-python-build && python -m PyInstaller --onefile --clean ./src/pyflask/api.py --distpath ./src/pyflaskdist",
-    "python:dev": "python ./src/pyflask/api.py 7632",
+    "python:dev": "python ./src/pyflask/api.py 7632 True",
     "electron:build": "yarn gulp clean-pre-electron-build && vue-cli-service electron:build",
     "electron:build-release": "yarn gulp clean-pre-electron-build && vue-cli-service electron:build -p always",
     "electron:pre-serve": "copyfiles -u 1 ./src/pyflask/** ./dist_electron && copyfiles -u 1 ./src/splash-screen.html ./dist_electron",

@@ -37,9 +37,7 @@
       <div class="flex w-full flex-col pt-20" v-if="locationID === 'local'">
         <span class="mb-2">
           Please select the folder where your
-          <span class="font-medium">
-            {{ combineDataTypes }}
-          </span>
+          <span class="font-medium"> Next Gen High Throughput Sequencing </span>
           files are stored. It is highly recommended to include all your data files.
         </span>
 
@@ -124,29 +122,6 @@ export default {
         return false;
       }
       return true;
-    },
-    combineDataTypes() {
-      if ("type" in this.workflow) {
-        const dataTypes = this.workflow.type;
-
-        if (dataTypes.length === 1) {
-          return dataTypes[0] === "Code" ? "Research Software" : dataTypes[0];
-        } else if (dataTypes.length === 2) {
-          return `${dataTypes[0]} and ${dataTypes[1]}`;
-        } else if (dataTypes.length > 2) {
-          let returnString = "";
-          dataTypes.forEach((type, index) => {
-            if (index === dataTypes.length - 1) {
-              returnString += `and ${type}`;
-            } else {
-              returnString += `${type}, `;
-            }
-          });
-          return returnString;
-        }
-      }
-
-      return "";
     },
   },
   methods: {

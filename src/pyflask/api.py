@@ -48,7 +48,7 @@ from zenodo import (
     removeFileFromZenodoDeposition,
     uploadFileToZenodoDeposition,
 )
-from geo import generateGeoChecksums
+
 
 API_VERSION = "1.4.0"
 
@@ -1057,32 +1057,6 @@ class getRepoFileContents(Resource):
 ncbigeo = api.namespace("ncbigeo", description="NCBI GEO")
 
 
-@ncbigeo.route("/checksums", endpoint="GenerateGeoChecksums")
-class GenerateGeoChecksums(Resource):
-    @ncbigeo.doc(
-        responses={200: "Success", 401: "Validation error"},
-        params={
-            "data_object": "data object to be checksummed",
-        },
-    )
-    def post(self):
-        """Generate checksums for a data object"""
-        parser = reqparse.RequestParser()
-
-        parser.add_argument(
-            "data_object",
-            type=str,
-            required=True,
-            help="data_object is required. dataObject needs to be of type str",
-        )
-
-        args = parser.parse_args()
-
-        data_object = json.loads(args["data_object"])
-
-        return generateGeoChecksums(data_object)
-
-
 ###############################################################################
 # Utilities
 ###############################################################################
@@ -1332,6 +1306,7 @@ class FileExistInFolder(Resource):
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
     requested_port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
+    debug = sys.argv[2] if len(sys.argv) > 2 else False
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
@@ -1339,5 +1314,4 @@ if __name__ == "__main__":
 
     api.logger.info("Starting FAIRshare server")
 
-    app.run(host="127.0.0.1", port=requested_port)
-    # app.run(host="127.0.0.1", port=requested_port, debug=True)
+    app.run(host="127.0.0.1", port=requested_port, debug=debug)

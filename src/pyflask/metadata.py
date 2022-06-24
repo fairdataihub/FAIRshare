@@ -1,11 +1,13 @@
+import hashlib
 import json
 import os
 
-import yaml
 import xlsxwriter
+import yaml
 
 
 def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
+    # sourcery skip: low-code-quality
     metadata = {
         "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
         "@type": "SoftwareSourceCode",
@@ -184,128 +186,101 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
 
 
 def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
+    # sourcery skip: low-code-quality
     metadata = {}
 
     if "license" in other_data:
         metadata["license"] = other_data["license"]
 
-    if "creationDate" in other_data:
-        if other_data["creationDate"] != "":
-            metadata["dateCreated"] = other_data["creationDate"]
+    if "creationDate" in other_data and other_data["creationDate"] != "":
+        metadata["dateCreated"] = other_data["creationDate"]
 
-    if "firstReleaseDate" in other_data:
-        if other_data["firstReleaseDate"] != "":
-            metadata["dateCreated"] = other_data["firstReleaseDate"]
+    if "firstReleaseDate" in other_data and other_data["firstReleaseDate"] != "":
+        metadata["dateCreated"] = other_data["firstReleaseDate"]
 
-    if "name" in other_data:
-        if other_data["name"] != "":
-            metadata["name"] = other_data["name"]
+    if "name" in other_data and other_data["name"] != "":
+        metadata["name"] = other_data["name"]
 
-    if "identifier" in other_data:
-        if other_data["identifier"] != "":
-            metadata["identifier"] = other_data["identifier"]
+    if "identifier" in other_data and other_data["identifier"] != "":
+        metadata["identifier"] = other_data["identifier"]
 
-    if "description" in other_data:
-        if other_data["description"] != "":
-            metadata["description"] = other_data["description"]
+    if "description" in other_data and other_data["description"] != "":
+        metadata["description"] = other_data["description"]
 
-    if "fundingCode" in other_data:
-        if other_data["fundingCode"] != "":
-            metadata["fundingCode"] = other_data["fundingCode"]
+    if "fundingCode" in other_data and other_data["fundingCode"] != "":
+        metadata["fundingCode"] = other_data["fundingCode"]
 
-    if "fundingOrganization" in other_data:
-        if other_data["fundingOrganization"] != "":
-            metadata["fundingOrganization"] = other_data["fundingOrganization"]
+    if "fundingOrganization" in other_data and other_data["fundingOrganization"] != "":
+        metadata["fundingOrganization"] = other_data["fundingOrganization"]
 
-    if "developmentStatus" in other_data:
-        if other_data["developmentStatus"] != "":
-            metadata["developmentStatus"] = other_data["developmentStatus"]
+    if "developmentStatus" in other_data and other_data["developmentStatus"] != "":
+        metadata["developmentStatus"] = other_data["developmentStatus"]
 
-    if "isPartOf" in other_data:
-        if other_data["isPartOf"] != "":
-            metadata["isPartOf"] = other_data["isPartOf"]
+    if "isPartOf" in other_data and other_data["isPartOf"] != "":
+        metadata["isPartOf"] = other_data["isPartOf"]
 
-    if "referencePublication" in other_data:
-        if other_data["referencePublication"] != "":
-            metadata["referencePublication"] = other_data["referencePublication"]
+    if (
+        "referencePublication" in other_data
+        and other_data["referencePublication"] != ""
+    ):
+        metadata["referencePublication"] = other_data["referencePublication"]
 
-    if "keywords" in other_data:
-        if len(other_data["keywords"]) > 0:
-            metadata["keywords"] = []
+    if "keywords" in other_data and len(other_data["keywords"]) > 0:
+        metadata["keywords"] = [item["keyword"] for item in other_data["keywords"]]
 
-            for item in other_data["keywords"]:
-                metadata["keywords"].append(item["keyword"])
+    if "relatedLinks" in other_data and len(other_data["relatedLinks"]) > 0:
+        metadata["relatedLink"] = []
 
-    if "relatedLinks" in other_data:
-        if len(other_data["relatedLinks"]) > 0:
-            metadata["relatedLink"] = []
+        for item in other_data["relatedLinks"]:
+            metadata["relatedLink"].append(item["link"])
 
-            for item in other_data["relatedLinks"]:
-                metadata["relatedLink"].append(item["link"])
+    if "authors" in other_data and len(other_data["authors"]) > 0:
+        metadata["author"] = []
 
-    if "authors" in other_data:
-        if len(other_data["authors"]) > 0:
-            metadata["author"] = []
+        for item in other_data["authors"]:
+            new_author = {"@type": "Person"}
 
-            for item in other_data["authors"]:
-                new_author = {}
+            if "orcid" in item and item["orcid"] != "":
+                new_author["@id"] = "https://orcid.org/" + item["orcid"]
 
-                new_author["@type"] = "Person"
+            if "givenName" in item:
+                new_author["givenName"] = item["givenName"]
 
-                if "orcid" in item:
-                    if item["orcid"] != "":
-                        new_author["@id"] = "https://orcid.org/" + item["orcid"]
+            if "familyName" in item and item["familyName"] != "":
+                new_author["familyName"] = item["familyName"]
 
-                if "givenName" in item:
-                    new_author["givenName"] = item["givenName"]
+            if "email" in item and item["email"] != "":
+                new_author["email"] = item["email"]
 
-                if "familyName" in item:
-                    if item["familyName"] != "":
-                        new_author["familyName"] = item["familyName"]
+            if "affiliation" in item and item["affiliation"] != "":
+                new_author["affiliation"] = {"@type": "Organization"}
+                new_author["affiliation"]["name"] = item["affiliation"]
 
-                if "email" in item:
-                    if item["email"] != "":
-                        new_author["email"] = item["email"]
+            metadata["author"].append(new_author)
 
-                if "affiliation" in item:
-                    if item["affiliation"] != "":
-                        new_author["affiliation"] = {}
-                        new_author["affiliation"]["@type"] = "Organization"
-                        new_author["affiliation"]["name"] = item["affiliation"]
+    if "contributors" in other_data and len(other_data["contributors"]) > 0:
+        metadata["contributor"] = []
 
-                metadata["author"].append(new_author)
+        for item in other_data["contributors"]:
+            new_contributor = {"@type": "Person"}
 
-    if "contributors" in other_data:
-        if len(other_data["contributors"]) > 0:
-            metadata["contributor"] = []
+            if "orcid" in item and item["orcid"] != "":
+                new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
 
-            for item in other_data["contributors"]:
-                new_contributor = {}
+            if "givenName" in item:
+                new_contributor["givenName"] = item["givenName"]
 
-                new_contributor["@type"] = "Person"
+            if "familyName" in item and item["familyName"] != "":
+                new_contributor["familyName"] = item["familyName"]
 
-                if "orcid" in item:
-                    if item["orcid"] != "":
-                        new_contributor["@id"] = "https://orcid.org/" + item["orcid"]
+            if "email" in item and item["email"] != "":
+                new_contributor["email"] = item["email"]
 
-                if "givenName" in item:
-                    new_contributor["givenName"] = item["givenName"]
+            if "affiliation" in item and item["affiliation"] != "":
+                new_contributor["affiliation"] = {"@type": "Organization"}
+                new_contributor["affiliation"]["name"] = item["affiliation"]
 
-                if "familyName" in item:
-                    if item["familyName"] != "":
-                        new_contributor["familyName"] = item["familyName"]
-
-                if "email" in item:
-                    if item["email"] != "":
-                        new_contributor["email"] = item["email"]
-
-                if "affiliation" in item:
-                    if item["affiliation"] != "":
-                        new_contributor["affiliation"] = {}
-                        new_contributor["affiliation"]["@type"] = "Organization"
-                        new_contributor["affiliation"]["name"] = item["affiliation"]
-
-                metadata["contributor"].append(new_contributor)
+            metadata["contributor"].append(new_contributor)
 
     # return the code metadata object if virtual is set to true
     if virtual_file:
@@ -459,9 +434,15 @@ def createCitationCFF(data_types, data, virtual_file):
 
 
 def createNextGenHighThroughputSequencingMetadata(metadata):
+    # sourcery skip: low-code-quality
+
+    def generateChecksum(filePath):
+        with open(filePath, "rb") as f:
+            return hashlib.md5(f.read()).hexdigest()
+
     homeFolderPath = os.path.expanduser("~")
     tempFolderPath = os.path.join(homeFolderPath, ".fairshare", "temp")
-    metadataFilePath = os.path.join(tempFolderPath, "geoMetadata.xlsx")
+    metadataFilePath = os.path.join(tempFolderPath, "metadata.xlsx")
 
     os.makedirs(tempFolderPath, exist_ok=True)
 
@@ -506,6 +487,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
         {"bold": True, "font_name": "Arial", "font_size": 10, "bg_color": "#E2EFDA"}
     )
 
+    header_row_format = workbook.add_format({"bg_color": "#BDD7EE"})
     comment_row_format = workbook.add_format({"bg_color": "#DBDBDB"})
 
     comment_text_cell_format.set_bottom()
@@ -514,126 +496,87 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
     comment_row_format.set_bottom()
     comment_row_format.set_top()
 
-    worksheet = workbook.add_worksheet()
+    metadataWorksheet = workbook.add_worksheet("Metadata")
 
     column = 0
     row = 0
 
-    worksheet.write(row, column, "STUDY", header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["study"], red_text_cell_format)
+    metadataWorksheet.write(row, column, "STUDY", header_text_cell_format)
+    metadataWorksheet.write(row, column + 1, metadata["study"], red_text_cell_format)
 
     row += 1
 
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# This section describes the overall study.",
-        comment_text_cell_format,
+    metadataWorksheet.write(row, column, "title", blue_header_text_cell_format)
+    metadataWorksheet.write(
+        row, column + 1, metadata["title"], default_text_cell_format
     )
 
     row += 1
 
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# Information provided in this section will be displayed in a GEO Series (GSE record) on public web pages.",  # noqa: E501
-        comment_text_cell_format,
+    metadataWorksheet.write(
+        row, column, "summary (abstract)", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(
+        row, column + 1, metadata["summary"], default_text_cell_format
     )
 
     row += 1
 
-    worksheet.write(row, column, "title", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["title"], default_text_cell_format)
-
-    row += 1
-
-    worksheet.write(row, column, "summary (abstract)", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["summary"], default_text_cell_format)
-
-    row += 1
-
-    worksheet.write(row, column, "experimental design", blue_header_text_cell_format)
-    worksheet.write(
+    metadataWorksheet.write(
+        row, column, "experimental design", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(
         row, column + 1, metadata["experimentalDesign"], default_text_cell_format
     )
 
     for item in metadata["contributors"]:
         row += 1
 
-        worksheet.write(row, column, "contributor", blue_header_text_cell_format)
-        worksheet.write(row, column + 1, item["contributor"], default_text_cell_format)
+        metadataWorksheet.write(
+            row, column, "contributor", blue_header_text_cell_format
+        )
+        metadataWorksheet.write(
+            row, column + 1, item["contributor"], default_text_cell_format
+        )
 
     row += 1
 
-    worksheet.write(row, column, "supplementary file", blue_header_text_cell_format)
-    worksheet.write(
-        row, column + 1, metadata["supplementaryFile"], default_text_cell_format
-    )
+    for filepath in metadata["supplementaryFiles"]:
+        row += 1
+
+        metadataWorksheet.write(
+            row, column, "supplementary file", blue_header_text_cell_format
+        )
+        metadataWorksheet.write(
+            row, column + 1, os.path.basename(filepath), default_text_cell_format
+        )
 
     row += 4  # 3 rows of empty space
 
-    worksheet.write(row, column, "SAMPLES", header_text_cell_format)
+    metadataWorksheet.write(row, column, "SAMPLES", header_text_cell_format)
 
     row += 1
 
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# Information provided in this section will be displayed in GEO Samples (GSM records) on public web pages.",  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# A GEO Sample record will be created from each row in this section.",
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# Biological replicates of the same sample: If provided, should be listed on different rows and titled accordingly (biol rep 1, biol rep 2, and so on).",  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        '# Technical replicates, eg, the same libraries were run in different lanes of a flow cell or sequenced multiple times: If provided, list all raw files in the same row, adding more "raw file" columns as needed to accommodate all raw files.',  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.write(row, column, "library name", blue_heading_cell_format)
-    worksheet.write(row, column + 1, "title", blue_heading_cell_format)
-    worksheet.write(row, column + 2, "organism", blue_heading_cell_format)
+    metadataWorksheet.write(row, column, "library name", blue_heading_cell_format)
+    metadataWorksheet.write(row, column + 1, "title", blue_heading_cell_format)
+    metadataWorksheet.write(row, column + 2, "organism", blue_heading_cell_format)
 
     i = 0
 
     for key in metadata["samples"][0]["characteristics"]:
-        worksheet.write(row, column + 3 + i, key, green_heading_cell_format)
+        metadataWorksheet.write(row, column + 3 + i, key, green_heading_cell_format)
         i += 1
 
     column = column + 3 + i  # reset the column index to 0 for the next section
 
-    worksheet.write(row, column + 0, "molecule", blue_heading_cell_format)
-    worksheet.write(row, column + 1, "single or paired-end", blue_heading_cell_format)
-    worksheet.write(row, column + 2, "instrument model", blue_heading_cell_format)
-    worksheet.write(row, column + 3, "description", blue_heading_cell_format)
+    metadataWorksheet.write(row, column + 0, "molecule", blue_heading_cell_format)
+    metadataWorksheet.write(
+        row, column + 1, "single or paired-end", blue_heading_cell_format
+    )
+    metadataWorksheet.write(
+        row, column + 2, "instrument model", blue_heading_cell_format
+    )
+    metadataWorksheet.write(row, column + 3, "description", blue_heading_cell_format)
 
     max_processed_files = 0
     max_raw_files = 0
@@ -649,7 +592,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
     processedDataFilesIndex = column + 4 + i
 
     while i < max_processed_files:
-        worksheet.write(
+        metadataWorksheet.write(
             row, column + 4 + i, "processed data file", green_heading_cell_format
         )
         i += 1
@@ -661,21 +604,27 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
     i = 0
 
     while i < max_raw_files:
-        worksheet.write(row, column + i, "raw file", green_heading_cell_format)
+        metadataWorksheet.write(row, column + i, "raw file", green_heading_cell_format)
         i += 1
 
     for sample in metadata["samples"]:
         row += 1
         column = 0  # reset the column index to 0 for the next section
 
-        worksheet.write(row, column, sample["libraryName"], default_text_cell_format)
-        worksheet.write(row, column + 1, sample["title"], default_text_cell_format)
-        worksheet.write(row, column + 2, sample["organism"], default_text_cell_format)
+        metadataWorksheet.write(
+            row, column, sample["libraryName"], default_text_cell_format
+        )
+        metadataWorksheet.write(
+            row, column + 1, sample["title"], default_text_cell_format
+        )
+        metadataWorksheet.write(
+            row, column + 2, sample["organism"], default_text_cell_format
+        )
 
         i = 0
 
         for key in sample["characteristics"]:
-            worksheet.write(
+            metadataWorksheet.write(
                 row,
                 column + 3 + i,
                 sample["characteristics"][key],
@@ -685,19 +634,21 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
 
         column = column + 3 + i  # reset the column index to 0 for the next section
 
-        worksheet.write(row, column + 0, sample["molecule"], default_text_cell_format)
-        worksheet.write(
+        metadataWorksheet.write(
+            row, column + 0, sample["molecule"], default_text_cell_format
+        )
+        metadataWorksheet.write(
             row, column + 1, sample["singleOrPairedEnd"], default_text_cell_format
         )
-        worksheet.write(
+        metadataWorksheet.write(
             row, column + 2, sample["instrumentModel"], default_text_cell_format
         )
-        worksheet.write(
+        metadataWorksheet.write(
             row, column + 3, sample["description"], default_text_cell_format
         )
 
         for (i, processedDataFile) in enumerate(sample["processedDataFiles"]):
-            worksheet.write(
+            metadataWorksheet.write(
                 row,
                 processedDataFilesIndex + i,
                 os.path.basename(processedDataFile),
@@ -705,7 +656,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
             )
 
         for (i, rawFile) in enumerate(sample["rawFiles"]):
-            worksheet.write(
+            metadataWorksheet.write(
                 row,
                 rawFilesIndex + i,
                 os.path.basename(rawFile),
@@ -715,127 +666,97 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
     row += 3  # 2 rows of empty space
     column = 0  # reset the column index to 0 for the next section
 
-    worksheet.write(row, column, "PROTOCOLS", header_text_cell_format)
+    metadataWorksheet.write(row, column, "PROTOCOLS", header_text_cell_format)
 
     row += 1
 
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# Information provided in this section will appear in each GEO Sample (GSM record). These fields can be moved to the above SAMPLES section in order to provide different information for different samples.",  # noqa: E501
-        comment_text_cell_format,
+    metadataWorksheet.write(
+        row, column, "growth protocol", blue_header_text_cell_format
     )
+    metadataWorksheet.write(row, column + 1, metadata["growthProtocol"])
 
     row += 1
 
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        "# Please ensure that the annotations are relevant to the SAMPLES above (not to the samples from a previous submission).",  # noqa: E501
-        comment_text_cell_format,
+    metadataWorksheet.write(
+        row, column, "treatment protocol", blue_header_text_cell_format
     )
+    metadataWorksheet.write(row, column + 1, metadata["treatmentProtocol"])
 
     row += 1
 
-    worksheet.write(row, column, "growth protocol", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["growthProtocol"])
+    metadataWorksheet.write(
+        row, column, "extract protocol", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(row, column + 1, metadata["extractProtocol"])
 
     row += 1
 
-    worksheet.write(row, column, "treatment protocol", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["treatmentProtocol"])
-
-    row += 1
-
-    worksheet.write(row, column, "extract protocol", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["extractProtocol"])
-
-    row += 1
-
-    worksheet.write(
+    metadataWorksheet.write(
         row, column, "library construction protocol", blue_header_text_cell_format
     )
-    worksheet.write(row, column + 1, metadata["libraryConstructionProtocol"])
+    metadataWorksheet.write(row, column + 1, metadata["libraryConstructionProtocol"])
 
     row += 1
 
-    worksheet.write(row, column, "library strategy", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["libraryStrategy"])
+    metadataWorksheet.write(
+        row, column, "library strategy", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(row, column + 1, metadata["libraryStrategy"])
 
     row += 1
 
-    worksheet.write(row, column, "", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, "")
+    metadataWorksheet.write(row, column, "", blue_header_text_cell_format)
+    metadataWorksheet.write(row, column + 1, "")
 
     row += 1
 
-    worksheet.write(row, column, "data processing step", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["dataProcessingSteps"])
+    metadataWorksheet.write(
+        row, column, "data processing step", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(row, column + 1, metadata["dataProcessingSteps"])
 
     row += 1
 
-    worksheet.write(row, column, "genome build/assembly", blue_header_text_cell_format)
-    worksheet.write(row, column + 1, metadata["genomeBuild"])
+    metadataWorksheet.write(
+        row, column, "genome build/assembly", blue_header_text_cell_format
+    )
+    metadataWorksheet.write(row, column + 1, metadata["genomeBuild"])
 
     row += 1
 
-    worksheet.write(
+    metadataWorksheet.write(
         row,
         column,
         "processed data files format and content",
         blue_header_text_cell_format,
     )
-    worksheet.write(row, column + 1, metadata["processedDataFilesFormat"])
+    metadataWorksheet.write(row, column + 1, metadata["processedDataFilesFormat"])
 
     row += 3  # 2 rows of empty space
 
-    worksheet.write(row, column, "PAIRED-END EXPERIMENTS", header_text_cell_format)
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        '# If "paired-end" experiments are included, list the files for each paired-end run in a row. Each row will become one sequencing run on a GEO Sample (GSM record).',  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        '# Single-cell data: If applicable, list index files (I1, I2, etc.) in "file name 3", "file name 4" columns.',  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
-    worksheet.set_row(row, cell_format=comment_row_format)
-    worksheet.write(
-        row,
-        column,
-        '# Please make sure all raw files listed here are also listed in the "raw file" columns in the above SAMPLES section.',  # noqa: E501
-        comment_text_cell_format,
-    )
-
-    row += 1
-
     max_raw_files = 0
+    pairedEndPresent = False
 
     for sample in metadata["samples"]:
         if sample["singleOrPairedEnd"] == "paired-end":
+            pairedEndPresent = True
+
             if len(sample["rawFiles"]) > max_raw_files:
                 max_raw_files = len(sample["rawFiles"])
+
+    if pairedEndPresent:
+        metadataWorksheet.write(
+            row, column, "PAIRED-END EXPERIMENTS", header_text_cell_format
+        )
+
+    row += 1
 
     i = 0
 
     while i < max_raw_files:
-        worksheet.write(row, column + i, f"file name {i + 1}", blue_heading_cell_format)
+        metadataWorksheet.write(
+            row, column + i, f"file name {i + 1}", blue_heading_cell_format
+        )
         i += 1
 
     for sample in metadata["samples"]:
@@ -844,9 +765,33 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
             column = 0
 
             for (i, rawFile) in enumerate(sample["rawFiles"]):
-                worksheet.write(
+                metadataWorksheet.write(
                     row, column + i, os.path.basename(rawFile), default_text_cell_format
                 )
+
+    # Add the checksums worksheet to the metadata file.
+
+    checksumsWorksheet = workbook.add_worksheet("MD5 Checksums")
+
+    column = 0
+    row = 0
+
+    checksumsWorksheet.write(row, column, "RAW FILES", header_text_cell_format)
+
+    row += 1
+
+    checksumsWorksheet.set_row(row, cell_format=header_row_format)
+    checksumsWorksheet.write(row, column, "file name", blue_heading_cell_format)
+    checksumsWorksheet.write(row, column + 1, "file checksum", blue_heading_cell_format)
+
+    for sample in metadata["samples"]:
+        for file in sample["rawFiles"]:
+            row += 1
+
+            checksumsWorksheet.write(
+                row, column, os.path.basename(file), default_text_cell_format
+            )
+            checksumsWorksheet.write(row, column + 1, generateChecksum(file))
 
     workbook.close()
 
