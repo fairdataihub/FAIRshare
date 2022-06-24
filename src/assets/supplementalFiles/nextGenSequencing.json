@@ -22,10 +22,19 @@
       "value": "sex"
     },
     {
+      "value": "breed"
+    },
+    {
+      "value": "cultivar"
+    },
+    {
       "value": "treatment"
     },
     {
       "value": "time"
+    },
+    {
+      "value": "disease"
     },
     {
       "value": "disease state"
@@ -35,7 +44,20 @@
     },
     {
       "value": "ChIP antibody"
+    },
+    {
+      "value": "diet"
     }
+  ],
+  "moleculeOptions": [
+    "Total RNA",
+    "PolyA RNA",
+    "Cytoplasmic RNA",
+    "Nuclear RNA",
+    "Genomic DNA",
+    "Protein",
+    "Synthetic construct",
+    "Other"
   ],
   "instrumentModelOptions": [
     "Illumina Genome Analyzer IIx",
@@ -86,5 +108,29 @@
     "GridION",
     "minION",
     "PromethION"
+  ],
+  "libraryStrategyOptions": [
+    "RNA-Seq",
+    "miRNA-Seq",
+    "ncRNA-Seq",
+    "RNA-Seq (CAGE)",
+    "RNA-Seq (RACE)",
+    "ssRNA-seq (stranded RNA-seq)",
+    "ChIP-Seq",
+    "MNase-Seq",
+    "MBD-Seq",
+    "MRE-Seq",
+    "Bisulfite-Seq",
+    "Bisulfite-Seq (reduced representation)",
+    "MeDIP-Seq",
+    "DNase-Hypersensitivity",
+    "Tn-Seq",
+    "FAIRE-seq",
+    "SELEX",
+    "RIP-Seq",
+    "ATAC-seq",
+    "ChIA-PET",
+    "Hi-C",
+    "Other"
   ]
 }
