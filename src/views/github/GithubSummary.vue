@@ -152,7 +152,7 @@ import DOMPurify from "dompurify";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
-import { app, dialog } from "@electron/remote";
+import { dialog } from "@electron/remote";
 import dayjs from "dayjs";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
@@ -222,7 +222,7 @@ export default {
         dialog
           .showSaveDialog({
             title: `Save ${file_name}`,
-            defaultPath: path.join(app.getPath("downloads"), file_name),
+            defaultPath: path.join(this.$downloads_path, file_name),
           })
           .then((result) => {
             const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
@@ -242,7 +242,7 @@ export default {
                   type: "success",
                   position: "bottom-right",
                 });
-                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
+                this.openFileExplorer(path.join(this.$downloads_path, file_name));
               }
             });
           })

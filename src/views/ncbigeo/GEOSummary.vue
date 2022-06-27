@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Summary </span>
+      <span class="text-left text-lg font-medium"> Generate dataset </span>
 
       <el-divider class="my-4"> </el-divider>
 
@@ -9,7 +9,7 @@
         <p class="mb-5">
           A list of all the files and folders that could be uploaded to NCBI GEO is shown below.
         </p>
-        <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
+        <div class="overflow-auto" :class="{ 'h-[150px]': finishedLoading }">
           <fade-transition>
             <el-tree-v2 v-if="finishedLoading" :data="fileData" :props="defaultProps">
               <template #default="{ node, data }">
@@ -58,7 +58,7 @@
           </fade-transition>
         </div>
         <el-drawer
-          v-if="anyfilePreview"
+          v-if="anyFilePreview"
           v-model="drawerModel"
           :title="fileTitle"
           direction="rtl"
@@ -78,16 +78,44 @@
             <span class="text-xs"> Some additional text here to explain what to do next. </span>
           </p>
           <!-- I think these two should be flipped but we shall see in the future. Also add a folder destination selector -->
-          <div v-else class="flex flex-col items-center justify-center py-10">
-            <p class="mb-5 text-center">
-              FAIRshare does not currently support the upload process to GEO. <br />
-              We can generate the metadata file for you, but you will need to upload the data files
-              to GEO manually.
+          <div v-else class="flex flex-col py-10">
+            <p class="mb-5">
+              At the moment FAIRshare does not currently support the upload process to GEO. However
+              we can still generate a dataset with the required metadata.
             </p>
+            <span>
+              Please provide a folder path to generate the final dataset on your computer. <br />
+            </span>
+
+            <folder-path-input v-model="folderPath" @folderSelected="setDestinationFolderPath" />
           </div>
         </div>
         <LoadingFoldingCube v-else></LoadingFoldingCube>
       </fade-transition>
+
+      <lottie-dialog
+        ref="generateDialog"
+        animationURL="https://assets4.lottiefiles.com/packages/lf20_45rapv.json"
+        title="Please wait while we generate your dataset"
+        :width="400"
+        :height="250"
+        content=""
+        :showCancelButton="false"
+        :showConfirmButton="false"
+      >
+      </lottie-dialog>
+
+      <success-confirm
+        ref="successConfirm"
+        title="Your dataset has been generated"
+        :preventOutsideClick="true"
+        confirmButtonText="Open the destination folder"
+        @messageConfirmed="openDestinationFolder"
+      >
+        <p class="text-center text-base text-gray-500">
+          Your dataset has been generated successfully. Do you want to open the destination folder?
+        </p>
+      </success-confirm>
 
       <fade-transition>
         <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
@@ -100,16 +128,16 @@
             </button>
           </router-link>
 
-          <button class="secondary-plain-button hidden" @click="showFilePreview">
-            <el-icon><checked-icon /></el-icon>
-            View files ready for upload
-          </button>
-
           <button class="primary-button" @click="navigateToUploadToGEO(false)" v-if="uploadToGEO">
             Start upload
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
-          <button class="primary-button" @click="navigateToUploadToGEO(true)" v-else>
+          <button
+            class="primary-button"
+            @click="generateDataset"
+            v-else
+            :disabled="folderPath === ''"
+          >
             Generate at folder location
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
@@ -127,11 +155,11 @@ import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
 import axios from "axios";
-import fs from "fs-extra";
 import path from "path";
-import { app, dialog } from "@electron/remote";
+import dayjs from "dayjs";
+
+import { v4 as uuidv4 } from "uuid";
 import { ElLoading } from "element-plus";
-import { marked } from "marked";
 
 export default {
   name: "ZenodoAccessToken",
@@ -150,12 +178,10 @@ export default {
       ready: false,
       showFiles: "1",
       licenseData: "",
+      folder_path: "",
+      datasetFolderName: "",
       tableData: [],
-      citationData: [],
-      otherMetadata: [],
       tableDataRecord: [],
-      citationDataRecord: [],
-      otherMetadataRecord: [],
       fileData: [],
       defaultProps: {
         value: "id",
@@ -164,10 +190,6 @@ export default {
       },
       fileTitle: "",
       showContinueSection: false,
-      PreviewNewlyCreatedLicenseFile: false,
-      PreviewNewlyCreatedCodemetaFile: false,
-      PreviewNewlyCreatedCitationFile: false,
-      PreviewNewlyCreatedOtherMetadataFile: false,
       drawerModel: true,
       showLoading: false,
       finishedLoading: false,
@@ -182,71 +204,13 @@ export default {
       return false;
     },
 
-    anyfilePreview() {
-      if (
-        this.PreviewNewlyCreatedCodemetaFile ||
-        this.PreviewNewlyCreatedLicenseFile ||
-        this.PreviewNewlyCreatedCitationFile ||
-        this.PreviewNewlyCreatedOtherMetadataFile
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    compiledLicense() {
-      return marked(this.licenseData);
+    anyFilePreview() {
+      return false;
     },
   },
   methods: {
-    exportToJson(obj, file_name) {
-      let contentType = "application/json;charset=utf-8;";
-
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(obj)))], {
-          type: contentType,
-        });
-        navigator.msSaveOrOpenBlob(blob, file_name);
-      } else {
-        dialog
-          .showSaveDialog({
-            title: `Save ${file_name}`,
-            defaultPath: path.join(app.getPath("downloads"), file_name),
-          })
-          .then((result) => {
-            const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
-            console.log(result.filePath);
-            fs.writeFile(result.filePath, fileData, (err) => {
-              if (err) {
-                console.log(err);
-                this.$notify({
-                  title: "Error",
-                  type: "error",
-                  message: "Something went wrong while saving the file",
-                });
-              } else {
-                this.$notify({
-                  title: "Success",
-                  message: `${file_name} saved successfully`,
-                  type: "success",
-                  position: "bottom-right",
-                });
-                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
-              }
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    },
-    createLoading() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "Reading data...",
-      });
-      return loading;
+    async sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
 
     async openFileExplorer(path) {
@@ -291,20 +255,6 @@ export default {
       this.fileData = [];
 
       this.tableDataRecord = [];
-      this.citationDataRecord = [];
-      this.otherMetadataRecord = [];
-
-      if (this.workflow.generateCodeMeta) {
-        this.tableData = await this.createCodeMetadataFile();
-        this.citationData = await this.createCitationFile();
-        this.tableDataRecord = Object.assign({}, this.tableData);
-        this.citationDataRecord = Object.assign({}, this.citationData);
-      }
-
-      if (this.workflow.generateOtherMetadata) {
-        this.otherMetadata = await this.createOtherMetadataFile();
-        this.otherMetadataRecord = Object.assign({}, this.otherMetadata);
-      }
 
       this.fileData.push(
         await this.readFolderContents(this.dataset.data.NextGenHighThroughputSequencing.folderPath)
@@ -313,44 +263,13 @@ export default {
       this.ready = true;
       this.finishedLoading = true;
     },
-    handleCloseDrawer() {
-      this.fileTitle = "";
-      this.PreviewNewlyCreatedLicenseFile = false;
-      this.PreviewNewlyCreatedCodemetaFile = false;
-      this.PreviewNewlyCreatedOtherMetadataFile = false;
-      this.PreviewNewlyCreatedCitationFile = false;
-    },
+    handleCloseDrawer() {},
     async handleOpenDrawer(title) {
-      if (title == "LICENSE") {
-        title += " (This preview may not be completely representative of the final license)";
-      }
-
       this.fileTitle = title;
     },
-    async handleNodeClick(data, action) {
+    async handleNodeClick(data) {
       if (!data.isDir) {
-        if (data.label == "codemeta.json" && this.workflow.generateCodeMeta) {
-          if (action === "view") {
-            this.PreviewNewlyCreatedCodemetaFile = true;
-          }
-          if (action === "download") {
-            this.exportToJson(this.tableDataRecord, "codemeta.json");
-          }
-        } else if (data.label == "CITATION.cff" && this.workflow.generateCodeMeta) {
-          if (action === "view") {
-            this.PreviewNewlyCreatedCitationFile = true;
-          }
-          if (action === "download") {
-            this.exportToJson(this.citationDataRecord, "CITATION.cff");
-          }
-        } else if (data.label == "metadata.json" && this.workflow.generateOtherMetadata) {
-          if (action === "view") {
-            this.PreviewNewlyCreatedOtherMetadataFile = true;
-          }
-          if (action === "download") {
-            this.exportToJson(this.otherMetadataRecord, "metadata.json");
-          }
-        } else if (!data.isDir) {
+        if (!data.isDir) {
           await this.openFileExplorer(data.fullpath);
         }
 
@@ -482,6 +401,135 @@ export default {
       } else {
         this.$router.push({ path: routerPath });
       }
+    },
+
+    setDestinationFolderPath(path) {
+      this.folderPath = path;
+    },
+
+    async generateDataset() {
+      this.$refs.generateDialog.show();
+
+      await this.sleep(1000);
+
+      const now = dayjs();
+      const destinationFolderPath = this.folderPath;
+
+      /**
+       * create a unique ID for the dataset and append to dataset folder
+       * TODO: handle if dataset folder already exists
+       * */
+      const ID = uuidv4();
+
+      this.datasetFolderName = `geo_submission_${now.format("MMMMDD")}-${ID.substring(
+        ID.length - 5
+      )}`.toLocaleLowerCase();
+
+      let response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create geoMetadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create geoMetadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response === "ERROR") {
+        this.errorMessage =
+          "Something went wrong with generating the metadata file. Please try again.";
+        this.$refs.generateDialog.hide();
+        return;
+      }
+
+      const source_file_path = path.join(this.$home_path, ".fairshare", "temp", "metadata.xlsx");
+      const destination_file_path = path.join(
+        destinationFolderPath,
+        this.datasetFolderName,
+        "metadata.xlsx"
+      );
+
+      response = await axios
+        .post(`${this.$server_url}/utilities/copyfile`, {
+          source_file_path,
+          destination_file_path,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Move geoMetadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Move geoMetadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+
+      if (response === "ERROR") {
+        this.errorMessage = "Something went wrong with moving the metadata file. Please try again.";
+        this.$refs.generateDialog.hide();
+        return;
+      }
+
+      const metadataObject = this.dataset.data.NextGenHighThroughputSequencing.questions;
+
+      let allFiles = [];
+
+      for (const sample of metadataObject.samples) {
+        for (const file of sample.rawFiles) {
+          allFiles.push(file);
+        }
+        for (const file of sample.processedDataFiles) {
+          allFiles.push(file);
+        }
+      }
+
+      allFiles = [...new Set(allFiles)]; // remove duplicates
+
+      for (const file of allFiles) {
+        const fileName = path.basename(file);
+
+        const destination_file_path = path.join(
+          destinationFolderPath,
+          this.datasetFolderName,
+          fileName
+        );
+
+        response = await axios
+          .post(`${this.$server_url}/utilities/copyfile`, {
+            source_file_path: file,
+            destination_file_path,
+          })
+          .then((response) => {
+            this.$track("Metadata", "Copy geo file", "success");
+            return response.data;
+          })
+          .catch((error) => {
+            this.$track("Metadata", "Copy geo file", "failed");
+            console.error(error);
+            return "ERROR";
+          });
+
+        if (response === "ERROR") {
+          this.errorMessage = "Something went wrong with copying your files. Please try again.";
+          this.$refs.generateDialog.hide();
+          return;
+        }
+      }
+
+      this.$refs.generateDialog.hide();
+      this.$refs.successConfirm.show();
+    },
+
+    async openDestinationFolder() {
+      await this.openFileExplorer(
+        path.join(this.folderPath, this.datasetFolderName, "metadata.xlsx")
+      );
     },
   },
   async mounted() {

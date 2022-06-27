@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import { app } from "@electron/remote";
 import axios from "axios";
 import dayjs from "dayjs";
 import path from "path";
@@ -601,7 +600,7 @@ export default {
       this.progressStatus = "";
       this.showAlert = false;
 
-      const tempFolderPath = path.join(app.getPath("home"), ".fairshare", "temp");
+      const tempFolderPath = path.join(this.$home_path, ".fairshare", "temp");
 
       // delete the temp folder if it exists
       // starting from a clean slate
@@ -633,7 +632,7 @@ export default {
     const tokenObject = await this.tokens.getToken("github");
     this.githubToken = tokenObject.token;
 
-    const tempFolderPath = path.join(app.getPath("home"), ".fairshare", "temp");
+    const tempFolderPath = path.join(this.$home_path, ".fairshare", "temp");
 
     // delete the temp folder if it exists
     // starting from a clean slate

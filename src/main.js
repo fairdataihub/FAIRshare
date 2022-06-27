@@ -1,4 +1,4 @@
-import { getGlobal } from "@electron/remote";
+import { app as electronApp, getGlobal } from "@electron/remote";
 
 import { createApp } from "vue";
 import { router } from "./router";
@@ -44,6 +44,7 @@ import AppDocsLink from "./components/ui/AppDocsLink.vue";
 import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
 import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
 import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
+import SuccessConfirm from "./components/dialogs/confirm/SuccessConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
@@ -51,8 +52,11 @@ import AddPrompt from "./components/dialogs/prompt/AddPrompt.vue";
 import EditPrompt from "./components/dialogs/prompt/EditPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
+import LottieDialog from "./components/dialogs/general/LottieDialog.vue";
 
 import AppAnnouncement from "./components/dialogs/announcement/AppAnnouncement.vue";
+
+import FolderPathInput from "./components/fileInputDialog/folderPathInput.vue";
 
 import FadeTransition from "./components/transitions/FadeTransition.vue";
 
@@ -73,6 +77,19 @@ app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 app.config.globalProperties.$fairshare_badge_text = `Curated with FAIRshare`;
 app.config.globalProperties.$fairshare_badge_image_url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg`;
 
+app.config.globalProperties.$app_path = electronApp.getAppPath();
+
+app.config.globalProperties.$locale = electronApp.getLocale();
+app.config.globalProperties.$app_version = electronApp.getVersion();
+
+app.config.globalProperties.$home_path = electronApp.getPath("home");
+app.config.globalProperties.$app_data_path = electronApp.getPath("appData");
+app.config.globalProperties.$user_data_path = electronApp.getPath("userData");
+app.config.globalProperties.$desktop_path = electronApp.getPath("desktop");
+app.config.globalProperties.$documents_path = electronApp.getPath("documents");
+app.config.globalProperties.$downloads_path = electronApp.getPath("downloads");
+app.config.globalProperties.$logs_path = electronApp.getPath("logs");
+
 // register components globally
 app.component("VuePopper", Popper);
 
@@ -86,6 +103,7 @@ app.component("app-docs-link", AppDocsLink);
 app.component("warning-confirm", WarningConfirm);
 app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
+app.component("success-confirm", SuccessConfirm);
 
 app.component("warning-prompt", WarningPrompt);
 app.component("login-prompt", LoginPrompt);
@@ -93,8 +111,11 @@ app.component("add-prompt", AddPrompt);
 app.component("edit-prompt", EditPrompt);
 
 app.component("general-dialog", GeneralDialog);
+app.component("lottie-dialog", LottieDialog);
 
 app.component("app-announcement", AppAnnouncement);
+
+app.component("folder-path-input", FolderPathInput);
 
 app.component("fade-transition", FadeTransition);
 

@@ -29,6 +29,7 @@ from github import (
 from metadata import createCitationCFF, createMetadata
 from utilities import (
     createFile,
+    copyFile,
     deleteFile,
     fileExistInFolder,
     foldersPresent,
@@ -247,7 +248,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
-            "virtual_file": "Parameter to generate a virtual file",
+            "folder_path": "Path to the folder to save the file",
         },
     )
     def post(self):
@@ -272,7 +273,11 @@ class CreateMetadata(Resource):
         data = json.loads(args["data_object"])
         virtual_file = args["virtual_file"]
 
-        return createMetadata(data_types, data, virtual_file)
+        return createMetadata(
+            data_types,
+            data,
+            virtual_file,
+        )
 
 
 @metadata.route("/citation/create", endpoint="CreateCitationCFF")
@@ -1299,6 +1304,37 @@ class FileExistInFolder(Resource):
         folder_path = args["folder_path"]
         file_name = args["file_name"]
         return fileExistInFolder(folder_path, file_name)
+
+
+@utilities.route("/copyfile", endpoint="CopyFile")
+class CopyFile(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "source_file_path": "source file path to copy",
+            "destination_file_path": "destination file path to copy to",
+        },
+    )
+    def post(self):
+        """copy a file"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "source_file_path",
+            type=str,
+            required=True,
+            help="source file path to copy",
+        )
+        parser.add_argument(
+            "destination_file_path",
+            type=str,
+            required=True,
+            help="destination file path to copy to",
+        )
+        args = parser.parse_args()
+        source_file_path = args["source_file_path"]
+        destination_file_path = args["destination_file_path"]
+        return copyFile(source_file_path, destination_file_path)
 
 
 # 5000 is the flask default port.

@@ -144,3 +144,19 @@ def fileExistInFolder(folder_path, file_name):
         return "Not Found"
     except Exception as e:
         raise e
+
+
+def copyFile(file_path, destination_path):
+    try:
+        # get parent folder of destination_path
+        parent_folder = os.path.dirname(destination_path)
+
+        # create destination parent folder if it doesn't exist
+        if not os.path.exists(parent_folder):
+            os.makedirs(parent_folder, exist_ok=True)
+
+        shutil.copy2(file_path, destination_path)
+
+        return "SUCCESS"
+    except Exception as e:
+        raise e

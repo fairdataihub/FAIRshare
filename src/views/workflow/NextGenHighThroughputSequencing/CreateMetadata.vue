@@ -320,6 +320,16 @@
                               >
                               </el-option>
                             </el-select>
+
+                            <fade-transition>
+                              <el-input
+                                v-if="step2Form.libraryStrategy == 'OTHER:'"
+                                class="mt-2"
+                                v-model="step2Form.otherLibraryStrategy"
+                                placeholder="specify"
+                              />
+                            </fade-transition>
+
                             <span class="mt-1 px-1 text-xs text-slate-600">
                               A Sequence Read Archive-specific field that describes the sequencing
                               technique for each library.
@@ -328,24 +338,68 @@
                         </el-form-item>
 
                         <el-form-item label="Data processing steps">
-                          <div class="flex w-full flex-col items-start">
-                            <el-input
-                              v-model="step2Form.dataProcessingSteps"
-                              type="textarea"
-                              placeholder="CLC Genomics Workbench v 11.0.1"
-                            />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
-                              Provide details of how processed data files were generated. Steps may
-                              include:<br />
-                              Base-calling software, version, parameters;<br />
-                              Data filtering steps;<br />
-                              Read alignment software, version, parameters;<br />
-                              Additional processing software (e.g., peak-calling, abundance
-                              measurement), version, parameters;<br />
-                              etc.
-                            </span>
-                          </div>
+                          <draggable
+                            tag="div"
+                            :list="step2Form.dataProcessingSteps"
+                            item-key="id"
+                            handle=".handle"
+                            :animation="200"
+                            class="w-full"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex w-full flex-row justify-between transition-all">
+                                <div class="flex w-11/12 flex-row justify-between">
+                                  <el-input
+                                    v-model="element.step"
+                                    type="text"
+                                    placeholder="First name, Initials, Last name"
+                                    v-on:keyup.enter="addDataProcessingStep"
+                                    :ref="element.id"
+                                  ></el-input>
+                                  <div class="mx-2"></div>
+                                </div>
+                                <div class="flex w-1/12 flex-row justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      title="Are you sure you want to remove this?"
+                                      icon-color="red"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      @confirm="deleteDataProcessingStep(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+
+                          <span class="mt-1 px-1 text-xs text-slate-600">
+                            Provide details of how processed data files were generated. <br />
+                            Steps may include: Base-calling software, version, parameters; Data
+                            filtering steps; Read alignment software, version, parameters;
+                            Additional processing software (e.g., peak-calling, abundance
+                            measurement), version, parameters; etc.
+                          </span>
                         </el-form-item>
+
+                        <div
+                          class="flex w-max cursor-pointer items-center pb-3 text-sm text-gray-500 hover:text-black"
+                          @click="addDataProcessingStep(null, '')"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span> Add a data processing step </span>
+                        </div>
 
                         <el-form-item label="Genome build/assembly">
                           <div class="flex w-full flex-col items-start">
@@ -893,7 +947,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 2,
+      currentStep: 1,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -945,7 +999,8 @@ export default {
         extractProtocol: "",
         libraryConstructionProtocol: "",
         libraryStrategy: "",
-        dataProcessingSteps: "",
+        otherLibraryStrategy: "",
+        dataProcessingSteps: [],
         genomeBuild: "",
         processedDataFilesFormat: "",
       },
@@ -1151,6 +1206,23 @@ export default {
         return contributor.id !== id;
       });
       this.$refs["s1Form"].validate();
+    },
+
+    addDataProcessingStep(_event, step = "") {
+      const id = uuidv4();
+      this.step2Form.dataProcessingSteps.push({
+        step,
+        id,
+      });
+      this.focusOnElementRef(id);
+    },
+    deleteDataProcessingStep(id) {
+      this.step2Form.dataProcessingSteps = this.step2Form.dataProcessingSteps.filter(
+        (processingStep) => {
+          return processingStep.id !== id;
+        }
+      );
+      this.$refs["s2Form"].validate();
     },
 
     filterArrayOfObjects(array, key) {
@@ -1450,6 +1522,7 @@ export default {
       nghtsForm.extractProtocol = this.step2Form.extractProtocol;
       nghtsForm.libraryConstructionProtocol = this.step2Form.libraryConstructionProtocol;
       nghtsForm.libraryStrategy = this.step2Form.libraryStrategy;
+      nghtsForm.otherLibraryStrategy = this.step2Form.otherLibraryStrategy;
       nghtsForm.dataProcessingSteps = this.step2Form.dataProcessingSteps;
       nghtsForm.genomeBuild = this.step2Form.genomeBuild;
       nghtsForm.processedDataFilesFormat = this.step2Form.processedDataFilesFormat;
@@ -1585,6 +1658,7 @@ export default {
         this.step2Form.extractProtocol = nghtsForm.extractProtocol;
         this.step2Form.libraryConstructionProtocol = nghtsForm.libraryConstructionProtocol;
         this.step2Form.libraryStrategy = nghtsForm.libraryStrategy;
+        this.step2Form.otherLibraryStrategy = nghtsForm.otherLibraryStrategy;
         this.step2Form.dataProcessingSteps = nghtsForm.dataProcessingSteps;
         this.step2Form.genomeBuild = nghtsForm.genomeBuild;
         this.step2Form.processedDataFilesFormat = nghtsForm.processedDataFilesFormat;
@@ -1592,6 +1666,7 @@ export default {
         this.step3Form = nghtsForm.samples;
 
         this.addIds(this.step1Form.contributors);
+        this.addIds(this.step2Form.dataProcessingSteps);
       } else {
         this.step1Form.title = this.dataset.name;
         this.step1Form.summary = this.dataset.description;

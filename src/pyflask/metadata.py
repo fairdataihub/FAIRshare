@@ -539,8 +539,6 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
             row, column + 1, item["contributor"], default_text_cell_format
         )
 
-    row += 1
-
     for filepath in metadata["supplementaryFiles"]:
         row += 1
 
@@ -698,22 +696,30 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
 
     row += 1
 
+    libraryStrategy = metadata["libraryStrategy"]
+
+    if libraryStrategy == "OTHER:":
+        libraryStrategy = f"{libraryStrategy} {metadata['otherLibraryStrategy']}"
+
     metadataWorksheet.write(
         row, column, "library strategy", blue_header_text_cell_format
     )
-    metadataWorksheet.write(row, column + 1, metadata["libraryStrategy"])
+    metadataWorksheet.write(row, column + 1, libraryStrategy)
 
     row += 1
 
+    # Weird empty cell in the middle of the protocols section in the template
+    # TODO: Figure out why this is necessary
     metadataWorksheet.write(row, column, "", blue_header_text_cell_format)
     metadataWorksheet.write(row, column + 1, "")
 
-    row += 1
+    for item in metadata["dataProcessingSteps"]:
+        row += 1
 
-    metadataWorksheet.write(
-        row, column, "data processing step", blue_header_text_cell_format
-    )
-    metadataWorksheet.write(row, column + 1, metadata["dataProcessingSteps"])
+        metadataWorksheet.write(
+            row, column, "data processing step", blue_header_text_cell_format
+        )
+        metadataWorksheet.write(row, column + 1, item["step"], default_text_cell_format)
 
     row += 1
 
@@ -828,7 +834,7 @@ def createMetadata(data_types, data, virtual_file):
             ]["questions"]
 
             result = createNextGenHighThroughputSequencingMetadata(
-                next_gen_high_throughput_sequencing_data
+                next_gen_high_throughput_sequencing_data,
             )
 
         return "SUCCESS"

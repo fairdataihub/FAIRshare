@@ -39,7 +39,6 @@
 <script>
 import { useDatasetsStore } from "@/store/datasets";
 import { useConfigStore } from "@/store/config";
-import { app } from "@electron/remote";
 
 export default {
   name: "AppDocumentation",
@@ -64,13 +63,13 @@ export default {
 
     this.about.push({
       label: "FAIRshare",
-      value: app.getVersion(),
+      value: this.$app_version,
       span: 1,
     });
 
     this.about.push({
       label: "Locale",
-      value: app.getLocale(),
+      value: this.$locale,
       span: 1,
     });
 
@@ -130,13 +129,13 @@ export default {
 
     this.about.push({
       label: "Application path",
-      value: app.getAppPath(),
+      value: this.$app_path,
       span: 3,
     });
 
     this.about.push({
       label: "Application data path",
-      value: app.getPath("appData"),
+      value: this.$app_data_path,
       span: 3,
     });
   },
