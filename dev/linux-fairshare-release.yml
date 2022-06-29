@@ -5,54 +5,58 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
-  - ca-certificates=2021.10.8
-  - certifi=2021.10.8
-  - icu=69.1
-  - ld_impl_linux-64=2.35.1
+  - bzip2=1.0.8
+  - ca-certificates=2022.6.15
+  - certifi=2022.6.15
+  - icu=70.1
+  - ld_impl_linux-64=2.38
   - libffi=3.3
-  - libgcc-ng=11.2.0
+  - libgcc-ng=12.1.0
   - libstdcxx-ng=11.2.0
-  - libuv=1.42.0
-  - libzlib=1.2.11
-  - llvm-openmp=12.0.1
+  - libuuid=1.0.3
+  - libuv=1.43.0
+  - libzlib=1.2.12
+  - llvm-openmp=14.0.4
   - ncurses=6.3
   - nodejs=16.14.2
-  - openssl=1.1.1l
-  - pip=21.2.4
-  - python=3.9.7
-  - python_abi=3.9
-  - readline=8.1
-  - setuptools=58.0.4
-  - sqlite=3.36.0
-  - tk=8.6.11
-  - tzdata=2021e
-  - wheel=0.37.0
+  - openssl=1.1.1p
+  - pip=22.1.2
+  - python=3.10.4
+  - python_abi=3.10
+  - readline=8.1.2
+  - setuptools=61.2.0
+  - sqlite=3.38.5
+  - tk=8.6.12
+  - tzdata=2022a
+  - wheel=0.37.1
   - xz=5.2.5
-  - yarn=1.22.17
-  - zlib=1.2.11
+  - yarn=1.22.19
+  - zlib=1.2.12
   - pip:
       - altgraph==0.17.2
       - aniso8601==9.0.1
-      - attrs==21.2.0
-      - charset-normalizer==2.0.9
-      - click==8.0.3
-      - flask==2.0.2
+      - attrs==21.4.0
+      - charset-normalizer==2.1.0
+      - click==8.1.3
+      - flask==2.1.2
       - flask-cors==3.0.10
       - flask-restx==0.5.1
-      - idna==3.3
-      - itsdangerous==2.0.1
-      - jinja2==3.0.3
-      - jsonschema==4.2.1
-      - markupsafe==2.0.1
-      - pyinstaller==4.7
-      - pyinstaller-hooks-contrib==2021.4
-      - pyrsistent==0.18.0
-      - python-dotenv==0.19.2
-      - pytz==2021.3
-      - requests==2.26.0
-      - six==1.16.0
-      - urllib3==1.26.7
-      - werkzeug==2.0.2
-      - pyyaml==6.0
       - flask-wtf==1.0.1
+      - idna==3.3
+      - itsdangerous==2.1.2
+      - jinja2==3.1.2
+      - jsonschema==4.6.1
+      - markupsafe==2.1.1
+      - pyinstaller==5.1
+      - pyinstaller-hooks-contrib==2022.7
+      - pyrsistent==0.18.1
+      - python-dotenv==0.20.0
+      - pytz==2022.1
+      - pyyaml==6.0
+      - requests==2.28.1
+      - six==1.16.0
+      - urllib3==1.26.9
+      - werkzeug==2.1.2
       - wtforms==3.0.1
+      - xlsxwriter==3.0.3
+prefix: /home/dev/anaconda3/envs/fairshare-dev
