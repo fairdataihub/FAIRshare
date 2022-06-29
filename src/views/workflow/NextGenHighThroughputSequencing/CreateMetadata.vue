@@ -685,7 +685,14 @@
                                   </label>
 
                                   <div class="flex items-center justify-between">
-                                    <el-input v-model="element.characteristics[key]" type="text" />
+                                    <el-autocomplete
+                                      v-model="element.characteristics[key]"
+                                      :fetch-suggestions="customFieldValueSuggestions"
+                                      @focus="setCustomFieldNameForFilter(key)"
+                                      clearable
+                                      class="w-full"
+                                      placeholder="Enter a field name"
+                                    />
                                     <div
                                       class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
                                       @click="showCustomFieldDeleteConfirm(key)"
@@ -947,7 +954,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 3,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -1053,7 +1060,7 @@ export default {
         isPartOf: "",
       },
       isPartOfErrorMessage: "",
-
+      customFieldNameForFilter: "",
       invalidStatus: {},
       originalObject: {},
       showSaving: false,
@@ -1279,6 +1286,41 @@ export default {
 
       cb(results);
     },
+
+    setCustomFieldNameForFilter(key) {
+      this.customFieldNameForFilter = key;
+    },
+
+    customFieldValueSuggestions(query, cb) {
+      let results = [];
+      let fieldOptions = [];
+      let customFieldOptions = [];
+
+      for (const sample of this.step3Form) {
+        if (sample.characteristics[this.customFieldNameForFilter] !== "") {
+          fieldOptions.push(sample.characteristics[this.customFieldNameForFilter]);
+        }
+      }
+
+      fieldOptions = [...new Set(fieldOptions)];
+
+      for (const value of fieldOptions) {
+        customFieldOptions.push({
+          value,
+        });
+      }
+
+      if (query) {
+        results = customFieldOptions.filter((element) => {
+          return element.value.toLowerCase().indexOf(query.toLowerCase()) === 0;
+        });
+      } else {
+        results = customFieldOptions;
+      }
+
+      cb(results);
+    },
+
     addCustomCharacteristic() {
       const customFieldName = this.customFieldName.trim();
 
