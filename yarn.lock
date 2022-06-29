@@ -3028,10 +3028,10 @@
     dir-compare "^2.4.0"
     fs-extra "^9.0.1"
 
-"@element-plus/icons-vue@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@element-plus/icons-vue/-/icons-vue-2.0.4.tgz#98fb9680c814a2a4f231b8bdabc8cd59b1b79d86"
-  integrity sha512-UeBVBU3fuBsYa9mzM7DgkRztQ1Aftw3sMTI/1gZsqXq2NWiCOi16ZYXXGIc0jFDIu+k6SojzdlxOjv+rN/Y6FQ==
+"@element-plus/icons-vue@2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@element-plus/icons-vue/-/icons-vue-2.0.6.tgz#8490e7a3193c17515d10c3be0544d800afe6a228"
+  integrity sha512-lPpG8hYkjL/Z97DH5Ei6w6o22Z4YdNglWCNYOPcB33JCF2A4wye6HFgSI7hEt9zdLyxlSpiqtgf9XcYU+m5mew==
 
 "@element-plus/icons-vue@^2.0.5":
   version "2.0.5"
