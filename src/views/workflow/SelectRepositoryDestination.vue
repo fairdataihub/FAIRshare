@@ -792,7 +792,7 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.shouldShowFigshare();
-    this.shouldShowGeo();
+    await this.shouldShowGeo();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
@@ -806,8 +806,14 @@ export default {
     }
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+
+    if (this.showGeo) {
+      this.datasetStore.setProgressBarType("geo");
+      this.datasetStore.setCurrentStep(4);
+    } else {
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(5);
+    }
 
     this.workflow.currentRoute = this.$route.path;
 

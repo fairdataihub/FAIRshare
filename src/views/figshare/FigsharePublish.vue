@@ -230,10 +230,7 @@ export default {
     async openDraftDataset() {
       const article_id = this.workflow.destination.figshare.article_id;
 
-      window.ipcRenderer.send(
-        "open-link-in-browser",
-        `${process.env.VUE_APP_FIGSHARE_URL}/account/articles/${article_id}`
-      );
+      this.openWebPage(`${process.env.VUE_APP_FIGSHARE_URL}/account/articles/${article_id}`);
     },
     navigateToBioToolsPublishing() {
       this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);

@@ -58,6 +58,7 @@ import BioToolsReview from "../views/biotools/BioToolsReview.vue";
 // ncbi geo related components
 import GEOSummary from "../views/ncbigeo/GEOSummary.vue";
 import GEOUpload from "../views/ncbigeo/GEOUpload.vue";
+import GEOPublish from "../views/ncbigeo/GEOPublish.vue";
 
 // integration related components
 import ManageAccount from "../views/accounts/ManageAccount.vue";
@@ -213,6 +214,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/figshare/publish",
     component: FigsharePublish,
     name: "FigsharePublish",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/publish",
+    component: GEOPublish,
+    name: "GEOPublish",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",

@@ -86,7 +86,7 @@ export default {
           description: "Select repository",
         },
         {
-          description: "Upload dataset",
+          description: "Generate dataset",
         },
       ],
     };

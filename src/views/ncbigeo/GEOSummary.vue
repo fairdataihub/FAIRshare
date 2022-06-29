@@ -81,7 +81,8 @@
           <div v-else class="flex flex-col py-10">
             <p class="mb-5">
               At the moment FAIRshare does not currently support the upload process to GEO. However
-              we can still generate a dataset with the required metadata.
+              we can still generate a dataset with the required metadata. You will need to upload
+              the dataset to GEO manually.
             </p>
             <span>
               Please provide a folder path to generate the final dataset on your computer. <br />
@@ -109,11 +110,11 @@
         ref="successConfirm"
         title="Your dataset has been generated"
         :preventOutsideClick="true"
-        confirmButtonText="Open the destination folder"
-        @messageConfirmed="openDestinationFolder"
+        confirmButtonText="Okay"
+        @messageConfirmed="navigateToFinalPage"
       >
         <p class="text-center text-base text-gray-500">
-          Your dataset has been generated successfully. Do you want to open the destination folder?
+          You can view your dataset in the next step.
         </p>
       </success-confirm>
 
@@ -523,13 +524,23 @@ export default {
       }
 
       this.$refs.generateDialog.hide();
+
       this.$refs.successConfirm.show();
     },
 
-    async openDestinationFolder() {
-      await this.openFileExplorer(
-        path.join(this.folderPath, this.datasetFolderName, "metadata.xlsx")
+    async navigateToFinalPage() {
+      this.workflow.destinationFolderPath = path.join(
+        this.folderPath,
+        this.datasetFolderName,
+        "metadata.xlsx"
       );
+
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/ncbigeo/publish`;
+
+      this.$router.push({ path: routerPath });
     },
   },
   async mounted() {
@@ -537,8 +548,8 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(6);
+    this.datasetStore.setProgressBarType("geo");
+    this.datasetStore.setCurrentStep(5);
 
     this.workflow.currentRoute = this.$route.path;
 

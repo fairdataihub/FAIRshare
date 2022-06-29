@@ -35,7 +35,7 @@
             v-if="codeObject.show"
           >
             <div
-              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="codeObject.minimize = !codeObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -126,7 +126,7 @@
             v-if="otherObject.show"
           >
             <div
-              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="otherObject.minimize = !otherObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -212,7 +212,7 @@
             v-if="nextGenHighThruObject.show"
           >
             <div
-              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="nextGenHighThruObject.minimize = !nextGenHighThruObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
