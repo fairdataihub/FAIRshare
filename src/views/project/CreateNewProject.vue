@@ -22,20 +22,16 @@
         </el-form-item>
 
         <el-form-item label="Project description" prop="datasetDescription">
-          <el-popover ref="popover" placement="bottom" :width="300" trigger="manual">
-            <template #reference>
-              <el-input
-                v-model="datasetForm.datasetDescription"
-                type="textarea"
-                :autosize="{ minRows: 3, maxRows: 5 }"
-              ></el-input>
-            </template>
+          <el-input
+            v-model="datasetForm.datasetDescription"
+            type="textarea"
+            :autosize="{ minRows: 3, maxRows: 5 }"
+          ></el-input>
 
-            <span class="break-normal text-left text-sm">
-              Use a description that is easily identifiable. This will be shown in the dataset
-              selection screen and is not part of your submitted metadata.
-            </span>
-          </el-popover>
+          <span class="mt-1 text-left text-xs text-slate-500">
+            Use a description that is easily identifiable. This will be shown in the dataset
+            selection screen and is not part of your submitted metadata.
+          </span>
         </el-form-item>
 
         <el-form-item label="Data type" prop="dataType" class="createNewProjectFormItemContainer">

@@ -450,9 +450,9 @@ export default {
         case "Code":
           return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
-          return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
+          return `/datasets/${this.datasetID}/${this.workflowID}/Other/landing`;
         case "NextGenHighThroughputSequencing":
-          return `/datasets/${this.datasetID}/${this.workflowID}/NextGenHighThroughputSequencing/selectFolder`;
+          return `/datasets/${this.datasetID}/${this.workflowID}/NextGenHighThroughputSequencing/landing`;
         default:
           return dataType;
       }

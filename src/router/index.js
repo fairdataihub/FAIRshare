@@ -24,6 +24,7 @@ import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
 import OtherPickLicense from "../views/workflow/Other/PickLicense.vue";
 
 // NextGenHighThroughputSequencing metadata related components
+import NextGenHighThroughputSequencingLanding from "../views/workflow/NextGenHighThroughputSequencing/NextGenHighThroughputSequencingLanding.vue";
 import NextGenHighThroughputSequencingSelectSourceFolder from "../views/workflow/NextGenHighThroughputSequencing/SelectSourceFolder.vue";
 import NextGenHighThroughputSequencingReviewStandards from "../views/workflow/NextGenHighThroughputSequencing/ReviewStandards.vue";
 import NextGenHighThroughputSequencingCreateMetadata from "../views/workflow/NextGenHighThroughputSequencing/CreateMetadata.vue";
@@ -100,6 +101,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Other/landing",
     component: OtherLanding,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/landing",
+    component: NextGenHighThroughputSequencingLanding,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
