@@ -3,7 +3,7 @@
     class="relative flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 px-5"
   >
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium">
+      <span class="text-left text-lg font-medium" ref="topOfPageElement">
         Provide information about your high-throughput data
       </span>
 
@@ -88,11 +88,14 @@
                         size="large"
                         ref="s1Form"
                         @submit.prevent
-                        class="metadata-form py-4"
+                        class="py-4"
                       >
                         <el-form-item label="Study" prop="study">
-                          <div class="flex w-full flex-row items-center">
+                          <div class="flex w-full flex-col items-start">
                             <el-input v-model="step1Form.study" placeholder="GSE131369"></el-input>
+                            <span class="mt-2 text-xs text-slate-600">
+                              This is usually your GEO accession number.
+                            </span>
                           </div>
                         </el-form-item>
 
@@ -102,7 +105,7 @@
                               v-model="step1Form.title"
                               placeholder="Decoding the Protein Composition of Whole Nucleosomes with Nuc-MS"
                             ></el-input>
-                            <span class="mt-2 px-1 text-xs text-slate-600">
+                            <span class="mt-2 text-xs text-slate-600">
                               A unique title that describes the whole study
                             </span>
                           </div>
@@ -115,7 +118,7 @@
                               type="textarea"
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
                             ></el-input>
-                            <span class="mt-2 px-1 text-xs text-slate-600">
+                            <span class="mt-2 text-xs text-slate-600">
                               Thorough description of the goals and objectives of this study. A
                               working abstract from the associated manuscript may be suitable.
                               Include as much text as necessary.
@@ -123,22 +126,22 @@
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Experimental design" prop="title">
+                        <el-form-item label="Experimental design" prop="experimentalDesign">
                           <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step1Form.experimentalDesign"
                               type="textarea"
                               placeholder="Intestinal GCs of the RedMUC298trTg mice were isolated by Fluorescence-activated cell sorting (FACS) according to the presence or absence of mCherry signal and analyzed using scRNAseq."
                             ></el-input>
-                            <span class="mt-2 px-1 text-xs text-slate-600">
+                            <span class="mt-2 text-xs text-slate-600">
                               Describe the SAMPLES. Include what types of Samples are analyzed, if
                               replicates are included, are there control and/or reference Samples,
-                              etc.
+                              etc. You should not include protocols/methods in this section.
                             </span>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Contributors">
+                        <el-form-item label="Contributors" prop="contributors">
                           <draggable
                             tag="div"
                             :list="step1Form.contributors"
@@ -204,7 +207,7 @@
                               clearable
                               class="w-full"
                             />
-                            <span class="mt-2 px-1 text-xs text-slate-600">
+                            <span class="mt-2 text-xs text-slate-600">
                               Optional. If you submit a processed data file corresponding to
                               *multiple* Samples, include the processed file here. For example:
                               FPKMs_allsamples.txt The file should have unique column names that
@@ -247,7 +250,7 @@
                         size="large"
                         ref="s2Form"
                         @submit.prevent
-                        class="metadata-form py-4"
+                        class="py-4"
                       >
                         <el-form-item label="Growth protocol">
                           <div class="flex w-full flex-col items-start">
@@ -256,7 +259,7 @@
                               type="textarea"
                               placeholder="C3H 10T1/2 mesenchymal cells were maintained in DMEM supplemented with 10% fetal bovine serum (FBS) and antibiotics in humidified atmosphere with 5% CO2 at 37C"
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               Optional. Describe the conditions used to grow or maintain organisms
                               or cells prior to extract preparation
                             </span>
@@ -270,41 +273,44 @@
                               type="textarea"
                               placeholder="Adipogenic differentiation was induced by treatment of 2-day post confluent cells (designated day 0, D0) with 10ug/ml insulin (Sigma), 1uM dexamethasone (Sigma), and 0.5mM isobutylmethylxanthine (Sigma) in the presence of 10% FBS until day 2. Cells were then fed with DMEM supplemented with 10% FBS and 10ug/ml insulin for 2 days, after which they were fed every other day with DMEM containing 10% FBS"
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               Optional. Describe the treatments applied to the biological material
                               prior to extract preparation.
                             </span>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Extract protocol">
+                        <el-form-item label="Extract protocol" prop="extractProtocol">
                           <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.extractProtocol"
                               type="textarea"
                               placeholder="RNA was harvested using Rneasy mini plus kit (Qiagen). 1.3 ug of total RNA was used for the construction of sequencing libraries."
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               Describe the protocols used to extract and prepare the material to be
                               sequenced.
                             </span>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Library construction protocol">
+                        <el-form-item
+                          label="Library construction protocol"
+                          prop="libraryConstructionProtocol"
+                        >
                           <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.libraryConstructionProtocol"
                               type="textarea"
                               placeholder="RNA libraries for RNA-seq were prepared using SMARTER mRNA-Seq Library Prep Kit following manufacturer's protocols."
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               Describe the library construction protocol.
                             </span>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Library strategy">
+                        <el-form-item label="Library strategy" prop="libraryStrategy">
                           <div class="flex w-full flex-col items-start">
                             <el-select
                               v-model="step2Form.libraryStrategy"
@@ -330,14 +336,14 @@
                               />
                             </fade-transition>
 
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               A Sequence Read Archive-specific field that describes the sequencing
                               technique for each library.
                             </span>
                           </div>
                         </el-form-item>
 
-                        <el-form-item label="Data processing steps">
+                        <el-form-item label="Data processing steps" prop="dataProcessingSteps">
                           <draggable
                             tag="div"
                             :list="step2Form.dataProcessingSteps"
@@ -384,7 +390,7 @@
                             </template>
                           </draggable>
 
-                          <span class="mt-1 px-1 text-xs text-slate-600">
+                          <span class="mt-1 text-xs text-slate-600">
                             Provide details of how processed data files were generated. <br />
                             Steps may include: Base-calling software, version, parameters; Data
                             filtering steps; Read alignment software, version, parameters;
@@ -401,14 +407,14 @@
                           <span> Add a data processing step </span>
                         </div>
 
-                        <el-form-item label="Genome build/assembly">
+                        <el-form-item label="Genome build/assembly" prop="genomeBuild">
                           <div class="flex w-full flex-col items-start">
                             <el-input
                               v-model="step2Form.genomeBuild"
                               type="textarea"
                               placeholder="mm10"
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               UCSC or NCBI genome build number (e.g., hg18, mm9, human NCBI genome
                               build 36, etc...), or reference sequence used for read alignment.
                             </span>
@@ -422,7 +428,7 @@
                               type="textarea"
                               placeholder="tab-delimited text files include RPKM values for each Sample"
                             />
-                            <span class="mt-1 px-1 text-xs text-slate-600">
+                            <span class="mt-1 text-xs text-slate-600">
                               For each processed data file type, provide a description of the format
                               and content.
                             </span>
@@ -457,13 +463,12 @@
                   <div class="px-4 pb-4 pt-2">
                     <el-form
                       :model="step3Form"
-                      :rules="step3FormRules"
                       label-width="160px"
                       label-position="top"
                       size="large"
                       ref="s3Form"
                       @submit.prevent
-                      class="metadata-form pb-4"
+                      class="pb-4"
                     >
                       <draggable
                         tag="div"
@@ -527,23 +532,23 @@
                               <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
                                 <div class="mb-4 flex flex-col">
                                   <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                                    Title
+                                    Title <span class="text-red-500"> * </span>
                                   </label>
 
                                   <el-input
                                     v-model="element.title"
                                     type="text"
-                                    placeholder="Title"
+                                    placeholder="[biomaterial], [condition(s)], [replicate number]"
                                   />
-                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                  <span class="mt-1 text-xs text-slate-600">
                                     Unique title that describes the Sample. We suggest the
-                                    convention: [biomaterial] [condition(s)] [replicate number]
+                                    convention: [biomaterial], [condition(s)], [replicate number]
                                   </span>
                                 </div>
 
                                 <div class="mb-4 flex flex-col">
                                   <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                                    Description
+                                    Description <span class="text-red-500"> * </span>
                                   </label>
                                   <el-input
                                     v-model="element.description"
@@ -551,7 +556,7 @@
                                     placeholder="Description"
                                     class="mb-2"
                                   />
-                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                  <span class="mt-1 text-xs text-slate-600">
                                     Optional. Additional information not provided in the other
                                     fields, or broad descriptions that cannot be easily dissected
                                     into other fields. <br />
@@ -570,7 +575,7 @@
                                       <label
                                         class="w-[160px] pb-1 text-sm font-medium text-gray-700"
                                       >
-                                        Organism
+                                        Organism <span class="text-red-500"> * </span>
                                       </label>
                                       <el-select
                                         v-model="element.organism"
@@ -589,8 +594,9 @@
                                           :value="item.value"
                                         />
                                       </el-select>
-                                      <span class="mt-1 px-1 text-xs text-slate-600">
-                                        Organisms from which the sequences was derived.
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        Organisms from which the sequences was derived. <br />
+                                        Start typing for suggestions.
                                       </span>
                                     </div>
                                   </div>
@@ -600,7 +606,7 @@
                                       <label
                                         class="w-[160px] pb-1 text-sm font-medium text-gray-700"
                                       >
-                                        Molecule
+                                        Molecule <span class="text-red-500"> * </span>
                                       </label>
                                       <el-select
                                         v-model="element.molecule"
@@ -616,7 +622,7 @@
                                         >
                                         </el-option>
                                       </el-select>
-                                      <span class="mt-1 px-1 text-xs text-slate-600">
+                                      <span class="mt-1 text-xs text-slate-600">
                                         Type of molecule that was extracted from the biological
                                         material.
                                       </span>
@@ -628,7 +634,7 @@
                                       <label
                                         class="w-[160px] pb-1 text-sm font-medium text-gray-700"
                                       >
-                                        Single or paired end
+                                        Single or paired end <span class="text-red-500"> * </span>
                                       </label>
                                       <el-select
                                         v-model="element.singleOrPairedEnd"
@@ -648,7 +654,7 @@
                                       <label
                                         class="w-[160px] pb-1 text-sm font-medium text-gray-700"
                                       >
-                                        Instrument Model
+                                        Instrument Model <span class="text-red-500"> * </span>
                                       </label>
                                       <el-select
                                         v-model="element.instrumentModel"
@@ -670,7 +676,9 @@
 
                                 <line-divider class="my-2" type="dashed" />
 
-                                <p class="">Sample Characteristics</p>
+                                <p class="">
+                                  Sample Characteristics <span class="text-red-500"> * </span>
+                                </p>
                                 <span class="mb-4 text-xs">
                                   One of 'tissue', 'cell line' or 'cell type' fields is required.
                                 </span>
@@ -715,7 +723,9 @@
                                 <line-divider class="my-4" type="dashed" />
 
                                 <div class="flex flex-col">
-                                  <p class="my-2">Add your raw files</p>
+                                  <p class="my-2">
+                                    Add your raw files <span class="text-red-500"> * </span>
+                                  </p>
 
                                   <el-tree-select
                                     v-model="element.rawFiles"
@@ -725,7 +735,7 @@
                                     clearable
                                     show-checkbox
                                   />
-                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                  <span class="mt-1 text-xs text-slate-600">
                                     Files containing the raw data.
                                   </span>
                                 </div>
@@ -743,7 +753,7 @@
                                     clearable
                                     show-checkbox
                                   />
-                                  <span class="mt-1 px-1 text-xs text-slate-600">
+                                  <span class="mt-1 text-xs text-slate-600">
                                     Files containing the processed data. The same processed file may
                                     be listed for multiple Samples.
                                   </span>
@@ -954,7 +964,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 3,
+      currentStep: 2,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -999,6 +1009,20 @@ export default {
             trigger: "blur",
           },
         ],
+        experimentalDesign: [
+          {
+            required: true,
+            message: "Please fill in this required field",
+            trigger: "blur",
+          },
+        ],
+        contributors: [
+          {
+            required: true,
+            validator: this.contributorValidator,
+            trigger: "blur",
+          },
+        ],
       },
       step2Form: {
         growthProtocol: "",
@@ -1011,55 +1035,45 @@ export default {
         genomeBuild: "",
         processedDataFilesFormat: "",
       },
-      step2FormRules: {},
-      step3Form: [
-        {
-          id: uuidv4(),
-          libraryName: "name 1",
-          title: "",
-          organism: "",
-          molecule: "",
-          singleOrPairedEnd: "",
-          instrumentModel: "",
-          description: "",
-          processedDataFiles: [],
-          rawFiles: [],
-          characteristics: {
-            tissue: "",
-            "developmental stage": "",
+      step2FormRules: {
+        extractProtocol: [
+          {
+            required: true,
+            message: "Please fill in this required field",
+            trigger: "blur",
           },
-          filteredRawFilesFolderContents: [],
-          filteredProcessedDataFilesFolderContents: [],
-          isExpanded: true,
-        },
-        {
-          id: uuidv4(),
-          libraryName: "name 2",
-          title: "",
-          organism: "",
-          molecule: "",
-          singleOrPairedEnd: "",
-          instrumentModel: "",
-          description: "",
-          processedDataFiles: [],
-          rawFiles: [],
-          characteristics: {
-            tissue: "",
-            "developmental stage": "",
+        ],
+        libraryConstructionProtocol: [
+          {
+            required: true,
+            message: "Please fill in this required field",
+            trigger: "blur",
           },
-          filteredRawFilesFolderContents: [],
-          filteredProcessedDataFilesFolderContents: [],
-          isExpanded: true,
-        },
-      ],
+        ],
+        libraryStrategy: [
+          {
+            required: true,
 
-      step3FormRules: {},
-      step4Form: {
-        referencePublication: "",
-
-        isPartOf: "",
+            validator: this.libraryStrategyValidator,
+            trigger: "blur",
+          },
+        ],
+        dataProcessingSteps: [
+          {
+            required: true,
+            validator: this.dataProcessingStepsValidator,
+            trigger: "blur",
+          },
+        ],
+        genomeBuild: [
+          {
+            required: true,
+            message: "Please add the genome build",
+            trigger: "blur",
+          },
+        ],
       },
-      isPartOfErrorMessage: "",
+      step3Form: [],
       customFieldNameForFilter: "",
       invalidStatus: {},
       originalObject: {},
@@ -1128,6 +1142,10 @@ export default {
     },
     async prevFormStep() {
       this.showSavingIcon();
+      this.$refs["topOfPageElement"].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
 
       if (this.currentStep - 1 > 0) {
         this.currentStep--;
@@ -1137,6 +1155,12 @@ export default {
     },
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
+        const valid = await this.checkSamplesValidity();
+
+        if (!valid) {
+          return;
+        }
+
         if (!this.checkInvalidStatus) {
           this.navigateToSelectDestination();
         }
@@ -1164,6 +1188,10 @@ export default {
         if (valid) {
           await this.saveCurrentEntries();
           this.setCurrentStep(2);
+          this.$refs["topOfPageElement"].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       });
     },
@@ -1172,6 +1200,10 @@ export default {
         if (valid) {
           await this.saveCurrentEntries();
           this.setCurrentStep(3);
+          this.$refs["topOfPageElement"].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       });
     },
@@ -1214,6 +1246,15 @@ export default {
       });
       this.$refs["s1Form"].validate();
     },
+    contributorValidator(_rule, value, callback) {
+      if (value.length === 0) {
+        callback(new Error("Please add at least one contributor."));
+      } else if ((value === "" || value === undefined) && value.length > 0) {
+        callback(new Error("Please provide a valid contributor."));
+      } else {
+        callback();
+      }
+    },
 
     addDataProcessingStep(_event, step = "") {
       const id = uuidv4();
@@ -1231,11 +1272,110 @@ export default {
       );
       this.$refs["s2Form"].validate();
     },
+    dataProcessingStepsValidator(_rule, value, callback) {
+      if (value.length === 0) {
+        callback(new Error("Please add at least one data processing step."));
+      } else if ((value === "" || value === undefined) && value.length > 0) {
+        callback(new Error("Please provide a valid data processing step."));
+      } else {
+        callback();
+      }
+    },
+
+    libraryStrategyValidator(_rule, value, callback) {
+      if (value === "" || value === undefined) {
+        callback(new Error("Please provide a valid library strategy."));
+      } else if (value === "OTHER:") {
+        console.log(this.step2Form.otherLibraryStrategy);
+        if (
+          this.step2Form.otherLibraryStrategy === undefined ||
+          this.step2Form.otherLibraryStrategy.trim() === ""
+        ) {
+          callback(new Error("Please provide a valid library strategy."));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    },
 
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
         return element[key] !== "";
       });
+    },
+
+    async checkSamplesValidity() {
+      if (this.step3Form.length === 0) {
+        this.$message.error("Please add at least one sample.");
+        return false;
+      }
+
+      for (const sample of this.step3Form) {
+        console.log(sample);
+
+        if (sample.libraryName.trim() === "") {
+          this.$message.error("Please provide a library name for all samples.");
+          return false;
+        }
+
+        if (sample.title.trim() === "") {
+          this.$message.error("Please provide a title for all samples.");
+          return false;
+        }
+
+        if (sample.description.trim() === "") {
+          this.$message.error("Please provide a description for all samples.");
+          return false;
+        }
+
+        if (sample.organism.trim() === "") {
+          this.$message.error("Please provide an organism for all samples.");
+          return false;
+        }
+
+        if (sample.molecule.trim() === "") {
+          this.$message.error("Please provide a molecule for all samples.");
+          return false;
+        }
+
+        if (sample.singleOrPairedEnd.trim() === "") {
+          this.$message.error("Some samples are missing a single or paired end value.");
+          return false;
+        }
+
+        if (sample.instrumentModel.trim() === "") {
+          this.$message.error("Some samples are missing an instrument model value.");
+          return false;
+        }
+
+        // get number of keys in object
+        const keys = Object.keys(sample.characteristics);
+        if (keys.length === 0) {
+          this.$message.error("No required characteristics provided for samples.");
+          return false;
+        }
+
+        if (keys.includes("tissue") || keys.includes("cell line") || keys.includes("cell type")) {
+          this.$message.error("Some required characteristics are missing for samples.");
+          return false;
+        }
+
+        for (const characteristic in sample.characteristics) {
+          if (sample.characteristics[characteristic].trim() === "") {
+            this.$message.error("Please provide a value for all samples' characteristics.");
+            return false;
+          }
+        }
+
+        if (sample.rawFiles.length === 0) {
+          this.$message.error("Please provide at least one raw file for all samples.");
+          return false;
+        }
+      }
+
+      return true;
     },
 
     showAddSamplePrompt() {
@@ -1559,15 +1699,15 @@ export default {
       nghtsForm.contributors = this.step1Form.contributors;
       nghtsForm.supplementaryFiles = this.step1Form.supplementaryFiles;
 
-      nghtsForm.growthProtocol = this.step2Form.growthProtocol;
-      nghtsForm.treatmentProtocol = this.step2Form.treatmentProtocol;
-      nghtsForm.extractProtocol = this.step2Form.extractProtocol;
-      nghtsForm.libraryConstructionProtocol = this.step2Form.libraryConstructionProtocol;
+      nghtsForm.growthProtocol = this.step2Form.growthProtocol.trim();
+      nghtsForm.treatmentProtocol = this.step2Form.treatmentProtocol.trim();
+      nghtsForm.extractProtocol = this.step2Form.extractProtocol.trim();
+      nghtsForm.libraryConstructionProtocol = this.step2Form.libraryConstructionProtocol.trim();
       nghtsForm.libraryStrategy = this.step2Form.libraryStrategy;
-      nghtsForm.otherLibraryStrategy = this.step2Form.otherLibraryStrategy;
+      nghtsForm.otherLibraryStrategy = this.step2Form.otherLibraryStrategy.trim();
       nghtsForm.dataProcessingSteps = this.step2Form.dataProcessingSteps;
-      nghtsForm.genomeBuild = this.step2Form.genomeBuild;
-      nghtsForm.processedDataFilesFormat = this.step2Form.processedDataFilesFormat;
+      nghtsForm.genomeBuild = this.step2Form.genomeBuild.trim();
+      nghtsForm.processedDataFilesFormat = this.step2Form.processedDataFilesFormat.trim();
 
       nghtsForm.samples = this.step3Form;
 
