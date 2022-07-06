@@ -52,9 +52,15 @@ gulp.task("copy-splash-screen", function () {
   return gulp.src(["./public/splash-screen.html"]).pipe(gulp.dest("./dist_electron"));
 });
 
+gulp.task("copy-app-icon", function () {
+  console.log("Copying app icon to dist_electron folder ...");
+
+  return gulp.src(["./src/assets/app-icons/Icon.png"]).pipe(gulp.dest("./dist_electron"));
+});
+
 gulp.task("build-css", gulp.series("compile-tailwind", "rename-css", "clean-css"));
 
-gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen"));
+gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen", "copy-app-icon"));
 
 gulp.task("watch-dev", function () {
   gulp.watch("./src/index.css", gulp.series("build-css"));

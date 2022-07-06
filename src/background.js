@@ -172,12 +172,14 @@ Menu.setApplicationMenu(menu);
 
 async function createWindow() {
   // Create the browser window.
+  console.log(path.join(__dirname, "Icon.png"));
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 850,
     minWidth: 1200,
     minHeight: 850,
-    icon: __dirname + "/assets/app-icons/Icon.png",
+    icon: path.join(__dirname, "Icon.png"),
     show: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -198,7 +200,7 @@ async function createWindow() {
     height: 500,
     frame: false,
     show: true,
-    icon: __dirname + "/assets/app-icons/Icon.png",
+    icon: path.join(__dirname, "Icon.png"),
     alwaysOnTop: true,
     transparent: true,
     hasShadow: false,
