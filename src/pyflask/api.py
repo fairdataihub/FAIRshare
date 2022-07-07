@@ -180,7 +180,12 @@ class BioToolsUserDetails(Resource):
         """Get user details"""
 
         parser = reqparse.RequestParser()
-        parser.add_argument("token", type=str, required=True)
+        parser.add_argument(
+            "token",
+            type=str,
+            required=True,
+            location="args",
+        )
         args = parser.parse_args()
 
         token = args["token"]
@@ -529,12 +534,14 @@ class zenodoDeposition(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
             help="deposition_id is required. deposition_id needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -591,6 +598,7 @@ class zenodoGetAll(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -869,6 +877,7 @@ class GetAllRepos(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -897,18 +906,21 @@ class GetAllContributorsForRepo(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -939,18 +951,21 @@ class GetAllReleasesForRepo(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -981,18 +996,21 @@ class getRepoContentsTree(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1024,24 +1042,28 @@ class getRepoFileContents(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "file_name",
             type=str,
             required=True,
             help="file_name is required. fileName needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1079,15 +1101,15 @@ class EchoG(Resource):
             "access_token",
             type=str,
             required=True,
-            location="args",
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "geo_id",
             type=str,
             required=True,
-            location="args",
             help="geo_id is required. geoId needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1177,29 +1199,29 @@ class getGEOFolder(Resource):
             "ftp_host",
             type=str,
             required=True,
-            location="args",
             help="ftp_host is required. ftpHost needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "ftp_username",
             type=str,
             required=True,
-            location="args",
             help="ftp_username is required. ftpUsername needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "ftp_password",
             type=str,
             required=True,
-            location="args",
             help="ftp_password is required. ftpPassword needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "ftp_folder_path",
             type=str,
             required=True,
-            location="args",
             help="Geo personalized folder path",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1316,6 +1338,7 @@ class RequestJSON(Resource):
             type=str,
             required=True,
             help="url that needs a CORS proxy",
+            location="args",
         )
 
         args = parser.parse_args()
