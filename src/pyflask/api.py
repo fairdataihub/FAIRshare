@@ -16,6 +16,7 @@ from figshare import (
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
+from geo import getFilesAndFoldersAtLocation, uploadFolderToGeo
 
 # from flask_wtf.csrf import CSRFProtect
 from github import (
@@ -28,8 +29,8 @@ from github import (
 )
 from metadata import createCitationCFF, createMetadata
 from utilities import (
-    createFile,
     copyFile,
+    createFile,
     deleteFile,
     fileExistInFolder,
     foldersPresent,
@@ -49,7 +50,6 @@ from zenodo import (
     removeFileFromZenodoDeposition,
     uploadFileToZenodoDeposition,
 )
-
 
 API_VERSION = "1.4.0"
 
@@ -1060,6 +1060,158 @@ class getRepoFileContents(Resource):
 
 
 ncbigeo = api.namespace("ncbigeo", description="NCBI GEO")
+
+
+@ncbigeo.route("/echo", endpoint="echoG")
+class EchoG(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "geo_id": "GEO ID",
+        },
+    )
+    def get(self):
+        """Echo"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            location="args",
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "geo_id",
+            type=str,
+            required=True,
+            location="args",
+            help="geo_id is required. geoId needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        geo_id = args["geo_id"]
+
+        return f"{access_token} {geo_id}"
+
+
+@ncbigeo.route("/upload", endpoint="UploadFolderToGeo")
+class UploadFolderToGeo(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "ftp_host": "Geo host",
+            "ftp_username": "Geo username",
+            "ftp_password": "Geo password",
+            "ftp_folder_path": "Geo personalized folder path",
+            "folder_path": "folder path to upload",
+        },
+    )
+    def post(self):
+        """Upload a folder to NCBI GEO"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "ftp_host",
+            type=str,
+            required=True,
+            help="ftp_host is required. ftpHost needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_username",
+            type=str,
+            required=True,
+            help="ftp_username is required. ftpUsername needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_password",
+            type=str,
+            required=True,
+            help="ftp_password is required. ftpPassword needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_folder_path",
+            type=str,
+            required=True,
+            help="Geo personalized folder path",
+        )
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to upload",
+        )
+
+        args = parser.parse_args()
+
+        ftp_host = args["ftp_host"]
+        ftp_username = args["ftp_username"]
+        ftp_password = args["ftp_password"]
+        ftp_folder_path = args["ftp_folder_path"]
+        folder_path = args["folder_path"]
+
+        return uploadFolderToGeo(
+            ftp_host, ftp_username, ftp_password, ftp_folder_path, folder_path
+        )
+
+
+@ncbigeo.route("/files", endpoint="getGEOFolder")
+class getGEOFolder(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "ftp_host": "Geo host",
+            "ftp_username": "Geo username",
+            "ftp_password": "Geo password",
+            "ftp_folder_path": "Geo personalized folder path",
+        },
+    )
+    def get(self):
+        "Get list of files and folder at location"
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "ftp_host",
+            type=str,
+            required=True,
+            location="args",
+            help="ftp_host is required. ftpHost needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_username",
+            type=str,
+            required=True,
+            location="args",
+            help="ftp_username is required. ftpUsername needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_password",
+            type=str,
+            required=True,
+            location="args",
+            help="ftp_password is required. ftpPassword needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_folder_path",
+            type=str,
+            required=True,
+            location="args",
+            help="Geo personalized folder path",
+        )
+
+        args = parser.parse_args()
+
+        ftp_host = args["ftp_host"]
+        ftp_username = args["ftp_username"]
+        ftp_password = args["ftp_password"]
+        ftp_folder_path = args["ftp_folder_path"]
+
+        return getFilesAndFoldersAtLocation(
+            ftp_host, ftp_username, ftp_password, ftp_folder_path
+        )
 
 
 ###############################################################################

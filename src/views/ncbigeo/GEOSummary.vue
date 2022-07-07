@@ -114,7 +114,7 @@
         @messageConfirmed="navigateToFinalPage"
       >
         <p class="text-center text-base text-gray-500">
-          You can view your dataset in the next step.
+          Do you want us to upload this dataset to GEO?
         </p>
       </success-confirm>
 
@@ -538,7 +538,7 @@ export default {
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
 
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/ncbigeo/publish`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/ncbigeo/upload`;
 
       this.$router.push({ path: routerPath });
     },

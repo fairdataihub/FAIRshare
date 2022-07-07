@@ -1,14 +1,51 @@
 <template>
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-medium"> Generating your final dataset </span>
+      <span class="text-left text-lg font-medium"> Let's upload your dataset </span>
       <span class="text-left">
-        This one is on us. FAIRshare is generating all the relevant metadata files and o
+        Looks like your dataset was generated for a Next Gen High Throughput Sequencing (NGS)
+        experiment. Let's upload it to GEO. FAIRShare can help you with this.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <el-divider class="my-4" />
 
-      <div class="flex h-full flex-col justify-center">
+      <div class="flex w-full flex-col">
+        <p class="mb-2">Please provide the link to your personalized GEO folder:</p>
+
+        <el-input
+          size="large"
+          v-model="geoFolderPath"
+          placeholder="uploads/username@orcid_UHs3vJap"
+          class="w-full"
+        />
+
+        <p class="mb-2 mt-2 text-xs text-slate-600">
+          Refer to the documentation provided by GEO for instructions on how to get your
+          personalized upload folder.
+          <a href="https://www.ncbi.nlm.nih.gov/geo/info/seq.html" class="text-url">
+            Click here to read the official documentation.
+          </a>
+        </p>
+
+        <div class="mt-4 flex flex-row items-center justify-center">
+          <router-link
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/summary`"
+            class="mx-6"
+          >
+            <button class="primary-plain-button" :disabled="showUploadProgress">Back</button>
+          </router-link>
+
+          <button
+            class="primary-button"
+            @click="startUpload"
+            :disabled="showUploadProgress || geoFolderPath == ''"
+          >
+            Connect and upload
+          </button>
+        </div>
+      </div>
+
+      <div class="flex h-full flex-col justify-center" v-if="showUploadProgress">
         <el-progress
           :percentage="percentage"
           :indeterminate="indeterminate"
@@ -94,6 +131,8 @@ export default {
       showAlert: false,
       alertTitle: "",
       alertMessage: "",
+      geoFolderPath: "",
+      showUploadProgress: false,
       overwriteCodeMeta: false,
       overwriteOtherMeta: false,
       licenseOptions: figshareMetadataOptions.licenseOptions,
@@ -458,6 +497,31 @@ export default {
     async retryUpload() {
       this.runGeoGenerate();
     },
+    async startUpload() {
+      await axios
+        .get(`${this.$server_url}/ncbigeo/files`, {
+          params: {
+            ftp_host: process.env.VUE_APP_GEO_FTP_SERVER_URL,
+            ftp_username: process.env.VUE_APP_GEO_FTP_SERVER_USER,
+            ftp_password: process.env.VUE_APP_GEO_FTP_SERVER_PASSWORD,
+            ftp_folder_path: this.geoFolderPath,
+          },
+        })
+        .then((response) => {
+          this.$track("Connections", "geo", "success");
+          this.showUploadProgress = true;
+          return response.data;
+        })
+        .catch((_error) => {
+          this.$track("Connections", "geo", "failed");
+          this.$message({
+            message: "There was an error with connecting to the FTP server",
+            type: "error",
+          });
+          return "ERROR";
+        });
+      return;
+    },
   },
   async mounted() {
     this.dataset = await this.datasetStore.getCurrentDataset();
@@ -470,7 +534,7 @@ export default {
     // not saving this page since it will start a random upload when saving progress
     // this.workflow.currentRoute = this.$route.path;
 
-    this.runGeoGenerate();
+    // this.runGeoGenerate();
   },
 };
 </script>

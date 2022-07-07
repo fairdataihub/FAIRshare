@@ -1357,7 +1357,12 @@ export default {
           return false;
         }
 
-        if (keys.includes("tissue") || keys.includes("cell line") || keys.includes("cell type")) {
+        console.log(keys);
+        if (
+          !keys.includes("tissue") &&
+          !keys.includes("cell line") &&
+          !keys.includes("cell type")
+        ) {
           this.$message.error("Some required characteristics are missing for samples.");
           return false;
         }
@@ -1411,6 +1416,7 @@ export default {
     },
 
     openAddFieldPrompt() {
+      this.customFieldName = "";
       this.$refs.addCharacteristicPrompt.show();
     },
     customFieldNameSearch(query, cb) {
