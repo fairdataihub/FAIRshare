@@ -222,8 +222,6 @@ export default {
             const currentVersionObject = announcements[currentVersion];
             let announcement = {};
 
-            console.log(announcements);
-
             if ("all" in currentVersionObject) {
               announcement = currentVersionObject["all"];
             } else if (platform in currentVersionObject) {
