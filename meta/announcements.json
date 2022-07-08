@@ -44,7 +44,7 @@
     }
   },
   "1.4.0": {
-    "darwin": {
+    "all": {
       "show": true,
       "title": "Outdated version",
       "message": "Please update to the latest version of the application.",
