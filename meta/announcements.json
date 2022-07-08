@@ -45,7 +45,7 @@
   },
   "1.4.0": {
     "all": {
-      "show": true,
+      "show": false,
       "title": "Outdated version",
       "message": "Please update to the latest version of the application.",
       "type": "warning"
