@@ -43,7 +43,7 @@
       "type": "warning"
     }
   },
-  "1.5.0": {
+  "1.4.0": {
     "win32": {
       "show": true,
       "title": "Outdated version",
