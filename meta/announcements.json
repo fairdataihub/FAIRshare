@@ -44,7 +44,7 @@
     }
   },
   "1.4.0": {
-    "win32": {
+    "darwin": {
       "show": true,
       "title": "Outdated version",
       "message": "Please update to the latest version of the application.",
