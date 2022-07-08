@@ -216,21 +216,24 @@ export default {
         .then((response) => {
           const announcements = response.data;
           const currentVersion = app.getVersion();
+          const platform = process.platform;
 
           if (currentVersion in announcements) {
-            const announcement = announcements[currentVersion];
+            const currentVersionObject = announcements[currentVersion];
+            let announcement = {};
+
+            if ("all" in currentVersionObject) {
+              announcement = currentVersionObject["all"];
+            } else if (platform in currentVersionObject) {
+              announcement = currentVersionObject[platform];
+            }
 
             if ("show" in announcement && announcement.show) {
               if ("type" in announcement && announcement.type === "warning") {
-                if (
-                  "platform" in announcement &&
-                  announcement.platform.includes(process.platform)
-                ) {
-                  this.announcementText = announcement.message;
+                this.announcementText = announcement.message;
 
-                  this.$refs.appAnnouncement.setTitle(announcement.title);
-                  this.$refs.appAnnouncement.show();
-                }
+                this.$refs.appAnnouncement.setTitle(announcement.title);
+                this.$refs.appAnnouncement.show();
               }
             }
           }
