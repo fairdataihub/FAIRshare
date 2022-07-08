@@ -221,11 +221,16 @@ export default {
             const announcement = announcements[currentVersion];
 
             if ("show" in announcement && announcement.show) {
-              if (announcement.type === "warning") {
-                this.announcementText = announcement.message;
+              if ("type" in announcement && announcement.type === "warning") {
+                if (
+                  "platform" in announcement &&
+                  announcement.platform.includes(process.platform)
+                ) {
+                  this.announcementText = announcement.message;
 
-                this.$refs.appAnnouncement.setTitle(announcement.title);
-                this.$refs.appAnnouncement.show();
+                  this.$refs.appAnnouncement.setTitle(announcement.title);
+                  this.$refs.appAnnouncement.show();
+                }
               }
             }
           }
