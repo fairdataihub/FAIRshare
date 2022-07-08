@@ -267,18 +267,17 @@
                 </el-table-column>
                 <el-table-column label="Details">
                   <template #default="scope">
-                    <span v-if="scope.row.type !== 'doi'">
+                    <span v-if="scope.row.type !== 'folderPath'">
                       {{ scope.row.detail }}
                     </span>
-                    <a
+                    <span
                       v-else
-                      :href="`https://doi.org/${scope.row.detail}`"
                       target="_blank"
-                      class="text-url"
+                      class="text-url break-all"
                       rel="noopener noreferrer"
                     >
                       {{ scope.row.detail }}
-                    </a>
+                    </span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -1004,35 +1003,30 @@ export default {
         type: "",
       });
 
-      if (workflow.datasetPublished) {
-        generateStatus = true;
+      let destinationFolderPath = "";
+      if ("destinationFolderPath" in workflow) {
+        destinationFolderPath = workflow.destinationFolderPath;
       } else {
-        generateStatus = false;
+        destinationFolderPath = "";
       }
       this.nextGenHighThruObject.data.push({
-        status: generateStatus,
-        task: "Published",
-        detail: "",
-        type: "",
+        status: destinationFolderPath,
+        task: "Local generated dataset",
+        detail: destinationFolderPath,
+        type: "folderPath",
       });
 
-      let doi = "";
-      if (
-        "destination" in workflow &&
-        "name" in workflow.destination &&
-        workflow.destination[workflow.destination.name] != null &&
-        workflow.destination[workflow.destination.name] != undefined &&
-        "doi" in workflow.destination[workflow.destination.name]
-      ) {
-        doi = workflow.destination[workflow.destination.name].doi;
+      let geoFolderPath = "";
+      if ("geoFolderPath" in workflow) {
+        geoFolderPath = workflow.geoFolderPath;
       } else {
-        doi = "";
+        geoFolderPath = "";
       }
       this.nextGenHighThruObject.data.push({
-        status: doi,
-        task: "Last generated DOI",
-        detail: doi,
-        type: "doi",
+        status: geoFolderPath,
+        task: "Geo folder",
+        detail: geoFolderPath,
+        type: "folderPath",
       });
     },
     generateStatusObjects() {
