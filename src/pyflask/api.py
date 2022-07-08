@@ -16,7 +16,7 @@ from figshare import (
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
-from geo import getFilesAndFoldersAtLocation, uploadFolderToGeo
+from geo import getFilesAndFoldersAtLocation, getGEOFileUploadStatus, uploadFolderToGeo
 
 # from flask_wtf.csrf import CSRFProtect
 from github import (
@@ -1084,42 +1084,6 @@ class getRepoFileContents(Resource):
 ncbigeo = api.namespace("ncbigeo", description="NCBI GEO")
 
 
-@ncbigeo.route("/echo", endpoint="echoG")
-class EchoG(Resource):
-    @ncbigeo.doc(
-        responses={200: "Success", 401: "Validation error"},
-        params={
-            "access_token": "GitHub authorization token for the user",
-            "geo_id": "GEO ID",
-        },
-    )
-    def get(self):
-        """Echo"""
-        parser = reqparse.RequestParser()
-
-        parser.add_argument(
-            "access_token",
-            type=str,
-            required=True,
-            help="access_token is required. accessToken needs to be of type str",
-            location="args",
-        )
-        parser.add_argument(
-            "geo_id",
-            type=str,
-            required=True,
-            help="geo_id is required. geoId needs to be of type str",
-            location="args",
-        )
-
-        args = parser.parse_args()
-
-        access_token = args["access_token"]
-        geo_id = args["geo_id"]
-
-        return f"{access_token} {geo_id}"
-
-
 @ncbigeo.route("/upload", endpoint="UploadFolderToGeo")
 class UploadFolderToGeo(Resource):
     @ncbigeo.doc(
@@ -1178,6 +1142,15 @@ class UploadFolderToGeo(Resource):
         return uploadFolderToGeo(
             ftp_host, ftp_username, ftp_password, ftp_folder_path, folder_path
         )
+
+    @ncbigeo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={},
+    )
+    def get(self):
+        """Get file upload status"""
+
+        return getGEOFileUploadStatus()
 
 
 @ncbigeo.route("/files", endpoint="getGEOFolder")

@@ -4,7 +4,7 @@
       <span class="text-left text-lg font-medium"> Let's upload your dataset </span>
       <span class="text-left">
         Looks like your dataset was generated for a Next Gen High Throughput Sequencing (NGS)
-        experiment. Let's upload it to GEO. FAIRShare can help you with this.
+        experiment. Let's upload it to GEO.
       </span>
 
       <el-divider class="my-4" />
@@ -27,10 +27,9 @@
           </a>
         </p>
 
-        <div class="mt-4 flex flex-row items-center justify-center">
+        <div class="mt-4 flex flex-row items-center justify-center space-x-4">
           <router-link
-            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/summary`"
-            class="mx-6"
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/generate`"
           >
             <button class="primary-plain-button" :disabled="showUploadProgress">Back</button>
           </router-link>
@@ -38,7 +37,7 @@
           <button
             class="primary-button"
             @click="startUpload"
-            :disabled="showUploadProgress || geoFolderPath == ''"
+            :disabled="showUploadProgress || geoFolderPath.trim() == ''"
           >
             Connect and upload
           </button>
@@ -52,15 +51,10 @@
           :status="progressStatus"
           :stroke-width="10"
         />
-        <el-alert
-          class="my-2"
-          v-if="showAlert"
-          :title="alertTitle"
-          type="error"
-          :description="alertMessage"
-          show-icon
-        >
-        </el-alert>
+        <div class="my-2" v-if="showAlert">
+          <el-alert :title="alertTitle" type="error" :description="alertMessage" show-icon />
+        </div>
+
         <div class="flex flex-row items-start justify-start py-3" v-else>
           <LoadingCubeGrid class="h-5 w-5" v-if="percentage !== 100"></LoadingCubeGrid>
           <div class="flex flex-col items-start">
@@ -81,10 +75,9 @@
         </div>
       </div>
 
-      <div class="flex w-full flex-row justify-center py-2" v-if="showAlert">
+      <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="showAlert">
         <router-link
           :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/metadata`"
-          class="mx-6"
         >
           <button class="primary-plain-button">Back</button>
         </router-link>
@@ -106,9 +99,6 @@ import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
-
-// import ignoreFilesJSON from "@/assets/supplementalFiles/ignoreFilesList.json";
-import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 
 export default {
   name: "FigshareUpload",
@@ -133,9 +123,6 @@ export default {
       alertMessage: "",
       geoFolderPath: "",
       showUploadProgress: false,
-      overwriteCodeMeta: false,
-      overwriteOtherMeta: false,
-      licenseOptions: figshareMetadataOptions.licenseOptions,
     };
   },
   computed: {
@@ -150,377 +137,177 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    async uploadWorkflow() {
-      let response = {};
 
-      if (this.workflow.destination.figshare.newVersion) {
-        this.statusMessage = "Creating a new version of the Figshare article";
-
-        await this.sleep(300);
-
-        const original_deposition_id = this.workflow.destination.zenodo.selectedDeposition.id;
-
-        let res = null;
-
-        res = await axios
-          .post(`${this.$server_url}/zenodo/deposition/newversion`, {
-            access_token: this.figshareToken,
-            deposition_id: original_deposition_id,
-          })
-          .then((response) => {
-            this.$track("Zenodo", "Create new version", "success");
-            return response.data;
-          })
-          .catch((error) => {
-            this.$track("Zenodo", "Create new version", "failed");
-            console.error(error);
-            return "ERROR";
-          });
-
-        const deposition_id = res;
-
-        if (res === "ERROR") {
-          this.alertMessage = "There was an error with creating a new version";
-          return "FAIL";
-        }
-
-        this.statusMessage = "Requesting new Zenodo deposition version data";
-
-        await this.sleep(300);
-
-        res = await axios
-          .get(`${this.$server_url}/zenodo/deposition`, {
-            params: {
-              access_token: this.figshareToken,
-              deposition_id,
-            },
-          })
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            return "ERROR";
-          });
-
-        if (res === "ERROR") {
-          this.alertMessage = "There was an error with requesting data from Zenodo";
-          return "FAIL";
-        } else {
-          //create a copy of the res object
-          response = JSON.parse(JSON.stringify(res));
-
-          this.statusMessage =
-            "Succeeded in requesting data from the new version of the zenodo deposition";
-        }
-
-        const files_list = res.files;
-
-        for (let file of files_list) {
-          this.statusMessage = `Removing pre-existing file '${file.filename}' from new Zenodo deposition version`;
-
-          await this.sleep(100);
-
-          await axios
-            .delete(`${this.$server_url}/zenodo/deposition/files`, {
-              data: {
-                access_token: this.figshareToken,
-                deposition_id,
-                file_id: file.id,
-              },
-            })
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-              return "ERROR";
-            });
-        }
-
-        this.statusMessage = "Succeeded in removing all old pre-existing files";
-      } else {
-        response = await this.createFigshareDeposition();
-
-        response = JSON.parse(response);
-
-        if ("status" in response && response.status === "ERROR") {
-          this.alertMessage = "There was an error with creating the deposition on Figshare";
-          this.errorMessage = response.message;
-          return "FAIL";
-        } else {
-          this.statusMessage = "Article shell created on Figshare";
-        }
-
-        this.percentage = 20;
-        this.indeterminate = false;
-      }
-
-      await this.sleep(300);
-
-      this.workflow.destination.figshare.status.depositionCreated = true;
-
-      const responseObject = response;
-
-      this.workflow.destination.figshare.article_id = responseObject.article_id;
-      this.workflow.destination.figshare.doi = responseObject.doi;
-
-      await this.datasetStore.updateCurrentDataset(this.dataset);
-      await this.datasetStore.syncDatasets();
-
-      await this.sleep(300);
-
-      if (this.workflow.generateCodeMeta) {
-        if (this.codePresent) {
-          if (
-            "metadata" in response &&
-            "identifier" in this.dataset.data.Code.questions &&
-            this.dataset.data.Code.questions.identifier == ""
-          ) {
-            this.dataset.data.Code.questions.identifier = responseObject.doi;
-            this.overwriteCodeMeta = true;
-          }
-
-          response = await this.createCodeMetadataFile();
-          // console.log(response);
-
-          if (response === "ERROR") {
-            this.alertMessage = "There was an error with creating the code metadata file";
-            return "FAIL";
-          } else {
-            this.statusMessage = "Created the codemeta.json file in the target folder";
-
-            await this.datasetStore.updateCurrentDataset(this.dataset);
-            await this.datasetStore.syncDatasets();
-          }
-        }
-      }
-
-      this.percentage = 15;
-      this.indeterminate = false;
-
-      if (this.workflow.generateOtherMetadata) {
-        console.log(this.dataset.data.Other.questions.identifier);
-        if (
-          "metadata" in response &&
-          "identifier" in this.dataset.data.Other.questions &&
-          this.dataset.data.Other.questions.identifier == ""
-        ) {
-          this.dataset.data.Other.questions.identifier = responseObject.doi;
-          this.overwriteOtherMeta = true;
-        }
-
-        response = await this.createOtherMetadataFile();
-        // console.log(response);
-
-        if (response === "ERROR") {
-          this.alertMessage = "There was an error with creating the required metadata.json file";
-          return "FAIL";
-        } else {
-          this.statusMessage = "Created the metadata.json file in the target folder";
-
-          await this.datasetStore.updateCurrentDataset(this.dataset);
-          await this.datasetStore.syncDatasets();
-        }
-      }
-
-      this.percentage = 18;
-      this.indeterminate = false;
-
-      await this.sleep(300);
-
-      if (this.workflow.generateCodeMeta) {
-        if (this.codePresent) {
-          response = await this.createCitationFile();
-
-          if (response === "ERROR") {
-            this.alertMessage = "There was an error with creating the CITATION.cff file";
-            return "FAIL";
-          } else {
-            this.statusMessage = "Created the CITATION.cff file in the target folder";
-          }
-        }
-      }
-
-      this.percentage = 20;
-      this.indeterminate = false;
-
-      await this.sleep(300);
-
-      if (this.workflow.generateLicense) {
-        response = await this.createLicenseFile();
-
-        if (response === "ERROR") {
-          this.alertMessage = "There was an error with creating the LICENSE file";
-          return "FAIL";
-        } else {
-          this.statusMessage = "Created the LICENSE file in the target folder";
-        }
-      }
-
-      this.percentage = 20;
-      this.indeterminate = false;
-
-      await this.sleep(300);
-
-      response = await this.checkForFoldersAndUpload();
-
-      if (response === "ERROR") {
-        this.$track("Figshare", "Dataset uploaded", "failed");
-        this.alertMessage = "There was an error with uploading files to Figshare";
-        return "FAIL";
-      } else {
-        const files = klawSync(this.dataset.data[this.workflow.type[0]].folderPath, {
-          nodir: true,
-        });
-
-        let totalSize = 0;
-
-        for (let file of files) {
-          totalSize += file.stats.size;
-        }
-
-        this.$track("Figshare", "Files uploaded size", totalSize);
-
-        this.$track("Figshare", "Files uploaded", files.length);
-
-        this.$track("Figshare", "Dataset uploaded", "success");
-
-        this.statusMessage = "Uploaded all files to Figshare successfully.";
-      }
-
-      this.workflow.destination.figshare.status.filesUploaded = true;
-
-      return "SUCCESS";
+    async retryUpload() {
+      this.startUpload();
     },
-    async createGeoMetadataFile() {
+    async checkUploadStatus() {
       const response = await axios
-        .post(`${this.$server_url}/metadata/create`, {
-          data_types: JSON.stringify(this.workflow.type),
-          data_object: JSON.stringify(this.dataset.data),
-          virtual_file: false,
-        })
+        .get(`${this.$server_url}/ncbigeo/upload`, {})
         .then((response) => {
-          this.$track("Metadata", "Create geoMetadata", "success");
           return response.data;
         })
         .catch((error) => {
-          this.$track("Metadata", "Create geoMetadata", "failed");
           console.error(error);
-          return "ERROR";
+          return JSON.stringify({ status: "ERROR", message: "error" });
         });
-      return response;
-    },
-    async generateWorkflow() {
-      let response = {};
 
-      this.statusMessage = "Getting ready to generate the required metadata files";
+      if (response !== "" || response !== "ERROR" || "message" in response) {
+        const res = JSON.parse(response);
 
-      await this.sleep(300);
+        if (typeof res.currentFileNumber === "number" && typeof res.totalFiles === "number") {
+          this.percentage = Math.floor((res.currentFileNumber / res.totalFiles) * 100);
+        } else {
+          this.percentage = 0;
+        }
 
-      response = await this.createGeoMetadataFile();
-
-      if (response === "ERROR") {
-        this.alertMessage = "There was an error with creating the metadata.xlsx file";
-        return "FAIL";
-      } else {
-        this.statusMessage = "Created the metadata.xlsx file";
+        this.subStatusMessage = res.status;
       }
 
-      await this.sleep(300);
-
-      console.log(response);
-
-      return "SUCCESS";
-    },
-    async runGeoGenerate() {
-      this.datasetStore.hideSidebar();
-
-      this.indeterminate = true;
-      this.percentage = 0;
-      this.progressStatus = "";
-      this.showAlert = false;
-
-      this.statusMessage = "Preparing backend services...";
-      await this.sleep(300);
-
-      let response = await this.generateWorkflow();
-
-      console.log(response);
-
       return;
-
-      // let response = await this.uploadWorkflow();
-
-      // this.datasetStore.showSidebar();
-
-      // if (response === "FAIL") {
-      //   this.indeterminate = true;
-      //   this.progressStatus = "exception";
-      //   this.showAlert = true;
-
-      //   this.deleteDraftFigshareArticle();
-
-      //   if (this.overwriteCodeMeta) {
-      //     this.dataset.data.Code.questions.identifier = "";
-      //   }
-      //   if (this.overwriteOtherMeta) {
-      //     this.dataset.data.Other.questions.identifier = "";
-      //   }
-
-      //   this.workflow.datasetUploaded = false;
-      //   this.workflow.datasetPublished = false;
-
-      //   await this.datasetStore.updateCurrentDataset(this.dataset);
-      //   await this.datasetStore.syncDatasets();
-
-      //   return;
-      // } else {
-      //   if (this.overwriteCodeMeta) {
-      //     this.dataset.data.Code.questions.identifier = "";
-      //   }
-      //   if (this.overwriteOtherMeta) {
-      //     this.dataset.data.Other.questions.identifier = "";
-      //   }
-
-      //   this.workflow.datasetUploaded = true;
-      //   this.workflow.datasetPublished = false;
-      //   this.workflow.generateLicense = false;
-
-      //   await this.datasetStore.updateCurrentDataset(this.dataset);
-      //   await this.datasetStore.syncDatasets();
-
-      // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-      // this.$router.push({ path: routerPath });
-      // }
     },
-    async retryUpload() {
-      this.runGeoGenerate();
+    async uploadFiles() {
+      this.datasetStore.hideSidebar();
+      let that = this;
+
+      this.indeterminate = false;
+
+      let interval = setInterval(() => {
+        that.checkUploadStatus();
+      }, 200);
+
+      if ("destinationFolderPath" in this.workflow) {
+        const destinationFolderPath = this.workflow.destinationFolderPath;
+
+        const response = await axios
+          .post(`${this.$server_url}/ncbigeo/upload`, {
+            ftp_host: process.env.VUE_APP_GEO_FTP_SERVER_URL,
+            ftp_username: process.env.VUE_APP_GEO_FTP_SERVER_USER,
+            ftp_password: process.env.VUE_APP_GEO_FTP_SERVER_PASSWORD,
+            ftp_folder_path: this.geoFolderPath.trim(),
+            folder_path: destinationFolderPath,
+          })
+          .then((response) => {
+            console.log(response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            this.alertMessage =
+              "Something went wrong with uploading your dataset to GEO. Please verify your folder and try again.";
+            this.showAlert = true;
+
+            console.error(error);
+
+            return "ERROR";
+          });
+
+        this.datasetStore.showSidebar();
+
+        clearInterval(interval);
+
+        if (response === "ERROR") {
+          this.subStatusMessage = " ";
+
+          this.workflow.datasetUploaded = false;
+          this.workflow.datasetPublished = false;
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+
+          this.$track("GEO", "Upload dataset", "failed");
+
+          this.alertMessage = "There was an error with uploading files to GEO";
+          return "FAIL";
+        } else {
+          this.subStatusMessage = " ";
+
+          const files = klawSync(destinationFolderPath, {
+            nodir: true,
+          });
+
+          let totalSize = 0;
+
+          for (let file of files) {
+            totalSize += file.stats.size;
+          }
+
+          this.$track("GEO", "Files uploaded size", totalSize);
+
+          this.$track("GEO", "Files uploaded", files.length);
+
+          this.$track("GEO", "Dataset uploaded", "success");
+
+          this.statusMessage = "Uploaded all files to GEO successfully.";
+
+          this.percentage = 100;
+          this.indeterminate = false;
+
+          this.datasetStore.showSidebar();
+
+          this.workflow.datasetUploaded = true;
+          this.workflow.datasetPublished = false;
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+
+          const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/ncbigeo/publish`;
+          this.$router.push({ path: routerPath });
+
+          return "SUCCESS";
+        }
+      } else {
+        this.$message({
+          message: "Could not find the destination folder path",
+          type: "error",
+        });
+      }
     },
     async startUpload() {
-      await axios
+      const response = await axios
         .get(`${this.$server_url}/ncbigeo/files`, {
           params: {
             ftp_host: process.env.VUE_APP_GEO_FTP_SERVER_URL,
             ftp_username: process.env.VUE_APP_GEO_FTP_SERVER_USER,
             ftp_password: process.env.VUE_APP_GEO_FTP_SERVER_PASSWORD,
-            ftp_folder_path: this.geoFolderPath,
+            ftp_folder_path: this.geoFolderPath.trim(),
           },
         })
         .then((response) => {
-          this.$track("Connections", "geo", "success");
+          this.$track("Connections", "GEO", "success");
           this.showUploadProgress = true;
+
           return response.data;
         })
         .catch((_error) => {
-          this.$track("Connections", "geo", "failed");
+          this.$track("Connections", "GEO", "failed");
           this.$message({
             message: "There was an error with connecting to the FTP server",
             type: "error",
           });
           return "ERROR";
         });
-      return;
+
+      if (response === "ERROR") {
+        return;
+      }
+
+      this.workflow.geoFolderPath = this.geoFolderPath.trim();
+
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+
+      this.indeterminate = true;
+      this.percentage = 0;
+      this.progressStatus = "";
+      this.showAlert = false;
+
+      this.statusMessage = "Connected to the FTP server";
+      await this.sleep(300);
+
+      this.statusMessage = "Uploading files to the FTP server";
+      await this.sleep(300);
+
+      await this.uploadFiles();
     },
   },
   async mounted() {
@@ -528,13 +315,15 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setProgressBarType("geo");
     this.datasetStore.setCurrentStep(6);
 
-    // not saving this page since it will start a random upload when saving progress
-    // this.workflow.currentRoute = this.$route.path;
+    // Saving on this page since we can return back to this page after uploading to GEO
+    this.workflow.currentRoute = this.$route.path;
 
-    // this.runGeoGenerate();
+    if ("geoFolderPath" in this.workflow) {
+      this.geoFolderPath = this.workflow.geoFolderPath;
+    }
   },
 };
 </script>

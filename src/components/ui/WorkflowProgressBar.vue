@@ -88,6 +88,9 @@ export default {
         {
           description: "Generate dataset",
         },
+        {
+          description: "Upload dataset",
+        },
       ],
     };
   },

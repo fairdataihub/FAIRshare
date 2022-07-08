@@ -709,7 +709,7 @@ export default {
       let routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
 
       if (type === "ncbigeo") {
-        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/review`;
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/generate`;
       }
 
       console.log(routerPath);
@@ -756,7 +756,7 @@ export default {
 
       // This should override the previous route but might need to refactor in the future
       if (this.nextGenHighThroughputSequencingPresent) {
-        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/review`;
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/generate`;
       }
 
       this.$router.push({ path: routerPath });

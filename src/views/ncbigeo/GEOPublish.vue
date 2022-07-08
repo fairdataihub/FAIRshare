@@ -16,16 +16,15 @@
           :loop="1"
         />
         <p class="pb-5 text-center">
-          FAIRShare does not support the GEO upload process at the moment. <br />
-          Please refer to the documentation provided by GEO for instructions on how to upload your
-          generated dataset.
+          Looks like your dataset was generated and uploaded to GEO successfully. <br />
+          You will need to notify GEO using the 'Submit to GEO' web form.
         </p>
         <div class="flex space-x-4">
           <button
-            class="secondary-plain-button"
+            class="secondary-plain-button mr-4"
             @click="openWebPage('https://submit.ncbi.nlm.nih.gov/geo/submission/')"
           >
-            View upload instructions <el-icon><document-icon /></el-icon>
+            Notify GEO <el-icon><chat-dot-round /></el-icon>
           </button>
           <button class="blob primary-button transition-all" @click="openGeneratedDataset">
             View generated dataset <el-icon><star-icon /></el-icon>
@@ -39,6 +38,7 @@
 
 <script>
 import axios from "axios";
+import path from "path";
 import { ElLoading } from "element-plus";
 
 import { useDatasetsStore } from "@/store/datasets";
@@ -66,7 +66,7 @@ export default {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
     async openGeneratedDataset() {
-      const file_path = this.workflow.destinationFolderPath;
+      const file_path = path.join(this.workflow.destinationFolderPath, "metadata.xlsx");
 
       this.showLoading = ElLoading.service({
         lock: true,

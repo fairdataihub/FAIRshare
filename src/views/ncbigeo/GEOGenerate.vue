@@ -2,6 +2,9 @@
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Generate dataset </span>
+      <span class="text-left">
+        FAIRshare will generate a local version of your dataset in this step.
+      </span>
 
       <el-divider class="my-4"> </el-divider>
 
@@ -80,9 +83,8 @@
           <!-- I think these two should be flipped but we shall see in the future. Also add a folder destination selector -->
           <div v-else class="flex flex-col py-10">
             <p class="mb-5">
-              At the moment FAIRshare does not currently support the upload process to GEO. However
-              we can still generate a dataset with the required metadata. You will need to upload
-              the dataset to GEO manually.
+              You can review your dataset before uploading it to NCBI GEO. FAIRShare will help you
+              with your upload to NCBI GEO in the next step.
             </p>
             <span>
               Please provide a folder path to generate the final dataset on your computer. <br />
@@ -110,7 +112,8 @@
         ref="successConfirm"
         title="Your dataset has been generated"
         :preventOutsideClick="true"
-        confirmButtonText="Okay"
+        cancelButtonText="No, I'll do it later"
+        confirmButtonText="Yes, Upload to GEO"
         @messageConfirmed="navigateToFinalPage"
       >
         <p class="text-center text-base text-gray-500">
@@ -163,7 +166,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ElLoading } from "element-plus";
 
 export default {
-  name: "ZenodoAccessToken",
+  name: "GEOGenerate",
   components: { LoadingFoldingCube },
   data() {
     return {
@@ -175,7 +178,6 @@ export default {
       workflow: {},
       uploadToGEO: false,
       errorMessage: "",
-      zenodoAccessToken: "",
       ready: false,
       showFiles: "1",
       licenseData: "",
@@ -529,11 +531,7 @@ export default {
     },
 
     async navigateToFinalPage() {
-      this.workflow.destinationFolderPath = path.join(
-        this.folderPath,
-        this.datasetFolderName,
-        "metadata.xlsx"
-      );
+      this.workflow.destinationFolderPath = path.join(this.folderPath, this.datasetFolderName);
 
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();

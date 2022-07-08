@@ -57,7 +57,7 @@ import BioToolsMetadata from "../views/biotools/BioToolsMetadata.vue";
 import BioToolsReview from "../views/biotools/BioToolsReview.vue";
 
 // ncbi geo related components
-import GEOSummary from "../views/ncbigeo/GEOSummary.vue";
+import GEOGenerate from "../views/ncbigeo/GEOGenerate.vue";
 import GEOUpload from "../views/ncbigeo/GEOUpload.vue";
 import GEOPublish from "../views/ncbigeo/GEOPublish.vue";
 
@@ -236,9 +236,9 @@ const routes = [
     name: "GithubSummary",
   },
   {
-    path: "/datasets/:datasetID/:workflowID/ncbigeo/review",
-    component: GEOSummary,
-    name: "GEOSummary",
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/generate",
+    component: GEOGenerate,
+    name: "GEOGenerate",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/upload",
