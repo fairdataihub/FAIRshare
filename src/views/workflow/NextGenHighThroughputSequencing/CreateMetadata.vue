@@ -849,6 +849,7 @@
                           <el-input
                             v-model="sampleName"
                             clearable
+                            size="large"
                             class="w-full"
                             placeholder="Enter a library name for your sample"
                           />
@@ -964,7 +965,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 2,
+      currentStep: 1,
       totalSteps: 3,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -1321,32 +1322,44 @@ export default {
         }
 
         if (sample.title.trim() === "") {
-          this.$message.error("Please provide a title for all samples.");
+          this.$message.error(
+            `Please provide a title for all samples. Sample ${sample.libraryName} is missing a title.`
+          );
           return false;
         }
 
         if (sample.description.trim() === "") {
-          this.$message.error("Please provide a description for all samples.");
+          this.$message.error(
+            `Please provide a description for all samples. Sample ${sample.libraryName} is missing a description.`
+          );
           return false;
         }
 
         if (sample.organism.trim() === "") {
-          this.$message.error("Please provide an organism for all samples.");
+          this.$message.error(
+            `Please provide an organism for all samples. Sample ${sample.libraryName} is missing an organism.`
+          );
           return false;
         }
 
         if (sample.molecule.trim() === "") {
-          this.$message.error("Please provide a molecule for all samples.");
+          this.$message.error(
+            `Please provide a molecule for all samples. Sample ${sample.libraryName} is missing a molecule.`
+          );
           return false;
         }
 
         if (sample.singleOrPairedEnd.trim() === "") {
-          this.$message.error("Some samples are missing a single or paired end value.");
+          this.$message.error(
+            `Some samples are missing a single or paired end value. Sample ${sample.libraryName} is missing this value.`
+          );
           return false;
         }
 
         if (sample.instrumentModel.trim() === "") {
-          this.$message.error("Some samples are missing an instrument model value.");
+          this.$message.error(
+            `Some samples are missing an instrument model. Sample ${sample.libraryName} is missing this value.`
+          );
           return false;
         }
 
@@ -1357,25 +1370,30 @@ export default {
           return false;
         }
 
-        console.log(keys);
         if (
           !keys.includes("tissue") &&
           !keys.includes("cell line") &&
           !keys.includes("cell type")
         ) {
-          this.$message.error("Some required characteristics are missing for samples.");
+          this.$message.error(
+            "Some required characteristics are missing for samples. Please provide at least one of the following: tissue, cell line or cell type."
+          );
           return false;
         }
 
         for (const characteristic in sample.characteristics) {
           if (sample.characteristics[characteristic].trim() === "") {
-            this.$message.error("Please provide a value for all samples' characteristics.");
+            this.$message.error(
+              `Please provide a value for all samples' characteristics. Sample ${sample.libraryName} is missing a value for ${characteristic}.`
+            );
             return false;
           }
         }
 
         if (sample.rawFiles.length === 0) {
-          this.$message.error("Please provide at least one raw file for all samples.");
+          this.$message.error(
+            `Please provide at least one raw file for all samples. Sample ${sample.libraryName} is missing raw files.`
+          );
           return false;
         }
       }

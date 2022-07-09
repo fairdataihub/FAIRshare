@@ -42,7 +42,7 @@
                     @click="handleNodeClick(data, 'download')"
                     class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
                     v-if="
-                      node.label == 'metadata.xlsx' &&
+                      node.label == 'metadata.xlsxx' &&
                       workflow.generateNextGenHighThroughputSequencingMetadata
                     "
                   >
@@ -81,7 +81,7 @@
             <span class="text-xs"> Some additional text here to explain what to do next. </span>
           </p>
           <!-- I think these two should be flipped but we shall see in the future. Also add a folder destination selector -->
-          <div v-else class="flex flex-col py-10">
+          <div v-else class="flex flex-col pb-10 pt-2">
             <p class="mb-5">
               You can review your dataset before uploading it to NCBI GEO. FAIRShare will help you
               with your upload to NCBI GEO in the next step.
@@ -238,19 +238,57 @@ export default {
         });
       return response;
     },
-    async readFolderContents(dir) {
-      const response = await axios
-        .post(`${this.$server_url}/utilities/readfoldercontents`, {
-          folder_path: dir,
-        })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          return "ERROR";
-        });
-      return response;
+    async generateFolderContents() {
+      const now = dayjs();
+      const datasetFolderName = `geo_submission_${now.format("MMMMDD")}`.toLocaleLowerCase();
+
+      const structure = {
+        id: uuidv4(),
+        label: datasetFolderName,
+        children: [],
+        isDir: true,
+      };
+
+      /**
+       * TODO: add support for metadata preview
+       */
+      structure.children.push({
+        id: uuidv4(),
+        label: "metadata.xlsx",
+        children: [],
+        isDir: false,
+      });
+
+      const metadataObject = this.dataset.data.NextGenHighThroughputSequencing.questions;
+
+      let allFiles = [];
+
+      for (const sample of metadataObject.samples) {
+        for (const file of sample.rawFiles) {
+          allFiles.push(file);
+        }
+        for (const file of sample.processedDataFiles) {
+          allFiles.push(file);
+        }
+      }
+
+      allFiles = [...new Set(allFiles)]; // remove duplicates
+
+      for (const file of allFiles) {
+        const fileName = path.basename(file);
+
+        const fileObject = {
+          id: uuidv4(),
+          label: fileName,
+          fullpath: file,
+          children: [],
+          isDir: false,
+        };
+
+        structure.children.push(fileObject);
+      }
+
+      return structure;
     },
     async showFilePreview() {
       this.finishedLoading = false;
@@ -259,9 +297,7 @@ export default {
 
       this.tableDataRecord = [];
 
-      this.fileData.push(
-        await this.readFolderContents(this.dataset.data.NextGenHighThroughputSequencing.folderPath)
-      );
+      this.fileData.push(await this.generateFolderContents());
 
       this.ready = true;
       this.finishedLoading = true;
@@ -270,9 +306,23 @@ export default {
     async handleOpenDrawer(title) {
       this.fileTitle = title;
     },
-    async handleNodeClick(data) {
+    async handleNodeClick(data, action) {
       if (!data.isDir) {
-        if (!data.isDir) {
+        if (data.label == "metadata.xlsx") {
+          if (action === "view") {
+            this.$message({
+              message: "This feature is currently unavailable",
+              type: "warning",
+            });
+          }
+
+          if (action === "download") {
+            this.$message({
+              message: "This feature is currently unavailable",
+              type: "warning",
+            });
+          }
+        } else if (!data.isDir) {
           await this.openFileExplorer(data.fullpath);
         }
 
