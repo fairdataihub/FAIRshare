@@ -131,7 +131,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-storybook": "0.5.13",
-    "eslint-plugin-vue": "9.1.1",
+    "eslint-plugin-vue": "9.2.0",
     "gulp": "4.0.2",
     "gulp-copy": "4.0.1",
     "gulp-postcss": "9.0.1",
