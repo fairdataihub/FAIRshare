@@ -1,4 +1,5 @@
-module.exports = {
-  types: ["wip"],
-  devmoji: [{ code: "wip", emoji: "construction", description: "Work in progress" }],
-};
+const { devmojiConfig } = require("@fairdataihub/config");
+
+const config = devmojiConfig();
+
+module.exports = config;
