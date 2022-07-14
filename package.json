@@ -75,7 +75,7 @@
     "katex": "0.16.0",
     "klaw-sync": "6.0.0",
     "lodash": "4.17.21",
-    "marked": "4.0.17",
+    "marked": "4.0.18",
     "mousetrap": "1.6.5",
     "pinia": "2.0.14",
     "ps-tree": "1.2.0",
