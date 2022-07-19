@@ -40,26 +40,28 @@
               class="my-8 grid grid-cols-3 gap-8"
               :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
             >
-              <div class="flex flex-col items-center justify-center">
-                <div
-                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-                  :class="{ 'selected-repo': repoID === 'zenodo' }"
-                  @click="selectRepo($event, 'zenodo')"
-                >
-                  <img
-                    src="https://api.iconify.design/simple-icons/zenodo.svg"
-                    alt=""
-                    class="mb-3 h-16 w-16"
-                  />
-                  <span class="mx-5 text-lg"> Zenodo </span>
-                </div>
-                <div
-                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
-                  v-if="repoID === 'zenodo'"
-                  @click="openWebsite('https://zenodo.org')"
-                >
-                  <span class="font-medium"> Learn more... </span>
-                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+              <div>
+                <div class="flex flex-col items-center justify-center">
+                  <div
+                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                    :class="{ 'selected-repo': repoID === 'zenodo' }"
+                    @click="selectRepo($event, 'zenodo')"
+                  >
+                    <img
+                      src="https://api.iconify.design/simple-icons/zenodo.svg"
+                      alt=""
+                      class="mb-3 h-16 w-16"
+                    />
+                    <span class="mx-5 text-lg"> Zenodo </span>
+                  </div>
+                  <div
+                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                    v-if="repoID === 'zenodo'"
+                    @click="openWebsite('https://zenodo.org')"
+                  >
+                    <span class="font-medium"> Learn more... </span>
+                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                  </div>
                 </div>
               </div>
 

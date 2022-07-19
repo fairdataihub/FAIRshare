@@ -181,7 +181,7 @@ export const useDatasetsStore = defineStore({
 
     async upgradeSavedDatasets() {
       if (!("version" in this.datasets)) {
-        this.datasets.version = semver.clean("1.3.0");
+        this.datasets.version = semver.clean("1.5.0");
       }
 
       /**
