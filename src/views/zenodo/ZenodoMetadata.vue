@@ -1432,7 +1432,7 @@ export default {
 
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/zenodoConnection`;
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`; // This one determines if source code, files or release is selected for upload;
         }
         if (this.workflow.source.type === "local") {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
@@ -1534,7 +1534,10 @@ export default {
           });
           this.zenodoMetadataForm.contributors = newContributors;
 
-          if (this.activeNames.indexOf("contributors") === -1) {
+          if (
+            this.zenodoMetadataForm.contributors.length > 0 &&
+            this.activeNames.indexOf("contributors") === -1
+          ) {
             this.activeNames.push("contributors");
           }
         }
@@ -1919,7 +1922,6 @@ export default {
 
     if (this.workflow.expandOptions.length === 0) {
       this.activeNames = ["basicInformation", "license"];
-      // this.activeNames = ["relatedIdentifiers"];
     } else {
       this.activeNames = this.workflow.expandOptions;
       this.workflow.expandOptions = [];

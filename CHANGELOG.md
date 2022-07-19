@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - When you reorder items in draggable lists(such as `authors` and `keywords`), a new animation is now shown to signify the change and to make it easier to see where you are moving the item.
 - An early version of support for NCBI Geo is included in this version.
 
+### Bug fixes
+
+- Removed a button that was accidentally added to the `GitHub` publish page.
+- Fixed an issue where the `Contributors` section was not collapsed when a new Zenodo dataset was loaded.
+
+### Feature enhancements
+
+- Information regarding licenses was moved to the main UI to make it more clear what the relevant licenses are.
+
 ## v1.4.0 - 2022-06-03
 
 ### Feature additions

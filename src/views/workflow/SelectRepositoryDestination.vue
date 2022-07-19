@@ -144,10 +144,7 @@
             </div>
 
             <fade-transition>
-              <div
-                v-if="repoID === 'zenodo' && workflow.source.type === 'local'"
-                class="mb-8 flex flex-col"
-              >
+              <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
                 <p class="mb-4">
                   Is your dataset already published on Zenodo or would you like to create a new
                   Zenodo publication?

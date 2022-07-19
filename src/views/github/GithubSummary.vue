@@ -170,7 +170,6 @@ export default {
       workflow: {},
       GithubAccessToken: "",
       errorMessage: "",
-      zenodoAccessToken: "",
       selectedRepo: "",
       currentBranch: "",
       rippleLottieJSON,

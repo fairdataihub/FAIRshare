@@ -418,7 +418,7 @@ export default {
           title: "Success",
           message: "License information found in GitHub",
           position: "top-right",
-          type: "info",
+          type: "success",
         });
       } else {
         ElNotification({
