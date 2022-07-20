@@ -15,8 +15,6 @@
           You have some incomplete projects. Select one to continue working on it.
         </span>
 
-        <!-- <el-divider> </el-divider> -->
-
         <div class="h-full flex-grow overflow-y-auto">
           <div v-if="datasetsInProgress.length > 0">
             <el-divider content-position="left"> Projects currently in progress </el-divider>
@@ -249,7 +247,7 @@
           </div>
         </div>
 
-        <el-divider> </el-divider>
+        <line-divider />
 
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">

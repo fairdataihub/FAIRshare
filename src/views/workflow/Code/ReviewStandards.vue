@@ -6,7 +6,7 @@
         to make your software FAIR
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex flex-col space-y-4">
         <!-- template start -->

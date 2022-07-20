@@ -8,7 +8,7 @@
         Select a FAIR repository to share your {{ combineDataTypes(workflow.type) }}
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="w-full">
         <span class="mb-2 w-full">

@@ -2,12 +2,13 @@
   <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Let's upload your dataset </span>
+
       <span class="text-left">
         Looks like your dataset was generated for a Next Gen High Throughput Sequencing (NGS)
         experiment. Let's upload it to GEO.
       </span>
 
-      <el-divider class="my-4" />
+      <line-divider />
 
       <div class="flex w-full flex-col">
         <p class="mb-2">Please provide the link to your personalized GEO folder:</p>

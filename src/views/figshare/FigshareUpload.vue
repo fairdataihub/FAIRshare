@@ -7,7 +7,7 @@
         files with the relevant metadata.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col justify-center">
         <el-progress

@@ -6,7 +6,7 @@
         All your data has been uploaded to Figshare. It's now time to publish your work.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col items-center justify-center px-10" v-if="!published">
         <p class="pb-5 text-center">

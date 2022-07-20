@@ -7,7 +7,7 @@
         Zenodo by creating a release on GitHub.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div
         class="flex h-full flex-col items-center justify-start"

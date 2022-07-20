@@ -5,8 +5,10 @@
         Provide the location of the files you want to include in your research software dataset
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
+
       <span class="mb-2"> Where are your research software files located? </span>
+
       <div class="item-center flex justify-center gap-8 pt-8">
         <div
           class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"

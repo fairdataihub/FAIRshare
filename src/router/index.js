@@ -47,6 +47,7 @@ import FigsharePublish from "../views/figshare/FigsharePublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubChooseUpload from "../views/github/GithubChooseUpload.vue";
 import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
@@ -244,6 +245,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/upload",
     component: GithubUpload,
     name: "GithubUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/chooseUpload",
+    component: GithubChooseUpload,
+    name: "GithubChooseUpload",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/publish",

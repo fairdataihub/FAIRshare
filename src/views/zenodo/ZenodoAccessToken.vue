@@ -6,7 +6,7 @@
         We will use this to upload and edit your dataset on your Zenodo account.
       </span> -->
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div>
         <p class="mb-5">

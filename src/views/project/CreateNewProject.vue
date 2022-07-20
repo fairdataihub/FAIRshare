@@ -7,7 +7,7 @@
         to identify your project.
       </span>
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <el-form
         ref="datasetForm"

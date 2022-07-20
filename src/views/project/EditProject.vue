@@ -16,7 +16,7 @@
         Update your project name, description and other settings.
       </span> -->
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <el-form
         ref="datasetForm"

@@ -6,7 +6,7 @@
         FAIRshare will generate a local version of your dataset in this step.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div>
         <p class="mb-5">

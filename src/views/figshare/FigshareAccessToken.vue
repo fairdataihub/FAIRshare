@@ -6,7 +6,7 @@
         We will use this to upload and edit your dataset on your Figshare account.
       </span> -->
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <fade-transition>
         <div v-if="ready">

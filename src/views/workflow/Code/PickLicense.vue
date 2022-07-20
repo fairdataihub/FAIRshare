@@ -5,7 +5,7 @@
         Select a license that defines the desired conditions for using your software
       </span>
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <div>
         <el-form

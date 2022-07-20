@@ -8,7 +8,7 @@
           When you are ready, click on the curation buttons below to start the curation process.
         </span>
 
-        <el-divider> </el-divider>
+        <line-divider />
 
         <!-- <div class="flex flex-col p-2" v-for="(workflow, key) in dataset.workflows" :key="key">
           <div class="bg-gray-300 px-4 py-2">

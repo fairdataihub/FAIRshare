@@ -6,7 +6,7 @@
         This one is on us. FAIRshare is creating your requested files for you.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col justify-center">
         <el-progress

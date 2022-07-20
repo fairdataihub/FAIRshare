@@ -6,7 +6,7 @@
       </span>
       <span class="text-left"> Lets select the GitHub repository that you want to make FAIR. </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div v-if="ready">
         <div v-if="validTokenAvailable">
