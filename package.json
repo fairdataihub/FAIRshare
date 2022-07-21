@@ -63,7 +63,7 @@
     "crypto-js": "4.1.1",
     "dayjs": "1.11.3",
     "doi-regex": "0.1.13",
-    "dompurify": "2.3.9",
+    "dompurify": "2.3.10",
     "electron-data-holder": "1.0.1",
     "electron-log": "4.4.8",
     "electron-updater": "5.0.5",
