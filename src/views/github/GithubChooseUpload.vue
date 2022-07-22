@@ -99,6 +99,7 @@
             </el-select-v2> -->
 
             <div class="mb-4">
+              <line-divider></line-divider>
               <p class="mb-2">Select the GitHub release you want to use for your Zenodo upload:</p>
 
               <el-select v-model="selectedRelease" placeholder="Select" class="w-full" size="large">
@@ -130,6 +131,8 @@
             </div>
 
             <div v-if="selectedRelease != ''">
+              <line-divider></line-divider>
+
               <p class="mb-2">
                 Select the files you want to add from your release to the Zenodo dataset
               </p>
@@ -138,7 +141,8 @@
                 v-model="addedReleaseAssets"
                 multiple
                 placeholder="Select"
-                style="width: 240px"
+                class="w-full"
+                size="large"
               >
                 <el-option
                   v-for="item in releaseAssets"
