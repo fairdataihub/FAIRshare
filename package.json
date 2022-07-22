@@ -121,7 +121,7 @@
     "concurrently": "7.2.2",
     "copyfiles": "2.4.1",
     "cz-conventional-changelog": "3.3.0",
-    "del": "6.1.1",
+    "del": "7.0.0",
     "devmoji": "2.3.0",
     "dotenv": "16.0.1",
     "electron": "19.0.8",
