@@ -47,6 +47,7 @@
 
         <div v-if="additionalFilesLocation === 'local'" class="w-full">
           <el-upload
+            v-model="localFileList"
             class="w-full pt-4 pb-6"
             drag
             multiple
@@ -151,27 +152,31 @@
                   :value="item.value"
                 />
               </el-select>
+
+              <pre>{{ addedReleaseAssets }}</pre>
             </div>
           </div>
         </div>
 
-        <transition name="fade" mode="out-in" appear>
-          <div class="flex w-full flex-row justify-center space-x-4 py-2">
-            <router-link
-              :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
-              class=""
-            >
-              <button class="primary-plain-button">
-                <el-icon><d-arrow-left /></el-icon> Back
-              </button>
-            </router-link>
-
-            <button class="primary-button" @click="showSummary" v-if="fileList.length > 0">
-              Continue
-              <el-icon> <d-arrow-right /> </el-icon>
+        <div class="flex w-full flex-row justify-center space-x-4 py-2">
+          <router-link
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
+            class=""
+          >
+            <button class="primary-plain-button">
+              <el-icon><d-arrow-left /></el-icon> Back
             </button>
-          </div>
-        </transition>
+          </router-link>
+
+          <button
+            class="primary-button"
+            @click="showSummary"
+            v-if="localFileList.length > 0 || addedReleaseAssets.length > 0"
+          >
+            Continue
+            <el-icon> <d-arrow-right /> </el-icon>
+          </button>
+        </div>
       </div>
     </div>
     <app-docs-link url="curate-and-share/connect-github-zenodo" position="bottom-4" />
@@ -182,6 +187,7 @@
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
 
+import { ElLoading } from "element-plus";
 import axios from "axios";
 import dayjs from "dayjs";
 
@@ -198,9 +204,9 @@ export default {
       workflow: {},
       GithubAccessToken: "",
       selectedRepo: "",
-      fileList: [],
-      addAdditionalFiles: "Yes",
-      additionalFilesLocation: "github",
+      localFileList: [],
+      addAdditionalFiles: "None",
+      additionalFilesLocation: "",
       allReleases: [],
       selectedRelease: "",
       addedReleaseAssets: [],
@@ -213,12 +219,8 @@ export default {
         return [];
       }
 
-      console.log(this.selectedRelease);
-
       const assets = this.allReleases.find((release) => release.value === this.selectedRelease).og
         .assets;
-
-      console.log("releaseAssets", assets);
 
       return assets.map((asset) => {
         return {
@@ -239,9 +241,8 @@ export default {
       return dayjs(date).format("MMM DD, YYYY");
     },
 
-    async handleAdditionalFilesChange(uploadFile, uploadFiles) {
-      console.log(uploadFile, uploadFiles);
-      this.fileList = uploadFiles;
+    async handleAdditionalFilesChange(_uploadFile, uploadFiles) {
+      this.localFileList = uploadFiles;
     },
 
     async getReleases() {
@@ -262,8 +263,6 @@ export default {
           console.error(error);
           return "ERROR";
         });
-
-      console.log(releaseList);
 
       if (releaseList !== "ERROR") {
         if (releaseList.length > 0) {
@@ -287,6 +286,13 @@ export default {
         this.workflow.addAdditionalFiles = false;
       }
 
+      this.workflow.additionalFilesLocation = this.additionalFilesLocation;
+
+      this.workflow.localFileList = this.localFileList;
+
+      this.workflow.selectedRelease = this.selectedRelease;
+      this.workflow.addedReleaseAssets = this.addedReleaseAssets;
+
       await this.datasetStore.updateCurrentDataset(this.dataset);
       await this.datasetStore.syncDatasets();
 
@@ -309,9 +315,47 @@ export default {
     const tokenObject = await this.tokens.getToken("github");
     this.GithubAccessToken = tokenObject.token;
 
-    this.getReleases();
+    if ("localFileList" in this.workflow) {
+      this.localFileList = this.workflow.localFileList;
+    } else {
+      this.localFileList = [];
+    }
 
-    // }
+    console.log(this.localFileList);
+
+    const loading = ElLoading.service({
+      lock: true,
+      text: "Reading GitHub releases...",
+      background: "rgba(0, 0, 0, 0.2)",
+    });
+
+    await this.getReleases();
+
+    loading.close();
+
+    if ("addAdditionalFiles" in this.workflow) {
+      this.addAdditionalFiles = this.workflow.addAdditionalFiles ? "Yes" : "No";
+    } else {
+      this.addAdditionalFiles = "None";
+    }
+
+    if ("additionalFilesLocation" in this.workflow) {
+      this.additionalFilesLocation = this.workflow.additionalFilesLocation;
+    } else {
+      this.additionalFilesLocation = "";
+    }
+
+    if ("selectedRelease" in this.workflow) {
+      this.selectedRelease = this.workflow.selectedRelease;
+    } else {
+      this.selectedRelease = "";
+    }
+
+    if ("addedReleaseAssets" in this.workflow) {
+      this.addedReleaseAssets = this.workflow.addedReleaseAssets;
+    } else {
+      this.addedReleaseAssets = [];
+    }
 
     this.workflow.currentRoute = this.$route.path;
   },
