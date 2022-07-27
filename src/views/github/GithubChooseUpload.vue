@@ -46,34 +46,7 @@
         </transition>
 
         <div v-if="additionalFilesLocation === 'local'" class="w-full">
-          <el-upload
-            v-model="localFileList"
-            class="w-full pt-4 pb-6"
-            drag
-            multiple
-            :auto-upload="false"
-            show-file-list
-            :on-change="handleAdditionalFilesChange"
-            :on-remove="handleAdditionalFilesChange"
-          >
-            <div class="flex w-full items-center justify-center space-x-4">
-              <Vue3Lottie
-                animationLink="https://assets3.lottiefiles.com/packages/lf20_GxMZME.json"
-                :width="120"
-                :height="120"
-              />
-              <div class="el-upload__text">
-                Drag and drop files here or <em>click to select files</em>
-              </div>
-            </div>
-
-            <!-- Come back here to expand on how the the preview works
-            https://github.com/element-plus/element-plus/blob/dev/packages/components/upload/src/upload-list.vue
-            https://www.npmjs.com/package/byte-size -->
-            <!-- <template #file="{ file }">
-              <div class="el-upload__tip">{{ file }}</div>
-            </template> -->
-          </el-upload>
+          <FileDropZone :fileList="localFileList" multiple @filesUpdated="syncFileList" />
         </div>
 
         <div
@@ -191,9 +164,11 @@ import { ElLoading } from "element-plus";
 import axios from "axios";
 import dayjs from "dayjs";
 
+import FileDropZone from "@/components/files/FileDropZone.vue";
+
 export default {
   name: "GithubChooseUpload",
-  components: {},
+  components: { FileDropZone },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -204,7 +179,10 @@ export default {
       workflow: {},
       GithubAccessToken: "",
       selectedRepo: "",
-      localFileList: [],
+      localFileList: [
+        "C:\\Users\\dev\\Desktop\\temp\\taxdmp\\nodes.dmp",
+        "C:\\Users\\dev\\Desktop\\temp\\taxdmp\\readme.txt",
+      ],
       addAdditionalFiles: "None",
       additionalFilesLocation: "",
       allReleases: [],
@@ -232,6 +210,10 @@ export default {
   },
 
   methods: {
+    syncFileList(data) {
+      this.localFileList = data;
+    },
+
     openWebsite() {
       const url = `${process.env.VUE_APP_ZENODO_URL}/account/settings/github`;
       window.ipcRenderer.send("open-link-in-browser", url);
@@ -239,10 +221,6 @@ export default {
 
     publishedDate(date) {
       return dayjs(date).format("MMM DD, YYYY");
-    },
-
-    async handleAdditionalFilesChange(_uploadFile, uploadFiles) {
-      this.localFileList = uploadFiles;
     },
 
     async getReleases() {
@@ -320,8 +298,6 @@ export default {
     } else {
       this.localFileList = [];
     }
-
-    console.log(this.localFileList);
 
     const loading = ElLoading.service({
       lock: true,

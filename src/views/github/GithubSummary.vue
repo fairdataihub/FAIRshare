@@ -124,7 +124,7 @@
       <transition name="fade" mode="out-in" appear>
         <div class="flex w-full flex-row justify-center space-x-4 py-2" v-if="finishedLoading">
           <router-link
-            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/zenodoConnection`"
+            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/github/chooseUpload`"
             class=""
           >
             <button class="primary-plain-button">

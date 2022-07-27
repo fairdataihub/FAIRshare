@@ -432,6 +432,7 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/figshare/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
+      routerPath = `/datasets/${datasetID}/workflow1/github/chooseUpload`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/githubNoUpload/finalPage`;
       // routerPath = `/datasets/${datasetID}/workflow1/localNoUpload/finalPage`;

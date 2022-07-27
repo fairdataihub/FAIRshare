@@ -11,6 +11,7 @@ import axios from "axios";
 import menuTemplate from "./scripts/menu";
 import "./scripts/utilities";
 import "./scripts/auth";
+import "./scripts/dialogs";
 
 const fp = require("find-free-port");
 const fs = require("fs-extra");
