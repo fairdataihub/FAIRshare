@@ -10,10 +10,10 @@
       <line-divider />
 
       <div class="w-full">
-        <span class="mb-2 w-full">
-          Would you like to add additional files to your upload? We will handle all your source code
-          from the GitHub repository.
-        </span>
+        <p class="mb-2 w-full">
+          Would you like to add additional files to your upload? We already have your code from
+          GitHub added.
+        </p>
 
         <div class="py-1">
           <el-radio v-model="addAdditionalFiles" label="Yes" size="large"> Yes </el-radio>
@@ -125,8 +125,6 @@
                   :value="item.value"
                 />
               </el-select>
-
-              <pre>{{ addedReleaseAssets }}</pre>
             </div>
           </div>
         </div>
@@ -184,7 +182,7 @@ export default {
         "C:\\Users\\dev\\Desktop\\temp\\taxdmp\\readme.txt",
       ],
       addAdditionalFiles: "None",
-      additionalFilesLocation: "",
+      additionalFilesLocation: "github",
       allReleases: [],
       selectedRelease: "",
       addedReleaseAssets: [],
@@ -200,10 +198,12 @@ export default {
       const assets = this.allReleases.find((release) => release.value === this.selectedRelease).og
         .assets;
 
+      console.log(assets);
+
       return assets.map((asset) => {
         return {
           label: asset.name,
-          value: asset.id,
+          value: asset.browser_download_url,
         };
       });
     },

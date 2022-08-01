@@ -3,17 +3,17 @@
     <div class="flex h-full w-full flex-col">
       <h1 class="pb-1 text-left text-lg font-medium">Let's look into the future</h1>
 
-      <el-divider class="my-2"> </el-divider>
+      <line-divider class="" />
 
       <div>
-        <p class="my-2">
+        <p class="mb-2">
           We will be adding some files to your GitHub repository. A preview of what your GitHub
           repository will look like after is shown below (files that will be added by FAIRshare are
           highlighted in orange):
         </p>
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
-            <el-tree-v2 v-if="!showSpinner" :data="fileData" :props="defaultProps">
+            <el-tree-v2 v-if="!showSpinner" :data="githubFileData" :props="defaultProps">
               <template #default="{ node, data }">
                 <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
                 <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
@@ -22,7 +22,6 @@
                   :class="
                     (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                     (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
-                    node.label == '.zenodo.json' ||
                     (node.label == 'LICENSE' && workflow.generateLicense)
                       ? 'text-secondary-500'
                       : ''
@@ -42,7 +41,6 @@
                     v-if="
                       (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                       (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
-                      node.label == '.zenodo.json' ||
                       (node.label == 'LICENSE' && workflow.generateLicense)
                     "
                   >
@@ -60,6 +58,63 @@
             </div>
           </transition>
         </div>
+
+        <line-divider class="" />
+
+        <p class="mb-2">
+          Your uploaded dataset on Zenodo will look like this (files that will be added by FAIRshare
+          to your final upload are highlighted in orange):
+        </p>
+
+        <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
+          <transition name="fade" mode="out-in" appear>
+            <el-tree-v2 v-if="!showSpinner" :data="zenodoFileData" :props="defaultProps">
+              <template #default="{ node, data }">
+                <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
+                <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
+                <div
+                  class="inline-flex items-center"
+                  :class="
+                    (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                    (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
+                    (node.label == 'LICENSE' && workflow.generateLicense) ||
+                    data.customAddition
+                      ? 'text-secondary-500'
+                      : ''
+                  "
+                >
+                  <span> {{ node.label }} </span>
+                  <button
+                    v-if="node.isLeaf"
+                    @click="handleNodeClick(data, 'view')"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
+                  >
+                    <el-icon><view-icon /></el-icon>
+                  </button>
+                  <button
+                    @click="handleNodeClick(data, 'download')"
+                    class="ml-2 flex items-center rounded-lg bg-primary-100 py-[3px] shadow-sm transition-all hover:bg-primary-200"
+                    v-if="
+                      (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
+                      (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
+                      (node.label == 'LICENSE' && workflow.generateLicense)
+                    "
+                  >
+                    <el-icon><download-icon /> </el-icon>
+                  </button>
+                </div>
+              </template>
+            </el-tree-v2>
+            <div class="flex items-center justify-center" v-else>
+              <Vue3Lottie
+                animationLink="https://assets3.lottiefiles.com/private_files/lf30_t26law.json"
+                :width="200"
+                :height="200"
+              />
+            </div>
+          </transition>
+        </div>
+
         <el-drawer
           v-model="drawerModel"
           :title="fileTitle"
@@ -101,19 +156,6 @@
               </p>
             </div>
 
-            <div v-if="PreviewNewlyCreatedZenodoFile" class="pb-20">
-              <el-table
-                :data="zenodoData"
-                style="width: 100%"
-                row-key="id"
-                border
-                default-expand-all
-              >
-                <el-table-column prop="Name" label="Name" />
-                <el-table-column prop="Value" label="Value" class="break-normal" />
-              </el-table>
-            </div>
-
             <div v-if="PreviewNewlyCreatedLicenseFile" class="">
               <div class="prose prose-base prose-slate pb-20" v-html="compiledLicense"></div>
             </div>
@@ -153,7 +195,6 @@ import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
 import { dialog } from "@electron/remote";
-import dayjs from "dayjs";
 
 import rippleLottieJSON from "@/assets/lotties/rippleLottie.json";
 
@@ -178,17 +219,16 @@ export default {
         children: "children",
         label: "label",
       },
-      fileData: [],
+      githubFileData: [],
+      zenodoFileData: [],
       tree: [],
       fileTitle: "",
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedCodeMetaFile: false,
       PreviewNewlyCreatedCitationFile: false,
-      PreviewNewlyCreatedZenodoFile: false,
       licenseData: "",
       tableData: [],
       tableDataRecord: [],
-      zenodoData: [],
       citationData: [],
       citationDataRecord: [],
       fullNameDictionary: {},
@@ -224,9 +264,9 @@ export default {
             defaultPath: path.join(this.$downloads_path, file_name),
           })
           .then((result) => {
-            const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
-            console.log(result.filePath);
-            fs.writeFile(result.filePath, fileData, (err) => {
+            const githubFileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
+
+            fs.writeFile(result.filePath, githubFileData, (err) => {
               if (err) {
                 console.log(err);
                 this.$notify({
@@ -378,231 +418,26 @@ export default {
       return response;
     },
 
-    async createZenodoJsonFile() {
-      const zenodoMetadata = this.workflow.destination.zenodo.questions;
-      let metadata = {};
-
-      metadata.upload_type = "software";
-
-      if ("title" in zenodoMetadata && zenodoMetadata.title != "") {
-        metadata.title = zenodoMetadata.title;
-      }
-      if ("publicationDate" in zenodoMetadata && zenodoMetadata.publicationDate != "") {
-        metadata.publication_date = zenodoMetadata.publicationDate;
-      }
-
-      if ("authors" in zenodoMetadata) {
-        metadata.creators = [];
-        zenodoMetadata.authors.forEach((author) => {
-          const creatorObject = {};
-
-          creatorObject.name = author.name;
-          creatorObject.affiliation = author.affiliation;
-
-          if (author.orcid !== "") {
-            creatorObject.orcid = author.orcid;
-          }
-
-          metadata.creators.push(creatorObject);
+    async openFileExplorer(path) {
+      const response = await axios
+        .post(`${this.$server_url}/utilities/openfileexplorer`, {
+          file_path: path,
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
         });
-      }
-
-      if ("description" in zenodoMetadata && zenodoMetadata.description != "") {
-        metadata.description = zenodoMetadata.description;
-      }
-      if ("license" in zenodoMetadata) {
-        if ("accessRight" in zenodoMetadata.license) {
-          metadata.access_right = zenodoMetadata.license.accessRight;
-        }
-        if ("licenseName" in zenodoMetadata.license) {
-          metadata.license = zenodoMetadata.license.licenseName;
-        }
-      }
-
-      if ("keywords" in zenodoMetadata) {
-        if (zenodoMetadata.keywords.length > 0) {
-          metadata.keywords = [];
-          zenodoMetadata.keywords.forEach((keyword) => {
-            metadata.keywords.push(keyword.keyword);
-          });
-        }
-      }
-
-      if ("version" in zenodoMetadata && zenodoMetadata.version !== "") {
-        metadata.version = zenodoMetadata.version;
-      }
-
-      if ("language" in zenodoMetadata && zenodoMetadata.language !== "") {
-        metadata.language = zenodoMetadata.language;
-      }
-
-      if ("additionalNotes" in zenodoMetadata && zenodoMetadata.additionalNotes != "") {
-        metadata.notes = zenodoMetadata.additionalNotes;
-      }
-
-      if ("relatedIdentifiers" in zenodoMetadata) {
-        if (zenodoMetadata.relatedIdentifiers.length > 0) {
-          metadata.related_identifiers = [];
-          zenodoMetadata.relatedIdentifiers.forEach((relatedIdentifier) => {
-            metadata.related_identifiers.push({
-              relation: relatedIdentifier.relationship,
-              identifier: relatedIdentifier.identifier,
-              resource_type: relatedIdentifier.resourceType,
-            });
-          });
-        }
-      }
-
-      if ("contributors" in zenodoMetadata) {
-        if (zenodoMetadata.contributors.length > 0) {
-          metadata.contributors = [];
-          zenodoMetadata.contributors.forEach((contributor) => {
-            const contributorObject = {};
-
-            contributorObject.name = contributor.name;
-            contributorObject.affiliation = contributor.affiliation;
-            contributorObject.type = contributor.contributorType;
-
-            if (contributor.orcid !== "") {
-              contributorObject.orcid = contributor.orcid;
-            }
-
-            metadata.contributors.push(contributorObject);
-          });
-        }
-      }
-
-      if ("references" in zenodoMetadata) {
-        if (zenodoMetadata.references.length > 0) {
-          metadata.references = [];
-          zenodoMetadata.references.forEach((reference) => {
-            metadata.references.push(reference.reference);
-          });
-        }
-      }
-
-      if ("journal" in zenodoMetadata) {
-        if ("title" in zenodoMetadata.journal && zenodoMetadata.journal.title !== "") {
-          metadata.journal_title = zenodoMetadata.journal.title;
-        }
-        if ("volume" in zenodoMetadata.journal && zenodoMetadata.journal.volume !== "") {
-          metadata.journal_volume = zenodoMetadata.journal.volume;
-        }
-        if ("issue" in zenodoMetadata.journal && zenodoMetadata.journal.issue !== "") {
-          metadata.journal_issue = zenodoMetadata.journal.issue;
-        }
-        if ("pages" in zenodoMetadata.journal && zenodoMetadata.journal.pages !== "") {
-          metadata.journal_pages = zenodoMetadata.journal.pages;
-        }
-      }
-
-      if ("conference" in zenodoMetadata) {
-        if ("title" in zenodoMetadata.conference && zenodoMetadata.conference.title !== "") {
-          metadata.conference_title = zenodoMetadata.conference.title;
-        }
-        if ("acronym" in zenodoMetadata.conference && zenodoMetadata.conference.acronym !== "") {
-          metadata.conference_acronym = zenodoMetadata.conference.acronym;
-        }
-
-        if ("dates" in zenodoMetadata.conference) {
-          if (zenodoMetadata.conference.dates.length === 2) {
-            metadata.conference_dates =
-              dayjs(zenodoMetadata.conference.dates[0]).format("MMMM D, YYYY") +
-              " - " +
-              dayjs(zenodoMetadata.conference.dates[1]).format("MMMM D, YYYY");
-          }
-        }
-
-        if ("place" in zenodoMetadata.conference && zenodoMetadata.conference.place !== "") {
-          metadata.conference_place = zenodoMetadata.conference.place;
-        }
-        if ("url" in zenodoMetadata.conference && zenodoMetadata.conference.url !== "") {
-          metadata.conference_url = zenodoMetadata.conference.url;
-        }
-        if ("session" in zenodoMetadata.conference && zenodoMetadata.conference.session !== "") {
-          metadata.conference_session = zenodoMetadata.conference.session;
-        }
-        if ("part" in zenodoMetadata.conference && zenodoMetadata.conference.part !== "") {
-          metadata.conference_session_part = zenodoMetadata.conference.part;
-        }
-      }
-
-      if ("bookReportChapter" in zenodoMetadata) {
-        if (
-          "publisher" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.publisher !== ""
-        ) {
-          metadata.imprint_publisher = zenodoMetadata.bookReportChapter.publisher;
-        }
-        if (
-          "isbn" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.isbn !== ""
-        ) {
-          metadata.imprint_isbn = zenodoMetadata.bookReportChapter.isbn;
-        }
-        if (
-          "place" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.place !== ""
-        ) {
-          metadata.imprint_place = zenodoMetadata.bookReportChapter.place;
-        }
-        if (
-          "title" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.title !== ""
-        ) {
-          metadata.partof_title = zenodoMetadata.bookReportChapter.title;
-        }
-        if (
-          "pages" in zenodoMetadata.bookReportChapter &&
-          zenodoMetadata.bookReportChapter.pages !== ""
-        ) {
-          metadata.partof_pages = zenodoMetadata.bookReportChapter.pages;
-        }
-      }
-
-      if ("thesis" in zenodoMetadata) {
-        if (
-          "awardingUniversity" in zenodoMetadata.thesis &&
-          zenodoMetadata.thesis.awardingUniversity !== ""
-        ) {
-          metadata.thesis_university = zenodoMetadata.thesis.awardingUniversity;
-        }
-
-        if (
-          "thesis_supervisors" in zenodoMetadata.thesis &&
-          zenodoMetadata.thesis.thesis_supervisors.length > 0
-        ) {
-          metadata.thesis_supervisors = [];
-          zenodoMetadata.thesis.supervisors.forEach((supervisor) => {
-            metadata.thesis_supervisors.push({
-              name: supervisor.name,
-              affiliation: supervisor.affiliation,
-              orcid: supervisor.orcid,
-            });
-          });
-        }
-      }
-
-      if ("subjects" in zenodoMetadata && zenodoMetadata.subjects.length > 0) {
-        metadata.subjects = [];
-        zenodoMetadata.subjects.forEach((subject) => {
-          metadata.subjects.push({
-            term: subject.term,
-            identifier: subject.identifier,
-            scheme: "url",
-          });
-        });
-      }
-
-      return metadata;
+      return response;
     },
 
     async handleNodeClick(data, action) {
       if (
         (data.label === "LICENSE" && this.workflow.generateLicense) ||
         data.label === "codemeta.json" ||
-        data.label === "CITATION.cff" ||
-        data.label === ".zenodo.json"
+        data.label === "CITATION.cff"
       ) {
         if (action === "view") {
           this.drawerModel = true;
@@ -628,19 +463,18 @@ export default {
           if (action === "download") {
             this.exportToJson(this.citationDataRecord, "CITATION.cff");
           }
-        } else if (data.label === ".zenodo.json") {
-          if (action === "view") {
-            this.PreviewNewlyCreatedZenodoFile = true;
-          }
-          if (action === "download") {
-            this.exportToJson(this.zenodoData, ".zenodo.json");
-          }
         }
         let title = data.label;
         this.handleOpenDrawer(title);
-      } else {
-        const githubURL = `https://github.com/${this.selectedRepo}/${data.type}/${this.currentBranch}/${data.label}`;
-        window.ipcRenderer.send("open-link-in-browser", githubURL);
+      } else if (!data.isDir) {
+        if (data.location === "local") {
+          await this.openFileExplorer(data.fullPath);
+        } else {
+          const githubURL = `https://github.com/${this.selectedRepo}/${
+            data.type ? data.type : "blob"
+          }/${this.currentBranch}/${data.label}`;
+          window.ipcRenderer.send("open-link-in-browser", githubURL);
+        }
       }
     },
 
@@ -657,7 +491,7 @@ export default {
       this.PreviewNewlyCreatedLicenseFile = false;
       this.PreviewNewlyCreatedCodeMetaFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
-      this.PreviewNewlyCreatedZenodoFile = false;
+
       this.drawerModel = false;
     },
 
@@ -712,49 +546,39 @@ export default {
         });
 
       if (response !== "ERROR") {
-        this.fileData = JSON.parse(response);
+        this.githubFileData = JSON.parse(response);
 
-        // check if label exists in fileData
+        // check if label exists in githubFileData
 
-        if (!this.fileData.some((el) => el.label === "codemeta.json")) {
+        if (!this.githubFileData.some((el) => el.label === "codemeta.json")) {
           if (this.workflow.generateCodeMeta) {
             let newObj = {};
             newObj.label = "codemeta.json";
             newObj.isDir = false;
 
-            this.fileData.push(newObj);
+            this.githubFileData.push(newObj);
           }
         }
 
-        if (!this.fileData.some((el) => el.label === "CITATION.cff")) {
+        if (!this.githubFileData.some((el) => el.label === "CITATION.cff")) {
           if (this.workflow.generateCodeMeta) {
             let newObj = {};
             newObj.label = "CITATION.cff";
             newObj.isDir = false;
 
-            this.fileData.push(newObj);
+            this.githubFileData.push(newObj);
           }
         }
 
-        if (!this.fileData.some((el) => el.label === ".zenodo.json")) {
-          let newObj = {};
-          newObj.label = ".zenodo.json";
-          newObj.isDir = false;
-
-          this.fileData.push(newObj);
-        }
-
-        if (!this.fileData.some((el) => el.label === "LICENSE")) {
+        if (!this.githubFileData.some((el) => el.label === "LICENSE")) {
           if (this.workflow.generateLicense) {
             let newObj = {};
             newObj.label = "LICENSE";
             newObj.isDir = false;
 
-            this.fileData.push(newObj);
+            this.githubFileData.push(newObj);
           }
         }
-
-        console.log(this.fileData);
       } else {
         this.$message({
           message: "Could not get the contents of the repository",
@@ -764,10 +588,47 @@ export default {
     },
 
     async showFilePreview() {
-      this.fileData = [];
+      this.githubFileData = [];
       this.showSpinner = true;
 
       await this.showGithubRepoContents();
+
+      this.zenodoFileData = JSON.parse(JSON.stringify(this.githubFileData));
+
+      // add additional files to zenodoFileData
+
+      if (
+        "addAdditionalFiles" in this.workflow &&
+        this.workflow.addAdditionalFiles &&
+        "additionalFilesLocation" in this.workflow
+      ) {
+        if (this.workflow.additionalFilesLocation === "local" && "localFileList" in this.workflow) {
+          for (const el of this.workflow.localFileList) {
+            let newObj = {};
+            newObj.label = path.basename(el);
+            newObj.isDir = false;
+            newObj.customAddition = true;
+            newObj.location = "local";
+            newObj.fullPath = el;
+
+            this.zenodoFileData.push(newObj);
+          }
+        } else if (
+          this.workflow.additionalFilesLocation === "github" &&
+          `addedReleaseAssets` in this.workflow
+        ) {
+          for (const el of this.workflow.addedReleaseAssets) {
+            let newObj = {};
+            newObj.label = path.basename(el);
+            newObj.isDir = false;
+            newObj.customAddition = true;
+            newObj.location = "github";
+
+            this.zenodoFileData.push(newObj);
+          }
+        }
+      }
+
       this.showSpinner = false;
       this.finishedLoading = true;
     },
@@ -797,9 +658,6 @@ export default {
     this.citationData = await this.createCitationFile();
     this.citationDataRecord = Object.assign({}, this.citationData);
     this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
-
-    this.zenodoData = await this.createZenodoJsonFile();
-    this.zenodoData = this.jsonToTableDataRecursive(this.zenodoData, 1, "ROOT");
 
     if (this.workflow.generateLicense) {
       this.licenseData = this.workflow.licenseText;

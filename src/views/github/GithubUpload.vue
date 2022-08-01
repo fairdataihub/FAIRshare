@@ -576,24 +576,43 @@ export default {
         await this.datasetStore.syncDatasets();
 
         return;
-      } else {
-        this.workflow.datasetUploaded = true;
+      }
+
+      this.workflow.datasetUploaded = true;
+      this.workflow.datasetPublished = false;
+      this.workflow.generateLicense = false;
+
+      await this.datasetStore.updateCurrentDataset(this.dataset);
+      await this.datasetStore.syncDatasets();
+
+      this.statusMessage = "Uploading dataset to Zenodo...";
+      await this.sleep(300);
+
+      response = await this.uploadToZenodo();
+
+      if (response === "FAIL" || response === "ERROR") {
+        this.indeterminate = true;
+        this.progressStatus = "exception";
+        this.showAlert = true;
+
+        this.workflow.datasetUploaded = false;
         this.workflow.datasetPublished = false;
-        this.workflow.generateLicense = false;
 
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        let routerPath = "";
-
-        if (this.workflow.uploadToRepo) {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
-        } else {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/githubNoUpload/finalPage`;
-        }
-
-        this.$router.push({ path: routerPath });
+        return;
       }
+
+      let routerPath = "";
+
+      if (this.workflow.uploadToRepo) {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/publish`;
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/githubNoUpload/finalPage`;
+      }
+
+      this.$router.push({ path: routerPath });
     },
     async retryUpload() {
       this.indeterminate = false;
