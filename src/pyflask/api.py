@@ -26,6 +26,7 @@ from github import (
     getRepoReleases,
     getUserRepositories,
     uploadFileToGithub,
+    getRepoZipball,
 )
 from metadata import createCitationCFF, createMetadata
 from utilities import (
@@ -1020,6 +1021,60 @@ class getRepoContentsTree(Resource):
         repo = args["repo"]
 
         return getRepoContentTree(access_token, owner, repo)
+
+
+@github.route("/repo/zipball", endpoint="GetRepoZipBall")
+class GetRepoZipBall(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "repo": "repository name",
+            "default_branch": "default branch to use",
+            "file_path": "name of file to be read",
+        },
+    )
+    def get(self):
+        """Get the contents of a file in a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "default_branch",
+            type=str,
+            required=True,
+            help="default_branch is required. default_branch needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. fileName needs to be of type str",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        repo = args["repo"]
+        default_branch = args["default_branch"]
+        file_path = args["file_path"]
+
+        return getRepoZipball(access_token, repo, default_branch, file_path)
 
 
 @github.route("/repo/file/contents", endpoint="getRepoFileContents")

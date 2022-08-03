@@ -334,3 +334,25 @@ def getFileFromRepo(access_token, owner, repo, file_name):
         return base64Decoded.decode("ascii")
     except Exception as e:
         raise e
+
+
+def getRepoZipball(access_token, repo, default_branch, file_path):
+    try:
+        url = f"https://api.github.com/repos/{repo}/zipball/{default_branch}"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code != 200:
+            return "NOT_FOUND"
+
+        with open(file_path, "wb") as fc:
+            fc.write(response.content)
+
+    except Exception as e:
+        raise e
