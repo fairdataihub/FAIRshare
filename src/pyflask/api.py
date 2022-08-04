@@ -21,12 +21,13 @@ from geo import getFilesAndFoldersAtLocation, getGEOFileUploadStatus, uploadFold
 # from flask_wtf.csrf import CSRFProtect
 from github import (
     getFileFromRepo,
+    getReleaseAsset,
     getRepoContentTree,
     getRepoContributors,
     getRepoReleases,
+    getRepoZipball,
     getUserRepositories,
     uploadFileToGithub,
-    getRepoZipball,
 )
 from metadata import createCitationCFF, createMetadata
 from utilities import (
@@ -1075,6 +1076,51 @@ class GetRepoZipBall(Resource):
         file_path = args["file_path"]
 
         return getRepoZipball(access_token, repo, default_branch, file_path)
+
+
+@github.route("/release/asset", endpoint="GetReleaseAsset")
+class GetReleaseAsset(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "browser_download_url": "The download url for the release asset",
+            "file_path": "file path to save the file at",
+        },
+    )
+    def get(self):
+        """Get the contents of a file in a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "browser_download_url",
+            type=str,
+            required=True,
+            help="browser_download_url is required. browser_download_url needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. fileName needs to be of type str",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        browser_download_url = args["browser_download_url"]
+        file_path = args["file_path"]
+
+        return getReleaseAsset(access_token, browser_download_url, file_path)
 
 
 @github.route("/repo/file/contents", endpoint="getRepoFileContents")

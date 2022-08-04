@@ -163,7 +163,7 @@ export default {
         });
       return response;
     },
-    async addMetadaToZenodoDeposition() {
+    async addMetadataToZenodoDeposition() {
       this.statusMessage = "Adding metadata to Zenodo";
       await this.sleep(300);
 
@@ -420,7 +420,6 @@ export default {
           return "ERROR";
         });
     },
-
     async uploadToGithub(filePath, fileName, repoName) {
       this.statusMessage = `Uploading ${fileName} to GitHub`;
       await this.sleep(100);
@@ -458,7 +457,6 @@ export default {
 
       return response;
     },
-
     async uploadMetadataFiles() {
       const folderPath = this.dataset.data.Code.folderPath;
       const repoName = this.workflow.github.repo;
@@ -486,7 +484,6 @@ export default {
 
       return "SUCCESS";
     },
-
     async createZenodoDeposition() {
       this.statusMessage = "Creating an empty dataset on Zenodo";
       await this.sleep(300);
@@ -505,7 +502,6 @@ export default {
           return "ERROR";
         });
     },
-
     async getGithubRepoZipball() {
       const repo = this.workflow.github.repo;
       const default_branch = this.workflow.github.fullObject.default_branch;
@@ -520,7 +516,7 @@ export default {
       const res = await axios
         .get(`${this.$server_url}/github/repo/zipball`, {
           params: {
-            access_token: this.zenodoToken,
+            access_token: this.githubToken,
             repo,
             default_branch,
             file_path: zip_file_path,
@@ -536,30 +532,29 @@ export default {
 
       return res;
     },
+    async getAssetFromGithubRelease(browser_download_url, file_name) {
+      const tempFolderPath = this.dataset.data.Code.folderPath;
+      const file_path = path.join(tempFolderPath, file_name);
 
-    async getAssetFromGithubRelease(url, file_name) {
-      try {
-        const tempFolderPath = this.dataset.data.Code.folderPath;
-        const file_path = path.join(tempFolderPath, file_name);
-        const writer = fs.createWriteStream(file_path);
+      this.statusMessage = `Writing ${file_name} to ${file_path}`;
 
-        const response = await axios({
-          method: "GET",
-          url,
-          responseType: "stream",
+      const res = await axios
+        .get(`${this.$server_url}/github/release/asset`, {
+          params: {
+            access_token: this.zenodoToken,
+            browser_download_url,
+            file_path,
+          },
+        })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
         });
 
-        this.statusMessage = `Writing ${file_name} to ${file_path}`;
-
-        response.data.pipe(writer);
-
-        return new Promise((resolve, reject) => {
-          writer.on("finish", resolve);
-          writer.on("error", reject);
-        });
-      } catch (error) {
-        return "ERROR";
-      }
+      return res;
     },
     async uploadFileToZenodo(bucket_url, file_path) {
       this.statusMessage = `Uploading ${path.basename(file_path)} to Zenodo`;
@@ -635,7 +630,6 @@ export default {
 
       return "SUCCESS";
     },
-
     async uploadWorkflow() {
       let response = {};
 
@@ -813,7 +807,7 @@ export default {
       await this.sleep(300);
 
       if (this.workflow.uploadToRepo) {
-        response = await this.addMetadaToZenodoDeposition();
+        response = await this.addMetadataToZenodoDeposition();
 
         if (response === "ERROR") {
           this.alertMessage = "There was an error when adding metadata to the deposition";
@@ -834,7 +828,7 @@ export default {
       // will have to figure out  where to ask this question
       response = await this.uploadMetadataFiles();
 
-      // await this.resetTempFolder();
+      await this.resetTempFolder();
 
       if (response === "ERROR") {
         this.alertMessage = "There was an error with uploading files to the GitHub repository";
@@ -872,7 +866,7 @@ export default {
           "addedReleaseAssets" in this.workflow &&
           this.workflow.addedReleaseAssets.length > 0
         ) {
-          for (const file of this.workflow.localFileList) {
+          for (const file of this.workflow.addedReleaseAssets) {
             response = await this.getAssetFromGithubRelease(file, path.basename(file));
 
             if (response === "ERROR") {
@@ -896,7 +890,6 @@ export default {
 
       return "SUCCESS";
     },
-
     async runUploadWorkflow() {
       await this.datasetStore.hideSidebar();
 
