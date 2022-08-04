@@ -300,6 +300,12 @@ export default {
         });
         await sleep(timeout);
       }
+
+      if (retriesSuccess) {
+        this.showConnectingMessage = false;
+      } else {
+        this.$refs.errorConfirmNoBackend.show();
+      }
     },
   },
   async mounted() {
