@@ -49,7 +49,7 @@ import FigsharePublish from "../views/figshare/FigsharePublish.vue";
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
 import GithubChooseUpload from "../views/github/GithubChooseUpload.vue";
 import GithubSummary from "../views/github/GithubSummary.vue";
-import GithubUpload from "../views/github/GithubUpload.vue";
+import GithubZenodoUpload from "../views/github/GithubZenodoUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
 // bio.tools related components
@@ -242,9 +242,9 @@ const routes = [
     name: "GEOGenerate",
   },
   {
-    path: "/datasets/:datasetID/:workflowID/github/upload",
-    component: GithubUpload,
-    name: "GithubUpload",
+    path: "/datasets/:datasetID/:workflowID/github/uploadZenodo",
+    component: GithubZenodoUpload,
+    name: "GithubZenodoUpload",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/chooseUpload",

@@ -496,7 +496,7 @@ export default {
     },
 
     async uploadToZenodo() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
+      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/uploadZenodo`;
 
       this.$router.push({ path: routerPath });
     },
