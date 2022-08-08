@@ -788,8 +788,6 @@ export default {
     this.githubToken = tokenObject.token;
 
     this.repoName = this.workflow.github.repo;
-    // this.repoName = "fairdataihub/Custom-Hook";
-    // this.repoName = "fairdataihub/FAIRshare";
 
     await this.prefillGithubEntries();
 

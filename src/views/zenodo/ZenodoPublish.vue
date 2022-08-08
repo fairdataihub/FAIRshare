@@ -51,18 +51,33 @@
             >here</span
           >).
         </p>
-        <div class="flex space-x-4">
-          <router-link :to="`/datasets`" class="">
-            <button class="primary-plain-button">
-              <el-icon><data-line /></el-icon> Go to the homepage
+        <div class="flex flex-col">
+          <div class="my-4 flex space-x-4">
+            <router-link :to="`/datasets`" class="">
+              <button class="primary-plain-button">
+                <el-icon><data-line /></el-icon> Go to the homepage
+              </button>
+            </router-link>
+            <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
+              View dataset on Zenodo <el-icon><star-icon /></el-icon>
             </button>
-          </router-link>
-          <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
-            View dataset on Zenodo <el-icon><star-icon /></el-icon>
-          </button>
-          <button class="blob primary-button transition-all" @click="navigateToBioToolsPublishing">
-            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
-          </button>
+          </div>
+
+          <div class="flex justify-center space-x-4">
+            <button
+              class="blob primary-button transition-all"
+              @click="createGitHubRelease"
+              v-if="showCreateGithubRelease"
+            >
+              Create GitHub release <el-icon><suitcase-icon /></el-icon>
+            </button>
+            <button
+              class="blob primary-button transition-all"
+              @click="navigateToBioToolsPublishing"
+            >
+              Register on bio.tools <el-icon><suitcase-icon /></el-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -96,6 +111,17 @@ export default {
   computed: {
     showBioToolsRegister() {
       if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCreateGithubRelease() {
+      if (
+        "source" in this.workflow &&
+        "type" in this.workflow.source &&
+        this.workflow.source.type === "github"
+      ) {
         return true;
       } else {
         return false;
@@ -225,6 +251,9 @@ export default {
     },
     navigateToBioToolsPublishing() {
       this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
+    createGitHubRelease() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/github/publish`);
     },
     async openWebPage(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
