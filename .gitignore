@@ -4,9 +4,15 @@ node_modules
 package-lock.json
 
 # local env files
-.env.local
+.env
+
 env.local
+.env.local
 .env.*.local
+
+env.production
+.env.production
+.env.*.production
 
 # Log files
 npm-debug.log*
@@ -26,14 +32,18 @@ pnpm-debug.log*
 #Electron-builder output
 /dist_electron
 
-#python files and folders
+# python files and folders
 src/pyflask/__pycache__
 build
 src/pyflaskdist
 api.spec
-*.ipynb
-.env
-.env.production
-env.production
+
 src/assets/css/tailwind.css
+
+# jupyter notebook files
+*.ipynb
 jupyter/dnt.fdih
+
+# vite and histoire config files
+vite.config.js
+histoire.config.js
