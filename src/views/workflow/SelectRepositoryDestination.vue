@@ -175,10 +175,9 @@
 
             <fade-transition>
               <ConnectZenodo
-                v-if="
-                  repoID === 'zenodo' && showSelectZenodoDeposition && !validZenodoTokenAvailable
-                "
+                v-if="repoID === 'zenodo' && !validZenodoTokenAvailable"
                 :statusChangeFunction="showConnection"
+                class="mb-8"
               ></ConnectZenodo>
             </fade-transition>
 
@@ -384,6 +383,7 @@
                   @click="addMetadata"
                   :disabled="repoID === ''"
                   id="continue"
+                  v-if="validZenodoTokenAvailable"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>

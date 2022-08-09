@@ -438,16 +438,13 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    selectEvent(type) {
-      console.log(type, this.selectedTag);
-    },
     openDropdown() {
       this.$refs.dropdown1.handleOpen();
     },
-    createLoading() {
+    createLoading(text) {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading GitHub repository...",
+        text,
       });
       return loading;
     },
@@ -534,11 +531,17 @@ export default {
       return await axios(config)
         .then((response) => {
           if (response.status === 201) {
+            const returnObject = {
+              id: response.data.id,
+            };
+
             if ("html_url" in response.data) {
-              return response.data.html_url;
+              returnObject.html_url = response.data.html_url;
             } else {
-              return `https://github.com/${this.repoName}/releases`;
+              returnObject.html_url = `https://github.com/${this.repoName}/releases`;
             }
+
+            return returnObject;
           } else {
             throw new Error(`Error creating release: ${response.status} ${response.statusText}`);
           }
@@ -588,7 +591,47 @@ export default {
         data: JSON.stringify(requestBody),
       };
 
-      const response = await this.pushRelease(config);
+      let response = await this.pushRelease(config);
+
+      if (
+        response !== "ERROR" &&
+        "addAdditionalFiles" in this.workflow &&
+        this.workflow.addAdditionalFiles &&
+        "additionalFilesLocation" in this.workflow &&
+        this.workflow.additionalFilesLocation === "local" &&
+        "localFileList" in this.workflow &&
+        this.workflow.localFileList.length > 0
+      ) {
+        const releaseID = response.id;
+
+        let spinner = this.createLoading("Uploading release assets...");
+
+        for (const file of this.workflow.localFileList) {
+          response = await axios
+            .post(`${this.$server_url}/github/release/asset`, {
+              access_token: this.githubToken,
+              owner: this.repoName.split("/")[0],
+              repo: this.repoName.split("/")[1],
+              release_id: releaseID,
+              asset_path: file,
+            })
+            .then((response) => {
+              this.$track("GitHub", "Upload asset to release", "success");
+              return response.data;
+            })
+            .catch((error) => {
+              this.$track("GitHub", "Upload asset to release", "failed");
+              console.error(error);
+              return "ERROR";
+            });
+
+          if (response === "ERROR") {
+            this.errorMessage = "Something went wrong with uploading the asset to the release";
+          }
+        }
+
+        spinner.close();
+      }
 
       if (response === "ERROR") {
         ElNotification({
@@ -616,12 +659,12 @@ export default {
         if (releaseType === "publish") {
           this.$track("GitHub", "Publish release", "success");
           this.$track("GitHub", "Repository name", this.repoName);
-          this.publishedReleaseURL = response;
+          this.publishedReleaseURL = response.html_url;
         }
         if (releaseType === "draft") {
           this.$track("GitHub", "Draft release", "success");
           this.$track("GitHub", "Repository name", this.repoName);
-          this.draftReleaseURL = response;
+          this.draftReleaseURL = response.html_url;
         }
 
         ElNotification({
@@ -666,9 +709,8 @@ export default {
       response = await axios(config)
         .then((response) => {
           this.$track("GitHub", "Auto generated release notes", "success");
-          console.log(response);
+
           if (response.status === 200) {
-            console.log("response.data", response.data.body);
             this.releaseBody = response.data.body;
             return true;
           } else {
@@ -774,7 +816,7 @@ export default {
     },
   },
   async mounted() {
-    let spinner = this.createLoading();
+    let spinner = this.createLoading("Reading GitHub repository...");
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 

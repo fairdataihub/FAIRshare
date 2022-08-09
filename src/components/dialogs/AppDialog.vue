@@ -93,7 +93,6 @@ export default {
     async confirmInput(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(">>>>");
           this.closeDialog("OK");
         }
       });

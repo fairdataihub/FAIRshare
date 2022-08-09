@@ -28,6 +28,7 @@ from github import (
     getRepoZipball,
     getUserRepositories,
     uploadFileToGithub,
+    uploadReleaseAsset,
 )
 from metadata import createCitationCFF, createMetadata
 from utilities import (
@@ -1121,6 +1122,61 @@ class GetReleaseAsset(Resource):
         file_path = args["file_path"]
 
         return getReleaseAsset(access_token, browser_download_url, file_path)
+
+    @github.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+            "release_id": "id of the release",
+            "asset_path": "path of the file to be uploaded to the release",
+        },
+    )
+    def post(self):
+        """Upload a local file to a specific release. Any pre-existing files with the same name will be replaced"""  # noqa: E501
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+        )
+        parser.add_argument(
+            "release_id",
+            type=str,
+            required=True,
+            help="release_id is required. release_id needs to be of type str",
+        )
+        parser.add_argument(
+            "asset_path",
+            type=str,
+            required=True,
+            help="asset_path is required. asset_path needs to be of type str",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+        release_id = args["release_id"]
+        asset_path = args["asset_path"]
+
+        return uploadReleaseAsset(access_token, owner, repo, release_id, asset_path)
 
 
 @github.route("/repo/file/contents", endpoint="getRepoFileContents")

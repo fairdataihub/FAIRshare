@@ -191,16 +191,23 @@ export const useDatasetsStore = defineStore({
        * Refer to https://www.npmjs.com/package/semver for semver syntax
        */
 
-      // if (semver.satisfies(this.datasets.version, "1.3.x")) {
-      //   console.log("Upgrading datasets to 1.4.0");
+      if (semver.satisfies(this.datasets.version, "1.3.x")) {
+        console.log("Upgrading datasets to 1.4.0");
 
-      //   for (let datsset of this.datasets) {
-      //     // do something with this
-      //   }
+        // for (let dataset of this.datasets) {
+        // do something with this
+        // }
 
-      //   this.datasets.version = semver.clean("1.4.0");
-      //   this.writeDatasetsToFile();
-      // }
+        this.datasets.version = semver.clean("1.4.0");
+        this.writeDatasetsToFile();
+      }
+
+      if (semver.satisfies(this.datasets.version, "1.4.x")) {
+        console.log("Upgrading datasets to 1.5.0");
+
+        this.datasets.version = semver.clean("1.5.0");
+        this.writeDatasetsToFile();
+      }
 
       await this.writeDatasetsToFile(); // write the datasets to file
 
