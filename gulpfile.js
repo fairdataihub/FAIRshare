@@ -2,6 +2,24 @@ const gulp = require("gulp");
 var rename = require("gulp-rename");
 var del = require("del");
 
+/* -------------------------------------------------------------------------- */
+/*                               Histoire tasks                               */
+/* -------------------------------------------------------------------------- */
+
+gulp.task("remove-histoire-files", function () {
+  return del(["./vite.config.js", "./histoire.config.js"]);
+});
+
+gulp.task("copy-histoire-files", function () {
+  console.log("copying histoire config files...");
+
+  return gulp.src(["./histoire/**/*"]).pipe(gulp.dest("./"));
+});
+
+/* -------------------------------------------------------------------------- */
+/*                               OLD - Build css                              */
+/* -------------------------------------------------------------------------- */
+
 gulp.task("compile-tailwind", function () {
   const postcss = require("gulp-postcss");
   return gulp
@@ -22,6 +40,10 @@ gulp.task("clean-css", function () {
   return del(["src/assets/css/index.css"]);
 });
 
+/* -------------------------------------------------------------------------- */
+/*                                   Python                                   */
+/* -------------------------------------------------------------------------- */
+
 gulp.task("clean-pre-python-build", function () {
   console.log("Removing any pre-existing python folders and files before build...");
 
@@ -32,19 +54,27 @@ gulp.task("clean-pre-python-build", function () {
   return del(["src/pyflaskdist", "./api.spec", "./build"]);
 });
 
-gulp.task("clean-pre-electron-build", function () {
-  console.log("Removing any pre-existing electron folders before build...");
-
-  console.log("Removing dist_electron/ ...");
-
-  return del(["./dist_electron"]);
-});
-
 gulp.task("copy-python", function () {
   console.log("Copying src/pyflask folder to dist_electron folder...");
 
   return gulp.src(["./src/pyflask/**/*"]).pipe(gulp.dest("./dist_electron/pyflask"));
 });
+
+/* -------------------------------------------------------------------------- */
+/*                                Electron dist                               */
+/* -------------------------------------------------------------------------- */
+
+gulp.task("clean-pre-electron-build", function () {
+  console.log("Removing any pre-existing electron folders before build...");
+
+  console.log("Removing dist_electron/ ...");
+
+  return del(["./dist_electron", "./index.html"]);
+});
+
+/* -------------------------------------------------------------------------- */
+/*                                Electron dev                                */
+/* -------------------------------------------------------------------------- */
 
 gulp.task("copy-splash-screen", function () {
   console.log("Copying splash screen to dist_electron folder ...");
@@ -58,9 +88,18 @@ gulp.task("copy-app-icon", function () {
   return gulp.src(["./src/assets/app-icons/Icon.png"]).pipe(gulp.dest("./dist_electron"));
 });
 
+/* -------------------------------------------------------------------------- */
+/*                                combinations                                */
+/* -------------------------------------------------------------------------- */
+
 gulp.task("build-css", gulp.series("compile-tailwind", "rename-css", "clean-css"));
 
-gulp.task("copy-all", gulp.parallel("copy-python", "copy-splash-screen", "copy-app-icon"));
+gulp.task(
+  "copy-all",
+  gulp.parallel("remove-histoire-files", "copy-python", "copy-splash-screen", "copy-app-icon")
+);
+
+gulp.task("setup-histoire", gulp.series("remove-histoire-files", "copy-histoire-files"));
 
 gulp.task("watch-dev", function () {
   gulp.watch("./src/index.css", gulp.series("build-css"));

@@ -35,6 +35,9 @@
     "commit": "cz",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "story:dev": "yarn gulp setup-histoire && histoire dev --port 3000",
+    "story:build": "yarn gulp setup-histoire && histoire build",
+    "story:preview": "histoire preview",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -95,6 +98,7 @@
     "@commitlint/cli": "17.0.3",
     "@commitlint/config-conventional": "17.0.3",
     "@fairdataihub/config": "1.2.0",
+    "@histoire/plugin-vue": "0.9.1",
     "@iconify/vue": "3.2.1",
     "@storybook/addon-actions": "6.5.9",
     "@storybook/addon-essentials": "6.5.9",
@@ -110,6 +114,7 @@
     "@tailwindcss/forms": "0.5.2",
     "@tailwindcss/line-clamp": "0.4.0",
     "@tailwindcss/typography": "0.5.3",
+    "@vitejs/plugin-vue": "3.0.1",
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-plugin-eslint": "5.0.8",
     "@vue/cli-service": "5.0.8",
@@ -137,6 +142,7 @@
     "gulp-copy": "4.0.1",
     "gulp-postcss": "9.0.1",
     "gulp-rename": "2.0.0",
+    "histoire": "0.9.1",
     "husky": "8.0.1",
     "lint-staged": "13.0.3",
     "postcss": "8.4.14",
@@ -146,6 +152,7 @@
     "renovate": "32.100.3",
     "tailwindcss": "3.1.5",
     "tailwindcss-debug-screens": "2.2.1",
+    "vite": "3.0.5",
     "vue-cli-plugin-electron-builder": "2.1.1",
     "vue-loader": "17.0.0"
   },
