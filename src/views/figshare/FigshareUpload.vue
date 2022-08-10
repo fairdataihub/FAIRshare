@@ -154,6 +154,11 @@ export default {
 
       if ("categories" in figshareMetadata && figshareMetadata.categories.length > 0) {
         metadata.categories = figshareMetadata.categories;
+
+        if (process.env.NODE_ENV === "development") {
+          // A random category from the dev environment for testing
+          metadata.categories = [26200];
+        }
       }
 
       if ("keywords" in figshareMetadata && figshareMetadata.keywords.length > 0) {
@@ -549,7 +554,6 @@ export default {
           }
 
           response = await this.createCodeMetadataFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the code metadata file";
@@ -567,7 +571,6 @@ export default {
       this.indeterminate = false;
 
       if (this.workflow.generateOtherMetadata) {
-        console.log(this.dataset.data.Other.questions.identifier);
         if (
           "metadata" in response &&
           "identifier" in this.dataset.data.Other.questions &&
@@ -578,7 +581,6 @@ export default {
         }
 
         response = await this.createOtherMetadataFile();
-        // console.log(response);
 
         if (response === "ERROR") {
           this.alertMessage = "There was an error with creating the required metadata.json file";
@@ -670,7 +672,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {

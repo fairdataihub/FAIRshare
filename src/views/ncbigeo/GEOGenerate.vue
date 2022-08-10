@@ -332,7 +332,6 @@ export default {
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
-      // console.log("obj: ", jsonObject)
       if (
         jsonObject &&
         typeof jsonObject === "object" &&
@@ -343,11 +342,9 @@ export default {
         let result = [];
         let count = 1;
         for (let property in jsonObject) {
-          //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
           let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
-          // console.log(property, value)
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = property;
@@ -423,7 +420,6 @@ export default {
     },
 
     async checkToken(token) {
-      console.log(token);
       const response = await this.tokens.getDepositions(token);
 
       if (response.status === 200) {

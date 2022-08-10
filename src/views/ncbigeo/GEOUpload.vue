@@ -189,7 +189,6 @@ export default {
             folder_path: destinationFolderPath,
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {

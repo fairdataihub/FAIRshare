@@ -565,10 +565,7 @@ export default {
       if (this.workflow.source.type === "github") {
         this.newVersion = "false";
 
-        console.log(this.workflow.github.fullObject.originalObject.permissions.admin);
-
         if (!this.workflow.github.fullObject.originalObject.permissions.admin) {
-          console.log("No admin permissions on this repo");
           this.$refs.errorConfirmNoAdminPermission.show();
 
           return;
@@ -582,7 +579,6 @@ export default {
       }
     },
     async showConnection(status) {
-      console.log(status);
       if (status === "connected") {
         this.validZenodoTokenAvailable = true;
       }
@@ -711,8 +707,6 @@ export default {
         routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/generate`;
       }
 
-      console.log(routerPath);
-
       this.$router.push(routerPath);
     },
     async saveSkip() {
@@ -785,7 +779,6 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    console.log(this.$route);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];

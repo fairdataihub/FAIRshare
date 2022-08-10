@@ -337,7 +337,6 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
-        console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;

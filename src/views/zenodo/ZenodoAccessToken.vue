@@ -297,10 +297,9 @@ export default {
           })
           .then((result) => {
             const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
-            console.log(result.filePath);
             fs.writeFile(result.filePath, fileData, (err) => {
               if (err) {
-                console.log(err);
+                console.error(err);
                 this.$notify({
                   title: "Error",
                   type: "error",
@@ -318,7 +317,7 @@ export default {
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       }
     },
@@ -428,7 +427,7 @@ export default {
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "ERROR";
         });
       return response;
@@ -573,7 +572,6 @@ export default {
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
-      // console.log("obj: ", jsonObject)
       if (
         jsonObject &&
         typeof jsonObject === "object" &&
@@ -584,11 +582,9 @@ export default {
         let result = [];
         let count = 1;
         for (let property in jsonObject) {
-          //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
           let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
-          // console.log(property, value)
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = property;
@@ -664,7 +660,6 @@ export default {
     },
 
     async checkToken(token) {
-      console.log(token);
       const response = await this.tokens.getDepositions(token);
 
       if (response.status === 200) {
@@ -696,11 +691,9 @@ export default {
       }
     },
     async showConnection(status) {
-      console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
       }
-      // this.uploadToZenodo(); console.log(this.workflow.licenseText)
     },
   },
   async mounted() {

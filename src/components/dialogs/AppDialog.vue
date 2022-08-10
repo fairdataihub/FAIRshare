@@ -65,7 +65,7 @@ export default {
       // let key = props.headers[i];
       userInputs.value[props.headers[i]] = "";
     }
-    console.log("user inputs: ", userInputs.value);
+
     return {
       userInputs,
     };

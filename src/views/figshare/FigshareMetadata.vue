@@ -560,7 +560,6 @@ export default {
       callback();
     },
     addAuthor(_event) {
-      console.log(_event);
       this.figshareMetadataForm.authors.push({
         name: "",
         affiliation: "",
@@ -686,7 +685,7 @@ export default {
 
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
-              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/figshareConnection`;
+              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`;
             }
             if (this.workflow.source.type === "local") {
               routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/accessToken`;
@@ -710,7 +709,6 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        // console.log(generalForm);
 
         if ("name" in generalForm) {
           this.figshareMetadataForm.title = generalForm.name;

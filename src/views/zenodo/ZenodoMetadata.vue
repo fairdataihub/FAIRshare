@@ -1421,7 +1421,6 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (shouldNavigateBack) {
-        // console.log("shouldNavigateBack");
         this.$router.push(
           `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
         );
@@ -1464,7 +1463,6 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        // console.log(generalForm);
 
         let date = new Date();
 
@@ -1859,7 +1857,6 @@ export default {
   watch: {
     "zenodoMetadataForm.relatedIdentifiers": {
       handler(val) {
-        // console.log(val);
         if (val.length === 0) {
           this.relatedIdentifiersErrorMessage = "";
           this.invalidStatus.relatedIdentifiers = false;

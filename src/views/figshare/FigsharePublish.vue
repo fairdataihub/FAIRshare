@@ -51,18 +51,33 @@
             >here</span
           >).
         </p>
-        <div class="flex space-x-4">
-          <router-link :to="`/datasets`" class="">
-            <button class="primary-plain-button">
-              <el-icon><data-line /></el-icon> Go to the homepage
+        <div class="flex flex-col">
+          <div class="my-4 flex space-x-4">
+            <router-link :to="`/datasets`" class="">
+              <button class="primary-plain-button">
+                <el-icon><data-line /></el-icon> Go to the homepage
+              </button>
+            </router-link>
+            <button class="secondary-plain-button" @click="viewDatasetOnFigshare">
+              View dataset on Figshare <el-icon><star-icon /></el-icon>
             </button>
-          </router-link>
-          <button class="secondary-plain-button" @click="viewDatasetOnFigshare">
-            View dataset on Figshare <el-icon><star-icon /></el-icon>
-          </button>
-          <button class="blob primary-button transition-all" @click="navigateToBioToolsPublishing">
-            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
-          </button>
+          </div>
+
+          <div class="flex justify-center space-x-4">
+            <button
+              class="blob primary-button transition-all"
+              @click="createGitHubRelease"
+              v-if="showCreateGithubRelease"
+            >
+              Create GitHub release <el-icon><suitcase-icon /></el-icon>
+            </button>
+            <button
+              class="blob primary-button transition-all"
+              @click="navigateToBioToolsPublishing"
+            >
+              Register on bio.tools <el-icon><suitcase-icon /></el-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -90,12 +105,22 @@ export default {
       workflow: {},
       figshareToken: "",
       published: false,
-      zenodoDatasetID: "",
     };
   },
   computed: {
     showBioToolsRegister() {
       if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCreateGithubRelease() {
+      if (
+        "source" in this.workflow &&
+        "type" in this.workflow.source &&
+        this.workflow.source.type === "github"
+      ) {
         return true;
       } else {
         return false;
@@ -177,17 +202,6 @@ export default {
           return "ERROR";
         });
 
-      // await this.sleep(1000);
-
-      // const response = {
-      //   id: "5750415",
-      // };
-
-      // this.zenodoDatasetID = response.id;
-      // console.log(this.zenodoDatasetID);
-
-      console.log(response);
-
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
 
@@ -251,7 +265,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("figshare");
     this.figshareToken = tokenObject.token;
-    // console.log(this.figshareToken);
   },
 };
 </script>

@@ -62,13 +62,13 @@
         <line-divider class="" />
 
         <p class="mb-2">
-          Your uploaded dataset on Zenodo will look like this (files that will be added by FAIRshare
-          to your final upload are highlighted in orange):
+          Your uploaded dataset on {{ finalDestination }} will look like this (files that will be
+          added by FAIRshare to your final upload are highlighted in orange):
         </p>
 
         <div class="overflow-auto" :class="{ 'h-[200px]': finishedLoading }">
           <transition name="fade" mode="out-in" appear>
-            <el-tree-v2 v-if="!showSpinner" :data="zenodoFileData" :props="defaultProps">
+            <el-tree-v2 v-if="!showSpinner" :data="finalRepoFileData" :props="defaultProps">
               <template #default="{ node, data }">
                 <el-icon v-if="!node.isLeaf"><folder-icon /></el-icon>
                 <el-icon v-if="node.isLeaf"><document-icon /></el-icon>
@@ -174,7 +174,7 @@
             </button>
           </router-link>
 
-          <button class="primary-button" @click="uploadToZenodo">
+          <button class="primary-button" @click="uploadToFinalRepository">
             Start upload
             <el-icon> <d-arrow-right /> </el-icon>
           </button>
@@ -220,7 +220,8 @@ export default {
         label: "label",
       },
       githubFileData: [],
-      zenodoFileData: [],
+      finalRepoFileData: [],
+      finalDestination: "",
       tree: [],
       fileTitle: "",
       PreviewNewlyCreatedLicenseFile: false,
@@ -268,7 +269,7 @@ export default {
 
             fs.writeFile(result.filePath, githubFileData, (err) => {
               if (err) {
-                console.log(err);
+                console.error(err);
                 this.$notify({
                   title: "Error",
                   type: "error",
@@ -286,7 +287,7 @@ export default {
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       }
     },
@@ -395,7 +396,7 @@ export default {
           return JSON.parse(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "ERROR";
         });
       return response;
@@ -495,9 +496,22 @@ export default {
       this.drawerModel = false;
     },
 
-    async uploadToZenodo() {
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/uploadZenodo`;
+    async uploadToFinalRepository() {
+      let routerPath = ``;
 
+      if (
+        "uploadToRepo" in this.workflow &&
+        "destination" in this.workflow &&
+        "name" in this.workflow.destination
+      ) {
+        const destination = this.workflow.destination.name;
+
+        if (destination === "zenodo") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/uploadZenodo`;
+        } else if (destination === "figshare") {
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/uploadFigshare`;
+        }
+      }
       this.$router.push({ path: routerPath });
     },
 
@@ -593,9 +607,19 @@ export default {
 
       await this.showGithubRepoContents();
 
-      this.zenodoFileData = JSON.parse(JSON.stringify(this.githubFileData));
+      if (
+        "uploadToRepo" in this.workflow &&
+        "destination" in this.workflow &&
+        "name" in this.workflow.destination
+      ) {
+        if (this.workflow.destination.name === "figshare") {
+          this.finalDestination = "Figshare";
+        } else if (this.workflow.destination.name === "zenodo") {
+          this.finalDestination = "Zenodo";
+        }
+      }
 
-      // add additional files to zenodoFileData
+      this.finalRepoFileData = JSON.parse(JSON.stringify(this.githubFileData));
 
       if (
         "addAdditionalFiles" in this.workflow &&
@@ -611,7 +635,7 @@ export default {
             newObj.location = "local";
             newObj.fullPath = el;
 
-            this.zenodoFileData.push(newObj);
+            this.finalRepoFileData.push(newObj);
           }
         } else if (
           this.workflow.additionalFilesLocation === "github" &&
@@ -624,7 +648,7 @@ export default {
             newObj.customAddition = true;
             newObj.location = "github";
 
-            this.zenodoFileData.push(newObj);
+            this.finalRepoFileData.push(newObj);
           }
         }
       }
