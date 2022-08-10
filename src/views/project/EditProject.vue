@@ -243,7 +243,7 @@ export default {
           this.$router.push({ name: "ShowAllProjects" });
         } else {
           this.$track("Projects", "Edit project", "failed");
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });

@@ -203,7 +203,6 @@ export default {
       // };
 
       this.zenodoDatasetID = response.id;
-      console.log(this.zenodoDatasetID);
 
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
@@ -271,7 +270,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    // console.log(this.zenodoToken);
   },
 };
 </script>

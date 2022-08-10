@@ -123,7 +123,7 @@ export default {
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
-        console.log(e);
+        console.error(e);
       }
       if (!errorFound) {
         this.$notify({

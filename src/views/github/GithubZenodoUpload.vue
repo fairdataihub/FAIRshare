@@ -916,7 +916,6 @@ export default {
     },
     async deleteDraftZenodoDeposition() {
       if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(this.zenodoToken, this.workflow.destination.zenodo.deposition_id);
         const response = await axios
           .delete(`${this.$server_url}/zenodo/deposition`, {
             data: {
@@ -925,7 +924,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {

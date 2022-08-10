@@ -239,7 +239,6 @@ export default {
       //get license object
       const licenseObject = this.licenseOptions[licenseId];
 
-      console.log(licenseObject.url);
       this.licenseHtmlUrl = licenseObject.url;
       this.licenseTitle = licenseObject.title;
 
@@ -320,7 +319,6 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
-        console.log(valid);
         if (valid) {
           this.dataset.data.Other.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;

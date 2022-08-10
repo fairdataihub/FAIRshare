@@ -379,8 +379,6 @@ export default {
         });
       }
 
-      console.log(metadata);
-
       const metadataObject = JSON.stringify({
         metadata: metadata,
       });
@@ -392,7 +390,6 @@ export default {
           metadata: metadataObject,
         })
         .then((response) => {
-          console.log(response);
           if ("status" in response.data && response.data.status != 200) {
             if ("errors" in response.data) {
               response.data.errors.forEach((error) => {
@@ -443,7 +440,6 @@ export default {
       await this.sleep(300);
 
       const folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
-      // console.log(folderPath);
 
       const response = await axios
         .post(`${this.$server_url}/utilities/checkforfolders`, {
@@ -472,8 +468,6 @@ export default {
             console.error(error);
             return "ERROR";
           });
-
-        // console.log(zippedPath);
 
         this.statusMessage =
           "Created a zipped folder successfully. Getting ready to upload to Zenodo";
@@ -721,7 +715,6 @@ export default {
           }
 
           response = await this.createCodeMetadataFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the code metadata file";
@@ -739,7 +732,6 @@ export default {
       this.indeterminate = false;
 
       if (this.workflow.generateOtherMetadata) {
-        console.log(this.dataset.data.Other.questions.identifier);
         if (
           "metadata" in response &&
           "identifier" in this.dataset.data.Other.questions &&
@@ -750,7 +742,6 @@ export default {
         }
 
         response = await this.createOtherMetadataFile();
-        // console.log(response);
 
         if (response === "ERROR") {
           this.alertMessage = "There was an error with creating the required metadata.json file";
@@ -771,7 +762,6 @@ export default {
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the CITATION.cff file";
@@ -804,7 +794,6 @@ export default {
         this.alertMessage = "There was an error when adding metadata to the deposition";
         return "FAIL";
       } else {
-        console.log(response);
         this.statusMessage = "Metadata successfully added to the Zenodo deposition";
       }
 
@@ -847,7 +836,6 @@ export default {
     },
     async deleteDraftZenodoDeposition() {
       if ("deposition_id" in this.workflow.destination.zenodo) {
-        console.log(this.zenodoToken, this.workflow.destination.zenodo.deposition_id);
         const response = await axios
           .delete(`${this.$server_url}/zenodo/deposition`, {
             data: {
@@ -856,7 +844,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {
@@ -939,7 +926,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    console.log(this.zenodoToken);
 
     this.runZenodoUpload();
   },

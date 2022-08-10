@@ -1287,7 +1287,6 @@ export default {
       if (value === "" || value === undefined) {
         callback(new Error("Please provide a valid library strategy."));
       } else if (value === "OTHER:") {
-        console.log(this.step2Form.otherLibraryStrategy);
         if (
           this.step2Form.otherLibraryStrategy === undefined ||
           this.step2Form.otherLibraryStrategy.trim() === ""
@@ -1314,8 +1313,6 @@ export default {
       }
 
       for (const sample of this.step3Form) {
-        console.log(sample);
-
         if (sample.libraryName.trim() === "") {
           this.$message.error("Please provide a library name for all samples.");
           return false;
@@ -1544,8 +1541,6 @@ export default {
       let sample = this.step3Form.find((element) => {
         return element.id === id;
       });
-
-      console.log(sample, id);
 
       sample.filteredRawFilesFolderContents = newFolderContents;
 

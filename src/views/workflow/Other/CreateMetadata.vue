@@ -1745,7 +1745,7 @@ export default {
                 return response.data;
               })
               .catch((error) => {
-                console.log(error);
+                console.error(error);
                 return "ERROR";
               });
 

@@ -181,7 +181,6 @@ export default {
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the CITATION.cff file";

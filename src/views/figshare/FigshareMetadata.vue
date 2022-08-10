@@ -560,7 +560,6 @@ export default {
       callback();
     },
     addAuthor(_event) {
-      console.log(_event);
       this.figshareMetadataForm.authors.push({
         name: "",
         affiliation: "",
@@ -710,7 +709,6 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        // console.log(generalForm);
 
         if ("name" in generalForm) {
           this.figshareMetadataForm.title = generalForm.name;

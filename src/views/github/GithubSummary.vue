@@ -269,7 +269,7 @@ export default {
 
             fs.writeFile(result.filePath, githubFileData, (err) => {
               if (err) {
-                console.log(err);
+                console.error(err);
                 this.$notify({
                   title: "Error",
                   type: "error",
@@ -287,7 +287,7 @@ export default {
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       }
     },
@@ -396,7 +396,7 @@ export default {
           return JSON.parse(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "ERROR";
         });
       return response;

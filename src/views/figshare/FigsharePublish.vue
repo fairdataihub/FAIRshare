@@ -105,7 +105,6 @@ export default {
       workflow: {},
       figshareToken: "",
       published: false,
-      zenodoDatasetID: "",
     };
   },
   computed: {
@@ -203,17 +202,6 @@ export default {
           return "ERROR";
         });
 
-      // await this.sleep(1000);
-
-      // const response = {
-      //   id: "5750415",
-      // };
-
-      // this.zenodoDatasetID = response.id;
-      // console.log(this.zenodoDatasetID);
-
-      console.log(response);
-
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
 
@@ -277,7 +265,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("figshare");
     this.figshareToken = tokenObject.token;
-    // console.log(this.figshareToken);
   },
 };
 </script>

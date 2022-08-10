@@ -259,15 +259,12 @@ export default {
             },
           };
 
-          console.log("dataset: ", dataset);
-
           dataset.data.general = {
             questions: {},
           };
 
           for (const type of dataset.dataType) {
             let tempType = type;
-            console.log(type);
             if (tempType == "Research software") {
               tempType = "Code";
             }
@@ -292,7 +289,7 @@ export default {
         } else {
           this.$track("Projects", "Create new project", "failed");
 
-          console.log("Invalid form entries");
+          console.error("Invalid form entries");
           return false;
         }
       });

@@ -230,12 +230,6 @@ export default {
       this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
-
-    // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
-
-    // if (this.workflow.folderPath) {
-    //   this.folderPath = this.workflow.folderPath;
-    // }
   },
 };
 </script>

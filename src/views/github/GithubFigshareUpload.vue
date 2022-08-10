@@ -597,7 +597,7 @@ export default {
         this.statusMessage = "Succeeded in removing all old pre-existing files";
       } else {
         response = await this.createFigshareDeposition();
-        console.log(response);
+
         response = JSON.parse(response);
 
         if ("status" in response && response.status === "ERROR") {
@@ -779,7 +779,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {

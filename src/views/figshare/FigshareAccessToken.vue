@@ -112,7 +112,6 @@ export default {
     },
 
     async showConnection(status) {
-      console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
       }

@@ -193,8 +193,6 @@ export default {
       const assets = this.allReleases.find((release) => release.value === this.selectedRelease).og
         .assets;
 
-      console.log(assets);
-
       return assets.map((asset) => {
         return {
           label: asset.name,
