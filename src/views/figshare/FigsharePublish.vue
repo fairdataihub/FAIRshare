@@ -104,7 +104,7 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       figshareToken: "",
-      published: true,
+      published: false,
       zenodoDatasetID: "",
     };
   },
