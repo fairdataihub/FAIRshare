@@ -50,6 +50,7 @@ import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
 import GithubChooseUpload from "../views/github/GithubChooseUpload.vue";
 import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubZenodoUpload from "../views/github/GithubZenodoUpload.vue";
+import GithubFigshareUpload from "../views/github/GithubFigshareUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
 // bio.tools related components
@@ -245,6 +246,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/github/uploadZenodo",
     component: GithubZenodoUpload,
     name: "GithubZenodoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/uploadFigshare",
+    component: GithubFigshareUpload,
+    name: "GithubFigshareUpload",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/chooseUpload",

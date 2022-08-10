@@ -686,7 +686,7 @@ export default {
 
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
-              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/figshareConnection`;
+              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`;
             }
             if (this.workflow.source.type === "local") {
               routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/accessToken`;
