@@ -6,7 +6,7 @@
       </span>
       <span class="text-left">
         This one is on us. We're working hard to get your files up to GitHub and your dataset to
-        Zenodo.
+        Figshare.
       </span>
 
       <line-divider />
@@ -754,7 +754,7 @@ export default {
       }
 
       if (response === "ERROR") {
-        this.alertMessage = "There was an error with uploading the dataset to Zenodo";
+        this.alertMessage = "There was an error with uploading the dataset to Figshare";
         return "FAIL";
       } else {
         this.statusMessage = "Uploaded the dataset to Figshare successfully";
