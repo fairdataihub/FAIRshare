@@ -130,14 +130,9 @@
         </div>
 
         <div class="flex w-full flex-row justify-center space-x-4 py-2">
-          <router-link
-            :to="`/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`"
-            class=""
-          >
-            <button class="primary-plain-button">
-              <el-icon><d-arrow-left /></el-icon> Back
-            </button>
-          </router-link>
+          <button class="primary-plain-button" @click="navigateBack">
+            <el-icon><d-arrow-left /></el-icon> Back
+          </button>
 
           <button
             class="primary-button"
@@ -276,6 +271,25 @@ export default {
 
       const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/summary`;
 
+      this.$router.push({ path: routerPath });
+    },
+
+    navigateBack() {
+      let routerPath = `/datasets/${this.datasetID}/${this.workflowID}`;
+
+      if (
+        "uploadToRepo" in this.workflow &&
+        "destination" in this.workflow &&
+        "name" in this.workflow.destination
+      ) {
+        const destination = this.workflow.destination.name;
+
+        if (destination === "zenodo") {
+          routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`;
+        } else if (destination === "figshare") {
+          routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/metadata`;
+        }
+      }
       this.$router.push({ path: routerPath });
     },
   },
