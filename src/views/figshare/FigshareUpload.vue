@@ -154,6 +154,11 @@ export default {
 
       if ("categories" in figshareMetadata && figshareMetadata.categories.length > 0) {
         metadata.categories = figshareMetadata.categories;
+
+        if (process.env.NODE_ENV === "development") {
+          // A random category from the dev environment for testing
+          metadata.categories = [26200];
+        }
       }
 
       if ("keywords" in figshareMetadata && figshareMetadata.keywords.length > 0) {

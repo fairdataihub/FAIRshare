@@ -502,7 +502,7 @@ export default {
       if (
         "uploadToRepo" in this.workflow &&
         "destination" in this.workflow &&
-        "name" in workflow.destination
+        "name" in this.workflow.destination
       ) {
         const destination = this.workflow.destination.name;
 

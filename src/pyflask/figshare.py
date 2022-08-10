@@ -20,10 +20,12 @@ def createNewFigshareItem(access_token, data):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     if response.status_code != 201:
-        return {
-            "status": "ERROR",
-            "message": response.json()["message"],
-        }
+        return json.dumps(
+            {
+                "status": "ERROR",
+                "message": response.json()["message"],
+            }
+        )
     response = response.json()
     article_id = response["entity_id"]
 
@@ -52,7 +54,9 @@ def createNewFigshareItem(access_token, data):
         response = requests.request("DELETE", url, headers=headers, data=payload)
 
         if response.status_code != 204:
-            return {"status": "ERROR", "message": "Could not delete default author"}
+            return json.dumps(
+                {"status": "ERROR", "message": "Could not delete default author"}
+            )
 
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles/{article_id}/reserve_doi"
 
@@ -63,14 +67,14 @@ def createNewFigshareItem(access_token, data):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response.status_code == 200:
-        response = response.json()
-
-        doi = response["doi"]
-
-        return json.dumps({"doi": doi, "article_id": article_id})
-    else:
+    if response.status_code != 200:
         return json.dumps({"status": "ERROR", "message": "Could not create DOI"})
+
+    response = response.json()
+
+    doi = response["doi"]
+
+    return json.dumps({"doi": doi, "article_id": article_id})
 
 
 def deleteFigshareArticle(access_token, article_id):

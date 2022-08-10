@@ -914,6 +914,28 @@ export default {
 
       return "SUCCESS";
     },
+    async deleteDraftZenodoDeposition() {
+      if ("deposition_id" in this.workflow.destination.zenodo) {
+        console.log(this.zenodoToken, this.workflow.destination.zenodo.deposition_id);
+        const response = await axios
+          .delete(`${this.$server_url}/zenodo/deposition`, {
+            data: {
+              access_token: this.zenodoToken,
+              deposition_id: this.workflow.destination.zenodo.deposition_id,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return "ERROR";
+          });
+        return response.data;
+      }
+      return "NO_DEPOSITION_FOUND";
+    },
     async runUploadWorkflow() {
       await this.datasetStore.hideSidebar();
 
@@ -983,18 +1005,7 @@ export default {
       this.progressStatus = "";
       this.showAlert = false;
 
-      const tempFolderPath = path.join(this.$home_path, ".fairshare", "temp");
-
-      // delete the temp folder if it exists
-      // starting from a clean slate
-      if (fs.existsSync(tempFolderPath)) {
-        fs.rmdirSync(tempFolderPath, { recursive: true, force: true });
-      }
-
-      // recreate the temp folder
-      if (!fs.existsSync(tempFolderPath)) {
-        fs.mkdirSync(tempFolderPath);
-      }
+      const tempFolderPath = await this.resetTempFolder();
 
       this.dataset.data.Code.folderPath = tempFolderPath;
 
