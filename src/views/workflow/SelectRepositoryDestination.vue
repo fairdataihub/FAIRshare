@@ -176,9 +176,17 @@
             <fade-transition>
               <ConnectZenodo
                 v-if="repoID === 'zenodo' && !validZenodoTokenAvailable"
-                :statusChangeFunction="showConnection"
+                :statusChangeFunction="showZenodoConnection"
                 class="mb-8"
               ></ConnectZenodo>
+            </fade-transition>
+
+            <fade-transition>
+              <ConnectFigshare
+                v-if="repoID === 'figshare' && !validFigshareTokenAvailable"
+                :statusChangeFunction="showFigshareConnection"
+                class="mb-8"
+              ></ConnectFigshare>
             </fade-transition>
 
             <fade-transition>
@@ -361,6 +369,7 @@
                   @click="addMetadata"
                   :disabled="repoID === ''"
                   id="continue"
+                  v-if="validFigshareTokenAvailable"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
@@ -479,6 +488,7 @@
 <script>
 import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectFigshare from "@/components/serviceIntegration/ConnectFigshare";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access";
@@ -490,7 +500,15 @@ import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@headless
 
 export default {
   name: "SelectRepositoryDestination",
-  components: { Icon, Listbox, ListboxButton, ListboxOptions, ListboxOption, ConnectZenodo },
+  components: {
+    Icon,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    ConnectZenodo,
+    ConnectFigshare,
+  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -516,6 +534,7 @@ export default {
       newVersion: "",
       loadingSpinner: false,
       validZenodoTokenAvailable: false,
+      validFigshareTokenAvailable: false,
       disableFigshare: false,
       showFigshare: false,
       figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
@@ -578,9 +597,14 @@ export default {
         this.addMetadata();
       }
     },
-    async showConnection(status) {
+    async showZenodoConnection(status) {
       if (status === "connected") {
         this.validZenodoTokenAvailable = true;
+      }
+    },
+    async showFigshareConnection(status) {
+      if (status === "connected") {
+        this.validFigshareTokenAvailable = true;
       }
     },
     showZenodoDepositionSelectorModal() {
@@ -789,12 +813,21 @@ export default {
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
 
+    this.figshareToken = await this.tokens.getToken("figshare").token;
+
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
+    const validFigshareConnection = await this.tokens.verifyFigshareConnection();
 
     if (validZenodoConnection) {
       this.validZenodoTokenAvailable = true;
     } else {
       this.validZenodoTokenAvailable = false;
+    }
+
+    if (validFigshareConnection) {
+      this.validFigshareTokenAvailable = true;
+    } else {
+      this.validFigshareTokenAvailable = false;
     }
 
     this.datasetStore.showProgressBar();
