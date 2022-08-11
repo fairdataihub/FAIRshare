@@ -429,7 +429,7 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/NextGenHighThroughputSequencing/createMetadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/ncbigeo/generate`;
       // routerPath = `/datasets/${datasetID}/workflow1/ncbigeo/upload`;
-      routerPath = `/datasets/${datasetID}/workflow1/figshare/publish`;
+      // routerPath = `/datasets/${datasetID}/workflow1/figshare/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/chooseUpload`;
