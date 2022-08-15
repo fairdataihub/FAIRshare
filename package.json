@@ -61,7 +61,7 @@
     "axios": "0.27.2",
     "core-js": "3.24.1",
     "crypto-js": "4.1.1",
-    "dayjs": "1.11.4",
+    "dayjs": "1.11.5",
     "doi-regex": "0.1.13",
     "dompurify": "2.3.10",
     "electron-data-holder": "1.0.1",
