@@ -249,6 +249,9 @@ export default {
     navigateToBioToolsPublishing() {
       this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
     },
+    createGitHubRelease() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/github/publish`);
+    },
     async openWebPage(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
