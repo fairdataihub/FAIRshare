@@ -21,7 +21,7 @@
             @click="navigateToBioToolsPublishing"
             v-if="showBioToolsRegister"
           >
-            Register on bio.toolss <el-icon><suitcase-icon /></el-icon>
+            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
           </button>
           <button class="blob primary-button transition-all" @click="publishDeposition">
             Publish <el-icon><star-icon /></el-icon>
