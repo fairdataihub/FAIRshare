@@ -269,6 +269,7 @@ export default {
 
       this.statusMessage = `Uploaded ${path.basename(file_path)} to Figshare successfully`;
       await this.sleep(300);
+
       return response;
     },
     async checkForFoldersAndUpload() {
@@ -309,7 +310,14 @@ export default {
           "Created a zipped folder successfully. Getting ready to upload to Figshare";
         await this.sleep(300);
 
-        await this.uploadToFigshare(this.workflow.destination.figshare.article_id, zippedPath);
+        const response = await this.uploadToFigshare(
+          this.workflow.destination.figshare.article_id,
+          zippedPath
+        );
+
+        if (response === "ERROR") {
+          return "ERROR";
+        }
       } else {
         this.statusMessage = "Getting ready to upload to Figshare";
         await this.sleep(300);
@@ -733,8 +741,8 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-        this.$router.push({ path: routerPath });
+        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
+        // this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

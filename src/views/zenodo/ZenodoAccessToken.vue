@@ -67,7 +67,7 @@
           </fade-transition>
         </div>
         <el-drawer
-          v-if="anyfilePreview"
+          v-if="anyFilePreview"
           v-model="drawerModel"
           :title="fileTitle"
           direction="rtl"
@@ -129,6 +129,7 @@
       </div>
 
       <line-divider></line-divider>
+
       <fade-transition>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
@@ -220,7 +221,6 @@ export default {
       errorMessage: "",
       zenodoAccessToken: "",
       ready: false,
-      showFiles: "1",
       licenseData: "",
       tableData: [],
       citationData: [],
@@ -235,7 +235,6 @@ export default {
         label: "label",
       },
       fileTitle: "",
-      showContinueSection: false,
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedCodemetaFile: false,
       PreviewNewlyCreatedCitationFile: false,
@@ -245,7 +244,7 @@ export default {
       finishedLoading: false,
     };
   },
-  //el-tree-node__content
+
   computed: {
     codePresent() {
       if ("type" in this.workflow) {
@@ -263,7 +262,7 @@ export default {
       return true;
     },
 
-    anyfilePreview() {
+    anyFilePreview() {
       if (
         this.PreviewNewlyCreatedCodemetaFile ||
         this.PreviewNewlyCreatedLicenseFile ||
