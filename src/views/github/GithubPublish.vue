@@ -604,7 +604,7 @@ export default {
       ) {
         const releaseID = response.id;
 
-        let spinner = this.createLoading("Uploading release assets...");
+        let spinner = this.createLoading("Please wait while we upload your release assets...");
 
         for (const file of this.workflow.localFileList) {
           response = await axios

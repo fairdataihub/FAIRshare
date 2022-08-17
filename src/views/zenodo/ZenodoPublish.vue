@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Publish your work to Zenodo </span>
       <span class="text-left">
@@ -34,11 +34,42 @@
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
           :loop="1"
         />
+
         <p class="pb-5 text-center text-lg font-medium">
           Your dataset was successfully published. You can now view it on Zenodo.
         </p>
+
+        <div class="flex flex-col">
+          <div class="my-4 flex space-x-4">
+            <router-link :to="`/datasets`" class="">
+              <button class="primary-plain-button">
+                <el-icon><data-line /></el-icon> Go to the homepage
+              </button>
+            </router-link>
+            <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
+              View dataset on Zenodo <el-icon><star-icon /></el-icon>
+            </button>
+          </div>
+        </div>
+
+        <div v-if="showCreateGithubRelease" class="w-full">
+          <line-divider class="w-full" />
+
+          <div class="flex items-center justify-center space-x-4">
+            <p class="text-center">
+              Would you also like to make a release on GitHub of this dataset?
+            </p>
+
+            <button class="primary-button transition-all" @click="createGitHubRelease">
+              <el-icon><suitcase-icon /></el-icon> Create GitHub release
+            </button>
+          </div>
+        </div>
+
+        <line-divider class="w-full" />
+
         <p class="max-w-lg pb-5 text-center text-sm">
-          To increase the FAIRness of your software, we recommend to register it on the
+          To increase the FAIRness of your software, we also recommend to register it on the
           <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
           registry. It is also suggested to publish about your software in a suitable journal such
           as the Journal of Open Research Software or any other suitable Journal (a list of suitable
@@ -52,30 +83,12 @@
           >).
         </p>
         <div class="flex flex-col">
-          <div class="my-4 flex space-x-4">
-            <router-link :to="`/datasets`" class="">
-              <button class="primary-plain-button">
-                <el-icon><data-line /></el-icon> Go to the homepage
-              </button>
-            </router-link>
-            <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
-              View dataset on Zenodo <el-icon><star-icon /></el-icon>
-            </button>
-          </div>
-
           <div class="flex justify-center space-x-4">
-            <button
-              class="blob primary-button transition-all"
-              @click="createGitHubRelease"
-              v-if="showCreateGithubRelease"
-            >
-              Create GitHub release <el-icon><suitcase-icon /></el-icon>
-            </button>
             <button
               class="blob primary-button transition-all"
               @click="navigateToBioToolsPublishing"
             >
-              Register on bio.tools <el-icon><suitcase-icon /></el-icon>
+              <el-icon><suitcase-icon /></el-icon> Register on bio.tools
             </button>
           </div>
         </div>

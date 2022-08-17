@@ -2,7 +2,7 @@
   <div class="pt-5 pb-3">
     <div
       class="dropzone group flex w-full cursor-pointer items-center justify-center space-x-4 rounded-md border-2 border-dashed transition-all hover:border-primary-400"
-      :class="{ 'border-primary-400': highlightBox }"
+      :class="{ '!border-primary-400': highlightBox }"
       @click="openFileDialog"
       @drop.prevent="onDrop"
       @dragenter.prevent="highlightBox = true"
@@ -18,7 +18,10 @@
         :class="{ '!scale-100': highlightBox }"
       />
 
-      <span class="font-medium transition-all group-hover:text-primary-500">
+      <span
+        class="font-medium transition-all group-hover:text-primary-500"
+        :class="{ '!text-primary-500': highlightBox }"
+      >
         Drag and drop files here or click to select files
       </span>
     </div>
