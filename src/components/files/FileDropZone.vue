@@ -2,13 +2,20 @@
   <div class="pt-5 pb-3">
     <div
       class="dropzone group flex w-full cursor-pointer items-center justify-center space-x-4 rounded-md border-2 border-dashed transition-all hover:border-primary-400"
+      :class="{ 'border-primary-400': highlightBox }"
       @click="openFileDialog"
+      @drop.prevent="onDrop"
+      @dragenter.prevent="highlightBox = true"
+      @dragover.prevent="highlightBox = true"
+      @dragleave.prevent="highlightBox = false"
+      @dragend.prevent="highlightBox = false"
     >
       <Vue3Lottie
         animationLink="https://assets3.lottiefiles.com/packages/lf20_GxMZME.json"
         :width="120"
         :height="120"
         class="scale-95 transition-all group-hover:scale-100"
+        :class="{ '!scale-100': highlightBox }"
       />
 
       <span class="font-medium transition-all group-hover:text-primary-500">
@@ -89,6 +96,8 @@ export default {
   data() {
     return {
       localFileList: [],
+      highlightBox: false,
+      events: ["dragenter", "dragover", "dragleave", "drop"],
     };
   },
   methods: {
@@ -98,6 +107,21 @@ export default {
     removeFile(file) {
       this.localFileList = this.localFileList.filter((f) => f !== file);
       this.$emit("filesUpdated", this.localFileList);
+    },
+    onDrop(event) {
+      const droppedFiles = event.dataTransfer.files;
+
+      if (droppedFiles && droppedFiles.length > 0) {
+        for (const file of droppedFiles) {
+          if (!this.localFileList.includes(file.path)) {
+            this.localFileList.push(file.path);
+          }
+        }
+
+        this.$emit("filesUpdated", this.localFileList);
+      }
+
+      this.highlightBox = false;
     },
     openFileDialog() {
       let data = {};
