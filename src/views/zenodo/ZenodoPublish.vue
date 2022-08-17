@@ -23,9 +23,21 @@
           >
             Register on bio.tools <el-icon><suitcase-icon /></el-icon>
           </button>
-          <button class="blob primary-button transition-all" @click="publishDeposition">
+          <button class="blob primary-button transition-all" @click="showPublishWarning">
             Publish <el-icon><star-icon /></el-icon>
           </button>
+
+          <warning-confirm
+            ref="zenodoPublishWarning"
+            title="Are you sure you want to publish?"
+            @messageConfirmed="publishDeposition"
+            confirmButtonText="Yes, I want to publish"
+          >
+            <p class="text-center text-base text-gray-500">
+              This is a permanent action. You will not be able to change the files in this version
+              of the dataset after it is published.
+            </p>
+          </warning-confirm>
         </div>
       </div>
       <div class="flex h-full flex-col items-center justify-center px-10" v-else>
@@ -94,6 +106,7 @@
         </div>
       </div>
     </div>
+
     <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
   </div>
 </template>
@@ -168,6 +181,9 @@ export default {
 
       this.workflow.destination.zenodo.selectedDeposition = selectedDeposition;
       this.workflow.destination.zenodo.newVersion = true;
+    },
+    async showPublishWarning() {
+      this.$refs.zenodoPublishWarning.show();
     },
     async publishDeposition() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
