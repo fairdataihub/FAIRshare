@@ -173,6 +173,14 @@ export default {
       return githubObject;
     },
   },
+  mounted() {
+    window.ipcRenderer.on("github-auth-token", (_e, arg, arg2) => {
+      console.log(arg, arg2);
+    });
+  },
+  unmounted() {
+    window.ipcRenderer.removeAllListeners("github-auth-token");
+  },
 };
 </script>
 <style scoped>
