@@ -11,6 +11,7 @@
       <button @click="interactWithService('github')" :class="githubDetails.buttonStyle">
         {{ githubDetails.action }}
       </button>
+      <button @click="testoauth" :class="githubDetails.buttonStyle">test oauth</button>
     </div>
     <!-- </template>
     </el-popover> -->
@@ -99,6 +100,9 @@ export default {
     };
   },
   methods: {
+    testoauth() {
+      window.ipcRenderer.send("fairshare-auth", "github");
+    },
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
