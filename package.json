@@ -70,7 +70,7 @@
     "element-plus": "2.2.13",
     "find-free-port": "2.0.0",
     "fs-extra": "10.1.0",
-    "gsap": "3.10.4",
+    "gsap": "3.11.0",
     "humanparser": "2.6.0",
     "katex": "0.16.0",
     "klaw-sync": "6.0.0",
