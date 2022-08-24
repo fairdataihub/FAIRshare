@@ -17,36 +17,20 @@
       </div>
     </fade-transition>
 
-    <el-dialog
-      width="600px"
-      title="Select an option to connect to GitHub"
-      destroy-on-close
-      v-model="dialogVisible"
+    <lottie-dialog
+      ref="lottieDialog"
+      animationURL="https://assets3.lottiefiles.com/packages/lf20_jcikwtux.json"
+      title="Redirecting to GitHub..."
+      confirmButtonText="Open auth.fairshareapp.io"
+      @messageConfirmed="openBrowserAuth"
     >
-      <div class="dialog-Container">
-        <div class="inputField">
-          <button class="primary-plain-button w-52" @click="showGithubTokenConnect">
-            Connect with token
-          </button>
-          <button class="primary-plain-button w-52" @click="showGithubOAuthConnect">
-            Connect with username
-          </button>
-        </div>
+      <div w-full>
+        <p class="mb-2 w-full text-center text-base">
+          FAIRshare will take you to `auth.fairshareapp.io` to login via GitHub. This step will be
+          done in your browser. You will be redirected back to FAIRshare after you have logged in.
+        </p>
       </div>
-      <p class="break-normal text-center text-sm text-gray-500">
-        To learn more about the permissions required by FAIRshare from your GitHub account
-        <span
-          class="text-url"
-          @click="
-            openWebsite(
-              'https://docs.fairshareapp.io/docs/manage-accounts/connect-to-github#scopes'
-            )
-          "
-        >
-          visit our documentation.
-        </span>
-      </p>
-    </el-dialog>
+    </lottie-dialog>
 
     <login-prompt
       ref="loginPrompt"
@@ -58,8 +42,7 @@
     >
       <div w-full>
         <p class="mb-5 w-full text-left text-sm text-gray-500">
-          You will be redirected to GitHub on your browser to login. <br />
-          Please enter your authentication token below if you have one.
+          Please enter your authentication token below from the authentication platform.
         </p>
 
         <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="120px" size="large">
@@ -124,20 +107,22 @@ export default {
     };
   },
   methods: {
-    testoauth() {
-      window.ipcRenderer.send("fairshare-auth", "github");
-    },
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
+
     changeConnectionStatus() {
       console.log(this.connected);
       if (this.connected) {
         this.$refs.warningConfirm.show();
       } else {
-        window.ipcRenderer.send("fairshare-auth", "github");
-        this.$refs.loginPrompt.show();
+        this.$refs.lottieDialog.show();
       }
+    },
+
+    openBrowserAuth() {
+      window.ipcRenderer.send("fairshare-auth", "github");
+      this.$refs.loginPrompt.show();
     },
 
     async checkGithubToken() {
@@ -184,6 +169,7 @@ export default {
         }
       }
     },
+
     loginSuccess() {
       this.$notify({
         title: "Success",
@@ -193,53 +179,29 @@ export default {
       });
       this.connected = true;
     },
+
     showErrorMessage(message) {
       this.errorMessage = message;
     },
 
-    // callbacks for cleaning
-    hideGithubTokenConnect() {
-      this.showTokenConnect = false;
-    },
-    hideGithubOAuthConnect() {
-      this.showOAuthConnect = false;
-    },
-    // call child components
-    showGithubTokenConnect() {
-      this.showTokenConnect = true;
-      this.dialogVisible = false;
-    },
-    showGithubOAuthConnect() {
-      this.showOAuthConnect = true;
-      this.dialogVisible = false;
-    },
-    // delete key or add key
-    interactWithService(serviceName) {
-      if (serviceName == "github") {
-        if ("github" in this.manager.accessTokens) {
-          this.$refs.warningConfirm.show();
-        } else {
-          this.dialogVisible = true;
-        }
-      }
-    },
     confirmDeleteToken() {
       this.deleteToken("github");
     },
-    // delete key and give notification
-    // APIkeyWarning(_key) {
-    //   this.$refs.warningConfirm.show();
-    // },
+
     async deleteToken(key) {
       let errorFound = false;
+
       try {
         await this.manager.deleteToken(key);
+
         this.$track("Connections", "GitHub", "disconnected");
+
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
         console.error(e);
       }
+
       if (!errorFound) {
         ElNotification({
           type: "success",
@@ -248,29 +210,15 @@ export default {
           duration: 2000,
         });
       }
+
+      this.connected = false;
     },
   },
-  computed: {
-    // github status for the button
-    githubDetails() {
-      let githubObject = {
-        status: "Not Connected",
-        name: "",
-        action: "Connect to GitHub",
-        buttonStyle: "primary-plain-button",
-      };
-      if ("github" in this.manager.accessTokens) {
-        githubObject.status = "Connected";
-        githubObject.name = this.manager.accessTokens.github.name;
-        githubObject.action = "Disconnect from GitHub";
-        githubObject.buttonStyle = "danger-plain-button";
-      }
-      return githubObject;
-    },
-  },
+
   async mounted() {
-    window.ipcRenderer.on("github-auth-token", (_e, arg, arg2) => {
-      console.log(arg, arg2);
+    window.ipcRenderer.on("github-auth-token", (_e, arg) => {
+      this.loginForm.token = arg;
+      this.$refs.loginPrompt.confirm();
     });
 
     const validGitHubConnection = await this.manager.verifyGithubConnection();
@@ -288,6 +236,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .dialog-Container {
   @apply flex h-32 flex-col items-center justify-center gap-3;

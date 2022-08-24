@@ -198,6 +198,9 @@ export default {
       }
       this.isOpen = val;
     },
+    confirm() {
+      this.loginToService();
+    },
     setTitle(val) {
       this.localTitle = val;
     },
