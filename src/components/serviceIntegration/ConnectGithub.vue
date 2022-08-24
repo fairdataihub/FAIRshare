@@ -38,7 +38,6 @@
       confirmButtonText="Login"
       :preConfirm="checkGithubToken"
       :showErrors="showErrorMessage"
-      @messageConfirmed="loginSuccess"
     >
       <div w-full>
         <p class="mb-5 w-full text-left text-sm text-gray-500">
@@ -74,7 +73,7 @@
 
 <script>
 import { useTokenStore } from "@/store/access";
-import { ElNotification } from "element-plus";
+import { useToast } from "vue-toastification";
 
 export default {
   // output component: return a button which can open a dialog that contains two buttons
@@ -87,12 +86,16 @@ export default {
       default: () => {},
     },
   },
+
   setup() {
     const manager = useTokenStore();
+    const toast = useToast();
     return {
       manager,
+      toast,
     };
   },
+
   data() {
     return {
       ready: false,
@@ -106,13 +109,13 @@ export default {
       },
     };
   },
+
   methods: {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
 
     changeConnectionStatus() {
-      console.log(this.connected);
       if (this.connected) {
         this.$refs.warningConfirm.show();
       } else {
@@ -151,16 +154,23 @@ export default {
           }
 
           if (!errorFound) {
-            ElNotification({
-              type: "success",
-              message: "Saved successfully",
+            this.toast.success("Saved token successfully", {
               position: "bottom-right",
-              duration: 2000,
+              timeout: 3000,
+              icon: true,
             });
 
             this.$track("Connections", "GitHub", "connected");
 
-            this.statusChangeFunction("connected");
+            this.statusChangeFunction("connected", this.loginForm.token);
+
+            this.toast.success("You have successfully logged in to GitHub", {
+              position: "bottom-right",
+              timeout: 7000,
+              icon: true,
+            });
+
+            this.connected = true;
 
             return "valid";
           }
@@ -168,16 +178,6 @@ export default {
           return "invalid";
         }
       }
-    },
-
-    loginSuccess() {
-      this.$notify({
-        title: "Success",
-        message: "You have successfully logged in to GitHub",
-        type: "success",
-        position: "bottom-right",
-      });
-      this.connected = true;
     },
 
     showErrorMessage(message) {
@@ -203,11 +203,10 @@ export default {
       }
 
       if (!errorFound) {
-        ElNotification({
-          type: "success",
-          message: "Deleted",
+        this.toast.success("Deleted GitHub token", {
           position: "bottom-right",
-          duration: 2000,
+          timeout: 3000,
+          icon: true,
         });
       }
 

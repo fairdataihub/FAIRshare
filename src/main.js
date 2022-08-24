@@ -11,7 +11,7 @@ import ElementPlus from "element-plus";
 import { ElCollapseTransition } from "element-plus";
 
 import Popper from "vue3-popper";
-
+import Toast from "vue-toastification";
 import Vue3Lottie from "vue3-lottie";
 
 import VMdEditor from "@kangc/v-md-editor";
@@ -29,6 +29,7 @@ import "./assets/css/utilities-theme.css";
 import "./assets/css/index.css";
 import "element-plus/dist/index.css";
 import "vue3-lottie/dist/style.css";
+import "vue-toastification/dist/index.css";
 
 // css for the markdown editor
 import "katex/dist/katex.min.css";
@@ -234,6 +235,11 @@ app.use(createPinia()); // pinia
 app.use(ElementPlus); // element plus
 app.use(VMdEditor); // markdown editor
 app.use(Vue3Lottie); // lottie animations
+app.use(Toast, {
+  transition: "Vue-Toastification__fade",
+  maxToasts: 10,
+  newestOnTop: true,
+}); // toast notifications
 app.use(analytics, {
   trackingID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
 }); // analytics

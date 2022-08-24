@@ -364,13 +364,19 @@ ipcMain.on("fairshare-auth", async (_event, app) => {
 });
 
 const getAuthUrl = async (deepLinkedUrl) => {
-  const url = new URL(deepLinkedUrl);
+  let url;
+  try {
+    url = new URL(deepLinkedUrl);
+  } catch (e) {
+    dialog.showErrorBox("Invalid URL", "The URL you entered is invalid.");
+    return;
+  }
 
   const query = url.searchParams;
 
   const session_id = query.get("session");
 
-  if (session_id && session_id !== SESSION_ID) {
+  if (!session_id || (session_id && session_id !== SESSION_ID)) {
     dialog.showErrorBox(
       "Unauthorized request",
       "This request did not originate from FAIRshare. An unauthorized app tried to open FAIRshare from your browser. Please contact the FAIRshare team if you think this is a mistake."

@@ -410,6 +410,10 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   @apply !m-0;
 }
 
+.Vue-Toastification__container {
+  @apply max-w-[330px];
+}
+
 /* ===== Scrollbar CSS ===== */
 /* ------------------------------------------
 Custom styles for all the scrollbars

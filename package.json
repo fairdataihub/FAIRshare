@@ -2,6 +2,7 @@
   "name": "fairshare",
   "version": "1.5.0",
   "description": "Your one-stop tool for making biomedical research data and software FAIR",
+  "homepage": "https://fairdataihub.org/fairshare",
   "private": true,
   "keywords": [
     "fair data",
@@ -86,6 +87,7 @@
     "validator": "13.7.0",
     "vue": "3.2.37",
     "vue-router": "4.1.1",
+    "vue-toastification": "2.0.0-rc.5",
     "vue3-lottie": "2.2.5",
     "vue3-popper": "1.5.0",
     "vuedraggable": "4.1.0"

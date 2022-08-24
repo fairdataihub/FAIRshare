@@ -7,6 +7,8 @@ module.exports = {
       builderOptions: {
         appId: "com.fairdataihub.fairshare",
         productName: "FAIRshare",
+        executableName: "FAIRshare",
+        copyright: "Copyright © 2022 Fair Data Innovations Hub",
 
         asar: true,
 
