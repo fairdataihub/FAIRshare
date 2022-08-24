@@ -1,22 +1,20 @@
 <template>
   <div>
-    <fade-transition>
-      <button
-        @click="changeConnectionStatus"
-        :class="{ 'danger-plain-button': connected, 'primary-plain-button': !connected }"
-        v-if="ready"
-      >
-        {{ connected ? "Disconnect from" : "Connect to" }} GitHub
+    <!-- <el-popover
+      placement="bottom"
+      :hide-after="0"
+      trigger="hover"
+      content="Coming soon..."
+    >
+      <template #reference> -->
+    <div>
+      <button @click="interactWithService('github')" :class="githubDetails.buttonStyle">
+        {{ githubDetails.action }}
       </button>
-      <div v-else class="flex justify-center">
-        <Vue3Lottie
-          animationLink="https://assets3.lottiefiles.com/packages/lf20_69bpyfie.json"
-          :width="50"
-          :height="50"
-        />
-      </div>
-    </fade-transition>
-
+      <button @click="testoauth" :class="githubDetails.buttonStyle">test oauth</button>
+    </div>
+    <!-- </template>
+    </el-popover> -->
     <el-dialog
       width="600px"
       title="Select an option to connect to GitHub"
@@ -47,40 +45,18 @@
         </span>
       </p>
     </el-dialog>
-
-    <login-prompt
-      ref="loginPrompt"
-      title="Login to GitHub"
-      confirmButtonText="Login"
-      :preConfirm="checkGithubToken"
-      :showErrors="showErrorMessage"
-      @messageConfirmed="loginSuccess"
-    >
-      <div w-full>
-        <p class="mb-5 w-full text-left text-sm text-gray-500">
-          You will be redirected to GitHub on your browser to login. <br />
-          Please enter your authentication token below if you have one.
-        </p>
-
-        <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="120px" size="large">
-          <el-form-item label="Access Token" prop="token">
-            <el-input
-              v-model="loginForm.token"
-              placeholder="71d23243c2c40b6fad"
-              clearable
-              class="w-full"
-            />
-          </el-form-item>
-        </el-form>
-
-        <fade-transition>
-          <p v-if="errorMessage !== ''" class="my-3 w-full text-center text-base text-red-600">
-            {{ errorMessage }}
-          </p>
-        </fade-transition>
-      </div>
-    </login-prompt>
-
+    <GithubTokenConnection
+      v-if="showTokenConnect"
+      v-model="showTokenConnect"
+      :callback="hideGithubTokenConnect"
+      :onStatusChange="statusChangeFunction"
+    ></GithubTokenConnection>
+    <GithubOAuthConnection
+      v-if="showOAuthConnect"
+      v-model="showOAuthConnect"
+      :callback="hideGithubOAuthConnect"
+      :onStatusChange="statusChangeFunction"
+    ></GithubOAuthConnection>
     <warning-confirm ref="warningConfirm" title="Warning" @messageConfirmed="confirmDeleteToken">
       <p class="text-center text-base text-gray-500">
         Disconnecting will delete the access token stored. Would you like to continue?
@@ -90,13 +66,19 @@
 </template>
 
 <script>
+import GithubTokenConnection from "@/components/serviceIntegration/GithubTokenConnection";
+import GithubOAuthConnection from "@/components/serviceIntegration/GithubOAuthConnection";
+
 import { useTokenStore } from "@/store/access";
 import { ElNotification } from "element-plus";
 
 export default {
   // output component: return a button which can open a dialog that contains two buttons
   name: "ConnectGithub",
-  components: {},
+  components: {
+    GithubTokenConnection: GithubTokenConnection,
+    GithubOAuthConnection: GithubOAuthConnection,
+  },
   props: {
     statusChangeFunction: {
       type: Function,
@@ -112,15 +94,9 @@ export default {
   },
   data() {
     return {
-      ready: false,
-      connected: false,
-      errorMessage: "",
-      loginForm: {
-        token: "",
-      },
-      rules: {
-        token: [{ required: true, message: "Please enter your token", trigger: "blur" }],
-      },
+      dialogVisible: false,
+      showTokenConnect: false,
+      showOAuthConnect: false,
     };
   },
   methods: {
@@ -130,73 +106,6 @@ export default {
     openWebsite(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
-    changeConnectionStatus() {
-      console.log(this.connected);
-      if (this.connected) {
-        this.$refs.warningConfirm.show();
-      } else {
-        window.ipcRenderer.send("fairshare-auth", "github");
-        this.$refs.loginPrompt.show();
-      }
-    },
-
-    async checkGithubToken() {
-      if (this.loginForm.token === "") {
-        return "empty";
-      } else {
-        const response = await this.manager.verifyGithubToken(this.loginForm.token);
-
-        if (response) {
-          const tokenObject = {};
-          const key = "github";
-          const name = await this.manager.getGithubUser(this.loginForm.token);
-
-          let errorFound = false;
-
-          try {
-            tokenObject.token = this.loginForm.token;
-            tokenObject.name = name;
-            tokenObject.type = "OAuth";
-
-            await this.manager.saveToken(key, tokenObject);
-          } catch (e) {
-            errorFound = true;
-
-            return "ERROR";
-          }
-
-          if (!errorFound) {
-            ElNotification({
-              type: "success",
-              message: "Saved successfully",
-              position: "bottom-right",
-              duration: 2000,
-            });
-
-            this.$track("Connections", "GitHub", "connected");
-
-            this.statusChangeFunction("connected");
-
-            return "valid";
-          }
-        } else {
-          return "invalid";
-        }
-      }
-    },
-    loginSuccess() {
-      this.$notify({
-        title: "Success",
-        message: "You have successfully logged in to GitHub",
-        type: "success",
-        position: "bottom-right",
-      });
-      this.connected = true;
-    },
-    showErrorMessage(message) {
-      this.errorMessage = message;
-    },
-
     // callbacks for cleaning
     hideGithubTokenConnect() {
       this.showTokenConnect = false;
@@ -268,20 +177,10 @@ export default {
       return githubObject;
     },
   },
-  async mounted() {
+  mounted() {
     window.ipcRenderer.on("github-auth-token", (_e, arg, arg2) => {
       console.log(arg, arg2);
     });
-
-    const validGitHubConnection = await this.manager.verifyGithubConnection();
-
-    if (validGitHubConnection) {
-      this.connected = true;
-    } else {
-      this.connected = false;
-    }
-
-    this.ready = true;
   },
   unmounted() {
     window.ipcRenderer.removeAllListeners("github-auth-token");
