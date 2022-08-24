@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, Menu, shell } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, Menu, shell, dialog } from "electron";
 import { enable as enableWebContents } from "@electron/remote/main";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
@@ -371,7 +371,11 @@ const getAuthUrl = async (deepLinkedUrl) => {
   const session_id = query.get("session");
 
   if (session_id && session_id !== SESSION_ID) {
-    console.log("Unauthorized session. Not doing anything else...");
+    dialog.showErrorBox(
+      "Unauthorized request",
+      "This request did not originate from FAIRshare. An unauthorized app tried to open FAIRshare from your browser. Please contact the FAIRshare team if you think this is a mistake."
+    );
+
     return;
   }
 
