@@ -1,11 +1,7 @@
 <template>
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-semibold"> Publish your work to Zenodo </span>
-      <span class="text-left">
-        All your metadata files have been uploaded to GitHub. It's now time to publish your work to
-        Zenodo by creating a release on GitHub.
-      </span>
+      <span class="text-left text-lg font-semibold"> Let's create a release on GitHub </span>
 
       <line-divider />
 
@@ -187,8 +183,7 @@
                 @messageConfirmed="createRelease('publish')"
               >
                 <p class="text-center text-base text-gray-500">
-                  Once a release has been made you will not be able to remove it from Zenodo. Are
-                  you sure you want to continue?
+                  This will create a published release on GitHub. Are you sure you want to continue?
                 </p>
               </warning-confirm>
               <warning-confirm
@@ -214,19 +209,14 @@
         />
         <div v-if="draftReleaseURL !== ''">
           <p class="pb-10 text-center font-medium">
-            Your draft release is now on GitHub. You can go in and add additional files or edit
-            items before publishing the release. <br />
-            <br />
-            <span class="font-medium text-secondary-500">
-              Once you publish the release from Github, this will automatically push your release to
-              Zenodo as well.
-            </span>
+            Your draft release is now on GitHub. <br />
+            You can go on GitHub and add additional files or edit items before publishing the
+            release.
           </p>
         </div>
         <div v-if="publishedReleaseURL !== ''" class="pb-10">
           <p class="pb-5 text-center text-lg font-medium">
-            Your release was published successfully. <br />
-            You can view it on Zenodo and get your DOI.
+            Your release was published successfully.
           </p>
           <p class="max-w-lg text-center text-sm">
             To increase the FAIRness of your software, we recommend to register it on the
@@ -271,14 +261,6 @@
           >
             <el-icon><upload-filled /></el-icon>
             View release on GitHub
-          </button>
-          <button
-            class="secondary-plain-button"
-            @click="viewZenodoRelease"
-            v-if="publishedReleaseURL !== ''"
-          >
-            <el-icon><star-icon /></el-icon>
-            View release on Zenodo
           </button>
         </div>
         <div class="flex items-center justify-center space-x-4">
@@ -511,10 +493,7 @@ export default {
     async openWebPage(URL) {
       window.ipcRenderer.send("open-link-in-browser", URL);
     },
-    async viewZenodoRelease() {
-      const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
-      window.ipcRenderer.send("open-link-in-browser", zenodoURL);
-    },
+
     declineRelease() {
       this.showReleasePrompt = false;
       this.showApprovedInstructions = false;
@@ -822,7 +801,7 @@ export default {
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(7);
+    this.datasetStore.setCurrentStep(8);
 
     this.workflow.currentRoute = this.$route.path;
 
