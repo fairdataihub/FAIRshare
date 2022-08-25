@@ -47,3 +47,4 @@ jupyter/dnt.fdih
 # vite and histoire config files
 vite.config.js
 histoire.config.js
+.histoire
