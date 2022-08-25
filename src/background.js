@@ -83,11 +83,7 @@ const guessPackaged = () => {
   const unixPath = path.join(process.resourcesPath, PY_MODULE);
   const winPath = path.join(process.resourcesPath, PY_MODULE + ".exe");
 
-  if (require("fs").existsSync(unixPath) || require("fs").existsSync(winPath)) {
-    return true;
-  } else {
-    return false;
-  }
+  return require("fs").existsSync(unixPath) || require("fs").existsSync(winPath);
 };
 
 // check if the python dist folder exists
@@ -589,10 +585,8 @@ ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
       },
     })
     .then(async (responseCode) => {
-      //   console.log("code:", responseCode.request.res.responseUrl);
       let authUrl = responseCode.request.res.responseUrl;
       await retrieveCode(authUrl).then(async (code) => {
-        // console.log("code:", code);
         await axios
           .post(
             "https://sandbox.zenodo.org/oauth/token",

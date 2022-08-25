@@ -10,6 +10,7 @@
         <slot> </slot>
       </div>
     </div>
+
     <div class="form-navigation-buttons flex w-full justify-center space-x-4 px-5">
       <button
         @click="prevStep"
@@ -20,7 +21,7 @@
         <el-icon v-if="!firstStep"><back-icon /></el-icon>
         <el-icon v-else><d-arrow-left /></el-icon> {{ prevText }}
       </button>
-      <!-- :plain="!lastStep" -->
+
       <button class="primary-button" @click="nextStep" :disabled="checkInvalidStatus">
         {{ nextText }}
         <el-icon v-if="lastStep"><d-arrow-right /></el-icon>

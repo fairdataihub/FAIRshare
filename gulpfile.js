@@ -1,6 +1,6 @@
 const gulp = require("gulp");
-var rename = require("gulp-rename");
-var del = require("del");
+const rename = require("gulp-rename");
+const del = require("del");
 
 gulp.task("compile-tailwind", function () {
   const postcss = require("gulp-postcss");
