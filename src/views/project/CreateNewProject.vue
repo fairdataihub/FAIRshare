@@ -103,13 +103,14 @@
             </div>
 
             <div class="flex gap-8">
-              <el-popover placement="top" :hide-after="0" trigger="hover" :width="400">
+              <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
                 <template #reference>
                   <el-checkbox
                     border
                     name="type"
                     class="single-check-box"
                     label="NextGenHighThroughputSequencing"
+                    disabled
                   >
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />
@@ -117,9 +118,9 @@
                     </div>
                   </el-checkbox>
                 </template>
-                <span class="break-normal text-left text-sm">
+                <!-- <span class="break-normal text-left text-sm">
                   Next generation high-throughput sequencing data, such as Illumina or PacBio.
-                </span>
+                </span> -->
               </el-popover>
 
               <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
