@@ -762,7 +762,7 @@ export default {
 
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`;
         }
         if (this.workflow.source.type === "local") {
           routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;

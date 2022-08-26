@@ -1,7 +1,9 @@
 <template>
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-semibold"> Let's create a release on GitHub </span>
+      <span class="text-left text-lg font-semibold">
+        {{ showFinalInstructions ? `GitHub release created` : `Let's create a release on GitHub` }}
+      </span>
 
       <line-divider />
 

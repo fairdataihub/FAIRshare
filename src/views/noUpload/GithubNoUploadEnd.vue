@@ -8,9 +8,10 @@
 
       <div class="flex h-full flex-col items-center justify-center px-2">
         <p class="pb-5 text-center">
-          It does not look like you have selected a data repository to upload your files to. This is
-          not recommended if you are trying to make your dataset FAIR. You can come back to this
-          page later and select a data sharing repository to make your dataset completely FAIR.
+          It does not look like you have selected a data repository to upload your files to. <br />
+          This is not recommended if you are trying to make your dataset FAIR. <br />
+          You can come back to this page later and select a data sharing repository to make your
+          dataset completely FAIR.
         </p>
         <div class="flex space-x-4">
           <router-link :to="`/datasets`" class="">

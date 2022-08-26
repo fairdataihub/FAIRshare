@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div v-if="addAdditionalFiles !== 'None'" class="flex w-full flex-col">
+      <div v-if="addAdditionalFiles === 'Yes'" class="flex w-full flex-col">
         <transition name="fade" mode="out-in" appear>
           <div v-if="addAdditionalFiles === 'Yes'" class="flex h-full w-full flex-col">
             <line-divider class="w-full"></line-divider>
@@ -128,21 +128,25 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="flex w-full flex-row justify-center space-x-4 py-2">
-          <button class="primary-plain-button" @click="navigateBack">
-            <el-icon><d-arrow-left /></el-icon> Back
-          </button>
+      <div class="flex w-full flex-row justify-center space-x-4 py-2">
+        <button class="primary-plain-button" @click="navigateBack">
+          <el-icon><d-arrow-left /></el-icon> Back
+        </button>
 
-          <button
-            class="primary-button"
-            @click="showSummary"
-            v-if="localFileList.length > 0 || addedReleaseAssets.length > 0"
-          >
-            Continue
-            <el-icon> <d-arrow-right /> </el-icon>
-          </button>
-        </div>
+        <button
+          class="primary-button"
+          @click="showSummary"
+          v-if="
+            (addAdditionalFiles === 'Yes' &&
+              (localFileList.length > 0 || addedReleaseAssets.length > 0)) ||
+            addAdditionalFiles === 'No'
+          "
+        >
+          Continue
+          <el-icon> <d-arrow-right /> </el-icon>
+        </button>
       </div>
     </div>
     <app-docs-link url="curate-and-share/connect-github-zenodo" position="bottom-4" />
@@ -286,6 +290,8 @@ export default {
           routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/zenodo/metadata`;
         } else if (destination === "figshare") {
           routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/figshare/metadata`;
+        } else {
+          routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`;
         }
       }
       this.$router.push({ path: routerPath });

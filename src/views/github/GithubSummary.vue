@@ -339,6 +339,9 @@ export default {
             case "keywords":
               customName = "keyword";
               break;
+            case "identifiers":
+              customName = "identifier";
+              break;
             case "authors":
               customName = "author";
               break;
@@ -501,6 +504,7 @@ export default {
 
       if (
         "uploadToRepo" in this.workflow &&
+        this.workflow.uploadToRepo &&
         "destination" in this.workflow &&
         "name" in this.workflow.destination
       ) {
@@ -511,6 +515,8 @@ export default {
         } else if (destination === "figshare") {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/uploadFigshare`;
         }
+      } else {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
       }
       this.$router.push({ path: routerPath });
     },
