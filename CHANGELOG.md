@@ -5,21 +5,24 @@ All notable changes to `FAIRshare` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## v1.5.0 - 2022-07-11
+## v2.0.0 - 2022-08-29
 
 ### Feature additions
 
+- The GitHub release workflow has been reworked to not use webhooks from the repository. You can now control what you post to your data repository with this new workflow. You are also able to add additional files directly from your system or a GitHub release to your final deposition.
+- A new authentication system has been developed for FAIRshare. At the moment, the GitHub login flow is the only supported authentication method. This will be expanded in the future to support other accounts such as Zenodo and Figshare.
 - When you reorder items in draggable lists(such as `authors` and `keywords`), a new animation is now shown to signify the change and to make it easier to see where you are moving the item.
-- An early version of support for NCBI Geo is included in this version.
+- Added an option for the user to login to Figshare from directly within their workflow.
+- Added a dataset preview option for the figshare workflow.
 
 ### Bug fixes
 
 - Removed a button that was accidentally added to the `GitHub` publish page.
 - Fixed an issue where the `Contributors` section was not collapsed when a new Zenodo dataset was loaded.
-
-### Feature enhancements
-
-- Information regarding licenses was moved to the main UI to make it more clear what the relevant licenses are.
+- Replaces the server presence check function timing from exponential backoff to a fixed interval. Now the front end portion of FAIRshare will check at startup every second for 30 seconds to see if the server is up. If the server is not up after 30 seconds, the front end will display an error message.
+- Reverted Headless UI to v1.6 for the message box transitions to work properly.
+- Fixed an issue where the correct upload type was not being assigned for the Zenodo workflow.
+- Fix code smells reported by SonarCloud.
 
 ## v1.4.0 - 2022-06-03
 
