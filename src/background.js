@@ -364,7 +364,6 @@ const getAuthUrl = async (deepLinkedUrl) => {
   try {
     url = new URL(deepLinkedUrl);
   } catch (e) {
-    dialog.showErrorBox("Invalid URL", "The URL you entered is invalid.");
     return;
   }
 
