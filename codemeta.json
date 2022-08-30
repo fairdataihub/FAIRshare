@@ -21,23 +21,8 @@
     "@type": "Organization",
     "@name": "National Institutes of Health (NIH)"
   },
-  "keywords": [
-    "curation",
-    "electron",
-    "fair",
-    "macos",
-    "metadata",
-    "sharing",
-    "ubuntu",
-    "windows"
-  ],
-  "programmingLanguage": [
-    "Vue",
-    "Python",
-    "JavaScript",
-    "CSS",
-    "HTML"
-  ],
+  "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"],
+  "programmingLanguage": ["Vue", "Python", "JavaScript", "CSS", "HTML"],
   "operatingSystem": [
     "Windows 11",
     "Windows 10",
@@ -45,10 +30,7 @@
     "Catalina (macOS 10.15)",
     "Ubuntu"
   ],
-  "relatedLink": [
-    "https://fairdataihub.org/fairshare",
-    "https://docs.fairshareapp.io"
-  ],
+  "relatedLink": ["https://fairdataihub.org/fairshare", "https://docs.fairshareapp.io"],
   "author": [
     {
       "@type": "Person",
