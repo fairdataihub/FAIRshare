@@ -50,5 +50,13 @@
       "message": "Please update to the latest version of the application.",
       "type": "warning"
     }
+  },
+  "2.0.0": {
+    "all": {
+      "show": false,
+      "title": "Outdated version",
+      "message": "Please update to the latest version of the application.",
+      "type": "warning"
+    }
   }
 }
