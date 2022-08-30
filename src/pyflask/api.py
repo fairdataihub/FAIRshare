@@ -1104,7 +1104,7 @@ class GetReleaseAsset(Resource):
             "browser_download_url",
             type=str,
             required=True,
-            help="browser_download_url is required. browser_download_url needs to be of type str",
+            help="browser_download_url is required. browser_download_url needs to be of type str",  # noqa: E501
             location="args",
         )
         parser.add_argument(
