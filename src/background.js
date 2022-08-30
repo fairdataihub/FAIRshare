@@ -464,9 +464,6 @@ if (isDevelopment) {
   }
 }
 
-const CLIENT_ID = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_ID;
-const CLIENT_SECRET = process.env.VUE_APP_GITHUB_OAUTH_CLIENT_SECRET;
-
 function retrieveCode(url) {
   return new Promise(function (resolve, reject) {
     let authWindow = new BrowserWindow({
@@ -519,53 +516,6 @@ function retrieveCode(url) {
     });
   });
 }
-
-ipcMain.on("OAuth-Github", async (_event, _test) => {
-  let success = false;
-
-  await axios
-    .get("https://github.com/login/oauth/authorize", {
-      params: {
-        client_id: CLIENT_ID,
-        scope: "repo admin:repo_hook admin:org_hook user",
-      },
-    })
-    .then(async (responseCode) => {
-      let authUrl = responseCode.request.res.responseUrl;
-
-      await retrieveCode(authUrl).then(async (code) => {
-        await axios
-          .post(
-            "https://github.com/login/oauth/access_token",
-            {
-              client_id: CLIENT_ID,
-              client_secret: CLIENT_SECRET,
-              code: code,
-            },
-            {
-              headers: {
-                Accept: "application/json",
-              },
-            }
-          )
-          .then(async (response) => {
-            mainWindow.webContents.send("OAuth-Github-Reply", response.data.access_token);
-            success = true;
-          })
-          .catch((error) => {
-            console.log("request token error: ", error);
-          });
-      });
-    })
-    .catch((error) => {
-      console.log("request code error: ", error);
-    });
-  if (!success) {
-    mainWindow.webContents.send("OAuth-Github-Reply", "failed");
-  }
-
-  mainWindow.webContents.session.clearStorageData();
-});
 
 ipcMain.on("OAuth-Zenodo", async (_event, _test) => {
   // complete this part to make zenodo oauth working
