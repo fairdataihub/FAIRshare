@@ -6,7 +6,7 @@
       </span>
       <span class="text-left"> Lets select the GitHub repository that you want to make FAIR. </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div v-if="ready">
         <div v-if="validTokenAvailable">
@@ -123,8 +123,7 @@
         <div class="px-5">
           <p class="text=lg my-5">
             A list of all the files and folders in the selected repository are shown below. Current
-            branch is <b>{{ currentBranch }}</b
-            >.
+            branch is <strong> {{ currentBranch }} </strong>.
           </p>
           <el-tree-v2 :data="fileData" :props="defaultProps">
             <template #default="{ node, data }">
@@ -341,7 +340,6 @@ export default {
       }
     },
     async showConnection(status, token = "") {
-      console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
 

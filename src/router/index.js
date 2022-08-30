@@ -23,6 +23,12 @@ import OtherReviewStandards from "../views/workflow/Other/ReviewStandards.vue";
 import OtherCreateMetadata from "../views/workflow/Other/CreateMetadata.vue";
 import OtherPickLicense from "../views/workflow/Other/PickLicense.vue";
 
+// NextGenHighThroughputSequencing metadata related components
+import NextGenHighThroughputSequencingLanding from "../views/workflow/NextGenHighThroughputSequencing/NextGenHighThroughputSequencingLanding.vue";
+import NextGenHighThroughputSequencingSelectSourceFolder from "../views/workflow/NextGenHighThroughputSequencing/SelectSourceFolder.vue";
+import NextGenHighThroughputSequencingReviewStandards from "../views/workflow/NextGenHighThroughputSequencing/ReviewStandards.vue";
+import NextGenHighThroughputSequencingCreateMetadata from "../views/workflow/NextGenHighThroughputSequencing/CreateMetadata.vue";
+
 // workflow related components
 import SelectRepositoryDestination from "../views/workflow/SelectRepositoryDestination.vue";
 
@@ -41,14 +47,22 @@ import FigsharePublish from "../views/figshare/FigsharePublish.vue";
 
 // github related components
 import GithubZenodoConnection from "../views/github/GithubZenodoConnection.vue";
+import GithubChooseUpload from "../views/github/GithubChooseUpload.vue";
 import GithubSummary from "../views/github/GithubSummary.vue";
 import GithubUpload from "../views/github/GithubUpload.vue";
+import GithubZenodoUpload from "../views/github/GithubZenodoUpload.vue";
+import GithubFigshareUpload from "../views/github/GithubFigshareUpload.vue";
 import GithubPublish from "../views/github/GithubPublish.vue";
 
 // bio.tools related components
 import BioToolsAccessToken from "../views/biotools/BioToolsAccessToken.vue";
 import BioToolsMetadata from "../views/biotools/BioToolsMetadata.vue";
 import BioToolsReview from "../views/biotools/BioToolsReview.vue";
+
+// ncbi geo related components
+import GEOGenerate from "../views/ncbigeo/GEOGenerate.vue";
+import GEOUpload from "../views/ncbigeo/GEOUpload.vue";
+import GEOPublish from "../views/ncbigeo/GEOPublish.vue";
 
 // integration related components
 import ManageAccount from "../views/accounts/ManageAccount.vue";
@@ -92,12 +106,20 @@ const routes = [
     component: OtherLanding,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/landing",
+    component: NextGenHighThroughputSequencingLanding,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
     component: CodeSelectSourceFolder,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/selectFolder",
     component: OtherSelectSourceFolder,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/selectFolder",
+    component: NextGenHighThroughputSequencingSelectSourceFolder,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectGithubRepo",
@@ -112,6 +134,10 @@ const routes = [
     component: OtherReviewStandards,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/reviewStandards",
+    component: NextGenHighThroughputSequencingReviewStandards,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
     name: "CodeCreateMetadata",
@@ -120,6 +146,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Other/createMetadata",
     component: OtherCreateMetadata,
     name: "OtherCreateMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/NextGenHighThroughputSequencing/createMetadata",
+    component: NextGenHighThroughputSequencingCreateMetadata,
+    name: "NextGenHighThroughputSequencingCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
@@ -176,6 +207,11 @@ const routes = [
     component: FigshareUpload,
     name: "FigshareUpload",
   },
+  {
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/upload",
+    component: GEOUpload,
+    name: "GEOUpload",
+  },
 
   {
     path: "/datasets/:datasetID/:workflowID/zenodo/publish",
@@ -188,6 +224,11 @@ const routes = [
     name: "FigsharePublish",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/publish",
+    component: GEOPublish,
+    name: "GEOPublish",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/github/zenodoConnection",
     component: GithubZenodoConnection,
     name: "GithubZenodoConnection",
@@ -198,9 +239,29 @@ const routes = [
     name: "GithubSummary",
   },
   {
+    path: "/datasets/:datasetID/:workflowID/ncbigeo/generate",
+    component: GEOGenerate,
+    name: "GEOGenerate",
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/github/upload",
     component: GithubUpload,
     name: "GithubUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/uploadZenodo",
+    component: GithubZenodoUpload,
+    name: "GithubZenodoUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/uploadFigshare",
+    component: GithubFigshareUpload,
+    name: "GithubFigshareUpload",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/github/chooseUpload",
+    component: GithubChooseUpload,
+    name: "GithubChooseUpload",
   },
   {
     path: "/datasets/:datasetID/:workflowID/github/publish",

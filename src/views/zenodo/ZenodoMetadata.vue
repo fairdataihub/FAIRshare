@@ -66,6 +66,7 @@
                   :list="zenodoMetadataForm.authors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -154,7 +155,7 @@
                     Optional. Mostly relevant for software and dataset uploads. Any string will be
                     accepted, but semantically-versioned tag is recommended. <br />
                     See
-                    <a href="https://semver.org/" target="_blank"> semver.org </a>
+                    <a href="https://semver.org/" target="_blank" rel="noopener"> semver.org </a>
                     for more information on semantic versioning.
                   </p>
                 </div>
@@ -184,6 +185,7 @@
                     <a
                       href="https://www.loc.gov/standards/iso639-2/php/code_list.php"
                       target="_blank"
+                      rel="noopener"
                     >
                       ISO 639 language codes list
                     </a>
@@ -198,6 +200,7 @@
                   :list="zenodoMetadataForm.keywords"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -324,12 +327,18 @@
                   <a
                     href="https://opendefinition.org/"
                     target="_blank"
+                    rel="noopener"
                     class="text-blue-500 hover:underline"
                   >
                     opendefinition.org
                   </a>
                   and
-                  <a href="https://spdx.org/" target="_blank" class="text-blue-500 hover:underline">
+                  <a
+                    href="https://spdx.org/"
+                    target="_blank"
+                    rel="noopener"
+                    class="text-blue-500 hover:underline"
+                  >
                     spdx.org
                   </a>
                   .
@@ -363,6 +372,7 @@
                   :list="zenodoMetadataForm.relatedIdentifiers"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -471,6 +481,7 @@
                   :list="zenodoMetadataForm.contributors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -572,6 +583,7 @@
                   item-key="id"
                   handle=".handle"
                   class="w-full"
+                  :animation="200"
                 >
                   <template #item="{ element }">
                     <div class="mb-2 flex flex-row justify-between transition-all">
@@ -838,6 +850,7 @@
                   :list="zenodoMetadataForm.thesis.supervisors"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -926,6 +939,7 @@
                   :list="zenodoMetadataForm.subjects"
                   item-key="id"
                   handle=".handle"
+                  :animation="200"
                   class="w-full"
                 >
                   <template #item="{ element }">
@@ -1013,7 +1027,7 @@
         />
       </div>
       <div v-else>
-        <app-docs-link url="curate-and-share/add-zenodo-metadata" position="bottom-4" />
+        <app-docs-link url="curate-and-share/zenodo/add-zenodo-metadata" position="bottom-4" />
       </div>
     </fade-transition>
   </div>
@@ -1407,7 +1421,6 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (shouldNavigateBack) {
-        // console.log("shouldNavigateBack");
         this.$router.push(
           `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/selectDestination`
         );
@@ -1418,7 +1431,7 @@ export default {
 
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/zenodoConnection`;
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`; // This one determines if source code, files or release is selected for upload;
         }
         if (this.workflow.source.type === "local") {
           routerPath = `/datasets/${this.datasetID}/${this.workflowID}/zenodo/accessToken`;
@@ -1450,7 +1463,6 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        // console.log(generalForm);
 
         let date = new Date();
 
@@ -1520,9 +1532,12 @@ export default {
           });
           this.zenodoMetadataForm.contributors = newContributors;
 
-          this.activeNames.indexOf("contributors") === -1
-            ? this.activeNames.push("contributors")
-            : null;
+          if (
+            this.zenodoMetadataForm.contributors.length > 0 &&
+            this.activeNames.indexOf("contributors") === -1
+          ) {
+            this.activeNames.push("contributors");
+          }
         }
 
         if (
@@ -1571,9 +1586,9 @@ export default {
                 }
               );
 
-              this.activeNames.indexOf("contributors") === -1
-                ? this.activeNames.push("contributors")
-                : null;
+              if (this.activeNames.indexOf("contributors") === -1) {
+                this.activeNames.push("contributors");
+              }
             }
           }
 
@@ -1597,9 +1612,9 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("relatedIdentifiers") === -1
-              ? this.activeNames.push("relatedIdentifiers")
-              : null;
+            if (this.activeNames.indexOf("relatedIdentifiers") === -1) {
+              this.activeNames.push("relatedIdentifiers");
+            }
           }
 
           if ("references" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
@@ -1613,9 +1628,9 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("references") === -1
-              ? this.activeNames.push("references")
-              : null;
+            if (this.activeNames.indexOf("references") === -1) {
+              this.activeNames.push("references");
+            }
           }
 
           if ("version" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
@@ -1631,34 +1646,42 @@ export default {
             this.zenodoMetadataForm.journal.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_title;
 
-            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
+            if (this.activeNames.indexOf("journal") === -1) {
+              this.activeNames.push("journal");
+            }
           }
           if ("journal_volume" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.volume =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_volume;
 
-            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
+            if (this.activeNames.indexOf("journal") === -1) {
+              this.activeNames.push("journal");
+            }
           }
           if ("journal_issue" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.issue =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_issue;
 
-            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
+            if (this.activeNames.indexOf("journal") === -1) {
+              this.activeNames.push("journal");
+            }
           }
           if ("journal_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.journal.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.journal_pages;
 
-            this.activeNames.indexOf("journal") === -1 ? this.activeNames.push("journal") : null;
+            if (this.activeNames.indexOf("journal") === -1) {
+              this.activeNames.push("journal");
+            }
           }
 
           if ("conference_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.conference.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_title;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
           if (
             "conference_acronym" in this.workflow.destination.zenodo.selectedDeposition.metadata
@@ -1666,9 +1689,9 @@ export default {
             this.zenodoMetadataForm.conference.acronym =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_acronym;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
           // Will have to comeback to this one
           // if (
@@ -1682,17 +1705,17 @@ export default {
             this.zenodoMetadataForm.conference.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_place;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
           if ("conference_url" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.conference.website =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_url;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
           if (
             "conference_session" in this.workflow.destination.zenodo.selectedDeposition.metadata
@@ -1700,9 +1723,9 @@ export default {
             this.zenodoMetadataForm.conference.session =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
           if (
             "conference_session_part" in
@@ -1711,57 +1734,59 @@ export default {
             this.zenodoMetadataForm.conference.part =
               this.workflow.destination.zenodo.selectedDeposition.metadata.conference_session_part;
 
-            this.activeNames.indexOf("conference") === -1
-              ? this.activeNames.push("conference")
-              : null;
+            if (this.activeNames.indexOf("conference") === -1) {
+              this.activeNames.push("conference");
+            }
           }
 
           if ("imprint_publisher" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.publisher =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_publisher;
 
-            this.activeNames.indexOf("bookReportChapter") === -1
-              ? this.activeNames.push("bookReportChapter")
-              : null;
+            if (this.activeNames.indexOf("bookReportChapter") === -1) {
+              this.activeNames.push("bookReportChapter");
+            }
           }
           if ("imprint_isbn" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.isbn =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_isbn;
 
-            this.activeNames.indexOf("bookReportChapter") === -1
-              ? this.activeNames.push("bookReportChapter")
-              : null;
+            if (this.activeNames.indexOf("bookReportChapter") === -1) {
+              this.activeNames.push("bookReportChapter");
+            }
           }
           if ("imprint_place" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.place =
               this.workflow.destination.zenodo.selectedDeposition.metadata.imprint_place;
 
-            this.activeNames.indexOf("bookReportChapter") === -1
-              ? this.activeNames.push("bookReportChapter")
-              : null;
+            if (this.activeNames.indexOf("bookReportChapter") === -1) {
+              this.activeNames.push("bookReportChapter");
+            }
           }
           if ("partof_title" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.title =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_title;
 
-            this.activeNames.indexOf("bookReportChapter") === -1
-              ? this.activeNames.push("bookReportChapter")
-              : null;
+            if (this.activeNames.indexOf("bookReportChapter") === -1) {
+              this.activeNames.push("bookReportChapter");
+            }
           }
           if ("partof_pages" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.bookReportChapter.pages =
               this.workflow.destination.zenodo.selectedDeposition.metadata.partof_pages;
 
-            this.activeNames.indexOf("bookReportChapter") === -1
-              ? this.activeNames.push("bookReportChapter")
-              : null;
+            if (this.activeNames.indexOf("bookReportChapter") === -1) {
+              this.activeNames.push("bookReportChapter");
+            }
           }
 
           if ("thesis_university" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
             this.zenodoMetadataForm.thesis.awardingUniversity =
               this.workflow.destination.zenodo.selectedDeposition.metadata.thesis_university;
 
-            this.activeNames.indexOf("thesis") === -1 ? this.activeNames.push("thesis") : null;
+            if (this.activeNames.indexOf("thesis") === -1) {
+              this.activeNames.push("thesis");
+            }
           }
           if (
             "thesis_supervisors" in this.workflow.destination.zenodo.selectedDeposition.metadata
@@ -1778,7 +1803,9 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("thesis") === -1 ? this.activeNames.push("thesis") : null;
+            if (this.activeNames.indexOf("thesis") === -1) {
+              this.activeNames.push("thesis");
+            }
           }
 
           if ("subjects" in this.workflow.destination.zenodo.selectedDeposition.metadata) {
@@ -1793,7 +1820,9 @@ export default {
               }
             );
 
-            this.activeNames.indexOf("subjects") === -1 ? this.activeNames.push("subjects") : null;
+            if (this.activeNames.indexOf("subjects") === -1) {
+              this.activeNames.push("subjects");
+            }
           }
         }
       }
@@ -1828,7 +1857,6 @@ export default {
   watch: {
     "zenodoMetadataForm.relatedIdentifiers": {
       handler(val) {
-        // console.log(val);
         if (val.length === 0) {
           this.relatedIdentifiersErrorMessage = "";
           this.invalidStatus.relatedIdentifiers = false;
@@ -1891,7 +1919,6 @@ export default {
 
     if (this.workflow.expandOptions.length === 0) {
       this.activeNames = ["basicInformation", "license"];
-      // this.activeNames = ["relatedIdentifiers"];
     } else {
       this.activeNames = this.workflow.expandOptions;
       this.workflow.expandOptions = [];

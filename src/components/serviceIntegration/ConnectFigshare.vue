@@ -130,7 +130,7 @@ export default {
         this.statusChangeFunction("disconnected");
       } catch (e) {
         errorFound = true;
-        console.log(e);
+        console.error(e);
       }
       if (!errorFound) {
         this.$notify({
@@ -164,7 +164,7 @@ export default {
         return "empty";
       } else {
         const url = `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`;
-        console.log("figshare auth url: ", url);
+
         const config = {
           method: "get",
           url,
@@ -173,7 +173,7 @@ export default {
           },
         };
 
-        const response = await axios(config)
+        await axios(config)
           .then(async (response) => {
             if (response.status === 200) {
               let tokenObject = {};
@@ -197,10 +197,8 @@ export default {
             }
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
-
-        console.log(response);
       }
     },
     showErrorMessage(message) {

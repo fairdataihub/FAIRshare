@@ -8,7 +8,7 @@
           When you are ready, click on the curation buttons below to start the curation process.
         </span>
 
-        <el-divider> </el-divider>
+        <line-divider />
 
         <!-- <div class="flex flex-col p-2" v-for="(workflow, key) in dataset.workflows" :key="key">
           <div class="bg-gray-300 px-4 py-2">
@@ -35,7 +35,7 @@
             v-if="codeObject.show"
           >
             <div
-              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="codeObject.minimize = !codeObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -126,7 +126,7 @@
             v-if="otherObject.show"
           >
             <div
-              class="absolute top-4 right-5 rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="otherObject.minimize = !otherObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -206,6 +206,94 @@
               </button>
             </div>
           </div>
+
+          <div
+            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            v-if="nextGenHighThruObject.show"
+          >
+            <div
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              @click="nextGenHighThruObject.minimize = !nextGenHighThruObject.minimize"
+            >
+              <Icon icon="bi:arrows-expand" height="20" />
+            </div>
+
+            <div class="flex flex-row items-center pb-2">
+              <Icon icon="clarity:dna-line" height="45" />
+              <div class="ml-2 flex w-full flex-col">
+                <span class="text-base">
+                  {{ nextGenHighThruObject.title }}
+                </span>
+
+                <span class="text-sm" v-show="nextGenHighThruObject.name != ''">
+                  {{ nextGenHighThruObject.name }}
+                </span>
+              </div>
+            </div>
+
+            <line-divider></line-divider>
+
+            <div
+              class="flex flex-col transition-all"
+              :class="{
+                'max-h-0': nextGenHighThruObject.minimize,
+                'max-h-screen': !nextGenHighThruObject.minimize,
+              }"
+            >
+              <el-table :data="nextGenHighThruObject.data" stripe style="width: 100%">
+                <el-table-column prop="task" label="Task" />
+                <el-table-column label="Status">
+                  <template #default="scope">
+                    <Icon
+                      icon="bi:check-circle"
+                      class="text-green-500"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
+                    />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
+                  </template>
+                </el-table-column>
+                <el-table-column label="Details">
+                  <template #default="scope">
+                    <span v-if="scope.row.type !== 'folderPath'">
+                      {{ scope.row.detail }}
+                    </span>
+                    <span
+                      v-else
+                      target="_blank"
+                      class="text-url break-all"
+                      rel="noopener noreferrer"
+                    >
+                      {{ scope.row.detail }}
+                    </span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+            <div class="mt-4 flex items-center justify-end px-2 py-2">
+              <button
+                class="primary-button"
+                @click="navigateToCurate(nextGenHighThruObject.workflowID)"
+                ref="continueButton"
+              >
+                Curate {{ nextGenHighThruObject.title }}
+                <el-icon><arrow-right-bold /></el-icon>
+              </button>
+            </div>
+          </div>
         </div>
 
         <info-confirm
@@ -261,7 +349,7 @@
         </info-confirm>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/your-workflows" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/your-workflows" position="bottom-4" />
   </div>
 </template>
 
@@ -287,6 +375,7 @@ export default {
       workflowID: "",
       codeObject: { data: [] },
       otherObject: { data: [] },
+      nextGenHighThruObject: { data: [] },
       codeLicensesOptions: codeLicensesJSON.licenses,
       otherLicensesOptions: otherLicensesJSON.licenses,
     };
@@ -360,7 +449,9 @@ export default {
         case "Code":
           return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
-          return `/datasets/${this.datasetID}/${this.workflowID}/Other/selectFolder`;
+          return `/datasets/${this.datasetID}/${this.workflowID}/Other/landing`;
+        case "NextGenHighThroughputSequencing":
+          return `/datasets/${this.datasetID}/${this.workflowID}/NextGenHighThroughputSequencing/landing`;
         default:
           return dataType;
       }
@@ -794,9 +885,154 @@ export default {
         type: "doi",
       });
     },
+    generateNextGenHighThruObject() {
+      this.nextGenHighThruObject.show = false;
+      this.nextGenHighThruObject.minimize = false;
+
+      const allWorkflows = Object.keys(this.dataset.workflows);
+
+      const workflowPresent = allWorkflows.some(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "NextGenHighThroughputSequencing"
+      );
+
+      if (!workflowPresent) {
+        return;
+      }
+
+      const workflowID = allWorkflows.find(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "NextGenHighThroughputSequencing"
+      );
+
+      this.nextGenHighThruObject.workflowID = workflowID;
+
+      const workflow = this.dataset.workflows[workflowID];
+
+      let metadata = {};
+
+      if ("NextGenHighThroughputSequencing" in this.dataset.data) {
+        metadata = this.dataset.data.NextGenHighThroughputSequencing;
+      }
+
+      this.nextGenHighThruObject.data = [];
+
+      this.nextGenHighThruObject.show = true;
+      this.nextGenHighThruObject.title = "High-throughput Sequencing Data";
+      if ("name" in this.dataset.data.NextGenHighThroughputSequencing.questions) {
+        this.nextGenHighThruObject.name =
+          this.dataset.data.NextGenHighThroughputSequencing.questions.name;
+      }
+
+      this.nextGenHighThruObject.data.push({
+        status: this.getSource(workflowID),
+        task: "Source",
+        detail: this.getSource(workflowID),
+        type: "",
+      });
+
+      if ("standards" in metadata) {
+        let invalid = false;
+        for (let question of Object.keys(metadata.standards)) {
+          if (metadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.nextGenHighThruObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.nextGenHighThruObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.nextGenHighThruObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
+
+      let generateStatus = "";
+
+      if (workflow.generateNextGenHighThroughputSequencingMetadata) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.nextGenHighThruObject.data.push({
+        status: generateStatus,
+        task: "Metadata",
+        detail: "metadata.json",
+        type: "",
+      });
+
+      let destination = "";
+      if (
+        "uploadToRepo" in workflow &&
+        "destination" in workflow &&
+        "name" in workflow.destination
+      ) {
+        destination = this.repoFullName(workflow.destination.name);
+      } else {
+        destination = "";
+      }
+      this.nextGenHighThruObject.data.push({
+        status: destination,
+        task: "Destination",
+        detail: destination,
+        type: "",
+      });
+
+      if (workflow.datasetUploaded) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.nextGenHighThruObject.data.push({
+        status: generateStatus,
+        task: "Uploaded",
+        detail: "",
+        type: "",
+      });
+
+      let destinationFolderPath = "";
+      if ("destinationFolderPath" in workflow) {
+        destinationFolderPath = workflow.destinationFolderPath;
+      } else {
+        destinationFolderPath = "";
+      }
+      this.nextGenHighThruObject.data.push({
+        status: destinationFolderPath,
+        task: "Local generated dataset",
+        detail: destinationFolderPath,
+        type: "folderPath",
+      });
+
+      let geoFolderPath = "";
+      if ("geoFolderPath" in workflow) {
+        geoFolderPath = workflow.geoFolderPath;
+      } else {
+        geoFolderPath = "";
+      }
+      this.nextGenHighThruObject.data.push({
+        status: geoFolderPath,
+        task: "Geo folder",
+        detail: geoFolderPath,
+        type: "folderPath",
+      });
+    },
     generateStatusObjects() {
       this.generateCodeObject();
       this.generateOtherObject();
+      this.generateNextGenHighThruObject();
     },
   },
 

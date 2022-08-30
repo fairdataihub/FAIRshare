@@ -15,8 +15,6 @@
           You have some incomplete projects. Select one to continue working on it.
         </span>
 
-        <!-- <el-divider> </el-divider> -->
-
         <div class="h-full flex-grow overflow-y-auto">
           <div v-if="datasetsInProgress.length > 0">
             <el-divider content-position="left"> Projects currently in progress </el-divider>
@@ -126,7 +124,7 @@
                           class="mr-1"
                           :class="{ '!hidden': index > 1 }"
                         >
-                          {{ workflow === "Code" ? "Research software" : workflow }}
+                          {{ replaceDataType(workflow) }}
                         </el-tag>
                       </div>
                     </div>
@@ -235,7 +233,7 @@
                           class="mr-1"
                           :class="{ '!bg-red-500': index > 0 }"
                         >
-                          {{ workflow === "Code" ? "Research software" : workflow }}
+                          {{ replaceDataType(workflow) }}
                         </el-tag>
                       </div>
                     </div>
@@ -249,7 +247,7 @@
           </div>
         </div>
 
-        <el-divider> </el-divider>
+        <line-divider />
 
         <div class="mb-5 flex flex-row justify-between">
           <router-link to="/datasets/new">
@@ -289,7 +287,7 @@
         </router-link>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/your-projects" />
+    <app-docs-link url="curate-and-share/projects/your-projects" />
   </div>
 </template>
 
@@ -309,8 +307,18 @@ export default {
       datasetsPublished: [],
     };
   },
-  computed: {},
+
   methods: {
+    replaceDataType(dataType) {
+      switch (dataType) {
+        case "Code":
+          return "Research Software";
+        case "NextGenHighThroughputSequencing":
+          return "Next Gen High Throughput Sequencing";
+        default:
+          return dataType;
+      }
+    },
     shortDate(date) {
       return dayjs(date).format("MMM DD");
     },
@@ -320,7 +328,7 @@ export default {
     dateDifference(date) {
       const now = dayjs();
 
-      let difference = "";
+      let difference = 0;
 
       difference = now.diff(date, "second");
 
@@ -412,16 +420,19 @@ export default {
       // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/reviewStandards`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/pickLicense`;
       // routerPath = `/datasets/${datasetID}/workflow1/Code/createMetadata`;
-      // routerPath = `/datasets/${datasetID}/workflow1/Other/createMetadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/Other/pickLicense`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
-      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;
+      // routerPath = `/datasets/${datasetID}/workflow1/NextGenHighThroughputSequencing/createMetadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/ncbigeo/generate`;
+      // routerPath = `/datasets/${datasetID}/workflow1/ncbigeo/upload`;
       // routerPath = `/datasets/${datasetID}/workflow1/figshare/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/figshare/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/zenodoConnection`;
+      // routerPath = `/datasets/${datasetID}/workflow1/github/chooseUpload`;
       // routerPath = `/datasets/${datasetID}/workflow1/github/publish`;
       // routerPath = `/datasets/${datasetID}/workflow1/githubNoUpload/finalPage`;
       // routerPath = `/datasets/${datasetID}/workflow1/localNoUpload/finalPage`;

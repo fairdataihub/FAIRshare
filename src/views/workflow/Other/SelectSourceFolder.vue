@@ -5,8 +5,10 @@
         Provide the location of the files you want to include in your dataset
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
+
       <span class="mb-2"> Where are your files located? </span>
+
       <div class="item-center flex justify-center gap-8 pt-8">
         <div
           class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
@@ -228,12 +230,6 @@ export default {
       this.locationID = this.workflow.source.type;
       this.folderPath = this.dataset.data[this.workflow.type[0]].folderPath;
     }
-
-    // console.log(this.dataset.data[this.workflow.type[0]].folderPath);
-
-    // if (this.workflow.folderPath) {
-    //   this.folderPath = this.workflow.folderPath;
-    // }
   },
 };
 </script>

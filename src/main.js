@@ -1,11 +1,18 @@
-import { getGlobal } from "@electron/remote";
+import { app as electronApp, getGlobal } from "@electron/remote";
+
 import { createApp } from "vue";
-import App from "./App.vue";
 import { router } from "./router";
-import ElementPlus from "element-plus";
+
 import { createPinia } from "pinia";
+
+import App from "./App.vue";
+
+import ElementPlus, { ElCollapseTransition } from "element-plus";
+
 import Popper from "vue3-popper";
+import Toast from "vue-toastification";
 import Vue3Lottie from "vue3-lottie";
+
 import VMdEditor from "@kangc/v-md-editor";
 
 import analytics from "./plugins/analytics";
@@ -21,6 +28,7 @@ import "./assets/css/utilities-theme.css";
 import "./assets/css/index.css";
 import "element-plus/dist/index.css";
 import "vue3-lottie/dist/style.css";
+import "vue-toastification/dist/index.css";
 
 // css for the markdown editor
 import "katex/dist/katex.min.css";
@@ -36,13 +44,19 @@ import AppDocsLink from "./components/ui/AppDocsLink.vue";
 import WarningConfirm from "./components/dialogs/confirm/WarningConfirm.vue";
 import InfoConfirm from "./components/dialogs/confirm/InfoConfirm.vue";
 import ErrorConfirm from "./components/dialogs/confirm/ErrorConfirm.vue";
+import SuccessConfirm from "./components/dialogs/confirm/SuccessConfirm.vue";
 
 import WarningPrompt from "./components/dialogs/prompt/WarningPrompt.vue";
 import LoginPrompt from "./components/dialogs/prompt/LoginPrompt.vue";
+import AddPrompt from "./components/dialogs/prompt/AddPrompt.vue";
+import EditPrompt from "./components/dialogs/prompt/EditPrompt.vue";
 
 import GeneralDialog from "./components/dialogs/general/GeneralDialog.vue";
+import LottieDialog from "./components/dialogs/general/LottieDialog.vue";
 
 import AppAnnouncement from "./components/dialogs/announcement/AppAnnouncement.vue";
+
+import FolderPathInput from "./components/fileInputDialog/folderPathInput.vue";
 
 import FadeTransition from "./components/transitions/FadeTransition.vue";
 
@@ -58,13 +72,28 @@ VMdEditor.lang.use("en-US", enUS); // set language to english
 let app = createApp(App);
 
 // global variables for use in the app
-app.config.globalProperties.$server_url = `http://127.0.0.1:${getGlobal("PYPORT")}`;
+app.config.globalProperties.$server_url = `http://127.0.0.1:${getGlobal("PY_PORT")}`;
 app.config.globalProperties.$helix_spinner = HelixSpinnerAnimationData;
 app.config.globalProperties.$fairshare_badge_text = `Curated with FAIRshare`;
 app.config.globalProperties.$fairshare_badge_image_url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/badge.svg`;
 
+app.config.globalProperties.$app_path = electronApp.getAppPath();
+
+app.config.globalProperties.$locale = electronApp.getLocale();
+app.config.globalProperties.$app_version = electronApp.getVersion();
+
+app.config.globalProperties.$home_path = electronApp.getPath("home");
+app.config.globalProperties.$app_data_path = electronApp.getPath("appData");
+app.config.globalProperties.$user_data_path = electronApp.getPath("userData");
+app.config.globalProperties.$desktop_path = electronApp.getPath("desktop");
+app.config.globalProperties.$documents_path = electronApp.getPath("documents");
+app.config.globalProperties.$downloads_path = electronApp.getPath("downloads");
+app.config.globalProperties.$logs_path = electronApp.getPath("logs");
+
 // register components globally
 app.component("VuePopper", Popper);
+
+app.component("el-collapse-transition", ElCollapseTransition);
 
 app.component("line-divider", LineDivider);
 app.component("workflow-progress-bar", WorkflowProgressBarVue);
@@ -74,18 +103,25 @@ app.component("app-docs-link", AppDocsLink);
 app.component("warning-confirm", WarningConfirm);
 app.component("info-confirm", InfoConfirm);
 app.component("error-confirm", ErrorConfirm);
+app.component("success-confirm", SuccessConfirm);
 
 app.component("warning-prompt", WarningPrompt);
 app.component("login-prompt", LoginPrompt);
+app.component("add-prompt", AddPrompt);
+app.component("edit-prompt", EditPrompt);
 
 app.component("general-dialog", GeneralDialog);
+app.component("lottie-dialog", LottieDialog);
 
 app.component("app-announcement", AppAnnouncement);
+
+app.component("folder-path-input", FolderPathInput);
 
 app.component("fade-transition", FadeTransition);
 
 // import and register icons globally
 import {
+  ArrowRight,
   ArrowRightBold,
   Back,
   Box,
@@ -94,6 +130,7 @@ import {
   Checked,
   CircleCheckFilled,
   CircleCloseFilled,
+  CirclePlus,
   Collection,
   CopyDocument,
   DArrowLeft,
@@ -138,6 +175,7 @@ import {
   View,
 } from "@element-plus/icons-vue";
 
+app.component("arrow-right", ArrowRight);
 app.component("arrow-right-bold", ArrowRightBold);
 app.component("back-icon", Back);
 app.component("box-icon", Box);
@@ -146,6 +184,7 @@ app.component("chat-line-square", ChatLineSquare);
 app.component("checked-icon", Checked);
 app.component("circle-check-filled", CircleCheckFilled);
 app.component("circle-close-filled", CircleCloseFilled);
+app.component("circle-plus", CirclePlus);
 app.component("collection-icon", Collection);
 app.component("copy-document", CopyDocument);
 app.component("d-arrow-left", DArrowLeft);
@@ -195,6 +234,11 @@ app.use(createPinia()); // pinia
 app.use(ElementPlus); // element plus
 app.use(VMdEditor); // markdown editor
 app.use(Vue3Lottie); // lottie animations
+app.use(Toast, {
+  transition: "Vue-Toastification__fade",
+  maxToasts: 10,
+  newestOnTop: true,
+}); // toast notifications
 app.use(analytics, {
   trackingID: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
 }); // analytics

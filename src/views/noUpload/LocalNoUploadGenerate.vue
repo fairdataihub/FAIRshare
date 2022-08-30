@@ -6,7 +6,7 @@
         This one is on us. FAIRshare is creating your requested files for you.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col justify-center">
         <el-progress
@@ -181,7 +181,6 @@ export default {
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the CITATION.cff file";

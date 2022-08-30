@@ -10,22 +10,29 @@ from figshare import (
     createNewFigshareItem,
     deleteFigshareArticle,
     getFigshareFileUploadStatus,
-    uploadFileToFigshare,
     publishFigshareArticle,
+    uploadFileToFigshare,
 )
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, reqparse
+from geo import getFilesAndFoldersAtLocation, getGEOFileUploadStatus, uploadFolderToGeo
+
+# from flask_wtf.csrf import CSRFProtect
 from github import (
     getFileFromRepo,
+    getReleaseAsset,
     getRepoContentTree,
     getRepoContributors,
     getRepoReleases,
+    getRepoZipball,
     getUserRepositories,
     uploadFileToGithub,
+    uploadReleaseAsset,
 )
 from metadata import createCitationCFF, createMetadata
 from utilities import (
+    copyFile,
     createFile,
     deleteFile,
     fileExistInFolder,
@@ -47,17 +54,22 @@ from zenodo import (
     uploadFileToZenodoDeposition,
 )
 
-API_VERSION = "1.4.0"
+API_VERSION = "2.0.0"
 
 
 app = Flask(__name__)
-# full if you want to see all the details
-app.config.SWAGGER_UI_DOC_EXPANSION = "list"
 
 SECRET_KEY = os.urandom(32)
 app.config["SECRET_KEY"] = SECRET_KEY
 
-CORS(app)
+# full if you want to see all the details
+app.config.SWAGGER_UI_DOC_EXPANSION = "list"
+
+# TODO - fix this
+# csrf = CSRFProtect()
+# csrf.init_app(app)
+
+CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}})
 
 # configure root logger
 LOG_FOLDER = os.path.join(os.path.expanduser("~"), ".fairshare", "logs")
@@ -171,7 +183,12 @@ class BioToolsUserDetails(Resource):
         """Get user details"""
 
         parser = reqparse.RequestParser()
-        parser.add_argument("token", type=str, required=True)
+        parser.add_argument(
+            "token",
+            type=str,
+            required=True,
+            location="args",
+        )
         args = parser.parse_args()
 
         token = args["token"]
@@ -239,7 +256,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
-            "virtual_file": "Parameter to generate a virtual file",
+            "folder_path": "Path to the folder to save the file",
         },
     )
     def post(self):
@@ -264,7 +281,11 @@ class CreateMetadata(Resource):
         data = json.loads(args["data_object"])
         virtual_file = args["virtual_file"]
 
-        return createMetadata(data_types, data, virtual_file)
+        return createMetadata(
+            data_types,
+            data,
+            virtual_file,
+        )
 
 
 @metadata.route("/citation/create", endpoint="CreateCitationCFF")
@@ -516,12 +537,14 @@ class zenodoDeposition(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "deposition_id",
             type=str,
             required=True,
             help="deposition_id is required. deposition_id needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -578,6 +601,7 @@ class zenodoGetAll(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -856,6 +880,7 @@ class GetAllRepos(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -884,18 +909,21 @@ class GetAllContributorsForRepo(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -926,18 +954,21 @@ class GetAllReleasesForRepo(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -968,6 +999,149 @@ class getRepoContentsTree(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "owner",
+            type=str,
+            required=True,
+            help="owner is required. owner needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        owner = args["owner"]
+        repo = args["repo"]
+
+        return getRepoContentTree(access_token, owner, repo)
+
+
+@github.route("/repo/zipball", endpoint="GetRepoZipBall")
+class GetRepoZipBall(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "repo": "repository name",
+            "default_branch": "default branch to use",
+            "file_path": "name of file to be read",
+        },
+    )
+    def get(self):
+        """Get the contents of a file in a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "repo",
+            type=str,
+            required=True,
+            help="repo is required. repo needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "default_branch",
+            type=str,
+            required=True,
+            help="default_branch is required. default_branch needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. fileName needs to be of type str",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        repo = args["repo"]
+        default_branch = args["default_branch"]
+        file_path = args["file_path"]
+
+        return getRepoZipball(access_token, repo, default_branch, file_path)
+
+
+@github.route("/release/asset", endpoint="GetReleaseAsset")
+class GetReleaseAsset(Resource):
+    @github.doc(
+        responses={200: "Success", 401: "Validation error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "browser_download_url": "The download url for the release asset",
+            "file_path": "file path to save the file at",
+        },
+    )
+    def get(self):
+        """Get the contents of a file in a repository"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "browser_download_url",
+            type=str,
+            required=True,
+            help="browser_download_url is required. browser_download_url needs to be of type str",  # noqa: E501
+            location="args",
+        )
+        parser.add_argument(
+            "file_path",
+            type=str,
+            required=True,
+            help="file_path is required. fileName needs to be of type str",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        access_token = args["access_token"]
+        browser_download_url = args["browser_download_url"]
+        file_path = args["file_path"]
+
+        return getReleaseAsset(access_token, browser_download_url, file_path)
+
+    @github.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={
+            "access_token": "GitHub authorization token for the user",
+            "owner": "owner of the repository",
+            "repo": "repository name",
+            "release_id": "id of the release",
+            "asset_path": "path of the file to be uploaded to the release",
+        },
+    )
+    def post(self):
+        """Upload a local file to a specific release. Any pre-existing files with the same name will be replaced"""  # noqa: E501
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "access_token",
+            type=str,
+            required=True,
+            help="access_token is required. accessToken needs to be of type str",
         )
         parser.add_argument(
             "owner",
@@ -981,14 +1155,28 @@ class getRepoContentsTree(Resource):
             required=True,
             help="repo is required. repo needs to be of type str",
         )
+        parser.add_argument(
+            "release_id",
+            type=str,
+            required=True,
+            help="release_id is required. release_id needs to be of type str",
+        )
+        parser.add_argument(
+            "asset_path",
+            type=str,
+            required=True,
+            help="asset_path is required. asset_path needs to be of type str",
+        )
 
         args = parser.parse_args()
 
         access_token = args["access_token"]
         owner = args["owner"]
         repo = args["repo"]
+        release_id = args["release_id"]
+        asset_path = args["asset_path"]
 
-        return getRepoContentTree(access_token, owner, repo)
+        return uploadReleaseAsset(access_token, owner, repo, release_id, asset_path)
 
 
 @github.route("/repo/file/contents", endpoint="getRepoFileContents")
@@ -1011,24 +1199,28 @@ class getRepoFileContents(Resource):
             type=str,
             required=True,
             help="access_token is required. accessToken needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "owner",
             type=str,
             required=True,
             help="owner is required. owner needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "repo",
             type=str,
             required=True,
             help="repo is required. repo needs to be of type str",
+            location="args",
         )
         parser.add_argument(
             "file_name",
             type=str,
             required=True,
             help="file_name is required. fileName needs to be of type str",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1039,6 +1231,139 @@ class getRepoFileContents(Resource):
         file_name = args["file_name"]
 
         return getFileFromRepo(access_token, owner, repo, file_name)
+
+
+###############################################################################
+# NCBI GEO
+###############################################################################
+
+
+ncbigeo = api.namespace("ncbigeo", description="NCBI GEO")
+
+
+@ncbigeo.route("/upload", endpoint="UploadFolderToGeo")
+class UploadFolderToGeo(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "ftp_host": "Geo host",
+            "ftp_username": "Geo username",
+            "ftp_password": "Geo password",
+            "ftp_folder_path": "Geo personalized folder path",
+            "folder_path": "folder path to upload",
+        },
+    )
+    def post(self):
+        """Upload a folder to NCBI GEO"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "ftp_host",
+            type=str,
+            required=True,
+            help="ftp_host is required. ftpHost needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_username",
+            type=str,
+            required=True,
+            help="ftp_username is required. ftpUsername needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_password",
+            type=str,
+            required=True,
+            help="ftp_password is required. ftpPassword needs to be of type str",
+        )
+        parser.add_argument(
+            "ftp_folder_path",
+            type=str,
+            required=True,
+            help="Geo personalized folder path",
+        )
+        parser.add_argument(
+            "folder_path",
+            type=str,
+            required=True,
+            help="folder path to upload",
+        )
+
+        args = parser.parse_args()
+
+        ftp_host = args["ftp_host"]
+        ftp_username = args["ftp_username"]
+        ftp_password = args["ftp_password"]
+        ftp_folder_path = args["ftp_folder_path"]
+        folder_path = args["folder_path"]
+
+        return uploadFolderToGeo(
+            ftp_host, ftp_username, ftp_password, ftp_folder_path, folder_path
+        )
+
+    @ncbigeo.doc(
+        responses={200: "Success", 401: "Authentication error"},
+        params={},
+    )
+    def get(self):
+        """Get file upload status"""
+
+        return getGEOFileUploadStatus()
+
+
+@ncbigeo.route("/files", endpoint="getGEOFolder")
+class getGEOFolder(Resource):
+    @ncbigeo.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "ftp_host": "Geo host",
+            "ftp_username": "Geo username",
+            "ftp_password": "Geo password",
+            "ftp_folder_path": "Geo personalized folder path",
+        },
+    )
+    def get(self):
+        "Get list of files and folder at location"
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "ftp_host",
+            type=str,
+            required=True,
+            help="ftp_host is required. ftpHost needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "ftp_username",
+            type=str,
+            required=True,
+            help="ftp_username is required. ftpUsername needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "ftp_password",
+            type=str,
+            required=True,
+            help="ftp_password is required. ftpPassword needs to be of type str",
+            location="args",
+        )
+        parser.add_argument(
+            "ftp_folder_path",
+            type=str,
+            required=True,
+            help="Geo personalized folder path",
+            location="args",
+        )
+
+        args = parser.parse_args()
+
+        ftp_host = args["ftp_host"]
+        ftp_username = args["ftp_username"]
+        ftp_password = args["ftp_password"]
+        ftp_folder_path = args["ftp_folder_path"]
+
+        return getFilesAndFoldersAtLocation(
+            ftp_host, ftp_username, ftp_password, ftp_folder_path
+        )
 
 
 ###############################################################################
@@ -1143,6 +1468,7 @@ class RequestJSON(Resource):
             type=str,
             required=True,
             help="url that needs a CORS proxy",
+            location="args",
         )
 
         args = parser.parse_args()
@@ -1285,11 +1611,43 @@ class FileExistInFolder(Resource):
         return fileExistInFolder(folder_path, file_name)
 
 
+@utilities.route("/copyfile", endpoint="CopyFile")
+class CopyFile(Resource):
+    @utilities.doc(
+        responses={200: "Success", 400: "Validation error"},
+        params={
+            "source_file_path": "source file path to copy",
+            "destination_file_path": "destination file path to copy to",
+        },
+    )
+    def post(self):
+        """copy a file"""
+        parser = reqparse.RequestParser()
+
+        parser.add_argument(
+            "source_file_path",
+            type=str,
+            required=True,
+            help="source file path to copy",
+        )
+        parser.add_argument(
+            "destination_file_path",
+            type=str,
+            required=True,
+            help="destination file path to copy to",
+        )
+        args = parser.parse_args()
+        source_file_path = args["source_file_path"]
+        destination_file_path = args["destination_file_path"]
+        return copyFile(source_file_path, destination_file_path)
+
+
 # 5000 is the flask default port.
 # Using 7632 since it spells SODA lol.
 # Remove `debug=True` when creating the standalone pyinstaller file
 if __name__ == "__main__":
     requested_port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
+    debug = sys.argv[2] if len(sys.argv) > 2 else False
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
@@ -1297,5 +1655,4 @@ if __name__ == "__main__":
 
     api.logger.info("Starting FAIRshare server")
 
-    app.run(host="127.0.0.1", port=requested_port)
-    # app.run(host="127.0.0.1", port=requested_port, debug=True)
+    app.run(host="127.0.0.1", port=requested_port, debug=debug)

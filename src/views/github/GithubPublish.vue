@@ -1,13 +1,11 @@
 <template>
   <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <span class="text-left text-lg font-semibold"> Publish your work to Zenodo </span>
-      <span class="text-left">
-        All your metadata files have been uploaded to GitHub. It's now time to publish your work to
-        Zenodo by creating a release on GitHub.
+      <span class="text-left text-lg font-semibold">
+        {{ showFinalInstructions ? `GitHub release created` : `Let's create a release on GitHub` }}
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div
         class="flex h-full flex-col items-center justify-start"
@@ -134,9 +132,6 @@
                   <Icon icon="ic:baseline-auto-fix-high" class="mx-2 h-5 w-5" />
                   Auto generate release notes
                 </button>
-                <button class="primary-button">
-                  <Icon icon="ic:baseline-auto-fix-high" class="mx-2 h-5 w-5" /> Primary Button
-                </button>
               </div>
               <div class="px-3">
                 <v-md-editor
@@ -190,8 +185,7 @@
                 @messageConfirmed="createRelease('publish')"
               >
                 <p class="text-center text-base text-gray-500">
-                  Once a release has been made you will not be able to remove it from Zenodo. Are
-                  you sure you want to continue?
+                  This will create a published release on GitHub. Are you sure you want to continue?
                 </p>
               </warning-confirm>
               <warning-confirm
@@ -217,19 +211,14 @@
         />
         <div v-if="draftReleaseURL !== ''">
           <p class="pb-10 text-center font-medium">
-            Your draft release is now on GitHub. You can go in and add additional files or edit
-            items before publishing the release. <br />
-            <br />
-            <span class="font-medium text-secondary-500">
-              Once you publish the release from Github, this will automatically push your release to
-              Zenodo as well.
-            </span>
+            Your draft release is now on GitHub. <br />
+            You can go on GitHub and add additional files or edit items before publishing the
+            release.
           </p>
         </div>
         <div v-if="publishedReleaseURL !== ''" class="pb-10">
           <p class="pb-5 text-center text-lg font-medium">
-            Your release was published successfully. <br />
-            You can view it on Zenodo and get your DOI.
+            Your release was published successfully.
           </p>
           <p class="max-w-lg text-center text-sm">
             To increase the FAIRness of your software, we recommend to register it on the
@@ -274,14 +263,6 @@
           >
             <el-icon><upload-filled /></el-icon>
             View release on GitHub
-          </button>
-          <button
-            class="secondary-plain-button"
-            @click="viewZenodoRelease"
-            v-if="publishedReleaseURL !== ''"
-          >
-            <el-icon><star-icon /></el-icon>
-            View release on Zenodo
           </button>
         </div>
         <div class="flex items-center justify-center space-x-4">
@@ -369,7 +350,10 @@
         </div>
       </general-dialog>
     </div>
-    <app-docs-link url="curate-and-share/create-github-release" position="bottom-4" />
+    <app-docs-link
+      url="curate-and-share/research-software/create-github-release"
+      position="bottom-4"
+    />
   </div>
 </template>
 
@@ -441,16 +425,13 @@ export default {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    selectEvent(type) {
-      console.log(type, this.selectedTag);
-    },
     openDropdown() {
       this.$refs.dropdown1.handleOpen();
     },
-    createLoading() {
+    createLoading(text) {
       const loading = ElLoading.service({
         lock: true,
-        text: "Reading GitHub repository...",
+        text,
       });
       return loading;
     },
@@ -517,10 +498,7 @@ export default {
     async openWebPage(URL) {
       window.ipcRenderer.send("open-link-in-browser", URL);
     },
-    async viewZenodoRelease() {
-      const zenodoURL = `${process.env.VUE_APP_ZENODO_URL}/deposit`;
-      window.ipcRenderer.send("open-link-in-browser", zenodoURL);
-    },
+
     declineRelease() {
       this.showReleasePrompt = false;
       this.showApprovedInstructions = false;
@@ -537,11 +515,17 @@ export default {
       return await axios(config)
         .then((response) => {
           if (response.status === 201) {
+            const returnObject = {
+              id: response.data.id,
+            };
+
             if ("html_url" in response.data) {
-              return response.data.html_url;
+              returnObject.html_url = response.data.html_url;
             } else {
-              return `https://github.com/${this.repoName}/releases`;
+              returnObject.html_url = `https://github.com/${this.repoName}/releases`;
             }
+
+            return returnObject;
           } else {
             throw new Error(`Error creating release: ${response.status} ${response.statusText}`);
           }
@@ -591,7 +575,47 @@ export default {
         data: JSON.stringify(requestBody),
       };
 
-      const response = await this.pushRelease(config);
+      let response = await this.pushRelease(config);
+
+      if (
+        response !== "ERROR" &&
+        "addAdditionalFiles" in this.workflow &&
+        this.workflow.addAdditionalFiles &&
+        "additionalFilesLocation" in this.workflow &&
+        this.workflow.additionalFilesLocation === "local" &&
+        "localFileList" in this.workflow &&
+        this.workflow.localFileList.length > 0
+      ) {
+        const releaseID = response.id;
+
+        let spinner = this.createLoading("Please wait while we upload your release assets...");
+
+        for (const file of this.workflow.localFileList) {
+          response = await axios
+            .post(`${this.$server_url}/github/release/asset`, {
+              access_token: this.githubToken,
+              owner: this.repoName.split("/")[0],
+              repo: this.repoName.split("/")[1],
+              release_id: releaseID,
+              asset_path: file,
+            })
+            .then((response) => {
+              this.$track("GitHub", "Upload asset to release", "success");
+              return response.data;
+            })
+            .catch((error) => {
+              this.$track("GitHub", "Upload asset to release", "failed");
+              console.error(error);
+              return "ERROR";
+            });
+
+          if (response === "ERROR") {
+            this.errorMessage = "Something went wrong with uploading the asset to the release";
+          }
+        }
+
+        spinner.close();
+      }
 
       if (response === "ERROR") {
         ElNotification({
@@ -619,12 +643,12 @@ export default {
         if (releaseType === "publish") {
           this.$track("GitHub", "Publish release", "success");
           this.$track("GitHub", "Repository name", this.repoName);
-          this.publishedReleaseURL = response;
+          this.publishedReleaseURL = response.html_url;
         }
         if (releaseType === "draft") {
           this.$track("GitHub", "Draft release", "success");
           this.$track("GitHub", "Repository name", this.repoName);
-          this.draftReleaseURL = response;
+          this.draftReleaseURL = response.html_url;
         }
 
         ElNotification({
@@ -669,9 +693,8 @@ export default {
       response = await axios(config)
         .then((response) => {
           this.$track("GitHub", "Auto generated release notes", "success");
-          console.log(response);
+
           if (response.status === 200) {
-            console.log("response.data", response.data.body);
             this.releaseBody = response.data.body;
             return true;
           } else {
@@ -777,13 +800,13 @@ export default {
     },
   },
   async mounted() {
-    let spinner = this.createLoading();
+    let spinner = this.createLoading("Reading GitHub repository...");
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
     this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(7);
+    this.datasetStore.setCurrentStep(8);
 
     this.workflow.currentRoute = this.$route.path;
 
@@ -791,8 +814,6 @@ export default {
     this.githubToken = tokenObject.token;
 
     this.repoName = this.workflow.github.repo;
-    // this.repoName = "fairdataihub/Custom-Hook";
-    // this.repoName = "fairdataihub/FAIRshare";
 
     await this.prefillGithubEntries();
 

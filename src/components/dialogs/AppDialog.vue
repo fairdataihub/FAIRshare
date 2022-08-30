@@ -62,10 +62,9 @@ export default {
     // user inputs. in the order of from top to the bottom
     const userInputs = ref({});
     for (let i = 0; i < props.numInput; i++) {
-      // let key = props.headers[i];
       userInputs.value[props.headers[i]] = "";
     }
-    console.log("user inputs: ", userInputs.value);
+
     return {
       userInputs,
     };
@@ -93,7 +92,6 @@ export default {
     async confirmInput(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(">>>>");
           this.closeDialog("OK");
         }
       });

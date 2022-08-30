@@ -60,8 +60,6 @@ export default {
           })
           .send();
       }
-
-      return;
     };
   },
 };

@@ -159,6 +159,7 @@
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
+                            :animation="200"
                             item-key="id"
                             handle=".handle"
                           >
@@ -253,6 +254,7 @@
                             tag="div"
                             :list="step2Form.contributors"
                             item-key="id"
+                            :animation="200"
                             handle=".handle"
                           >
                             <template #item="{ element }">
@@ -437,6 +439,7 @@
                             :list="step3Form.keywords"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">
@@ -792,7 +795,7 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
+    <!-- <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" /> -->
   </div>
 </template>
 
@@ -819,7 +822,7 @@ import codeMetadataJSON from "@/assets/supplementalFiles/codeMetadata.json";
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
 
 export default {
-  name: "CodeCreateMetadata",
+  name: "OtherCreateMetadata",
   components: {
     draggable,
     Icon,
@@ -1493,7 +1496,7 @@ export default {
           });
         }
 
-        if ("created_at" in response) {
+        if (typeof response === "object" && "created_at" in response) {
           this.step1Form.creationDate = response.created_at;
         }
 
@@ -1742,7 +1745,7 @@ export default {
                 return response.data;
               })
               .catch((error) => {
-                console.log(error);
+                console.error(error);
                 return "ERROR";
               });
 

@@ -15,7 +15,12 @@
       :class="{ 'pointer-events-none': !datasetStore.sidebarVisible }"
     >
       <div class="relative flex flex-row justify-center p-2">
-        <img v-if="sideBarOpen" class="m-4 w-28" src="../../assets/brand/logo.svg" />
+        <img
+          v-if="sideBarOpen"
+          class="m-4 w-28"
+          src="../../assets/brand/logo.svg"
+          alt="FAIRshare app logo"
+        />
 
         <div
           class="group absolute top-0 right-2 flex scale-100 transform cursor-pointer items-center justify-center p-1 transition-all hover:scale-110"
@@ -66,7 +71,11 @@
             <span v-show="sideBarOpen"> About </span>
           </router-link>
           <div class="sideBarMenuItem !pointer-events-none !mb-0 !pb-0" v-if="sideBarOpen">
-            <img src="../../assets/brand/fair-data-innovations-hub-logo.svg" class="w-[150px]" />
+            <img
+              src="../../assets/brand/fair-data-innovations-hub-logo.svg"
+              class="w-[150px]"
+              alt="FAIR Data Innovations Hub logo"
+            />
           </div>
           <div class="absolute bottom-0 right-3 hidden">
             <span class="text-xs text-gray-400">{{ environment }}</span>

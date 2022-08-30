@@ -87,8 +87,8 @@ export default {
           tokenObject.type = "token";
           await this.manager.saveToken(key, tokenObject);
         } catch (e) {
-          // console.log(e);
           errorFound = true;
+          console.error(e);
         }
         if (!errorFound) {
           ElNotification({

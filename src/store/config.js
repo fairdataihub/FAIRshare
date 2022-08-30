@@ -60,7 +60,7 @@ export const useConfigStore = defineStore({
     async addConfig(key, value) {
       try {
         this.config[key] = value;
-        this.writeConfigToFile();
+        await this.writeConfigToFile();
       } catch (error) {
         console.log(error);
       }
@@ -68,13 +68,13 @@ export const useConfigStore = defineStore({
     async deleteConfig(key) {
       try {
         delete this.config[key];
-        this.writeConfigToFile();
+        await this.writeConfigToFile();
       } catch (error) {
         console.log(error);
       }
     },
     async syncConfig() {
-      this.writeConfigToFile();
+      await this.writeConfigToFile();
     },
     async setGlobals(key, value) {
       this.globals[key] = value;

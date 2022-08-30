@@ -120,7 +120,6 @@
 </template>
 
 <script>
-import { app } from "@electron/remote";
 import axios from "axios";
 import path from "path";
 
@@ -158,9 +157,9 @@ export default {
       let customPath = "";
 
       if (type === "configFolder") {
-        customPath = path.join(app.getPath("home"), ".fairshare", "accessTokens.json");
+        customPath = path.join(this.$home_path, ".fairshare", "accessTokens.json");
       } else if (type === "backendLogs") {
-        customPath = path.join(app.getPath("home"), ".fairshare", "logs", "api.log");
+        customPath = path.join(this.$home_path, ".fairshare", "logs", "api.log");
       }
 
       axios

@@ -138,7 +138,7 @@ import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
 import { useConfigStore } from "./store/config.js";
 
-const MIN_API_VERSION = "1.4.0";
+const MIN_API_VERSION = "2.0.0";
 
 export default {
   name: "App",
@@ -209,19 +209,27 @@ export default {
       });
     },
     checkForAnnouncements() {
-      const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/main/meta/announcements.json?timestamp=${new Date().getTime()}`;
+      const url = `https://raw.githubusercontent.com/fairdataihub/FAIRshare/geo/meta/announcements.json?timestamp=${new Date().getTime()}`;
 
       axios
         .get(url)
         .then((response) => {
           const announcements = response.data;
           const currentVersion = app.getVersion();
+          const platform = process.platform;
 
           if (currentVersion in announcements) {
-            const announcement = announcements[currentVersion];
+            const currentVersionObject = announcements[currentVersion];
+            let announcement = {};
+
+            if ("all" in currentVersionObject) {
+              announcement = currentVersionObject["all"];
+            } else if (platform in currentVersionObject) {
+              announcement = currentVersionObject[platform];
+            }
 
             if ("show" in announcement && announcement.show) {
-              if (announcement.type === "warning") {
+              if ("type" in announcement && announcement.type === "warning") {
                 this.announcementText = announcement.message;
 
                 this.$refs.appAnnouncement.setTitle(announcement.title);
@@ -291,6 +299,12 @@ export default {
             });
         });
         await sleep(timeout);
+      }
+
+      if (retriesSuccess) {
+        this.showConnectingMessage = false;
+      } else {
+        this.$refs.errorConfirmNoBackend.show();
       }
     },
   },

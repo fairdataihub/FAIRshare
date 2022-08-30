@@ -5,7 +5,7 @@
         Select a license that defines the desired conditions for using your software
       </span>
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <div>
         <el-form
@@ -21,11 +21,9 @@
               <div class="flex">
                 <span> License </span>
                 <span class="px-1 text-red-500"> * </span>
-                <form-help-content
-                  popoverContent="<p class='text-sm'> Required. Selected license applies to all of your files <br /> If you want to upload some of your files under different licenses, please do so in separate uploads. <br /> If you cannot find the license you're looking for, include a relevant LICENSE file in your record and choose one of the <span class='italic'> Other </span> licenses available <span class='italic'> (Other (Open), Other (Attribution) </span>, etc.). <br /> The supported licenses in the list are harvested from <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://opendefinition.org`)' class='text-url'> opendefinition.org </a> and <a onclick='window.ipcRenderer.send(`open-link-in-browser`, `https://spdx.org`)' class='text-url' > spdx.org </a>.</p>"
-                ></form-help-content>
               </div>
             </template>
+
             <el-select
               v-model="licenseForm.license"
               filterable
@@ -41,6 +39,26 @@
               >
               </el-option>
             </el-select>
+
+            <span class="ml-1 mt-1 text-xs text-slate-600">
+              Required. Selected license applies to all of your files. If you want to upload some of
+              your files under different licenses, please do so in separate uploads. <br />
+
+              The supported licenses in the list are harvested from
+              <a
+                onclick="window.ipcRenderer.send(`open-link-in-browser`, `https://opendefinition.org`)"
+                class="text-url"
+              >
+                opendefinition.org
+              </a>
+              and
+              <a
+                onclick="window.ipcRenderer.send(`open-link-in-browser`, `https://spdx.org`)"
+                class="text-url"
+              >
+                spdx.org </a
+              >.
+            </span>
 
             <div class="flex w-full flex-row items-center">
               <span class="mx-1 text-sm italic text-zinc-600"> Suggestions: </span>
@@ -88,6 +106,7 @@
               </fade-transition>
               <iframe
                 sandbox
+                title="License preview"
                 :src="licenseHtmlUrl"
                 class="h-full w-full transition-all"
                 :class="loading ? 'opacity-0' : 'opacity-100'"
@@ -149,7 +168,7 @@
         </button>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/select-a-license" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/select-a-license" position="bottom-4" />
   </div>
 </template>
 
@@ -318,7 +337,6 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
-        console.log(valid);
         if (valid) {
           this.dataset.data.Code.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;
@@ -381,6 +399,7 @@ export default {
         });
 
       if (
+        typeof response === "object" &&
         response !== "ERROR" &&
         "license" in response &&
         response.license != null &&
@@ -398,7 +417,7 @@ export default {
           title: "Success",
           message: "License information found in GitHub",
           position: "top-right",
-          type: "info",
+          type: "success",
         });
       } else {
         ElNotification({
