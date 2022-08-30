@@ -4,11 +4,11 @@
   "license": "https://spdx.org/licenses/MIT",
   "codeRepository": "https://github.com/fairdataihub/FAIRshare",
   "dateCreated": "2022-03-19T00:12:42Z",
-  "dateModified": "2022-06-03",
+  "dateModified": "2022-08-30",
   "downloadUrl": "https://fairdataihub.org/fairshare",
   "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues",
   "name": "FAIRshare: FAIR data and software sharing made easy",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "identifier": "https://doi.org/10.5281/zenodo.6369429",
   "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
   "applicationCategory": "Scientific",
@@ -17,9 +17,27 @@
   "developmentStatus": "active",
   "isPartOf": "https://fairdataihub.org",
   "referencePublication": "https://doi.org/10.1101/2022.04.18.488694",
-  "funder": { "@type": "Organization", "@name": "National Institutes of Health (NIH)" },
-  "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"],
-  "programmingLanguage": ["Vue", "Python", "JavaScript", "CSS", "HTML"],
+  "funder": {
+    "@type": "Organization",
+    "@name": "National Institutes of Health (NIH)"
+  },
+  "keywords": [
+    "curation",
+    "electron",
+    "fair",
+    "macos",
+    "metadata",
+    "sharing",
+    "ubuntu",
+    "windows"
+  ],
+  "programmingLanguage": [
+    "Vue",
+    "Python",
+    "JavaScript",
+    "CSS",
+    "HTML"
+  ],
   "operatingSystem": [
     "Windows 11",
     "Windows 10",
@@ -27,14 +45,20 @@
     "Catalina (macOS 10.15)",
     "Ubuntu"
   ],
-  "relatedLink": ["https://fairdataihub.org/fairshare", "https://docs.fairshareapp.io"],
+  "relatedLink": [
+    "https://fairdataihub.org/fairshare",
+    "https://docs.fairshareapp.io"
+  ],
   "author": [
     {
       "@type": "Person",
       "givenName": "Sanjay",
       "familyName": "Soundarajan",
       "email": "ssoundarajan@calmi2.org",
-      "affiliation": { "@type": "Organization", "name": "FAIR Data Innovations Hub" }
+      "affiliation": {
+        "@type": "Organization",
+        "name": "FAIR Data Innovations Hub"
+      }
     },
     {
       "@type": "Person",
@@ -42,7 +66,10 @@
       "givenName": "Bhavesh",
       "familyName": "Patel",
       "email": "bpatel@calmi2.org",
-      "affiliation": { "@type": "Organization", "name": "California Medical Innovations Institute" }
+      "affiliation": {
+        "@type": "Organization",
+        "name": "California Medical Innovations Institute"
+      }
     }
   ]
 }
