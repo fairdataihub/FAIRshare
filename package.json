@@ -1,6 +1,6 @@
 {
   "name": "fairshare",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "Your one-stop tool for making biomedical research data and software FAIR",
   "homepage": "https://fairdataihub.org/fairshare",
   "private": true,

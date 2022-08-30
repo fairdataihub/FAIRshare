@@ -54,7 +54,7 @@ from zenodo import (
     uploadFileToZenodoDeposition,
 )
 
-API_VERSION = "1.5.0"
+API_VERSION = "2.0.0"
 
 
 app = Flask(__name__)

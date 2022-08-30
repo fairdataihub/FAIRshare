@@ -138,7 +138,7 @@ import { useDatasetsStore } from "./store/datasets";
 import { useTokenStore } from "./store/access.js";
 import { useConfigStore } from "./store/config.js";
 
-const MIN_API_VERSION = "1.5.0";
+const MIN_API_VERSION = "2.0.0";
 
 export default {
   name: "App",

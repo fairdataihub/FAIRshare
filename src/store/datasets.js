@@ -181,7 +181,7 @@ export const useDatasetsStore = defineStore({
 
     async upgradeSavedDatasets() {
       if (!("version" in this.datasets)) {
-        this.datasets.version = semver.clean("1.5.0");
+        this.datasets.version = semver.clean("2.0.0");
       }
 
       /**
@@ -199,14 +199,14 @@ export const useDatasetsStore = defineStore({
         // }
 
         this.datasets.version = semver.clean("1.4.0");
-        this.writeDatasetsToFile();
+        await this.writeDatasetsToFile();
       }
 
       if (semver.satisfies(this.datasets.version, "1.4.x")) {
-        console.log("Upgrading datasets to 1.5.0");
+        console.log("Upgrading datasets to 2.0.0");
 
-        this.datasets.version = semver.clean("1.5.0");
-        this.writeDatasetsToFile();
+        this.datasets.version = semver.clean("2.0.0");
+        await this.writeDatasetsToFile();
       }
 
       await this.writeDatasetsToFile(); // write the datasets to file
