@@ -302,86 +302,79 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
         "cff-version": "1.2.0",
     }
 
-    if "name" in general_data:
-        if general_data["name"] != "":
-            citationObject["title"] = general_data["name"]
+    if "name" in general_data and general_data["name"] != "":
+        citationObject["title"] = general_data["name"]
 
     citationObject["message"] = "If you use this software, please cite it as below."
     citationObject["type"] = "software"
 
-    if "authors" in general_data:
-        if len(general_data["authors"]) > 0:
-            citationObject["authors"] = []
+    if "authors" in general_data and len(general_data["authors"]) > 0:
+        citationObject["authors"] = []
 
-            for item in general_data["authors"]:
-                new_author = {}
+        for item in general_data["authors"]:
+            new_author = {}
 
-                if "orcid" in item:
-                    if item["orcid"] != "":
-                        new_author["orcid"] = item["orcid"]
+            if "orcid" in item and item["orcid"] != "":
+                new_author["orcid"] = item["orcid"]
 
-                if "givenName" in item:
-                    new_author["given-names"] = item["givenName"]
+            if "givenName" in item:
+                new_author["given-names"] = item["givenName"]
 
-                if "familyName" in item:
-                    new_author["family-names"] = item["familyName"]
+            if "familyName" in item:
+                new_author["family-names"] = item["familyName"]
 
-                if "email" in item:
-                    if item["email"] != "":
-                        new_author["email"] = item["email"]
+            if "email" in item and item["email"] != "":
+                new_author["email"] = item["email"]
 
-                if "affiliation" in item:
-                    if item["affiliation"] != "":
-                        new_author["affiliation"] = item["affiliation"]
+            if "affiliation" in item and item["affiliation"] != "":
+                new_author["affiliation"] = item["affiliation"]
 
-                citationObject["authors"].append(new_author)
+            citationObject["authors"].append(new_author)
 
-    if "identifier" in code_data:
-        if code_data["identifier"] != "":
-            citationObject["identifiers"] = []
+    if "identifier" in code_data and code_data["identifier"] != "":
+        citationObject["identifiers"] = []
 
-            identifier = {}
-            identifier["type"] = "doi"
-            identifier["value"] = code_data["identifier"]
-            identifier["description"] = "DOI for this software's record on Zenodo"
+        identifier = {}
+        identifier["type"] = "doi"
+        identifier["value"] = code_data["identifier"]
+        identifier["description"] = "DOI for this software's record on Zenodo"
 
-            citationObject["identifiers"].append(identifier)
+        citationObject["identifiers"].append(identifier)
 
-    if "codeRepository" in code_data:
-        if code_data["codeRepository"] != "":
-            citationObject["repository-code"] = code_data["codeRepository"]
+    if "codeRepository" in code_data and code_data["codeRepository"] != "":
+        citationObject["repository-code"] = code_data["codeRepository"]
 
-    if "isPartOf" in code_data:
-        if code_data["isPartOf"] != "":
-            citationObject["url"] = code_data["isPartOf"]
+    if "isPartOf" in code_data and code_data["isPartOf"] != "":
+        citationObject["url"] = code_data["isPartOf"]
 
-    if "currentVersionDownloadLink" in code_data:
-        if code_data["currentVersionDownloadLink"] != "":
-            citationObject["repository-artifact"] = code_data[
-                "currentVersionDownloadLink"
-            ]
+    if (
+        "currentVersionDownloadLink" in code_data
+        and code_data["currentVersionDownloadLink"] != ""
+    ):
+        citationObject["repository-artifact"] = code_data[
+            "currentVersionDownloadLink"
+        ]
 
-    if "description" in general_data:
-        if general_data["description"] != "":
-            citationObject["abstract"] = general_data["description"]
+    if "description" in general_data and general_data["description"] != "":
+        citationObject["abstract"] = general_data["description"]
 
-    if "keywords" in general_data:
-        if len(general_data["keywords"]) > 0:
-            citationObject["keywords"] = []
+    if "keywords" in general_data and len(general_data["keywords"]) > 0:
+        citationObject["keywords"] = []
 
-            for item in general_data["keywords"]:
-                citationObject["keywords"].append(item["keyword"])
+        for item in general_data["keywords"]:
+            citationObject["keywords"].append(item["keyword"])
 
     if "license" in code_data:
         citationObject["license"] = code_data["license"]
 
-    if "currentVersion" in code_data:
-        if code_data["currentVersion"] != "":
-            citationObject["version"] = code_data["currentVersion"]
+    if "currentVersion" in code_data and code_data["currentVersion"] != "":
+        citationObject["version"] = code_data["currentVersion"]
 
-    if "currentVersionReleaseDate" in code_data:
-        if code_data["currentVersionReleaseDate"] != "":
-            citationObject["date-released"] = code_data["currentVersionReleaseDate"]
+    if (
+        "currentVersionReleaseDate" in code_data
+        and code_data["currentVersionReleaseDate"] != ""
+    ):
+        citationObject["date-released"] = code_data["currentVersionReleaseDate"]
 
     # return the CITATION.cff object if virtual is set to true
     if virtual_file:
