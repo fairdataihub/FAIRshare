@@ -61,10 +61,11 @@
             :list="figshareMetadataForm.authors"
             item-key="id"
             handle=".handle"
+            class="w-full"
             :animation="200"
           >
             <template #item="{ element }">
-              <div class="mb-2 flex flex-row justify-between transition-all">
+              <div class="mb-2 flex w-full flex-row justify-between transition-all">
                 <div class="flex w-11/12 flex-row justify-between">
                   <el-input
                     v-model="element.givenName"
@@ -73,7 +74,7 @@
                     class="h-[40px]"
                   ></el-input>
 
-                  <div class="mx-1"></div>
+                  <div class="mx-2"></div>
 
                   <el-input
                     v-model="element.familyName"
