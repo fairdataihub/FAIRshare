@@ -351,9 +351,7 @@ def createCitationFromCode(code_data, general_data, folder_path, virtual_file):
         "currentVersionDownloadLink" in code_data
         and code_data["currentVersionDownloadLink"] != ""
     ):
-        citationObject["repository-artifact"] = code_data[
-            "currentVersionDownloadLink"
-        ]
+        citationObject["repository-artifact"] = code_data["currentVersionDownloadLink"]
 
     if "description" in general_data and general_data["description"] != "":
         citationObject["abstract"] = general_data["description"]
