@@ -287,7 +287,7 @@
         </router-link>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/your-projects" />
+    <app-docs-link url="curate-and-share/projects/your-projects" />
   </div>
 </template>
 

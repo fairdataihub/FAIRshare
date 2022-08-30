@@ -181,7 +181,10 @@
         </div>
       </transition>
     </div>
-    <app-docs-link url="curate-and-share/github-upload-summary" position="bottom-4" />
+    <app-docs-link
+      url="curate-and-share/research-software/github-upload-summary"
+      position="bottom-4"
+    />
   </div>
 </template>
 

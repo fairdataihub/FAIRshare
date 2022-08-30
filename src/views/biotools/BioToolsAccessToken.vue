@@ -50,7 +50,7 @@
       </fade-transition>
     </div>
 
-    <!-- <app-docs-link url="curate-and-share/zenodo-upload-summary" position="bottom-4" /> -->
+    <app-docs-link url="manage-accounts/connect-to-bio-tools" position="bottom-4" />
   </div>
 </template>
 

@@ -161,7 +161,7 @@
         </button>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/project-settings" position="bottom-4" />
+    <app-docs-link url="curate-and-share/projects/project-settings" position="bottom-4" />
   </div>
 </template>
 

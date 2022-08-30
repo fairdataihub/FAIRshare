@@ -932,7 +932,7 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
+    <!-- <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" /> -->
   </div>
 </template>
 

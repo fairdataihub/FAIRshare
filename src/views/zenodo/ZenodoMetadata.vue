@@ -1027,7 +1027,7 @@
         />
       </div>
       <div v-else>
-        <app-docs-link url="curate-and-share/add-zenodo-metadata" position="bottom-4" />
+        <app-docs-link url="curate-and-share/zenodo/add-zenodo-metadata" position="bottom-4" />
       </div>
     </fade-transition>
   </div>

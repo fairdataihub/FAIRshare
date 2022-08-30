@@ -349,7 +349,7 @@
         </info-confirm>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/your-workflows" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/your-workflows" position="bottom-4" />
   </div>
 </template>
 

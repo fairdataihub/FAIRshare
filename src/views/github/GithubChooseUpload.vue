@@ -149,7 +149,7 @@
         </button>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/connect-github-zenodo" position="bottom-4" />
+    <app-docs-link url="curate-and-share/research-software/add-files" position="bottom-4" />
   </div>
 </template>
 

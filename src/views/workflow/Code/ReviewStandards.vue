@@ -203,7 +203,7 @@
         </warning-confirm>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/verify-best-practices" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/verify-best-practices" position="bottom-4" />
   </div>
 </template>
 

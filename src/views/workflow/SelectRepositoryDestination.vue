@@ -471,7 +471,7 @@
         </transition>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/select-github-repo" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/select-github-repo" position="bottom-4" />
     <error-confirm
       ref="errorConfirmNoAdminPermission"
       title="Invalid permissions"

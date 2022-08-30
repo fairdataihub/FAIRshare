@@ -350,7 +350,10 @@
         </div>
       </general-dialog>
     </div>
-    <app-docs-link url="curate-and-share/create-github-release" position="bottom-4" />
+    <app-docs-link
+      url="curate-and-share/research-software/create-github-release"
+      position="bottom-4"
+    />
   </div>
 </template>
 
