@@ -7,8 +7,7 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 
-import ElementPlus from "element-plus";
-import { ElCollapseTransition } from "element-plus";
+import ElementPlus, { ElCollapseTransition } from "element-plus";
 
 import Popper from "vue3-popper";
 import Toast from "vue-toastification";

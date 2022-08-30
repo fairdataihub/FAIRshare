@@ -148,8 +148,6 @@ export default {
 
             await this.manager.saveToken(key, tokenObject);
           } catch (e) {
-            errorFound = true;
-
             return "ERROR";
           }
 
