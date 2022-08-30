@@ -456,7 +456,6 @@ export default {
       ) {
         return true;
       } else {
-        // console.log(this.zenodoMetadata.conference);
         return false;
       }
     },

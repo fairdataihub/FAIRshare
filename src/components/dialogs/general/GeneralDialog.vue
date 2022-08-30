@@ -31,14 +31,6 @@
             >
               <div class="flex h-full flex-col justify-between">
                 <div class="flex flex-col items-start justify-start">
-                  <!-- <div class="mb-0 flex w-full justify-center">
-                  <Vue3Lottie
-                    animationLink="https://assets1.lottiefiles.com/packages/lf20_8zle4p5u.json"
-                    :width="100"
-                    :height="100"
-                    :loop="1"
-                  />
-                </div> -->
                   <div class="my-2 flex w-full flex-col">
                     <DialogTitle
                       as="h3"
@@ -183,5 +175,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style></style>

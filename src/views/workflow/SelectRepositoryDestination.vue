@@ -8,7 +8,7 @@
         Select a FAIR repository to share your {{ combineDataTypes(workflow.type) }}
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="w-full">
         <span class="mb-2 w-full">
@@ -36,6 +36,7 @@
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
             <div
+              v-show="codePresent"
               class="my-8 grid grid-cols-3 gap-8"
               :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
             >
@@ -115,11 +116,35 @@
               </div>
             </div>
 
+            <div v-show="showGeo" class="my-8 grid grid-cols-1 gap-8">
+              <div class="flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{
+                    'selected-repo': repoID === 'ncbigeo',
+                  }"
+                  @click="selectRepo($event, 'ncbigeo')"
+                >
+                  <img
+                    src="https://www.ncbi.nlm.nih.gov/geo/img/geo_main.gif"
+                    alt=""
+                    class="mb-3 h-auto w-full"
+                  />
+                  <span class="mx-5 text-lg"> NCBI GEO </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'ncbigeo'"
+                  @click="openWebsite('https://www.ncbi.nlm.nih.gov/geo/')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                </div>
+              </div>
+            </div>
+
             <fade-transition>
-              <div
-                v-if="repoID === 'zenodo' && workflow.source.type === 'local'"
-                class="mb-8 flex flex-col"
-              >
+              <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
                 <p class="mb-4">
                   Is your dataset already published on Zenodo or would you like to create a new
                   Zenodo publication?
@@ -150,11 +175,18 @@
 
             <fade-transition>
               <ConnectZenodo
-                v-if="
-                  repoID === 'zenodo' && showSelectZenodoDeposition && !validZenodoTokenAvailable
-                "
-                :statusChangeFunction="showConnection"
+                v-if="repoID === 'zenodo' && !validZenodoTokenAvailable"
+                :statusChangeFunction="showZenodoConnection"
+                class="mb-8"
               ></ConnectZenodo>
+            </fade-transition>
+
+            <fade-transition>
+              <ConnectFigshare
+                v-if="repoID === 'figshare' && !validFigshareTokenAvailable"
+                :statusChangeFunction="showFigshareConnection"
+                class="mb-8"
+              ></ConnectFigshare>
             </fade-transition>
 
             <fade-transition>
@@ -337,6 +369,7 @@
                   @click="addMetadata"
                   :disabled="repoID === ''"
                   id="continue"
+                  v-if="validFigshareTokenAvailable"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
@@ -359,6 +392,7 @@
                   @click="addMetadata"
                   :disabled="repoID === ''"
                   id="continue"
+                  v-if="validZenodoTokenAvailable"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
@@ -384,6 +418,27 @@
                   @click="saveSelectedVersionDetails"
                   :disabled="repoID === ''"
                   id="continueNewVersion"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                v-show="nextGenHighThroughputSequencingPresent"
+              >
+                <!-- ncbi geo selected -->
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
+
+                <button
+                  class="primary-button"
+                  @click="addMetadata('ncbigeo')"
+                  :disabled="repoID === ''"
+                  id="geo-continue"
                 >
                   Continue <el-icon> <d-arrow-right /> </el-icon>
                 </button>
@@ -416,7 +471,7 @@
         </transition>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/select-github-repo" position="bottom-4" />
+    <app-docs-link url="curate-and-share/workflows/select-github-repo" position="bottom-4" />
     <error-confirm
       ref="errorConfirmNoAdminPermission"
       title="Invalid permissions"
@@ -433,6 +488,7 @@
 <script>
 import figshareMetadataOptions from "@/assets/supplementalFiles/figshareMetadataOptions.json";
 import ConnectZenodo from "@/components/serviceIntegration/ConnectZenodo";
+import ConnectFigshare from "@/components/serviceIntegration/ConnectFigshare";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access";
@@ -444,7 +500,15 @@ import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@headless
 
 export default {
   name: "SelectRepositoryDestination",
-  components: { Icon, Listbox, ListboxButton, ListboxOptions, ListboxOption, ConnectZenodo },
+  components: {
+    Icon,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    ConnectZenodo,
+    ConnectFigshare,
+  },
   data() {
     return {
       datasetStore: useDatasetsStore(),
@@ -470,15 +534,23 @@ export default {
       newVersion: "",
       loadingSpinner: false,
       validZenodoTokenAvailable: false,
+      validFigshareTokenAvailable: false,
       disableFigshare: false,
       showFigshare: false,
       figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
+      showGeo: false,
     };
   },
   computed: {
     codePresent() {
       if ("type" in this.workflow) {
         return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+    nextGenHighThroughputSequencingPresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("NextGenHighThroughputSequencing");
       }
       return false;
     },
@@ -512,10 +584,7 @@ export default {
       if (this.workflow.source.type === "github") {
         this.newVersion = "false";
 
-        console.log(this.workflow.github.fullObject.originalObject.permissions.admin);
-
         if (!this.workflow.github.fullObject.originalObject.permissions.admin) {
-          console.log("No admin permissions on this repo");
           this.$refs.errorConfirmNoAdminPermission.show();
 
           return;
@@ -528,10 +597,14 @@ export default {
         this.addMetadata();
       }
     },
-    async showConnection(status) {
-      console.log(status);
+    async showZenodoConnection(status) {
       if (status === "connected") {
         this.validZenodoTokenAvailable = true;
+      }
+    },
+    async showFigshareConnection(status) {
+      if (status === "connected") {
+        this.validFigshareTokenAvailable = true;
       }
     },
     showZenodoDepositionSelectorModal() {
@@ -595,6 +668,8 @@ export default {
 
       if (this.codePresent) {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`;
+      } else if (this.nextGenHighThroughputSequencingPresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/createMetadata`;
       } else {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Other/pickLicense`;
       }
@@ -621,7 +696,9 @@ export default {
         //do nothing
         this.workflow.destination.name = this.repoID;
       } else {
-        // warn the user that they are changing repos (add a sweetalert or something)
+        /**
+         * TODO warn the user that they are changing repos(add a sweetalert or something)
+         * */
         this.workflow.destination.name = this.repoID;
       }
 
@@ -648,7 +725,12 @@ export default {
 
       // using the zenodo one here. I don't think this matters since we aren't uploading anything
       // Might change it to its own page later
-      const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
+      let routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/metadata`;
+
+      if (type === "ncbigeo") {
+        routerPath = `/datasets/${this.datasetID}/${this.workflowID}/${this.repoID}/generate`;
+      }
+
       this.$router.push(routerPath);
     },
     async saveSkip() {
@@ -680,13 +762,18 @@ export default {
 
       if ("source" in this.workflow) {
         if (this.workflow.source.type === "github") {
-          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/upload`;
+          routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`;
         }
         if (this.workflow.source.type === "local") {
           routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
         }
       } else {
         routerPath = `/datasets/${this.dataset.id}/${this.workflowID}/localNoUpload/summary`;
+      }
+
+      // This should override the previous route but might need to refactor in the future
+      if (this.nextGenHighThroughputSequencingPresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/ncbigeo/generate`;
       }
 
       this.$router.push({ path: routerPath });
@@ -706,20 +793,30 @@ export default {
         this.showFigshare = false;
       }
     },
+    async shouldShowGeo() {
+      if ("NextGenHighThroughputSequencing" in this.dataset.data) {
+        this.showGeo = true;
+      } else {
+        this.showGeo = false;
+      }
+    },
   },
   async mounted() {
     this.loading = true;
-    console.log(this.$route);
 
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.shouldShowFigshare();
+    await this.shouldShowGeo();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
 
+    this.figshareToken = await this.tokens.getToken("figshare").token;
+
     const validZenodoConnection = await this.tokens.verifyZenodoConnection();
+    const validFigshareConnection = await this.tokens.verifyFigshareConnection();
 
     if (validZenodoConnection) {
       this.validZenodoTokenAvailable = true;
@@ -727,9 +824,21 @@ export default {
       this.validZenodoTokenAvailable = false;
     }
 
+    if (validFigshareConnection) {
+      this.validFigshareTokenAvailable = true;
+    } else {
+      this.validFigshareTokenAvailable = false;
+    }
+
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
-    this.datasetStore.setCurrentStep(5);
+
+    if (this.showGeo) {
+      this.datasetStore.setProgressBarType("geo");
+      this.datasetStore.setCurrentStep(4);
+    } else {
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(5);
+    }
 
     this.workflow.currentRoute = this.$route.path;
 

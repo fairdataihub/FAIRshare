@@ -92,7 +92,7 @@ export const useDatasetsStore = defineStore({
         console.error(error);
       }
     },
-    async loadandReturnDatasets() {
+    async loadAndReturnDatasets() {
       try {
         const datasets = await loadFile();
 
@@ -109,7 +109,7 @@ export const useDatasetsStore = defineStore({
       try {
         this.datasets[datasetID] = dataset;
         this.currentDataset = dataset;
-        this.writeDatasetsToFile();
+        await this.writeDatasetsToFile();
       } catch (error) {
         console.log(error);
       }
@@ -117,7 +117,7 @@ export const useDatasetsStore = defineStore({
     async deleteDataset(datasetID) {
       try {
         delete this.datasets[datasetID];
-        this.writeDatasetsToFile();
+        await this.writeDatasetsToFile();
       } catch (error) {
         console.log(error);
       }
@@ -125,7 +125,7 @@ export const useDatasetsStore = defineStore({
     async syncDatasets() {
       const datasetID = this.currentDataset.id;
       this.datasets[datasetID] = this.currentDataset;
-      this.writeDatasetsToFile();
+      await this.writeDatasetsToFile();
     },
     async updateCurrentDataset(dataset) {
       try {
@@ -148,7 +148,7 @@ export const useDatasetsStore = defineStore({
       }
     },
     async getAllDatasets() {
-      return this.loadandReturnDatasets();
+      return this.loadAndReturnDatasets();
     },
     async getProgressBar() {
       return this.progressBar;
@@ -181,7 +181,7 @@ export const useDatasetsStore = defineStore({
 
     async upgradeSavedDatasets() {
       if (!("version" in this.datasets)) {
-        this.datasets.version = semver.clean("1.3.0");
+        this.datasets.version = semver.clean("1.5.0");
       }
 
       /**
@@ -191,18 +191,25 @@ export const useDatasetsStore = defineStore({
        * Refer to https://www.npmjs.com/package/semver for semver syntax
        */
 
-      // if (semver.satisfies(this.datasets.version, "1.3.x")) {
-      //   console.log("Upgrading datasets to 1.4.0");
+      if (semver.satisfies(this.datasets.version, "1.3.x")) {
+        console.log("Upgrading datasets to 1.4.0");
 
-      //   for (let datsset of this.datasets) {
-      //     // do something with this
-      //   }
+        // for (let dataset of this.datasets) {
+        // do something with this
+        // }
 
-      //   this.datasets.version = semver.clean("1.4.0");
-      //   this.writeDatasetsToFile();
-      // }
+        this.datasets.version = semver.clean("1.4.0");
+        this.writeDatasetsToFile();
+      }
 
-      this.writeDatasetsToFile(); // write the datasets to file
+      if (semver.satisfies(this.datasets.version, "1.4.x")) {
+        console.log("Upgrading datasets to 1.5.0");
+
+        this.datasets.version = semver.clean("1.5.0");
+        this.writeDatasetsToFile();
+      }
+
+      await this.writeDatasetsToFile(); // write the datasets to file
 
       return;
     },

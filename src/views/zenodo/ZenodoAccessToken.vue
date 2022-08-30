@@ -6,7 +6,7 @@
         We will use this to upload and edit your dataset on your Zenodo account.
       </span> -->
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div>
         <p class="mb-5">
@@ -67,7 +67,7 @@
           </fade-transition>
         </div>
         <el-drawer
-          v-if="anyfilePreview"
+          v-if="anyFilePreview"
           v-model="drawerModel"
           :title="fileTitle"
           direction="rtl"
@@ -129,6 +129,7 @@
       </div>
 
       <line-divider></line-divider>
+
       <fade-transition>
         <div v-if="ready">
           <p v-if="validTokenAvailable" class="my-10 w-full text-center">
@@ -186,7 +187,7 @@
         </div>
       </fade-transition>
     </div>
-    <app-docs-link url="curate-and-share/zenodo-upload-summary" position="bottom-4" />
+    <app-docs-link url="curate-and-share/zenodo/zenodo-upload-summary" position="bottom-4" />
   </div>
 </template>
 
@@ -200,7 +201,7 @@ import { useTokenStore } from "@/store/access.js";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
-import { app, dialog } from "@electron/remote";
+import { dialog } from "@electron/remote";
 import { ElLoading } from "element-plus";
 import { marked } from "marked";
 import { v4 as uuidv4 } from "uuid";
@@ -220,7 +221,6 @@ export default {
       errorMessage: "",
       zenodoAccessToken: "",
       ready: false,
-      showFiles: "1",
       licenseData: "",
       tableData: [],
       citationData: [],
@@ -235,7 +235,6 @@ export default {
         label: "label",
       },
       fileTitle: "",
-      showContinueSection: false,
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedCodemetaFile: false,
       PreviewNewlyCreatedCitationFile: false,
@@ -245,7 +244,7 @@ export default {
       finishedLoading: false,
     };
   },
-  //el-tree-node__content
+
   computed: {
     codePresent() {
       if ("type" in this.workflow) {
@@ -263,7 +262,7 @@ export default {
       return true;
     },
 
-    anyfilePreview() {
+    anyFilePreview() {
       if (
         this.PreviewNewlyCreatedCodemetaFile ||
         this.PreviewNewlyCreatedLicenseFile ||
@@ -293,14 +292,13 @@ export default {
         dialog
           .showSaveDialog({
             title: `Save ${file_name}`,
-            defaultPath: path.join(app.getPath("downloads"), file_name),
+            defaultPath: path.join(this.$downloads_path, file_name),
           })
           .then((result) => {
             const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
-            console.log(result.filePath);
             fs.writeFile(result.filePath, fileData, (err) => {
               if (err) {
-                console.log(err);
+                console.error(err);
                 this.$notify({
                   title: "Error",
                   type: "error",
@@ -313,12 +311,12 @@ export default {
                   type: "success",
                   position: "bottom-right",
                 });
-                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
+                this.openFileExplorer(path.join(this.$downloads_path, file_name));
               }
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       }
     },
@@ -428,7 +426,7 @@ export default {
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "ERROR";
         });
       return response;
@@ -573,7 +571,6 @@ export default {
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
-      // console.log("obj: ", jsonObject)
       if (
         jsonObject &&
         typeof jsonObject === "object" &&
@@ -584,11 +581,9 @@ export default {
         let result = [];
         let count = 1;
         for (let property in jsonObject) {
-          //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
           let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
-          // console.log(property, value)
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = property;
@@ -664,7 +659,6 @@ export default {
     },
 
     async checkToken(token) {
-      console.log(token);
       const response = await this.tokens.getDepositions(token);
 
       if (response.status === 200) {
@@ -696,11 +690,9 @@ export default {
       }
     },
     async showConnection(status) {
-      console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
       }
-      // this.uploadToZenodo(); console.log(this.workflow.licenseText)
     },
   },
   async mounted() {

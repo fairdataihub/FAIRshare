@@ -3,7 +3,7 @@
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Registered on bio.tools </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col items-center justify-center px-10">
         <Vue3Lottie
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
+    <app-docs-link url="curate-and-share/zenodo/zenodo-publish" position="bottom-4" />
   </div>
 </template>
 

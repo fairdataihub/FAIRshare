@@ -5,7 +5,7 @@
         Select a license that defines the desired conditions for using your dataset
       </span>
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <div>
         <el-form
@@ -88,6 +88,7 @@
               </fade-transition>
               <iframe
                 sandbox
+                title="Preview license"
                 :src="licenseHtmlUrl"
                 class="h-full w-full transition-all"
                 :class="loading ? 'opacity-0' : 'opacity-100'"
@@ -149,7 +150,7 @@
         </button>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/select-a-license" position="bottom-4" />
+    <!-- <app-docs-link url="curate-and-share/select-a-license" position="bottom-4" /> -->
   </div>
 </template>
 
@@ -238,7 +239,6 @@ export default {
       //get license object
       const licenseObject = this.licenseOptions[licenseId];
 
-      console.log(licenseObject.url);
       this.licenseHtmlUrl = licenseObject.url;
       this.licenseTitle = licenseObject.title;
 
@@ -319,7 +319,6 @@ export default {
     },
     startCuration() {
       this.$refs.licenseForm.validate((valid) => {
-        console.log(valid);
         if (valid) {
           this.dataset.data.Other.questions.license = this.licenseForm.license;
           this.dataset.data.general.questions.license = this.licenseForm.license;
@@ -382,6 +381,7 @@ export default {
         });
 
       if (
+        typeof response === "object" &&
         response !== "ERROR" &&
         "license" in response &&
         response.license != null &&

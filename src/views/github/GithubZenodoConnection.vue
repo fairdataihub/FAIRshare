@@ -173,7 +173,6 @@ export default {
     async checkIfZenodoHookIsPresent() {
       const tokenObject = await this.tokens.getToken("github");
       const GithubAccessToken = tokenObject.token;
-      // console.log(GithubAccessToken);
 
       let response = "";
 
@@ -200,6 +199,7 @@ export default {
       if (response !== "ERROR" && response.length > 0) {
         for (const webhook of response) {
           if (
+            typeof webhook === "object" &&
             "config" in webhook &&
             "events" in webhook &&
             webhook.events.includes("release") &&
@@ -249,7 +249,6 @@ export default {
 
       response = await axios(config)
         .then((response) => {
-          console.log(response);
           if (response.status === 200 || response.status === 201) {
             return true;
           } else {
@@ -321,7 +320,6 @@ export default {
 
     this.interval = setInterval(async () => {
       const response = await this.checkIfZenodoHookIsPresent();
-      console.log(response);
 
       spinner.close();
 

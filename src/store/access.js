@@ -92,7 +92,7 @@ export const useTokenStore = defineStore({
     },
 
     async syncTokens() {
-      this.writeDatasetsToFile();
+      await this.writeDatasetsToFile();
     },
 
     async getToken(key) {

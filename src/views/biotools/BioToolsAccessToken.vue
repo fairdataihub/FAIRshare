@@ -6,7 +6,7 @@
         We will use this to upload and edit your dataset on your Zenodo account.
       </span> -->
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <fade-transition>
         <div v-if="ready">
@@ -50,7 +50,7 @@
       </fade-transition>
     </div>
 
-    <!-- <app-docs-link url="curate-and-share/zenodo-upload-summary" position="bottom-4" /> -->
+    <app-docs-link url="manage-accounts/connect-to-bio-tools" position="bottom-4" />
   </div>
 </template>
 
@@ -113,7 +113,6 @@ export default {
             });
           }
           if (this.workflow.source.type === "local") {
-            this.workflow.destination.name;
             if ("name" in this.workflow.destination) {
               const destination = this.workflow.destination.name;
               this.$router.push({
@@ -135,7 +134,6 @@ export default {
     },
 
     async showConnection(status) {
-      console.log(status);
       if (status === "connected") {
         this.validTokenAvailable = true;
       }

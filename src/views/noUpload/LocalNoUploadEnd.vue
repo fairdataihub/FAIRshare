@@ -4,7 +4,7 @@
       <span class="text-left text-lg font-medium"> Final step </span>
       <span class="text-left"> All your requested data has been generated. </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col items-center justify-center px-6">
         <p class="pb-5 text-center">

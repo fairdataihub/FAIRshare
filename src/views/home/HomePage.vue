@@ -3,7 +3,11 @@
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
         <div class="flex w-full items-center justify-center pt-5 pb-1">
-          <img class="w-[350px] xl:w-[400px]" src="../../assets/brand/logo-with-name.png" />
+          <img
+            class="w-[350px] xl:w-[400px]"
+            src="../../assets/brand/logo-with-name.png"
+            alt="FAIRshare logo"
+          />
         </div>
         <div class="mb-1 flex w-full flex-col items-center justify-center pt-4 pb-3">
           <h2 class="text-xl font-medium text-slate-700">

@@ -1,12 +1,12 @@
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Publish your work to Zenodo </span>
       <span class="text-left">
         All your data has been uploaded to Zenodo. It's now time to publish your work.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col items-center justify-center px-10" v-if="!published">
         <p class="pb-5 text-center">
@@ -23,9 +23,21 @@
           >
             Register on bio.tools <el-icon><suitcase-icon /></el-icon>
           </button>
-          <button class="blob primary-button transition-all" @click="publishDeposition">
+          <button class="blob primary-button transition-all" @click="showPublishWarning">
             Publish <el-icon><star-icon /></el-icon>
           </button>
+
+          <warning-confirm
+            ref="zenodoPublishWarning"
+            title="Are you sure you want to publish?"
+            @messageConfirmed="publishDeposition"
+            confirmButtonText="Yes, I want to publish"
+          >
+            <p class="text-center text-base text-gray-500">
+              This is a permanent action. You will not be able to change the files in this version
+              of the dataset after it is published.
+            </p>
+          </warning-confirm>
         </div>
       </div>
       <div class="flex h-full flex-col items-center justify-center px-10" v-else>
@@ -34,11 +46,42 @@
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
           :loop="1"
         />
+
         <p class="pb-5 text-center text-lg font-medium">
           Your dataset was successfully published. You can now view it on Zenodo.
         </p>
+
+        <div class="flex flex-col">
+          <div class="my-4 flex space-x-4">
+            <router-link :to="`/datasets`" class="">
+              <button class="primary-plain-button">
+                <el-icon><data-line /></el-icon> Go to the homepage
+              </button>
+            </router-link>
+            <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
+              View dataset on Zenodo <el-icon><star-icon /></el-icon>
+            </button>
+          </div>
+        </div>
+
+        <div v-if="showCreateGithubRelease" class="w-full">
+          <line-divider class="w-full" />
+
+          <div class="flex items-center justify-center space-x-4">
+            <p class="text-center">
+              Would you also like to make a release on GitHub of this dataset?
+            </p>
+
+            <button class="primary-button transition-all" @click="createGitHubRelease">
+              <el-icon><suitcase-icon /></el-icon> Create GitHub release
+            </button>
+          </div>
+        </div>
+
+        <line-divider class="w-full" />
+
         <p class="max-w-lg pb-5 text-center text-sm">
-          To increase the FAIRness of your software, we recommend to register it on the
+          To increase the FAIRness of your software, we also recommend to register it on the
           <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
           registry. It is also suggested to publish about your software in a suitable journal such
           as the Journal of Open Research Software or any other suitable Journal (a list of suitable
@@ -51,22 +94,20 @@
             >here</span
           >).
         </p>
-        <div class="flex space-x-4">
-          <router-link :to="`/datasets`" class="">
-            <button class="primary-plain-button">
-              <el-icon><data-line /></el-icon> Go to the homepage
+        <div class="flex flex-col">
+          <div class="flex justify-center space-x-4">
+            <button
+              class="blob primary-button transition-all"
+              @click="navigateToBioToolsPublishing"
+            >
+              <el-icon><suitcase-icon /></el-icon> Register on bio.tools
             </button>
-          </router-link>
-          <button class="secondary-plain-button" @click="viewDatasetOnZenodo">
-            View dataset on Zenodo <el-icon><star-icon /></el-icon>
-          </button>
-          <button class="blob primary-button transition-all" @click="navigateToBioToolsPublishing">
-            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
-          </button>
+          </div>
         </div>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
+
+    <app-docs-link url="curate-and-share/zenodo/zenodo-publish" position="bottom-4" />
   </div>
 </template>
 
@@ -101,6 +142,17 @@ export default {
         return false;
       }
     },
+    showCreateGithubRelease() {
+      if (
+        "source" in this.workflow &&
+        "type" in this.workflow.source &&
+        this.workflow.source.type === "github"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     async sleep(ms) {
@@ -129,6 +181,9 @@ export default {
 
       this.workflow.destination.zenodo.selectedDeposition = selectedDeposition;
       this.workflow.destination.zenodo.newVersion = true;
+    },
+    async showPublishWarning() {
+      this.$refs.zenodoPublishWarning.show();
     },
     async publishDeposition() {
       const depositionID = this.workflow.destination.zenodo.deposition_id;
@@ -177,7 +232,6 @@ export default {
       // };
 
       this.zenodoDatasetID = response.id;
-      console.log(this.zenodoDatasetID);
 
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
@@ -226,6 +280,9 @@ export default {
     navigateToBioToolsPublishing() {
       this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
     },
+    createGitHubRelease() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/github/publish`);
+    },
     async openWebPage(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
     },
@@ -242,7 +299,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
-    // console.log(this.zenodoToken);
   },
 };
 </script>

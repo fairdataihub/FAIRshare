@@ -7,7 +7,7 @@
         files with the relevant metadata.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col justify-center">
         <el-progress
@@ -154,6 +154,11 @@ export default {
 
       if ("categories" in figshareMetadata && figshareMetadata.categories.length > 0) {
         metadata.categories = figshareMetadata.categories;
+
+        if (process.env.NODE_ENV === "development") {
+          // A random category from the dev environment for testing
+          metadata.categories = [26200];
+        }
       }
 
       if ("keywords" in figshareMetadata && figshareMetadata.keywords.length > 0) {
@@ -264,6 +269,7 @@ export default {
 
       this.statusMessage = `Uploaded ${path.basename(file_path)} to Figshare successfully`;
       await this.sleep(300);
+
       return response;
     },
     async checkForFoldersAndUpload() {
@@ -304,7 +310,14 @@ export default {
           "Created a zipped folder successfully. Getting ready to upload to Figshare";
         await this.sleep(300);
 
-        await this.uploadToFigshare(this.workflow.destination.figshare.article_id, zippedPath);
+        const response = await this.uploadToFigshare(
+          this.workflow.destination.figshare.article_id,
+          zippedPath
+        );
+
+        if (response === "ERROR") {
+          return "ERROR";
+        }
       } else {
         this.statusMessage = "Getting ready to upload to Figshare";
         await this.sleep(300);
@@ -549,7 +562,6 @@ export default {
           }
 
           response = await this.createCodeMetadataFile();
-          // console.log(response);
 
           if (response === "ERROR") {
             this.alertMessage = "There was an error with creating the code metadata file";
@@ -567,7 +579,6 @@ export default {
       this.indeterminate = false;
 
       if (this.workflow.generateOtherMetadata) {
-        console.log(this.dataset.data.Other.questions.identifier);
         if (
           "metadata" in response &&
           "identifier" in this.dataset.data.Other.questions &&
@@ -578,7 +589,6 @@ export default {
         }
 
         response = await this.createOtherMetadataFile();
-        // console.log(response);
 
         if (response === "ERROR") {
           this.alertMessage = "There was an error with creating the required metadata.json file";
@@ -670,7 +680,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
             return response.data;
           })
           .catch((error) => {
@@ -732,8 +741,8 @@ export default {
         await this.datasetStore.updateCurrentDataset(this.dataset);
         await this.datasetStore.syncDatasets();
 
-        const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
-        this.$router.push({ path: routerPath });
+        // const routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/publish`;
+        // this.$router.push({ path: routerPath });
       }
     },
     async retryUpload() {

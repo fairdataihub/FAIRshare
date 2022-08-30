@@ -1,5 +1,6 @@
 import base64
 import json
+import os
 import uuid
 
 import requests
@@ -8,7 +9,6 @@ import requests
 def uploadFileToGithub(access_token, file_name, file_path, repo_name):
     def getFileSHA(file_name, repo_name, access_token):
         url = f"https://api.github.com/repos/{repo_name}/contents/{file_name}"
-
         payload = {}
         headers = {"Authorization": f"Bearer {access_token}"}
 
@@ -16,13 +16,9 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
 
         if response.status_code != 200:
             return False
-
         fileSHA = response.json()["sha"]
 
-        if fileSHA == "":
-            return False
-
-        return fileSHA
+        return False if fileSHA == "" else fileSHA
 
     try:
         baseFileContent = open(file_path, "r").read()
@@ -37,10 +33,7 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
 
         if fileSHA is False:
             payload = json.dumps(
-                {
-                    "message": f"Added {file_name}",
-                    "content": base64FileContent,
-                }
+                {"message": f"Added {file_name}", "content": base64FileContent}
             )
         else:
             payload = json.dumps(
@@ -59,15 +52,9 @@ def uploadFileToGithub(access_token, file_name, file_path, repo_name):
 
         url = f"https://api.github.com/repos/{repo_name}/contents/{file_name}"
 
-        print(headers)
-
         response = requests.request("PUT", url, headers=headers, data=payload)
 
-        print(response.status_code, response.json())
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return "FAILURE"
+        return response.json() if response.status_code == 200 else "FAILURE"
     except Exception as e:
         raise e
 
@@ -334,3 +321,82 @@ def getFileFromRepo(access_token, owner, repo, file_name):
         return base64Decoded.decode("ascii")
     except Exception as e:
         raise e
+
+
+def getRepoZipball(access_token, repo, default_branch, file_path):
+    try:
+        url = f"https://api.github.com/repos/{repo}/zipball/{default_branch}"
+
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code != 200:
+            return "NOT_FOUND"
+
+        with open(file_path, "wb") as fc:
+            fc.write(response.content)
+
+    except Exception as e:
+        raise e
+
+
+def getReleaseAsset(access_token, browser_download_url, file_path):
+    try:
+        url = browser_download_url
+        payload = {}
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"Bearer {access_token}",
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code != 200:
+            return "NOT_FOUND"
+
+        with open(file_path, "wb") as fc:
+            fc.write(response.content)
+
+        return "SUCCESS"
+    except Exception as e:
+        raise e
+
+
+def uploadReleaseAsset(access_token, owner, repo, release_id, asset_path):
+    def getAllReleaseAssets(release_id):
+        url = (
+            f"https://api.github.com/repos/{owner}/{repo}/releases/{release_id}/assets"
+        )
+
+        headers = {"Authorization": f"token {access_token}"}
+
+        response = requests.get(url, headers=headers)
+
+        return response.json()
+
+    asset_name = os.path.basename(asset_path)
+    all_assets = getAllReleaseAssets(release_id)
+
+    for asset in all_assets:
+        if asset["name"] == asset_name:
+            url = f"https://api.github.com/repos/{owner}/{repo}/releases/assets/{asset['id']}"  # noqa E501
+            headers = {"Authorization": f"token {access_token}"}
+
+            response = requests.delete(url, headers=headers)
+
+            if response.status_code != 204:
+                return "ERROR"
+
+    url = f"https://uploads.github.com/repos/{owner}/{repo}/releases/{release_id}/assets?name={asset_name}"  # noqa E501
+
+    headers = {"Authorization": f"token {access_token}"}
+    files = {"file": open(asset_path, "rb")}
+
+    response = requests.post(url, headers=headers, files=files)
+
+    return "SUCCESS" if response.status_code == 201 else "ERROR"

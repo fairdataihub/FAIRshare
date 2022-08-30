@@ -39,10 +39,7 @@ export default {
   },
   computed: {
     development() {
-      if (process.env.NODE_ENV === "development") {
-        return true;
-      }
-      return false;
+      return process.env.NODE_ENV === "development";
     },
   },
   emits: ["updateCurrentStep"],
@@ -57,5 +54,3 @@ export default {
   async mounted() {},
 };
 </script>
-
-<style lang="postcss" scoped></style>

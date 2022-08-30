@@ -56,9 +56,16 @@
         </el-form-item>
 
         <el-form-item label="Authors" prop="authors">
-          <draggable tag="div" :list="figshareMetadataForm.authors" item-key="id" handle=".handle">
+          <draggable
+            tag="div"
+            :list="figshareMetadataForm.authors"
+            item-key="id"
+            handle=".handle"
+            class="w-full"
+            :animation="200"
+          >
             <template #item="{ element }">
-              <div class="mb-2 flex flex-row justify-between transition-all">
+              <div class="mb-2 flex w-full flex-row justify-between transition-all">
                 <div class="flex w-11/12 flex-row justify-between">
                   <el-input
                     v-model="element.givenName"
@@ -67,7 +74,7 @@
                     class="h-[40px]"
                   ></el-input>
 
-                  <div class="mx-1"></div>
+                  <div class="mx-2"></div>
 
                   <el-input
                     v-model="element.familyName"
@@ -152,6 +159,7 @@
             :list="figshareMetadataForm.keywords"
             item-key="id"
             handle=".handle"
+            :animation="200"
             class="w-full"
           >
             <template #item="{ element }">
@@ -207,6 +215,7 @@
             tag="div"
             :list="figshareMetadataForm.funding"
             item-key="id"
+            :animation="200"
             handle=".handle"
             class="w-full"
           >
@@ -259,6 +268,7 @@
             tag="div"
             :list="figshareMetadataForm.references"
             item-key="id"
+            :animation="200"
             handle=".handle"
             class="w-full"
           >
@@ -368,7 +378,7 @@
         />
       </div>
       <div v-else>
-        <app-docs-link url="curate-and-share/add-zenodo-metadata" position="bottom-4" />
+        <app-docs-link url="curate-and-share/figshare/add-figshare-metadata" position="bottom-4" />
       </div>
     </fade-transition>
   </div>
@@ -551,7 +561,6 @@ export default {
       callback();
     },
     addAuthor(_event) {
-      console.log(_event);
       this.figshareMetadataForm.authors.push({
         name: "",
         affiliation: "",
@@ -677,7 +686,7 @@ export default {
 
           if ("source" in this.workflow) {
             if (this.workflow.source.type === "github") {
-              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/figshareConnection`;
+              routerPath = `/datasets/${this.datasetID}/${this.workflowID}/github/chooseUpload`;
             }
             if (this.workflow.source.type === "local") {
               routerPath = `/datasets/${this.datasetID}/${this.workflowID}/figshare/accessToken`;
@@ -701,7 +710,6 @@ export default {
         Object.keys(this.dataset.data.general.questions).length !== 0
       ) {
         const generalForm = this.dataset.data.general.questions;
-        // console.log(generalForm);
 
         if ("name" in generalForm) {
           this.figshareMetadataForm.title = generalForm.name;

@@ -1,12 +1,12 @@
 <template>
-  <div class="flex h-full w-full flex-col items-center justify-center p-3 pr-5">
+  <div class="flex h-full w-full max-w-screen-xl flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
       <span class="text-left text-lg font-medium"> Publish your work to Figshare </span>
       <span class="text-left">
         All your data has been uploaded to Figshare. It's now time to publish your work.
       </span>
 
-      <el-divider class="my-4"> </el-divider>
+      <line-divider />
 
       <div class="flex h-full flex-col items-center justify-center px-10" v-if="!published">
         <p class="pb-5 text-center">
@@ -23,9 +23,22 @@
           >
             Register on bio.tools <el-icon><suitcase-icon /></el-icon>
           </button>
-          <button class="blob primary-button transition-all" @click="publishDeposition">
+
+          <button class="blob primary-button transition-all" @click="showPublishWarning">
             Publish <el-icon><star-icon /></el-icon>
           </button>
+
+          <warning-confirm
+            ref="figsharePublishWarning"
+            title="Are you sure you want to publish?"
+            @messageConfirmed="publishDeposition"
+            confirmButtonText="Yes, I want to publish"
+          >
+            <p class="text-center text-base text-gray-500">
+              This is a permanent action. You will not be able to change the files in this version
+              of the dataset after it is published.
+            </p>
+          </warning-confirm>
         </div>
       </div>
       <div class="flex h-full flex-col items-center justify-center px-10" v-else>
@@ -34,11 +47,42 @@
           class="pointer-events-none absolute top-0 left-0 h-full w-full"
           :loop="1"
         />
+
         <p class="pb-5 text-center text-lg font-medium">
           Your dataset was successfully published. You can now view it on Figshare.
         </p>
+
+        <div class="flex flex-col">
+          <div class="my-4 flex space-x-4">
+            <router-link :to="`/datasets`" class="">
+              <button class="primary-plain-button">
+                <el-icon><data-line /></el-icon> Go to the homepage
+              </button>
+            </router-link>
+            <button class="secondary-plain-button" @click="viewDatasetOnFigshare">
+              <el-icon><star-icon /></el-icon> View dataset on Figshare
+            </button>
+          </div>
+        </div>
+
+        <div v-if="showCreateGithubRelease" class="w-full">
+          <line-divider class="w-full" />
+
+          <div class="flex items-center justify-center space-x-4">
+            <p class="text-center">
+              Would you also like to make a release on GitHub of this dataset?
+            </p>
+
+            <button class="primary-button transition-all" @click="createGitHubRelease">
+              <el-icon><suitcase-icon /></el-icon> Create GitHub release
+            </button>
+          </div>
+        </div>
+
+        <line-divider class="w-full" />
+
         <p class="max-w-lg pb-5 text-center text-sm">
-          To increase the FAIRness of your software, we recommend to register it on the
+          To increase the FAIRness of your software, we also recommend to register it on the
           <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
           registry. It is also suggested to publish about your software in a suitable journal such
           as the Journal of Open Research Software or any other suitable Journal (a list of suitable
@@ -51,22 +95,20 @@
             >here</span
           >).
         </p>
-        <div class="flex space-x-4">
-          <router-link :to="`/datasets`" class="">
-            <button class="primary-plain-button">
-              <el-icon><data-line /></el-icon> Go to the homepage
+
+        <div class="flex flex-col">
+          <div class="flex justify-center space-x-4">
+            <button
+              class="blob primary-button transition-all"
+              @click="navigateToBioToolsPublishing"
+            >
+              <el-icon><suitcase-icon /></el-icon> Register on bio.tools
             </button>
-          </router-link>
-          <button class="secondary-plain-button" @click="viewDatasetOnFigshare">
-            View dataset on Figshare <el-icon><star-icon /></el-icon>
-          </button>
-          <button class="blob primary-button transition-all" @click="navigateToBioToolsPublishing">
-            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
-          </button>
+          </div>
         </div>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/zenodo-publish" position="bottom-4" />
+    <app-docs-link url="curate-and-share/figshare/figshare-publish" position="bottom-4" />
   </div>
 </template>
 
@@ -90,12 +132,22 @@ export default {
       workflow: {},
       figshareToken: "",
       published: false,
-      zenodoDatasetID: "",
     };
   },
   computed: {
     showBioToolsRegister() {
       if ("biotools" in this.workflow) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCreateGithubRelease() {
+      if (
+        "source" in this.workflow &&
+        "type" in this.workflow.source &&
+        this.workflow.source.type === "github"
+      ) {
         return true;
       } else {
         return false;
@@ -129,6 +181,9 @@ export default {
 
       this.workflow.destination.figshare.selectedDeposition = selectedDeposition;
       this.workflow.destination.figshare.newVersion = true;
+    },
+    async showPublishWarning() {
+      this.$refs.figsharePublishWarning.show();
     },
     async publishDeposition() {
       const article_id = this.workflow.destination.figshare.article_id;
@@ -177,17 +232,6 @@ export default {
           return "ERROR";
         });
 
-      // await this.sleep(1000);
-
-      // const response = {
-      //   id: "5750415",
-      // };
-
-      // this.zenodoDatasetID = response.id;
-      // console.log(this.zenodoDatasetID);
-
-      console.log(response);
-
       if (response === "ERROR") {
         this.workflow.datasetPublished = false;
 
@@ -230,13 +274,13 @@ export default {
     async openDraftDataset() {
       const article_id = this.workflow.destination.figshare.article_id;
 
-      window.ipcRenderer.send(
-        "open-link-in-browser",
-        `${process.env.VUE_APP_FIGSHARE_URL}/account/articles/${article_id}`
-      );
+      this.openWebPage(`${process.env.VUE_APP_FIGSHARE_URL}/account/articles/${article_id}`);
     },
     navigateToBioToolsPublishing() {
       this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/biotools/login`);
+    },
+    createGitHubRelease() {
+      this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/github/publish`);
     },
     async openWebPage(url) {
       window.ipcRenderer.send("open-link-in-browser", url);
@@ -254,7 +298,6 @@ export default {
 
     const tokenObject = await this.tokens.getToken("figshare");
     this.figshareToken = tokenObject.token;
-    // console.log(this.figshareToken);
   },
 };
 </script>

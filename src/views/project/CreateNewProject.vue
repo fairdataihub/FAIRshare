@@ -7,7 +7,7 @@
         to identify your project.
       </span>
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <el-form
         ref="datasetForm"
@@ -22,20 +22,16 @@
         </el-form-item>
 
         <el-form-item label="Project description" prop="datasetDescription">
-          <el-popover ref="popover" placement="bottom" :width="300" trigger="manual">
-            <template #reference>
-              <el-input
-                v-model="datasetForm.datasetDescription"
-                type="textarea"
-                :autosize="{ minRows: 3, maxRows: 5 }"
-              ></el-input>
-            </template>
+          <el-input
+            v-model="datasetForm.datasetDescription"
+            type="textarea"
+            :autosize="{ minRows: 3, maxRows: 5 }"
+          ></el-input>
 
-            <span class="break-normal text-left text-sm">
-              Use a description that is easily identifiable. This will be shown in the dataset
-              selection screen and is not part of your submitted metadata.
-            </span>
-          </el-popover>
+          <span class="mt-1 text-left text-xs text-slate-500">
+            Use a description that is easily identifiable. This will be shown in the dataset
+            selection screen and is not part of your submitted metadata.
+          </span>
         </el-form-item>
 
         <el-form-item label="Data type" prop="dataType" class="createNewProjectFormItemContainer">
@@ -45,7 +41,7 @@
                 <template #reference>
                   <el-checkbox
                     border
-                    name="type1"
+                    name="type"
                     class="single-check-box transition-all"
                     label="Research software"
                   >
@@ -109,13 +105,22 @@
             <div class="flex gap-8">
               <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
                 <template #reference>
-                  <el-checkbox border name="type" class="single-check-box" label="Genomic" disabled>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="NextGenHighThroughputSequencing"
+                    disabled
+                  >
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />
                       <span class="text-sm">Genomic</span>
                     </div>
                   </el-checkbox>
                 </template>
+                <!-- <span class="break-normal text-left text-sm">
+                  Next generation high-throughput sequencing data, such as Illumina or PacBio.
+                </span> -->
               </el-popover>
 
               <el-popover placement="top" :hide-after="0" trigger="hover" content="Coming soon...">
@@ -174,7 +179,7 @@
         </div>
       </el-form>
     </div>
-    <app-docs-link url="curate-and-share/create-new-project" position="bottom-4" />
+    <app-docs-link url="curate-and-share/projects/create-new-project" position="bottom-4" />
   </div>
 </template>
 
@@ -255,15 +260,12 @@ export default {
             },
           };
 
-          console.log("dataset: ", dataset);
-
           dataset.data.general = {
             questions: {},
           };
 
           for (const type of dataset.dataType) {
             let tempType = type;
-            console.log(type);
             if (tempType == "Research software") {
               tempType = "Code";
             }
@@ -288,7 +290,7 @@ export default {
         } else {
           this.$track("Projects", "Create new project", "failed");
 
-          console.log("Invalid form entries");
+          console.error("Invalid form entries");
           return false;
         }
       });

@@ -1,0 +1,136 @@
+{
+  "customFieldOptions": [
+    {
+      "value": "tissue"
+    },
+    {
+      "value": "cell line"
+    },
+    {
+      "value": "cell type"
+    },
+    {
+      "value": "strain"
+    },
+    {
+      "value": "genotype"
+    },
+    {
+      "value": "developmental stage"
+    },
+    {
+      "value": "sex"
+    },
+    {
+      "value": "breed"
+    },
+    {
+      "value": "cultivar"
+    },
+    {
+      "value": "treatment"
+    },
+    {
+      "value": "time"
+    },
+    {
+      "value": "disease"
+    },
+    {
+      "value": "disease state"
+    },
+    {
+      "value": "tumor stage"
+    },
+    {
+      "value": "ChIP antibody"
+    },
+    {
+      "value": "diet"
+    }
+  ],
+  "moleculeOptions": [
+    "Total RNA",
+    "PolyA RNA",
+    "Cytoplasmic RNA",
+    "Nuclear RNA",
+    "Genomic DNA",
+    "Protein",
+    "Synthetic construct",
+    "Other"
+  ],
+  "instrumentModelOptions": [
+    "Illumina Genome Analyzer IIx",
+    "Illumina HiSeq 1000",
+    "Illumina HiSeq 1500",
+    "Illumina HiSeq 2000",
+    "Illumina HiSeq 2500",
+    "Illumina HiSeq 3000",
+    "Illumina HiSeq 4000",
+    "Illumina NextSeq 500",
+    "Illumina NextSeq 550",
+    "Illumina HiSeq X Ten",
+    "Illumina HiSeq X Five",
+    "Illumina NovaSeq 6000",
+    "Illumina MiSeq",
+    "Illumina HiScanSQ",
+    "Illumina MiniSeq",
+    "Illumina iSeq 100",
+    "BGISEQ-500",
+    "DNBSEQ-G400",
+    "DNBSEQ-T7",
+    "DNBSEQ-G50",
+    "Ion Torrent PGM",
+    "Ion Torrent Proton",
+    "Ion Torrent S5",
+    "Ion Torrent S5 XL",
+    "PacBio RS",
+    "PacBio RS II",
+    "Sequel",
+    "Sequel II",
+    "AB SOLiD System 2.0",
+    "AB SOLiD System 3.0",
+    "AB SOLiD 3 Plus System",
+    "AB SOLiD 4 System",
+    "AB SOLiD 4hq System",
+    "AB SOLiD PI System",
+    "AB 5500 Genetic Analyzer",
+    "AB 5500xl Genetic Analyzer",
+    "AB 5500xl-W Genetic Analysis System",
+    "454 GS",
+    "454 GS 20",
+    "454 GS FLX",
+    "454 GS FLX+",
+    "454 GS Junior",
+    "454 GS FLX Titanium",
+    "Complete Genomics",
+    "Helios Heliscope",
+    "GridION",
+    "minION",
+    "PromethION"
+  ],
+  "libraryStrategyOptions": [
+    "RNA-Seq",
+    "miRNA-Seq",
+    "ncRNA-Seq",
+    "RNA-Seq (CAGE)",
+    "RNA-Seq (RACE)",
+    "ssRNA-seq (stranded RNA-seq)",
+    "ChIP-Seq",
+    "MNase-Seq",
+    "MBD-Seq",
+    "MRE-Seq",
+    "Bisulfite-Seq",
+    "Bisulfite-Seq (reduced representation)",
+    "MeDIP-Seq",
+    "DNase-Hypersensitivity",
+    "Tn-Seq",
+    "FAIRE-seq",
+    "SELEX",
+    "RIP-Seq",
+    "ATAC-seq",
+    "ChIA-PET",
+    "Hi-C",
+    "OTHER:"
+  ]
+}

@@ -16,7 +16,7 @@
         Update your project name, description and other settings.
       </span> -->
 
-      <el-divider> </el-divider>
+      <line-divider />
 
       <el-form
         ref="datasetForm"
@@ -161,7 +161,7 @@
         </button>
       </div>
     </div>
-    <app-docs-link url="curate-and-share/project-settings" position="bottom-4" />
+    <app-docs-link url="curate-and-share/projects/project-settings" position="bottom-4" />
   </div>
 </template>
 
@@ -243,7 +243,7 @@ export default {
           this.$router.push({ name: "ShowAllProjects" });
         } else {
           this.$track("Projects", "Edit project", "failed");
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });

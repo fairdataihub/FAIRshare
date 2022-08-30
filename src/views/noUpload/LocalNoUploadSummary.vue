@@ -141,7 +141,7 @@ import { useTokenStore } from "@/store/access.js";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
-import { app, dialog } from "@electron/remote";
+import { dialog } from "@electron/remote";
 import { ElLoading } from "element-plus";
 import { marked } from "marked";
 import { v4 as uuidv4 } from "uuid";
@@ -211,14 +211,13 @@ export default {
         dialog
           .showSaveDialog({
             title: `Save ${file_name}`,
-            defaultPath: path.join(app.getPath("downloads"), file_name),
+            defaultPath: path.join(this.$downloads_path, file_name),
           })
           .then((result) => {
             const fileData = typeof obj === "object" ? JSON.stringify(obj) : obj;
-            console.log(result.filePath);
             fs.writeFile(result.filePath, fileData, (err) => {
               if (err) {
-                console.log(err);
+                console.error(err);
                 this.$notify({
                   title: "Error",
                   type: "error",
@@ -231,12 +230,12 @@ export default {
                   type: "success",
                   position: "bottom-right",
                 });
-                this.openFileExplorer(path.join(app.getPath("downloads"), file_name));
+                this.openFileExplorer(path.join(this.$downloads_path, file_name));
               }
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       }
     },
@@ -328,7 +327,7 @@ export default {
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           return "ERROR";
         });
       return response;
@@ -438,7 +437,6 @@ export default {
     },
 
     jsonToTableDataRecursive(jsonObject, parentId, parentName) {
-      // console.log("obj: ", jsonObject)
       if (
         jsonObject &&
         typeof jsonObject === "object" &&
@@ -449,11 +447,9 @@ export default {
         let result = [];
         let count = 1;
         for (let property in jsonObject) {
-          //console.log(property, jsonObject);
           let newObj = { Name: "", Value: "" };
           let newId = parentId + String(count);
           let value = this.jsonToTableDataRecursive(jsonObject[property], newId, property);
-          // console.log(property, value)
           if (Array.isArray(value)) {
             newObj.id = newId;
             newObj.Name = property;

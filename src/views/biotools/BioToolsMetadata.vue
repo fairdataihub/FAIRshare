@@ -119,6 +119,7 @@
                           tag="div"
                           :list="step1Form.versions"
                           item-key="id"
+                          :animation="200"
                           handle=".handle"
                           class="w-full"
                         >
@@ -223,7 +224,7 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-bio-tools-metadata" position="bottom-4" />
+    <app-docs-link url="curate-and-share/biotools/add-bio-tools-metadata" position="bottom-4" />
   </div>
 </template>
 

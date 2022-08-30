@@ -95,7 +95,6 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
-
     try:
 
         def dfs(dir):
@@ -117,6 +116,7 @@ def readFolderContents(dir):
                     newDic["label"] = filename
                     newDic["isDir"] = False
                 newDic["fullpath"] = fileFullName
+                newDic["value"] = fileFullName  # I don't know if this is needed
                 result.append(newDic)
             return result
 
@@ -125,6 +125,7 @@ def readFolderContents(dir):
             "label": dir,
             "children": dfs(dir),
             "fullPath": dir,
+            "value": dir,
             "isDir": True,
         }
         return root
@@ -141,5 +142,21 @@ def fileExistInFolder(folder_path, file_name):
 
                 return json.load(f)
         return "Not Found"
+    except Exception as e:
+        raise e
+
+
+def copyFile(file_path, destination_path):
+    try:
+        # get parent folder of destination_path
+        parent_folder = os.path.dirname(destination_path)
+
+        # create destination parent folder if it doesn't exist
+        if not os.path.exists(parent_folder):
+            os.makedirs(parent_folder, exist_ok=True)
+
+        shutil.copy2(file_path, destination_path)
+
+        return "SUCCESS"
     except Exception as e:
         raise e

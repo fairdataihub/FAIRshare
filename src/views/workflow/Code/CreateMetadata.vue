@@ -63,7 +63,7 @@
                         size="large"
                         ref="s1Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Software name" prop="name">
                           <div class="flex w-full flex-row items-center">
@@ -152,13 +152,14 @@
                         size="large"
                         ref="s2Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Authors" prop="authors">
                           <draggable
                             tag="div"
                             :list="step2Form.authors"
                             item-key="id"
+                            :animation="200"
                             handle=".handle"
                           >
                             <template #item="{ element }">
@@ -252,6 +253,7 @@
                             tag="div"
                             :list="step2Form.contributors"
                             item-key="id"
+                            :animation="200"
                             handle=".handle"
                           >
                             <template #item="{ element }">
@@ -397,7 +399,7 @@
                         size="large"
                         ref="s3Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Unique identifier">
                           <div class="flex w-full flex-row items-center">
@@ -489,6 +491,7 @@
                             :list="step3Form.keywords"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">
@@ -714,7 +717,7 @@
                         size="large"
                         ref="s4Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Code repository" :error="codeRepositoryErrorMessage">
                           <div class="flex w-full flex-row items-center">
@@ -761,6 +764,7 @@
                             :list="step4Form.relatedLinks"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">
@@ -853,7 +857,7 @@
                         size="large"
                         ref="s5Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Programming Language" prop="programmingLanguage">
                           <div class="flex w-full flex-row items-center">
@@ -941,6 +945,7 @@
                             :list="step5Form.otherSoftwareRequirements"
                             item-key="id"
                             handle=".handle"
+                            :animation="200"
                             class="w-full"
                           >
                             <template #item="{ element }">
@@ -1032,7 +1037,7 @@
                         size="large"
                         ref="s6Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Current version">
                           <div class="flex w-full flex-row items-center">
@@ -1131,7 +1136,7 @@
                         size="large"
                         ref="s7Form"
                         @submit.prevent
-                        class="code-metadata-form py-4"
+                        class="metadata-form py-4"
                       >
                         <el-form-item label="Reference publication">
                           <div class="flex w-full flex-row items-center">
@@ -1261,7 +1266,7 @@
       </div>
     </fade-transition>
 
-    <app-docs-link url="curate-and-share/add-codemeta" position="bottom-4" />
+    <app-docs-link url="curate-and-share/research-software/add-codemeta" position="bottom-4" />
   </div>
 </template>
 
@@ -2191,7 +2196,7 @@ export default {
           });
         }
 
-        if ("created_at" in response) {
+        if (typeof response === "object" && "created_at" in response) {
           this.step1Form.creationDate = response.created_at;
         }
 
@@ -2503,7 +2508,7 @@ export default {
                   return response.data;
                 })
                 .catch((error) => {
-                  console.log(error);
+                  console.error(error);
                   return "ERROR";
                 });
 
