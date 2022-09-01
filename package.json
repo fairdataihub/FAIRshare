@@ -94,8 +94,8 @@
   "devDependencies": {
     "@babel/core": "7.18.10",
     "@babel/eslint-parser": "7.18.9",
-    "@commitlint/cli": "17.0.3",
-    "@commitlint/config-conventional": "17.0.3",
+    "@commitlint/cli": "17.1.2",
+    "@commitlint/config-conventional": "17.1.0",
     "@fairdataihub/config": "1.2.2",
     "@iconify/vue": "3.2.1",
     "@storybook/addon-actions": "6.5.10",
