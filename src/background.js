@@ -30,7 +30,7 @@ log.transports.console.format = "{h}:{i}:{s} {text}";
 
 log.info("starting log");
 
-if (process.platform === 'win32') {
+if (process.platform === "win32") {
   app.setAppUserModelId(app.name);
 }
 
