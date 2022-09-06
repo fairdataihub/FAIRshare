@@ -109,7 +109,7 @@
     "@storybook/manager-webpack5": "6.5.10",
     "@storybook/testing-library": "0.0.13",
     "@storybook/vue3": "6.5.10",
-    "@tailwindcss/forms": "0.5.2",
+    "@tailwindcss/forms": "0.5.3",
     "@tailwindcss/line-clamp": "0.4.0",
     "@tailwindcss/typography": "0.5.7",
     "@vue/cli-plugin-babel": "5.0.8",
