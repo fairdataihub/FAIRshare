@@ -129,7 +129,7 @@
     "electron": "19.0.16",
     "electron-devtools-installer": "3.2.0",
     "electron-notarize": "1.2.1",
-    "eslint": "8.23.0",
+    "eslint": "8.23.1",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-storybook": "0.6.4",
