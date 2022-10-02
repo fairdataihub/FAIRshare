@@ -125,7 +125,7 @@
     "cz-conventional-changelog": "3.3.0",
     "del": "6.1.1",
     "devmoji": "2.3.0",
-    "dotenv": "16.0.2",
+    "dotenv": "16.0.3",
     "electron": "19.1.0",
     "electron-devtools-installer": "3.2.0",
     "electron-notarize": "1.2.1",
