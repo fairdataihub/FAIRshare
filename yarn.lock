@@ -20013,11 +20013,12 @@ vue-toastification@2.0.0-rc.5:
   resolved "https://registry.yarnpkg.com/vue-toastification/-/vue-toastification-2.0.0-rc.5.tgz#92798604d806ae473cfb76ed776fae294280f8f8"
   integrity sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA==
 
-vue3-lottie@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.3.0.tgz#3b0e93cd8235545aad85e73a3ed3e9ca8ccbc6cd"
-  integrity sha512-pThHpAIxxvk9c5lJXyCgrIAUIy/Xn/XLETqW2yA+VIg5B+phjQkdxkTvRG60pq3zOZ9su2hee+HZgT9tWA+8Fw==
+vue3-lottie@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.4.0.tgz#84fecd68d22beae808a9cc0ee89112435347e242"
+  integrity sha512-arNBADu3vW+1Lf+Pw32mU9T6X7c1bMn1tBvJ0/uo+W0G/0UxHyCwoXzyYIKZWB0WoeEvdo5x7HCf8VH0J7rLsw==
   dependencies:
+    lodash "^4.17.21"
     lottie-web "^5.8.1"
 
 vue3-popper@1.5.0:
