@@ -2519,14 +2519,14 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fairdataihub/config@1.2.2", "@fairdataihub/config@^1.2.1":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@fairdataihub/config/-/config-1.2.2.tgz#931b46bd09ee692ed47d5ce6bd31404aa09a6acf"
-  integrity sha512-tv0tymBWVmODZjqtK9JvnrfZF5AW9DK2oUyQSZsNKcmdxYvTrEKUPCDlASCk/uJUJfl6CdkSG9BMmaqYg3rzyg==
+"@fairdataihub/config@2.2.1", "@fairdataihub/config@^2.1.0":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@fairdataihub/config/-/config-2.2.1.tgz#81a5ab4727c0879ac88fa2de9f23a32b9271b703"
+  integrity sha512-f9PCK7MhahyQB3yaSzbA5vOFOLPOZabZLc8J5rpg45bPI8um8q0nssknKmV2x1EGY9GJXzxD0AVs4YocZjjt+w==
   dependencies:
-    "@fairdataihub/config" "^1.2.1"
+    "@fairdataihub/config" "^2.1.0"
     "@semantic-release/git" "^10.0.1"
-    devmoji "^2.3.0"
+    megasanjay-devmoji "^1.2.1"
 
 "@floating-ui/core@^1.0.1":
   version "1.0.1"
@@ -9438,7 +9438,7 @@ detective@^5.2.1:
     defined "^1.0.0"
     minimist "^1.2.6"
 
-devmoji@2.3.0, devmoji@^2.3.0:
+devmoji@2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/devmoji/-/devmoji-2.3.0.tgz#5cc3764c59899802bcbecd19afeb9a22c0626b89"
   integrity sha512-ErQdYUsE7tKxqDzQzRos6fKWaRIFUOJvMkQODq9iYDI3o5X6nxD78XEdGNYaW5AaJW4uxj+XQTkCuJkV86Qg6g==
@@ -14177,6 +14177,15 @@ media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==
+
+megasanjay-devmoji@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/megasanjay-devmoji/-/megasanjay-devmoji-1.2.1.tgz#ae1e9cc18b19889632712713590d67522c8a7f7d"
+  integrity sha512-9sRyYQbv1USkSihyKDFwoq6sCA5o1BvtvqW50KOWvEHjK80F5xcHwZQdnyZ09X6paKqjfHs1jK4LMFtbwAYB3A==
+  dependencies:
+    chalk "^4.1.1"
+    commander "7.2.0"
+    ts-interface-checker "1.0.2"
 
 mem@^8.1.1:
   version "8.1.1"
@@ -19106,6 +19115,11 @@ ts-interface-checker@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ts-interface-checker/-/ts-interface-checker-1.0.0.tgz#2c637389f24566e0bf7db8e4482bad1db7d3bd87"
   integrity sha512-yUeWbFBDiwPodNqrqpvQpGWheL6PvNu2/pVAb9yy2vzdkkflCgwVA4U2akByPCXzYTum3/5/nB92yKuiLpSo/Q==
+
+ts-interface-checker@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ts-interface-checker/-/ts-interface-checker-1.0.2.tgz#63f73a098b0ed34b982df1f490c54890e8e5e0b3"
+  integrity sha512-4IKKvhZRXhvtYF/mtu+OCfBqJKV6LczUq4kQYcpT+iSB7++R9+giWnp2ecwWMIcnG16btVOkXFnoxLSYMN1Q1g==
 
 ts-loader@^8.0.14:
   version "8.4.0"
