@@ -3438,17 +3438,17 @@
   dependencies:
     "@seald-io/nedb" "3.1.0"
 
-"@renovatebot/osv-offline@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.6.tgz#14e13db19976d2212deb6474113b483da5e245de"
-  integrity sha512-64qb/5mmKRQer2j5Bv7s7oCeJ9r3LzmypsUJLm6C2sTnP8gj4pfvLPtAVjGv6OMMfCIYqd8J2bnTY5arChBLwA==
+"@renovatebot/osv-offline@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.7.tgz#87e8e3464d51d2a108c09be3da66ca1906466efd"
+  integrity sha512-f84i96ECTwn7l+q+GAiJkVmr+bq34BqLmSiTz0nhZMwDhIDioJthmRpkwe9101E3ui1tRivkpRLFprMfly1sGQ==
   dependencies:
     "@octokit/rest" "19.0.5"
     "@renovatebot/osv-offline-db" "1.0.1"
     adm-zip "0.5.9"
     fs-extra "10.1.0"
     got "11.8.5"
-    luxon "3.1.0"
+    luxon "3.1.1"
 
 "@renovatebot/pep440@2.1.5":
   version "2.1.5"
@@ -14291,10 +14291,10 @@ lru-cache@^7.7.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.14.0.tgz#21be64954a4680e303a09e9468f880b98a0b3c7f"
   integrity sha512-EIRtP1GrSJny0dqb50QXRUNBxHJhcpxHC++M5tD7RYbvLLn5KVWKsbyswSSqDuU15UFi3bgTQIY8nhDMeF6aDQ==
 
-luxon@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.1.0.tgz#9ac33d7142b7ea18d4ec8583cdeb0b079abef60d"
-  integrity sha512-7w6hmKC0/aoWnEsmPCu5Br54BmbmUp5GfcqBxQngRcXJ+q5fdfjEzn7dxmJh2YdDhgW8PccYtlWKSv4tQkrTQg==
+luxon@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.1.1.tgz#b492c645b2474fb86f3bd3283213846b99c32c1e"
+  integrity sha512-Ah6DloGmvseB/pX1cAmjbFvyU/pKuwQMQqz7d0yvuDlVYLTs2WeDHQMpC8tGjm1da+BriHROW/OEIT/KfYg6xw==
 
 lz-string@^1.4.4:
   version "1.4.4"
@@ -14904,6 +14904,13 @@ minimatch@5.1.0, minimatch@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
   integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
+  dependencies:
+    brace-expansion "^2.0.1"
+
+minimatch@5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.1.tgz#6c9dffcf9927ff2a31e74b5af11adf8b9604b022"
+  integrity sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -17579,10 +17586,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.49.0:
-  version "34.49.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.49.0.tgz#feb76cb10a10a674576a7260997de9ef0fe63d48"
-  integrity sha512-UNVaSLrxj2xCcX6EMD5cTqm9qNK8YiIHZmCCI+/PCiPdosryxpU5xUgRzC/SRIf814XZfSVPFLDAiBUyxr8NdA==
+renovate@34.52.0:
+  version "34.52.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.52.0.tgz#337f452a24f5597ad937e68d24b4b9e29beb3c05"
+  integrity sha512-OFKbYr0uUlRqCp9MbOu9gP5Iqm1zYWpt4hr3ExIDOeCJdgP//0b0O3x+AFrjDkTYxwau/YOhz9Zz23laVWmlSA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.154.0"
     "@aws-sdk/client-ec2" "3.155.0"
@@ -17603,7 +17610,7 @@ renovate@34.49.0:
     "@opentelemetry/sdk-trace-base" "1.8.0"
     "@opentelemetry/sdk-trace-node" "1.8.0"
     "@opentelemetry/semantic-conventions" "1.8.0"
-    "@renovatebot/osv-offline" "1.0.6"
+    "@renovatebot/osv-offline" "1.0.7"
     "@renovatebot/pep440" "2.1.5"
     "@renovatebot/ruby-semver" "1.1.7"
     "@sindresorhus/is" "4.6.0"
@@ -17651,11 +17658,11 @@ renovate@34.49.0:
     json-dup-key-validator "1.0.3"
     json-stringify-pretty-compact "3.0.0"
     json5 "2.2.1"
-    luxon "3.1.0"
+    luxon "3.1.1"
     markdown-it "13.0.1"
     markdown-table "2.0.0"
     marshal "0.5.4"
-    minimatch "5.1.0"
+    minimatch "5.1.1"
     moo "0.5.2"
     nanoid "3.3.4"
     node-html-parser "6.1.4"
@@ -17675,7 +17682,7 @@ renovate@34.49.0:
     semver-stable "3.0.0"
     semver-utils "1.1.4"
     shlex "2.1.2"
-    simple-git "3.15.0"
+    simple-git "3.15.1"
     slugify "1.6.5"
     traverse "0.6.7"
     tslib "2.4.1"
@@ -18377,10 +18384,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.3, signal-exit@^3.0.7:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
-simple-git@3.15.0:
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.15.0.tgz#301a95a943c4f9b0a21d051eb6e6d0ffe4c9754f"
-  integrity sha512-FiWoMPlcYHQ+ApRihUsGjC/ZmIlWj62S6MBCwOunczvXcLQt+9ZdrysDrR6QVepkRQfEAaBXrN2QtJKrN6zbtg==
+simple-git@3.15.1:
+  version "3.15.1"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.15.1.tgz#57f595682cb0c2475d5056da078a05c8715a25ef"
+  integrity sha512-73MVa5984t/JP4JcQt0oZlKGr42ROYWC3BcUZfuHtT3IHKPspIvL0cZBnvPXF7LL3S/qVeVHVdYYmJ3LOTw4Rg==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
