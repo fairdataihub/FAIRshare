@@ -12601,15 +12601,20 @@ iferr@^0.1.5:
   resolved "https://registry.yarnpkg.com/iferr/-/iferr-0.1.5.tgz#c60eed69e6d8fdb6b3104a1fcbca1c192dc5b501"
   integrity sha512-DUNFN5j7Tln0D+TxzloUjKB+CtVu6myn0JEFak6dG18mNt9YkQ6lzGCdafwofISZ1lLF3xRHJ98VKy9ynkcFaA==
 
-ignore@5.2.0, ignore@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
-  integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
+ignore@5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.1.tgz#c2b1f76cb999ede1502f3a226a9310fdfe88d46c"
+  integrity sha512-d2qQLzTJ9WxQftPAuEQpSPmKqzxePjzVbpAVv62AQ64NTL+wR4JkrVqR/LqFsFEUsHDAiId52mJteHDFuDkElA==
 
 ignore@^4.0.3:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
+
+ignore@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
+  integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
 immediate@~3.0.5:
   version "3.0.6"
@@ -17565,10 +17570,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.48.3:
-  version "34.48.3"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.48.3.tgz#b5fafe362bef9470e2f38cda1440883cde1ee291"
-  integrity sha512-ZpxAgTuu0pxgN5vOJ8oPoLe6Qaq740F0l9iKAPTGrPnpXDbLnmyA90meEyze5UN9ZmUWiAaIRShpvJl8gSebUA==
+renovate@34.49.0:
+  version "34.49.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.49.0.tgz#feb76cb10a10a674576a7260997de9ef0fe63d48"
+  integrity sha512-UNVaSLrxj2xCcX6EMD5cTqm9qNK8YiIHZmCCI+/PCiPdosryxpU5xUgRzC/SRIf814XZfSVPFLDAiBUyxr8NdA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.154.0"
     "@aws-sdk/client-ec2" "3.155.0"
@@ -17631,7 +17636,7 @@ renovate@34.48.3:
     graph-data-structure "2.0.0"
     handlebars "4.7.7"
     hasha "5.2.2"
-    ignore "5.2.0"
+    ignore "5.2.1"
     ini "3.0.1"
     js-yaml "4.1.0"
     json-dup-key-validator "1.0.3"
