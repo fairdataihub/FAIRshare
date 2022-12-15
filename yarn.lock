@@ -7529,16 +7529,16 @@ bytes@3.1.2:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.2.tgz#8b0beeb98605adf1b128fa4386403c009e0221a5"
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
-cacache@17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/cacache/-/cacache-17.0.2.tgz#ff2bd029bf45099b3fe711f56fbf138b846c8d6d"
-  integrity sha512-rYUs2x4OjSgCQND7nTrh21AHIBFgd7s/ctAYvU3a8u+nK+R5YaX/SFPDYz4Azz7SGL6+6L9ZZWI4Kawpb7grzQ==
+cacache@17.0.3:
+  version "17.0.3"
+  resolved "https://registry.yarnpkg.com/cacache/-/cacache-17.0.3.tgz#9ba14e0e50eca763ae7e2ee89036a948a13035ed"
+  integrity sha512-pwsIK/grdM0cHpfVaNFxMdzElBtLJGsVPE+JnxqXP1l40O01Z1mfDE8MbRTuwomGq/UwEtGisOylutOEVJxEqg==
   dependencies:
     "@npmcli/fs" "^3.1.0"
     fs-minipass "^2.1.0"
     glob "^8.0.1"
     lru-cache "^7.7.1"
-    minipass "^3.1.6"
+    minipass "^4.0.0"
     minipass-collect "^1.0.2"
     minipass-flush "^1.0.5"
     minipass-pipeline "^1.2.4"
@@ -14999,6 +14999,13 @@ minipass@^3.0.0, minipass@^3.1.1, minipass@^3.1.6:
   dependencies:
     yallist "^4.0.0"
 
+minipass@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-4.0.0.tgz#7cebb0f9fa7d56f0c5b17853cbe28838a8dbbd3b"
+  integrity sha512-g2Uuh2jEKoht+zvO6vJqXmYpflPqzRBT+Th2h01DKh5z7wbY/AZ2gCQ78cP70YoHPyFdY30YBV5WxgLOEwOykw==
+  dependencies:
+    yallist "^4.0.0"
+
 minizlib@^2.1.1, minizlib@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-2.1.2.tgz#e90d3466ba209b932451508a11ce3d3632145931"
@@ -16665,11 +16672,6 @@ prettier-plugin-tailwindcss@0.2.1:
   resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.2.1.tgz#989b35afd86c550cb671da69891aba4f4a051159"
   integrity sha512-aIO8IguumORyRsmT+E7JfJ3A9FEoyhqZR7Au7TBOege3VZkgMvHJMkufeYp4zjnDK2iq4ktkvGMNOQR9T8lisQ==
 
-prettier@2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.0.tgz#c7df58393c9ba77d6fba3921ae01faf994fb9dc9"
-  integrity sha512-9Lmg8hTFZKG0Asr/kW9Bp8tJjRVluO8EJQVfY2T7FMw9T5jy4I/Uvx0Rca/XWf50QQ1/SS48+6IJWnrb+2yemA==
-
 prettier@2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.1.tgz#4e1fd11c34e2421bc1da9aea9bd8127cd0a35efc"
@@ -17611,10 +17613,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.55.0:
-  version "34.55.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.55.0.tgz#af8a939318171185c73c55c3bbff239b3097d4ea"
-  integrity sha512-dX32UFsyJTOOOK4XsP8jK1jEGRvjoSeRduRhnLnzR0/B/RWygIRpBR+ny4ZfC6WFtZOanLNp4mrDc02tZ+fqpg==
+renovate@34.58.0:
+  version "34.58.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.58.0.tgz#187e91e71c6f77602bb93a74a53e64f8d5dd9041"
+  integrity sha512-O+3Mr0bvgYUPfEFP+3/zCn0IO6C8nRfsBcnVtpU0Jqn7r53UW5ygy238ADh5vV1fS4IFL8nscnVyNEdgjJvrww==
   dependencies:
     "@aws-sdk/client-codecommit" "3.154.0"
     "@aws-sdk/client-ec2" "3.155.0"
@@ -17648,7 +17650,7 @@ renovate@34.55.0:
     aws4 "1.11.0"
     azure-devops-node-api "11.2.0"
     bunyan "1.8.15"
-    cacache "17.0.2"
+    cacache "17.0.3"
     cacheable-lookup "5.0.4"
     chalk "4.1.2"
     changelog-filename-regex "2.0.1"
@@ -17697,7 +17699,7 @@ renovate@34.55.0:
     p-queue "6.6.2"
     p-throttle "4.1.1"
     parse-link-header "2.0.0"
-    prettier "2.8.0"
+    prettier "2.8.1"
     quick-lru "5.1.1"
     redis "4.5.1"
     remark "13.0.0"
