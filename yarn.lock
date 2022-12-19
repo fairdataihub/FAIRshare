@@ -3438,16 +3438,16 @@
   dependencies:
     "@seald-io/nedb" "3.1.0"
 
-"@renovatebot/osv-offline@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.7.tgz#87e8e3464d51d2a108c09be3da66ca1906466efd"
-  integrity sha512-f84i96ECTwn7l+q+GAiJkVmr+bq34BqLmSiTz0nhZMwDhIDioJthmRpkwe9101E3ui1tRivkpRLFprMfly1sGQ==
+"@renovatebot/osv-offline@1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.8.tgz#d8a386c0614a24e00326f224e2bf6fc90df5a03c"
+  integrity sha512-oYryh9uttikbaYhcoiJn8DBMjgxbneu9NvVF5PnG7qrUDYr7KIrlxdOlo8vQ2iytT1qd8+VzOLDoJReu1EL1Ag==
   dependencies:
     "@octokit/rest" "19.0.5"
     "@renovatebot/osv-offline-db" "1.0.1"
     adm-zip "0.5.9"
     fs-extra "10.1.0"
-    got "11.8.5"
+    got "11.8.6"
     luxon "3.1.1"
 
 "@renovatebot/pep440@2.1.5":
@@ -11953,7 +11953,24 @@ good-enough-parser@1.1.21:
     klona "2.0.5"
     moo "0.5.2"
 
-got@11.8.5, got@^11.7.0:
+got@11.8.6:
+  version "11.8.6"
+  resolved "https://registry.yarnpkg.com/got/-/got-11.8.6.tgz#276e827ead8772eddbcfc97170590b841823233a"
+  integrity sha512-6tfZ91bOr7bOXnK7PRDCGBLa1H4U080YHNaAQ2KsMGlLEzRbk44nsZF2E1IeRc3vtJHPVbKCYgdFbaGO2ljd8g==
+  dependencies:
+    "@sindresorhus/is" "^4.0.0"
+    "@szmarczak/http-timer" "^4.0.5"
+    "@types/cacheable-request" "^6.0.1"
+    "@types/responselike" "^1.0.0"
+    cacheable-lookup "^5.0.3"
+    cacheable-request "^7.0.2"
+    decompress-response "^6.0.0"
+    http2-wrapper "^1.0.0-beta.5.2"
+    lowercase-keys "^2.0.0"
+    p-cancelable "^2.0.0"
+    responselike "^2.0.0"
+
+got@^11.7.0:
   version "11.8.5"
   resolved "https://registry.yarnpkg.com/got/-/got-11.8.5.tgz#ce77d045136de56e8f024bebb82ea349bc730046"
   integrity sha512-o0Je4NvQObAuZPHLFoRSkdG2lTgtcynqymzg2Vupdx6PorhaT5MCbIyXG6d4D94kk8ZG57QeosgdiqfJWhEhlQ==
@@ -17613,10 +17630,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.58.0:
-  version "34.58.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.58.0.tgz#187e91e71c6f77602bb93a74a53e64f8d5dd9041"
-  integrity sha512-O+3Mr0bvgYUPfEFP+3/zCn0IO6C8nRfsBcnVtpU0Jqn7r53UW5ygy238ADh5vV1fS4IFL8nscnVyNEdgjJvrww==
+renovate@34.60.0:
+  version "34.60.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.60.0.tgz#fe0aa527588b8ba86559667e6adb9b99b2b9553b"
+  integrity sha512-iFw4benHTvA4cH7tBRFjdRggjhIwINUxsreXgkmWKgoPeufRhMCMNREcSLTTKB9Tm0m86AbNfsmHa/snfh3ycg==
   dependencies:
     "@aws-sdk/client-codecommit" "3.154.0"
     "@aws-sdk/client-ec2" "3.155.0"
@@ -17637,7 +17654,7 @@ renovate@34.58.0:
     "@opentelemetry/sdk-trace-base" "1.8.0"
     "@opentelemetry/sdk-trace-node" "1.8.0"
     "@opentelemetry/semantic-conventions" "1.8.0"
-    "@renovatebot/osv-offline" "1.0.7"
+    "@renovatebot/osv-offline" "1.0.8"
     "@renovatebot/pep440" "2.1.5"
     "@renovatebot/ruby-semver" "1.1.7"
     "@sindresorhus/is" "4.6.0"
@@ -17675,7 +17692,7 @@ renovate@34.58.0:
     github-url-from-git "1.5.0"
     global-agent "3.0.0"
     good-enough-parser "1.1.21"
-    got "11.8.5"
+    got "11.8.6"
     graph-data-structure "2.0.0"
     handlebars "4.7.7"
     hasha "5.2.2"
