@@ -12862,10 +12862,10 @@ iferr@^0.1.5:
   resolved "https://registry.yarnpkg.com/iferr/-/iferr-0.1.5.tgz#c60eed69e6d8fdb6b3104a1fcbca1c192dc5b501"
   integrity sha512-DUNFN5j7Tln0D+TxzloUjKB+CtVu6myn0JEFak6dG18mNt9YkQ6lzGCdafwofISZ1lLF3xRHJ98VKy9ynkcFaA==
 
-ignore@5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.2.tgz#7e5f30224584b67aeeefe383a24a61dce4cb370d"
-  integrity sha512-m1MJSy4Z2NAcyhoYpxQeBsc1ZdNQwYjN0wGbLBlnVArdJ90Gtr8IhNSfZZcCoR0fM/0E0BJ0mf1KnLNDOCJP4w==
+ignore@5.2.4:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
+  integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
 ignore@^4.0.3:
   version "4.0.6"
@@ -17944,10 +17944,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.73.3:
-  version "34.73.3"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.73.3.tgz#cc81be330d2b01ff0ac295379cb1b7c09921fd4f"
-  integrity sha512-mTIiX3bLJ0feTjnwKv4t/i9LnJgwS6Sy6Za95AwXgZS+dUqey+AJ/Zd2A81NIiQl80Dx/scec0IWR0lz6VI+5Q==
+renovate@34.74.0:
+  version "34.74.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.74.0.tgz#546415eb24c056f9104ead9821e515686ba5ce02"
+  integrity sha512-gKTgzg6qmnC/RKnWY3eYQDSUK+PMnVQAKbLAfgn5EZbxCOCF5Vp9qTz7AF5n85xHUzGplQo+LzYEDQ4RK70wnw==
   dependencies:
     "@aws-sdk/client-codecommit" "3.226.0"
     "@aws-sdk/client-ec2" "3.226.0"
@@ -18010,7 +18010,7 @@ renovate@34.73.3:
     graph-data-structure "2.0.0"
     handlebars "4.7.7"
     hasha "5.2.2"
-    ignore "5.2.2"
+    ignore "5.2.4"
     ini "3.0.1"
     js-yaml "4.1.0"
     json-dup-key-validator "1.0.3"
