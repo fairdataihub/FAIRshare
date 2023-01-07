@@ -12175,10 +12175,10 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-good-enough-parser@1.1.21:
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/good-enough-parser/-/good-enough-parser-1.1.21.tgz#92a799b7e0c02029e3457644db8c56cc8a270e60"
-  integrity sha512-XkTm6NC2z0AGkaTI3dgmNMgPoKC51Mu+TIXUyAWmp8xk5iC+6+JKBaQRwfr3/UNsU09VdPFdjMnjks/FWpU+Gw==
+good-enough-parser@1.1.22:
+  version "1.1.22"
+  resolved "https://registry.yarnpkg.com/good-enough-parser/-/good-enough-parser-1.1.22.tgz#1fcab50b385ead49cb89a847868631d588bc5716"
+  integrity sha512-fI4qWIeyqjleGazMcXnqgtvG8qBJGUoj5CtraqaUpZmk94ztMab6irx3Yz+EsJKKgIrwkSBM69WHLngfhAe7hg==
   dependencies:
     "@thi.ng/zipper" "1.0.3"
     "@types/moo" "0.5.5"
@@ -17952,10 +17952,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.81.0:
-  version "34.81.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.81.0.tgz#f7e7c64352893d99e57efdc459bbd2742ab48386"
-  integrity sha512-7JMntROGxxLNROl6R6SX719Gk5/emHFG1rNeBJUwPAG0qhvjvPAp9HQAmB/bbcSMSTTMrNaorqgt+QnDjIQpYQ==
+renovate@34.83.1:
+  version "34.83.1"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.83.1.tgz#83c720025144204eafd065e9a6c7598a9b63168e"
+  integrity sha512-do5oxsX4Nbio0mXGjbzDD0cUEFZXCZELukyqEsdNV8C+SjnHhiXqglNGQJpETmMsS9yNl0hxEHFqeXolgM7qRw==
   dependencies:
     "@aws-sdk/client-codecommit" "3.226.0"
     "@aws-sdk/client-ec2" "3.226.0"
@@ -18013,7 +18013,7 @@ renovate@34.81.0:
     git-url-parse "13.1.0"
     github-url-from-git "1.5.0"
     global-agent "3.0.0"
-    good-enough-parser "1.1.21"
+    good-enough-parser "1.1.22"
     got "11.8.6"
     graph-data-structure "2.0.0"
     handlebars "4.7.7"
@@ -18043,7 +18043,7 @@ renovate@34.81.0:
     redis "4.5.1"
     remark "13.0.0"
     remark-github "10.1.0"
-    safe-stable-stringify "2.4.1"
+    safe-stable-stringify "2.4.2"
     semver "7.3.8"
     semver-stable "3.0.0"
     semver-utils "1.1.4"
@@ -18391,10 +18391,10 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-safe-stable-stringify@2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/safe-stable-stringify/-/safe-stable-stringify-2.4.1.tgz#34694bd8a30575b7f94792aa51527551bd733d61"
-  integrity sha512-dVHE6bMtS/bnL2mwualjc6IxEv1F+OCUpA46pKUj6F8uDbUM0jCCulPqRNPSnWwGNKx5etqMjZYdXtrm5KJZGA==
+safe-stable-stringify@2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/safe-stable-stringify/-/safe-stable-stringify-2.4.2.tgz#ec7b037768098bf65310d1d64370de0dc02353aa"
+  integrity sha512-gMxvPJYhP0O9n2pvcfYfIuYgbledAOJFcqRThtPRmjscaipiwcwPPKLytpVzMkG2HAN87Qmo2d4PtGiri1dSLA==
 
 "safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
