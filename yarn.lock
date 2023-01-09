@@ -3538,17 +3538,17 @@
   dependencies:
     "@seald-io/nedb" "3.1.0"
 
-"@renovatebot/osv-offline@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.9.tgz#7372a3ef48bf986de9155189c6fac47ed345a422"
-  integrity sha512-dZoKJT1QVpoN6F8v1S7mW0R1A+gDY5xA6xkdWpn6iuPxl1VazDdvrA/wNa5IYNUMH69ofI15f9oZwHSoiORaaw==
+"@renovatebot/osv-offline@1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@renovatebot/osv-offline/-/osv-offline-1.0.10.tgz#9e918e5f1d93c187897426277a57bfedf9ae865d"
+  integrity sha512-xEn+c2a2SQV92JaFCTzV/zvXuFAXG6W0d05sR398qJGkEfhZLo6y9FvaWJirQi24vRXjpzdUmB9CXtzR36s1fg==
   dependencies:
     "@octokit/rest" "19.0.5"
     "@renovatebot/osv-offline-db" "1.0.1"
     adm-zip "0.5.10"
     fs-extra "10.1.0"
     got "11.8.6"
-    luxon "3.1.1"
+    luxon "3.2.0"
 
 "@renovatebot/pep440@2.1.6":
   version "2.1.6"
@@ -14674,10 +14674,10 @@ lru-cache@^7.7.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.14.0.tgz#21be64954a4680e303a09e9468f880b98a0b3c7f"
   integrity sha512-EIRtP1GrSJny0dqb50QXRUNBxHJhcpxHC++M5tD7RYbvLLn5KVWKsbyswSSqDuU15UFi3bgTQIY8nhDMeF6aDQ==
 
-luxon@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.1.1.tgz#b492c645b2474fb86f3bd3283213846b99c32c1e"
-  integrity sha512-Ah6DloGmvseB/pX1cAmjbFvyU/pKuwQMQqz7d0yvuDlVYLTs2WeDHQMpC8tGjm1da+BriHROW/OEIT/KfYg6xw==
+luxon@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.2.0.tgz#7962c5dafcd3623e70e222882be49b381e7a8718"
+  integrity sha512-Namj3XqoJjFekq/JHQEaaAv4zyE/fyyDBrMEBnIL2s/X54SC8W5Ea0uej1TRXUArWec8OojsAVsGBYhNRjpMVw==
 
 lz-string@^1.4.4:
   version "1.4.4"
@@ -17981,10 +17981,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.83.1:
-  version "34.83.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.83.1.tgz#83c720025144204eafd065e9a6c7598a9b63168e"
-  integrity sha512-do5oxsX4Nbio0mXGjbzDD0cUEFZXCZELukyqEsdNV8C+SjnHhiXqglNGQJpETmMsS9yNl0hxEHFqeXolgM7qRw==
+renovate@34.88.0:
+  version "34.88.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.88.0.tgz#7d8c84accb8597b5a696d51cf7bfbc33290d6441"
+  integrity sha512-D2C1rDpqZMOpiBTFOzk7Wg9PAs5B4HGJzrIEqVkYdtDJdk9G06sDggMwFnlRWrv0cQ/VtaJ+Ga+y98SltJh5DA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.226.0"
     "@aws-sdk/client-ec2" "3.226.0"
@@ -18005,7 +18005,7 @@ renovate@34.83.1:
     "@opentelemetry/sdk-trace-base" "1.8.0"
     "@opentelemetry/sdk-trace-node" "1.8.0"
     "@opentelemetry/semantic-conventions" "1.8.0"
-    "@renovatebot/osv-offline" "1.0.9"
+    "@renovatebot/osv-offline" "1.0.10"
     "@renovatebot/pep440" "2.1.6"
     "@renovatebot/ruby-semver" "1.1.7"
     "@sindresorhus/is" "4.6.0"
@@ -18053,7 +18053,7 @@ renovate@34.83.1:
     json-dup-key-validator "1.0.3"
     json-stringify-pretty-compact "3.0.0"
     json5 "2.2.3"
-    luxon "3.1.1"
+    luxon "3.2.0"
     markdown-it "13.0.1"
     markdown-table "2.0.0"
     marshal "0.5.4"
