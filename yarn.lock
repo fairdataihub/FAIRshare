@@ -3556,10 +3556,10 @@
   resolved "https://registry.yarnpkg.com/@renovatebot/pep440/-/pep440-2.1.6.tgz#b04895bc83d9c5ec65a0ce3f51666bb21d69c0e1"
   integrity sha512-DpH0LvlRt4sDDTwVNEoen9ZaExigbBm2PPwOCBUqBSXxFGM0Ms9flzhdTRJLnmgdYLUcLcQ8zjyy+S1EnDFPnw==
 
-"@renovatebot/ruby-semver@1.1.7":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-1.1.7.tgz#0f684158ace11b0c18ba40425c24169d1b81fc75"
-  integrity sha512-M07oVOD2pr+E0lopMgFVtDwUqJ5oTZD2QlrVT7yyZ3qW5/R1RQTGb6FwME2Iy+QNjfxYtvkCz1XS2LHZcOPyOw==
+"@renovatebot/ruby-semver@1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-1.1.8.tgz#1690f950ad13910d4bb12ad345708246df782b4d"
+  integrity sha512-e8eDI+Xq1mizLiQenjCqmG/cY739iY0SeY3u/3kHlhZsMo4D+htaKYOpHa8YfzSn3DvUmMMBpQQit4yOth/ksA==
   dependencies:
     tslib "2.4.1"
 
@@ -17992,10 +17992,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.97.3:
-  version "34.97.3"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.97.3.tgz#782a73cb447c6dd2649892ad0f54a3abc233fc70"
-  integrity sha512-KZgmJTOU+PMT/y8GqvgUcD7R2tdgJY7/w86PezOz7IFfxR8FAD9q9TF/8AGKG1XSLCZeEn77WD7m1wGTTSDV6Q==
+renovate@34.99.2:
+  version "34.99.2"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.99.2.tgz#a8aaa28b57beca3d5a509b9b0dc9bc9dccd4653b"
+  integrity sha512-jSAvKxdg/xzBFRAQf1dglFvoXfWj1g1PIA/QQ+UFCJCP90fKx2mAsPzwN0V/oNiFoGWpBBm/4AYUBPiCXnLi1w==
   dependencies:
     "@aws-sdk/client-codecommit" "3.226.0"
     "@aws-sdk/client-ec2" "3.226.0"
@@ -18018,7 +18018,7 @@ renovate@34.97.3:
     "@opentelemetry/semantic-conventions" "1.8.0"
     "@renovatebot/osv-offline" "1.1.0"
     "@renovatebot/pep440" "2.1.6"
-    "@renovatebot/ruby-semver" "1.1.7"
+    "@renovatebot/ruby-semver" "1.1.8"
     "@sindresorhus/is" "4.6.0"
     "@types/tmp" "0.2.3"
     "@yarnpkg/core" "3.3.1"
