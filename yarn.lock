@@ -3575,17 +3575,17 @@
     got "^11.8.6"
     luxon "^3.2.1"
 
-"@renovatebot/pep440@2.1.6":
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/@renovatebot/pep440/-/pep440-2.1.6.tgz#b04895bc83d9c5ec65a0ce3f51666bb21d69c0e1"
-  integrity sha512-DpH0LvlRt4sDDTwVNEoen9ZaExigbBm2PPwOCBUqBSXxFGM0Ms9flzhdTRJLnmgdYLUcLcQ8zjyy+S1EnDFPnw==
+"@renovatebot/pep440@2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@renovatebot/pep440/-/pep440-2.1.8.tgz#38cd90189cb7f6d2894b8837d30b7f0ee073033f"
+  integrity sha512-5RerbQS2/Sr80VlA6HTUn/tS4VqT+RyLOBd1VZdYabVpMW4hFuh99YlGc7mhdupv/gHWKmOB2PiHn2YZAz4onA==
 
-"@renovatebot/ruby-semver@1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-1.1.8.tgz#1690f950ad13910d4bb12ad345708246df782b4d"
-  integrity sha512-e8eDI+Xq1mizLiQenjCqmG/cY739iY0SeY3u/3kHlhZsMo4D+htaKYOpHa8YfzSn3DvUmMMBpQQit4yOth/ksA==
+"@renovatebot/ruby-semver@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-2.1.4.tgz#96b79cfdbcc52fe86350b4068cd1af4a1cad9c66"
+  integrity sha512-HskQQ+g7ZdZO1L+3j8+z3e5o+cS2tb5UETW4Zh4wdhEZ/as8vaSJ2noARVwZuNimBUSyAi79j4UDGv8XlbFdag==
   dependencies:
-    tslib "2.4.1"
+    tslib "^2.4.1"
 
 "@seald-io/binary-search-tree@^1.0.2":
   version "1.0.2"
@@ -7191,10 +7191,10 @@ axios@0.27.2:
     follow-redirects "^1.14.9"
     form-data "^4.0.0"
 
-azure-devops-node-api@11.2.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/azure-devops-node-api/-/azure-devops-node-api-11.2.0.tgz#bf04edbef60313117a0507415eed4790a420ad6b"
-  integrity sha512-XdiGPhrpaT5J8wdERRKs5g8E0Zy1pvOYTli7z9E8nmOn3YGp4FhtjhrOyFmX/8veWCwdI69mCHKJw6l+4J/bHA==
+azure-devops-node-api@12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/azure-devops-node-api/-/azure-devops-node-api-12.0.0.tgz#38b9892f88e86da46246218411920923d8dd6a52"
+  integrity sha512-S6Il++7dQeMlZDokBDWw7YVoPeb90tWF10pYxnoauRMnkuL91jq9M7SOYRVhtO3FUC5URPkB/qzGa7jTLft0Xw==
   dependencies:
     tunnel "0.0.6"
     typed-rest-client "^1.8.4"
@@ -8501,6 +8501,11 @@ comma-separated-tokens@^1.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-1.0.8.tgz#632b80b6117867a158f1080ad498b2fbe7e3f5ea"
   integrity sha512-GHuDRO12Sypu2cV70d1dkA2EUmXHgntrzbpvOB+Qy+49ypNfGgFQIC2fhhXbnyrJRynDCAARsT7Ou0M6hirpfw==
 
+commander@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-10.0.0.tgz#71797971162cd3cf65f0b9d24eb28f8d303acdf1"
+  integrity sha512-zS5PnTI22FIRM6ylNW8G4Ap0IEOyk62fhLSD0+uHRT9McRCLGpkVNvao4bjimpK/GShynyQkFFxHhwMcETmduA==
+
 commander@2, commander@^2.19.0, commander@^2.20.0, commander@^2.20.3:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
@@ -8517,11 +8522,6 @@ commander@7, commander@7.2.0, commander@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
   integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
-
-commander@9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-9.5.0.tgz#bc08d1eb5cedf7ccb797a96199d41c7bc3e60d30"
-  integrity sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==
 
 commander@^4.1.1:
   version "4.1.1"
@@ -12308,10 +12308,10 @@ graceful-fs@^4.0.0, graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
   integrity sha512-8tLu60LgxF6XpdbK8OW3FA+IfTNBn1ZHGHKF4KQbEeSkajYw5PlYJcKluntgegDPTg8UkHjpet1T82vk6TQ68w==
 
-graph-data-structure@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/graph-data-structure/-/graph-data-structure-2.0.0.tgz#a95762a067f81f0fe4ea77525253b946a941fa89"
-  integrity sha512-ravWDe9LaV0u27ZDme/8w5xHyyTqIWQsetpzDvBNJsGy4nZQB5IVw/u+7ngdEMZWsHYim+PAHatV4cGQX1XKpQ==
+graph-data-structure@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/graph-data-structure/-/graph-data-structure-3.1.0.tgz#8c9e78ed3262ace1d2efa796e5dcc0e439c8a53e"
+  integrity sha512-eP6R9RQ0TGS+276/CY5uO2OrEUvJbltpyFju+5TB18fpcufDZ7ftL7a2xtd9XM9fqQQIt5oKVXDe814mXb9GXg==
 
 grapheme-splitter@^1.0.4:
   version "1.0.4"
@@ -18038,10 +18038,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.110.0:
-  version "34.110.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.110.0.tgz#d49e6925df369d185ea56497640cebbc4200bad3"
-  integrity sha512-W6ToDU0eFlb1zrQMYrIOmh7nUiajXpVN/qgavOzp2LsSKFQWz6PSUfy822wWI74vyqnDmgg5Myc7K99nfTEnBw==
+renovate@34.112.3:
+  version "34.112.3"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.112.3.tgz#eb82506fbe32dfe7665696572c4dfb3eb78b24a1"
+  integrity sha512-vUoGccDcoRLbe6mbpt0gO7LmwItkQfZhJzejuYIiF1ZCIZMjZzB71hkc9bO28EbussF9kixPTV/xkeuoKxy6qg==
   dependencies:
     "@aws-sdk/client-codecommit" "3.226.0"
     "@aws-sdk/client-ec2" "3.226.0"
@@ -18064,8 +18064,8 @@ renovate@34.110.0:
     "@opentelemetry/semantic-conventions" "1.9.0"
     "@qnighy/marshal" "0.1.3"
     "@renovatebot/osv-offline" "1.1.0"
-    "@renovatebot/pep440" "2.1.6"
-    "@renovatebot/ruby-semver" "1.1.8"
+    "@renovatebot/pep440" "2.1.8"
+    "@renovatebot/ruby-semver" "2.1.4"
     "@sindresorhus/is" "4.6.0"
     "@types/tmp" "0.2.3"
     "@yarnpkg/core" "3.3.1"
@@ -18074,14 +18074,14 @@ renovate@34.110.0:
     aggregate-error "3.1.0"
     auth-header "1.0.0"
     aws4 "1.12.0"
-    azure-devops-node-api "11.2.0"
+    azure-devops-node-api "12.0.0"
     bunyan "1.8.15"
     cacache "17.0.4"
     cacheable-lookup "5.0.4"
     chalk "4.1.2"
     changelog-filename-regex "2.0.1"
     clean-git-ref "2.0.1"
-    commander "9.5.0"
+    commander "10.0.0"
     conventional-commits-detector "1.0.3"
     crypto-random-string "3.3.1"
     deepmerge "4.2.2"
@@ -18102,7 +18102,7 @@ renovate@34.110.0:
     global-agent "3.0.0"
     good-enough-parser "1.1.22"
     got "11.8.6"
-    graph-data-structure "2.0.0"
+    graph-data-structure "3.1.0"
     handlebars "4.7.7"
     hasha "5.2.2"
     hcl2-parser "1.0.3"
@@ -20153,6 +20153,11 @@ tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.1:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
+tslib@^2.4.1:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.0.tgz#42bfed86f5787aeb41d031866c8f402429e0fddf"
+  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
 tsutils@^3.21.0:
   version "3.21.0"
