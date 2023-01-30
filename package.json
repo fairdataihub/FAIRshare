@@ -97,7 +97,7 @@
     "@commitlint/cli": "17.4.2",
     "@commitlint/config-conventional": "17.4.2",
     "@fairdataihub/config": "2.2.1",
-    "@iconify/vue": "4.0.2",
+    "@iconify/vue": "4.1.0",
     "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
     "@storybook/addon-interactions": "6.5.16",
