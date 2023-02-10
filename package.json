@@ -138,7 +138,7 @@
     "gulp-copy": "4.0.1",
     "gulp-rename": "2.0.0",
     "husky": "8.0.3",
-    "lint-staged": "13.1.0",
+    "lint-staged": "13.1.1",
     "postcss": "8.4.21",
     "prettier": "2.8.3",
     "prettier-plugin-tailwindcss": "0.2.2",
