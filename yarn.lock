@@ -3563,10 +3563,10 @@
   resolved "https://registry.yarnpkg.com/@redis/bloom/-/bloom-1.2.0.tgz#d3fd6d3c0af3ef92f26767b56414a370c7b63b71"
   integrity sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==
 
-"@redis/client@1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.4.tgz#7ff66602168e0a2d51813189e0411f719818ad04"
-  integrity sha512-inTBWktJX6rRUCmhpVCnSb7pHOOiGCFIiy5IuEa0GgjcOJsKvw4zHkT9dfYm5UGoUi0I1c4i/f3ScMW5gkNpmQ==
+"@redis/client@1.5.5":
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.5.tgz#330aa9c2dafe1e2a2aa603619e58095fe33c3a1e"
+  integrity sha512-fuMnpDYSjT5JXR9rrCW1YWA4L8N/9/uS4ImT3ZEC/hcaQRI1D/9FvwjriRj1UvepIgzZXthFVKMNRzP/LNL7BQ==
   dependencies:
     cluster-key-slot "1.1.2"
     generic-pool "3.9.0"
@@ -6241,19 +6241,19 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yarnpkg/core@3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/core/-/core-3.3.1.tgz#180bf54f82d285b829b004b2c3141adb3c822c2f"
-  integrity sha512-OigU50KuAGkxcLR/wYORNA8l6Z4LBxDu9qyW0XwWBycIRl7dDAdOOOjOfOEu1biJijlJpswACLiv/v8fOf7qJw==
+"@yarnpkg/core@3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/core/-/core-3.4.0.tgz#1684dfcbd4e68ff28a11a25154d415f7de2c8224"
+  integrity sha512-EwkRU7TjZrpAPA2cqVBtMD95unti9uSXefGJbhCVANOfuY6tjBoqSt8uSf6BSXUUoJkxBWwewjTn0v0tgoLBkQ==
   dependencies:
     "@arcanis/slice-ansi" "^1.1.1"
     "@types/semver" "^7.1.0"
     "@types/treeify" "^1.0.0"
-    "@yarnpkg/fslib" "^2.10.0"
+    "@yarnpkg/fslib" "^2.10.1"
     "@yarnpkg/json-proxy" "^2.1.1"
     "@yarnpkg/libzip" "^2.2.4"
     "@yarnpkg/parsers" "^2.5.1"
-    "@yarnpkg/pnp" "^3.2.6"
+    "@yarnpkg/pnp" "^3.3.0"
     "@yarnpkg/shell" "^3.2.5"
     camelcase "^5.3.1"
     chalk "^3.0.0"
@@ -6316,10 +6316,10 @@
     tslib "^1.13.0"
     tunnel "^0.0.6"
 
-"@yarnpkg/fslib@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.10.0.tgz#f3e24f1d6fb1bfbb8aa398c26dd663b84653eb71"
-  integrity sha512-eHqvrVlzlhd4owKoLsMRaL4wTGer+r9BXi95u1omHYcAcEQbKnHH3PqYf3j7nxsc8apa09WyA1XNCiiIniFXLg==
+"@yarnpkg/fslib@^2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.10.1.tgz#3ed7e450f1316e535740653c2e8eff2d851c45cb"
+  integrity sha512-pVMLtOYu87N5y5G2lyPNYTY2JbTco99v7nGFI34Blx01Ct9LmoKVOc91vnLOYIMMljKr1c8xs1O2UamRdMG5Pg==
   dependencies:
     "@yarnpkg/libzip" "^2.2.4"
     tslib "^1.13.0"
@@ -6378,13 +6378,13 @@
     "@yarnpkg/fslib" "^2.4.0"
     tslib "^1.13.0"
 
-"@yarnpkg/pnp@^3.2.6":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/pnp/-/pnp-3.2.6.tgz#ea9ee12a0d2e1fcfdccc0b8d920e7b545a49afb2"
-  integrity sha512-Qk+SZLfYKS0kuDOaulpXVUyOivSWGEQ483/2r9HwaY0CmPsWZCh70mxeK+RsCfcBeapYFZLaQRh115ukMLWvlg==
+"@yarnpkg/pnp@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/pnp/-/pnp-3.3.0.tgz#78be9a718ec58472154da602133826813b8be34c"
+  integrity sha512-ZiNfQIodOEatHODe33KNfWph9Db6aPPDMGrrRaAksrKoQhTN6B22CLK2wVPRKYfRiS5UvMd4SMYEUpdXMAAnmg==
   dependencies:
     "@types/node" "^13.7.0"
-    "@yarnpkg/fslib" "^2.10.0"
+    "@yarnpkg/fslib" "^2.10.1"
 
 "@yarnpkg/shell@^2.4.1":
   version "2.4.1"
@@ -17824,13 +17824,13 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redis@4.6.3:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.3.tgz#fef5c02edf44a93880149321a41c9ddb5afd46e6"
-  integrity sha512-2UBX8APh9xIXotVwbt3/jUSeu9kwoke9fNzCMQppuQhmOUmEBkM73sdUifXiabjH7YUN0VireJcgw7ky4DnC+A==
+redis@4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.4.tgz#fe84169de000b247009c70c2740f22d1f85bc2de"
+  integrity sha512-wi2tgDdQ+Q8q+PR5FLRx4QvDiWaA+PoJbrzsyFqlClN5R4LplHqN3scs/aGjE//mbz++W19SgxiEnQ27jnCRaA==
   dependencies:
     "@redis/bloom" "1.2.0"
-    "@redis/client" "1.5.4"
+    "@redis/client" "1.5.5"
     "@redis/graph" "1.1.0"
     "@redis/json" "1.0.4"
     "@redis/search" "1.1.1"
@@ -18079,10 +18079,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.125.2:
-  version "34.125.2"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.125.2.tgz#e197dad56838adedb900b3de16f02453d183bab5"
-  integrity sha512-r4iqbcO+Qcgy8MOL9HeeF1zr/dEl4Vs1E0uyQq172A1Aih9bHQZNztSnjbzsKbTiMVG/Cbg4BERoyFRIX1jHfw==
+renovate@34.128.1:
+  version "34.128.1"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.128.1.tgz#217f896a141aaaa9134fabd8de7e4a1fa33168de"
+  integrity sha512-3Pu2Z3VU9vuSK2CV99ijcZpcAuSdGHjA49wTfsncfifoWkJq606IU5PiiZTX8viyj3NMCk7vN9gjMhKBg/nH5A==
   dependencies:
     "@aws-sdk/client-codecommit" "3.256.0"
     "@aws-sdk/client-ec2" "3.256.0"
@@ -18110,7 +18110,7 @@ renovate@34.125.2:
     "@sindresorhus/is" "4.6.0"
     "@types/ms" "0.7.31"
     "@types/tmp" "0.2.3"
-    "@yarnpkg/core" "3.3.1"
+    "@yarnpkg/core" "3.4.0"
     "@yarnpkg/parsers" "2.5.1"
     agentkeepalive "4.2.1"
     aggregate-error "3.1.0"
@@ -18170,7 +18170,7 @@ renovate@34.125.2:
     parse-link-header "2.0.0"
     prettier "2.8.3"
     quick-lru "5.1.1"
-    redis "4.6.3"
+    redis "4.6.4"
     remark "13.0.0"
     remark-github "10.1.0"
     safe-stable-stringify "2.4.2"
