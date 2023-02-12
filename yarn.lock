@@ -8537,7 +8537,7 @@ comma-separated-tokens@^1.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-1.0.8.tgz#632b80b6117867a158f1080ad498b2fbe7e3f5ea"
   integrity sha512-GHuDRO12Sypu2cV70d1dkA2EUmXHgntrzbpvOB+Qy+49ypNfGgFQIC2fhhXbnyrJRynDCAARsT7Ou0M6hirpfw==
 
-commander@10.0.0:
+commander@10.0.0, commander@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-10.0.0.tgz#71797971162cd3cf65f0b9d24eb28f8d303acdf1"
   integrity sha512-zS5PnTI22FIRM6ylNW8G4Ap0IEOyk62fhLSD0+uHRT9McRCLGpkVNvao4bjimpK/GShynyQkFFxHhwMcETmduA==
@@ -10420,14 +10420,14 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-editorconfig@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-1.0.1.tgz#94dee9bf4351ccce3b12eefed663efef29b06046"
-  integrity sha512-QKhz+SCEjJ6JpIK4Ve64KpSZs8ZIoIkd2qWbhfrVrwbIh60+uVV70QDh3FYcZrhwJwQ+m9UdrOMSbGe/Osxiew==
+editorconfig@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-1.0.2.tgz#0e4ff2ce6bf392f3f9e4d50c1a9819b06d380d15"
+  integrity sha512-l8CnaNCz0dgCqJQ3hKqW2qtUavm1WLdJUvlxufaZ6JDkds3UFxgUKnKJz982yJPYko/78LkWAiwJadFnFtUBjw==
   dependencies:
     "@one-ini/wasm" "0.1.1"
-    commander "^9.4.1"
-    minimatch "5.1.0"
+    commander "^10.0.0"
+    minimatch "6.1.6"
     semver "^7.3.8"
 
 editorconfig@^0.15.3:
@@ -15376,17 +15376,24 @@ minimatch@3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@5.1.0, minimatch@^5.0.1:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
-  integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
-  dependencies:
-    brace-expansion "^2.0.1"
-
 minimatch@5.1.6:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.6.tgz#1cfcb8cf5522ea69952cd2af95ae09477f122a96"
   integrity sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==
+  dependencies:
+    brace-expansion "^2.0.1"
+
+minimatch@6.1.6:
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-6.1.6.tgz#5384bb324be5b5dae12a567c03d22908febd0ddd"
+  integrity sha512-6bR3UIeh/DF8+p6A9Spyuy67ShOq42rOkHWi7eUe3Ua99Zo5lZfGC6lJJWkeoK4k9jQFT3Pl7czhTXimG2XheA==
+  dependencies:
+    brace-expansion "^2.0.1"
+
+minimatch@^5.0.1:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
+  integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -18079,10 +18086,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.128.1:
-  version "34.128.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.128.1.tgz#217f896a141aaaa9134fabd8de7e4a1fa33168de"
-  integrity sha512-3Pu2Z3VU9vuSK2CV99ijcZpcAuSdGHjA49wTfsncfifoWkJq606IU5PiiZTX8viyj3NMCk7vN9gjMhKBg/nH5A==
+renovate@34.132.1:
+  version "34.132.1"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.132.1.tgz#410a81a7d862b9d5fee5b4023299f04ae2049611"
+  integrity sha512-dPUQwpw7xEHl8qvrI/XL38t5oaG6WDmVjUUf+3Xbau98XkKjUKwwEJSLvTU3JJw9XTmhjtsttvBp30p1oeoT3g==
   dependencies:
     "@aws-sdk/client-codecommit" "3.256.0"
     "@aws-sdk/client-ec2" "3.256.0"
@@ -18130,7 +18137,7 @@ renovate@34.128.1:
     delay "5.0.0"
     dequal "2.0.3"
     detect-indent "6.1.0"
-    editorconfig "1.0.1"
+    editorconfig "1.0.2"
     email-addresses "5.0.0"
     emoji-regex "10.2.1"
     emojibase "6.1.0"
@@ -18186,6 +18193,7 @@ renovate@34.128.1:
     upath "2.0.1"
     url-join "4.0.1"
     validate-npm-package-name "5.0.0"
+    vuln-vects "1.1.0"
     xmldoc "1.2.0"
     zod "3.20.2"
   optionalDependencies:
@@ -21113,6 +21121,11 @@ vuedraggable@4.1.0:
   integrity sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==
   dependencies:
     sortablejs "1.14.0"
+
+vuln-vects@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vuln-vects/-/vuln-vects-1.1.0.tgz#537d403615610446c1d687934584ea9dfb2a63ed"
+  integrity sha512-LGDwn9nRz94YoeqOn2TZqQXzyonBc5FJppSgH34S/1U+3bgPONq/vvfiCbCQ4MeBll58xx+kDmhS73ac+EHBBw==
 
 walker@^1.0.7, walker@~1.0.5:
   version "1.0.8"
