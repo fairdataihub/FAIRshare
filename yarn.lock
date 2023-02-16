@@ -18091,10 +18091,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@34.132.4:
-  version "34.132.4"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.132.4.tgz#18947a9843979f2b3ebd5f1ddcc90630845cd055"
-  integrity sha512-nRm3EN520JPt0uy4zJZjE9o+b5Cc9nw6hSjfb+Q6AINCpMA4Lq1LRmBLLE3I92Y/vRjAOUKDwnFXED9dlAyLtg==
+renovate@34.135.0:
+  version "34.135.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-34.135.0.tgz#e688e3a0b6d5ae5669c220cd475e181c42b10418"
+  integrity sha512-jdszH9ZaTDByLb96dUq6UKpVoyk6Pm9p4buVHAwzx1da7PcXKQyh6XGwsijDrLbqk3857ATvepUCy8EZZ2KRXw==
   dependencies:
     "@aws-sdk/client-codecommit" "3.256.0"
     "@aws-sdk/client-ec2" "3.256.0"
