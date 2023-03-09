@@ -42,7 +42,6 @@ def uploadFolderToGeo(
         os.chdir("..")
 
     try:
-
         UPLOAD_STATUS["message"] = "Connecting to FTP server..."
         UPLOAD_STATUS["currentFileNumber"] = 0
 

@@ -645,7 +645,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
             row, column + 3, sample["description"], default_text_cell_format
         )
 
-        for (i, processedDataFile) in enumerate(sample["processedDataFiles"]):
+        for i, processedDataFile in enumerate(sample["processedDataFiles"]):
             metadataWorksheet.write(
                 row,
                 processedDataFilesIndex + i,
@@ -653,7 +653,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
                 default_text_cell_format,
             )
 
-        for (i, rawFile) in enumerate(sample["rawFiles"]):
+        for i, rawFile in enumerate(sample["rawFiles"]):
             metadataWorksheet.write(
                 row,
                 rawFilesIndex + i,
@@ -770,7 +770,7 @@ def createNextGenHighThroughputSequencingMetadata(metadata):
             row += 1
             column = 0
 
-            for (i, rawFile) in enumerate(sample["rawFiles"]):
+            for i, rawFile in enumerate(sample["rawFiles"]):
                 metadataWorksheet.write(
                     row, column + i, os.path.basename(rawFile), default_text_cell_format
                 )
