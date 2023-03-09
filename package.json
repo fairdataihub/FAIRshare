@@ -35,7 +35,7 @@
     "commit": "cz",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "story:dev": "yarn gulp setup-histoire && histoire dev --port 3000",
+    "story:dev": "yarn gulp setup-histoire && histoire dev --port 3001",
     "story:build": "yarn gulp setup-histoire && histoire build",
     "story:preview": "histoire preview",
     "prepare": "husky install"
