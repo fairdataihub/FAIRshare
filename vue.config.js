@@ -17,7 +17,7 @@ module.exports = {
 
         files: ["**/*", "!pyflask/", "!build/", "!api.spec", "!index.css"],
 
-        fileAssociations: { ext: ["fairshare"] },
+        fileAssociations: { ext: "fairshare" },
         protocols: [
           {
             name: "fairshare",

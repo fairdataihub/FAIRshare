@@ -30,6 +30,10 @@ log.transports.console.format = "{h}:{i}:{s} {text}";
 
 log.info("starting log");
 
+if (process.platform === "win32") {
+  app.setAppUserModelId(app.name);
+}
+
 const getReleaseChannel = () => {
   const exists = fs.pathExistsSync(CONFIG_STORE_PATH);
 
