@@ -51,7 +51,7 @@ def uploadFolderToGeo(
 
         localFolderName = os.path.basename(localFolderPath)
 
-        numberOfFiles = sum([len(files) for r, d, files in os.walk(localFolderPath)])
+        numberOfFiles = sum(len(files) for r, d, files in os.walk(localFolderPath))
         UPLOAD_STATUS["totalFiles"] = numberOfFiles
 
         session.mkd(localFolderName)
