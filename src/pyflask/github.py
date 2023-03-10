@@ -219,7 +219,6 @@ def getRepoContentTree(access_token, owner, repo):
             return contentTree
 
         def convertContentTree(contentTree):
-
             outputList = []
             for item in contentTree:
                 if "children" in contentTree[item]:
