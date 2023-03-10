@@ -16,6 +16,11 @@ import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
 import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
 import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 
+// Immunology metadata related components
+import ImmunologyLanding from "../views/workflow/Immunology/ImmunologyLanding.vue";
+import ImmunologySelectSourceFolder from "../views/workflow/Immunology/SelectSourceFolder.vue";
+import ImmunologyReviewStandards from "../views/workflow/Immunology/ReviewStandards.vue";
+
 // Other metadata related components
 import OtherLanding from "../views/workflow/Other/OtherLanding.vue";
 import OtherSelectSourceFolder from "../views/workflow/Other/SelectSourceFolder.vue";
@@ -102,6 +107,10 @@ const routes = [
     component: CodeLanding,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Immunology/landing",
+    component: ImmunologyLanding,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Other/landing",
     component: OtherLanding,
   },
@@ -112,6 +121,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
     component: CodeSelectSourceFolder,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/selectFolder",
+    component: ImmunologySelectSourceFolder,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/selectFolder",
@@ -128,6 +141,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/reviewStandards",
     component: CodeReviewStandards,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/reviewStandards",
+    component: ImmunologyReviewStandards,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/reviewStandards",

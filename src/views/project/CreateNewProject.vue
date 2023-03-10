@@ -52,31 +52,25 @@
                     </div>
                   </el-checkbox>
                 </template>
+
                 <span class="break-normal text-left text-sm">
                   Computational code, scripts, models, notebooks, code libraries, etc.
                 </span>
               </el-popover>
 
-              <el-popover
-                placement="bottom"
-                :hide-after="0"
-                trigger="hover"
-                content="Coming soon..."
-              >
+              <el-popover placement="bottom" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
-                  <el-checkbox
-                    border
-                    name="type"
-                    class="single-check-box"
-                    label="Immunology"
-                    disabled
-                  >
+                  <el-checkbox border name="type" class="single-check-box" label="Immunology">
                     <div class="flex flex-col items-center">
                       <Icon icon="mdi:virus-outline" class="my-2 h-12 w-12" />
                       <span class="text-sm">Immunology</span>
                     </div>
                   </el-checkbox>
                 </template>
+
+                <span class="break-normal text-left text-sm">
+                  Immunology-related research, assay methods, etc.
+                </span>
               </el-popover>
 
               <el-popover
@@ -168,6 +162,99 @@
           </el-checkbox-group>
         </el-form-item>
 
+        <el-form-item
+          label="Immunology Data Type"
+          prop="immunologyDataTypes"
+          class="createNewProjectFormItemContainer"
+          v-show="datasetForm.dataType.includes('Immunology')"
+        >
+          <el-checkbox-group v-model="datasetForm.immunologyDataTypes" class="checkbox-group">
+            <div class="flex gap-8 transition-all">
+              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box transition-all"
+                    label="FlowCytometry"
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="entypo:lab-flask" class="my-2 h-12 w-12" />
+                      <span class="text-sm">Flow</span>
+                      <span class="text-sm">Cytometry</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  Flow cytometry data, such as FCS files.
+                </span>
+              </el-popover>
+
+              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box transition-all"
+                    label="RNASequencing"
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="fluent-emoji-high-contrast:worm" class="my-2 h-12 w-12" />
+                      <span class="text-sm">RNA</span>
+                      <span class="text-sm">Sequencing</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  RNA sequencing data, such as FASTQ files.
+                </span>
+              </el-popover>
+
+              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box transition-all"
+                    label="ELISA"
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="raphael:lab" class="my-2 h-12 w-12" />
+                      <span class="text-sm">ELISA</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  ELISA data, such as raw data files.
+                </span>
+              </el-popover>
+
+              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+                <template #reference>
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box transition-all"
+                    label="CyTOF"
+                  >
+                    <div class="flex flex-col items-center">
+                      <Icon icon="codicon:graph-scatter" class="my-2 h-12 w-12" />
+                      <span class="text-sm">CyTOF</span>
+                    </div>
+                  </el-checkbox>
+                </template>
+
+                <span class="break-normal text-left text-sm">
+                  CyTOF data, such as raw data files.
+                </span>
+              </el-popover>
+            </div>
+          </el-checkbox-group>
+        </el-form-item>
+
         <div class="flex flex-row justify-center space-x-4 py-4">
           <button class="danger-plain-button" @click="cancelNewDataset">
             <el-icon><circle-close-filled /></el-icon> Cancel
@@ -201,6 +288,7 @@ export default {
         datasetName: "",
         datasetDescription: "",
         dataType: [],
+        immunologyDataTypes: [],
       },
       rules: {
         datasetName: [
@@ -222,6 +310,13 @@ export default {
             type: "array",
             required: true,
             message: "Please select at least one data type",
+            trigger: "change",
+          },
+        ],
+        immunologyDataTypes: [
+          {
+            type: "array",
+            validator: this.validateImmunoDataTypes,
             trigger: "change",
           },
         ],
@@ -249,6 +344,7 @@ export default {
             name: this.datasetForm.datasetName.trim(),
             description: this.datasetForm.datasetDescription.trim(),
             dataType: this.datasetForm.dataType,
+            immunologyDataTypes: this.datasetForm.immunologyDataTypes,
             data: {},
             workflowConfirmed: false,
             meta: {
@@ -275,6 +371,13 @@ export default {
             };
           }
 
+          for (const type of dataset.immunologyDataTypes) {
+            dataset.data[type] = {
+              uploaded: false,
+              questions: {},
+            };
+          }
+
           this.datasetStore.addDataset(dataset, datasetID);
 
           ElNotification({
@@ -294,6 +397,17 @@ export default {
           return false;
         }
       });
+    },
+    validateImmunoDataTypes(_rule, value, callback) {
+      if (this.datasetForm.dataType.includes("Immunology")) {
+        if (value.length === 0) {
+          callback(new Error("Please select at least one immunology data type"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
     },
     cancelNewDataset() {
       this.$router.push({ name: "ShowAllProjects" });
