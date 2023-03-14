@@ -104,7 +104,6 @@
                     name="type"
                     class="single-check-box"
                     label="NextGenHighThroughputSequencing"
-                    disabled
                   >
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />

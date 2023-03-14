@@ -20,6 +20,7 @@ import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 import ImmunologyLanding from "../views/workflow/Immunology/ImmunologyLanding.vue";
 import ImmunologySelectSourceFolder from "../views/workflow/Immunology/SelectSourceFolder.vue";
 import ImmunologyReviewStandards from "../views/workflow/Immunology/ReviewStandards.vue";
+import ImmunologyCreateMetadata from "../views/workflow/Immunology/CreateMetadata.vue";
 
 // Other metadata related components
 import OtherLanding from "../views/workflow/Other/OtherLanding.vue";
@@ -158,6 +159,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
     name: "CodeCreateMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/createMetadata",
+    component: ImmunologyCreateMetadata,
+    name: "ImmunologyCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/createMetadata",
