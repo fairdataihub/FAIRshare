@@ -453,7 +453,7 @@
                         item-key="id"
                         handle=".handle"
                         :animation="200"
-                        @start="minimizeAllSamples"
+                        @start="minimizeAllArmGroups"
                       >
                         <template #item="{ element }">
                           <div
@@ -480,11 +480,11 @@
                                   />
                                 </div>
 
-                                <span class="flex items-center"> {{ element.libraryName }} </span>
+                                <span class="flex items-center"> {{ element.armID }} </span>
 
                                 <div
                                   class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                  @click.stop="editLibraryName(element.id)"
+                                  @click.stop="editArmID(element.id)"
                                 >
                                   <el-icon><edit-pen /></el-icon>
                                 </div>
@@ -498,7 +498,7 @@
                                 </div>
                                 <div
                                   class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                  @click.stop="showRemoveSampleConfirm(element.id)"
+                                  @click.stop="showRemoveArmGroupConfirm(element.id)"
                                 >
                                   <el-icon><delete-filled /></el-icon>
                                 </div>
@@ -509,17 +509,19 @@
                               <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
                                 <div class="mb-4 flex flex-col">
                                   <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                                    Title <span class="text-red-500"> * </span>
+                                    Name <span class="text-red-500"> * </span>
                                   </label>
 
                                   <el-input
-                                    v-model="element.title"
+                                    v-model="element.name"
                                     type="text"
-                                    placeholder="[biomaterial], [condition(s)], [replicate number]"
+                                    placeholder="arm-cohort_1056-7"
+                                    maxlength="126"
+                                    show-word-limit
                                   />
                                   <span class="mt-1 text-xs text-slate-600">
-                                    Unique title that describes the Sample. We suggest the
-                                    convention: [biomaterial], [condition(s)], [replicate number]
+                                    THe arm or cohort name is an alternate identifier that is
+                                    visible when the study is shared.
                                   </span>
                                 </div>
 
@@ -532,207 +534,40 @@
                                     type="textarea"
                                     placeholder="Description"
                                     class="mb-2"
+                                    maxlength="4000"
+                                    show-word-limit
+                                    rows="4"
                                   />
                                   <span class="mt-1 text-xs text-slate-600">
-                                    Optional. Additional information not provided in the other
-                                    fields, or broad descriptions that cannot be easily dissected
-                                    into other fields. <br />
-                                    OR <br />
-                                    If you submit a matrix containing processed data for multiple
-                                    Samples (e.g., counts.txt for all RNA-Seq samples), list the
-                                    matrix column names here.
-                                  </span>
-                                </div>
-
-                                <div
-                                  class="mb-2 flex w-full flex-row justify-between transition-all"
-                                >
-                                  <div class="mr-2 w-4/12 xl:w-3/12">
-                                    <div class="mb-4 flex flex-col">
-                                      <label
-                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
-                                      >
-                                        Organism <span class="text-red-500"> * </span>
-                                      </label>
-                                      <el-select
-                                        v-model="element.organism"
-                                        filterable
-                                        remote
-                                        reserve-keyword
-                                        placeholder="Organism"
-                                        class="w-full"
-                                        :remote-method="loadTaxonomy"
-                                        :loading="loading"
-                                      >
-                                        <el-option
-                                          v-for="item in organismOptions"
-                                          :key="item.value"
-                                          :label="item.label"
-                                          :value="item.value"
-                                        />
-                                      </el-select>
-                                      <span class="mt-1 text-xs text-slate-600">
-                                        Organisms from which the sequences was derived. <br />
-                                        Start typing for suggestions.
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <div class="mx-2 w-3/12">
-                                    <div class="mb-4 flex flex-col">
-                                      <label
-                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
-                                      >
-                                        Molecule <span class="text-red-500"> * </span>
-                                      </label>
-                                      <el-select
-                                        v-model="element.molecule"
-                                        filterable
-                                        class="w-full"
-                                        placeholder="Molecule"
-                                      >
-                                        <el-option
-                                          v-for="item in moleculeOptions"
-                                          :key="item"
-                                          :label="item"
-                                          :value="item"
-                                        >
-                                        </el-option>
-                                      </el-select>
-                                      <span class="mt-1 text-xs text-slate-600">
-                                        Type of molecule that was extracted from the biological
-                                        material.
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <div class="mx-2 w-3/12">
-                                    <div class="mb-4 flex flex-col">
-                                      <label
-                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
-                                      >
-                                        Single or paired end <span class="text-red-500"> * </span>
-                                      </label>
-                                      <el-select
-                                        v-model="element.singleOrPairedEnd"
-                                        filterable
-                                        class="w-full"
-                                        placeholder="Single or paired end"
-                                      >
-                                        <el-option label="single" value="single"> </el-option>
-                                        <el-option label="paired-end" value="paired-end">
-                                        </el-option>
-                                      </el-select>
-                                    </div>
-                                  </div>
-
-                                  <div class="mx-2 w-2/12 xl:w-3/12">
-                                    <div class="mb-4 flex flex-col">
-                                      <label
-                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
-                                      >
-                                        Instrument Model <span class="text-red-500"> * </span>
-                                      </label>
-                                      <el-select
-                                        v-model="element.instrumentModel"
-                                        filterable
-                                        class="w-full"
-                                        placeholder="Instrument Model"
-                                      >
-                                        <el-option
-                                          v-for="item in instrumentModelOptions"
-                                          :key="item"
-                                          :label="item"
-                                          :value="item"
-                                        >
-                                        </el-option>
-                                      </el-select>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <line-divider class="my-2" type="dashed" />
-
-                                <p class="">
-                                  Sample Characteristics <span class="text-red-500"> * </span>
-                                </p>
-                                <span class="mb-4 text-xs">
-                                  One of 'tissue', 'cell line' or 'cell type' fields is required.
-                                </span>
-
-                                <div
-                                  class="flex w-full flex-col justify-between pb-4"
-                                  v-for="(_item, key, index) in element.characteristics"
-                                  :key="index"
-                                >
-                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
-                                    {{ key }}
-                                  </label>
-
-                                  <div class="flex items-center justify-between">
-                                    <el-autocomplete
-                                      v-model="element.characteristics[key]"
-                                      :fetch-suggestions="customFieldValueSuggestions"
-                                      @focus="setCustomFieldNameForFilter(key)"
-                                      clearable
-                                      class="w-full"
-                                      placeholder="Enter a field name"
-                                    />
-                                    <div
-                                      class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
-                                      @click="showCustomFieldDeleteConfirm(key)"
-                                    >
-                                      <el-icon><delete-filled /></el-icon>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="flex w-full flex-row justify-start">
-                                  <button
-                                    class="primary-plain-button"
-                                    @click="openAddFieldPrompt(id)"
-                                  >
-                                    Add a field
-                                    <el-icon><circle-plus /></el-icon>
-                                  </button>
-                                </div>
-
-                                <line-divider class="my-4" type="dashed" />
-
-                                <div class="flex flex-col">
-                                  <p class="my-2">
-                                    Add your raw files <span class="text-red-500"> * </span>
-                                  </p>
-
-                                  <el-tree-select
-                                    v-model="element.rawFiles"
-                                    :data="element.filteredRawFilesFolderContents"
-                                    @visible-change="getFilteredRawFilesFolderContents(element.id)"
-                                    multiple
-                                    clearable
-                                    show-checkbox
-                                  />
-                                  <span class="mt-1 text-xs text-slate-600">
-                                    Files containing the raw data.
+                                    The arm or cohort description should explain any abbreviations
+                                    used in the arm or cohort name.
                                   </span>
                                 </div>
 
                                 <div class="mb-4 flex flex-col">
-                                  <p class="my-2">Add your processed files</p>
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Type Reported <span class="text-red-500"> * </span>
+                                  </label>
 
-                                  <el-tree-select
-                                    v-model="element.processedDataFiles"
-                                    :data="element.filteredProcessedDataFilesFolderContents"
-                                    @visible-change="
-                                      getFilteredProcessedDataFilesFolderContents(element.id)
-                                    "
-                                    multiple
-                                    clearable
-                                    show-checkbox
-                                  />
+                                  <el-select
+                                    v-model="element.type"
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    :reserve-keyword="false"
+                                    placeholder="Choose a type for this group"
+                                  >
+                                    <el-option
+                                      v-for="item in armTypeOptions"
+                                      :key="item"
+                                      :label="item"
+                                      :value="item"
+                                    />
+                                  </el-select>
+
                                   <span class="mt-1 text-xs text-slate-600">
-                                    Files containing the processed data. The same processed file may
-                                    be listed for multiple Samples.
+                                    Arms used in the clinical trial. Terms are derived from the
+                                    National Cancer Institute.
                                   </span>
                                 </div>
                               </div>
@@ -741,43 +576,18 @@
                         </template>
                       </draggable>
 
-                      <add-prompt
-                        ref="addCharacteristicPrompt"
-                        title="Add a sample characteristic"
-                        confirmButtonText="Add this field"
-                        :confirmDisabled="disableCustomCharacteristic"
-                        @messageConfirmed="addCustomCharacteristic"
-                      >
-                        <div w-full>
-                          <p class="mb-3 text-sm">
-                            Please select or enter the name of the field you would like to add. This
-                            field will be added to all samples.
-                          </p>
-
-                          <el-autocomplete
-                            v-model="customFieldName"
-                            :fetch-suggestions="customFieldNameSearch"
-                            clearable
-                            class="w-full"
-                            placeholder="Enter a field name"
-                          />
-                        </div>
-                      </add-prompt>
-
                       <edit-prompt
-                        ref="editLibraryNamePrompt"
-                        title="Edit library name"
+                        ref="editArmIDPrompt"
+                        title="Edit Arm/Cohort/Subject group ID"
                         confirmButtonText="Save"
-                        :confirmDisabled="disableEditLibraryNameSaveButton"
-                        @messageConfirmed="saveUpdatedLibraryName"
+                        :confirmDisabled="disableEditArmIDSaveButton"
+                        @messageConfirmed="saveUpdatedArmID"
                       >
                         <div w-full>
-                          <p class="mb-3 text-sm">
-                            Please enter the new library name for this sample.
-                          </p>
+                          <p class="mb-3 text-sm">Please enter a new ID for this group.</p>
 
                           <el-input
-                            v-model="sampleName"
+                            v-model="armID"
                             clearable
                             class="w-full"
                             placeholder="Enter a field name"
@@ -786,49 +596,636 @@
                       </edit-prompt>
 
                       <warning-confirm
-                        ref="removeSampleConfirm"
+                        ref="removeArmGroupConfirm"
                         title="Warning"
-                        @messageConfirmed="confirmedRemoveSample"
+                        @messageConfirmed="confirmedRemoveArmGroup"
                       >
                         <p class="text-center text-base text-gray-500">
-                          Are you sure you want to remove this sample? This action cannot be undone.
+                          Are you sure you want to remove this group? This action cannot be undone.
                         </p>
                       </warning-confirm>
+                    </el-form>
+                    <div class="m-2 flex w-full justify-center">
+                      <button class="primary-plain-button" @click="showAddArmGroupPrompt">
+                        Add an Arm/Cohort/Subject group
+                      </button>
+
+                      <add-prompt
+                        ref="addArmGroupPrompt"
+                        title="Add a Arm/Cohort/Subject group"
+                        confirmButtonText="Add this group"
+                        :confirmDisabled="disableEditArmIDSaveButton"
+                        @messageConfirmed="addArmGroupConfirmed"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">
+                            Please add a unique ID for this Arm/Cohort/Subject group. This ID should
+                            be unique within your ImmPort workspace.
+                          </p>
+
+                          <el-input
+                            v-model="armID"
+                            clearable
+                            size="large"
+                            class="w-full"
+                            placeholder="Enter a ID for this Arm/Cohort/Subject group"
+                          />
+                        </div>
+                      </add-prompt>
+                    </div>
+                  </div>
+
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep4FromStep3"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 4">
+                  <div class="px-4 pb-4 pt-2">
+                    <el-form
+                      :model="step4Form"
+                      label-width="160px"
+                      label-position="top"
+                      size="large"
+                      ref="s3Form"
+                      @submit.prevent
+                      class="pb-4"
+                    >
+                      <draggable
+                        tag="div"
+                        :list="step4Form"
+                        item-key="id"
+                        handle=".handle"
+                        :animation="200"
+                        @start="minimizeAllPersonnel"
+                      >
+                        <template #item="{ element }">
+                          <div
+                            class="form-card-content mb-4 flex flex-col rounded-lg border-2 border-slate-100 shadow-md"
+                          >
+                            <div
+                              class="flex w-full flex-row items-center justify-between bg-gray-50 px-4 py-2"
+                              @click="element.isExpanded = !element.isExpanded"
+                            >
+                              <div class="flex w-full flex-row justify-start">
+                                <div
+                                  class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                  @click.stop="element.isExpanded = !element.isExpanded"
+                                >
+                                  <Icon
+                                    icon="dashicons:arrow-right-alt2"
+                                    width="20"
+                                    height="20"
+                                    class="transition-all"
+                                    :class="{
+                                      'rotate-90': element.isExpanded,
+                                      'rotate-0': !element.isExpanded,
+                                    }"
+                                  />
+                                </div>
+
+                                <span class="flex items-center"> {{ element.personnelID }} </span>
+
+                                <div
+                                  class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="editPersonnelID(element.id)"
+                                >
+                                  <el-icon><edit-pen /></el-icon>
+                                </div>
+                              </div>
+
+                              <div class="flex w-1/12 flex-row justify-evenly">
+                                <div
+                                  class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                >
+                                  <Icon icon="ic:outline-drag-indicator" />
+                                </div>
+                                <div
+                                  class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="showRemovePersonnelEntryConfirm(element.id)"
+                                >
+                                  <el-icon><delete-filled /></el-icon>
+                                </div>
+                              </div>
+                            </div>
+
+                            <el-collapse-transition>
+                              <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                                <div
+                                  class="mb-2 flex w-full flex-row justify-between transition-all"
+                                >
+                                  <div class="mr-2 w-2/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Honorific
+                                      </label>
+                                      <el-input
+                                        v-model="element.honorific"
+                                        type="text"
+                                        placeholder="Dr."
+                                        maxlength="20"
+                                        show-word-limit
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-4/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        First Name <span class="text-red-500"> * </span>
+                                      </label>
+                                      <el-input
+                                        v-model="element.firstName"
+                                        type="text"
+                                        placeholder="Steven"
+                                        maxlength="40"
+                                        show-word-limit
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-4/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Last Name <span class="text-red-500"> * </span>
+                                      </label>
+                                      <el-input
+                                        v-model="element.lastName"
+                                        type="text"
+                                        placeholder="Strange"
+                                        maxlength="40"
+                                        show-word-limit
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-2/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Suffix
+                                      </label>
+                                      <el-input
+                                        v-model="element.suffix"
+                                        type="text"
+                                        placeholder="Jr."
+                                        maxlength="40"
+                                        show-word-limit
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Organization <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.organization"
+                                    type="text"
+                                    placeholder="University of California, San Francisco"
+                                    maxlength="100"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The organization with whom the study personnel being described
+                                    is affiliated.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Site Name <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.siteName"
+                                    type="text"
+                                    placeholder="Department of Neurology"
+                                    maxlength="125"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    Enter the site name if there is a need to further differentiate
+                                    the affiliation of the study personnel from the organization.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Email <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.email"
+                                    type="text"
+                                    placeholder="stevenstrange@ucsf.edu"
+                                    maxlength="100"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The organization with whom the study personnel being described
+                                    is affiliated.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    ORCID
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.orcid"
+                                    type="text"
+                                    placeholder="0000-0003-2829-8032"
+                                    maxlength="100"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The organization with whom the study personnel being described
+                                    is affiliated.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Title in the Study <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.titleInStudy"
+                                    type="text"
+                                    placeholder="Principal Investigator"
+                                    maxlength="100"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The role the personnel plat in the study as defined by the
+                                    research team.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Role in the Study <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-select
+                                    v-model="element.roleInStudy"
+                                    filterable
+                                    default-first-option
+                                    :reserve-keyword="false"
+                                    placeholder="Choose a type for this group"
+                                  >
+                                    <el-option
+                                      v-for="item in studyRoleOptions"
+                                      :key="item"
+                                      :label="item"
+                                      :value="item"
+                                    />
+                                  </el-select>
+
+                                  <span class="mt-1 text-xs text-slate-600"> Some text here. </span>
+                                </div>
+                              </div>
+                            </el-collapse-transition>
+                          </div>
+                        </template>
+                      </draggable>
+
+                      <edit-prompt
+                        ref="editpersonnelIDPrompt"
+                        title="Edit Arm/Cohort/Subject group ID"
+                        confirmButtonText="Save"
+                        :confirmDisabled="disableEditPersonnelIDSaveButton"
+                        @messageConfirmed="saveUpdatedPersonnelID"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">Please enter a new ID for this person.</p>
+
+                          <el-input
+                            v-model="personnelID"
+                            clearable
+                            class="w-full"
+                            placeholder="Enter a field name"
+                          />
+                        </div>
+                      </edit-prompt>
 
                       <warning-confirm
-                        ref="removeCustomFieldConfirm"
+                        ref="removePersonnelEntryConfirm"
                         title="Warning"
-                        @messageConfirmed="confirmedRemoveCustomField"
+                        @messageConfirmed="confirmedRemovePersonnelEntry"
                       >
                         <p class="text-center text-base text-gray-500">
-                          Are you sure you want to remove this field from all samples? This action
+                          Are you sure you want to remove this person from this study? This action
                           cannot be undone.
                         </p>
                       </warning-confirm>
                     </el-form>
                     <div class="m-2 flex w-full justify-center">
-                      <button class="primary-plain-button" @click="showAddSamplePrompt">
-                        Add a Sample
+                      <button class="primary-plain-button" @click="showAddPersonnelPrompt">
+                        Add a person to the study
                       </button>
 
                       <add-prompt
-                        ref="addSamplePrompt"
-                        title="Add a sample"
-                        confirmButtonText="Add this sample"
-                        :confirmDisabled="disableEditLibraryNameSaveButton"
-                        @messageConfirmed="addSampleConfirmed"
+                        ref="addPersonnelPrompt"
+                        title="Add a person"
+                        confirmButtonText="Add this person to the study"
+                        :confirmDisabled="disableEditPersonnelIDSaveButton"
+                        @messageConfirmed="addPersonnelConfirmed"
                       >
                         <div w-full>
                           <p class="mb-3 text-sm">
-                            Please select or enter the name of the sample you would like to add.
+                            Please add a unique ID for this person. This ID should be unique within
+                            your ImmPort workspace.
                           </p>
 
                           <el-input
-                            v-model="sampleName"
+                            v-model="personnelID"
                             clearable
                             size="large"
                             class="w-full"
-                            placeholder="Enter a library name for your sample"
+                            placeholder="personnel_1056_2"
+                          />
+                        </div>
+                      </add-prompt>
+                    </div>
+                  </div>
+
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep5FromStep4"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 5">
+                  <div class="px-4 pb-4 pt-2">
+                    <el-form
+                      :model="step5Form"
+                      label-width="160px"
+                      label-position="top"
+                      size="large"
+                      ref="s3Form"
+                      @submit.prevent
+                      class="pb-4"
+                    >
+                      <draggable
+                        tag="div"
+                        :list="step5Form"
+                        item-key="id"
+                        handle=".handle"
+                        :animation="200"
+                        @start="minimizeAllPlannedVisits"
+                      >
+                        <template #item="{ element }">
+                          <div
+                            class="form-card-content mb-4 flex flex-col rounded-lg border-2 border-slate-100 shadow-md"
+                          >
+                            <div
+                              class="flex w-full flex-row items-center justify-between bg-gray-50 px-4 py-2"
+                              @click="element.isExpanded = !element.isExpanded"
+                            >
+                              <div class="flex w-full flex-row justify-start">
+                                <div
+                                  class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                  @click.stop="element.isExpanded = !element.isExpanded"
+                                >
+                                  <Icon
+                                    icon="dashicons:arrow-right-alt2"
+                                    width="20"
+                                    height="20"
+                                    class="transition-all"
+                                    :class="{
+                                      'rotate-90': element.isExpanded,
+                                      'rotate-0': !element.isExpanded,
+                                    }"
+                                  />
+                                </div>
+
+                                <span class="flex items-center"> {{ element.visitID }} </span>
+
+                                <div
+                                  class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="editPlannedVisitID(element.id)"
+                                >
+                                  <el-icon><edit-pen /></el-icon>
+                                </div>
+                              </div>
+
+                              <div class="flex w-1/12 flex-row justify-evenly">
+                                <div
+                                  class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                >
+                                  <Icon icon="ic:outline-drag-indicator" />
+                                </div>
+                                <div
+                                  class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="showRemovePlannedVisitConfirm(element.id)"
+                                >
+                                  <el-icon><delete-filled /></el-icon>
+                                </div>
+                              </div>
+                            </div>
+
+                            <el-collapse-transition>
+                              <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Visit Name <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.name"
+                                    type="text"
+                                    placeholder="Screening Vaccination, Week 1"
+                                    maxlength="125"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    This is an alternate identifier that is visible when the study
+                                    is shared.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Order Number <span class="text-red-500"> * </span>
+                                  </label>
+                                  <el-input-number v-model="element.orderNumber" :min="1" />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The order of the visit within the study schedule.
+                                  </span>
+                                </div>
+
+                                <div
+                                  class="mb-2 flex w-full flex-row justify-between transition-all"
+                                >
+                                  <div class="mr-2 w-6/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Min Start Day <span class="text-red-500"> * </span>
+                                      </label>
+                                      <el-input-number v-model="element.minStartDay" :min="1" />
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        The minimum start day for a visit as defined in the study
+                                        schedule.
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-6/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Max Start Day <span class="text-red-500"> * </span>
+                                      </label>
+                                      <el-input-number v-model="element.maxStartDay" :min="1" />
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        The maximum start day for a visit as defined in the study
+                                        schedule.
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Start Rule
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.startRule"
+                                    type="text"
+                                    placeholder="2 weeks after initial vaccination"
+                                    maxlength="256"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    Enter a start rule for the visit, if applicable.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    End Rule
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.endRule"
+                                    type="text"
+                                    placeholder="Subjects experience a severe or fatal adverse event"
+                                    maxlength="256"
+                                    show-word-limit
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    Enter an end rule for the visit, if applicable.
+                                  </span>
+                                </div>
+                              </div>
+                            </el-collapse-transition>
+                          </div>
+                        </template>
+                      </draggable>
+
+                      <edit-prompt
+                        ref="editPlannedVisitPrompt"
+                        title="Edit Planned Visit ID"
+                        confirmButtonText="Save"
+                        :confirmDisabled="disableEditPlannedVisitsIDSaveButton"
+                        @messageConfirmed="saveUpdatedPlannedVisitID"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">Please enter a new ID for this visit.</p>
+
+                          <el-input
+                            v-model="visitID"
+                            clearable
+                            class="w-full"
+                            placeholder="plannedvisit_1056_2"
+                          />
+                        </div>
+                      </edit-prompt>
+
+                      <warning-confirm
+                        ref="removePlannedVisitConfirm"
+                        title="Warning"
+                        @messageConfirmed="confirmedRemovePlannedVisit"
+                      >
+                        <p class="text-center text-base text-gray-500">
+                          Are you sure you want to remove this person from this study? This action
+                          cannot be undone.
+                        </p>
+                      </warning-confirm>
+                    </el-form>
+                    <div class="m-2 flex w-full justify-center">
+                      <button class="primary-plain-button" @click="showAddPlannedVisitPrompt">
+                        Add a Planned Visit/Time Series to the study
+                      </button>
+
+                      <add-prompt
+                        ref="addPlannedVisitPrompt"
+                        title="Add a Planned Visit/Time Series to the study"
+                        confirmButtonText="Add this planned visit to the study"
+                        :confirmDisabled="disableEditPlannedVisitsIDSaveButton"
+                        @messageConfirmed="addPlannedVisitConfirmed"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">
+                            Please add a unique ID for this visit. This ID should be unique within
+                            your ImmPort workspace.
+                          </p>
+
+                          <el-input
+                            v-model="visitID"
+                            clearable
+                            size="large"
+                            class="w-full"
+                            placeholder="plannedvisit_1056_2"
                           />
                         </div>
                       </add-prompt>
@@ -927,7 +1324,6 @@ import { useTokenStore } from "@/store/access.js";
 
 import PillProgressBar from "@/components/ui/PillProgressBar.vue";
 
-import nextGenSequencingJSON from "@/assets/supplementalFiles/nextGenSequencing.json";
 import ImmunologyJSON from "@/assets/supplementalFiles/immunology.json";
 
 import SaveLottieJSON from "@/assets/lotties/saveLottie.json";
@@ -943,8 +1339,8 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
-      totalSteps: 3,
+      currentStep: 5,
+      totalSteps: 5,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
@@ -952,20 +1348,19 @@ export default {
       workflow: {},
       loading: false,
       interval: null,
-      instrumentModelOptions: nextGenSequencingJSON.instrumentModelOptions,
-      customFieldOptions: nextGenSequencingJSON.customFieldOptions,
-      moleculeOptions: nextGenSequencingJSON.moleculeOptions,
-      libraryStrategyOptions: nextGenSequencingJSON.libraryStrategyOptions,
+
       researchFocusOptions: ImmunologyJSON.researchFocusOptions,
       conditionOptions: ImmunologyJSON.conditionOptions,
+      armTypeOptions: ImmunologyJSON.armTypeOptions,
+      studyRoleOptions: ImmunologyJSON.studyRoleOptions,
       generateImmunologyMetadata: "Yes",
       step1Form: {
-        studyID: "",
-        briefTitle: "",
-        officialTitle: "",
-        briefDescription: "",
-        description: "",
-        sponsoringOrganization: "",
+        studyID: "study",
+        briefTitle: "briefTitle",
+        officialTitle: "officialTitle",
+        briefDescription: "briefDescription",
+        description: "description",
+        sponsoringOrganization: "someOrg",
       },
       step1FormRules: {
         studyID: [
@@ -1005,17 +1400,17 @@ export default {
         ],
       },
       step2Form: {
-        researchFocus: "",
-        condition: "",
-        interventionAgent: "",
-        endpoints: "",
-        hypothesis: "",
-        objectives: "",
-        ageUnit: "",
-        minimumAge: "",
-        maximumAge: "",
-        actualStartDate: "",
-        targetEnrollment: 1,
+        researchFocus: "Development",
+        condition: ["alcohol use disorder", "alcohol dependence"],
+        interventionAgent: "ia",
+        endpoints: "end",
+        hypothesis: "hype",
+        objectives: "obj",
+        ageUnit: "Years",
+        minimumAge: "20",
+        maximumAge: "30",
+        actualStartDate: "2023-03-14T07:00:00.000Z",
+        targetEnrollment: 10,
       },
       step2FormRules: {
         endpoints: [
@@ -1040,15 +1435,48 @@ export default {
           },
         ],
       },
-      step3Form: [],
-      customFieldNameForFilter: "",
+      step3Form: [
+        {
+          id: "f6c67289-949c-498c-8df4-a10da3c6dad9",
+          armID: "test",
+          name: "ar",
+          description: "asddf",
+          type: "No Intervention Arm",
+          isExpanded: true,
+        },
+      ],
+      step4Form: [
+        {
+          id: "44b71c40-343e-492f-a943-cbae29b0095c",
+          personnelID: "test",
+          firstName: "steven",
+          lastName: "strange",
+          suffix: "",
+          honorific: "",
+          orcid: "",
+          organization: "ucsf",
+          email: "asd@amd.vef",
+          titleInStudy: "pi",
+          roleInStudy: "Investigator",
+          siteName: "sn",
+          isExpanded: true,
+          type: "Investigator",
+        },
+      ],
+      step5Form: [],
       invalidStatus: {},
-      originalObject: {},
       showSaving: false,
       showSpinner: false,
-      sampleID: "",
-      sampleName: "",
-      customFieldName: "",
+
+      armGroupID: "",
+      armID: "",
+
+      personnelEntryID: "",
+      personnelID: "",
+
+      plannedVisitID: "",
+      visitID: "",
+
       folderContents: [
         {
           value: "1",
@@ -1076,16 +1504,39 @@ export default {
       }
       return false;
     },
-    disableCustomCharacteristic() {
-      return this.customFieldName.trim() === "";
-    },
-    disableEditLibraryNameSaveButton() {
-      if (this.sampleName.trim() === "") {
+    disableEditArmIDSaveButton() {
+      if (this.armID.trim() === "") {
         return true;
       }
 
-      for (const sample of this.step3Form) {
-        if (sample.libraryName === this.sampleName.trim()) {
+      for (const group of this.step3Form) {
+        if (group.armID === this.armID.trim()) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    disableEditPersonnelIDSaveButton() {
+      if (this.personnelID.trim() === "") {
+        return true;
+      }
+
+      for (const entry of this.step4Form) {
+        if (entry.personnelID === this.personnelID.trim()) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    disableEditPlannedVisitsIDSaveButton() {
+      if (this.visitID.trim() === "") {
+        return true;
+      }
+
+      for (const entry of this.step5Form) {
+        if (entry.visitID === this.visitID.trim()) {
           return true;
         }
       }
@@ -1122,7 +1573,7 @@ export default {
     },
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
-        const valid = await this.checkSamplesValidity();
+        const valid = await this.checkArmGroupValidity();
 
         if (!valid) {
           return;
@@ -1174,6 +1625,36 @@ export default {
         }
       });
     },
+    async navigateToStep4FromStep3() {
+      const valid = await this.checkArmGroupValidity();
+
+      if (!valid) {
+        return;
+      }
+
+      await this.saveCurrentEntries();
+
+      this.setCurrentStep(4);
+      this.$refs["topOfPageElement"].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    },
+    async navigateToStep5FromStep4() {
+      const valid = await this.checkPersonnelEntryValidity();
+
+      if (!valid) {
+        return;
+      }
+
+      await this.saveCurrentEntries();
+
+      this.setCurrentStep(5);
+      this.$refs["topOfPageElement"].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    },
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();
@@ -1193,329 +1674,10 @@ export default {
         }
       }, 50);
     },
-
-    addDataProcessingStep(_event, step = "") {
-      const id = uuidv4();
-      this.step2Form.dataProcessingSteps.push({
-        step,
-        id,
-      });
-      this.focusOnElementRef(id);
-    },
-    deleteDataProcessingStep(id) {
-      this.step2Form.dataProcessingSteps = this.step2Form.dataProcessingSteps.filter(
-        (processingStep) => {
-          return processingStep.id !== id;
-        }
-      );
-      this.$refs["s2Form"].validate();
-    },
-    dataProcessingStepsValidator(_rule, value, callback) {
-      if (value.length === 0) {
-        callback(new Error("Please add at least one data processing step."));
-      } else if ((value === "" || value === undefined) && value.length > 0) {
-        callback(new Error("Please provide a valid data processing step."));
-      } else {
-        callback();
-      }
-    },
-
-    libraryStrategyValidator(_rule, value, callback) {
-      if (value === "" || value === undefined) {
-        callback(new Error("Please provide a valid library strategy."));
-      } else if (value === "OTHER:") {
-        if (
-          this.step2Form.otherLibraryStrategy === undefined ||
-          this.step2Form.otherLibraryStrategy.trim() === ""
-        ) {
-          callback(new Error("Please provide a valid library strategy."));
-        } else {
-          callback();
-        }
-      } else {
-        callback();
-      }
-    },
-
     filterArrayOfObjects(array, key) {
       return array.filter((element) => {
         return element[key] !== "";
       });
-    },
-
-    async checkSamplesValidity() {
-      if (this.step3Form.length === 0) {
-        this.$message.error("Please add at least one sample.");
-        return false;
-      }
-
-      for (const sample of this.step3Form) {
-        if (sample.libraryName.trim() === "") {
-          this.$message.error("Please provide a library name for all samples.");
-          return false;
-        }
-
-        if (sample.title.trim() === "") {
-          this.$message.error(
-            `Please provide a title for all samples. Sample ${sample.libraryName} is missing a title.`
-          );
-          return false;
-        }
-
-        if (sample.description.trim() === "") {
-          this.$message.error(
-            `Please provide a description for all samples. Sample ${sample.libraryName} is missing a description.`
-          );
-          return false;
-        }
-
-        if (sample.organism.trim() === "") {
-          this.$message.error(
-            `Please provide an organism for all samples. Sample ${sample.libraryName} is missing an organism.`
-          );
-          return false;
-        }
-
-        if (sample.molecule.trim() === "") {
-          this.$message.error(
-            `Please provide a molecule for all samples. Sample ${sample.libraryName} is missing a molecule.`
-          );
-          return false;
-        }
-
-        if (sample.singleOrPairedEnd.trim() === "") {
-          this.$message.error(
-            `Some samples are missing a single or paired end value. Sample ${sample.libraryName} is missing this value.`
-          );
-          return false;
-        }
-
-        if (sample.instrumentModel.trim() === "") {
-          this.$message.error(
-            `Some samples are missing an instrument model. Sample ${sample.libraryName} is missing this value.`
-          );
-          return false;
-        }
-
-        // get number of keys in object
-        const keys = Object.keys(sample.characteristics);
-        if (keys.length === 0) {
-          this.$message.error("No required characteristics provided for samples.");
-          return false;
-        }
-
-        if (
-          !keys.includes("tissue") &&
-          !keys.includes("cell line") &&
-          !keys.includes("cell type")
-        ) {
-          this.$message.error(
-            "Some required characteristics are missing for samples. Please provide at least one of the following: tissue, cell line or cell type."
-          );
-          return false;
-        }
-
-        for (const characteristic in sample.characteristics) {
-          if (sample.characteristics[characteristic].trim() === "") {
-            this.$message.error(
-              `Please provide a value for all samples' characteristics. Sample ${sample.libraryName} is missing a value for ${characteristic}.`
-            );
-            return false;
-          }
-        }
-
-        if (sample.rawFiles.length === 0) {
-          this.$message.error(
-            `Please provide at least one raw file for all samples. Sample ${sample.libraryName} is missing raw files.`
-          );
-          return false;
-        }
-      }
-
-      return true;
-    },
-
-    showAddSamplePrompt() {
-      this.sampleName = "";
-      this.$refs.addSamplePrompt.show();
-    },
-
-    addSampleConfirmed() {
-      let newSampleObject = {
-        id: uuidv4(),
-        libraryName: this.sampleName,
-        title: "",
-        organism: "",
-        molecule: "",
-        singleOrPairedEnd: "",
-        instrumentModel: "",
-        description: "",
-        characteristics: {},
-        processedDataFiles: [],
-        rawFiles: [],
-        filteredRawFilesFolderContents: [],
-        filteredProcessedDataFilesFolderContents: [],
-        isExpanded: true,
-      };
-
-      if (this.step3Form.length > 0) {
-        for (const key in this.step3Form[0].characteristics) {
-          newSampleObject.characteristics[key] = "";
-        }
-      }
-
-      this.step3Form.push(newSampleObject);
-    },
-
-    openAddFieldPrompt() {
-      this.customFieldName = "";
-      this.$refs.addCharacteristicPrompt.show();
-    },
-    customFieldNameSearch(query, cb) {
-      let results;
-
-      if (query) {
-        results = this.customFieldOptions.filter((element) => {
-          return element.value.toLowerCase().indexOf(query.toLowerCase()) === 0;
-        });
-      } else {
-        results = this.customFieldOptions;
-      }
-
-      cb(results);
-    },
-
-    setCustomFieldNameForFilter(key) {
-      this.customFieldNameForFilter = key;
-    },
-
-    customFieldValueSuggestions(query, cb) {
-      let results = [];
-      let fieldOptions = [];
-      let customFieldOptions = [];
-
-      for (const sample of this.step3Form) {
-        if (sample.characteristics[this.customFieldNameForFilter] !== "") {
-          fieldOptions.push(sample.characteristics[this.customFieldNameForFilter]);
-        }
-      }
-
-      fieldOptions = [...new Set(fieldOptions)];
-
-      for (const value of fieldOptions) {
-        customFieldOptions.push({
-          value,
-        });
-      }
-
-      if (query) {
-        results = customFieldOptions.filter((element) => {
-          return element.value.toLowerCase().indexOf(query.toLowerCase()) === 0;
-        });
-      } else {
-        results = customFieldOptions;
-      }
-
-      cb(results);
-    },
-
-    addCustomCharacteristic() {
-      const customFieldName = this.customFieldName.trim();
-
-      if (customFieldName.toLocaleLowerCase() in this.step3Form[0].characteristics) {
-        this.$message.error("This field already exists.");
-        return;
-      }
-
-      for (let sample of this.step3Form) {
-        sample.characteristics[customFieldName] = "";
-      }
-
-      this.customFieldName = "";
-    },
-    showCustomFieldDeleteConfirm(key) {
-      this.customFieldName = key;
-      this.$refs.removeCustomFieldConfirm.show();
-    },
-    confirmedRemoveCustomField() {
-      const key = this.customFieldName;
-      if (key in this.step3Form[0].characteristics) {
-        for (let sample of this.step3Form) {
-          delete sample.characteristics[key];
-        }
-      }
-    },
-
-    getFilteredRawFilesFolderContents(id) {
-      let alreadyAddedFiles = [];
-
-      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
-
-      for (let i = 0; i < this.step3Form.length; i++) {
-        alreadyAddedFiles.push(...this.step3Form[i].processedDataFiles);
-        if (this.step3Form[i].id !== id) {
-          alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
-        }
-      }
-
-      //recurse through the folder contents
-      function recurse(folderContents) {
-        for (let i = 0; i < folderContents.length; i++) {
-          if (folderContents[i].isDir) {
-            recurse(folderContents[i].children);
-          } else {
-            if (alreadyAddedFiles.includes(folderContents[i].value)) {
-              folderContents[i].disabled = true;
-            } else {
-              folderContents[i].disabled = false;
-            }
-          }
-        }
-      }
-
-      recurse(newFolderContents);
-
-      let sample = this.step3Form.find((element) => {
-        return element.id === id;
-      });
-
-      sample.filteredRawFilesFolderContents = newFolderContents;
-
-      return;
-    },
-    getFilteredProcessedDataFilesFolderContents(id) {
-      let alreadyAddedFiles = [];
-
-      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
-
-      for (let i = 0; i < this.step3Form.length; i++) {
-        alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
-      }
-
-      //recurse through the folder contents
-      function recurse(folderContents) {
-        for (let i = 0; i < folderContents.length; i++) {
-          if (folderContents[i].isDir) {
-            recurse(folderContents[i].children);
-          } else {
-            if (alreadyAddedFiles.includes(folderContents[i].value)) {
-              folderContents[i].disabled = true;
-            } else {
-              folderContents[i].disabled = false;
-            }
-          }
-        }
-      }
-
-      recurse(newFolderContents);
-
-      let sample = this.step3Form.find((element) => {
-        return element.id === id;
-      });
-
-      sample.filteredProcessedDataFilesFolderContents = newFolderContents;
-
-      return;
     },
     getSupplementaryFilesFolderContents() {
       let alreadyAddedFiles = [];
@@ -1548,88 +1710,244 @@ export default {
       return;
     },
 
-    async loadTaxonomy(query) {
-      if (query) {
-        this.loading = true;
-        this.organismOptions = [];
-
-        try {
-          const response = await axios.get(
-            `https://rest.ensembl.org/taxonomy/id/${query}?simple=0`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (response.status === 200) {
-            const res = response.data;
-
-            if ("children" in res) {
-              this.organismOptions = res.children.map((child) => {
-                return {
-                  value: child.scientific_name,
-                  label: child.scientific_name,
-                };
-              });
-            }
-
-            if (res.scientific_name) {
-              this.organismOptions = [
-                {
-                  value: res.scientific_name,
-                  label: res.scientific_name,
-                },
-                ...this.organismOptions,
-              ];
-            }
-
-            this.loading = false;
-          }
-        } catch (error) {
-          this.organismOptions = [];
-          this.loading = false;
-          return;
-        }
-      } else {
-        this.organismOptions = [];
+    async checkArmGroupValidity() {
+      if (this.step3Form.length === 0) {
+        this.$message.error("Please add at least one arm group.");
+        return false;
       }
-    },
 
-    minimizeAllSamples() {
-      this.step3Form.map((sample) => {
-        sample.isExpanded = false;
+      for (const group of this.step3Form) {
+        if (group.armID.trim() === "") {
+          this.$message.error("Please provide a Arm ID for all groups.");
+          return false;
+        }
+
+        if (group.name.trim() === "") {
+          this.$message.error("Please provide a name for all groups.");
+          return false;
+        }
+      }
+
+      return true;
+    },
+    showAddArmGroupPrompt() {
+      this.armID = "";
+      this.$refs.addArmGroupPrompt.show();
+    },
+    addArmGroupConfirmed() {
+      const entry = {
+        id: uuidv4(),
+        armID: this.armID,
+        name: "",
+        description: "",
+        type: "",
+        isExpanded: true,
+      };
+
+      this.step3Form.push(entry);
+    },
+    minimizeAllArmGroups() {
+      this.step3Form.map((group) => {
+        group.isExpanded = false;
       });
     },
-
-    editLibraryName(id) {
-      let sample = this.step3Form.find((element) => {
+    editArmID(id) {
+      let group = this.step3Form.find((element) => {
         return element.id === id;
       });
 
-      this.sampleID = id;
-      this.sampleName = sample.libraryName;
-      this.$refs.editLibraryNamePrompt.show();
+      this.armGroupID = id;
+      this.armID = group.armID;
+      this.$refs.editArmIDPrompt.show();
     },
-
-    saveUpdatedLibraryName() {
-      let sample = this.step3Form.find((element) => {
-        return element.id === this.sampleID;
+    saveUpdatedArmID() {
+      let group = this.step3Form.find((element) => {
+        return element.id === this.armGroupID;
       });
 
-      sample.libraryName = this.sampleName;
+      group.armID = this.armID;
+    },
+    showRemoveArmGroupConfirm(id) {
+      this.armGroupID = id;
+      this.$refs.removeArmGroupConfirm.show();
+    },
+    confirmedRemoveArmGroup() {
+      const id = this.armGroupID;
+
+      this.step3Form = this.step3Form.filter((group) => {
+        return group.id !== id;
+      });
     },
 
-    showRemoveSampleConfirm(id) {
-      this.sampleID = id;
-      this.$refs.removeSampleConfirm.show();
-    },
-    confirmedRemoveSample() {
-      const id = this.sampleID;
+    async checkPersonnelEntryValidity() {
+      if (this.step4Form.length === 0) {
+        this.$message.error("Please add at least one arm group.");
+        return false;
+      }
 
-      this.step3Form = this.step3Form.filter((sample) => {
-        return sample.id !== id;
+      for (const person of this.step4Form) {
+        if (person.personnelID.trim() === "") {
+          this.$message.error("Please provide a Personnel ID for all entries.");
+          return false;
+        }
+
+        if (person.firstName.trim() === "") {
+          this.$message.error("Please provide a first name for all entries.");
+          return false;
+        }
+
+        if (person.lastName.trim() === "") {
+          this.$message.error("Please provide a last name for all entries.");
+          return false;
+        }
+
+        if (person.organization.trim() === "") {
+          this.$message.error("Please provide an organization for all entries.");
+          return false;
+        }
+
+        if (person.email.trim() === "") {
+          this.$message.error("Please provide an email for all entries.");
+          return false;
+        }
+
+        if (person.titleInStudy.trim() === "") {
+          this.$message.error("Please provide a title in study for all entries.");
+          return false;
+        }
+
+        if (person.roleInStudy.trim() === "") {
+          this.$message.error("Please provide a role in study for all entries.");
+          return false;
+        }
+
+        if (person.siteName.trim() === "") {
+          this.$message.error("Please provide a site name for all entries.");
+          return false;
+        }
+      }
+
+      return true;
+    },
+    showAddPersonnelPrompt() {
+      this.personnelID = "";
+      this.$refs.addPersonnelPrompt.show();
+    },
+    addPersonnelConfirmed() {
+      const entry = {
+        id: uuidv4(),
+        personnelID: this.personnelID,
+        firstName: "",
+        lastName: "",
+        suffix: "",
+        honorific: "",
+        orcid: "",
+        organization: "",
+        email: "",
+        titleInStudy: "",
+        roleInStudy: "",
+        siteName: "",
+        isExpanded: true,
+      };
+
+      this.step4Form.push(entry);
+    },
+    minimizeAllPersonnel() {
+      this.step4Form.map((entry) => {
+        entry.isExpanded = false;
+      });
+    },
+    editPersonnelID(id) {
+      let entry = this.step4Form.find((element) => {
+        return element.id === id;
+      });
+
+      this.personnelEntryID = id;
+      this.personnelID = entry.personnelID;
+      this.$refs.editpersonnelIDPrompt.show();
+    },
+    saveUpdatedPersonnelID() {
+      let group = this.step4Form.find((element) => {
+        return element.id === this.personnelEntryID;
+      });
+
+      group.personnelID = this.personnelID;
+    },
+    showRemovePersonnelEntryConfirm(id) {
+      this.personnelEntryID = id;
+      this.$refs.removePersonnelEntryConfirm.show();
+    },
+    confirmedRemovePersonnelEntry() {
+      const id = this.personnelEntryID;
+
+      this.step4Form = this.step4Form.filter((entry) => {
+        return entry.id !== id;
+      });
+    },
+
+    async checkPlannedVisitsValidity() {
+      for (const visit of this.step5Form) {
+        if (visit.visitID.trim() === "") {
+          this.$message.error("Please provide an ID for all planned visits.");
+          return false;
+        }
+
+        if (visit.name.trim() === "") {
+          this.$message.error("Please provide a name for all planned visits.");
+          return false;
+        }
+      }
+
+      return true;
+    },
+    showAddPlannedVisitPrompt() {
+      this.visitID = "";
+      this.$refs.addPlannedVisitPrompt.show();
+    },
+    addPlannedVisitConfirmed() {
+      const entry = {
+        id: uuidv4(),
+        visitID: this.visitID,
+        orderNumber: 0,
+        minStartDay: 0,
+        maxStartDay: 0,
+        startRule: "",
+        endRule: "",
+        isExpanded: true,
+      };
+
+      this.step5Form.push(entry);
+    },
+    minimizeAllPlannedVisits() {
+      this.step5Form.map((entry) => {
+        entry.isExpanded = false;
+      });
+    },
+    editPlannedVisitID(id) {
+      let entry = this.step5Form.find((element) => {
+        return element.id === id;
+      });
+
+      this.plannedVisitID = id;
+      this.visitID = entry.visitID;
+      this.$refs.editPlannedVisitPrompt.show();
+    },
+    saveUpdatedPlannedVisitID() {
+      let visit = this.step5Form.find((element) => {
+        return element.id === this.plannedVisitID;
+      });
+
+      visit.visitID = this.visitID;
+    },
+    showRemovePlannedVisitConfirm(id) {
+      this.plannedVisitID = id;
+      this.$refs.removePlannedVisitConfirm.show();
+    },
+    confirmedRemovePlannedVisit() {
+      const id = this.plannedVisitID;
+
+      this.step5Form = this.step5Form.filter((entry) => {
+        return entry.id !== id;
       });
     },
 
@@ -1659,6 +1977,12 @@ export default {
       immunologyForm.maximumAge = this.step2Form.maximumAge.trim();
       immunologyForm.researchFocus = this.step2Form.researchFocus;
       immunologyForm.condition = this.step2Form.condition;
+
+      immunologyForm.arms = this.step3Form;
+
+      immunologyForm.studyPersonnel = this.step4Form;
+
+      immunologyForm.plannedVisits = this.step5Form;
 
       this.dataset.data.Immunology.questions = immunologyForm;
 
@@ -1790,7 +2114,11 @@ export default {
         this.step2Form.researchFocus = immunologyForm.researchFocus;
         this.step2Form.condition = immunologyForm.condition;
 
-        this.step3Form = immunologyForm.samples;
+        this.step3Form = immunologyForm.arms;
+
+        this.step4Form = immunologyForm.studyPersonnel;
+
+        this.step5Form = immunologyForm.plannedVisits;
 
         // this.addIds(this.step2Form.dataProcessingSteps);
       } else {
