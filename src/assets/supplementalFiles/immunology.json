@@ -361,5 +361,31 @@
     "West Nile fever",
     "yellow fever",
     "Zika fever"
+  ],
+  "armTypeOptions": [
+    "Active Comparator Arm",
+    "Experimental Arm",
+    "Healthy Control",
+    "Intervention",
+    "Negative Control",
+    "No Intervention Arm",
+    "Observational",
+    "Other",
+    "Placebo Comparator Arm",
+    "Positive Control",
+    "Sham Comparator Arm",
+    "Treatment Arm",
+    "Vaccination"
+  ],
+  "studyRoleOptions": [
+    "Co-Principal Investigator",
+    "Medical Monitor",
+    "Other",
+    "Principal Investigator",
+    "Site Manager",
+    "Sub-Investigator",
+    "Investigator",
+    "Corresponding Author",
+    "Group Coordinator"
   ]
 }
