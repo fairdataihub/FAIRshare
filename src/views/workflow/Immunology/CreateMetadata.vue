@@ -165,26 +165,6 @@
                             </span>
                           </div>
                         </el-form-item>
-
-                        <el-form-item label="Supplementary files" prop="supplementaryFiles">
-                          <div class="flex flex-col">
-                            <el-tree-select
-                              v-model="step1Form.supplementaryFiles"
-                              :data="step1Form.filteredSupplementaryFilesFolderContents"
-                              @visible-change="getSupplementaryFilesFolderContents"
-                              multiple
-                              clearable
-                              class="w-full"
-                            />
-                            <span class="mt-2 text-xs text-slate-600">
-                              Optional. If you submit a processed data file corresponding to
-                              *multiple* Samples, include the processed file here. For example:
-                              FPKMs_allsamples.txt The file should have unique column names that
-                              match unique descriptors in metadata SAMPLES (for example, "library
-                              name" descriptors). An exception would be single-cell submissions.
-                            </span>
-                          </div>
-                        </el-form-item>
                       </el-form>
                     </div>
                   </div>
@@ -1268,7 +1248,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Protocols
+                        Inclusion or Exclusion Criteria
                       </span>
                     </div>
                     <div class="p-4">
@@ -1312,8 +1292,8 @@
                                       placeholder="Criterion Category"
                                       size="large"
                                     >
-                                      <el-option label="inclusion" value="inclusion" />
-                                      <el-option label="exclusion" value="exclusion" />
+                                      <el-option label="Inclusion" value="Inclusion" />
+                                      <el-option label="Exclusion" value="Exclusion" />
                                     </el-select>
                                   </div>
 
@@ -1333,7 +1313,7 @@
                                     </span>
                                   </div>
                                 </div>
-                                <div class="flex w-1/12 flex-row items-center justify-evenly py-4">
+                                <div class="flex w-1/12 flex-row items-center justify-evenly">
                                   <div
                                     class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
                                   >
@@ -1371,6 +1351,183 @@
                           </span>
                           <form-help-content
                             popoverContent="Add a new inclusion/exclusion to the list."
+                          ></form-help-content>
+                        </div>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep7FromStep6"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 7">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Protocols
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step7Form"
+                        :rules="step7FormRules"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s7Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Protocol" prop="protocols">
+                          <draggable
+                            tag="div"
+                            :list="step7Form.protocols"
+                            item-key="id"
+                            :animation="200"
+                            handle=".handle"
+                            class="w-full divide-y-2"
+                          >
+                            <template #item="{ element }">
+                              <div class="flex w-full flex-row justify-between py-4">
+                                <div class="flex w-11/12 flex-col px-2">
+                                  <div class="flex w-full flex-row justify-between">
+                                    <div class="flex w-full flex-col">
+                                      <el-input
+                                        v-model="element.userDefinedID"
+                                        type="text"
+                                        placeholder="User Defined ID"
+                                        class="h-[40px]"
+                                        maxlength="100"
+                                        show-word-limit
+                                      ></el-input>
+                                      <span class="mt-1 text-xs text-gray-400">
+                                        Should be unique across your ImmPort workspace.
+                                      </span>
+                                    </div>
+
+                                    <div class="mx-1"></div>
+
+                                    <el-select
+                                      v-model="element.type"
+                                      class=""
+                                      placeholder="Protocol Type"
+                                      size="large"
+                                    >
+                                      <el-option
+                                        v-for="type in protocolTypeOptions"
+                                        :key="type"
+                                        :label="type"
+                                        :value="type"
+                                      />
+                                    </el-select>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.name"
+                                      type="text"
+                                      placeholder="Name"
+                                      maxlength="250"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      The protocol name is an alternate identifier that is visible
+                                      when the protocol is shared.
+                                    </span>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.description"
+                                      type="textarea"
+                                      placeholder="Description"
+                                      rows="3"
+                                      maxlength="4000"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      The protocol summary describes the purpose of the protocol.
+                                    </span>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex flex-col">
+                                    <el-tree-select
+                                      v-model="element.filePath"
+                                      :data="step7Form.filteredProtocolFilesFolderContents"
+                                      @visible-change="getProtocolFilesFolderContents"
+                                      placeholder="Select a file to associate with this protocol"
+                                      clearable
+                                      class="w-full"
+                                    />
+                                    <span class="mt-2 text-xs text-slate-600">
+                                      Select the file that is associated with this protocol.
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="flex w-1/12 flex-row items-center justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      width="220"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      icon-color="red"
+                                      title="Are you sure you want to remove this?"
+                                      @confirm="deleteProtocol(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addProtocol"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add a new protocol
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a new protocol to the list."
                           ></form-help-content>
                         </div>
                       </el-form>
@@ -1479,8 +1636,8 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 6,
-      totalSteps: 6,
+      currentStep: 7,
+      totalSteps: 7,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
@@ -1493,6 +1650,8 @@ export default {
       conditionOptions: ImmunologyJSON.conditionOptions,
       armTypeOptions: ImmunologyJSON.armTypeOptions,
       studyRoleOptions: ImmunologyJSON.studyRoleOptions,
+      protocolTypeOptions: ImmunologyJSON.protocolTypeOptions,
+
       generateImmunologyMetadata: "Yes",
       step1Form: {
         studyID: "study",
@@ -1619,13 +1778,43 @@ export default {
       step6Form: {
         inexclusions: [
           {
+            userDefinedID: "test",
+            criterion: "test description",
+            criterionCategory: "Inclusion",
+            id: "362e293d-1c61-4e9c-b64a-d7e897dbe029",
+          },
+        ],
+      },
+      step6FormRules: {
+        inexclusions: [
+          {
             required: true,
             validator: this.inexclusionValidator,
             trigger: "blur",
           },
         ],
       },
-      step6FormRules: {},
+      step7Form: {
+        protocols: [
+          {
+            userDefinedID: "test",
+            name: "test",
+            description: "test",
+            type: "Clinical",
+            filePath: "",
+            id: "a799a5ed-a33c-4bff-a04b-a1090809b4b3",
+          },
+        ],
+      },
+      step7FormRules: {
+        protocols: [
+          {
+            required: true,
+            validator: this.protocolsValidator,
+            trigger: "blur",
+          },
+        ],
+      },
 
       invalidStatus: {},
       showSaving: false,
@@ -1764,6 +1953,7 @@ export default {
     showSkipMetadataCreationWarning() {
       this.$refs.warningConfirm.show();
     },
+
     navigateToStep2FromStep1() {
       this.$refs["s1Form"].validate(async (valid) => {
         if (valid) {
@@ -1833,6 +2023,18 @@ export default {
         block: "start",
       });
     },
+    navigateToStep7FromStep6() {
+      this.$refs["s6Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(7);
+          this.$refs["topOfPageElement"].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    },
 
     addIds(array) {
       array.forEach((element) => {
@@ -1858,13 +2060,13 @@ export default {
         return element[key] !== "";
       });
     },
-    getSupplementaryFilesFolderContents() {
+    getProtocolFilesFolderContents() {
       let alreadyAddedFiles = [];
 
       const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
 
-      for (let i = 0; i < this.step3Form.length; i++) {
-        alreadyAddedFiles.push(...this.step3Form[i].rawFiles);
+      for (let i = 0; i < this.step7Form.protocols.length; i++) {
+        alreadyAddedFiles.push(this.step7Form.protocols[i].filePath);
       }
 
       //recurse through the folder contents
@@ -1884,7 +2086,7 @@ export default {
 
       recurse(newFolderContents);
 
-      this.step1Form.filteredSupplementaryFilesFolderContents = newFolderContents;
+      this.step7Form.filteredProtocolFilesFolderContents = newFolderContents;
 
       return;
     },
@@ -2134,14 +2336,14 @@ export default {
       if (value.length > 0) {
         for (let item of value) {
           //check if id is not empty
-          if (item.id.trim() === "") {
+          if (item.userDefinedID.trim() === "") {
             this.invalidStatus.inexclusion = true;
             callback(new Error("Please provide an ID for all entries"));
             return;
           }
 
           //check if id is unique
-          if (value.filter((x) => x.id === item.id).length > 1) {
+          if (value.filter((x) => x.userDefinedID === item.userDefinedID).length > 1) {
             this.invalidStatus.inexclusion = true;
             callback(new Error("Please provide a unique ID for all entries"));
             return;
@@ -2157,6 +2359,7 @@ export default {
     },
     addInexclusion() {
       this.step6Form.inexclusions.push({
+        userDefinedID: "",
         criterion: "",
         criterionCategory: "",
         id: uuidv4(),
@@ -2167,6 +2370,48 @@ export default {
         return inexclusion.id !== id;
       });
       this.$refs["s6Form"].validate();
+    },
+
+    protocolsValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let item of value) {
+          //check if id is not empty
+          if (item.userDefinedID.trim() === "") {
+            this.invalidStatus.protocols = true;
+            callback(new Error("Please provide an ID for all entries"));
+            return;
+          }
+
+          //check if id is unique
+          if (value.filter((x) => x.userDefinedID === item.userDefinedID).length > 1) {
+            this.invalidStatus.protocols = true;
+            callback(new Error("Please provide a unique ID for all entries"));
+            return;
+          }
+        }
+      } else {
+        this.invalidStatus.protocols = true;
+        callback(new Error("Please provide at least one entry"));
+        return;
+      }
+      this.invalidStatus.protocols = false;
+      callback();
+    },
+    addProtocol() {
+      this.step7Form.protocols.push({
+        userDefinedID: "",
+        name: "",
+        description: "",
+        type: "",
+        filePath: "",
+        id: uuidv4(),
+      });
+    },
+    deleteProtocol(id) {
+      this.step7Form.protocols = this.step7Form.protocols.filter((protocol) => {
+        return protocol.id !== id;
+      });
+      this.$refs["s7Form"].validate();
     },
 
     async saveCurrentEntries() {
@@ -2201,6 +2446,10 @@ export default {
       immunologyForm.studyPersonnel = this.step4Form;
 
       immunologyForm.plannedVisits = this.step5Form;
+
+      immunologyForm.inexclusions = this.step6Form.inexclusions;
+
+      immunologyForm.protocols = this.step7Form.protocols;
 
       this.dataset.data.Immunology.questions = immunologyForm;
 
@@ -2338,7 +2587,12 @@ export default {
 
         this.step5Form = immunologyForm.plannedVisits;
 
-        // this.addIds(this.step2Form.dataProcessingSteps);
+        this.step6Form.inexclusions = immunologyForm.inexclusions;
+
+        this.step7Form.protocols = immunologyForm.protocols;
+
+        this.addIds(this.step6Form.inexclusions);
+        this.addIds(this.step7Form.protocols);
       } else {
         this.step1Form.briefTitle = this.dataset.name;
         this.step1Form.briefDescription = this.dataset.description;
