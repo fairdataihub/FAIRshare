@@ -47,14 +47,10 @@
               </div>
 
               <div class="mt-3 mb-1">
-                <span v-if="currentStep === 3">
-                  Add some information about your samples below. We will use this information to
-                  automatically generate the required metadata files needed for your dataset.
-                </span>
-                <span v-else>
+                <span>
                   Provide information about your dataset below. We will use this information to
                   automatically generate and include in your dataset the standard metadata files
-                  required to make your dataset FAIR.
+                  required.
                 </span>
               </div>
 
@@ -591,6 +587,8 @@
                             clearable
                             class="w-full"
                             placeholder="Enter a field name"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </edit-prompt>
@@ -629,6 +627,8 @@
                             size="large"
                             class="w-full"
                             placeholder="Enter a ID for this Arm/Cohort/Subject group"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </add-prompt>
@@ -933,6 +933,8 @@
                             clearable
                             class="w-full"
                             placeholder="Enter a field name"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </edit-prompt>
@@ -972,6 +974,8 @@
                             size="large"
                             class="w-full"
                             placeholder="personnel_1056_2"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </add-prompt>
@@ -1187,6 +1191,8 @@
                             clearable
                             class="w-full"
                             placeholder="plannedvisit_1056_2"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </edit-prompt>
@@ -1226,6 +1232,8 @@
                             size="large"
                             class="w-full"
                             placeholder="plannedvisit_1056_2"
+                            maxlength="100"
+                            show-word-limit
                           />
                         </div>
                       </add-prompt>
@@ -1242,14 +1250,150 @@
                       <el-icon><back-icon /></el-icon>
                       Previous
                     </button>
+
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep6FromStep5"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 6">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Protocols
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step6Form"
+                        :rules="step6FormRules"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s6Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Inclusions & Exclusions" prop="inexclusions">
+                          <draggable
+                            tag="div"
+                            :list="step6Form.inexclusions"
+                            item-key="id"
+                            :animation="200"
+                            handle=".handle"
+                            class="w-full divide-y-2"
+                          >
+                            <template #item="{ element }">
+                              <div class="mb-2 flex w-full flex-row justify-between py-2">
+                                <div class="flex w-11/12 flex-col px-2">
+                                  <div class="flex w-full flex-row justify-between">
+                                    <el-input
+                                      v-model="element.userDefinedID"
+                                      type="text"
+                                      placeholder="User Defined ID"
+                                      class="h-[40px]"
+                                      maxlength="100"
+                                      show-word-limit
+                                    ></el-input>
+
+                                    <div class="mx-1"></div>
+
+                                    <el-select
+                                      v-model="element.criterionCategory"
+                                      class=""
+                                      placeholder="Criterion Category"
+                                      size="large"
+                                    >
+                                      <el-option label="inclusion" value="inclusion" />
+                                      <el-option label="exclusion" value="exclusion" />
+                                    </el-select>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.criterion"
+                                      type="textarea"
+                                      placeholder="Criterion"
+                                      maxlength="750"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      The criterion describes the parameter used to decide if a
+                                      subject may be enrolled in a study.
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="flex w-1/12 flex-row items-center justify-evenly py-4">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      width="220"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      icon-color="red"
+                                      title="Are you sure you want to remove this?"
+                                      @confirm="deleteInexclusion(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addInexclusion"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add an inclusion/exclusion
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a new inclusion/exclusion to the list."
+                          ></form-help-content>
+                        </div>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
                     <!-- :plain="!lastStep" -->
                     <button
                       class="primary-button"
-                      @click="nextFormStep"
+                      @click="navigateToStep3FromStep2"
                       :disabled="checkInvalidStatus"
                     >
-                      Continue
-                      <el-icon><d-arrow-right /></el-icon>
+                      Next
+                      <el-icon><right-icon /></el-icon>
                     </button>
                   </div>
                 </div>
@@ -1263,11 +1407,7 @@
                 Back
               </button>
 
-              <button
-                class="primary-button"
-                :disabled="checkInvalidStatus"
-                @click="showSkipMetadataCreationWarning"
-              >
+              <button class="primary-button" @click="nextFormStep" :disabled="checkInvalidStatus">
                 Continue
                 <el-icon><d-arrow-right /></el-icon>
               </button>
@@ -1339,8 +1479,8 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 5,
-      totalSteps: 5,
+      currentStep: 6,
+      totalSteps: 6,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
@@ -1463,7 +1603,30 @@ export default {
           type: "Investigator",
         },
       ],
-      step5Form: [],
+      step5Form: [
+        {
+          id: "64e38224-0cc5-42a1-b0e4-ee13336a90fc",
+          visitID: "test",
+          orderNumber: 3,
+          minStartDay: 5,
+          maxStartDay: 7,
+          startRule: "sr",
+          endRule: "er",
+          isExpanded: true,
+          name: "tasx",
+        },
+      ],
+      step6Form: {
+        inexclusions: [
+          {
+            required: true,
+            validator: this.inexclusionValidator,
+            trigger: "blur",
+          },
+        ],
+      },
+      step6FormRules: {},
+
       invalidStatus: {},
       showSaving: false,
       showSpinner: false,
@@ -1655,6 +1818,22 @@ export default {
         block: "start",
       });
     },
+    async navigateToStep6FromStep5() {
+      const valid = await this.checkPlannedVisitsValidity();
+
+      if (!valid) {
+        return;
+      }
+
+      await this.saveCurrentEntries();
+
+      this.setCurrentStep(6);
+      this.$refs["topOfPageElement"].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    },
+
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();
@@ -1949,6 +2128,45 @@ export default {
       this.step5Form = this.step5Form.filter((entry) => {
         return entry.id !== id;
       });
+    },
+
+    inexclusionValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let item of value) {
+          //check if id is not empty
+          if (item.id.trim() === "") {
+            this.invalidStatus.inexclusion = true;
+            callback(new Error("Please provide an ID for all entries"));
+            return;
+          }
+
+          //check if id is unique
+          if (value.filter((x) => x.id === item.id).length > 1) {
+            this.invalidStatus.inexclusion = true;
+            callback(new Error("Please provide a unique ID for all entries"));
+            return;
+          }
+        }
+      } else {
+        this.invalidStatus.inexclusion = true;
+        callback(new Error("Please provide at least one entry"));
+        return;
+      }
+      this.invalidStatus.inexclusion = false;
+      callback();
+    },
+    addInexclusion() {
+      this.step6Form.inexclusions.push({
+        criterion: "",
+        criterionCategory: "",
+        id: uuidv4(),
+      });
+    },
+    deleteInexclusion(id) {
+      this.step6Form.inexclusions = this.step6Form.inexclusions.filter((inexclusion) => {
+        return inexclusion.id !== id;
+      });
+      this.$refs["s6Form"].validate();
     },
 
     async saveCurrentEntries() {
