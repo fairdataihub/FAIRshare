@@ -387,5 +387,28 @@
     "Investigator",
     "Corresponding Author",
     "Group Coordinator"
+  ],
+  "protocolTypeOptions": [
+    "Assay",
+    "Bio Sample Preparation",
+    "Bio Sample Treatment",
+    "Biomaterial Transformation",
+    "Clinical",
+    "Data Processing",
+    "Data Transformation",
+    "Experiment",
+    " Experiment Sample",
+    "Not Specified",
+    "Study Protocol",
+    "Study Summary",
+    "Subject Organism Treatment",
+    "Clinical Trials Operational Procedure Manual",
+    "Institutional Review Board Independent Ethics Commitee Informed Consent Document",
+    "Clinical Trial Monitoring Plan",
+    "Laboratory Sample Manual",
+    "Clinical Study Protocol",
+    "Statistical Analysis Documentation",
+    "Case Report Form",
+    "Other"
   ]
 }
