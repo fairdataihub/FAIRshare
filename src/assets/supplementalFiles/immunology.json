@@ -410,5 +410,23 @@
     "Statistical Analysis Documentation",
     "Case Report Form",
     "Other"
+  ],
+  "studyFileTypeOptions": [
+    "Adverse Events",
+    "Assesment Results",
+    "Case Report Form",
+    "Concomitant Medications",
+    "Data Dictonary",
+    "Demographics",
+    "Interventions",
+    "Lab Test Results",
+    "Study Data",
+    "Study Medication",
+    "Study Summary Description",
+    "Substance Use",
+    "Screening Data",
+    "Medical History Data",
+    "Protocol Deviation Data",
+    "JSON Summary Description"
   ]
 }
