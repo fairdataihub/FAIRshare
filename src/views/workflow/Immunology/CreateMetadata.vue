@@ -1479,8 +1479,10 @@
                                   <div class="flex flex-col">
                                     <el-tree-select
                                       v-model="element.filePath"
-                                      :data="step7Form.filteredProtocolFilesFolderContents"
-                                      @visible-change="getProtocolFilesFolderContents"
+                                      :data="step7Form.filteredFolderContents"
+                                      @visible-change="
+                                        getFilteredFolderContentsForProtocols(element.filePath)
+                                      "
                                       placeholder="Select a file to associate with this protocol"
                                       clearable
                                       class="w-full"
@@ -1528,6 +1530,241 @@
                           </span>
                           <form-help-content
                             popoverContent="Add a new protocol to the list."
+                          ></form-help-content>
+                        </div>
+                      </el-form>
+                    </div>
+                  </div>
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+                    <!-- :plain="!lastStep" -->
+                    <button
+                      class="primary-button"
+                      @click="navigateToStep8FromStep7"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Next
+                      <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 8">
+                  <div
+                    class="form-card-content mb-4 rounded-lg border-2 border-slate-100 shadow-md"
+                  >
+                    <div class="w-full bg-gray-100 px-4 py-2">
+                      <span class="pointer-events-none text-lg font-semibold text-primary-600">
+                        Study Files and Links
+                      </span>
+                    </div>
+                    <div class="p-4">
+                      <el-form
+                        :model="step8Form"
+                        :rules="step8FormRules"
+                        label-width="160px"
+                        label-position="top"
+                        size="large"
+                        ref="s8Form"
+                        @submit.prevent
+                        class="py-4"
+                      >
+                        <el-form-item label="Study Files" prop="studyFiles">
+                          <draggable
+                            tag="div"
+                            :list="step8Form.studyFiles"
+                            item-key="id"
+                            :animation="200"
+                            handle=".handle"
+                            class="w-full divide-y-2"
+                          >
+                            <template #item="{ element }">
+                              <div class="flex w-full flex-row justify-between py-4">
+                                <div class="flex w-11/12 flex-col px-2">
+                                  <div class="flex flex-col">
+                                    <el-select
+                                      v-model="element.type"
+                                      class=""
+                                      placeholder="Study File Type"
+                                      size="large"
+                                    >
+                                      <el-option
+                                        v-for="type in studyFileTypeOptions"
+                                        :key="type"
+                                        :label="type"
+                                        :value="type"
+                                      />
+                                    </el-select>
+                                    <span class="mt-2 text-xs text-slate-600"> text here... </span>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex flex-col">
+                                    <el-tree-select
+                                      v-model="element.filePaths"
+                                      multiple
+                                      show-checkbox
+                                      clearable
+                                      :data="step8Form.filteredFolderContents"
+                                      @visible-change="
+                                        getFilteredFolderContentsForStudyFiles(element.filePaths)
+                                      "
+                                      placeholder="Select your data files here"
+                                      class="w-full"
+                                    />
+                                    <span class="mt-2 text-xs text-slate-600">
+                                      Select the study file to be associated with the study. This
+                                      can be data dictionaries, Case Report Forms, custom-formatted
+                                      data files, etc...
+                                    </span>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.description"
+                                      type="textarea"
+                                      placeholder="Description"
+                                      rows="3"
+                                      maxlength="4000"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      The protocol summary describes the purpose of the protocol.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="flex w-1/12 flex-row items-center justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      width="220"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      icon-color="red"
+                                      title="Are you sure you want to remove this?"
+                                      @confirm="deleteStudyFile(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addStudyFile"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add a new study file
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a new protocol to the list."
+                          ></form-help-content>
+                        </div>
+
+                        <el-form-item label="Study Links" prop="studyLinks">
+                          <draggable
+                            tag="div"
+                            :list="step8Form.studyLinks"
+                            item-key="id"
+                            :animation="200"
+                            handle=".handle"
+                            class="w-full divide-y-2"
+                          >
+                            <template #item="{ element }">
+                              <div class="flex w-full flex-row justify-between py-4">
+                                <div class="flex w-11/12 flex-col px-2">
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.name"
+                                      type="text"
+                                      placeholder="Clinicaltrials.gov"
+                                      maxlength="500"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      Provide the name of the website to which the link refers.
+                                    </span>
+                                  </div>
+
+                                  <div class="my-2"></div>
+
+                                  <div class="flex w-full flex-col">
+                                    <el-input
+                                      v-model="element.url"
+                                      type="textarea"
+                                      placeholder="https://clinicaltrials.gov/ct2/show/NCT04505795"
+                                      maxlength="2000"
+                                      show-word-limit
+                                    ></el-input>
+                                    <span class="mt-1 text-xs text-gray-400">
+                                      Provide the website URL.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="flex w-1/12 flex-row items-center justify-evenly">
+                                  <div
+                                    class="handle flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                  >
+                                    <Icon icon="ic:outline-drag-indicator" />
+                                  </div>
+                                  <div
+                                    class="flex cursor-pointer items-center justify-center text-gray-500 transition-all hover:text-gray-800"
+                                  >
+                                    <el-popconfirm
+                                      width="220"
+                                      confirm-button-text="Yes"
+                                      cancel-button-text="No"
+                                      icon-color="red"
+                                      title="Are you sure you want to remove this?"
+                                      @confirm="deleteStudyLink(element.id)"
+                                    >
+                                      <template #reference>
+                                        <el-icon><delete-filled /></el-icon>
+                                      </template>
+                                    </el-popconfirm>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </draggable>
+                        </el-form-item>
+
+                        <div
+                          class="mb-6 flex w-max cursor-pointer items-center text-sm text-gray-500 hover:text-black"
+                          @click="addStudyLink"
+                        >
+                          <Icon icon="carbon:add" />
+                          <span class="text-primary-600 hover:text-primary-500">
+                            Add a new study link
+                          </span>
+                          <form-help-content
+                            popoverContent="Add a new study link to the list."
                           ></form-help-content>
                         </div>
                       </el-form>
@@ -1636,8 +1873,8 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 7,
-      totalSteps: 7,
+      currentStep: 8,
+      totalSteps: 8,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
@@ -1651,6 +1888,9 @@ export default {
       armTypeOptions: ImmunologyJSON.armTypeOptions,
       studyRoleOptions: ImmunologyJSON.studyRoleOptions,
       protocolTypeOptions: ImmunologyJSON.protocolTypeOptions,
+      studyFileTypeOptions: ImmunologyJSON.studyFileTypeOptions,
+
+      filteredFolderContents: [],
 
       generateImmunologyMetadata: "Yes",
       step1Form: {
@@ -1801,7 +2041,7 @@ export default {
             name: "test",
             description: "test",
             type: "Clinical",
-            filePath: "",
+            filePath: "C:\\Users\\dev\\Desktop\\temp2\\codemeta.json",
             id: "a799a5ed-a33c-4bff-a04b-a1090809b4b3",
           },
         ],
@@ -1811,6 +2051,36 @@ export default {
           {
             required: true,
             validator: this.protocolsValidator,
+            trigger: "blur",
+          },
+        ],
+      },
+      step8Form: {
+        studyFiles: [
+          {
+            description: "test",
+            type: "Assesment Results",
+            filePaths: [
+              "C:\\Users\\dev\\Desktop\\temp2\\01d3328c-582d-41ff-a8d3-cf563ec2b97a.soda",
+              "C:\\Users\\dev\\Desktop\\temp2\\CITATION.cff",
+            ],
+            id: "0cd1a639-0ebb-4c9c-b766-152a2af5925f",
+          },
+        ],
+        studyLinks: [],
+      },
+      step8FormRules: {
+        studyFiles: [
+          {
+            required: true,
+            validator: this.studyFilesValidator,
+            trigger: "blur",
+          },
+        ],
+        studyLinks: [
+          {
+            required: false,
+            validator: this.studyLinksValidator,
             trigger: "blur",
           },
         ],
@@ -2035,6 +2305,18 @@ export default {
         }
       });
     },
+    navigateToStep8FromStep7() {
+      this.$refs["s7Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(8);
+          this.$refs["topOfPageElement"].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    },
 
     addIds(array) {
       array.forEach((element) => {
@@ -2060,13 +2342,19 @@ export default {
         return element[key] !== "";
       });
     },
-    getProtocolFilesFolderContents() {
-      let alreadyAddedFiles = [];
+    getFilteredFolderContentsForProtocols(preselected) {
+      const alreadyAddedFiles = [];
 
       const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
 
       for (let i = 0; i < this.step7Form.protocols.length; i++) {
         alreadyAddedFiles.push(this.step7Form.protocols[i].filePath);
+      }
+
+      for (let i = 0; i < this.step8Form.studyFiles.length; i++) {
+        for (let j = 0; j < this.step8Form.studyFiles[i].filePaths.length; j++) {
+          alreadyAddedFiles.push(this.step8Form.studyFiles[i].filePaths[j]);
+        }
       }
 
       //recurse through the folder contents
@@ -2076,7 +2364,11 @@ export default {
             recurse(folderContents[i].children);
           } else {
             if (alreadyAddedFiles.includes(folderContents[i].value)) {
-              folderContents[i].disabled = true;
+              if (preselected == folderContents[i].value) {
+                folderContents[i].disabled = true;
+              } else {
+                folderContents[i].disabled = false;
+              }
             } else {
               folderContents[i].disabled = false;
             }
@@ -2086,7 +2378,49 @@ export default {
 
       recurse(newFolderContents);
 
-      this.step7Form.filteredProtocolFilesFolderContents = newFolderContents;
+      this.step7Form.filteredFolderContents = newFolderContents;
+
+      return;
+    },
+
+    getFilteredFolderContentsForStudyFiles(preselected) {
+      const alreadyAddedFiles = [];
+
+      const newFolderContents = JSON.parse(JSON.stringify(this.folderContents));
+
+      for (let i = 0; i < this.step7Form.protocols.length; i++) {
+        alreadyAddedFiles.push(this.step7Form.protocols[i].filePath);
+      }
+
+      for (let i = 0; i < this.step8Form.studyFiles.length; i++) {
+        for (let j = 0; j < this.step8Form.studyFiles[i].filePaths.length; j++) {
+          alreadyAddedFiles.push(this.step8Form.studyFiles[i].filePaths[j]);
+        }
+      }
+
+      //recurse through the folder contents
+      function recurse(folderContents) {
+        for (let i = 0; i < folderContents.length; i++) {
+          if (folderContents[i].isDir) {
+            recurse(folderContents[i].children);
+          } else {
+            if (alreadyAddedFiles.includes(folderContents[i].value)) {
+              if (typeof preselected !== "undefined")
+                if (!preselected.includes(folderContents[i].value)) {
+                  folderContents[i].disabled = true;
+                } else {
+                  folderContents[i].disabled = false;
+                }
+            } else {
+              folderContents[i].disabled = false;
+            }
+          }
+        }
+      }
+
+      recurse(newFolderContents);
+
+      this.step8Form.filteredFolderContents = newFolderContents;
 
       return;
     },
@@ -2414,6 +2748,81 @@ export default {
       this.$refs["s7Form"].validate();
     },
 
+    studyFilesValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let item of value) {
+          // check if description is present
+          if (item.description.trim() === "") {
+            this.invalidStatus.studyFiles = true;
+            callback(new Error("Please provide a description for all entries"));
+            return;
+          }
+
+          // check if type is present
+          if (item.type.trim() === "") {
+            this.invalidStatus.studyFiles = true;
+            callback(new Error("Please provide a type for all entries"));
+            return;
+          }
+        }
+      } else {
+        this.invalidStatus.studyFiles = true;
+        callback(new Error("Please provide at least one entry"));
+        return;
+      }
+      this.invalidStatus.studyFiles = false;
+      callback();
+    },
+    addStudyFile() {
+      this.step8Form.studyFiles.push({
+        description: "",
+        type: "",
+        filePaths: [],
+        id: uuidv4(),
+      });
+    },
+    deleteStudyFile(id) {
+      this.step8Form.studyFiles = this.step8Form.studyFiles.filter((item) => {
+        return item.id !== id;
+      });
+      this.$refs["s8Form"].validate();
+    },
+
+    studyLinksValidator(_rule, value, callback) {
+      if (value.length > 0) {
+        for (let item of value) {
+          // check if description is present
+          if (item.name.trim() === "") {
+            this.invalidStatus.studyFiles = true;
+            callback(new Error("Please provide a name for all entries"));
+            return;
+          }
+
+          // check if type is present
+          if (item.url.trim() === "") {
+            this.invalidStatus.url = true;
+            callback(new Error("Please provide a URL for all entries"));
+            return;
+          }
+        }
+      }
+      this.invalidStatus.studyLinks = false;
+      callback();
+    },
+    addStudyLink() {
+      this.step8Form.studyLinks.push({
+        name: "",
+        url: "",
+        id: uuidv4(),
+      });
+    },
+    deleteStudyLink(id) {
+      this.step8Form.studyLinks = this.step8Form.studyLinks.filter((item) => {
+        return item.id !== id;
+      });
+      this.$refs["s8Form"].validate();
+    },
+
     async saveCurrentEntries() {
       this.showSavingIcon();
 
@@ -2450,6 +2859,9 @@ export default {
       immunologyForm.inexclusions = this.step6Form.inexclusions;
 
       immunologyForm.protocols = this.step7Form.protocols;
+
+      immunologyForm.studyFiles = this.step8Form.studyFiles;
+      immunologyForm.studyLinks = this.step8Form.studyLinks;
 
       this.dataset.data.Immunology.questions = immunologyForm;
 
@@ -2591,8 +3003,13 @@ export default {
 
         this.step7Form.protocols = immunologyForm.protocols;
 
+        this.step8Form.studyFiles = immunologyForm.studyFiles;
+        this.step8Form.studyLinks = immunologyForm.studyLinks;
+
         this.addIds(this.step6Form.inexclusions);
         this.addIds(this.step7Form.protocols);
+        this.addIds(this.step8Form.studyFiles);
+        this.addIds(this.step8Form.studyLinks);
       } else {
         this.step1Form.briefTitle = this.dataset.name;
         this.step1Form.briefDescription = this.dataset.description;
