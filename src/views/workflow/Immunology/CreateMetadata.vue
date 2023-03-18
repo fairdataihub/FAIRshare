@@ -1780,14 +1780,300 @@
                       <el-icon><back-icon /></el-icon>
                       Previous
                     </button>
-                    <!-- :plain="!lastStep" -->
+
                     <button
                       class="primary-button"
-                      @click="navigateToStep3FromStep2"
+                      @click="navigateToStep9FromStep8"
                       :disabled="checkInvalidStatus"
                     >
                       Next
                       <el-icon><right-icon /></el-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="currentStep == 9">
+                  <div class="px-4 pb-4 pt-2">
+                    <el-form
+                      :model="step9Form"
+                      label-width="160px"
+                      label-position="top"
+                      size="large"
+                      ref="s3Form"
+                      @submit.prevent
+                      class="pb-4"
+                    >
+                      <draggable
+                        tag="div"
+                        :list="step9Form"
+                        item-key="id"
+                        handle=".handle"
+                        :animation="200"
+                        @start="minimizeAllStudyPublications"
+                      >
+                        <template #item="{ element }">
+                          <div
+                            class="form-card-content mb-4 flex flex-col rounded-lg border-2 border-slate-100 shadow-md"
+                          >
+                            <div
+                              class="flex w-full flex-row items-center justify-between bg-gray-50 px-4 py-2"
+                              @click="element.isExpanded = !element.isExpanded"
+                            >
+                              <div class="flex w-full flex-row justify-start">
+                                <div
+                                  class="mr-2 flex items-center justify-center rounded-md p-1 hover:cursor-pointer hover:bg-slate-200"
+                                  @click.stop="element.isExpanded = !element.isExpanded"
+                                >
+                                  <Icon
+                                    icon="dashicons:arrow-right-alt2"
+                                    width="20"
+                                    height="20"
+                                    class="transition-all"
+                                    :class="{
+                                      'rotate-90': element.isExpanded,
+                                      'rotate-0': !element.isExpanded,
+                                    }"
+                                  />
+                                </div>
+
+                                <span class="flex items-center"> {{ element.publicationID }} </span>
+
+                                <div
+                                  class="ml-2 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="editPublicationID(element.id)"
+                                >
+                                  <el-icon><edit-pen /></el-icon>
+                                </div>
+                              </div>
+
+                              <div class="flex w-1/12 flex-row justify-evenly">
+                                <div
+                                  class="handle mr-1 flex items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                >
+                                  <Icon icon="ic:outline-drag-indicator" />
+                                </div>
+                                <div
+                                  class="ml-1 flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-800"
+                                  @click.stop="showRemoveStudyPublicationConfirm(element.id)"
+                                >
+                                  <el-icon><delete-filled /></el-icon>
+                                </div>
+                              </div>
+                            </div>
+
+                            <el-collapse-transition>
+                              <div class="mt-4 flex flex-col px-4" v-show="element.isExpanded">
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Title <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.title"
+                                    type="textarea"
+                                    placeholder="36921622"
+                                    maxlength="4000"
+                                    show-word-limit
+                                    rows="2"
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The title of an article that includes data from this study.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Authors <span class="text-red-500"> * </span>
+                                  </label>
+                                  <el-input
+                                    v-model="element.authors"
+                                    type="textarea"
+                                    placeholder="Authors"
+                                    class="mb-2"
+                                    maxlength="4000"
+                                    show-word-limit
+                                    rows="4"
+                                  />
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    Authors of the article.
+                                  </span>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    Journal <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.journal"
+                                    type="text"
+                                    placeholder="Nature Communications"
+                                    maxlength="250"
+                                    show-word-limit
+                                  />
+                                </div>
+
+                                <div
+                                  class="mb-2 flex w-full flex-row justify-between transition-all"
+                                >
+                                  <div class="mr-2 w-3/12">
+                                    <div class="mb-4 flex w-full flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Date
+                                      </label>
+
+                                      <el-date-picker
+                                        v-model="element.date"
+                                        type="month"
+                                        placeholder="2023-03"
+                                        class="w-full"
+                                      />
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        The article's publication date.
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-4/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Issue
+                                      </label>
+                                      <el-input
+                                        v-model="element.issue"
+                                        type="text"
+                                        placeholder="something here"
+                                        maxlength="20"
+                                        show-word-limit
+                                      />
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        The Journal's issue number.
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div class="mx-2 w-5/12">
+                                    <div class="mb-4 flex flex-col">
+                                      <label
+                                        class="w-[160px] pb-1 text-sm font-medium text-gray-700"
+                                      >
+                                        Pages
+                                      </label>
+                                      <el-input
+                                        v-model="element.pages"
+                                        type="text"
+                                        placeholder="something here"
+                                        maxlength="20"
+                                        show-word-limit
+                                      />
+                                      <span class="mt-1 text-xs text-slate-600">
+                                        The Journal's page number.
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4 flex flex-col">
+                                  <label class="w-[160px] pb-1 text-sm font-medium text-gray-700">
+                                    DOI <span class="text-red-500"> * </span>
+                                  </label>
+
+                                  <el-input
+                                    v-model="element.doi"
+                                    type="text"
+                                    placeholder="36921622"
+                                    maxlength="100"
+                                    show-word-limit
+                                  />
+                                </div>
+                              </div>
+                            </el-collapse-transition>
+                          </div>
+                        </template>
+                      </draggable>
+
+                      <edit-prompt
+                        ref="editPublicationIDrompt"
+                        title="Edit Study Publication ID"
+                        confirmButtonText="Save"
+                        :confirmDisabled="disableEditPublicationIDSaveButton"
+                        @messageConfirmed="saveUpdatedPublicationID"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">Please enter a new ID for this publication.</p>
+
+                          <el-input
+                            v-model="publicationID"
+                            clearable
+                            class="w-full"
+                            placeholder="Enter a new ID for this publication"
+                            maxlength="100"
+                            show-word-limit
+                          />
+                        </div>
+                      </edit-prompt>
+
+                      <warning-confirm
+                        ref="removeStudyPublicationConfirm"
+                        title="Warning"
+                        @messageConfirmed="confirmedRemoveStudyPublication"
+                      >
+                        <p class="text-center text-base text-gray-500">
+                          Are you sure you want to remove this group? This action cannot be undone.
+                        </p>
+                      </warning-confirm>
+                    </el-form>
+                    <div class="m-2 flex w-full justify-center">
+                      <button class="primary-plain-button" @click="showAddStudyPublicationPrompt">
+                        Add a Study Publication
+                      </button>
+
+                      <add-prompt
+                        ref="addStudyPublicationPrompt"
+                        title="Add a Study Publication"
+                        confirmButtonText="Add this publication"
+                        :confirmDisabled="disableEditPublicationIDSaveButton"
+                        @messageConfirmed="addStudyPublicationConfirmed"
+                      >
+                        <div w-full>
+                          <p class="mb-3 text-sm">Please add a unique ID for this publication.</p>
+
+                          <el-input
+                            v-model="publicationID"
+                            clearable
+                            size="large"
+                            class="w-full"
+                            placeholder="Enter a ID for this publication"
+                            maxlength="100"
+                            show-word-limit
+                          />
+                        </div>
+                      </add-prompt>
+                    </div>
+                  </div>
+
+                  <div class="flex w-full justify-center space-x-4 px-5 py-4">
+                    <button
+                      @click="prevFormStep"
+                      class="secondary-plain-button"
+                      size="medium"
+                      :disabled="checkInvalidStatus"
+                    >
+                      <el-icon><back-icon /></el-icon>
+                      Previous
+                    </button>
+
+                    <button
+                      class="primary-button"
+                      @click="nextFormStep"
+                      :disabled="checkInvalidStatus"
+                    >
+                      Continue
+                      <el-icon><d-arrow-right /></el-icon>
                     </button>
                   </div>
                 </div>
@@ -1873,8 +2159,8 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 8,
-      totalSteps: 8,
+      currentStep: 9,
+      totalSteps: 9,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
       dataset: {},
@@ -2085,6 +2371,20 @@ export default {
           },
         ],
       },
+      step9Form: [
+        {
+          id: "f6c67289-949c-498c-8df4-a10da3c6dad9",
+          publicationID: "test",
+          doi: "",
+          title: "",
+          journal: "",
+          date: "",
+          issue: "",
+          pages: "",
+          authors: "",
+          isExpanded: true,
+        },
+      ],
 
       invalidStatus: {},
       showSaving: false,
@@ -2098,6 +2398,9 @@ export default {
 
       plannedVisitID: "",
       visitID: "",
+
+      studyPublicationsID: "",
+      publicationID: "",
 
       folderContents: [
         {
@@ -2165,6 +2468,19 @@ export default {
 
       return false;
     },
+    disableEditPublicationIDSaveButton() {
+      if (this.publicationID.trim() === "") {
+        return true;
+      }
+
+      for (const entry of this.step9Form) {
+        if (entry.publicationID === this.publicationID.trim()) {
+          return true;
+        }
+      }
+
+      return false;
+    },
   },
   methods: {
     async sleep(ms) {
@@ -2195,7 +2511,7 @@ export default {
     },
     async nextFormStep() {
       if (this.currentStep + 1 > this.totalSteps) {
-        const valid = await this.checkArmGroupValidity();
+        const valid = await this.checkStudyPublicationsValidity();
 
         if (!valid) {
           return;
@@ -2310,6 +2626,18 @@ export default {
         if (valid) {
           await this.saveCurrentEntries();
           this.setCurrentStep(8);
+          this.$refs["topOfPageElement"].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    },
+    navigateToStep9FromStep8() {
+      this.$refs["s8Form"].validate(async (valid) => {
+        if (valid) {
+          await this.saveCurrentEntries();
+          this.setCurrentStep(9);
           this.$refs["topOfPageElement"].scrollIntoView({
             behavior: "smooth",
             block: "start",
@@ -2823,6 +3151,73 @@ export default {
       this.$refs["s8Form"].validate();
     },
 
+    async checkStudyPublicationsValidity() {
+      if (this.step9Form.length === 0) {
+        return true;
+      }
+
+      for (const group of this.step9Form) {
+        if (group.publicationID.trim() === "") {
+          this.$message.error("Please provide an ID for all publications.");
+          return false;
+        }
+      }
+
+      return true;
+    },
+    showAddStudyPublicationPrompt() {
+      this.publicationID = "";
+      this.$refs.addStudyPublicationPrompt.show();
+    },
+    addStudyPublicationConfirmed() {
+      const entry = {
+        id: uuidv4(),
+        publicationID: this.publicationID,
+        doi: "",
+        title: "",
+        authors: "",
+        journal: "",
+        date: "",
+        issue: "",
+        pages: "",
+        isExpanded: true,
+      };
+
+      this.step9Form.push(entry);
+    },
+    minimizeAllStudyPublications() {
+      this.step9Form.map((group) => {
+        group.isExpanded = false;
+      });
+    },
+    editPublicationID(id) {
+      let publication = this.step9Form.find((element) => {
+        return element.id === id;
+      });
+
+      this.studyPublicationsID = id;
+      this.publicationID = publication.publicationID;
+      this.$refs.editPublicationIDrompt.show();
+    },
+    saveUpdatedPublicationID() {
+      let publication = this.step9Form.find((element) => {
+        return element.id === this.studyPublicationsID;
+      });
+
+      publication.publicationID = this.publicationID;
+    },
+    showRemoveStudyPublicationConfirm(id) {
+      this.studyPublicationsID = id;
+      this.$refs.removeStudyPublicationConfirm.show();
+    },
+    confirmedRemoveStudyPublication() {
+      const id = this.studyPublicationsID;
+
+      this.step9Form = this.step9Form.filter((publication) => {
+        return publication.id !== id;
+      });
+    },
+
     async saveCurrentEntries() {
       this.showSavingIcon();
 
@@ -2863,6 +3258,8 @@ export default {
       immunologyForm.studyFiles = this.step8Form.studyFiles;
       immunologyForm.studyLinks = this.step8Form.studyLinks;
 
+      immunologyForm.studyPublications = this.step9Form;
+
       this.dataset.data.Immunology.questions = immunologyForm;
 
       this.workflow.generateImmunologyMetadata = true;
@@ -2881,7 +3278,7 @@ export default {
 
       if (shouldNavigateBack) {
         this.$router.push({
-          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/selectFolder`,
+          path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Immunology/selectFolder`,
         });
         return;
       }
@@ -3005,6 +3402,8 @@ export default {
 
         this.step8Form.studyFiles = immunologyForm.studyFiles;
         this.step8Form.studyLinks = immunologyForm.studyLinks;
+
+        this.step9Form = immunologyForm.studyPublications;
 
         this.addIds(this.step6Form.inexclusions);
         this.addIds(this.step7Form.protocols);
