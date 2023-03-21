@@ -3283,13 +3283,13 @@ export default {
         return;
       }
 
-      const routerPath = `/datasets/${this.$route.params.datasetID}/${this.workflowID}/selectDestination`;
+      const routerPath = `/datasets/${this.$route.params.datasetID}/${this.workflowID}/Immunology/pickLicense`;
 
       this.$router.push({ path: routerPath });
     },
     navigateBack() {
       this.$router.push({
-        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/reviewStandards`,
+        path: `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Immunology/reviewStandards`,
       });
     },
 
@@ -3354,7 +3354,7 @@ export default {
       this.workflow = this.dataset.workflows[this.workflowID];
 
       this.datasetStore.showProgressBar();
-      this.datasetStore.setProgressBarType("geo");
+      this.datasetStore.setProgressBarType("immport");
       this.datasetStore.setCurrentStep(3);
 
       this.workflow.currentRoute = this.$route.path;

@@ -21,6 +21,7 @@ import ImmunologyLanding from "../views/workflow/Immunology/ImmunologyLanding.vu
 import ImmunologySelectSourceFolder from "../views/workflow/Immunology/SelectSourceFolder.vue";
 import ImmunologyReviewStandards from "../views/workflow/Immunology/ReviewStandards.vue";
 import ImmunologyCreateMetadata from "../views/workflow/Immunology/CreateMetadata.vue";
+import ImmunologyPickLicense from "../views/workflow/Immunology/PickLicense.vue";
 
 // Other metadata related components
 import OtherLanding from "../views/workflow/Other/OtherLanding.vue";
@@ -179,6 +180,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
     name: "CodePickLicense",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/pickLicense",
+    component: ImmunologyPickLicense,
+    name: "ImmunologyPickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/pickLicense",

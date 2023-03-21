@@ -137,7 +137,7 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("geo");
+    this.datasetStore.setProgressBarType("immport");
     this.datasetStore.setCurrentStep(1);
 
     this.workflow.fairListShown = true;
