@@ -418,7 +418,7 @@ export default {
       routerPath = `/datasets/${datasetID}`;
       // routerPath = `/datasets/new/${datasetID}/confirm`;
       // routerPath = `/datasets/${datasetID}/workflow1/selectDestination`;
-      routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
+      // routerPath = `/datasets/${datasetID}/workflow1/zenodo/metadata`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/review`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/accessToken`;
       // routerPath = `/datasets/${datasetID}/workflow1/zenodo/publish`;

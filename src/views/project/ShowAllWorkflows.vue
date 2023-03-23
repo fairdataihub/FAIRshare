@@ -1054,7 +1054,7 @@ export default {
 
       let generateStatus = "";
 
-      if (workflow.generateOtherMetadata) {
+      if (workflow.generateImmunologyMetadata) {
         generateStatus = true;
       } else {
         generateStatus = false;
@@ -1062,14 +1062,14 @@ export default {
       this.immunologyObject.data.push({
         status: generateStatus,
         task: "Metadata",
-        detail: "metadata.json",
+        detail: "basic_study.tsv",
         type: "",
       });
 
       let license = "";
 
       if ("license" in this.dataset.data.Immunology.questions) {
-        license = this.getLicenseName(this.dataset.data.Immunology.questions.license, "Other");
+        license = this.getLicenseName(this.dataset.data.Immunology.questions.license, "Code");
       } else {
         license = "";
       }

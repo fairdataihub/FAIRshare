@@ -3224,6 +3224,18 @@ export default {
       this.dataset.data.general.questions.name = this.step1Form.briefTitle;
       this.dataset.data.general.questions.description = this.step1Form.briefDescription;
 
+      const authors = this.step4Form.map((person) => {
+        return {
+          familyName: person.lastName,
+          givenName: person.firstName,
+          email: person.email,
+          affiliation: person.organization,
+          orcid: person.orcid,
+        };
+      });
+
+      this.dataset.data.general.questions.authors = authors;
+
       let immunologyForm = {};
 
       immunologyForm.studyID = this.step1Form.studyID.trim();
