@@ -256,11 +256,11 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
-            "folder_path": "Path to the folder to save the file",
+            "virtual_file": "Parameter to generate a virtual file",
         },
     )
     def post(self):
-        """Create the codemetadata json file"""
+        """Create the metadata files"""
         parser = reqparse.RequestParser()
 
         parser.add_argument("data_types", type=str, help="Types of data ")
@@ -276,6 +276,8 @@ class CreateMetadata(Resource):
         )
 
         args = parser.parse_args()
+
+        print(args["data_types"], type(args["data_types"]))
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])

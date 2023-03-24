@@ -1,7 +1,9 @@
 import hashlib
 import json
 import os
-
+import csv
+import shutil
+import datetime
 import xlsxwriter
 import yaml
 
@@ -91,9 +93,10 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
         and "organization" in general_data["funding"]
         and general_data["funding"]["organization"] != ""
     ):
-        metadata["funder"] = {"@type": "Organization"}
-
-        metadata["funder"]["@name"] = general_data["funding"]["organization"]
+        metadata["funder"] = {
+            "@type": "Organization",
+            "@name": general_data["funding"]["organization"],
+        }
 
     if "keywords" in general_data and len(general_data["keywords"]) > 0:
         metadata["keywords"] = [item["keyword"] for item in general_data["keywords"]]
@@ -111,11 +114,9 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
         "otherSoftwareRequirements" in code_data
         and len(code_data["otherSoftwareRequirements"]) > 0
     ):
-        metadata["softwareRequirements"] = []
-
-        for item in code_data["otherSoftwareRequirements"]:
-            metadata["softwareRequirements"].append(item["link"])
-
+        metadata["softwareRequirements"] = [
+            item["link"] for item in code_data["otherSoftwareRequirements"]
+        ]
     if "relatedLinks" in code_data and len(code_data["relatedLinks"]) > 0:
         metadata["relatedLink"] = []
 
@@ -141,9 +142,10 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
                 new_author["email"] = item["email"]
 
             if "affiliation" in item and item["affiliation"] != "":
-                new_author["affiliation"] = {"@type": "Organization"}
-                new_author["affiliation"]["name"] = item["affiliation"]
-
+                new_author["affiliation"] = {
+                    "@type": "Organization",
+                    "name": item["affiliation"],
+                }
             metadata["author"].append(new_author)
 
     if "contributors" in general_data and len(general_data["contributors"]) > 0:
@@ -181,6 +183,527 @@ def createCodeMetadata(code_data, general_data, folder_path, virtual_file):
     # Create the metadata file
     with open(os.path.join(folder_path, "codemeta.json"), "w") as f:
         f.write(json.dumps(metadata, indent=4))
+
+    return True
+
+
+def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
+    def createBasicStudyDesign(immunology_data, folder_path, virtual_file):
+        row_content = []
+        virtual_metadata = {}
+
+        homeFolderPath = os.path.expanduser("~")
+        tempFolderPath = os.path.join(
+            homeFolderPath, ".fairshare", "temp", "basic_study_design"
+        )
+        metadataFilePath = os.path.join(tempFolderPath, "basic_study_design.txt")
+
+        os.makedirs(tempFolderPath, exist_ok=True)
+
+        if os.path.exists(metadataFilePath):
+            os.remove(metadataFilePath)
+
+        # write as a tsv file
+        with open(metadataFilePath, "w", newline="") as tsvfile:
+            basic_study_design = csv.writer(
+                tsvfile, delimiter="\t", lineterminator="\n"
+            )
+
+            row_content = ["basic_study_design", "Schema Version 3.36"]
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "Please do not delete or edit this column",
+                "The basic study design template defines and annotates key elements of a study including the purpose, subject grouping, schedule of events, personnel, and references (weblinks, publications). Use the study_design_edit template to add additional information for a study after a study is defined in ImmPort. The basic study design template consists of several sections or compound templates. Some compound templates are required: study, arm_or_cohort, inclusion_exclusion, planned_visit, study_2_condition_or_disease, study_2_protocol, study_categorization, study_personnel.  Other compound templates are optional: study_file, study_link, and study_pubmed.",  # noqa: E501
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Column Name"]
+            basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study"]
+            basic_study_design.writerow(row_content)
+            virtual_metadata["study"] = {}
+
+            row_content = ["User Defined ID", immunology_data["studyID"]]
+            virtual_metadata["study"] = {"User Defined ID": immunology_data["studyID"]}
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Brief Title", immunology_data["briefTitle"]]
+            virtual_metadata["study"]["Brief Title"] = immunology_data["briefTitle"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Official Title", immunology_data["officialTitle"]]
+            virtual_metadata["study"]["Official Title"] = immunology_data[
+                "officialTitle"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Brief Description", immunology_data["briefDescription"]]
+            virtual_metadata["study"]["Brief Description"] = immunology_data[
+                "briefDescription"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Description", immunology_data["description"]]
+            virtual_metadata["study"]["Description"] = immunology_data["description"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Intervention Agent", immunology_data["interventionAgent"]]
+            virtual_metadata["study"]["Intervention Agent"] = immunology_data[
+                "interventionAgent"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Endpoints", immunology_data["endpoints"]]
+            virtual_metadata["study"]["Endpoints"] = immunology_data["endpoints"]
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "Sponsoring Organization",
+                immunology_data["sponsoringOrganization"],
+            ]
+            virtual_metadata["study"]["Sponsoring Organization"] = immunology_data[
+                "sponsoringOrganization"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Age Unit", immunology_data["ageUnit"]]
+            virtual_metadata["study"]["Age Unit"] = immunology_data["ageUnit"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Actual Start Date", immunology_data["actualStartDate"]]
+            virtual_metadata["study"]["Actual Start Date"] = immunology_data[
+                "actualStartDate"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Hypothesis", immunology_data["hypothesis"]]
+            virtual_metadata["study"]["Hypothesis"] = immunology_data["hypothesis"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Objectives", immunology_data["objectives"]]
+            virtual_metadata["study"]["Objectives"] = immunology_data["objectives"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Target Enrollment", immunology_data["targetEnrollment"]]
+            virtual_metadata["study"]["Target Enrollment"] = immunology_data[
+                "targetEnrollment"
+            ]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Minimum Age", immunology_data["minimumAge"]]
+            virtual_metadata["study"]["Minimum Age"] = immunology_data["minimumAge"]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Maximum Age", immunology_data["maximumAge"]]
+            virtual_metadata["study"]["Maximum Age"] = immunology_data["maximumAge"]
+            basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_categorization"]
+            basic_study_design.writerow(row_content)
+            virtual_metadata["study_categorization"] = {}
+
+            row_content = ["Research Focus", immunology_data["researchFocus"]]
+            virtual_metadata["study_categorization"][
+                "Research Focus"
+            ] = immunology_data["researchFocus"]
+            basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_2_condition_or_disease"]
+            virtual_metadata["study_2_condition_or_disease"] = {}
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Condition Reported"]
+            virtual_metadata["study_2_condition_or_disease"]["Condition Reported"] = []
+            for condition in immunology_data["condition"]:
+                row_content.append(condition)
+            virtual_metadata["study_2_condition_or_disease"][
+                "Condition Reported"
+            ].append(condition)
+            basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["arm_or_cohort"]
+            virtual_metadata["arm_or_cohort"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = ["User Defined ID", "Name", "Description", "Type Reported"]
+            basic_study_design.writerow(row_content)
+
+            for arm in immunology_data["arms"]:
+                row_content = [
+                    arm["armID"],
+                    arm["name"],
+                    arm["description"],
+                    arm["type"],
+                ]
+                virtual_metadata["arm_or_cohort"].append(
+                    {
+                        "User Defined ID": arm["armID"],
+                        "Name": arm["name"],
+                        "Description": arm["description"],
+                        "Type Reported": arm["type"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_personnel"]
+            virtual_metadata["study_personnel"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "User Defined ID",
+                "Honorific",
+                "Last Name",
+                "First Name",
+                "Suffixes",
+                "Organization",
+                "ORCID ID",
+                "Email",
+                " Title In Study",
+                "Role in Study",
+                "Site Name",
+            ]
+            basic_study_design.writerow(row_content)
+
+            for person in immunology_data["studyPersonnel"]:
+                row_content = [
+                    person["personnelID"],
+                    person["honorific"],
+                    person["lastName"],
+                    person["firstName"],
+                    person["suffix"],
+                    person["organization"],
+                    person["orcid"],
+                    person["email"],
+                    person["titleInStudy"],
+                    person["roleInStudy"],
+                    person["siteName"],
+                ]
+                virtual_metadata["study_personnel"].append(
+                    {
+                        "User Defined ID": person["personnelID"],
+                        "Honorific": person["honorific"],
+                        "Last Name": person["lastName"],
+                        "First Name": person["firstName"],
+                        "Suffixes": person["suffix"],
+                        "Organization": person["organization"],
+                        "ORCID ID": person["orcid"],
+                        "Email": person["email"],
+                        "Title In Study": person["titleInStudy"],
+                        "Role in Study": person["roleInStudy"],
+                        "Site Name": person["siteName"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["planned_visit"]
+            virtual_metadata["planned_visit"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "User Defined ID",
+                "Name",
+                "Order Number",
+                "Min Start Day",
+                "Max Start Day",
+                "Start Rule",
+                "End Rule",
+            ]
+            basic_study_design.writerow(row_content)
+
+            for visit in immunology_data["plannedVisits"]:
+                row_content = [
+                    visit["visitID"],
+                    visit["name"],
+                    visit["orderNumber"],
+                    visit["minStartDay"],
+                    visit["maxStartDay"],
+                    visit["startRule"],
+                    visit["endRule"],
+                ]
+                virtual_metadata["planned_visit"].append(
+                    {
+                        "User Defined ID": visit["visitID"],
+                        "Name": visit["name"],
+                        "Order Number": visit["orderNumber"],
+                        "Min Start Day": visit["minStartDay"],
+                        "Max Start Day": visit["maxStartDay"],
+                        "Start Rule": visit["startRule"],
+                        "End Rule": visit["endRule"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["inclusion_exclusion"]
+            virtual_metadata["inclusion_exclusion"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "User Defined ID",
+                "Criterion",
+                "Criterion Category",
+            ]
+            basic_study_design.writerow(row_content)
+
+            for inexclusion in immunology_data["inexclusions"]:
+                row_content = [
+                    inexclusion["userDefinedID"],
+                    inexclusion["criterion"],
+                    inexclusion["criterionCategory"],
+                ]
+                virtual_metadata["inclusion_exclusion"].append(
+                    {
+                        "User Defined ID": inexclusion["userDefinedID"],
+                        "Criterion": inexclusion["criterion"],
+                        "Criterion Category": inexclusion["criterionCategory"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_2_protocol"]
+            virtual_metadata["study_2_protocol"] = {}
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Condition Reported"]
+            virtual_metadata["study_2_protocol"]["Protocol ID"] = []
+            for protocol in immunology_data["protocols"]:
+                row_content.append(protocol["userDefinedID"])
+            virtual_metadata["study_2_protocol"]["Protocol ID"].append(
+                protocol["userDefinedID"]
+            )
+            basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_file"]
+            virtual_metadata["study_file"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "File Name",
+                "Description",
+                "Study File Type",
+            ]
+            basic_study_design.writerow(row_content)
+
+            for study_file in immunology_data["studyFiles"]:
+                for file in study_file["filePaths"]:
+                    file_name = os.path.basename(file)
+
+                    row_content = [
+                        file_name,
+                        study_file["description"],
+                        study_file["type"],
+                    ]
+                    virtual_metadata["study_file"].append(
+                        {
+                            "File Name": file_name,
+                            "Description": study_file["description"],
+                            "Study File Type": study_file["type"],
+                        }
+                    )
+                    basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_link"]
+            virtual_metadata["study_link"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = ["Name", "Value"]
+            basic_study_design.writerow(row_content)
+
+            for link in immunology_data["studyLinks"]:
+                row_content = [
+                    link["name"],
+                    link["url"],
+                ]
+                virtual_metadata["study_link"].append(
+                    {
+                        "Name": link["name"],
+                        "Value": link["url"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+            row_content = [""]
+            basic_study_design.writerow(row_content)
+
+            row_content = ["study_pubmed"]
+            virtual_metadata["study_pubmed"] = []
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "PubMed ID",
+                "DOI",
+                "Title",
+                "Journal",
+                "Year",
+                "Month",
+                "Issue",
+                "Pages",
+                "Authors",
+            ]
+            basic_study_design.writerow(row_content)
+
+            for publication in immunology_data["studyPublications"]:
+                # date is in format YYYY-MM-DDTHH:MM:SS.000Z
+                date = publication["date"]
+
+                year = date[:4]
+                month = date[5:7]
+
+                # convert month to month name
+                month = datetime.datetime.strptime(month, "%m").strftime("%B")
+
+                row_content = [
+                    publication["publicationID"],
+                    publication["doi"],
+                    publication["title"],
+                    publication["journal"],
+                    year,
+                    month,
+                    publication["issue"],
+                    publication["pages"],
+                    publication["authors"],
+                ]
+                virtual_metadata["study_pubmed"].append(
+                    {
+                        "PubMed ID": publication["publicationID"],
+                        "DOI": publication["doi"],
+                        "Title": publication["title"],
+                        "Journal": publication["journal"],
+                        "Year": year,
+                        "Month": month,
+                        "Issue": publication["issue"],
+                        "Pages": publication["pages"],
+                        "Authors": publication["authors"],
+                    }
+                )
+                basic_study_design.writerow(row_content)
+
+        tsvfile.close()
+
+        if virtual_file:
+            return virtual_metadata
+
+        # move the file from temp to the folder path and replace if it exists
+        shutil.move(metadataFilePath, folder_path)
+
+        return
+
+    def createBasicStudyProtocols(immunology_data, folder_path, virtual_file):
+        row_content = []
+        virtual_metadata = {}
+
+        homeFolderPath = os.path.expanduser("~")
+        tempFolderPath = os.path.join(
+            homeFolderPath, ".fairshare", "temp", "basic_study_design"
+        )
+        metadataFilePath = os.path.join(tempFolderPath, "protocols.txt")
+
+        os.makedirs(tempFolderPath, exist_ok=True)
+
+        if os.path.exists(metadataFilePath):
+            os.remove(metadataFilePath)
+
+        # write as a tsv file
+        with open(metadataFilePath, "w", newline="") as tsvfile:
+            basic_study_protocols = csv.writer(
+                tsvfile, delimiter="\t", lineterminator="\n"
+            )
+
+            row_content = ["protocols	", "Schema Version 3.36"]
+            basic_study_protocols.writerow(row_content)
+
+            row_content = [
+                "Please do not delete or edit this column",
+            ]
+            basic_study_protocols.writerow(row_content)
+
+            virtual_metadata["protocols"] = []
+
+            row_content = [
+                "Column Name",
+                "User Defined ID",
+                "File Name",
+                "Name",
+                "Description",
+                "Type",
+            ]
+            basic_study_protocols.writerow(row_content)
+
+            for protocol in immunology_data["protocols"]:
+                file_path = protocol["filePath"]
+                file_name = os.path.basename(file_path)
+                row_content = [
+                    "",
+                    protocol["userDefinedID"],
+                    file_name,
+                    protocol["name"],
+                    protocol["description"],
+                    protocol["type"],
+                ]
+                virtual_metadata["protocols"].append(
+                    {
+                        "Column Name": "",
+                        "User Defined ID": protocol["userDefinedID"],
+                        "File Name": file_name,
+                        "Name": protocol["name"],
+                        "Description": protocol["description"],
+                        "Type": protocol["type"],
+                    }
+                )
+                basic_study_protocols.writerow(row_content)
+
+        tsvfile.close()
+
+        if virtual_file:
+            return virtual_metadata
+
+        # move the file from temp to the folder path and replace if it exists
+        shutil.move(metadataFilePath, folder_path)
+
+    basic_study_design_file = createBasicStudyDesign(
+        immunology_data, folder_path, virtual_file
+    )
+    basic_study_protocols_file = createBasicStudyProtocols(
+        immunology_data, folder_path, virtual_file
+    )
+
+    if virtual_file:
+        metadata = {
+            "basic_study_design": basic_study_design_file,
+            "basic_study_protocols": basic_study_protocols_file,
+        }
+        return json.dumps(metadata)
 
     return True
 
@@ -799,11 +1322,26 @@ def createMetadata(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = ""
+
             if "folderPath" in data["Code"]:
                 folder_path = data["Code"]["folderPath"]
             result = createCodeMetadata(
                 code_data, general_data, folder_path, virtual_file
             )
+
+            if virtual_file:
+                return result
+
+        if "Immunology" in data_types:
+            immunology_data = data["Immunology"]["questions"]
+            folder_path = ""
+
+            if "folderPath" in data["Immunology"]:
+                folder_path = data["Immunology"]["folderPath"]
+            result = createImmunologyMetadata(
+                immunology_data, folder_path, virtual_file
+            )
+
             if virtual_file:
                 return result
 
@@ -811,11 +1349,13 @@ def createMetadata(data_types, data, virtual_file):
             other_data = data["Other"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = ""
+
             if "folderPath" in data["Other"]:
                 folder_path = data["Other"]["folderPath"]
             result = createOtherMetadata(
                 other_data, general_data, folder_path, virtual_file
             )
+
             if virtual_file:
                 return result
 
