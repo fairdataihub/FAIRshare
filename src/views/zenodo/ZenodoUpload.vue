@@ -58,7 +58,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import path from "path";
 import fs from "fs-extra";
-// import klawSync from "klaw-sync";
+import klawSync from "klaw-sync";
 
 import LoadingCubeGrid from "@/components/spinners/LoadingCubeGrid.vue";
 import LoadingEllipsis from "@/components/spinners/LoadingEllipsis.vue";
@@ -91,6 +91,7 @@ export default {
       overwriteCodeMeta: false,
       overwriteOtherMeta: false,
       overwriteImmunologyMeta: false,
+      devStatus: "development",
     };
   },
   computed: {
@@ -810,11 +811,15 @@ export default {
 
       await this.sleep(300);
 
+      // if (this.devStatus === "development") {
+      //   this.statusMessage = "Development status is set to development, skipping upload to Zenodo";
+      //   return "SUCCESS";
+      // }
+
       /**
        * TODO: Check if this needs to be done for the immunology metadata
        */
 
-      /*
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
           response = await this.createCitationFile();
@@ -889,8 +894,6 @@ export default {
       this.workflow.destination.zenodo.status.filesUploaded = true;
 
       return "SUCCESS";
-
-      */
     },
     async deleteDraftZenodoDeposition() {
       if ("deposition_id" in this.workflow.destination.zenodo) {

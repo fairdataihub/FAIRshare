@@ -28,6 +28,7 @@
                     (node.label == 'LICENSE' && workflow.generateLicense) ||
                     (node.label == 'basic_study_design.txt' &&
                       workflow.generateImmunologyMetadata) ||
+                    (node.label == 'protocols.txt' && workflow.generateImmunologyMetadata) ||
                     (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                       ? 'text-secondary-500'
                       : ''
@@ -53,6 +54,7 @@
                       (node.label == 'LICENSE' && workflow.generateLicense) ||
                       (node.label == 'basic_study_design.txt' &&
                         workflow.generateImmunologyMetadata) ||
+                      (node.label == 'protocols.txt' && workflow.generateImmunologyMetadata) ||
                       (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                     "
                   >
@@ -96,6 +98,19 @@
             <div v-if="PreviewNewlyCreatedImmunologyMetadataFile" class="pb-20">
               <el-table
                 :data="immunologyMetadata"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
+              >
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column prop="Value" label="Value" />
+              </el-table>
+            </div>
+
+            <div v-if="PreviewNewlyCreatedImmunologyProtocolMetadataFile" class="pb-20">
+              <el-table
+                :data="immunologyProtocolMetadata"
                 style="width: 100%"
                 row-key="id"
                 border
@@ -242,10 +257,12 @@ export default {
       tableData: [],
       citationData: [],
       immunologyMetadata: [],
+      immunologyProtocolMetadata: [],
       otherMetadata: [],
       tableDataRecord: [],
       citationDataRecord: [],
       immunologyMetadataRecord: [],
+      immunologyProtocolMetadataRecord: [],
       otherMetadataRecord: [],
       fileData: [],
       defaultProps: {
@@ -257,6 +274,7 @@ export default {
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedCodemetaFile: false,
       PreviewNewlyCreatedImmunologyMetadataFile: false,
+      PreviewNewlyCreatedImmunologyProtocolMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
       PreviewNewlyCreatedOtherMetadataFile: false,
       drawerModel: true,
@@ -294,6 +312,7 @@ export default {
         this.PreviewNewlyCreatedLicenseFile ||
         this.PreviewNewlyCreatedCitationFile ||
         this.PreviewNewlyCreatedImmunologyMetadataFile ||
+        this.PreviewNewlyCreatedImmunologyProtocolMetadataFile ||
         this.PreviewNewlyCreatedOtherMetadataFile
       ) {
         return true;
@@ -483,6 +502,7 @@ export default {
       this.citationDataRecord = [];
       this.otherMetadataRecord = [];
       this.immunologyMetadataRecod = [];
+      this.immunologyProtocolMetadataRecord = [];
 
       if (this.workflow.generateCodeMeta) {
         this.tableData = await this.createCodeMetadataFile();
@@ -492,8 +512,19 @@ export default {
       }
 
       if (this.workflow.generateImmunologyMetadata) {
-        this.immunologyMetadata = await this.createImmunologyMetadataFile();
-        this.immunologyMetadataRecord = Object.assign({}, this.immunologyMetadata);
+        const combinedImmunologyMetadata = await this.createImmunologyMetadataFile();
+
+        this.immunologyMetadata = combinedImmunologyMetadata.basic_study_design;
+        this.immunologyProtocolMetadata = combinedImmunologyMetadata.basic_study_protocols;
+
+        this.immunologyMetadataRecord = Object.assign(
+          {},
+          this.immunologyMetadata.basic_study_design
+        );
+        this.immunologyProtocolMetadataRecord = Object.assign(
+          {},
+          this.immunologyMetadata.basic_study_protocols
+        );
       }
 
       if (this.workflow.generateOtherMetadata) {
@@ -544,6 +575,17 @@ export default {
         }
       }
 
+      if (!root.children.some((el) => el.label === "protocols.txt")) {
+        if (this.workflow.generateImmunologyMetadata) {
+          let newObj = {};
+          newObj.id = uuidv4();
+          newObj.label = "protocols.txt";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
+
       if (!root.children.some((el) => el.label === "metadata.json")) {
         if (this.workflow.generateOtherMetadata) {
           let newObj = {};
@@ -568,6 +610,12 @@ export default {
 
       this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
       this.immunologyMetadata = this.jsonToTableDataRecursive(this.immunologyMetadata, 1, "ROOT");
+
+      this.immunologyProtocolMetadata = this.jsonToTableDataRecursive(
+        this.immunologyProtocolMetadata,
+        1,
+        "ROOT"
+      );
       this.otherMetadata = this.jsonToTableDataRecursive(this.otherMetadata, 1, "ROOT");
 
       this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
@@ -584,6 +632,7 @@ export default {
       this.PreviewNewlyCreatedLicenseFile = false;
       this.PreviewNewlyCreatedCodemetaFile = false;
       this.PreviewNewlyCreatedImmunologyMetadataFile = false;
+      this.PreviewNewlyCreatedImmunologyProtocolMetadataFile = false;
       this.PreviewNewlyCreatedOtherMetadataFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
     },
@@ -627,6 +676,13 @@ export default {
           }
           if (action === "download") {
             this.exportToJson(this.immunologyMetadataRecord, "basic_study_design.txt");
+          }
+        } else if (data.label == "protocols.txt" && this.workflow.generateImmunologyMetadata) {
+          if (action === "view") {
+            this.PreviewNewlyCreatedImmunologyProtocolMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.immunologyProtocolMetadata, "protocols.txt");
           }
         } else if (data.label == "metadata.json" && this.workflow.generateOtherMetadata) {
           if (action === "view") {

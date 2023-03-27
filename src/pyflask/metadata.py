@@ -221,7 +221,10 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             row_content = ["Column Name"]
             basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
+            basic_study_design.writerow(row_content)
+
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study"]
@@ -303,7 +306,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             virtual_metadata["study"]["Maximum Age"] = immunology_data["maximumAge"]
             basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_categorization"]
@@ -316,7 +319,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             ] = immunology_data["researchFocus"]
             basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_2_condition_or_disease"]
@@ -332,7 +335,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             ].append(condition)
             basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["arm_or_cohort"]
@@ -359,7 +362,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 )
                 basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_personnel"]
@@ -412,7 +415,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 )
                 basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["planned_visit"]
@@ -453,7 +456,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 )
                 basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["inclusion_exclusion"]
@@ -482,7 +485,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 )
                 basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_2_protocol"]
@@ -498,7 +501,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             )
             basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_file"]
@@ -530,7 +533,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                     )
                     basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_link"]
@@ -553,7 +556,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 )
                 basic_study_design.writerow(row_content)
 
-            row_content = [""]
+            row_content = []
             basic_study_design.writerow(row_content)
 
             row_content = ["study_pubmed"]
