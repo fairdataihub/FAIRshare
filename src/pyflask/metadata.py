@@ -617,7 +617,13 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
         if virtual_file:
             return virtual_metadata
 
-        # move the file from temp to the folder path and replace if it exists
+        # check if the file exists and remove before moving
+        destination = os.path.join(folder_path, "basic_study_design.txt")
+
+        if os.path.exists(destination):
+            os.remove(destination)
+
+        # move the file from temp to the folder path
         shutil.move(metadataFilePath, folder_path)
 
         return
@@ -690,6 +696,12 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
 
         if virtual_file:
             return virtual_metadata
+
+        # check if the file exists and remove before moving
+        destination = os.path.join(folder_path, "protocols.txt")
+
+        if os.path.exists(destination):
+            os.remove(destination)
 
         # move the file from temp to the folder path and replace if it exists
         shutil.move(metadataFilePath, folder_path)

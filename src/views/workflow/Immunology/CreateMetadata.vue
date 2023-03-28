@@ -77,12 +77,31 @@
                       >
                         <el-form-item label="Study ID" prop="studyID">
                           <div class="flex w-full flex-col items-start">
-                            <el-input
-                              v-model="step1Form.studyID"
-                              placeholder="study_198423"
-                              maxlength="150"
-                              show-word-limit
-                            ></el-input>
+                            <div class="flex w-full space-x-4">
+                              <el-input
+                                v-model="step1Form.studyID"
+                                placeholder="study_198423"
+                                maxlength="150"
+                                show-word-limit
+                                class="w-full"
+                              />
+
+                              <el-popover
+                                placement="top-start"
+                                :width="180"
+                                trigger="hover"
+                                content="Automatically generate a random ID."
+                              >
+                                <template #reference>
+                                  <button
+                                    @click="generateRandomID('study')"
+                                    class="rounded-md px-3 hover:bg-slate-100"
+                                  >
+                                    <Icon icon="mdi:magic" />
+                                  </button>
+                                </template>
+                              </el-popover>
+                            </div>
                             <span class="mt-2 text-xs text-slate-600">
                               This identifier should be unique to the ImmPort workspace to which the
                               data will be uploaded.
@@ -97,7 +116,7 @@
                               placeholder="Decoding the Protein Composition of Whole Nucleosomes with Nuc-MS"
                               maxlength="250"
                               show-word-limit
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Serves as the working title for the study.
                             </span>
@@ -111,7 +130,7 @@
                               placeholder="Decoding the Protein Composition of Whole Nucleosomes with Nuc-MS"
                               maxlength="500"
                               show-word-limit
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Serves as the working title for the study.
                             </span>
@@ -127,7 +146,7 @@
                               maxlength="4000"
                               show-word-limit
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Thorough description of the goals and objectives of this study. A
                               working abstract from the associated manuscript may be suitable.
@@ -143,7 +162,7 @@
                               type="textarea"
                               rows="5"
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Thorough description of the goals and objectives of this study. A
                               working abstract from the associated manuscript may be suitable.
@@ -159,7 +178,7 @@
                               placeholder="Univeristy of California, San Francisco"
                               maxlength="250"
                               show-word-limit
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               The organization that provides funding and support for the study.
                             </span>
@@ -209,7 +228,7 @@
                               maxlength="1000"
                               show-word-limit
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Thorough description of the goals and objectives of this study. A
                               working abstract from the associated manuscript may be suitable.
@@ -227,7 +246,7 @@
                               v-model="step2Form.endpoints"
                               type="textarea"
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               Thorough description of the goals and objectives of this study. A
                               working abstract from the associated manuscript may be suitable.
@@ -285,7 +304,7 @@
                               maxlength="4000"
                               show-word-limit
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               The proposition(s) being tested by the research study .
                             </span>
@@ -299,7 +318,7 @@
                               type="textarea"
                               rows="5"
                               placeholder="Goblet cells are considered as a homogeneous population in the intestinal epithelium. We used single cell RNA sequencing (scRNA-seq) to analyze the diversity of GCs in the intestine."
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               The goals of the research study.
                             </span>
@@ -322,7 +341,7 @@
                               placeholder="20"
                               maxlength="40"
                               show-word-limit
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               The minimum age of the subjects enrolled in the study.
                             </span>
@@ -336,7 +355,7 @@
                               placeholder="20"
                               maxlength="40"
                               show-word-limit
-                            ></el-input>
+                            />
                             <span class="mt-2 text-xs text-slate-600">
                               The maximum age of the subjects enrolled in the study.
                             </span>
@@ -496,7 +515,7 @@
                                     show-word-limit
                                   />
                                   <span class="mt-1 text-xs text-slate-600">
-                                    THe arm or cohort name is an alternate identifier that is
+                                    The arm or cohort name is an alternate identifier that is
                                     visible when the study is shared.
                                   </span>
                                 </div>
@@ -562,14 +581,33 @@
                         <div w-full>
                           <p class="mb-3 text-sm">Please enter a new ID for this group.</p>
 
-                          <el-input
-                            v-model="armID"
-                            clearable
-                            class="w-full"
-                            placeholder="Enter a field name"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="armID"
+                              size="large"
+                              clearable
+                              class="w-full"
+                              placeholder="arm_i5nUpTcaZ"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('arm-cohort')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </edit-prompt>
 
@@ -601,15 +639,33 @@
                             be unique within your ImmPort workspace.
                           </p>
 
-                          <el-input
-                            v-model="armID"
-                            clearable
-                            size="large"
-                            class="w-full"
-                            placeholder="Enter a ID for this Arm/Cohort/Subject group"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="armID"
+                              clearable
+                              size="large"
+                              class="w-full"
+                              placeholder="Enter a ID for this Arm/Cohort/Subject group"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('arm-cohort')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </add-prompt>
                     </div>
@@ -865,7 +921,7 @@
                                     show-word-limit
                                   />
                                   <span class="mt-1 text-xs text-slate-600">
-                                    The role the personnel plat in the study as defined by the
+                                    The role the personnel plays in the study as defined by the
                                     research team.
                                   </span>
                                 </div>
@@ -890,7 +946,7 @@
                                     />
                                   </el-select>
 
-                                  <span class="mt-1 text-xs text-slate-600"> Some text here. </span>
+                                  <span class="mt-1 text-xs text-slate-600"> </span>
                                 </div>
                               </div>
                             </el-collapse-transition>
@@ -908,14 +964,33 @@
                         <div w-full>
                           <p class="mb-3 text-sm">Please enter a new ID for this person.</p>
 
-                          <el-input
-                            v-model="personnelID"
-                            clearable
-                            class="w-full"
-                            placeholder="Enter a field name"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="personnelID"
+                              clearable
+                              size="large"
+                              class="w-full"
+                              placeholder="Enter a ID for this person"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('personnel')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </edit-prompt>
 
@@ -948,15 +1023,33 @@
                             your ImmPort workspace.
                           </p>
 
-                          <el-input
-                            v-model="personnelID"
-                            clearable
-                            size="large"
-                            class="w-full"
-                            placeholder="personnel_1056_2"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="personnelID"
+                              clearable
+                              size="large"
+                              class="w-full"
+                              placeholder="personnel_1056_2"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('personnel')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </add-prompt>
                     </div>
@@ -1166,14 +1259,33 @@
                         <div w-full>
                           <p class="mb-3 text-sm">Please enter a new ID for this visit.</p>
 
-                          <el-input
-                            v-model="visitID"
-                            clearable
-                            class="w-full"
-                            placeholder="plannedvisit_1056_2"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="visitID"
+                              clearable
+                              size="large"
+                              class="w-full"
+                              placeholder="plannedvisit_1056_2"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('plannedvisit')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </edit-prompt>
 
@@ -1206,15 +1318,33 @@
                             your ImmPort workspace.
                           </p>
 
-                          <el-input
-                            v-model="visitID"
-                            clearable
-                            size="large"
-                            class="w-full"
-                            placeholder="plannedvisit_1056_2"
-                            maxlength="100"
-                            show-word-limit
-                          />
+                          <div class="flex w-full space-x-2">
+                            <el-input
+                              v-model="visitID"
+                              clearable
+                              size="large"
+                              class="w-full"
+                              placeholder="plannedvisit_1056_2"
+                              maxlength="100"
+                              show-word-limit
+                            />
+
+                            <el-popover
+                              placement="top-start"
+                              :width="180"
+                              trigger="hover"
+                              content="Automatically generate a random ID."
+                            >
+                              <template #reference>
+                                <button
+                                  @click="generateRandomID('plannedvisit')"
+                                  class="rounded-md px-3 hover:bg-slate-100"
+                                >
+                                  <Icon icon="mdi:magic" />
+                                </button>
+                              </template>
+                            </el-popover>
+                          </div>
                         </div>
                       </add-prompt>
                     </div>
@@ -1282,7 +1412,7 @@
                                       class="h-[40px]"
                                       maxlength="100"
                                       show-word-limit
-                                    ></el-input>
+                                    />
 
                                     <div class="mx-1"></div>
 
@@ -1306,7 +1436,7 @@
                                       placeholder="Criterion"
                                       maxlength="750"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       The criterion describes the parameter used to decide if a
                                       subject may be enrolled in a study.
@@ -1412,20 +1542,43 @@
                                 <div class="flex w-11/12 flex-col px-2">
                                   <div class="flex w-full flex-row justify-between">
                                     <div class="flex w-full flex-col">
-                                      <el-input
-                                        v-model="element.userDefinedID"
-                                        type="text"
-                                        placeholder="User Defined ID"
-                                        class="h-[40px]"
-                                        maxlength="100"
-                                        show-word-limit
-                                      ></el-input>
+                                      <div class="flex w-full space-x-1">
+                                        <el-input
+                                          v-model="element.userDefinedID"
+                                          type="text"
+                                          placeholder="User Defined ID"
+                                          class="h-[40px]"
+                                          maxlength="100"
+                                          show-word-limit
+                                        />
+
+                                        <el-popover
+                                          placement="top-start"
+                                          :width="180"
+                                          trigger="hover"
+                                          content="Automatically generate a random ID."
+                                        >
+                                          <template #reference>
+                                            <button
+                                              @click="
+                                                () =>
+                                                  (element.userDefinedID =
+                                                    generateRandomID('protocol'))
+                                              "
+                                              class="rounded-md px-3 hover:bg-slate-100"
+                                            >
+                                              <Icon icon="mdi:magic" />
+                                            </button>
+                                          </template>
+                                        </el-popover>
+                                      </div>
+
                                       <span class="mt-1 text-xs text-gray-400">
                                         Should be unique across your ImmPort workspace.
                                       </span>
                                     </div>
 
-                                    <div class="mx-1"></div>
+                                    <div class="mx-3"></div>
 
                                     <el-select
                                       v-model="element.type"
@@ -1451,7 +1604,7 @@
                                       placeholder="Name"
                                       maxlength="250"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       The protocol name is an alternate identifier that is visible
                                       when the protocol is shared.
@@ -1468,7 +1621,7 @@
                                       rows="3"
                                       maxlength="4000"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       The protocol summary describes the purpose of the protocol.
                                     </span>
@@ -1638,7 +1791,7 @@
                                       rows="3"
                                       maxlength="4000"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       The protocol summary describes the purpose of the protocol.
                                     </span>
@@ -1705,7 +1858,7 @@
                                       placeholder="Clinicaltrials.gov"
                                       maxlength="500"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       Provide the name of the website to which the link refers.
                                     </span>
@@ -1720,7 +1873,7 @@
                                       placeholder="https://clinicaltrials.gov/ct2/show/NCT04505795"
                                       maxlength="2000"
                                       show-word-limit
-                                    ></el-input>
+                                    />
                                     <span class="mt-1 text-xs text-gray-400">
                                       Provide the website URL.
                                     </span>
@@ -2138,6 +2291,7 @@ import { v4 as uuidv4 } from "uuid";
 import draggable from "vuedraggable";
 // import validator from "validator";
 import axios from "axios";
+import { nanoid } from "nanoid";
 
 import { useDatasetsStore } from "@/store/datasets";
 import { useTokenStore } from "@/store/access.js";
@@ -2159,7 +2313,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 9,
+      currentStep: 1,
       totalSteps: 9,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -2305,7 +2459,7 @@ export default {
         inexclusions: [
           {
             userDefinedID: "test",
-            criterion: "test description",
+            criterion: "test description2",
             criterionCategory: "Inclusion",
             id: "362e293d-1c61-4e9c-b64a-d7e897dbe029",
           },
@@ -2646,6 +2800,28 @@ export default {
       });
     },
 
+    generateRandomID(prefix) {
+      const randomID = `${prefix}_${nanoid(5)}`;
+
+      switch (prefix) {
+        case "study":
+          this.step1Form.studyID = randomID;
+          break;
+        case "arm-cohort":
+          this.armID = randomID;
+          break;
+        case "personnel":
+          this.personnelID = randomID;
+          break;
+        case "plannedvisit":
+          this.visitID = randomID;
+          break;
+        default:
+          break;
+      }
+
+      return randomID;
+    },
     addIds(array) {
       array.forEach((element) => {
         element.id = uuidv4();

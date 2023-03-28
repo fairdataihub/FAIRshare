@@ -169,7 +169,7 @@
         >
           <el-checkbox-group v-model="datasetForm.immunologyDataTypes" class="checkbox-group">
             <div class="flex gap-8 transition-all">
-              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+              <el-popover placement="top" title="" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
                   <el-checkbox
                     border
@@ -190,7 +190,7 @@
                 </span>
               </el-popover>
 
-              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+              <el-popover placement="top" title="" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
                   <el-checkbox
                     border
@@ -211,7 +211,7 @@
                 </span>
               </el-popover>
 
-              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+              <el-popover placement="top" title="" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
                   <el-checkbox
                     border
@@ -231,7 +231,7 @@
                 </span>
               </el-popover>
 
-              <el-popover placement="bottom" title="" :width="400" :hide-after="0" trigger="hover">
+              <el-popover placement="top" title="" :width="400" :hide-after="0" trigger="hover">
                 <template #reference>
                   <el-checkbox
                     border
