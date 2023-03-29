@@ -128,7 +128,7 @@ export default {
       workflowID: this.$route.params.workflowID,
       workflow: {},
       zenodoToken: "",
-      published: true,
+      published: false,
       zenodoDatasetID: "",
     };
   },

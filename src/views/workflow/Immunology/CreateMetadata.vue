@@ -2334,12 +2334,12 @@ export default {
 
       generateImmunologyMetadata: "Yes",
       step1Form: {
-        studyID: "study",
-        briefTitle: "briefTitle",
-        officialTitle: "officialTitle",
-        briefDescription: "briefDescription",
-        description: "description",
-        sponsoringOrganization: "someOrg",
+        studyID: "",
+        briefTitle: "",
+        officialTitle: "",
+        briefDescription: "",
+        description: "",
+        sponsoringOrganization: "",
       },
       step1FormRules: {
         studyID: [
@@ -2379,17 +2379,17 @@ export default {
         ],
       },
       step2Form: {
-        researchFocus: "Development",
-        condition: ["alcohol use disorder", "alcohol dependence"],
-        interventionAgent: "ia",
-        endpoints: "end",
-        hypothesis: "hype",
-        objectives: "obj",
-        ageUnit: "Years",
-        minimumAge: "20",
-        maximumAge: "30",
-        actualStartDate: "2023-03-14T07:00:00.000Z",
-        targetEnrollment: 10,
+        researchFocus: "",
+        condition: [],
+        interventionAgent: "",
+        endpoints: "",
+        hypothesis: "",
+        objectives: "",
+        ageUnit: "",
+        minimumAge: "",
+        maximumAge: "",
+        actualStartDate: "",
+        targetEnrollment: 0,
       },
       step2FormRules: {
         endpoints: [
@@ -2414,56 +2414,11 @@ export default {
           },
         ],
       },
-      step3Form: [
-        {
-          id: "f6c67289-949c-498c-8df4-a10da3c6dad9",
-          armID: "test",
-          name: "ar",
-          description: "asddf",
-          type: "No Intervention Arm",
-          isExpanded: true,
-        },
-      ],
-      step4Form: [
-        {
-          id: "44b71c40-343e-492f-a943-cbae29b0095c",
-          personnelID: "test",
-          firstName: "steven",
-          lastName: "strange",
-          suffix: "",
-          honorific: "",
-          orcid: "",
-          organization: "ucsf",
-          email: "asd@amd.vef",
-          titleInStudy: "pi",
-          roleInStudy: "Investigator",
-          siteName: "sn",
-          isExpanded: true,
-          type: "Investigator",
-        },
-      ],
-      step5Form: [
-        {
-          id: "64e38224-0cc5-42a1-b0e4-ee13336a90fc",
-          visitID: "test",
-          orderNumber: 3,
-          minStartDay: 5,
-          maxStartDay: 7,
-          startRule: "sr",
-          endRule: "er",
-          isExpanded: true,
-          name: "tasx",
-        },
-      ],
+      step3Form: [],
+      step4Form: [],
+      step5Form: [],
       step6Form: {
-        inexclusions: [
-          {
-            userDefinedID: "test",
-            criterion: "test description2",
-            criterionCategory: "Inclusion",
-            id: "362e293d-1c61-4e9c-b64a-d7e897dbe029",
-          },
-        ],
+        inexclusions: [],
       },
       step6FormRules: {
         inexclusions: [
@@ -2475,16 +2430,7 @@ export default {
         ],
       },
       step7Form: {
-        protocols: [
-          {
-            userDefinedID: "test",
-            name: "test",
-            description: "test",
-            type: "Clinical",
-            filePath: "C:\\Users\\dev\\Desktop\\temp2\\codemeta.json",
-            id: "a799a5ed-a33c-4bff-a04b-a1090809b4b3",
-          },
-        ],
+        protocols: [],
       },
       step7FormRules: {
         protocols: [
@@ -2496,17 +2442,7 @@ export default {
         ],
       },
       step8Form: {
-        studyFiles: [
-          {
-            description: "test",
-            type: "Assesment Results",
-            filePaths: [
-              "C:\\Users\\dev\\Desktop\\temp2\\01d3328c-582d-41ff-a8d3-cf563ec2b97a.soda",
-              "C:\\Users\\dev\\Desktop\\temp2\\CITATION.cff",
-            ],
-            id: "0cd1a639-0ebb-4c9c-b766-152a2af5925f",
-          },
-        ],
+        studyFiles: [],
         studyLinks: [],
       },
       step8FormRules: {
@@ -2525,20 +2461,7 @@ export default {
           },
         ],
       },
-      step9Form: [
-        {
-          id: "f6c67289-949c-498c-8df4-a10da3c6dad9",
-          publicationID: "test",
-          doi: "",
-          title: "",
-          journal: "",
-          date: "",
-          issue: "",
-          pages: "",
-          authors: "",
-          isExpanded: true,
-        },
-      ],
+      step9Form: [],
 
       invalidStatus: {},
       showSaving: false,
