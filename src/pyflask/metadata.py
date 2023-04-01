@@ -4,6 +4,7 @@ import os
 import csv
 import shutil
 import datetime
+
 import xlsxwriter
 import yaml
 
@@ -232,7 +233,7 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             virtual_metadata["study"] = {}
 
             row_content = ["User Defined ID", immunology_data["studyID"]]
-            virtual_metadata["study"] = {"User Defined ID": immunology_data["studyID"]}
+            virtual_metadata["study"]["User Defined ID"] = immunology_data["briefTitle"]
             basic_study_design.writerow(row_content)
 
             row_content = ["Brief Title", immunology_data["briefTitle"]]
@@ -278,32 +279,58 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             virtual_metadata["study"]["Age Unit"] = immunology_data["ageUnit"]
             basic_study_design.writerow(row_content)
 
-            row_content = ["Actual Start Date", immunology_data["actualStartDate"]]
-            virtual_metadata["study"]["Actual Start Date"] = immunology_data[
-                "actualStartDate"
+            row_content = [
+                "Actual Start Date",
+                immunology_data.get("actualStartDate", None),
             ]
+            virtual_metadata["study"]["Actual Start Date"] = immunology_data.get(
+                "actualStartDate", None
+            )
             basic_study_design.writerow(row_content)
 
-            row_content = ["Hypothesis", immunology_data["hypothesis"]]
-            virtual_metadata["study"]["Hypothesis"] = immunology_data["hypothesis"]
-            basic_study_design.writerow(row_content)
-
-            row_content = ["Objectives", immunology_data["objectives"]]
-            virtual_metadata["study"]["Objectives"] = immunology_data["objectives"]
-            basic_study_design.writerow(row_content)
-
-            row_content = ["Target Enrollment", immunology_data["targetEnrollment"]]
-            virtual_metadata["study"]["Target Enrollment"] = immunology_data[
-                "targetEnrollment"
+            row_content = [
+                "Hypothesis",
+                immunology_data.get("hypothesis", None),
             ]
+            virtual_metadata["study"]["Hypothesis"] = immunology_data.get(
+                "hypothesis", None
+            )
             basic_study_design.writerow(row_content)
 
-            row_content = ["Minimum Age", immunology_data["minimumAge"]]
-            virtual_metadata["study"]["Minimum Age"] = immunology_data["minimumAge"]
+            row_content = [
+                "Objectives",
+                immunology_data.get("objectives", None),
+            ]
+            virtual_metadata["study"]["Objectives"] = immunology_data.get(
+                "objectives", None
+            )
             basic_study_design.writerow(row_content)
 
-            row_content = ["Maximum Age", immunology_data["maximumAge"]]
-            virtual_metadata["study"]["Maximum Age"] = immunology_data["maximumAge"]
+            row_content = [
+                "Target Enrollment",
+                immunology_data.get("targetEnrollment", None),
+            ]
+            virtual_metadata["study"]["Target Enrollment"] = immunology_data.get(
+                "targetEnrollment", None
+            )
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "Minimum Age",
+                immunology_data.get("minimumAge", None),
+            ]
+            virtual_metadata["study"]["Minimum Age"] = immunology_data.get(
+                "minimumAge", None
+            )
+            basic_study_design.writerow(row_content)
+
+            row_content = [
+                "Maximum Age",
+                immunology_data.get("maximumAge", None),
+            ]
+            virtual_metadata["study"]["Maximum Age"] = immunology_data.get(
+                "maximumAge", None
+            )
             basic_study_design.writerow(row_content)
 
             row_content = []
@@ -313,7 +340,10 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             basic_study_design.writerow(row_content)
             virtual_metadata["study_categorization"] = {}
 
-            row_content = ["Research Focus", immunology_data["researchFocus"]]
+            row_content = [
+                "Research Focus",
+                immunology_data["researchFocus"],
+            ]
             virtual_metadata["study_categorization"][
                 "Research Focus"
             ] = immunology_data["researchFocus"]
@@ -330,9 +360,10 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             virtual_metadata["study_2_condition_or_disease"]["Condition Reported"] = []
             for condition in immunology_data["condition"]:
                 row_content.append(condition)
-            virtual_metadata["study_2_condition_or_disease"][
-                "Condition Reported"
-            ].append(condition)
+                virtual_metadata["study_2_condition_or_disease"][
+                    "Condition Reported"
+                ].append(condition)
+
             basic_study_design.writerow(row_content)
 
             row_content = []
@@ -387,12 +418,12 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             for person in immunology_data["studyPersonnel"]:
                 row_content = [
                     person["personnelID"],
-                    person["honorific"],
+                    person.get("honorific", None),
                     person["lastName"],
                     person["firstName"],
-                    person["suffix"],
+                    person.get("suffix", None),
                     person["organization"],
-                    person["orcid"],
+                    person.get("orcid", None),
                     person["email"],
                     person["titleInStudy"],
                     person["roleInStudy"],
@@ -401,12 +432,12 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                 virtual_metadata["study_personnel"].append(
                     {
                         "User Defined ID": person["personnelID"],
-                        "Honorific": person["honorific"],
+                        "Honorific": person.get("honorific", None),
                         "Last Name": person["lastName"],
                         "First Name": person["firstName"],
-                        "Suffixes": person["suffix"],
+                        "Suffixes": person.get("suffix", None),
                         "Organization": person["organization"],
-                        "ORCID ID": person["orcid"],
+                        "ORCID ID": person.get("orcid", None),
                         "Email": person["email"],
                         "Title In Study": person["titleInStudy"],
                         "Role in Study": person["roleInStudy"],
@@ -439,9 +470,9 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                     visit["name"],
                     visit["orderNumber"],
                     visit["minStartDay"],
-                    visit["maxStartDay"],
-                    visit["startRule"],
-                    visit["endRule"],
+                    visit.get("maxStartDay", visit["minStartDay"]),
+                    visit.get("startRule", None),
+                    visit.get("endRule", None),
                 ]
                 virtual_metadata["planned_visit"].append(
                     {
@@ -449,9 +480,9 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                         "Name": visit["name"],
                         "Order Number": visit["orderNumber"],
                         "Min Start Day": visit["minStartDay"],
-                        "Max Start Day": visit["maxStartDay"],
-                        "Start Rule": visit["startRule"],
-                        "End Rule": visit["endRule"],
+                        "Max Start Day": visit.get("maxStartDay", visit["minStartDay"]),
+                        "Start Rule": visit.get("startRule", None),
+                        "End Rule": visit.get("endRule", None),
                     }
                 )
                 basic_study_design.writerow(row_content)
@@ -496,9 +527,9 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             virtual_metadata["study_2_protocol"]["Protocol ID"] = []
             for protocol in immunology_data["protocols"]:
                 row_content.append(protocol["userDefinedID"])
-            virtual_metadata["study_2_protocol"]["Protocol ID"].append(
-                protocol["userDefinedID"]
-            )
+                virtual_metadata["study_2_protocol"]["Protocol ID"].append(
+                    protocol["userDefinedID"]
+                )
             basic_study_design.writerow(row_content)
 
             row_content = []
@@ -577,37 +608,41 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
             basic_study_design.writerow(row_content)
 
             for publication in immunology_data["studyPublications"]:
-                # date is in format YYYY-MM-DDTHH:MM:SS.000Z
-                date = publication["date"]
+                year = None
+                month = None
 
-                year = date[:4]
-                month = date[5:7]
+                if "date" in publication:
+                    # date is in format YYYY-MM-DDTHH:MM:SS.000Z
+                    date = publication["date"]
 
-                # convert month to month name
-                month = datetime.datetime.strptime(month, "%m").strftime("%B")
+                    year = date[:4]
+                    month = date[5:7]
+
+                    # convert month to month name
+                    month = datetime.datetime.strptime(month, "%m").strftime("%B")
 
                 row_content = [
                     publication["publicationID"],
-                    publication["doi"],
-                    publication["title"],
-                    publication["journal"],
+                    publication.get("doi", None),
+                    publication.get("title", None),
+                    publication.get("journal", None),
                     year,
                     month,
-                    publication["issue"],
-                    publication["pages"],
-                    publication["authors"],
+                    publication.get("issue", None),
+                    publication.get("pages", None),
+                    publication.get("authors", None),
                 ]
                 virtual_metadata["study_pubmed"].append(
                     {
                         "PubMed ID": publication["publicationID"],
-                        "DOI": publication["doi"],
-                        "Title": publication["title"],
-                        "Journal": publication["journal"],
+                        "DOI": publication.get("doi", None),
+                        "Title": publication.get("title", None),
+                        "Journal": publication.get("journal", None),
                         "Year": year,
                         "Month": month,
-                        "Issue": publication["issue"],
-                        "Pages": publication["pages"],
-                        "Authors": publication["authors"],
+                        "Issue": publication.get("issue", None),
+                        "Pages": publication.get("pages", None),
+                        "Authors": publication.get("authors", None),
                     }
                 )
                 basic_study_design.writerow(row_content)
@@ -677,8 +712,8 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                     protocol["userDefinedID"],
                     file_name,
                     protocol["name"],
-                    protocol["description"],
-                    protocol["type"],
+                    protocol.get("description", None),
+                    protocol.get("type", None),
                 ]
                 virtual_metadata["protocols"].append(
                     {
@@ -686,8 +721,8 @@ def createImmunologyMetadata(immunology_data, folder_path, virtual_file):
                         "User Defined ID": protocol["userDefinedID"],
                         "File Name": file_name,
                         "Name": protocol["name"],
-                        "Description": protocol["description"],
-                        "Type": protocol["type"],
+                        "Description": protocol.get("description", None),
+                        "Type": protocol.get("type", None),
                     }
                 )
                 basic_study_protocols.writerow(row_content)

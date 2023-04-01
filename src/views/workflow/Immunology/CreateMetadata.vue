@@ -946,7 +946,10 @@
                                     />
                                   </el-select>
 
-                                  <span class="mt-1 text-xs text-slate-600"> </span>
+                                  <span class="mt-1 text-xs text-slate-600">
+                                    The ImmPort display will show the personnel listed as 'Principal
+                                    Investigator' in the study
+                                  </span>
                                 </div>
                               </div>
                             </el-collapse-transition>
@@ -2313,7 +2316,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 1,
+      currentStep: 2,
       totalSteps: 9,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,
@@ -2410,6 +2413,13 @@ export default {
           {
             required: true,
             message: "Please select the age unit",
+            trigger: "blur",
+          },
+        ],
+        condition: [
+          {
+            required: true,
+            message: "Please select the condition",
             trigger: "blur",
           },
         ],
@@ -2868,6 +2878,16 @@ export default {
           this.$message.error("Please provide a name for all groups.");
           return false;
         }
+
+        if (group.description.trim() === "") {
+          this.$message.error("Please provide a description for all groups.");
+          return false;
+        }
+
+        if (group.type.trim() === "") {
+          this.$message.error("Please provide a type for all groups.");
+          return false;
+        }
       }
 
       return true;
@@ -2923,7 +2943,7 @@ export default {
 
     async checkPersonnelEntryValidity() {
       if (this.step4Form.length === 0) {
-        this.$message.error("Please add at least one arm group.");
+        this.$message.error("Please add at least one person from the study.");
         return false;
       }
 
@@ -3038,6 +3058,18 @@ export default {
           this.$message.error("Please provide a name for all planned visits.");
           return false;
         }
+
+        if (visit.orderNumber === 0) {
+          this.$message.error("Please provide an order number for all planned visits.");
+          return false;
+        }
+
+        if (visit.minStartDay === 0) {
+          this.$message.error(
+            "Please provide the minimum start day for a visit as defined in the study schedule for all planned visits."
+          );
+          return false;
+        }
       }
 
       return true;
@@ -3109,6 +3141,20 @@ export default {
             callback(new Error("Please provide a unique ID for all entries"));
             return;
           }
+
+          //check if criterion is not empty
+          if (item.criterion.trim() === "") {
+            this.invalidStatus.inexclusion = true;
+            callback(new Error("Please provide a criterion for all entries"));
+            return;
+          }
+
+          //check if criterion category is not empty
+          if (item.criterionCategory.trim() === "") {
+            this.invalidStatus.inexclusion = true;
+            callback(new Error("Please provide a criterion category for all entries"));
+            return;
+          }
         }
       } else {
         this.invalidStatus.inexclusion = true;
@@ -3147,6 +3193,13 @@ export default {
           if (value.filter((x) => x.userDefinedID === item.userDefinedID).length > 1) {
             this.invalidStatus.protocols = true;
             callback(new Error("Please provide a unique ID for all entries"));
+            return;
+          }
+
+          // check if name is present
+          if (item.name.trim() === "") {
+            this.invalidStatus.protocols = true;
+            callback(new Error("Please provide a name for all entries"));
             return;
           }
         }
