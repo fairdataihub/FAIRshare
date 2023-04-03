@@ -500,9 +500,9 @@ export default {
 
       this.tableDataRecord = [];
       this.citationDataRecord = [];
-      this.otherMetadataRecord = [];
       this.immunologyMetadataRecod = [];
       this.immunologyProtocolMetadataRecord = [];
+      this.otherMetadataRecord = [];
 
       if (this.workflow.generateCodeMeta) {
         this.tableData = await this.createCodeMetadataFile();
@@ -609,13 +609,14 @@ export default {
       }
 
       this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
-      this.immunologyMetadata = this.jsonToTableDataRecursive(this.immunologyMetadata, 1, "ROOT");
 
+      this.immunologyMetadata = this.jsonToTableDataRecursive(this.immunologyMetadata, 1, "ROOT");
       this.immunologyProtocolMetadata = this.jsonToTableDataRecursive(
         this.immunologyProtocolMetadata,
         1,
         "ROOT"
       );
+
       this.otherMetadata = this.jsonToTableDataRecursive(this.otherMetadata, 1, "ROOT");
 
       this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");

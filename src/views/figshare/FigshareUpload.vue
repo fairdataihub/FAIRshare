@@ -97,7 +97,9 @@ export default {
       alertMessage: "",
       overwriteCodeMeta: false,
       overwriteOtherMeta: false,
+      overwriteImmunologyMeta: false,
       licenseOptions: figshareMetadataOptions.licenseOptions,
+      devStatus: "development",
     };
   },
   computed: {
@@ -373,6 +375,24 @@ export default {
         });
       return response;
     },
+    async createImmunologyMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: false,
+        })
+        .then((response) => {
+          this.$track("Metadata", "Create immunology metadata", "success");
+          return response.data;
+        })
+        .catch((error) => {
+          this.$track("Metadata", "Create immunology metadata", "failed");
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
     async createOtherMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
@@ -575,7 +595,7 @@ export default {
         }
       }
 
-      this.percentage = 15;
+      this.percentage = 11;
       this.indeterminate = false;
 
       if (this.workflow.generateOtherMetadata) {
@@ -601,10 +621,51 @@ export default {
         }
       }
 
-      this.percentage = 18;
+      this.percentage = 12;
       this.indeterminate = false;
 
       await this.sleep(300);
+
+      /**
+       * TODO: might need to split this step into multiple if needed
+       */
+      if (this.workflow.generateImmunologyMetadata) {
+        if (
+          "metadata" in response &&
+          "identifier" in this.dataset.data.Immunology.questions &&
+          this.dataset.data.Immunology.questions.identifier == ""
+        ) {
+          this.dataset.data.Immunology.questions.identifier = response.metadata.prereserve_doi.doi;
+          this.overwriteImmunologyMeta = true;
+        }
+
+        response = await this.createImmunologyMetadataFile();
+
+        if (response === "ERROR") {
+          this.alertMessage =
+            "There was an error with creating the required metadata files for your dataset";
+          return "FAIL";
+        } else {
+          this.statusMessage = "Created the immunology.json file in the target folder";
+
+          await this.datasetStore.updateCurrentDataset(this.dataset);
+          await this.datasetStore.syncDatasets();
+        }
+      }
+
+      this.percentage = 13;
+      this.indeterminate = false;
+
+      await this.sleep(300);
+
+      // if (this.devStatus === "development") {
+      //   this.statusMessage = "Development status is set to development, skipping upload to Zenodo";
+      //   return "SUCCESS";
+      // }
+
+      /**
+       * TODO: Check if this needs to be done for the immunology metadata
+       */
 
       if (this.workflow.generateCodeMeta) {
         if (this.codePresent) {
@@ -619,7 +680,7 @@ export default {
         }
       }
 
-      this.percentage = 20;
+      this.percentage = 14;
       this.indeterminate = false;
 
       await this.sleep(300);

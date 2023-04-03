@@ -2316,7 +2316,7 @@ export default {
     return {
       datasetStore: useDatasetsStore(),
       tokens: useTokenStore(),
-      currentStep: 2,
+      currentStep: 1,
       totalSteps: 9,
       pillTitles: ["Study", "Protocols", "Samples"],
       SaveLottieJSON,

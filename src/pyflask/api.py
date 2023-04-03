@@ -5,8 +5,9 @@ import os
 import sys
 
 import config
-from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
+from biotools import getBioToolsUserDetails, loginToBioTools, registerTool, validateTool
 from figshare import (
+    getFigshareUserDetails,
     createNewFigshareItem,
     deleteFigshareArticle,
     getFigshareFileUploadStatus,
@@ -193,7 +194,7 @@ class BioToolsUserDetails(Resource):
 
         token = args["token"]
 
-        return getUserDetails(token)
+        return getBioToolsUserDetails(token)
 
 
 @biotools.route("/tool/validate", endpoint="BioToolsValidate")
@@ -330,6 +331,31 @@ class CreateCitationCFF(Resource):
 ###############################################################################
 
 figshare = api.namespace("figshare", description="Figshare operations")
+
+
+@figshare.route("/user", endpoint="FigshareUserValidation")
+class FigshareUserValidation(Resource):
+    @figshare.doc(
+        responses={200: "Success"},
+        params={
+            "token": "Token of the account",
+        },
+    )
+    def get(self):
+        """Validate user details"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            "token",
+            type=str,
+            required=True,
+            location="args",
+        )
+        args = parser.parse_args()
+
+        token = args["token"]
+
+        return getFigshareUserDetails(token)
 
 
 @figshare.route("/item", endpoint="FigshareItem")

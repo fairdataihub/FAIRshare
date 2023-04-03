@@ -26,7 +26,7 @@ def loginToBioTools(username, password):
         raise e
 
 
-def getUserDetails(token):
+def getBioToolsUserDetails(token):
     # Get user details
 
     try:
