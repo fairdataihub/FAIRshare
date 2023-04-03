@@ -61,7 +61,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Study
+                        Study Information
                       </span>
                     </div>
                     <div class="p-4">
@@ -206,7 +206,7 @@
                   >
                     <div class="w-full bg-gray-100 px-4 py-2">
                       <span class="pointer-events-none text-lg font-semibold text-primary-600">
-                        Protocols
+                        Additional Study Information
                       </span>
                     </div>
                     <div class="p-4">
@@ -2735,6 +2735,10 @@ export default {
 
     generateRandomID(prefix) {
       const randomID = `${prefix}_${nanoid(5)}`;
+
+      /**
+       * * Protocol is handled directly in the template
+       */
 
       switch (prefix) {
         case "study":
