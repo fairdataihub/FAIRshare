@@ -110,7 +110,7 @@
     "@storybook/testing-library": "0.0.13",
     "@storybook/vue3": "6.5.16",
     "@tailwindcss/forms": "0.5.3",
-    "@tailwindcss/line-clamp": "0.4.2",
+    "@tailwindcss/line-clamp": "0.4.4",
     "@tailwindcss/typography": "0.5.9",
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-plugin-eslint": "5.0.8",
