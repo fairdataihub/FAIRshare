@@ -2788,7 +2788,16 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fairdataihub/config@2.2.1", "@fairdataihub/config@^2.1.0":
+"@fairdataihub/config@2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@fairdataihub/config/-/config-2.2.3.tgz#a265d13b33af24af313c447323fd6a2127e5dd62"
+  integrity sha512-SDn37zpHh84QfB1MaSeROnt3g061KfwK0xyqtDRNaAW40VkF9l9rzoNlOMVJVapDKFsOe4J90yAD5H32PoVctA==
+  dependencies:
+    "@fairdataihub/config" "^2.1.0"
+    "@semantic-release/git" "^10.0.1"
+    megasanjay-devmoji "^1.2.1"
+
+"@fairdataihub/config@^2.1.0":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@fairdataihub/config/-/config-2.2.1.tgz#81a5ab4727c0879ac88fa2de9f23a32b9271b703"
   integrity sha512-f9PCK7MhahyQB3yaSzbA5vOFOLPOZabZLc8J5rpg45bPI8um8q0nssknKmV2x1EGY9GJXzxD0AVs4YocZjjt+w==
