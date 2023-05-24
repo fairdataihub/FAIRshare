@@ -21198,14 +21198,14 @@ vue-inbrowser-compiler-independent-utils@^4.52.0:
   resolved "https://registry.yarnpkg.com/vue-inbrowser-compiler-independent-utils/-/vue-inbrowser-compiler-independent-utils-4.52.0.tgz#c40aefe12eef48d22157fd22cd2bf9b9f9ee9e9c"
   integrity sha512-r09DtBbHbCO/5Ns0UofB/orwX7pYaAJW12+c/cy4brTF06oeng6QbxX0XziiepMyf9E9q/lLa4gk8hlhmG4Zww==
 
-vue-loader@17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-17.0.1.tgz#c0ee8875e0610a0c2d13ba9b4d50a9c8442e7a3a"
-  integrity sha512-/OOyugJnImKCkAKrAvdsWMuwoCqGxWT5USLsjohzWbMgOwpA5wQmzQiLMzZd7DjhIfunzAGIApTOgIylz/kwcg==
+vue-loader@17.1.1:
+  version "17.1.1"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-17.1.1.tgz#546c85eb844f98653921c02e8b0b060ebea19bfb"
+  integrity sha512-qpqEVkKdrAsgyIBMHaiXurDeCuBWqRyKqg2GI4aG3NbggEls+BLqTZdqahbJJh7fm83sz+iz3gg6eDWdbNlG7Q==
   dependencies:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
-    loader-utils "^2.0.0"
+    watchpack "^2.4.0"
 
 vue-loader@^16.4.1:
   version "16.8.3"
