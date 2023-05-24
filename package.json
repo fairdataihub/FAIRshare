@@ -77,7 +77,7 @@
     "lodash": "4.17.21",
     "marked": "4.2.12",
     "mousetrap": "1.6.5",
-    "pinia": "2.0.32",
+    "pinia": "2.0.35",
     "ps-tree": "1.2.0",
     "semver": "7.3.8",
     "uniqid": "5.4.0",
