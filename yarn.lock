@@ -14833,10 +14833,10 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-lottie-web@^5.8.1:
-  version "5.9.6"
-  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.9.6.tgz#62ae68563355d3e04aa75d53dec3dd4bea0e57c9"
-  integrity sha512-JFs7KsHwflugH5qIXBpB4905yC1Sub2MZWtl/elvO/QC6qj1ApqbUZJyjzJseJUtVpgiDaXQLjBlIJGS7UUUXA==
+lottie-web@5.11.0:
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.11.0.tgz#04bb9fd6cdfbb10e586985dd666de6c727619d95"
+  integrity sha512-9vSt0AtdOH98GKDXwD5LPfFg9Pcmxt5+1BllAbudKM5iqPxpJnJUfuGaP45OyudDrESCOBgsjnntVUTygBNlzw==
 
 loud-rejection@^1.0.0:
   version "1.6.0"
@@ -21250,13 +21250,13 @@ vue-toastification@2.0.0-rc.5:
   resolved "https://registry.yarnpkg.com/vue-toastification/-/vue-toastification-2.0.0-rc.5.tgz#92798604d806ae473cfb76ed776fae294280f8f8"
   integrity sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA==
 
-vue3-lottie@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.4.0.tgz#84fecd68d22beae808a9cc0ee89112435347e242"
-  integrity sha512-arNBADu3vW+1Lf+Pw32mU9T6X7c1bMn1tBvJ0/uo+W0G/0UxHyCwoXzyYIKZWB0WoeEvdo5x7HCf8VH0J7rLsw==
+vue3-lottie@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.7.0.tgz#b9f591bb1990eca762a6195f5d49259dac57f7e2"
+  integrity sha512-6vblrGFQxRP1bqd5Lfg+/g/kDH7OL5dQMxU9xYORSsTC7NfHXOjebhYrIYOlRodtA5/zfWMkG+3+sIR7wjaIXw==
   dependencies:
-    lodash "^4.17.21"
-    lottie-web "^5.8.1"
+    lodash-es "^4.17.21"
+    lottie-web "5.11.0"
 
 vue3-popper@1.5.0:
   version "1.5.0"
