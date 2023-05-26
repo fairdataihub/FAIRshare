@@ -13045,10 +13045,10 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-humanparser@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/humanparser/-/humanparser-2.6.0.tgz#716ab4e24700ac27374577135e19edae79c8fc6f"
-  integrity sha512-zl7UM7dY/KKe4wlJ6h5fDumzVOCt5SVzPBtMf46r+eyAcjs2ucjGk/lFNT2dy+ZgTh8/hsZMwN2Wjb2Kjfgkgw==
+humanparser@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/humanparser/-/humanparser-2.7.0.tgz#cc017c8bf7f1dad36330a5edfd760c941c9955fd"
+  integrity sha512-SyuUACd48ey150QUZHVPMcGZwbn48naoJCN80LVA6RHZ5i7iQO9FcXvsOpqi2DEGGtymyp+SenaqaGQ3ik7dvA==
 
 husky@8.0.3:
   version "8.0.3"
