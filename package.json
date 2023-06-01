@@ -139,7 +139,7 @@
     "gulp-rename": "2.0.0",
     "husky": "8.0.3",
     "lint-staged": "13.2.2",
-    "postcss": "8.4.23",
+    "postcss": "8.4.24",
     "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "0.3.0",
     "pretty": "2.0.0",
