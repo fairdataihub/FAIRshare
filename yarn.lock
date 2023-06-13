@@ -3774,15 +3774,15 @@
     luxon "^3.3.0"
     node-fetch "^2.6.11"
 
-"@renovatebot/pep440@2.1.15":
-  version "2.1.15"
-  resolved "https://registry.yarnpkg.com/@renovatebot/pep440/-/pep440-2.1.15.tgz#b481ec1a9f2782debd8f3c787999529a46157019"
-  integrity sha512-zJQ6ZLzgD3HsyyBLnDiviimxfripKHzPYmRqgIHb9Ettre3ivrkaz6F1zbeowf0kRBxB8rh8qit0Ftn4oBsg+w==
+"@renovatebot/pep440@2.1.16":
+  version "2.1.16"
+  resolved "https://registry.yarnpkg.com/@renovatebot/pep440/-/pep440-2.1.16.tgz#952940991a51240e9c15b2dfd4f903c7f1c81c01"
+  integrity sha512-Zuiw9Zaa4b/fZ0+Aw/fu2eJw+U+9To5dsx45DOWWa4jh7BFW1RGKZbJaGBZJou1iLI6Ao7d3ICcQlUsTRsmmbQ==
 
-"@renovatebot/ruby-semver@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-3.0.1.tgz#968c7dcf8b46a97df15aeca393fe2b2cae564d26"
-  integrity sha512-sbNb8/J/bI8ZYFrgwpEnYAZl8WDrB9OvEPbnEw4hakAMNLJ4H9ByrzywmJa+xqmPXcF4rOqFqqURMiLZkBXwtQ==
+"@renovatebot/ruby-semver@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@renovatebot/ruby-semver/-/ruby-semver-3.0.2.tgz#1c83c4c3c39fafbe1f23e4b1c008ecdc4833a6cc"
+  integrity sha512-GwmcQThzOQGAn/iiEBhavikp0R9jOT0MWRwTcZQXM89Ghl0HUZUf8R9XjckPYT+WvZL6qgAB4CA/Ydfegh079g==
 
 "@seald-io/binary-search-tree@^1.0.3":
   version "1.0.3"
@@ -18543,10 +18543,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-renovate@35.115.2:
-  version "35.115.2"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-35.115.2.tgz#ac139e2571a66c69d7a54df528dae4f707cbf4b5"
-  integrity sha512-LTOJcJlf1cyJ4LmSPVqcnuZCwy4gEpOeNzBCVWOZn62SB6Ix14mRc3K4t+W8Tq48RGQhnElc++4r+lvzKqwsdw==
+renovate@35.117.1:
+  version "35.117.1"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-35.117.1.tgz#38bda77f748bfeb5e9a63e4dfacd2c89af13c0d3"
+  integrity sha512-A5JmrOqQkCe3VRod+YKUCHxR/gYnv997SQNwVF/6loRaSlVhWLVUNDCZt4eXDu4Jh348VWjyeVp65xOr5sXdeQ==
   dependencies:
     "@aws-sdk/client-codecommit" "3.348.0"
     "@aws-sdk/client-ec2" "3.348.0"
@@ -18570,8 +18570,8 @@ renovate@35.115.2:
     "@opentelemetry/semantic-conventions" "1.13.0"
     "@qnighy/marshal" "0.1.3"
     "@renovatebot/osv-offline" "1.2.12"
-    "@renovatebot/pep440" "2.1.15"
-    "@renovatebot/ruby-semver" "3.0.1"
+    "@renovatebot/pep440" "2.1.16"
+    "@renovatebot/ruby-semver" "3.0.2"
     "@sindresorhus/is" "4.6.0"
     "@types/ms" "0.7.31"
     "@types/tmp" "0.2.3"
@@ -18647,7 +18647,7 @@ renovate@35.115.2:
     slugify "1.6.6"
     source-map-support "0.5.21"
     traverse "0.6.7"
-    tslib "2.5.2"
+    tslib "2.5.3"
     upath "2.0.1"
     url-join "4.0.1"
     validate-npm-package-name "5.0.0"
@@ -20676,10 +20676,10 @@ ts-pnp@^1.1.6:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
-tslib@2.5.2:
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.2.tgz#1b6f07185c881557b0ffa84b111a0106989e8338"
-  integrity sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==
+tslib@2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.3.tgz#24944ba2d990940e6e982c4bea147aba80209913"
+  integrity sha512-mSxlJJwl3BMEQCUNnxXBU9jP4JBktcEGhURcPR6VQVlnP0FdDEsIaz0C35dXNGLyRfrATNofF0F5p2KPxQgB+w==
 
 tslib@^1.11.1, tslib@^1.13.0, tslib@^1.8.1, tslib@^1.9.3:
   version "1.14.1"
