@@ -118,7 +118,7 @@
     "@vue/compiler-sfc": "3.3.4",
     "autoprefixer": "10.4.14",
     "@babel/eslint-parser": "7.11.0",
-    "babel-loader": "8.3.0",
+    "babel-loader": "9.1.2",
     "chromatic": "6.19.9",
     "commitizen": "4.3.0",
     "copyfiles": "2.4.1",
