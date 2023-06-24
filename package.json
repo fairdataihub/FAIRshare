@@ -92,7 +92,7 @@
     "vuedraggable": "4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.22.5",
     "@babel/eslint-parser": "7.18.9",
     "@commitlint/cli": "17.6.5",
     "@commitlint/config-conventional": "17.6.5",
@@ -117,7 +117,7 @@
     "@vue/cli-service": "5.0.8",
     "@vue/compiler-sfc": "3.3.4",
     "autoprefixer": "10.4.14",
-    "@babel/eslint-parser": "7.11.0",
+    "@babel/eslint-parser": "7.22.5",
     "babel-loader": "8.3.0",
     "chromatic": "6.19.9",
     "commitizen": "4.3.0",
