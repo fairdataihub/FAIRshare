@@ -67,7 +67,7 @@
     "dompurify": "3.0.3",
     "electron-log": "4.4.8",
     "electron-updater": "5.0.5",
-    "element-plus": "2.3.6",
+    "element-plus": "2.3.7",
     "find-free-port": "2.0.0",
     "fs-extra": "10.1.0",
     "gsap": "3.12.1",
