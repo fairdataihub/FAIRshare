@@ -57,7 +57,6 @@
     "url": "https://github.com/fairdataihub/FAIRshare.git"
   },
   "dependencies": {
-    "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.10",
     "@element-plus/icons-vue": "2.1.0",
     "@headlessui/vue": "1.6.0",
@@ -100,6 +99,7 @@
     "@babel/eslint-parser": "7.18.9",
     "@commitlint/cli": "17.6.5",
     "@commitlint/config-conventional": "17.6.5",
+    "@electron/notarize": "2.1.0",
     "@fairdataihub/config": "2.2.3",
     "@iconify/vue": "4.1.1",
     "@storybook/addon-actions": "6.5.16",
