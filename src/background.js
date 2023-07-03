@@ -235,6 +235,12 @@ async function createWindow() {
     setTimeout(function () {
       splash.close();
       mainWindow.show();
+
+      // Open the DevTools automatically if developing
+      if (process.env.WEBPACK_DEV_SERVER_URL) {
+        console.log("Opening dev tools in ready-to-show event...");
+        mainWindow.webContents.openDevTools();
+      }
     }, 500);
   });
 
@@ -272,7 +278,7 @@ async function createWindow() {
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
 
     if (!process.env.IS_TEST) {
-      console.log("Opening dev tools");
+      console.log("Opening dev tools in window handler...");
 
       mainWindow.webContents.openDevTools({ mode: "detach" });
     }

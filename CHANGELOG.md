@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - The bio.tools register button is now only shown if the data type is an allowed application.
 - The text in the `Review standards` section has been revised to better reflect the purpose of the project.
+- Electron has been updated to v25.
 
 ## v2.0.0 - 2022-08-30
 
