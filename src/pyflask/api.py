@@ -720,7 +720,9 @@ class zenodoAddMetadata(Resource):
         deposition_id = args["deposition_id"]
         zenodo_metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(access_token, deposition_id, zenodo_metadata)
+        return addMetadataToZenodoDeposition(
+            access_token, deposition_id, zenodo_metadata
+        )
 
 
 @zenodo.route("/deposition/publish", endpoint="zenodoPublish")
@@ -1399,8 +1401,7 @@ class getGEOFolder(Resource):
 ###############################################################################
 
 
-utilities = api.namespace(
-    "utilities", description="utilities for random tasks")
+utilities = api.namespace("utilities", description="utilities for random tasks")
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -1680,8 +1681,7 @@ if __name__ == "__main__":
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
-    print(
-        f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
+    print(f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
 
     api.logger.info("Starting FAIRshare server")
 
