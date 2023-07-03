@@ -5,6 +5,17 @@ All notable changes to `FAIRshare` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## v2.1.0 - 2023-07-04
+
+### Feature additions
+
+- Added new workflows for both NCBI GEO and Immport. These repositories are not enabled for users but will be in the future.
+- Added support for better user validation on Figshare.
+
+### Bug fixes
+
+- The bio.tools register button is now only shown if the data type is an allowed application.
+
 ## v2.0.0 - 2022-08-30
 
 ### Feature additions

@@ -55,7 +55,7 @@ from zenodo import (
     uploadFileToZenodoDeposition,
 )
 
-API_VERSION = "2.0.0"
+API_VERSION = "2.1.0"
 
 
 app = Flask(__name__)
@@ -1399,7 +1399,8 @@ class getGEOFolder(Resource):
 ###############################################################################
 
 
-utilities = api.namespace("utilities", description="utilities for random tasks")
+utilities = api.namespace(
+    "utilities", description="utilities for random tasks")
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -1679,7 +1680,8 @@ if __name__ == "__main__":
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
-    print(f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
+    print(
+        f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
 
     api.logger.info("Starting FAIRshare server")
 

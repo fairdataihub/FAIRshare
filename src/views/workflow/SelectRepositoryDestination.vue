@@ -84,32 +84,6 @@
                 </div>
               </div>
 
-              <div
-                v-show="showSoftwareHeritage"
-                class="my-8 flex flex-col items-center justify-center"
-              >
-                <el-popover placement="bottom" trigger="hover" content="Coming soon...">
-                  <template #reference>
-                    <div>
-                      <div
-                        class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all hover:shadow-lg"
-                        :class="{
-                          'selected-repo': repoID === 'softwareheritage',
-                        }"
-                        @click="selectRepo($event, 'softwareheritage')"
-                      >
-                        <img
-                          src="https://www.softwareheritage.org/wp-content/uploads/2015/08/swh-logo.png"
-                          alt=""
-                          class="mb-3 h-16 opacity-50"
-                        />
-                        <span class="mx-5 w-full text-center text-lg"> Software Heritage </span>
-                      </div>
-                    </div>
-                  </template>
-                </el-popover>
-              </div>
-
               <div v-show="showGeo" class="my-8 flex flex-col items-center justify-center">
                 <div
                   class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
@@ -574,7 +548,6 @@ export default {
       validFigshareTokenAvailable: false,
       disableFigshare: false,
       showZenodo: false,
-      showSoftwareHeritage: false,
       showFigshare: false,
       figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
       showGeo: false,
@@ -861,13 +834,6 @@ export default {
         this.showGeo = false;
       }
     },
-    async shouldShowSoftwareHeritage() {
-      if ("Code" in this.dataset.data) {
-        this.showSoftwareHeritage = true;
-      } else {
-        this.showSoftwareHeritage = false;
-      }
-    },
     async shouldShowImmport() {
       if ("Immunology" in this.dataset.data) {
         this.showImmport = true;
@@ -884,7 +850,6 @@ export default {
 
     this.shouldShowZenodo();
     this.shouldShowFigshare();
-    this.shouldShowSoftwareHeritage();
     this.shouldShowGeo();
     this.shouldShowImmport();
 

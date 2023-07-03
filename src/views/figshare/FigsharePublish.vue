@@ -75,7 +75,13 @@
           <line-divider class="w-full" />
 
           <p class="max-w-lg pb-5 text-center text-sm">
-            To increase the FAIRness of your software, we also recommend to register it on the
+            To increase the FAIRness of your software, we also recommend to also archive it on
+            <span
+              @click="openWebPage('https://archive.softwareheritage.org/save/')"
+              class="text-url"
+              >Software Heritage</span
+            >
+            and register it on the
             <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
             registry. It is also suggested to publish about your software in a suitable journal such
             as the Journal of Open Research Software or any other suitable Journal (a list of

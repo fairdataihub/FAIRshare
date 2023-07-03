@@ -58,9 +58,20 @@
                 </span>
               </el-popover>
 
-              <el-popover placement="bottom" :width="400" :hide-after="0" trigger="hover">
+              <el-popover
+                placement="bottom"
+                :hide-after="0"
+                trigger="hover"
+                content="Coming soon..."
+              >
                 <template #reference>
-                  <el-checkbox border name="type" class="single-check-box" label="Immunology">
+                  <el-checkbox
+                    border
+                    name="type"
+                    class="single-check-box"
+                    label="Immunology"
+                    disabled
+                  >
                     <div class="flex flex-col items-center">
                       <Icon icon="mdi:virus-outline" class="my-2 h-12 w-12" />
                       <span class="text-sm">Immunology</span>
@@ -68,9 +79,10 @@
                   </el-checkbox>
                 </template>
 
-                <span class="break-normal text-left text-sm">
+                <!-- <span class="break-normal text-left text-sm">
+                  Add :width="400" to the popover to make it wider.
                   Immunology-related research, assay methods, etc.
-                </span>
+                </span> -->
               </el-popover>
 
               <el-popover
@@ -104,6 +116,7 @@
                     name="type"
                     class="single-check-box"
                     label="NextGenHighThroughputSequencing"
+                    disabled
                   >
                     <div class="flex flex-col items-center">
                       <Icon icon="uil:dna" class="my-2 h-12 w-12" />
