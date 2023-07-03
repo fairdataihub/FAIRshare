@@ -12,7 +12,7 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
+<style lang="css" scoped>
 .one {
   opacity: 0;
   -webkit-animation: dot 1.3s infinite;

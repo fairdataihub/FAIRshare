@@ -19,13 +19,18 @@
           <span class="mx-5 text-lg"> My computer </span>
         </div>
 
+        <!-- hidden for now. Will probably be replaced by another file storage location in the future -->
         <div class="hidden">
           <div
             class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
             :class="{ 'selected-location': locationID === 'github' }"
             @click="selectSourceLocation('github')"
           >
-            <img src="../../../assets/images/githublogo.jpeg" alt="" class="h-24 w-full" />
+            <img
+              src="../../../assets/images/githublogo.jpeg"
+              alt="GitHub logo"
+              class="h-24 w-full"
+            />
             <span class="mx-5 text-lg"> On GitHub </span>
           </div>
         </div>
@@ -34,9 +39,7 @@
       <div class="flex w-full flex-col pt-20" v-if="locationID === 'local'">
         <span class="mb-2">
           Please select the folder where your
-          <span class="font-medium">
-            {{ combineDataTypes }}
-          </span>
+          <span class="font-medium"> Immunology </span>
           files are stored. It is highly recommended to include all your data files.
         </span>
 
@@ -91,7 +94,7 @@ import { dialog } from "@electron/remote";
 import { useDatasetsStore } from "@/store/datasets";
 
 export default {
-  name: "OtherSelectSourceFolder",
+  name: "ImmunologySelectSourceFolder",
   components: {},
   data() {
     return {
@@ -121,29 +124,6 @@ export default {
         return false;
       }
       return true;
-    },
-    combineDataTypes() {
-      if ("type" in this.workflow) {
-        const dataTypes = this.workflow.type;
-
-        if (dataTypes.length === 1) {
-          return dataTypes[0] === "Code" ? "Research Software" : dataTypes[0];
-        } else if (dataTypes.length === 2) {
-          return `${dataTypes[0]} and ${dataTypes[1]}`;
-        } else if (dataTypes.length > 2) {
-          let returnString = "";
-          dataTypes.forEach((type, index) => {
-            if (index === dataTypes.length - 1) {
-              returnString += `and ${type}`;
-            } else {
-              returnString += `${type}, `;
-            }
-          });
-          return returnString;
-        }
-      }
-
-      return "";
     },
   },
   methods: {
@@ -207,10 +187,12 @@ export default {
       this.datasetStore.syncDatasets();
 
       if (this.locationID === "github") {
-        this.$router.push(`/datasets/${this.datasetID}/${this.workflowID}/Other/selectGithubRepo`);
+        this.$router.push(
+          `/datasets/${this.datasetID}/${this.workflowID}/Immunology/selectGithubRepo`
+        );
       } else {
         this.$router.push({
-          path: `/datasets/${this.dataset.id}/${this.workflowID}/Other/reviewStandards`,
+          path: `/datasets/${this.dataset.id}/${this.workflowID}/Immunology/reviewStandards`,
         });
       }
     },
@@ -220,7 +202,7 @@ export default {
     this.workflow = this.dataset.workflows[this.workflowID];
 
     this.datasetStore.showProgressBar();
-    this.datasetStore.setProgressBarType("zenodo");
+    this.datasetStore.setProgressBarType("immport");
     this.datasetStore.setCurrentStep(1);
 
     this.workflow.currentRoute = this.$route.path;

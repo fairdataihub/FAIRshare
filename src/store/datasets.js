@@ -103,7 +103,9 @@ export const useDatasetsStore = defineStore({
     },
     async writeDatasetsToFile() {
       fs.ensureFileSync(DATASETS_STORE_PATH);
-      fs.writeJsonSync(DATASETS_STORE_PATH, this.datasets);
+      fs.writeJsonSync(DATASETS_STORE_PATH, this.datasets, {
+        spaces: 4,
+      });
     },
     async addDataset(dataset, datasetID) {
       try {

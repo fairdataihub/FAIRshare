@@ -8,6 +8,29 @@ import requests
 UPLOAD_STATUS = ""
 
 
+def getFigshareUserDetails(token):
+    # Get user details
+
+    try:
+        headers = {
+            "Authorization": f"token {token}",
+        }
+
+        response = requests.request(
+            "GET",
+            f"{config.FIGSHARE_SERVER_URL}/token",
+            headers=headers,
+        )
+
+        if response.status_code != 200:
+            return "Invalid login information", response.status_code
+        else:
+            return response.json()
+
+    except Exception as e:
+        raise e
+
+
 def createNewFigshareItem(access_token, data):
     url = f"{config.FIGSHARE_SERVER_URL}/account/articles"
 

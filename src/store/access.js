@@ -232,25 +232,34 @@ export const useTokenStore = defineStore({
     },
 
     async verifyFigshareToken(token) {
+      const serverURL = this.getServerUrl;
+
+      const url =
+        serverURL !== undefined
+          ? `${serverURL}/figshare/user?token=${token}`
+          : `http://127.0.0.1:7632/figshare/user?token=${token}`;
+
       const config = {
         method: "get",
-        url: `${process.env.VUE_APP_FIGSHARE_SERVER_URL}/token`,
-        headers: {
-          Authorization: `token ${token}`,
-        },
+        url,
       };
 
-      return await axios(config)
-        .then(async (response) => {
-          if (response.status === 200) {
-            return true;
-          } else {
-            return false;
-          }
+      const response = await axios(config)
+        .then((response) => {
+          return { data: response.data, status: response.status };
         })
-        .catch((_error) => {
-          return false;
+        .catch((error) => {
+          console.error(error);
+          return { data: error.response };
         });
+
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        return false;
+      } else {
+        return false;
+      }
     },
 
     async verifyFigshareConnection() {

@@ -110,7 +110,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .el-button--text {
   @apply text-base;
 }

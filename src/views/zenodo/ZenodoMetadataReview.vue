@@ -529,7 +529,7 @@ export default {
 // Add computed to hide properties
 </script>
 
-<style lang="postcss">
+<style lang="css">
 .handle {
   cursor: move;
 }

@@ -372,7 +372,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .card-container {
   @apply my-5 flex  w-4/5 flex-row rounded-md border border-gray-200 py-3 shadow-lg transition-all;
 }

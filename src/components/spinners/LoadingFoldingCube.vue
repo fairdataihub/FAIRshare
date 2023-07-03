@@ -13,7 +13,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .sk-folding-cube {
   margin: 20px auto;
   width: 40px;

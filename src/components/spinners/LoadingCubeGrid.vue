@@ -18,7 +18,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .sk-cube-grid {
   display: block;
 }

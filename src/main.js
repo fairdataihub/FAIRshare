@@ -27,7 +27,6 @@ import enUS from "@kangc/v-md-editor/lib/lang/en-US";
 import "./assets/css/utilities-theme.css";
 import "./assets/css/index.css";
 import "element-plus/dist/index.css";
-import "vue3-lottie/dist/style.css";
 import "vue-toastification/dist/index.css";
 
 // css for the markdown editor

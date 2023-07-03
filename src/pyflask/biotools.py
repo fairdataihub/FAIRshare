@@ -26,7 +26,7 @@ def loginToBioTools(username, password):
         raise e
 
 
-def getUserDetails(token):
+def getBioToolsUserDetails(token):
     # Get user details
 
     try:
@@ -53,7 +53,6 @@ def validateTool(token, data):
     # Validate tool
 
     try:
-
         data = json.dumps(data)
         headers = {
             "Authorization": f"Token {token}",

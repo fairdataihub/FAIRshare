@@ -5,8 +5,9 @@ import os
 import sys
 
 import config
-from biotools import getUserDetails, loginToBioTools, registerTool, validateTool
+from biotools import getBioToolsUserDetails, loginToBioTools, registerTool, validateTool
 from figshare import (
+    getFigshareUserDetails,
     createNewFigshareItem,
     deleteFigshareArticle,
     getFigshareFileUploadStatus,
@@ -54,7 +55,7 @@ from zenodo import (
     uploadFileToZenodoDeposition,
 )
 
-API_VERSION = "2.0.0"
+API_VERSION = "2.1.0"
 
 
 app = Flask(__name__)
@@ -193,7 +194,7 @@ class BioToolsUserDetails(Resource):
 
         token = args["token"]
 
-        return getUserDetails(token)
+        return getBioToolsUserDetails(token)
 
 
 @biotools.route("/tool/validate", endpoint="BioToolsValidate")
@@ -260,7 +261,7 @@ class CreateMetadata(Resource):
         },
     )
     def post(self):
-        """Create the codemetadata json file"""
+        """Create the metadata files"""
         parser = reqparse.RequestParser()
 
         parser.add_argument("data_types", type=str, help="Types of data ")
@@ -276,6 +277,8 @@ class CreateMetadata(Resource):
         )
 
         args = parser.parse_args()
+
+        print(args["data_types"], type(args["data_types"]))
 
         data_types = json.loads(args["data_types"])
         data = json.loads(args["data_object"])
@@ -330,6 +333,31 @@ class CreateCitationCFF(Resource):
 figshare = api.namespace("figshare", description="Figshare operations")
 
 
+@figshare.route("/user", endpoint="FigshareUserValidation")
+class FigshareUserValidation(Resource):
+    @figshare.doc(
+        responses={200: "Success"},
+        params={
+            "token": "Token of the account",
+        },
+    )
+    def get(self):
+        """Validate user details"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            "token",
+            type=str,
+            required=True,
+            location="args",
+        )
+        args = parser.parse_args()
+
+        token = args["token"]
+
+        return getFigshareUserDetails(token)
+
+
 @figshare.route("/item", endpoint="FigshareItem")
 class FigshareItem(Resource):
     @figshare.doc(
@@ -359,9 +387,9 @@ class FigshareItem(Resource):
         args = parser.parse_args()
 
         access_token = args["access_token"]
-        metadata = args["metadata"]
+        figshare_metadata = args["metadata"]
 
-        return createNewFigshareItem(access_token, metadata)
+        return createNewFigshareItem(access_token, figshare_metadata)
 
     @figshare.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -690,9 +718,9 @@ class zenodoAddMetadata(Resource):
 
         access_token = args["access_token"]
         deposition_id = args["deposition_id"]
-        metadata = json.loads(args["metadata"])
+        zenodo_metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
+        return addMetadataToZenodoDeposition(access_token, deposition_id, zenodo_metadata)
 
 
 @zenodo.route("/deposition/publish", endpoint="zenodoPublish")
@@ -1371,7 +1399,8 @@ class getGEOFolder(Resource):
 ###############################################################################
 
 
-utilities = api.namespace("utilities", description="utilities for random tasks")
+utilities = api.namespace(
+    "utilities", description="utilities for random tasks")
 
 
 @utilities.route("/checkforfolders", endpoint="checkForFolders")
@@ -1651,7 +1680,8 @@ if __name__ == "__main__":
     api.logger.info(f"PORT_NUMBER: {requested_port}")
 
     print(f"Running on port {requested_port}.")
-    print(f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
+    print(
+        f"API documentation hosted at http://127.0.0.1:{requested_port}/docs")
 
     api.logger.info("Starting FAIRshare server")
 

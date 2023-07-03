@@ -26,6 +26,9 @@
                     (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                     (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                     (node.label == 'LICENSE' && workflow.generateLicense) ||
+                    (node.label == 'basic_study_design.txt' &&
+                      workflow.generateImmunologyMetadata) ||
+                    (node.label == 'protocols.txt' && workflow.generateImmunologyMetadata) ||
                     (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                       ? 'text-secondary-500'
                       : ''
@@ -49,6 +52,9 @@
                       (node.label == 'codemeta.json' && workflow.generateCodeMeta) ||
                       (node.label == 'CITATION.cff' && workflow.generateCodeMeta) ||
                       (node.label == 'LICENSE' && workflow.generateLicense) ||
+                      (node.label == 'basic_study_design.txt' &&
+                        workflow.generateImmunologyMetadata) ||
+                      (node.label == 'protocols.txt' && workflow.generateImmunologyMetadata) ||
                       (node.label == 'metadata.json' && workflow.generateOtherMetadata)
                     "
                   >
@@ -79,6 +85,32 @@
             <div v-if="PreviewNewlyCreatedCodemetaFile" class="pb-20">
               <el-table
                 :data="tableData"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
+              >
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column prop="Value" label="Value" />
+              </el-table>
+            </div>
+
+            <div v-if="PreviewNewlyCreatedImmunologyMetadataFile" class="pb-20">
+              <el-table
+                :data="immunologyMetadata"
+                style="width: 100%"
+                row-key="id"
+                border
+                default-expand-all
+              >
+                <el-table-column prop="Name" label="Name" />
+                <el-table-column prop="Value" label="Value" />
+              </el-table>
+            </div>
+
+            <div v-if="PreviewNewlyCreatedImmunologyProtocolMetadataFile" class="pb-20">
+              <el-table
+                :data="immunologyProtocolMetadata"
                 style="width: 100%"
                 row-key="id"
                 border
@@ -224,9 +256,13 @@ export default {
       licenseData: "",
       tableData: [],
       citationData: [],
+      immunologyMetadata: [],
+      immunologyProtocolMetadata: [],
       otherMetadata: [],
       tableDataRecord: [],
       citationDataRecord: [],
+      immunologyMetadataRecord: [],
+      immunologyProtocolMetadataRecord: [],
       otherMetadataRecord: [],
       fileData: [],
       defaultProps: {
@@ -237,6 +273,8 @@ export default {
       fileTitle: "",
       PreviewNewlyCreatedLicenseFile: false,
       PreviewNewlyCreatedCodemetaFile: false,
+      PreviewNewlyCreatedImmunologyMetadataFile: false,
+      PreviewNewlyCreatedImmunologyProtocolMetadataFile: false,
       PreviewNewlyCreatedCitationFile: false,
       PreviewNewlyCreatedOtherMetadataFile: false,
       drawerModel: true,
@@ -249,6 +287,12 @@ export default {
     codePresent() {
       if ("type" in this.workflow) {
         return this.workflow.type.includes("Code");
+      }
+      return false;
+    },
+    immunologyPresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Immunology");
       }
       return false;
     },
@@ -267,6 +311,8 @@ export default {
         this.PreviewNewlyCreatedCodemetaFile ||
         this.PreviewNewlyCreatedLicenseFile ||
         this.PreviewNewlyCreatedCitationFile ||
+        this.PreviewNewlyCreatedImmunologyMetadataFile ||
+        this.PreviewNewlyCreatedImmunologyProtocolMetadataFile ||
         this.PreviewNewlyCreatedOtherMetadataFile
       ) {
         return true;
@@ -328,6 +374,22 @@ export default {
       return loading;
     },
     async createCodeMetadataFile() {
+      const response = await axios
+        .post(`${this.$server_url}/metadata/create`, {
+          data_types: JSON.stringify(this.workflow.type),
+          data_object: JSON.stringify(this.dataset.data),
+          virtual_file: true,
+        })
+        .then((response) => {
+          return JSON.parse(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          return "ERROR";
+        });
+      return response;
+    },
+    async createImmunologyMetadataFile() {
       const response = await axios
         .post(`${this.$server_url}/metadata/create`, {
           data_types: JSON.stringify(this.workflow.type),
@@ -438,6 +500,8 @@ export default {
 
       this.tableDataRecord = [];
       this.citationDataRecord = [];
+      this.immunologyMetadataRecod = [];
+      this.immunologyProtocolMetadataRecord = [];
       this.otherMetadataRecord = [];
 
       if (this.workflow.generateCodeMeta) {
@@ -447,6 +511,22 @@ export default {
         this.citationDataRecord = Object.assign({}, this.citationData);
       }
 
+      if (this.workflow.generateImmunologyMetadata) {
+        const combinedImmunologyMetadata = await this.createImmunologyMetadataFile();
+
+        this.immunologyMetadata = combinedImmunologyMetadata.basic_study_design;
+        this.immunologyProtocolMetadata = combinedImmunologyMetadata.basic_study_protocols;
+
+        this.immunologyMetadataRecord = Object.assign(
+          {},
+          this.immunologyMetadata.basic_study_design
+        );
+        this.immunologyProtocolMetadataRecord = Object.assign(
+          {},
+          this.immunologyMetadata.basic_study_protocols
+        );
+      }
+
       if (this.workflow.generateOtherMetadata) {
         this.otherMetadata = await this.createOtherMetadataFile();
         this.otherMetadataRecord = Object.assign({}, this.otherMetadata);
@@ -454,6 +534,8 @@ export default {
 
       if (this.codePresent) {
         this.fileData.push(await this.readFolderContents(this.dataset.data.Code.folderPath));
+      } else if (this.immunologyPresent) {
+        this.fileData.push(await this.readFolderContents(this.dataset.data.Immunology.folderPath));
       } else {
         this.fileData.push(await this.readFolderContents(this.dataset.data.Other.folderPath));
       }
@@ -476,6 +558,28 @@ export default {
           let newObj = {};
           newObj.id = uuidv4();
           newObj.label = "CITATION.cff";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
+
+      if (!root.children.some((el) => el.label === "basic_study_design.txt")) {
+        if (this.workflow.generateImmunologyMetadata) {
+          let newObj = {};
+          newObj.id = uuidv4();
+          newObj.label = "basic_study_design.txt";
+          newObj.isDir = false;
+
+          root.children.push(newObj);
+        }
+      }
+
+      if (!root.children.some((el) => el.label === "protocols.txt")) {
+        if (this.workflow.generateImmunologyMetadata) {
+          let newObj = {};
+          newObj.id = uuidv4();
+          newObj.label = "protocols.txt";
           newObj.isDir = false;
 
           root.children.push(newObj);
@@ -505,6 +609,14 @@ export default {
       }
 
       this.tableData = this.jsonToTableDataRecursive(this.tableData, 1, "ROOT");
+
+      this.immunologyMetadata = this.jsonToTableDataRecursive(this.immunologyMetadata, 1, "ROOT");
+      this.immunologyProtocolMetadata = this.jsonToTableDataRecursive(
+        this.immunologyProtocolMetadata,
+        1,
+        "ROOT"
+      );
+
       this.otherMetadata = this.jsonToTableDataRecursive(this.otherMetadata, 1, "ROOT");
 
       this.citationData = this.jsonToTableDataRecursive(this.citationData, 1, "ROOT");
@@ -520,6 +632,8 @@ export default {
       this.fileTitle = "";
       this.PreviewNewlyCreatedLicenseFile = false;
       this.PreviewNewlyCreatedCodemetaFile = false;
+      this.PreviewNewlyCreatedImmunologyMetadataFile = false;
+      this.PreviewNewlyCreatedImmunologyProtocolMetadataFile = false;
       this.PreviewNewlyCreatedOtherMetadataFile = false;
       this.PreviewNewlyCreatedCitationFile = false;
     },
@@ -553,6 +667,23 @@ export default {
           }
           if (action === "download") {
             this.exportToJson(this.citationDataRecord, "CITATION.cff");
+          }
+        } else if (
+          data.label == "basic_study_design.txt" &&
+          this.workflow.generateImmunologyMetadata
+        ) {
+          if (action === "view") {
+            this.PreviewNewlyCreatedImmunologyMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.immunologyMetadataRecord, "basic_study_design.txt");
+          }
+        } else if (data.label == "protocols.txt" && this.workflow.generateImmunologyMetadata) {
+          if (action === "view") {
+            this.PreviewNewlyCreatedImmunologyProtocolMetadataFile = true;
+          }
+          if (action === "download") {
+            this.exportToJson(this.immunologyProtocolMetadata, "protocols.txt");
           }
         } else if (data.label == "metadata.json" && this.workflow.generateOtherMetadata) {
           if (action === "view") {

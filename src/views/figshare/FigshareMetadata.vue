@@ -1035,7 +1035,7 @@ export default {
 // CHANGE TO ONE FORM SINCE THAT iS BETTER
 </script>
 
-<style lang="postcss" scoped>
+<style lang="css" scoped>
 .handle {
   cursor: move;
 }

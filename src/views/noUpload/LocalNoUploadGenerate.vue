@@ -259,4 +259,4 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped></style>
+<style lang="css" scoped></style>

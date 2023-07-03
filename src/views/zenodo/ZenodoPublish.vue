@@ -16,13 +16,6 @@
         </p>
         <div class="flex space-x-4">
           <button class="primary-plain-button" @click="openDraftDataset">View draft</button>
-          <button
-            class="secondary-plain-button"
-            @click="navigateToBioToolsPublishing"
-            v-if="showBioToolsRegister"
-          >
-            Register on bio.tools <el-icon><suitcase-icon /></el-icon>
-          </button>
           <button class="blob primary-button transition-all" @click="showPublishWarning">
             Publish <el-icon><star-icon /></el-icon>
           </button>
@@ -78,30 +71,40 @@
           </div>
         </div>
 
-        <line-divider class="w-full" />
+        <div class="" v-if="showBioToolsRegister">
+          <line-divider class="w-full" />
 
-        <p class="max-w-lg pb-5 text-center text-sm">
-          To increase the FAIRness of your software, we also recommend to register it on the
-          <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
-          registry. It is also suggested to publish about your software in a suitable journal such
-          as the Journal of Open Research Software or any other suitable Journal (a list of suitable
-          Journals can be found
-          <span
-            @click="
-              openWebPage('https://www.software.ac.uk/which-journals-should-i-publish-my-software')
-            "
-            class="text-url"
-            >here</span
-          >).
-        </p>
-        <div class="flex flex-col">
-          <div class="flex justify-center space-x-4">
-            <button
-              class="blob primary-button transition-all"
-              @click="navigateToBioToolsPublishing"
+          <p class="max-w-lg pb-5 text-center text-sm">
+            To increase the FAIRness of your software, we also recommend to also archive it on
+            <span
+              @click="openWebPage('https://archive.softwareheritage.org/save/')"
+              class="text-url"
+              >Software Heritage</span
             >
-              <el-icon><suitcase-icon /></el-icon> Register on bio.tools
-            </button>
+            and register it on the
+            <span @click="openWebPage('https://bio.tools/')" class="text-url">bio.tools</span>
+            registry. It is also suggested to publish about your software in a suitable journal such
+            as the Journal of Open Research Software or any other suitable Journal (a list of
+            suitable Journals can be found
+            <span
+              @click="
+                openWebPage(
+                  'https://www.software.ac.uk/which-journals-should-i-publish-my-software'
+                )
+              "
+              class="text-url"
+              >here</span
+            >).
+          </p>
+          <div class="flex flex-col">
+            <div class="flex justify-center space-x-4">
+              <button
+                class="blob primary-button transition-all"
+                @click="navigateToBioToolsPublishing"
+              >
+                <el-icon><suitcase-icon /></el-icon> Register on bio.tools
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -136,11 +139,17 @@ export default {
   },
   computed: {
     showBioToolsRegister() {
-      if ("biotools" in this.workflow) {
-        return true;
-      } else {
-        return false;
+      const allowedDataTypes = ["Code"];
+
+      if ("type" in this.workflow) {
+        for (const dataType of this.workflow.type) {
+          if (allowedDataTypes.includes(dataType)) {
+            return true;
+          }
+        }
       }
+
+      return false;
     },
     showCreateGithubRelease() {
       if (
@@ -303,7 +312,7 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
+<style lang="css" scoped>
 .blob {
   box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
   animation: pulse-blue 2s infinite;

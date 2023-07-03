@@ -35,80 +35,97 @@
             </span>
             <span class="text-center text-sm"> Please click one of the following options: </span>
 
-            <div
-              v-show="codePresent"
-              class="my-8 grid grid-cols-3 gap-8"
-              :class="{ 'grid-cols-2': !codePresent || !showFigshare }"
-            >
-              <div>
-                <div class="flex flex-col items-center justify-center">
-                  <div
-                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-                    :class="{ 'selected-repo': repoID === 'zenodo' }"
-                    @click="selectRepo($event, 'zenodo')"
-                  >
-                    <img
-                      src="https://api.iconify.design/simple-icons/zenodo.svg"
-                      alt=""
-                      class="mb-3 h-16 w-16"
-                    />
-                    <span class="mx-5 text-lg"> Zenodo </span>
-                  </div>
-                  <div
-                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
-                    v-if="repoID === 'zenodo'"
-                    @click="openWebsite('https://zenodo.org')"
-                  >
-                    <span class="font-medium"> Learn more... </span>
-                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-                  </div>
+            <div class="flex max-w-screen-md flex-wrap items-start justify-evenly space-x-8">
+              <div v-show="showZenodo" class="my-8 flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{ 'selected-repo': repoID === 'zenodo' }"
+                  @click="selectRepo($event, 'zenodo')"
+                >
+                  <img
+                    src="https://api.iconify.design/simple-icons/zenodo.svg"
+                    alt=""
+                    class="mb-3 h-16 w-16"
+                  />
+                  <span class="mx-5 text-lg"> Zenodo </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'zenodo'"
+                  @click="openWebsite('https://zenodo.org')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
                 </div>
               </div>
 
-              <div v-show="showFigshare">
-                <div class="flex flex-col items-center justify-center">
-                  <div
-                    class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
-                    :class="{
-                      'selected-repo': repoID === 'figshare',
-                    }"
-                    @click="selectRepo($event, 'figshare')"
-                  >
-                    <img
-                      src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
-                      alt=""
-                      class="mb-3 h-16 w-16"
-                    />
-                    <span class="mx-5 text-lg"> Figshare </span>
-                  </div>
-                  <div
-                    class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
-                    v-if="repoID === 'figshare'"
-                    @click="openWebsite('https://figshare.com')"
-                  >
-                    <span class="font-medium"> Learn more... </span>
-                    <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
-                  </div>
+              <div v-show="showFigshare" class="my-8 flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{
+                    'selected-repo': repoID === 'figshare',
+                  }"
+                  @click="selectRepo($event, 'figshare')"
+                >
+                  <img
+                    src="https://www.digital-science.com/wp-content/uploads/2020/11/Figshare-no-padding.png"
+                    alt=""
+                    class="mb-3 h-16 w-16"
+                  />
+                  <span class="mx-5 text-lg"> Figshare </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'figshare'"
+                  @click="openWebsite('https://figshare.com')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
                 </div>
               </div>
 
-              <div :class="{ hidden: !codePresent }">
+              <div v-show="showGeo" class="my-8 flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{
+                    'selected-repo': repoID === 'ncbigeo',
+                  }"
+                  @click="selectRepo($event, 'ncbigeo')"
+                >
+                  <img
+                    src="https://www.ncbi.nlm.nih.gov/geo/img/geo_main.gif"
+                    alt=""
+                    class="mb-3 h-auto w-full"
+                  />
+                  <span class="mx-5 text-lg"> NCBI GEO </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'ncbigeo'"
+                  @click="openWebsite('https://www.ncbi.nlm.nih.gov/geo/')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                </div>
+              </div>
+
+              <div v-show="showImmport" class="my-8 flex flex-col items-center justify-center">
                 <el-popover placement="bottom" trigger="hover" content="Coming soon...">
                   <template #reference>
                     <div>
                       <div
                         class="disabled-card single-check-box pointer-events-none flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 text-stone-400 shadow-md transition-all hover:shadow-lg"
                         :class="{
-                          'selected-repo': repoID === 'softwareheritage',
+                          'selected-repo': repoID === 'immport',
                         }"
-                        @click="selectRepo($event, 'softwareheritage')"
+                        @click="selectRepo($event, 'immport')"
                       >
                         <img
-                          src="https://www.softwareheritage.org/wp-content/uploads/2015/08/swh-logo.png"
+                          src="https://www.immport.org/images/home/immport-icon-orange.png"
                           alt=""
                           class="mb-3 h-16 opacity-50"
                         />
-                        <span class="mx-5 w-full text-center text-lg"> Software Heritage </span>
+                        <span class="mx-5 w-full text-center text-lg"> ImmPort </span>
                       </div>
                     </div>
                   </template>
@@ -379,6 +396,27 @@
             <fade-transition>
               <div
                 class="w-max-content flex flex-row justify-center space-x-4 py-6"
+                id="repo-is-immport"
+                v-if="repoID === 'immport' && showImmport"
+              >
+                <button class="primary-plain-button" @click="navigateBack">
+                  <el-icon><d-arrow-left /></el-icon> Back
+                </button>
+
+                <button
+                  class="primary-button"
+                  @click="addMetadata"
+                  :disabled="repoID === ''"
+                  id="continue"
+                >
+                  Continue <el-icon> <d-arrow-right /> </el-icon>
+                </button>
+              </div>
+            </fade-transition>
+
+            <fade-transition>
+              <div
+                class="w-max-content flex flex-row justify-center space-x-4 py-6"
                 v-if="newVersion === 'false' && repoID === 'zenodo'"
                 id="zenodo-new-version-false"
               >
@@ -536,9 +574,11 @@ export default {
       validZenodoTokenAvailable: false,
       validFigshareTokenAvailable: false,
       disableFigshare: false,
+      showZenodo: false,
       showFigshare: false,
       figshareLicenseOptions: figshareMetadataOptions.licenseOptions,
       showGeo: false,
+      showImmport: false,
     };
   },
   computed: {
@@ -551,6 +591,12 @@ export default {
     nextGenHighThroughputSequencingPresent() {
       if ("type" in this.workflow) {
         return this.workflow.type.includes("NextGenHighThroughputSequencing");
+      }
+      return false;
+    },
+    immunologyPresent() {
+      if ("type" in this.workflow) {
+        return this.workflow.type.includes("Immunology");
       }
       return false;
     },
@@ -668,6 +714,8 @@ export default {
 
       if (this.codePresent) {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Code/pickLicense`;
+      } else if (this.immunologyPresent) {
+        routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/Immunology/pickLicense`;
       } else if (this.nextGenHighThroughputSequencingPresent) {
         routerPath = `/datasets/${this.$route.params.datasetID}/${this.$route.params.workflowID}/NextGenHighThroughputSequencing/createMetadata`;
       } else {
@@ -778,6 +826,18 @@ export default {
 
       this.$router.push({ path: routerPath });
     },
+    async shouldShowZenodo() {
+      const allowedDataTypes = ["Code", "Immunology", "Other"];
+
+      for (const dataType of this.workflow.type) {
+        if (allowedDataTypes.includes(dataType)) {
+          this.showZenodo = true;
+          return;
+        }
+      }
+
+      this.showZenodo = false;
+    },
     async shouldShowFigshare() {
       if ("license" in this.dataset.data.general.questions) {
         const licenseObject = await this.figshareLicenseOptions.find(
@@ -800,6 +860,13 @@ export default {
         this.showGeo = false;
       }
     },
+    async shouldShowImmport() {
+      if ("Immunology" in this.dataset.data) {
+        this.showImmport = true;
+      } else {
+        this.showImmport = false;
+      }
+    },
   },
   async mounted() {
     this.loading = true;
@@ -807,8 +874,10 @@ export default {
     this.dataset = await this.datasetStore.getCurrentDataset();
     this.workflow = this.dataset.workflows[this.workflowID];
 
+    this.shouldShowZenodo();
     this.shouldShowFigshare();
-    await this.shouldShowGeo();
+    this.shouldShowGeo();
+    this.shouldShowImmport();
 
     const tokenObject = await this.tokens.getToken("zenodo");
     this.zenodoToken = tokenObject.token;
@@ -835,6 +904,14 @@ export default {
     if (this.showGeo) {
       this.datasetStore.setProgressBarType("geo");
       this.datasetStore.setCurrentStep(4);
+    } else {
+      this.datasetStore.setProgressBarType("zenodo");
+      this.datasetStore.setCurrentStep(5);
+    }
+
+    if (this.showImmport) {
+      this.datasetStore.setProgressBarType("immport");
+      this.datasetStore.setCurrentStep(5);
     } else {
       this.datasetStore.setProgressBarType("zenodo");
       this.datasetStore.setCurrentStep(5);
@@ -887,7 +964,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .single-check-box {
   @apply flex h-48 w-48 items-center justify-center transition-all;
 }
