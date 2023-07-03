@@ -95,7 +95,6 @@ def openFileExplorer(file_path):
 
 
 def readFolderContents(dir):
-
     try:
 
         def dfs(dir):

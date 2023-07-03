@@ -53,7 +53,6 @@ def validateTool(token, data):
     # Validate tool
 
     try:
-
         data = json.dumps(data)
         headers = {
             "Authorization": f"Token {token}",
