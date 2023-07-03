@@ -133,6 +133,33 @@
               </div>
             </div>
 
+            <div v-show="showGeo" class="my-8 grid grid-cols-1 gap-8">
+              <div class="flex flex-col items-center justify-center">
+                <div
+                  class="single-check-box flex h-[200px] w-[200px] cursor-pointer flex-col items-center justify-evenly rounded-lg p-4 shadow-md transition-all"
+                  :class="{
+                    'selected-repo': repoID === 'ncbigeo',
+                  }"
+                  @click="selectRepo($event, 'ncbigeo')"
+                >
+                  <img
+                    src="https://www.ncbi.nlm.nih.gov/geo/img/geo_main.gif"
+                    alt=""
+                    class="mb-3 h-auto w-full"
+                  />
+                  <span class="mx-5 text-lg"> NCBI GEO </span>
+                </div>
+                <div
+                  class="hover-underline-animation my-5 flex w-max cursor-pointer flex-row items-center text-primary-600"
+                  v-if="repoID === 'ncbigeo'"
+                  @click="openWebsite('https://www.ncbi.nlm.nih.gov/geo/')"
+                >
+                  <span class="font-medium"> Learn more... </span>
+                  <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
+                </div>
+              </div>
+            </div>
+
             <fade-transition>
               <div v-if="repoID === 'zenodo'" class="mb-8 flex flex-col">
                 <p class="mb-4">
@@ -826,7 +853,6 @@ export default {
         this.showFigshare = false;
       }
     },
-
     async shouldShowGeo() {
       if ("NextGenHighThroughputSequencing" in this.dataset.data) {
         this.showGeo = true;

@@ -1372,7 +1372,6 @@ def createMetadata(data_types, data, virtual_file):
             code_data = data["Code"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = ""
-
             if "folderPath" in data["Code"]:
                 folder_path = data["Code"]["folderPath"]
             result = createCodeMetadata(
@@ -1399,13 +1398,11 @@ def createMetadata(data_types, data, virtual_file):
             other_data = data["Other"]["questions"]
             general_data = data["general"]["questions"]
             folder_path = ""
-
             if "folderPath" in data["Other"]:
                 folder_path = data["Other"]["folderPath"]
             result = createOtherMetadata(
                 other_data, general_data, folder_path, virtual_file
             )
-
             if virtual_file:
                 return result
 

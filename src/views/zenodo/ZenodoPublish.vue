@@ -16,7 +16,6 @@
         </p>
         <div class="flex space-x-4">
           <button class="primary-plain-button" @click="openDraftDataset">View draft</button>
-
           <button class="blob primary-button transition-all" @click="showPublishWarning">
             Publish <el-icon><star-icon /></el-icon>
           </button>

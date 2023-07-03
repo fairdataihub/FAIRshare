@@ -257,7 +257,7 @@ class CreateMetadata(Resource):
         params={
             "data_types": "Types of data.",
             "data_object": "Full data object to create metadata from. Should have keys from the `data_types` parameter",  # noqa: E501
-            "virtual_file": "Parameter to generate a virtual file",
+            "folder_path": "Path to the folder to save the file",
         },
     )
     def post(self):
@@ -387,9 +387,9 @@ class FigshareItem(Resource):
         args = parser.parse_args()
 
         access_token = args["access_token"]
-        metadata = args["metadata"]
+        figshare_metadata = args["metadata"]
 
-        return createNewFigshareItem(access_token, metadata)
+        return createNewFigshareItem(access_token, figshare_metadata)
 
     @figshare.doc(
         responses={200: "Success", 401: "Authentication error"},
@@ -718,9 +718,9 @@ class zenodoAddMetadata(Resource):
 
         access_token = args["access_token"]
         deposition_id = args["deposition_id"]
-        metadata = json.loads(args["metadata"])
+        zenodo_metadata = json.loads(args["metadata"])
 
-        return addMetadataToZenodoDeposition(access_token, deposition_id, metadata)
+        return addMetadataToZenodoDeposition(access_token, deposition_id, zenodo_metadata)
 
 
 @zenodo.route("/deposition/publish", endpoint="zenodoPublish")

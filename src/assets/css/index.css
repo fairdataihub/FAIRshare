@@ -378,9 +378,6 @@ Trying to keep this minimal since we want to use much of the predefined styles a
   background-color: var(--el-button-bg-color);
 }
 
-.el-form-item__content {
-}
-
 .metadata-form > .el-form-item {
   @apply mb-2;
 }
