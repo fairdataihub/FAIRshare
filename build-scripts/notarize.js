@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const electron_notarize = require("@electron-notarize");
+const electron_notarize = require("@electron/notarize");
 
 require("dotenv").config();
 
