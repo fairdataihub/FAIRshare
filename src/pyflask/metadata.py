@@ -802,10 +802,7 @@ def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
         metadata["keywords"] = [item["keyword"] for item in other_data["keywords"]]
 
     if "relatedLinks" in other_data and len(other_data["relatedLinks"]) > 0:
-        metadata["relatedLink"] = []
-
-        for item in other_data["relatedLinks"]:
-            metadata["relatedLink"].append(item["link"])
+       metadata["relatedLink"] = [item["link"] for item in other_data["relatedLinks"]]
 
     if "authors" in other_data and len(other_data["authors"]) > 0:
         metadata["author"] = []
@@ -826,8 +823,10 @@ def createOtherMetadata(other_data, general_data, folder_path, virtual_file):
                 new_author["email"] = item["email"]
 
             if "affiliation" in item and item["affiliation"] != "":
-                new_author["affiliation"] = {"@type": "Organization"}
-                new_author["affiliation"]["name"] = item["affiliation"]
+                new_author["affiliation"] = {
+                    "@type": "Organization",
+                    "name": item["affiliation"],
+                }
 
             metadata["author"].append(new_author)
 
