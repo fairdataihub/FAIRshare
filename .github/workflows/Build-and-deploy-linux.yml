@@ -1,0 +1,42 @@
+name: Build-and-deploy-linux
+run-name: ${{ github.actor }} is building a linux release for FAIRshare
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-on-linux:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: env-electron-python
+          environment-file: dev/linux-fairshare-release.yml
+          auto-activate-base: false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.14.2"
+
+      - name: Install package.json modules and their dependencies
+        run: npm install --ignore-scripts
+
+      - name: Build and deploy on Linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm run python:build
+          npm run electron:build-release
