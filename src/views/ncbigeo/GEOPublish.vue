@@ -104,7 +104,7 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
+<style lang="css" scoped>
 .blob {
   box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
   animation: pulse-blue 2s infinite;

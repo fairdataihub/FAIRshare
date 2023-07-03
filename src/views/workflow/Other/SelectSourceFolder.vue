@@ -233,7 +233,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="css">
 .single-check-box {
   @apply flex h-48 w-48 items-center justify-center transition-all;
 }

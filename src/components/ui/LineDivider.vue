@@ -14,7 +14,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 hr.dashed {
   border-style: dashed;
 }

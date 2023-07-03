@@ -86,7 +86,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 #step1,
 #step2,
 #step3,

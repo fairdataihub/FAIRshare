@@ -472,7 +472,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="css">
 .checkbox-group {
   @apply box-border flex flex-col items-center justify-center gap-8 pt-4 transition-all;
 }

@@ -149,7 +149,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="css">
 .dialog-Container {
   @apply flex h-32 flex-col items-center justify-center gap-3;
 }
