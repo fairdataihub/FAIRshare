@@ -41,6 +41,31 @@
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
+            Have you recorded the dependencies of your software as per the applicable standards for
+            the language used in your software?
+          </p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+              <div class="px-3 py-2">
+                The standards for recording dependencies depend on the language used in your
+                software. For example, the use of a `requirements.txt` file is recommended for
+                Python programs, a `DESCRIPTION` file for R programs, and a `package.json` file for
+                JavaScript programs.
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question2" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question2" label="No" size="large"> No </el-radio>
+          </div>
+        </div>
+        <div class="rounded-lg border-2 border-slate-100 p-4">
+          <p class="pb-2">
             Have you followed applicable language-specific standards and best practices for your
             code?
           </p>
@@ -64,14 +89,15 @@
                 >
                   Google's R Style Guide</span
                 >
-                for R programs.
+                for R programs. This also includes, but not limited to, standard best practices like
+                commenting your code and adding descriptions in your file headers.
               </div>
             </el-collapse-item>
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question2" label="Yes" size="large"> Yes </el-radio>
-            <el-radio v-model="questions.question2" label="No" size="large"> No </el-radio>
+            <el-radio v-model="questions.question3" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question3" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
@@ -100,16 +126,14 @@
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question3" label="Yes" size="large"> Yes </el-radio>
-            <el-radio v-model="questions.question3" label="No" size="large"> No </el-radio>
+            <el-radio v-model="questions.question4" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question4" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
           <p class="pb-2">
-            Is your software documentation following applicable standards and best practices? It is
-            especially recommemded that the following aspects are documented: inputs and outputs of
-            the software, parameters and data required to run the software, the standards applied,
-            and how to contribute to the software.
+            Do you have a README file in your project? Is your software documentation following
+            applicable standards and best practices?
           </p>
 
           <el-collapse v-model="activeNames" class="border-none">
@@ -119,6 +143,31 @@
               </template>
 
               <div class="px-3 py-2">
+                It is especially recommended that the following aspects are documented: inputs and
+                outputs of the software, parameters and data required to run the software, the
+                standards applied, and how to contribute to the software. More complex software
+                applications can use tools like
+                <span class="text-url" @click="openWebsite('https://pages.github.com/')">
+                  GitHub Pages</span
+                >,
+                <span class="text-url" @click="openWebsite('https://readthedocs.org/')">
+                  Read the Docs</span
+                >,
+                <span
+                  class="text-url"
+                  @click="openWebsite('https://www.sphinx-doc.org/en/master/')"
+                >
+                  Sphinx</span
+                >,
+                <span class="text-url" @click="openWebsite('https://docusaurus.io/')">
+                  Docusaurus</span
+                >, or
+                <span class="text-url" @click="openWebsite('https://vitepress.dev/')">
+                  Vitepress</span
+                >
+                to generate documentation platforms. The use of plain text or Markdown syntax is
+                recommended for the documentation of your software.
+                <br />
                 We refer to the following literature for additional information on documenting your
                 software:
                 <span
@@ -127,13 +176,49 @@
                 >
                   Ten simple rules for documenting scientific software</span
                 >.
+                <br />
+                We also recommend using
+                <span class="text-url" @click="openWebsite('https://fairsharing.org/')"
+                  >FAIRsharing.org</span
+                >
+                to find relevant standards for your software.
               </div>
             </el-collapse-item>
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question4" label="Yes" size="large"> Yes </el-radio>
-            <el-radio v-model="questions.question4" label="No" size="large"> No </el-radio>
+            <el-radio v-model="questions.question5" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question5" label="No" size="large"> No </el-radio>
+          </div>
+        </div>
+        <div class="rounded-lg border-2 border-slate-100 p-4">
+          <p class="pb-2">Do you have a CHANGELOG file in your project?</p>
+
+          <el-collapse v-model="activeNames" class="border-none">
+            <el-collapse-item class="test-header code-collapse-item">
+              <template #title>
+                <span class="pr-2"> Learn more </span>
+              </template>
+
+              <div class="px-3 py-2">
+                A CHANGELOG file is a log or record of all notable changes made to a project. It
+                should be located in the root directory of your project and use plain text or
+                Markdown syntax. We suggest following the
+                <span class="text-url" @click="openWebsite('https://keepachangelog.com/en/1.0.0/')">
+                  keep a changelog</span
+                >
+                conventions for the contents of this file and
+                <span class="text-url" @click="openWebsite('https://semver.org/')">
+                  semantic versioning</span
+                >
+                for version numbers.
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <div class="pb-3">
+            <el-radio v-model="questions.question6" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question6" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <div class="rounded-lg border-2 border-slate-100 p-4">
@@ -167,8 +252,8 @@
           </el-collapse>
 
           <div class="pb-3">
-            <el-radio v-model="questions.question5" label="Yes" size="large"> Yes </el-radio>
-            <el-radio v-model="questions.question5" label="No" size="large"> No </el-radio>
+            <el-radio v-model="questions.question7" label="Yes" size="large"> Yes </el-radio>
+            <el-radio v-model="questions.question7" label="No" size="large"> No </el-radio>
           </div>
         </div>
         <!-- template end -->
@@ -226,6 +311,8 @@ export default {
         question3: process.env.NODE_ENV === "development" ? "Yes" : "",
         question4: process.env.NODE_ENV === "development" ? "Yes" : "",
         question5: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question6: process.env.NODE_ENV === "development" ? "Yes" : "",
+        question7: process.env.NODE_ENV === "development" ? "Yes" : "",
       },
     };
   },
