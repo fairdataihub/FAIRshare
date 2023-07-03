@@ -57,6 +57,7 @@
     "url": "https://github.com/fairdataihub/FAIRshare.git"
   },
   "dependencies": {
+    "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.10",
     "@element-plus/icons-vue": "2.1.0",
     "@headlessui/vue": "1.6.0",
@@ -120,7 +121,6 @@
     "@vue/cli-service": "5.0.8",
     "@vue/compiler-sfc": "3.3.4",
     "autoprefixer": "10.4.14",
-    "babel-eslint": "10.1.0",
     "babel-loader": "8.3.0",
     "chromatic": "6.19.9",
     "commitizen": "4.3.0",
@@ -130,7 +130,6 @@
     "dotenv": "16.3.1",
     "electron": "25.2.0",
     "electron-devtools-installer": "3.2.0",
-    "electron-notarize": "1.2.2",
     "eslint": "8.43.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
