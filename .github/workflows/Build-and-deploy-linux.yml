@@ -23,7 +23,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          activate-environment: env-electron-python
+          activate-environment: linux-fairshare-release
           environment-file: dev/linux-fairshare-release.yml
           auto-activate-base: false
 
@@ -32,11 +32,23 @@ jobs:
           node-version: "16.14.2"
 
       - name: Install package.json modules and their dependencies
-        run: npm install --ignore-scripts
+        run: yarn install --frozen-lockfile
 
       - name: Build and deploy on Linux
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VUE_APP_GITHUB_SERVER_URL: https://api.github.com
+          VUE_APP_ZENODO_SERVER_URL: https://zenodo.org/api
+          VUE_APP_FIGSHARE_SERVER_URL: https://api.figshare.com/v2
+          VUE_APP_BIO_TOOLS_SERVER_URL: https://bio.tools/api
+          VUE_APP_ZENODO_URL: https://zenodo.org
+          VUE_APP_BIO_TOOLS_URL: https://bio.tools
+          VUE_APP_FIGSHARE_URL: https://figshare.com
+          VUE_APP_ENCRYPTION_KEY: ${{ secrets.VUE_APP_ENCRYPTION_KEY }}}
+          VUE_APP_GOOGLE_ANALYTICS_ID: ${{ secrets.VUE_APP_GOOGLE_ANALYTICS_ID }}
+          VUE_APP_FTP_SERVER_URL: ftp-private.ncbi.nlm.nih.gov
+          VUE_APP_FTP_SERVER_USER: ${{ secrets.VUE_APP_FTP_SERVER_USER }}
+          VUE_APP_FTP_SERVER_PASSWORD: ${{ secrets.VUE_APP_FTP_SERVER_PASSWORD }}
         run: |
           npm run python:build
           npm run electron:build-release
