@@ -16,6 +16,13 @@ import CodeReviewStandards from "../views/workflow/Code/ReviewStandards.vue";
 import CodePickLicense from "../views/workflow/Code/PickLicense.vue";
 import CodeSelectGithubRepo from "../views/workflow/Code/SelectGithubRepo.vue";
 
+// Immunology metadata related components
+import ImmunologyLanding from "../views/workflow/Immunology/ImmunologyLanding.vue";
+import ImmunologySelectSourceFolder from "../views/workflow/Immunology/SelectSourceFolder.vue";
+import ImmunologyReviewStandards from "../views/workflow/Immunology/ReviewStandards.vue";
+import ImmunologyCreateMetadata from "../views/workflow/Immunology/CreateMetadata.vue";
+import ImmunologyPickLicense from "../views/workflow/Immunology/PickLicense.vue";
+
 // Other metadata related components
 import OtherLanding from "../views/workflow/Other/OtherLanding.vue";
 import OtherSelectSourceFolder from "../views/workflow/Other/SelectSourceFolder.vue";
@@ -102,6 +109,10 @@ const routes = [
     component: CodeLanding,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Immunology/landing",
+    component: ImmunologyLanding,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Other/landing",
     component: OtherLanding,
   },
@@ -112,6 +123,10 @@ const routes = [
   {
     path: "/datasets/:datasetID/:workflowID/Code/selectFolder",
     component: CodeSelectSourceFolder,
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/selectFolder",
+    component: ImmunologySelectSourceFolder,
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/selectFolder",
@@ -130,6 +145,10 @@ const routes = [
     component: CodeReviewStandards,
   },
   {
+    path: "/datasets/:datasetID/:workflowID/Immunology/reviewStandards",
+    component: ImmunologyReviewStandards,
+  },
+  {
     path: "/datasets/:datasetID/:workflowID/Other/reviewStandards",
     component: OtherReviewStandards,
   },
@@ -141,6 +160,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Code/createMetadata",
     component: CodeCreateMetadata,
     name: "CodeCreateMetadata",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/createMetadata",
+    component: ImmunologyCreateMetadata,
+    name: "ImmunologyCreateMetadata",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/createMetadata",
@@ -156,6 +180,11 @@ const routes = [
     path: "/datasets/:datasetID/:workflowID/Code/pickLicense",
     component: CodePickLicense,
     name: "CodePickLicense",
+  },
+  {
+    path: "/datasets/:datasetID/:workflowID/Immunology/pickLicense",
+    component: ImmunologyPickLicense,
+    name: "ImmunologyPickLicense",
   },
   {
     path: "/datasets/:datasetID/:workflowID/Other/pickLicense",

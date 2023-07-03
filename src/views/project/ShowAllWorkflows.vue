@@ -209,6 +209,95 @@
 
           <div
             class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            v-if="immunologyObject.show"
+          >
+            <div
+              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              @click="immunologyObject.minimize = !immunologyObject.minimize"
+            >
+              <Icon icon="bi:arrows-expand" height="20" />
+            </div>
+
+            <div class="flex flex-row items-center pb-2">
+              <Icon icon="mdi:virus-outline" height="55" />
+              <div class="ml-2 flex w-full flex-col">
+                <span class="text-base">
+                  {{ immunologyObject.title }}
+                </span>
+
+                <span class="text-sm" v-show="immunologyObject.name != ''">
+                  {{ immunologyObject.name }}
+                </span>
+              </div>
+            </div>
+
+            <line-divider></line-divider>
+
+            <div
+              class="flex flex-col transition-all"
+              :class="{
+                'max-h-0': immunologyObject.minimize,
+                'max-h-screen': !immunologyObject.minimize,
+              }"
+            >
+              <el-table :data="immunologyObject.data" stripe style="width: 100%">
+                <el-table-column prop="task" label="Task" />
+                <el-table-column label="Status">
+                  <template #default="scope">
+                    <Icon
+                      icon="bi:check-circle"
+                      class="text-green-500"
+                      v-if="
+                        scope.row.status !== 'invalid' &&
+                        scope.row.status !== '' &&
+                        scope.row.status !== false
+                      "
+                    />
+                    <Icon
+                      icon="carbon:warning-alt"
+                      class="text-yellow-500"
+                      v-if="scope.row.status == 'invalid'"
+                    />
+                    <Icon
+                      icon="charm:circle-cross"
+                      class="text-orange-500"
+                      v-if="scope.row.status == '' || scope.row.status == false"
+                    />
+                  </template>
+                </el-table-column>
+                <el-table-column label="Details">
+                  <template #default="scope">
+                    <span v-if="scope.row.type !== 'doi'">
+                      {{ scope.row.detail }}
+                    </span>
+                    <a
+                      v-else
+                      :href="`https://doi.org/${scope.row.detail}`"
+                      target="_blank"
+                      class="text-url"
+                      rel="noopener noreferrer"
+                    >
+                      {{ scope.row.detail }}
+                    </a>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+            <div class="mt-4 flex items-center justify-end px-2 py-2">
+              <button
+                class="primary-button"
+                @click="navigateToCurate(immunologyObject.workflowID)"
+                ref="continueButton"
+              >
+                Curate {{ immunologyObject.title }}
+                <el-icon><arrow-right-bold /></el-icon>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
             v-if="nextGenHighThruObject.show"
           >
             <div
@@ -375,6 +464,7 @@ export default {
       workflowID: "",
       codeObject: { data: [] },
       otherObject: { data: [] },
+      immunologyObject: { data: [] },
       nextGenHighThruObject: { data: [] },
       codeLicensesOptions: codeLicensesJSON.licenses,
       otherLicensesOptions: otherLicensesJSON.licenses,
@@ -450,6 +540,8 @@ export default {
           return `/datasets/${this.datasetID}/${this.workflowID}/Code/landing`;
         case "Other":
           return `/datasets/${this.datasetID}/${this.workflowID}/Other/landing`;
+        case "Immunology":
+          return `/datasets/${this.datasetID}/${this.workflowID}/Immunology/landing`;
         case "NextGenHighThroughputSequencing":
           return `/datasets/${this.datasetID}/${this.workflowID}/NextGenHighThroughputSequencing/landing`;
         default:
@@ -885,6 +977,169 @@ export default {
         type: "doi",
       });
     },
+    generateImmunologyObject() {
+      this.immunologyObject.show = false;
+      this.immunologyObject.minimize = false;
+
+      const allWorkflows = Object.keys(this.dataset.workflows);
+
+      const immunologyWorkflowPresent = allWorkflows.some(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "Immunology"
+      );
+
+      if (!immunologyWorkflowPresent) {
+        return;
+      }
+
+      const workflowID = allWorkflows.find(
+        (workflow) => this.dataset.workflows[workflow].type[0] === "Immunology"
+      );
+
+      this.immunologyObject.workflowID = workflowID;
+
+      const workflow = this.dataset.workflows[workflowID];
+
+      let immunologyMetadata = {};
+
+      if ("Immunology" in this.dataset.data) {
+        immunologyMetadata = this.dataset.data.Immunology;
+      }
+
+      this.immunologyObject.data = [];
+
+      this.immunologyObject.show = true;
+      this.immunologyObject.title = "Immunology Data";
+
+      if ("name" in this.dataset.data.Immunology.questions) {
+        this.immunologyObject.name = this.dataset.data.Immunology.questions.name;
+      }
+
+      this.immunologyObject.data.push({
+        status: this.getSource(workflowID),
+        task: "Source",
+        detail: this.getSource(workflowID),
+        type: "",
+      });
+
+      if ("standards" in immunologyMetadata) {
+        let invalid = false;
+        for (let question of Object.keys(immunologyMetadata.standards)) {
+          if (immunologyMetadata.standards[question] !== "Yes") {
+            invalid = true;
+          }
+        }
+        if (invalid) {
+          this.immunologyObject.data.push({
+            status: "invalid",
+            task: "Review standards",
+            detail: "Not all standards have been met",
+            type: "standards",
+          });
+        } else {
+          this.immunologyObject.data.push({
+            status: true,
+            task: "Review standards",
+            detail: "All standards met",
+            type: "standards",
+          });
+        }
+      } else {
+        this.immunologyObject.data.push({
+          status: false,
+          task: "Review standards",
+          detail: "None provided",
+          type: "standards",
+        });
+      }
+
+      let generateStatus = "";
+
+      if (workflow.generateImmunologyMetadata) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.immunologyObject.data.push({
+        status: generateStatus,
+        task: "Metadata",
+        detail: "basic_study.tsv",
+        type: "",
+      });
+
+      let license = "";
+
+      if ("license" in this.dataset.data.Immunology.questions) {
+        license = this.getLicenseName(this.dataset.data.Immunology.questions.license, "Code");
+      } else {
+        license = "";
+      }
+      this.immunologyObject.data.push({
+        status: license,
+        task: "License",
+        detail: license,
+        type: "",
+      });
+
+      let destination = "";
+      if (
+        "uploadToRepo" in workflow &&
+        "destination" in workflow &&
+        "name" in workflow.destination
+      ) {
+        destination = this.repoFullName(workflow.destination.name);
+      } else {
+        destination = "";
+      }
+      this.immunologyObject.data.push({
+        status: destination,
+        task: "Destination",
+        detail: destination,
+        type: "",
+      });
+
+      if (workflow.datasetUploaded) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.immunologyObject.data.push({
+        status: generateStatus,
+        task: "Uploaded",
+        detail: "",
+        type: "",
+      });
+
+      if (workflow.datasetPublished) {
+        generateStatus = true;
+      } else {
+        generateStatus = false;
+      }
+      this.immunologyObject.data.push({
+        status: generateStatus,
+        task: "Published",
+        detail: "",
+        type: "",
+      });
+
+      let doi = "";
+      if (
+        "destination" in workflow &&
+        "name" in workflow.destination &&
+        workflow.destination[workflow.destination.name] != null &&
+        workflow.destination[workflow.destination.name] != undefined &&
+        "doi" in workflow.destination[workflow.destination.name]
+      ) {
+        doi = workflow.destination[workflow.destination.name].doi;
+      } else {
+        doi = "";
+      }
+      this.immunologyObject.data.push({
+        status: doi,
+        task: "Last generated DOI",
+        detail: doi,
+        type: "doi",
+      });
+    },
     generateNextGenHighThruObject() {
       this.nextGenHighThruObject.show = false;
       this.nextGenHighThruObject.minimize = false;
@@ -1032,6 +1287,7 @@ export default {
     generateStatusObjects() {
       this.generateCodeObject();
       this.generateOtherObject();
+      this.generateImmunologyObject();
       this.generateNextGenHighThruObject();
     },
   },

@@ -10,11 +10,9 @@
         </template>
       </el-page-header>
 
-      <!-- <span class="font-medium text-left"> Project settings </span>
+      <span class="text-left font-medium"> Project settings </span>
 
-      <span class="pt-1">
-        Update your project name, description and other settings.
-      </span> -->
+      <span class="pt-1"> Update your project name, description and other settings. </span>
 
       <line-divider />
 
