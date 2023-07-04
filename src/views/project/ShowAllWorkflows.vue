@@ -31,11 +31,11 @@
 
         <div class="flex w-full flex-col p-2">
           <div
-            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            class="relative mx-3 my-4 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
             v-if="codeObject.show"
           >
             <div
-              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute right-5 top-4 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="codeObject.minimize = !codeObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -122,11 +122,11 @@
           </div>
 
           <div
-            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            class="relative mx-3 my-4 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
             v-if="otherObject.show"
           >
             <div
-              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute right-5 top-4 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="otherObject.minimize = !otherObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -208,11 +208,11 @@
           </div>
 
           <div
-            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            class="relative mx-3 my-4 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
             v-if="immunologyObject.show"
           >
             <div
-              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute right-5 top-4 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="immunologyObject.minimize = !immunologyObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />
@@ -297,11 +297,11 @@
           </div>
 
           <div
-            class="relative my-4 mx-3 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
+            class="relative mx-3 my-4 flex flex-col rounded-lg border border-zinc-200 px-6 py-4 shadow-md transition-all"
             v-if="nextGenHighThruObject.show"
           >
             <div
-              class="absolute top-4 right-5 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
+              class="absolute right-5 top-4 cursor-pointer rounded-xl border-zinc-200 bg-zinc-100 p-2 shadow-sm transition-all hover:shadow-lg"
               @click="nextGenHighThruObject.minimize = !nextGenHighThruObject.minimize"
             >
               <Icon icon="bi:arrows-expand" height="20" />

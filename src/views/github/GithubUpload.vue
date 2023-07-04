@@ -31,7 +31,7 @@
             <LoadingEllipsis v-if="percentage !== 100"></LoadingEllipsis>
           </p>
         </div>
-        <div class="pt-2 pl-2" v-if="errorMessage != ''">
+        <div class="pl-2 pt-2" v-if="errorMessage != ''">
           <p style="white-space: pre-line">
             {{ errorMessage }}
           </p>

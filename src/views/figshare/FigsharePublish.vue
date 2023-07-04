@@ -37,7 +37,7 @@
       <div class="flex h-full flex-col items-center justify-center px-10" v-else>
         <Vue3Lottie
           animationLink="https://assets4.lottiefiles.com/packages/lf20_lg6lh7fp.json"
-          class="pointer-events-none absolute top-0 left-0 h-full w-full"
+          class="pointer-events-none absolute left-0 top-0 h-full w-full"
           :loop="1"
         />
 

@@ -2,14 +2,14 @@
   <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col items-center justify-evenly">
       <div class="pointer-events-none">
-        <div class="flex w-full items-center justify-center pt-5 pb-1">
+        <div class="flex w-full items-center justify-center pb-1 pt-5">
           <img
             class="w-[350px] xl:w-[400px]"
             src="../../assets/brand/logo-with-name.png"
             alt="FAIRshare logo"
           />
         </div>
-        <div class="mb-1 flex w-full flex-col items-center justify-center pt-4 pb-3">
+        <div class="mb-1 flex w-full flex-col items-center justify-center pb-3 pt-4">
           <h2 class="text-xl font-medium text-slate-700">
             Make your biomedical research data and software
           </h2>

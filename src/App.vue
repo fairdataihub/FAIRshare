@@ -61,7 +61,7 @@
           :height="180"
         />
         <div
-          class="absolute top-2 right-2 hidden cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          class="absolute right-2 top-2 hidden cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
           @click="closeNotification"
         >
           <el-icon><circle-close-filled /></el-icon>
@@ -78,7 +78,7 @@
         v-if="showDownloadingMessage"
       >
         <div
-          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          class="absolute right-2 top-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
           @click="closeNotification"
         >
           <el-icon><circle-close-filled /></el-icon>
@@ -98,7 +98,7 @@
         v-if="showRestartMessage"
       >
         <div
-          class="absolute top-2 right-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
+          class="absolute right-2 top-2 cursor-pointer text-zinc-400 transition-all hover:text-zinc-700"
           @click="closeNotification"
         >
           <el-icon><circle-close-filled /></el-icon>
@@ -115,7 +115,7 @@
               : "Restart FAIRshare to install the latest version of the app."
           }}
         </p>
-        <button class="primary-plain-button py-1 px-2" @click="restartAppForUpdate">
+        <button class="primary-plain-button px-2 py-1" @click="restartAppForUpdate">
           {{ platform == "darwin" ? "Close FAIRshare" : "Restart FAIRshare" }}
         </button>
       </div>

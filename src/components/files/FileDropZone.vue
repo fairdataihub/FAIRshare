@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-5 pb-3">
+  <div class="pb-3 pt-5">
     <div
       class="dropzone group flex w-full cursor-pointer items-center justify-center space-x-4 rounded-md border-2 border-dashed transition-all hover:border-primary-400"
       :class="{ '!border-primary-400': highlightBox }"
@@ -30,7 +30,7 @@
       <div
         v-for="file in localFileList"
         :key="file"
-        class="flex cursor-default flex-row items-center justify-between rounded-lg py-1 px-3 transition-all hover:bg-primary-50"
+        class="flex cursor-default flex-row items-center justify-between rounded-lg px-3 py-1 transition-all hover:bg-primary-50"
       >
         <div class="flex items-center">
           <Icon icon="akar-icons:file" width="20" height="20" />

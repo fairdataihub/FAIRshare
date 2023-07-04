@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
     <div class="flex h-full w-full flex-col">
-      <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Contact Us</h1>
+      <h1 class="pb-1 pt-5 text-3xl font-bold text-slate-700">Contact Us</h1>
 
       <line-divider></line-divider>
 

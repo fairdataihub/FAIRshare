@@ -24,7 +24,7 @@
         >
         to find out more about them.
       </p>
-      <p class="pt-1 pb-4">
+      <p class="pb-4 pt-1">
         <br />
         To implement these guidelines, FAIRshare will guide you step-by-step through the following
         process:

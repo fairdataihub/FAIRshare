@@ -212,7 +212,7 @@
 
                 <div class="flex flex-col items-center">
                   <div
-                    class="mt-4 mb-8 flex w-full flex-col items-start justify-center rounded-xl border border-zinc-100 px-4 py-4 shadow-xl"
+                    class="mb-8 mt-4 flex w-full flex-col items-start justify-center rounded-xl border border-zinc-100 px-4 py-4 shadow-xl"
                     v-if="'id' in selectedDeposition"
                   >
                     <h3 class="font-semibold">Currently selected Zenodo deposition</h3>
@@ -292,7 +292,7 @@
                                 :class="[
                                   active ? 'bg-zinc-100 text-zinc-900' : 'text-gray-900',
                                   selected ? 'bg-secondary-100 text-gray-900' : 'text-gray-900',
-                                  'relative cursor-default select-none border-t border-b border-zinc-50 py-2 pl-10 pr-4',
+                                  'relative cursor-default select-none border-b border-t border-zinc-50 py-2 pl-10 pr-4',
                                 ]"
                               >
                                 <div class="flex flex-col">

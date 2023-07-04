@@ -125,7 +125,7 @@
                   Release description <span class="text-red-600">*</span>
                 </p>
                 <button
-                  class="secondary-plain-button py-1 px-2"
+                  class="secondary-plain-button px-2 py-1"
                   @click="autoGenerateReleaseNotes"
                   :disabled="disableAutoGenerateReleaseNotes"
                 >
@@ -206,7 +206,7 @@
       <div class="flex h-full flex-col items-center justify-center" v-if="showFinalInstructions">
         <Vue3Lottie
           animationLink="https://assets4.lottiefiles.com/packages/lf20_lg6lh7fp.json"
-          class="pointer-events-none absolute top-0 left-0 h-full w-full"
+          class="pointer-events-none absolute left-0 top-0 h-full w-full"
           :loop="1"
         />
         <div v-if="draftReleaseURL !== ''">
@@ -287,7 +287,7 @@
             <div class="py-2">
               <p class="pb-2 text-base font-semibold text-gray-700">Markdown</p>
               <div
-                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2"
               >
                 <div
                   class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"
@@ -318,7 +318,7 @@
             <div class="py-2">
               <p class="pb-2 text-base font-semibold text-gray-700">HTML</p>
               <div
-                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 py-2 px-3"
+                class="relative w-full break-normal rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2"
               >
                 <div
                   class="badge-container h-[50px] overflow-x-auto overflow-y-hidden whitespace-nowrap text-left font-mono text-sm"

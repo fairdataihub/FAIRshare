@@ -162,7 +162,7 @@
 
       <fade-transition>
         <div v-if="ready">
-          <div class="flex justify-center pt-3 pb-1" v-if="validTokenAvailable">
+          <div class="flex justify-center pb-1 pt-3" v-if="validTokenAvailable">
             <Vue3Lottie
               animationLink="https://assets9.lottiefiles.com/packages/lf20_0jomt6wm.json"
               :width="100"

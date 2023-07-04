@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div
-    class="relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pt-2 pb-5"
+    class="relative mr-3 flex h-screen min-h-screen w-full max-w-xs flex-col bg-gray-50 pb-5 pt-2"
     :class="{
       'w-72': sideBarOpen,
       'w-[85px]': !sideBarOpen,
@@ -23,7 +23,7 @@
         />
 
         <div
-          class="group absolute top-0 right-2 flex scale-100 transform cursor-pointer items-center justify-center p-1 transition-all hover:scale-110"
+          class="group absolute right-2 top-0 flex scale-100 transform cursor-pointer items-center justify-center p-1 transition-all hover:scale-110"
           :class="{ 'right-6': !sideBarOpen }"
           @click="sideBarOpen = !sideBarOpen"
           title="Open or close the sidebar"

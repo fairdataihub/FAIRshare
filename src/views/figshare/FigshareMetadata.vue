@@ -91,7 +91,7 @@
                       type="text"
                       placeholder="E-mail address"
                     ></el-input>
-                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                    <span class="ml-2 mt-1 text-xs text-gray-400"> Optional </span>
                   </div>
 
                   <div class="mx-2 flex w-full flex-col">
@@ -100,7 +100,7 @@
                       type="text"
                       placeholder="ORCID (e.g.: 0000-0002-1825-0097)"
                     ></el-input>
-                    <span class="mt-1 ml-2 text-xs text-gray-400"> Optional </span>
+                    <span class="ml-2 mt-1 text-xs text-gray-400"> Optional </span>
                   </div>
                 </div>
                 <div class="flex w-1/12 flex-row items-start justify-evenly py-4">

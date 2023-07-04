@@ -31,7 +31,7 @@
         <transition name="fade" mode="out-in" appear>
           <div v-if="validZenodoHookTokenFound" class="my-10">
             <div class="flex items-center justify-center">
-              <p class="my-3 mx-2 font-medium text-emerald-400">
+              <p class="mx-2 my-3 font-medium text-emerald-400">
                 We found a Zenodo webhook on your GitHub repository.
               </p>
               <Vue3Lottie

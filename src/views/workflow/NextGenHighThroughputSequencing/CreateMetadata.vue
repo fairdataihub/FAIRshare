@@ -57,7 +57,7 @@
                 />
               </div>
 
-              <div class="mt-3 mb-1">
+              <div class="mb-1 mt-3">
                 <span v-if="currentStep === 3">
                   Add some information about your samples below. We will use this information to
                   automatically generate the required metadata files needed for your dataset.

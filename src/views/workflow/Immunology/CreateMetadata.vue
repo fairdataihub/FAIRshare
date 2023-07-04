@@ -46,7 +46,7 @@
                 />
               </div>
 
-              <div class="mt-3 mb-1">
+              <div class="mb-1 mt-3">
                 <span>
                   Provide information about your dataset below. We will use this information to
                   automatically generate and include in your dataset the standard metadata files

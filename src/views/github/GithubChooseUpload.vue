@@ -53,7 +53,7 @@
           v-if="additionalFilesLocation === 'github'"
           class="flex h-full w-full flex-col items-center"
         >
-          <div class="w-full pt-4 pb-6">
+          <div class="w-full pb-6 pt-4">
             <!-- <el-select-v2
               v-model="selectedRelease"
               :options="allReleases"

@@ -46,7 +46,7 @@
                       >
                         <div class="flex items-center">
                           <Icon icon="clarity:date-outline-badged" />
-                          <span class="pr-2 pl-1 text-sm">
+                          <span class="pl-1 pr-2 text-sm">
                             {{ shortDate(dataset.meta.dateCreated) }}
                           </span>
                         </div>
@@ -59,7 +59,7 @@
                       >
                         <div class="flex items-center">
                           <Icon icon="bx:time" />
-                          <span class="pr-2 pl-1 text-sm">
+                          <span class="pl-1 pr-2 text-sm">
                             {{ dateDifference(dataset.meta.dateModified) }} ago
                           </span>
                         </div>
@@ -74,7 +74,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="ic:outline-source" />
-                            <span class="pr-2 pl-1 text-sm"> Local </span>
+                            <span class="pl-1 pr-2 text-sm"> Local </span>
                           </div>
                         </el-tooltip>
 
@@ -86,7 +86,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="ic:outline-source" />
-                            <span class="pr-2 pl-1 text-sm"> GitHub </span>
+                            <span class="pl-1 pr-2 text-sm"> GitHub </span>
                           </div>
                         </el-tooltip>
                       </div>
@@ -100,7 +100,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="clarity:upload-cloud-line" />
-                            <span class="pr-2 pl-1 text-sm"> Zenodo </span>
+                            <span class="pl-1 pr-2 text-sm"> Zenodo </span>
                           </div>
                         </el-tooltip>
                         <el-tooltip
@@ -111,7 +111,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="clarity:upload-cloud-line" />
-                            <span class="pr-2 pl-1 text-sm"> Figshare </span>
+                            <span class="pl-1 pr-2 text-sm"> Figshare </span>
                           </div>
                         </el-tooltip>
                       </div>
@@ -166,7 +166,7 @@
                       >
                         <div class="flex items-center">
                           <Icon icon="clarity:date-outline-badged" />
-                          <span class="pr-2 pl-1 text-sm">
+                          <span class="pl-1 pr-2 text-sm">
                             {{ shortDate(dataset.meta.dateCreated) }}
                           </span>
                         </div>
@@ -179,7 +179,7 @@
                       >
                         <div class="flex items-center">
                           <Icon icon="bx:time" />
-                          <span class="pr-2 pl-1 text-sm">
+                          <span class="pl-1 pr-2 text-sm">
                             {{ dateDifference(dataset.meta.dateModified) }} ago
                           </span>
                         </div>
@@ -194,7 +194,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="ic:outline-source" />
-                            <span class="pr-2 pl-1 text-sm"> Local </span>
+                            <span class="pl-1 pr-2 text-sm"> Local </span>
                           </div>
                         </el-tooltip>
 
@@ -206,7 +206,7 @@
                         >
                           <div class="flex items-center">
                             <Icon icon="ic:outline-source" />
-                            <span class="pr-2 pl-1 text-sm"> GitHub </span>
+                            <span class="pl-1 pr-2 text-sm"> GitHub </span>
                           </div>
                         </el-tooltip>
                       </div>
@@ -219,7 +219,7 @@
                       >
                         <div class="flex items-center">
                           <Icon icon="clarity:upload-cloud-line" />
-                          <span class="pr-2 pl-1 text-sm capitalize">
+                          <span class="pl-1 pr-2 text-sm capitalize">
                             {{ dataset.meta.destination }}
                           </span>
                         </div>
@@ -258,7 +258,7 @@
               <Icon icon="grommet-icons:form-next-link" class="ml-2 h-5 w-5" />
             </div>
           </router-link>
-          <div class="flex flex-row space-x-4 pr-2 pl-1" v-if="selectedDataset !== ''">
+          <div class="flex flex-row space-x-4 pl-1 pr-2" v-if="selectedDataset !== ''">
             <button class="secondary-plain-button" @click="editProject">
               <el-icon><setting-icon /></el-icon> Project settings
             </button>
