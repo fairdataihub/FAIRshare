@@ -146,7 +146,7 @@
     "prettier-plugin-tailwindcss": "0.3.0",
     "pretty": "2.0.0",
     "run-script-os": "1.1.6",
-    "tailwindcss": "3.1.8",
+    "tailwindcss": "3.3.2",
     "tailwindcss-debug-screens": "2.2.1",
     "vue-cli-plugin-electron-builder": "2.1.1",
     "vue-loader": "17.2.2"
