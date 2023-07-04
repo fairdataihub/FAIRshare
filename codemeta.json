@@ -1,77 +1,59 @@
 {
-    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
-    "@type": "SoftwareSourceCode",
-    "license": "https://spdx.org/licenses/MIT",
-    "codeRepository": "https://github.com/fairdataihub/FAIRshare",
-    "dateCreated": "2022-03-18",
-    "datePublished": "2022-03-18",
-    "dateModified": "2023-07-04",
-    "downloadUrl": "https://fairdataihub.org/fairshare",
-    "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues",
-    "name": "FAIRshare: FAIR data and software sharing made easy",
-    "version": "2.1.0",
-    "identifier": "10.5281/zenodo.8112716",
-    "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
-    "applicationCategory": "Scientific",
-    "releaseNotes": "Feature additions\nAdded new workflows for both NCBI GEO and Immport. These repositories are not enabled for users but will be in the future.\nAdded support for better user validation on Figshare.\n\nBug fixes\nThe bio.tools register button is now only shown if the data type is an allowed application.\nThe text in the Review standards section has been revised to better reflect the purpose of the project.\nElectron has been updated to v25.",
-    "funding": "U01AI150741",
-    "developmentStatus": "active",
-    "isPartOf": "https://fairdataihub.org",
-    "referencePublication": "https://doi.org/10.1101/2022.04.18.488694",
-    "funder": {
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/fairdataihub/FAIRshare",
+  "dateCreated": "2022-03-18",
+  "datePublished": "2022-03-18",
+  "dateModified": "2023-07-04",
+  "downloadUrl": "https://fairdataihub.org/fairshare",
+  "issueTracker": "https://github.com/fairdataihub/FAIRshare/issues",
+  "name": "FAIRshare: FAIR data and software sharing made easy",
+  "version": "2.1.0",
+  "identifier": "10.5281/zenodo.8112716",
+  "description": "Simplifying the curation and sharing of biomedical research data and software according to applicable FAIR guidelines",
+  "applicationCategory": "Scientific",
+  "releaseNotes": "Feature additions\nAdded new workflows for both NCBI GEO and Immport. These repositories are not enabled for users but will be in the future.\nAdded support for better user validation on Figshare.\n\nBug fixes\nThe bio.tools register button is now only shown if the data type is an allowed application.\nThe text in the Review standards section has been revised to better reflect the purpose of the project.\nElectron has been updated to v25.",
+  "funding": "U01AI150741",
+  "developmentStatus": "active",
+  "isPartOf": "https://fairdataihub.org",
+  "referencePublication": "https://doi.org/10.1101/2022.04.18.488694",
+  "funder": {
+    "@type": "Organization",
+    "@name": "National Institutes of Health (NIH)"
+  },
+  "keywords": ["curation", "electron", "fair", "macos", "metadata", "sharing", "ubuntu", "windows"],
+  "programmingLanguage": ["Vue", "Python", "JavaScript", "CSS", "HTML"],
+  "operatingSystem": [
+    "Windows 11",
+    "Windows 10",
+    "Big Sur (macOS 11)",
+    "Catalina (macOS 10.15)",
+    "Ubuntu"
+  ],
+  "relatedLink": ["https://fairdataihub.org/fairshare", "https://docs.fairshareapp.io"],
+  "author": [
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0003-2829-8032",
+      "givenName": "Sanjay",
+      "familyName": "Soundarajan",
+      "email": "ssoundarajan@calmi2.org",
+      "affiliation": {
         "@type": "Organization",
-        "@name": "National Institutes of Health (NIH)"
+        "name": "FAIR Data Innovations Hub, California Medical Innovations Institute"
+      }
     },
-    "keywords": [
-        "curation",
-        "electron",
-        "fair",
-        "macos",
-        "metadata",
-        "sharing",
-        "ubuntu",
-        "windows"
-    ],
-    "programmingLanguage": [
-        "Vue",
-        "Python",
-        "JavaScript",
-        "CSS",
-        "HTML"
-    ],
-    "operatingSystem": [
-        "Windows 11",
-        "Windows 10",
-        "Big Sur (macOS 11)",
-        "Catalina (macOS 10.15)",
-        "Ubuntu"
-    ],
-    "relatedLink": [
-        "https://fairdataihub.org/fairshare",
-        "https://docs.fairshareapp.io"
-    ],
-    "author": [
-        {
-            "@type": "Person",
-            "@id": "https://orcid.org/0000-0003-2829-8032",
-            "givenName": "Sanjay",
-            "familyName": "Soundarajan",
-            "email": "ssoundarajan@calmi2.org",
-            "affiliation": {
-                "@type": "Organization",
-                "name": "FAIR Data Innovations Hub, California Medical Innovations Institute"
-            }
-        },
-        {
-            "@type": "Person",
-            "@id": "https://orcid.org/0000-0002-0307-262X",
-            "givenName": "Bhavesh",
-            "familyName": "Patel",
-            "email": "bpatel@calmi2.org",
-            "affiliation": {
-                "@type": "Organization",
-                "name": "FAIR Data Innovations Hub, California Medical Innovations Institute"
-            }
-        }
-    ]
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0002-0307-262X",
+      "givenName": "Bhavesh",
+      "familyName": "Patel",
+      "email": "bpatel@calmi2.org",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "FAIR Data Innovations Hub, California Medical Innovations Institute"
+      }
+    }
+  ]
 }
