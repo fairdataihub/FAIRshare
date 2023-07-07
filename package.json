@@ -95,8 +95,8 @@
     "vuedraggable": "4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.18.10",
-    "@babel/eslint-parser": "7.18.9",
+    "@babel/core": "7.22.6",
+    "@babel/eslint-parser": "7.22.6",
     "@commitlint/cli": "17.6.5",
     "@commitlint/config-conventional": "17.6.5",
     "@electron/notarize": "2.1.0",
