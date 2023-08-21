@@ -1908,10 +1908,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@kangc/v-md-editor@2.3.15":
-  version "2.3.15"
-  resolved "https://registry.yarnpkg.com/@kangc/v-md-editor/-/v-md-editor-2.3.15.tgz#2d005eb64cfc5748688df2fedec7ad9f92ddcdd7"
-  integrity sha512-tPsBJd4YwJSZK3+mbeBu9Iol9Zi3BboNr1QbDfsxVQ/4hlMgEpMT+vj3/e5FNwgBx50RIphU0j9qNLK+dgFmqA==
+"@kangc/v-md-editor@2.3.16":
+  version "2.3.16"
+  resolved "https://registry.yarnpkg.com/@kangc/v-md-editor/-/v-md-editor-2.3.16.tgz#b7d3ab04ec0574e9429b300808f27cb53f195328"
+  integrity sha512-XBsU6TWsXhXbyLv6b14J+j4PmW2btMEPBXhkVRcRt2hE/wFQk3q3WFz0/7Ymx4ISfJVC8+G0uzJT8bRojneBSA==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@vuepress/markdown" "^1.8.2"
