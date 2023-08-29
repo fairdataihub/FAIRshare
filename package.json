@@ -139,7 +139,7 @@
     "gulp-copy": "4.0.1",
     "gulp-rename": "2.0.0",
     "husky": "8.0.3",
-    "lint-staged": "13.2.2",
+    "lint-staged": "13.3.0",
     "megasanjay-devmoji": "1.2.1",
     "postcss": "8.4.28",
     "prettier": "2.8.8",
