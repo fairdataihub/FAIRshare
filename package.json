@@ -57,7 +57,7 @@
     "url": "https://github.com/fairdataihub/FAIRshare.git"
   },
   "dependencies": {
-    "@electron/remote": "2.0.10",
+    "@electron/remote": "2.0.11",
     "@element-plus/icons-vue": "2.1.0",
     "@headlessui/vue": "1.6.0",
     "@kangc/v-md-editor": "2.3.17",
