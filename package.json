@@ -97,7 +97,7 @@
   "devDependencies": {
     "@babel/core": "7.22.6",
     "@babel/eslint-parser": "7.22.6",
-    "@commitlint/cli": "17.7.1",
+    "@commitlint/cli": "17.7.2",
     "@commitlint/config-conventional": "17.7.0",
     "@electron/notarize": "2.1.0",
     "@fairdataihub/config": "2.2.3",
