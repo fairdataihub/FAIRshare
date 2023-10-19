@@ -8318,10 +8318,10 @@ electron-updater@5.0.5:
     semver "^7.3.5"
     typed-emitter "^2.1.0"
 
-electron@25.9.1:
-  version "25.9.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-25.9.1.tgz#cc4baecbebe346b050b9cf9db9882d3d00fc4abd"
-  integrity sha512-Uo/Fh7igjoUXA/f90iTATZJesQEArVL1uLA672JefNWTLymdKSZkJKiCciu/Xnd0TS6qvdIOUGuJFSTQnKskXQ==
+electron@25.9.2:
+  version "25.9.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-25.9.2.tgz#12be98fbcff485c94ff99df21e0727797a45364a"
+  integrity sha512-hVBN5rsrL99BKNHvzMeYy2PkAmewuIobu4U3o3EzVz4MDoLmMfW4yTH5GZ4RbJrpokoEky5IzGtRR/ggPzL6Fw==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^18.11.18"
