@@ -60,7 +60,7 @@
     "@electron/remote": "2.0.12",
     "@element-plus/icons-vue": "2.1.0",
     "@headlessui/vue": "1.6.0",
-    "@kangc/v-md-editor": "2.3.17",
+    "@kangc/v-md-editor": "2.3.18",
     "axios": "1.6.0",
     "core-js": "3.33.2",
     "crypto-js": "4.2.0",
