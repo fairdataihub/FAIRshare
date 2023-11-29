@@ -61,7 +61,7 @@
     "@element-plus/icons-vue": "2.1.0",
     "@headlessui/vue": "1.6.0",
     "@kangc/v-md-editor": "2.3.18",
-    "axios": "1.6.0",
+    "axios": "1.6.1",
     "core-js": "3.33.2",
     "crypto-js": "4.2.0",
     "dayjs": "1.11.10",
