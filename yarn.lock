@@ -8252,10 +8252,10 @@ electron-updater@5.0.5:
     semver "^7.3.5"
     typed-emitter "^2.1.0"
 
-electron@25.9.8:
-  version "25.9.8"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-25.9.8.tgz#7c125ccbddad02861736275b0d4a387c59a91469"
-  integrity sha512-PGgp6PH46QVENHuAHc2NT1Su8Q1qov7qIl2jI5tsDpTibwV2zD8539AeWBQySeBU4dhbj9onIl7+1bXQ0wefBg==
+electron@28.2.3:
+  version "28.2.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-28.2.3.tgz#d26821bcfda7ee445b4b75231da4b057a7ce6e7b"
+  integrity sha512-he9nGphZo03ejDjYBXpmFVw0KBKogXvR2tYxE4dyYvnfw42uaFIBFrwGeenvqoEOfheJfcI0u4rFG6h3QxDwnA==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^18.11.18"
