@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: 3.9
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: linux-fairshare-release
           environment-file: dev/linux-fairshare-release.yml
