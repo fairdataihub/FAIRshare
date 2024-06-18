@@ -7995,10 +7995,10 @@ doctypes@^1.1.0:
   resolved "https://registry.yarnpkg.com/doctypes/-/doctypes-1.1.0.tgz#ea80b106a87538774e8a3a4a5afe293de489e0a9"
   integrity sha512-LLBi6pEqS6Do3EKQ3J0NqHWV5hhb78Pi8vvESYwyOy2c31ZEZVdtitdzsQsKb7878PEERhzUk0ftqGhG6Mz+pQ==
 
-doi-regex@0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.13.tgz#fb021f4126a96cfaa2321d62843f998e9d361e0c"
-  integrity sha512-ZDqScsVsQfq2oanvnOPUUyDTxsRYhdNUC5q75FE7DhKpVlXQLGexj11+78gxz0DwBiUdB0VRT5ggtw+zg9KHpQ==
+doi-regex@0.1.17:
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/doi-regex/-/doi-regex-0.1.17.tgz#6b8675fa41e80f9166333b3295e3b27de2478393"
+  integrity sha512-GVHFJiDKHMeYb1nGHSZp0/iQDGEaeyZ3i23CycCHKuh5bXNhnp0f9f/hGp3SFA1PspKwSkzPCj3QSKSTNzdPbA==
 
 dom-accessibility-api@^0.5.9:
   version "0.5.16"
