@@ -8602,12 +8602,13 @@ eslint-plugin-storybook@0.8.0:
     requireindex "^1.2.0"
     ts-dedent "^2.2.0"
 
-eslint-plugin-vue@9.23.0:
-  version "9.23.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.23.0.tgz#1354a33b0cd21e0cb373557ff73c5d7a6698fbcd"
-  integrity sha512-Bqd/b7hGYGrlV+wP/g77tjyFmp81lh5TMw0be9093X02SyelxRRfCI6/IsGq/J7Um0YwB9s0Ry0wlFyjPdmtUw==
+eslint-plugin-vue@9.26.0:
+  version "9.26.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.26.0.tgz#bf7f5cce62c8f878059b91edae44d22974133af5"
+  integrity sha512-eTvlxXgd4ijE1cdur850G6KalZqk65k1JKoOI2d1kT3hr8sPD07j1q98FRFdNnpxBELGPWxZmInxeHGF/GxtqQ==
   dependencies:
     "@eslint-community/eslint-utils" "^4.4.0"
+    globals "^13.24.0"
     natural-compare "^1.4.0"
     nth-check "^2.1.1"
     postcss-selector-parser "^6.0.15"
@@ -9861,6 +9862,13 @@ globals@^13.19.0:
   version "13.20.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-13.20.0.tgz#ea276a1e508ffd4f1612888f9d1bad1e2717bf82"
   integrity sha512-Qg5QtVkCy/kv3FUSlu4ukeZDVf9ee0iXLAUYX13gbR17bnejFTzr4iS9bY7kwCf1NztRNm1t91fjOiyx4CSwPQ==
+  dependencies:
+    type-fest "^0.20.2"
+
+globals@^13.24.0:
+  version "13.24.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-13.24.0.tgz#8432a19d78ce0c1e833949c36adb345400bb1171"
+  integrity sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==
   dependencies:
     type-fest "^0.20.2"
 
