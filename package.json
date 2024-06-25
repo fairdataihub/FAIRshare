@@ -68,7 +68,7 @@
     "doi-regex": "0.1.17",
     "dompurify": "3.1.5",
     "electron-log": "4.4.8",
-    "electron-updater": "5.0.5",
+    "electron-updater": "6.2.1",
     "element-plus": "2.7.6",
     "find-free-port": "2.0.0",
     "fs-extra": "10.1.0",
