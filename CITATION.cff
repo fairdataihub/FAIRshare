@@ -34,5 +34,5 @@ repository-code: https://github.com/fairdataihub/FAIRshare
 title: 'FAIRshare: FAIR data and software sharing made easy'
 type: software
 url: https://fairdataihub.org
-version: v1-test
-doi: 10.5281/zenodo.116894
+version: v2-test
+doi: 10.5281/zenodo.117009
