@@ -1,34 +1,32 @@
-# This CITATION.cff file was generated with FAIRshare.
-# Visit https://fairdataihub.org/fairshare to learn more!
-
-abstract: Simplifying the curation and sharing of biomedical research data and software
+abstract: >-
+  Simplifying the curation and sharing of biomedical research data and software
   according to applicable FAIR guidelines
 authors:
-- affiliation: FAIR Data Innovations Hub, California Medical Innovations Institute
-  email: ssoundarajan@calmi2.org
-  family-names: Soundarajan
-  given-names: Sanjay
-  orcid: 0000-0003-2829-8032
-- affiliation: FAIR Data Innovations Hub, California Medical Innovations Institute
-  email: bpatel@calmi2.org
-  family-names: Patel
-  given-names: Bhavesh
-  orcid: 0000-0002-0307-262X
+  - affiliation: FAIR Data Innovations Hub, California Medical Innovations Institute
+    email: ssoundarajan@calmi2.org
+    family-names: Soundarajan
+    given-names: Sanjay
+    orcid: 0000-0003-2829-8032
+  - affiliation: FAIR Data Innovations Hub, California Medical Innovations Institute
+    email: bpatel@calmi2.org
+    family-names: Patel
+    given-names: Bhavesh
+    orcid: 0000-0002-0307-262X
 cff-version: 1.2.0
-date-released: '2023-07-04'
+date-released: '2024-10-11'
 identifiers:
-- description: DOI for this software's record on Zenodo
-  type: doi
-  value: 10.5281/zenodo.8112716
+  - description: DOI for this software's record on Zenodo
+    type: doi
+    value: 10.5281/zenodo.8112716
 keywords:
-- curation
-- electron
-- fair
-- macos
-- metadata
-- sharing
-- ubuntu
-- windows
+  - curation
+  - electron
+  - fair
+  - macos
+  - metadata
+  - sharing
+  - ubuntu
+  - windows
 license: MIT
 message: If you use this software, please cite it as below.
 repository-artifact: https://fairdataihub.org/fairshare
@@ -36,4 +34,5 @@ repository-code: https://github.com/fairdataihub/FAIRshare
 title: 'FAIRshare: FAIR data and software sharing made easy'
 type: software
 url: https://fairdataihub.org
-version: 2.1.0
+version: v1-test
+doi: 10.5281/zenodo.116894
